@@ -336,15 +336,18 @@ namespace Example
             log.Password = jc.Password;
             log.Server = jc.Server;
             log.Port = jc.Port;
+#if !NO_SSL
             log.SSL = jc.SSL;
-            
+#endif            
             if (log.ShowDialog() == DialogResult.OK)
             {
                 jc.User = log.User;
                 jc.Password = log.Password;
                 jc.Server = log.Server;
                 jc.Port = log.Port;
+#if !NO_SSL
                 jc.SSL = log.SSL;
+#endif
                 jc.Connect();
             }
         }
@@ -388,8 +391,10 @@ namespace Example
 
         private void jc_OnError(object sender, System.Exception ex)
         {
+#if !NO_SSL
             if (ex is Org.Mentalis.Security.Certificates.CertificateException)
                 m_err = true;
+#endif
 
             pnlCon.Text = "Error: " + ex.Message;
             debug.SelectionColor = Color.Green;

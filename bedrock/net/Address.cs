@@ -167,7 +167,11 @@ namespace bedrock.net
         /// <param name="callback">Called when resolution complete.</param>
         public void Resolve(AddressResolved callback)
         {
-            if ((m_ip != null) && (m_ip != IPAddress.Any) && (m_ip != IPAddress.IPv6Any))
+            if ((m_ip != null) && (m_ip != IPAddress.Any) 
+#if !OLD_CLR
+                && (m_ip != IPAddress.IPv6Any)
+#endif
+                )
             {
                 callback(this);
             }
@@ -181,7 +185,11 @@ namespace bedrock.net
         /// </summary>
         public void Resolve()
         {
-            if ((m_ip != null) && (m_ip != IPAddress.Any) && (m_ip != IPAddress.IPv6Any))
+            if ((m_ip != null) && (m_ip != IPAddress.Any)
+#if !OLD_CLR
+                && (m_ip != IPAddress.IPv6Any)
+#endif
+                )
             {
                 return;
             }

@@ -470,6 +470,7 @@ namespace bedrock.net
                         options);
 				}
 #else
+#if !OLD_CLR
                 if (Socket.SupportsIPv6 && (m_addr.Endpoint.AddressFamily == AddressFamily.InterNetworkV6))
                 {
                     m_sock = new Socket(AddressFamily.InterNetworkV6, 
@@ -477,6 +478,7 @@ namespace bedrock.net
                         ProtocolType.Tcp);
                 }
                 else
+#endif
                 {
                     m_sock = new Socket(AddressFamily.InterNetwork, 
                         SocketType.Stream, 

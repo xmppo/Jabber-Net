@@ -25,7 +25,7 @@
                     BaseAddress = "285212672"
                     CheckForOverflowUnderflow = "false"
                     ConfigurationOverrideFile = ""
-                    DefineConstants = "DEBUG;TRACE"
+                    DefineConstants = "DEBUG;TRACE;NO_STRINGPREP;NO_SSL;OLD_CLR"
                     DocumentationFile = "jabber-net.xml"
                     DebugSymbols = "true"
                     FileAlignment = "4096"
@@ -369,7 +369,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "jabber\protocol\iq\Disco.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "jabber\protocol\iq\Factory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "jabber\protocol\iq\Last.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

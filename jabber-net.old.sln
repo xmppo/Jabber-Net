@@ -1,13 +1,11 @@
 Microsoft Visual Studio Solution File, Format Version 7.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "jabber-net", "jabber-net.old.csproj", "{6CAE854A-F202-4D2B-B10E-E8D8E81E5EF5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "jabber-net.old", "jabber-net.old.csproj", "{6CAE854A-F202-4D2B-B10E-E8D8E81E5EF5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test", "test\test.old.csproj", "{76F923A3-5D99-45B9-9327-FBE56648A39F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test.old", "test\test.old.csproj", "{76F923A3-5D99-45B9-9327-FBE56648A39F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "muzzle", "muzzle\muzzle.old.csproj", "{071A79A9-E23F-418F-A6B7-63D3A3E59EEB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "muzzle.old", "muzzle\muzzle.old.csproj", "{071A79A9-E23F-418F-A6B7-63D3A3E59EEB}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{FFE3CDF8-F0AF-4F9A-BBA3-1DE72A249797}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example", "Example\Example.old.csproj", "{F7208FC2-C9FF-4019-96D8-E0F5001FDBFD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example.old", "Example\Example.old.csproj", "{F7208FC2-C9FF-4019-96D8-E0F5001FDBFD}"
 EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
@@ -29,9 +27,6 @@ Global
 		{071A79A9-E23F-418F-A6B7-63D3A3E59EEB}.Debug.Build.0 = Debug|.NET
 		{071A79A9-E23F-418F-A6B7-63D3A3E59EEB}.Release.ActiveCfg = Release|.NET
 		{071A79A9-E23F-418F-A6B7-63D3A3E59EEB}.Release.Build.0 = Release|.NET
-		{FFE3CDF8-F0AF-4F9A-BBA3-1DE72A249797}.Debug.ActiveCfg = Debug
-		{FFE3CDF8-F0AF-4F9A-BBA3-1DE72A249797}.Release.ActiveCfg = Release
-		{FFE3CDF8-F0AF-4F9A-BBA3-1DE72A249797}.Release.Build.0 = Release
 		{F7208FC2-C9FF-4019-96D8-E0F5001FDBFD}.Debug.ActiveCfg = Debug|.NET
 		{F7208FC2-C9FF-4019-96D8-E0F5001FDBFD}.Debug.Build.0 = Debug|.NET
 		{F7208FC2-C9FF-4019-96D8-E0F5001FDBFD}.Release.ActiveCfg = Release|.NET

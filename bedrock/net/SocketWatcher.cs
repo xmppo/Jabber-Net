@@ -35,7 +35,9 @@ using System.IO;
 using bedrock.util;
 using bedrock.collections;
 
+#if !NO_SSL
 using Org.Mentalis.Security.Certificates;
+#endif
 
 namespace bedrock.net
 {
@@ -58,7 +60,9 @@ namespace bedrock.net
         private ISet        m_socks   = new Set(SetImplementation.SkipList);
         private object      m_lock = new object();
         private int         m_maxSocks;
+#if !NO_SSL
         private Certificate m_cert = null;
+#endif
 
         /// <summary>
         /// Create a new instance, which will manage an unlimited number of sockets.
@@ -98,6 +102,7 @@ namespace bedrock.net
             }
         }
 
+#if !NO_SSL
         /// <summary>
         /// The certificate to be used for listen sockets, with SSL on.
         /// </summary>
@@ -155,6 +160,7 @@ namespace bedrock.net
             if (m_cert == null)
                 throw new CertificateException("The certificate file does not contain a server authentication certificate.");
         }
+#endif
 
         /// <summary>
         /// Create a socket that is listening for inbound connections.
