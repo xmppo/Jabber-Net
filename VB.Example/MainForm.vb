@@ -1,0 +1,455 @@
+' --------------------------------------------------------------------------
+'
+' License
+'
+' The contents of this file are subject to the Jabber Open Source License
+' Version 1.0 (the "License").  You may not copy or use this file, in either
+' source code or executable form, except in compliance with the License.  You
+' may obtain a copy of the License at http://www.jabber.com/license/ or at
+' http://www.opensource.org/.  
+'
+' Software distributed under the License is distributed on an "AS IS" basis,
+' WITHOUT WARRANTY OF ANY KIND, either express or implied.  See the License
+' for the specific language governing rights and limitations under the
+' License.
+'
+' Copyrights
+' 
+' Portions created by or assigned to Cursive Systems, Inc. are 
+' Copyright (c) 2002 Cursive Systems, Inc.  All Rights Reserved.  Contact
+' information for Cursive Systems, Inc. is available at http://www.cursive.net/.
+'
+' Portions Copyright (c) 2003 Joe Hildebrand.
+' 
+' Acknowledgements
+' 
+' Special thanks to the Jabber Open Source Contributors for their
+' suggestions and support of Jabber.
+' 
+' --------------------------------------------------------------------------*/
+Imports System.Diagnostics
+
+Imports jabber
+Imports jabber.protocol
+Imports jabber.protocol.client
+Imports jabber.protocol.iq
+
+Public Class MainForm
+    Inherits System.Windows.Forms.Form
+
+#Region " Windows Form Designer generated code "
+
+    Public Sub New()
+        MyBase.New()
+
+        'This call is required by the Windows Form Designer.
+        InitializeComponent()
+
+        'Add any initialization after the InitializeComponent() call
+
+    End Sub
+
+    'Form overrides dispose to clean up the component list.
+    Protected Overloads Overrides Sub Dispose(ByVal disposing As Boolean)
+        If disposing Then
+            If Not (components Is Nothing) Then
+                components.Dispose()
+            End If
+        End If
+        MyBase.Dispose(disposing)
+    End Sub
+
+    Private m_err As Boolean = False
+
+    'Required by the Windows Form Designer
+    Private components As System.ComponentModel.IContainer
+
+    'NOTE: The following procedure is required by the Windows Form Designer
+    'It can be modified using the Windows Form Designer.  
+    'Do not modify it using the code editor.
+    Friend WithEvents sb As System.Windows.Forms.StatusBar
+    Friend WithEvents pnlCon As System.Windows.Forms.StatusBarPanel
+    Friend WithEvents pnlPresence As System.Windows.Forms.StatusBarPanel
+    Friend WithEvents jc As jabber.client.JabberClient
+    Friend WithEvents rm As jabber.client.RosterManager
+    Friend WithEvents pm As jabber.client.PresenceManager
+    Friend WithEvents ilPresence As System.Windows.Forms.ImageList
+    Friend WithEvents mnuPresence As System.Windows.Forms.ContextMenu
+    Friend WithEvents MenuItem3 As System.Windows.Forms.MenuItem
+    Friend WithEvents TabControl1 As System.Windows.Forms.TabControl
+    Friend WithEvents tpRoster As System.Windows.Forms.TabPage
+    Friend WithEvents tpDebug As System.Windows.Forms.TabPage
+    Friend WithEvents roster As System.Windows.Forms.TreeView
+    Friend WithEvents debug As System.Windows.Forms.RichTextBox
+    Friend WithEvents mnuAvailable As System.Windows.Forms.MenuItem
+    Friend WithEvents mnuAway As System.Windows.Forms.MenuItem
+    Friend WithEvents mnuOffline As System.Windows.Forms.MenuItem
+
+    <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
+        Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(MainForm))
+        Me.sb = New System.Windows.Forms.StatusBar()
+        Me.pnlCon = New System.Windows.Forms.StatusBarPanel()
+        Me.pnlPresence = New System.Windows.Forms.StatusBarPanel()
+        Me.jc = New jabber.client.JabberClient(Me.components)
+        Me.rm = New jabber.client.RosterManager(Me.components)
+        Me.pm = New jabber.client.PresenceManager(Me.components)
+        Me.ilPresence = New System.Windows.Forms.ImageList(Me.components)
+        Me.mnuPresence = New System.Windows.Forms.ContextMenu()
+        Me.mnuAvailable = New System.Windows.Forms.MenuItem()
+        Me.mnuAway = New System.Windows.Forms.MenuItem()
+        Me.MenuItem3 = New System.Windows.Forms.MenuItem()
+        Me.mnuOffline = New System.Windows.Forms.MenuItem()
+        Me.TabControl1 = New System.Windows.Forms.TabControl()
+        Me.tpRoster = New System.Windows.Forms.TabPage()
+        Me.roster = New System.Windows.Forms.TreeView()
+        Me.tpDebug = New System.Windows.Forms.TabPage()
+        Me.debug = New System.Windows.Forms.RichTextBox()
+        CType(Me.pnlCon, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.pnlPresence, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.TabControl1.SuspendLayout()
+        Me.tpRoster.SuspendLayout()
+        Me.tpDebug.SuspendLayout()
+        Me.SuspendLayout()
+        '
+        'sb
+        '
+        Me.sb.Location = New System.Drawing.Point(0, 244)
+        Me.sb.Name = "sb"
+        Me.sb.Panels.AddRange(New System.Windows.Forms.StatusBarPanel() {Me.pnlCon, Me.pnlPresence})
+        Me.sb.ShowPanels = True
+        Me.sb.Size = New System.Drawing.Size(632, 22)
+        Me.sb.TabIndex = 0
+        '
+        'pnlCon
+        '
+        Me.pnlCon.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Spring
+        Me.pnlCon.Text = "Click on ""Offline"", and select a presence to log in."
+        Me.pnlCon.Width = 569
+        '
+        'pnlPresence
+        '
+        Me.pnlPresence.Alignment = System.Windows.Forms.HorizontalAlignment.Right
+        Me.pnlPresence.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Contents
+        Me.pnlPresence.Text = "Offline"
+        Me.pnlPresence.Width = 47
+        '
+        'jc
+        '
+        Me.jc.AutoReconnect = 3.0!
+        Me.jc.InvokeControl = Me
+        Me.jc.Password = Nothing
+        Me.jc.User = Nothing
+        '
+        'rm
+        '
+        Me.rm.Client = Me.jc
+        '
+        'pm
+        '
+        Me.pm.Client = Me.jc
+        '
+        'ilPresence
+        '
+        Me.ilPresence.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit
+        Me.ilPresence.ImageSize = New System.Drawing.Size(20, 20)
+        Me.ilPresence.ImageStream = CType(resources.GetObject("ilPresence.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.ilPresence.TransparentColor = System.Drawing.Color.Transparent
+        '
+        'mnuPresence
+        '
+        Me.mnuPresence.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.mnuAvailable, Me.mnuAway, Me.MenuItem3, Me.mnuOffline})
+        '
+        'mnuAvailable
+        '
+        Me.mnuAvailable.Index = 0
+        Me.mnuAvailable.Text = "Available"
+        '
+        'mnuAway
+        '
+        Me.mnuAway.Index = 1
+        Me.mnuAway.Text = "Away"
+        '
+        'MenuItem3
+        '
+        Me.MenuItem3.Index = 2
+        Me.MenuItem3.Text = "-"
+        '
+        'mnuOffline
+        '
+        Me.mnuOffline.Index = 3
+        Me.mnuOffline.Text = "Offline"
+        '
+        'TabControl1
+        '
+        Me.TabControl1.Controls.AddRange(New System.Windows.Forms.Control() {Me.tpRoster, Me.tpDebug})
+        Me.TabControl1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TabControl1.Name = "TabControl1"
+        Me.TabControl1.SelectedIndex = 0
+        Me.TabControl1.Size = New System.Drawing.Size(632, 244)
+        Me.TabControl1.TabIndex = 1
+        '
+        'tpRoster
+        '
+        Me.tpRoster.Controls.AddRange(New System.Windows.Forms.Control() {Me.roster})
+        Me.tpRoster.Location = New System.Drawing.Point(4, 22)
+        Me.tpRoster.Name = "tpRoster"
+        Me.tpRoster.Size = New System.Drawing.Size(624, 218)
+        Me.tpRoster.TabIndex = 0
+        Me.tpRoster.Text = "Roster"
+        '
+        'roster
+        '
+        Me.roster.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.roster.ImageList = Me.ilPresence
+        Me.roster.Name = "roster"
+        Me.roster.Size = New System.Drawing.Size(624, 218)
+        Me.roster.TabIndex = 0
+        '
+        'tpDebug
+        '
+        Me.tpDebug.Controls.AddRange(New System.Windows.Forms.Control() {Me.debug})
+        Me.tpDebug.Location = New System.Drawing.Point(4, 22)
+        Me.tpDebug.Name = "tpDebug"
+        Me.tpDebug.Size = New System.Drawing.Size(624, 218)
+        Me.tpDebug.TabIndex = 1
+        Me.tpDebug.Text = "Debug"
+        '
+        'debug
+        '
+        Me.debug.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.debug.Name = "debug"
+        Me.debug.Size = New System.Drawing.Size(624, 218)
+        Me.debug.TabIndex = 0
+        Me.debug.Text = ""
+        '
+        'MainForm
+        '
+        Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
+        Me.ClientSize = New System.Drawing.Size(632, 266)
+        Me.Controls.AddRange(New System.Windows.Forms.Control() {Me.TabControl1, Me.sb})
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.Name = "MainForm"
+        Me.Text = "MainForm"
+        CType(Me.pnlCon, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pnlPresence, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.TabControl1.ResumeLayout(False)
+        Me.tpRoster.ResumeLayout(False)
+        Me.tpDebug.ResumeLayout(False)
+        Me.ResumeLayout(False)
+
+    End Sub
+
+#End Region
+
+    Private Sub Connect()
+        Dim log As New muzzle.ClientLogin()
+        With log
+            .User = jc.User
+            .Password = jc.Password
+            .Server = jc.Server
+            .Port = jc.Port
+        End With
+
+        If log.ShowDialog() = DialogResult.OK Then
+            With jc
+                .User = log.User
+                .Password = log.Password
+                .Server = log.Server
+                .Port = log.Port
+                .Connect()
+            End With
+        End If
+    End Sub
+
+    Private Sub sb_PanelClick(ByVal sender As System.Object, ByVal e As System.Windows.Forms.StatusBarPanelClickEventArgs) Handles sb.PanelClick
+        If Not e.StatusBarPanel Is pnlPresence Then Return
+
+        mnuPresence.Show(sb, New Point(e.X, e.Y))
+    End Sub
+
+    Private Sub mnuOffline_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnuOffline.Click
+        If jc.IsAuthenticated Then
+            jc.Close()
+        End If
+    End Sub
+
+    Private Sub mnuAway_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnuAway.Click
+        If jc.IsAuthenticated Then
+            jc.Presence(PresenceType.available, "Away", "away", 0)
+            pnlPresence.Text = "Away"
+        Else
+            Connect()
+        End If
+    End Sub
+
+    Private Sub mnuAvailable_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnuAvailable.Click
+        If jc.IsAuthenticated Then
+            jc.Presence(PresenceType.available, "Available", Nothing, 0)
+            pnlPresence.Text = "Available"
+        Else
+            Connect()
+        End If
+    End Sub
+
+    Private Sub jc_OnConnect(ByVal sender As Object, ByVal sock As bedrock.net.AsyncSocket) Handles jc.OnConnect
+        m_err = False
+        debug.AppendText("Connected to: " & sock.Address.IP.ToString() & vbCrLf)
+    End Sub
+
+    Private Sub jc_OnReadText(ByVal sender As Object, ByVal txt As String) Handles jc.OnReadText
+        debug.SelectionColor = Color.Red
+        debug.AppendText("RECV: ")
+        debug.SelectionColor = Color.Black
+        debug.AppendText(txt)
+        debug.AppendText(vbCrLf)
+    End Sub
+
+    Private Sub jc_OnWriteText(ByVal sender As Object, ByVal txt As String) Handles jc.OnWriteText
+        ' keepalive
+        If txt = " " Then
+            Return
+        End If
+
+        debug.SelectionColor = Color.Blue
+        debug.AppendText("SEND: ")
+        debug.SelectionColor = Color.Black
+        debug.AppendText(txt)
+        debug.AppendText(vbCrLf)
+    End Sub
+
+    Private Sub jc_OnAuthenticate(ByVal sender As Object) Handles jc.OnAuthenticate
+        pnlPresence.Text = "Available"
+        pnlCon.Text = "Connected"
+    End Sub
+
+    Private Sub jc_OnDisconnect(ByVal sender As Object) Handles jc.OnDisconnect
+        roster.Nodes.Clear()
+        pnlPresence.Text = "Offline"
+
+        If Not m_err Then
+            pnlCon.Text = "Disconnected"
+        End If
+    End Sub
+
+    Private Sub jc_OnError(ByVal sender As Object, ByVal ex As System.Exception) Handles jc.OnError
+        pnlCon.Text = "Error!"
+        debug.SelectionColor = Color.Green
+        debug.AppendText("ERROR: ")
+        debug.SelectionColor = Color.Black
+        debug.AppendText(ex.ToString())
+        debug.AppendText(vbCrLf)
+    End Sub
+
+    Private Sub jc_OnAuthError(ByVal sender As Object, ByVal iq As jabber.protocol.client.IQ) Handles jc.OnAuthError
+        If (MessageBox.Show(Me, "Create new account?", _
+            "Authentication error", MessageBoxButtons.OKCancel) = DialogResult.OK) Then
+            jc.Register(New JID(jc.User, jc.Server, Nothing))
+        Else
+            jc.Close()
+            Connect()
+        End If
+    End Sub
+
+
+    Private Sub jc_OnRegistered(ByVal sender As Object, ByVal iq As jabber.protocol.client.IQ) Handles jc.OnRegistered
+        If (iq.Type = IQType.result) Then
+            jc.Login()
+        Else
+            pnlCon.Text = "Registration error"
+        End If
+    End Sub
+
+    Private Sub jc_OnRegisterInfo(ByVal sender As Object, ByVal iq As jabber.protocol.client.IQ) Handles jc.OnRegisterInfo
+        Dim r As Register = DirectCast(iq, Register)
+        r.Password = jc.Password
+    End Sub
+
+    Private Sub jc_OnMessage(ByVal sender As Object, ByVal msg As jabber.protocol.client.Message) Handles jc.OnMessage
+        MessageBox.Show(Me, msg.Body, msg.From.ToString(), MessageBoxButtons.OK)
+    End Sub
+
+    Private Sub jc_OnIQ(ByVal sender As Object, ByVal iq As jabber.protocol.client.IQ) Handles jc.OnIQ
+        If iq.Type <> IQType.get Then Return
+
+        If TypeOf iq.Query Is Version Then
+            Dim ver As Version = DirectCast(iq.Query, Version)
+            iq.Swap()
+            iq.Type = IQType.result
+            ver.OS = Environment.OSVersion.ToString()
+            ver.EntityName = Application.ProductName
+            ver.Ver = Application.ProductVersion
+            jc.Write(iq)
+        Else
+            iq.Swap()
+            iq.Type = IQType.error
+            iq.Error.Code = ErrorCode.NOT_IMPLEMENTED
+            jc.Write(iq)
+        End If
+    End Sub
+
+
+    Private Sub rm_OnRosterBegin(ByVal sender As Object) Handles rm.OnRosterBegin
+        roster.BeginUpdate()
+    End Sub
+
+    Private Sub rm_OnRosterEnd(ByVal sender As Object) Handles rm.OnRosterEnd
+        roster.EndUpdate()
+    End Sub
+
+    Private Sub rm_OnRosterItem(ByVal sender As Object, ByVal ri As jabber.protocol.iq.Item) Handles rm.OnRosterItem
+        roster.Nodes.Add(New RosterNode(ri, pm))
+    End Sub
+
+    Private Sub jc_OnPresence(ByVal sender As Object, ByVal pres As jabber.protocol.client.Presence) Handles jc.OnPresence
+        Dim n As RosterNode
+        Dim bareFrom As String = pres.From.Bare
+
+        For Each n In roster.Nodes
+            If n.jid = bareFrom Then
+                If pres.Type = PresenceType.available Then
+                    n.ImageIndex = 0
+                    n.SelectedImageIndex = 0
+                Else
+                    n.ImageIndex = 1
+                    n.SelectedImageIndex = 1
+                End If
+
+                Exit For
+            End If
+        Next
+    End Sub
+
+    Private Sub roster_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles roster.DoubleClick
+        Dim n As RosterNode = DirectCast(roster.SelectedNode, RosterNode)
+        Dim sm As New SendMessage(jc, n.jid)
+        sm.Show()
+    End Sub
+
+    Private Sub jc_OnStreamError(ByVal sender As Object, ByVal rp As System.Xml.XmlElement) Handles jc.OnStreamError
+        m_err = True
+        pnlCon.Text = "Stream error: " + rp.InnerText
+    End Sub
+End Class
+
+Public Class RosterNode
+    Inherits TreeNode
+
+    Private i As jabber.protocol.iq.Item
+    Private p As jabber.client.PresenceManager
+    Public jid As String
+
+    Public Sub New(ByVal ri As jabber.protocol.iq.Item, ByVal pm As jabber.client.PresenceManager)
+        MyBase.New(ri.Nickname)
+
+        Dim image As Integer = 0
+        If pm.Item(ri.JID) Is Nothing Then image = 1
+
+        Me.ImageIndex = image
+        Me.SelectedImageIndex = image
+
+        i = ri
+        p = pm
+        jid = i.JID.ToString()
+    End Sub
+End Class
