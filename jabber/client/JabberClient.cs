@@ -76,6 +76,7 @@ namespace jabber.client
         private bool m_autoPres   = true;
         private bool m_autoAgents = true;
 
+        private Agent[] m_agents = null;
         private IQTracker m_tracker = null;
 
 
@@ -260,6 +261,16 @@ namespace jabber.client
             set { m_resource = value; }
         }
 
+
+        /// <summary>
+        /// The list of agents available at the server
+        /// </summary>
+        [Browsable(false)]
+        public Agent[] Agents
+        {
+            get { return m_agents; }
+        }
+
         /// <summary>
         /// Let's track IQ packets.
         /// </summary>
@@ -398,7 +409,13 @@ namespace jabber.client
         {
             AgentsIQ aiq = new AgentsIQ(Document);
             aiq.Type = IQType.get;
-            Write(aiq);
+            Tracker.BeginIQ(aiq, new IqCB(GotAgents), null);
+        }
+
+        private void GotAgents(object sender, IQ iq, object state)
+        {
+            AgentsQuery aq = (AgentsQuery) iq["query", URI.AGENTS];
+            m_agents = aq.GetAgents();
         }
 
         /// <summary>
