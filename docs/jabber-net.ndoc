@@ -4,23 +4,22 @@
         <assembly location="C:\src\jabber-net\muzzle\bin\Debug\muzzle.dll" documentation="C:\src\jabber-net\muzzle\bin\Debug\muzzle.xml" />
     </assemblies>
     <namespaces>
-        <namespace name="jabber">Jabber-specific classes</namespace>
-        <namespace name="bedrock.collections">Collection classes not in the .Net framework</namespace>
-        <namespace name="jabber.protocol.accept">jabber:component:accept namespace, for services.</namespace>
-        <namespace name="jabber.server">Service connections and utilties for extending the functionality of a Jabber server.</namespace>
-        <namespace name="jabber.connection">Base classes for client and service connections</namespace>
-        <namespace name="jabber.protocol.iq">The jabber:iq:* namespaces.</namespace>
-        <namespace name="bedrock.io">Input/output classes</namespace>
-        <namespace name="jabber.protocol">Jabber protocol implementation</namespace>
-        <namespace name="jabber.protocol.x">The jabber:x:* namespaces.</namespace>
-        <namespace name="jabber.protocol.stream">etherx namespace.  stream:stream and friends.</namespace>
-        <namespace name="muzzle">User interface elements that are at best peripherally related to Jabber.</namespace>
         <namespace name="bedrock">Low-level utility routines.</namespace>
+        <namespace name="bedrock.collections">Collection classes not in the .Net framework</namespace>
+        <namespace name="bedrock.io">Input/output classes</namespace>
         <namespace name="bedrock.net">Async network access</namespace>
         <namespace name="bedrock.util">General utilities</namespace>
+        <namespace name="jabber">Jabber-specific classes</namespace>
         <namespace name="jabber.client">Client connection oriented classes</namespace>
-        <namespace name="jabber.xml">Jabber-specific XML processing clases.  Packetization, etc.</namespace>
+        <namespace name="jabber.connection">Base classes for client and service connections</namespace>
+        <namespace name="jabber.protocol">Jabber protocol implementation</namespace>
+        <namespace name="jabber.protocol.accept">jabber:component:accept namespace, for services.</namespace>
         <namespace name="jabber.protocol.client">jabber:client namespace.  The meat of the protocol.</namespace>
+        <namespace name="jabber.protocol.iq">The jabber:iq:* namespaces.</namespace>
+        <namespace name="jabber.protocol.stream">etherx namespace.  stream:stream and friends.</namespace>
+        <namespace name="jabber.protocol.x">The jabber:x:* namespaces.</namespace>
+        <namespace name="jabber.server">Service connections and utilties for extending the functionality of a Jabber server.</namespace>
+        <namespace name="muzzle">User interface elements that are at best peripherally related to Jabber.</namespace>
     </namespaces>
     <documenters>
         <documenter name="JavaDoc">
@@ -39,19 +38,24 @@
             <property name="CopyrightText" value="Copyright © 2002 Cursive Systems" />
             <property name="CopyrightHref" value="http://www.cursive.net/" />
             <property name="SkipNamespacesWithoutSummaries" value="False" />
-            <property name="AddPropertyBackerSummaries" value="False" />
+            <property name="AutoPropertyBackerSummaries" value="False" />
+            <property name="AutoDocumentConstructors" value="True" />
+            <property name="DocumentAttributes" value="False" />
+            <property name="DocumentedAttributes" value="" />
         </documenter>
         <documenter name="MSDN">
             <property name="OutputDirectory" value="Msdn\" />
             <property name="HtmlHelpName" value="jabber-net" />
-            <property name="IncludeFavorites" value="False" />
+            <property name="IncludeFavorites" value="True" />
             <property name="Title" value="Jabber-Net Documentation" />
             <property name="SplitTOCs" value="False" />
             <property name="DefaulTOC" value="" />
+            <property name="IncludeHierarchy" value="True" />
             <property name="ShowVisualBasic" value="False" />
             <property name="OmitObjectTags" value="False" />
             <property name="RootPageTOCName" value="Getting Started" />
             <property name="RootPageFileName" value="howto.htm" />
+            <property name="SortTOCByNamespace" value="True" />
             <property name="ShowMissingSummaries" value="False" />
             <property name="ShowMissingRemarks" value="False" />
             <property name="ShowMissingParams" value="False" />
@@ -64,8 +68,11 @@
             <property name="IncludeAssemblyVersion" value="True" />
             <property name="CopyrightText" value="Copyright © 2002 Cursive Systems" />
             <property name="CopyrightHref" value="http://www.cursive.net/" />
-            <property name="SkipNamespacesWithoutSummaries" value="True" />
-            <property name="AddPropertyBackerSummaries" value="False" />
+            <property name="SkipNamespacesWithoutSummaries" value="False" />
+            <property name="AutoPropertyBackerSummaries" value="False" />
+            <property name="AutoDocumentConstructors" value="True" />
+            <property name="DocumentAttributes" value="False" />
+            <property name="DocumentedAttributes" value="" />
         </documenter>
         <documenter name="XML">
             <property name="OutputFile" value=".\docs\doc.xml" />
@@ -82,7 +89,10 @@
             <property name="CopyrightText" value="" />
             <property name="CopyrightHref" value="" />
             <property name="SkipNamespacesWithoutSummaries" value="False" />
-            <property name="AddPropertyBackerSummaries" value="False" />
+            <property name="AutoPropertyBackerSummaries" value="False" />
+            <property name="AutoDocumentConstructors" value="True" />
+            <property name="DocumentAttributes" value="False" />
+            <property name="DocumentedAttributes" value="" />
         </documenter>
     </documenters>
 </project>
