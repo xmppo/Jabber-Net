@@ -256,7 +256,10 @@ namespace jabber.server
         {
             base.OnDocumentStart(sender, tag);
 
-            this.State = HandshakingState.Instance;
+            lock (StateLock)
+            {
+                State = HandshakingState.Instance;
+            }
 
             if (m_type == ComponentType.Accept)
             {
@@ -285,14 +288,14 @@ namespace jabber.server
             }
 
             if (m_type == ComponentType.Accept)
-                IsConnected = true;
+                IsAuthenticated = true;
             else
             {       
                 string test = hs.Digest;
                 string good = Element.ShaHash(StreamID, m_secret);
                 if (test == good)
                 {
-                    IsConnected = true;
+                    IsAuthenticated = true;
                     Write(new Handshake(this.Document));
                 }
                 else
@@ -310,10 +313,14 @@ namespace jabber.server
         /// <param name="tag"></param>
         protected override void OnElement(object sender, System.Xml.XmlElement tag)
         {
-            if (State == HandshakingState.Instance)
+            lock (StateLock)
             {
-                Handshake(tag);
-                return;
+                if (State == HandshakingState.Instance)
+                {
+                    // sets IsConnected
+                    Handshake(tag);
+                    return;
+                }
             }
 
             base.OnElement(sender, tag);

@@ -61,12 +61,12 @@ namespace jabber.connection
         private BaseState      m_state      = ClosedState.Instance;
         private string         m_server     = "jabber.com";
         private string         m_streamID   = null;
+        private object         m_stateLock  = new object();
 
         private int            m_port       = 5222;
         private int            m_autoReconnect = 30;
 
         private ISynchronizeInvoke m_invoker = null;
-
         
         /// <summary>
         /// Required designer variable.
@@ -141,7 +141,7 @@ namespace jabber.connection
         /// The connection is complete, and the user is authenticated.
         /// </summary>
         [Category("Stream")]
-        public event bedrock.ObjectHandler OnConnect;
+        public event bedrock.ObjectHandler OnAuthenticate;
         /// <summary>
         /// The connection is disconnected
         /// </summary>
@@ -231,7 +231,8 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// The current state of the connection.
+        /// The current state of the connection.  
+        /// Lock on StateLock before accessing.
         /// </summary>
         [Browsable(false)]
         protected virtual BaseState State
@@ -241,23 +242,35 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Are we currently connected?
+        /// A lock for the state info.
+        /// </summary>
+        [Browsable(false)]
+        protected object StateLock
+        {
+            get { return m_stateLock; }
+        }
+
+        /// <summary>
+        /// Have we authenticated?  Locks on StateLock
         /// </summary>
         [Browsable(false)]
         [DefaultValue(false)]
-        public virtual bool IsConnected
+        public virtual bool IsAuthenticated
         {
-            get { return m_state == RunningState.Instance; }
+            get { lock (StateLock) { return m_state == RunningState.Instance; } }
             set
             {
-                if (value)
+                lock (StateLock)
                 {
-                    m_state = RunningState.Instance;
-                    if (OnConnect != null)
-                        CheckedInvoke(OnConnect, new object[] {this});
+                    if (value)
+                    {
+                        m_state = RunningState.Instance;
+                    }
+                    else
+                        Close();
                 }
-                else
-                    Close();
+                if (OnAuthenticate != null)
+                    CheckedInvoke(OnAuthenticate, new object[] {this});
             }
         }
 
@@ -335,10 +348,13 @@ namespace jabber.connection
             Debug.Assert(m_port > 0);
             Debug.Assert(m_server != null);
 
-            InitializeStream();
-            Address addr = new Address(m_server, m_port);
-            m_state = ConnectingState.Instance;
-            m_sock = m_watcher.CreateConnectSocket(this, addr, m_keepAlive * 1000);
+            lock (StateLock)
+            {
+                InitializeStream();
+                Address addr = new Address(m_server, m_port);
+                m_state = ConnectingState.Instance;
+                m_sock = m_watcher.CreateConnectSocket(this, addr, m_keepAlive * 1000);
+            }
         }
 
         /// <summary>
@@ -346,14 +362,17 @@ namespace jabber.connection
         /// </summary>
         public virtual void Close()
         {
-            if (m_state == RunningState.Instance)
+            lock (StateLock)
             {
-                Write("</stream:stream>");
-            }
-            if (m_state != ClosedState.Instance)
-            {
-                m_state = ClosingState.Instance;
-                m_sock.Close();
+                if (m_state == RunningState.Instance)
+                {
+                    Write("</stream:stream>");
+                }
+                if (m_state != ClosedState.Instance)
+                {
+                    m_state = ClosingState.Instance;
+                    m_sock.Close();
+                }
             }
         }
 
@@ -365,11 +384,18 @@ namespace jabber.connection
         /// <param name="args"></param>
         protected void CheckedInvoke(MulticastDelegate method, object[] args)
         {
-            if ((m_invoker != null) && m_invoker.InvokeRequired)
-                m_invoker.BeginInvoke(method, args);
-            else
-                // ew.  this is probably slow.
-                method.DynamicInvoke(args);
+            try
+            {
+                if ((m_invoker != null) && m_invoker.InvokeRequired)
+                    m_invoker.BeginInvoke(method, args);
+                else
+                    // ew.  this is probably slow.
+                    method.DynamicInvoke(args);
+            }
+            catch (System.Reflection.TargetInvocationException e)
+            {
+                throw e.InnerException;
+            }
         }
 
         /// <summary>
@@ -391,8 +417,11 @@ namespace jabber.connection
         /// <param name="sender"></param>
         protected virtual void OnDocumentEnd(object sender)
         {
-            m_state = ClosingState.Instance;
-            m_sock.Close();
+            lock (StateLock)
+            {
+                m_state = ClosingState.Instance;
+                m_sock.Close();
+            }
         }
 
         /// <summary>
@@ -489,20 +518,24 @@ namespace jabber.connection
 
         void ISocketEventListener.OnClose(bedrock.net.AsyncSocket sock)
         {
-            BaseState old = m_state;
-            m_state = ClosedState.Instance;
-            m_sock = null;
+            lock (StateLock)
+            {
+                BaseState old = m_state;
+                m_state = ClosedState.Instance;
+                m_sock = null;
 
+
+                // close was requested, or autoreconnect turned off.
+                if ((old == ClosingState.Instance) && (m_autoReconnect >= 0))
+                {
+                    new System.Threading.Timer(new System.Threading.TimerCallback(Reconnect), 
+                        null, 
+                        m_autoReconnect * 1000, 
+                        System.Threading.Timeout.Infinite );
+                }
+            }
             if (OnDisconnect != null)
                 CheckedInvoke(OnDisconnect, new object[]{this});
-
-            // close was requested, or autoreconnect turned off.
-            if ((old != ClosingState.Instance) || (m_autoReconnect < 0))
-                return;
-
-            new System.Threading.Timer(new System.Threading.TimerCallback(Reconnect), 
-                                       null, 
-                                       m_autoReconnect * 1000, System.Threading.Timeout.Infinite );
         }
         #endregion
     }

@@ -294,12 +294,12 @@ namespace jabber.client
         /// </summary>
         [Browsable(false)]
         [DefaultValue(false)]
-        public override bool IsConnected
+        public override bool IsAuthenticated
         {
-            get { return base.IsConnected; }
+            get { return base.IsAuthenticated; }
             set
             {
-                base.IsConnected = value;
+                base.IsAuthenticated = value;
                 if (value)
                 {
                     if (m_autoRoster)
@@ -344,7 +344,7 @@ namespace jabber.client
         /// </summary>
         public override void Close()
         {
-            if (IsConnected)
+            if (IsAuthenticated)
             {
                 Presence p = new Presence(Document);
                 p.Status = "offline";
@@ -362,8 +362,11 @@ namespace jabber.client
             aiq.Type = IQType.get;
             Auth a = (Auth) aiq.Query;
             a.Username = m_user;
-            
-            State = GetAuthState.Instance;
+
+            lock (StateLock)
+            {
+                State = GetAuthState.Instance;
+            }
             Tracker.BeginIQ(aiq, new IqCB(OnGetAuth), null);
         }
 
@@ -434,7 +437,10 @@ namespace jabber.client
                 Login();
             else
             {
-                State = ManualLoginState.Instance;
+                lock (StateLock)
+                {
+                    State = ManualLoginState.Instance;
+                }
                 if (OnLoginRequired != null)
                     CheckedInvoke(OnLoginRequired, new object[]{this});
                 else
@@ -481,7 +487,10 @@ namespace jabber.client
                 a.Resource = m_resource;
             a.Username = m_user;
 
-            State = SetAuthState.Instance;
+            lock (StateLock)
+            {
+                State = SetAuthState.Instance;
+            }
             Tracker.BeginIQ(aiq, new IqCB(OnSetAuth), null);
         }
 
@@ -490,7 +499,7 @@ namespace jabber.client
             if (i.Type != IQType.result)
                 FireAuthError(i);
             else
-                IsConnected = true;
+                IsAuthenticated = true;
         }
 
         /// <summary>
