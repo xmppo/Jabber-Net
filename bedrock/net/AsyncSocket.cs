@@ -106,6 +106,7 @@ namespace bedrock.net
         private int                  m_keepAlive  = 0;
         private Timer                m_timer      = null;
         private Guid                 m_id         = Guid.NewGuid();
+        private bool                 m_reading    = false;
 
         /// <summary>
         /// Called from SocketWatcher.
@@ -434,8 +435,22 @@ namespace bedrock.net
         /// </summary>
         public void RequestRead()
         {
+            lock (m_state_lock)
+            {
+                if (m_reading)
+                {
+                    throw new InvalidOperationException("Cannot call RequestRead while another read is pending.");
+                }
+                if (m_state != State.Connected)
+                {
+                    throw new InvalidOperationException("Socket not connected.");
+                }
+
+                m_reading = true;
+            }
             try
             {
+
                 m_sock.BeginReceive(m_buf, 0, m_buf.Length, 
                     SocketFlags.None, new AsyncCallback(GotData), null);
             }
@@ -468,6 +483,11 @@ namespace bedrock.net
         /// <param name="ar"></param>
         protected virtual void GotData(IAsyncResult ar)
         {
+            lock (m_state_lock)
+            {
+                m_reading = false;
+            }
+
             int count;
             try
             {
