@@ -13,10 +13,9 @@ The GNU Public License (GPL) is probably most appropriate for
 inclusion in other open source projects.  
 http://www.gnu.org/copyleft/gpl.html
 
-I ask that you don't use this library to build a Jabber/XMPP server.
-There's no legal restriction against it, just common courtesy, since
-my day job depends on selling servers.  Server components are fine;
-I'm talking about writing an entire server.
+I ask that you don't use this library to build an entire commercial
+Jabber/XMPP server.  There's no legal restriction against it, just
+common courtesy, since my day job depends on selling servers.
 
 This file MUST be included with any source distribution.
 
