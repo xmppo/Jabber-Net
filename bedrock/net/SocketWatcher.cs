@@ -134,25 +134,10 @@ namespace bedrock.net
         public AsyncSocket CreateConnectSocket(ISocketEventListener listener,
                                                Address              addr)
         {
-            return CreateConnectSocket(listener, addr, -1);
-        }
-
-        /// <summary>
-        /// Create an outbound socket.
-        /// </summary>
-        /// <param name="listener">Where to send notifications</param>
-        /// <param name="addr">Address to connect to</param>
-        /// <param name="keepAlive">Timeout, in milliseconds between keep alives.</param>
-        /// <returns>Socket that is in the process of connecting</returns>
-        public AsyncSocket CreateConnectSocket(ISocketEventListener listener,
-                                               Address              addr,
-                                               int                  keepAlive)
-        {
             AsyncSocket result;
    
             // Create the socket:
             result = new AsyncSocket(this, listener);
-            result.KeepAlive = keepAlive;
             // Start the connect process:
             result.Connect(addr);
             return result;

@@ -82,7 +82,7 @@ namespace bedrock.net
     /// An asynchronous socket, which calls a listener class when interesting things happen.
     /// </summary>
     [RCS(@"$Header$")]
-    public class AsyncSocket : IComparable
+    public class AsyncSocket : BaseSocket, IComparable
     {
         /// <summary>
         /// Socket states.
@@ -126,13 +126,9 @@ namespace bedrock.net
 
         private byte[]               m_buf        = new byte[4096];
         private State                m_state      = State.Created;
-        private object               m_state_lock = new object();
         private Socket               m_sock       = null;
-        private ISocketEventListener m_listener   = null;
         private SocketWatcher        m_watcher    = null;
         private Address              m_addr;
-        private int                  m_keepAlive  = 0;
-        private Timer                m_timer      = null;
         private Guid                 m_id         = Guid.NewGuid();
         private bool                 m_reading    = false;
 
@@ -141,14 +137,12 @@ namespace bedrock.net
         /// </summary>
         /// <param name="w"></param>
         /// <param name="listener">The listener for this socket</param>
-        public AsyncSocket(SocketWatcher w, ISocketEventListener listener)
+        public AsyncSocket(SocketWatcher w, ISocketEventListener listener) : base(listener)
         {
-            Debug.Assert(listener != null);
-            m_listener = listener;
             m_watcher = w;
         }
 
-        private AsyncSocket(SocketWatcher w)
+        private AsyncSocket(SocketWatcher w) : base()
         {
             m_watcher = w;
         }
@@ -175,74 +169,6 @@ namespace bedrock.net
             {
                 return m_addr;
             }
-        }
-
-        /// <summary>
-        /// Where to send notifications of interesting things.
-        /// WARNING!  Only assign to this if you are Tom Waters.
-        /// </summary>
-        public ISocketEventListener Listener
-        {
-            get 
-            {
-                return m_listener;
-            }
-            set
-            {
-                lock (m_state_lock)
-                {
-                    if (m_reading)
-                        throw new InvalidOperationException("Don't set listener while reading, Tom.");
-                    m_listener = value;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Keep-alive interval in milliseconds.  
-        /// When >0, sends a space byte (0x20) every this many milliseconds
-        /// </summary>
-        public int KeepAlive
-        {
-            get
-            {
-                return m_keepAlive;
-            }
-            set
-            {
-                lock (m_state_lock)
-                {
-                    m_keepAlive = value;
-                    if (value <= 0)
-                    {
-                        if (m_timer != null)
-                        {
-                            m_timer.Dispose();
-                            m_timer = null;
-                        }
-                    }
-                    else
-                    {
-                        if (m_timer == null)
-                        {
-                            if (m_state == State.Connected)
-                            {
-                                m_timer = new Timer(new TimerCallback(DoKeepAlive), null, m_keepAlive, m_keepAlive);
-                            }
-                            else
-                            {
-                                m_timer = new Timer(new TimerCallback(DoKeepAlive), null, Timeout.Infinite, Timeout.Infinite);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        private void DoKeepAlive(object state)
-        {
-//          Debug.Assert(m_state == State.Connected);
-            Write(new byte[] {32});
         }
 
         /// <summary>
@@ -286,20 +212,10 @@ namespace bedrock.net
 
         /// <summary>
         /// Prepare to start accepting inbound requests.  Call RequestAccept() to start the async process.
-        /// Default the listen queue size to 5.
-        /// </summary>
-        /// <param name="addr">Address to listen on</param>
-        public void Accept(Address addr)
-        {
-            Accept(addr, 5);
-        }
-
-        /// <summary>
-        /// Prepare to start accepting inbound requests.  Call RequestAccept() to start the async process.
         /// </summary>
         /// <param name="addr">Address to listen on</param>
         /// <param name="backlog">The Maximum length of the queue of pending connections</param>
-        public void Accept(Address addr, int backlog)
+        public override void Accept(Address addr, int backlog)
         {
             m_addr = addr;
             m_sock = new Socket(AddressFamily.InterNetwork, 
@@ -319,9 +235,9 @@ namespace bedrock.net
         /// Listener.OnAccept() returns true.  Otherwise, call RequestAccept() again
         /// to continue.
         /// </summary>
-        public void RequestAccept()
+        public override void RequestAccept()
         {
-            lock (m_state_lock)
+            lock (this)
             {
                 if (m_state != State.Listening)
                 {
@@ -389,7 +305,7 @@ namespace bedrock.net
         /// OnConnect()!
         /// </summary>
         /// <param name="addr"></param>
-        public void Connect(Address addr)
+        public override void Connect(Address addr)
         {
             m_sock = new Socket(AddressFamily.InterNetwork, 
                                 SocketType.Stream, 
@@ -403,13 +319,14 @@ namespace bedrock.net
             m_watcher.RegisterSocket(this);
             addr.Resolve(new AddressResolved(OnConnectResolved));
         }
+
         /// <summary>
         /// Address resolution finished.  Try connecting.
         /// </summary>
         /// <param name="addr"></param>
         private void OnConnectResolved(Address addr)
         {
-            lock (m_state_lock)
+            lock (this)
             {
                 if (m_state != State.Resolving)
                 {
@@ -435,7 +352,7 @@ namespace bedrock.net
         /// <param name="ar"></param>
         private void ExecuteConnect(IAsyncResult ar)
         {
-            lock (m_state_lock)
+            lock (this)
             {
                 try
                 {
@@ -455,10 +372,6 @@ namespace bedrock.net
                 {
                     m_state = State.Connected;
                     m_listener.OnConnect(this);
-                    if (m_timer != null)
-                    {
-                        m_timer.Change(m_keepAlive, m_keepAlive);
-                    }
                 }
                 else
                 {
@@ -471,9 +384,9 @@ namespace bedrock.net
         /// Start an async read from the socket.  Listener.OnRead() is eventually called
         /// when data arrives.
         /// </summary>
-        public void RequestRead()
+        public override void RequestRead()
         {
-            lock (m_state_lock)
+            lock (this)
             {
                 if (m_reading)
                 {
@@ -515,13 +428,14 @@ namespace bedrock.net
                 throw;
             }
         }
+
         /// <summary>
         /// Some data arrived.
         /// </summary>
         /// <param name="ar"></param>
         protected virtual void GotData(IAsyncResult ar)
         {
-            lock (m_state_lock)
+            lock (this)
             {
                 m_reading = false;
             }
@@ -568,15 +482,7 @@ namespace bedrock.net
                 AsyncClose();
             }
         }
-        /// <summary>
-        /// Async write to the socket.  Listener.OnWrite will be called eventually
-        /// when the data has been written.  A copy is made of the data, internally.
-        /// </summary>
-        /// <param name="buf">Data to write</param>
-        public void Write(byte[] buf)
-        {
-            Write(buf, 0, buf.Length);
-        }
+
         /// <summary>
         /// Async write to the socket.  Listener.OnWrite will be called eventually
         /// when the data has been written.  A trimmed copy is made of the data, internally.
@@ -584,9 +490,9 @@ namespace bedrock.net
         /// <param name="buf">Buffer to output</param>
         /// <param name="offset">Offset into buffer</param>
         /// <param name="len">Number of bytes to output</param>
-        public void Write(byte[] buf, int offset, int len)
+        public override void Write(byte[] buf, int offset, int len)
         {
-            lock (m_state_lock)
+            lock (this)
             {
                 if (m_state != State.Connected)
                 {
@@ -600,10 +506,6 @@ namespace bedrock.net
                 {
                     m_sock.BeginSend(ret, 0, ret.Length, 
                         SocketFlags.None, new AsyncCallback(WroteData), ret);
-                    if (m_timer != null)
-                    {
-                        m_timer.Change(m_keepAlive, m_keepAlive);
-                    }
                 }
                 catch (SocketException e)
                 {
@@ -624,6 +526,7 @@ namespace bedrock.net
                 }
             }
         }
+        
         /// <summary>
         /// Data was written.
         /// </summary>
@@ -661,21 +564,16 @@ namespace bedrock.net
                 AsyncClose();
             }
         }
+
         /// <summary>
         /// Close the socket.  This is NOT async.  .Net doesn't have async closes.  
         /// But, it can be *called* async, particularly from GotData.
         /// Attempts to do a shutdown() first.
         /// </summary>
-        public void Close()
+        public override void Close()
         {
-            lock (m_state_lock)
+            lock (this)
             {
-                if (m_timer != null)
-                {
-                    m_timer.Dispose();
-                    m_timer = null;
-                }
-
                 /*
                 switch (m_state)
                 {
@@ -701,7 +599,6 @@ namespace bedrock.net
                         m_sock.Close();
                     }
                     catch {}
-                    
                 }
 
                 if (oldState <= State.Connected)
@@ -734,7 +631,7 @@ namespace bedrock.net
         /// <param name="e"></param>
         protected void FireError(Exception e)
         {
-            lock (m_state_lock)
+            lock (this)
             {
                 m_state = State.Error;
             }
