@@ -199,12 +199,23 @@ namespace jabber.connection
         /// </summary>
         [Category("Stream")]
         public event ProtocolHandler OnStreamHeader;
+        /// <summary>
+        /// We received a stream:error packet.
+        /// </summary>
+        [Category("Stream")]
+        [Description("We received stream:error packet.")]
+        public event ProtocolHandler OnStreamError;
 
         /// <summary>
         /// The connection is complete, and the user is authenticated.
         /// </summary>
         [Category("Stream")]
         public event bedrock.ObjectHandler OnAuthenticate;
+        /// <summary>
+        /// The connection is connected, but no stream:stream has been sent, yet.
+        /// </summary>
+        [Category("Stream")]
+        public event bedrock.net.AsyncSocketHandler OnConnect;
         /// <summary>
         /// The connection is disconnected
         /// </summary>
@@ -616,11 +627,6 @@ namespace jabber.connection
         /// <param name="tag"></param>
         protected virtual void OnElement(object sender, System.Xml.XmlElement tag)
         {
-            if (OnProtocol != null)
-                CheckedInvoke(OnProtocol, new object[] {this, tag});
-
-            CheckAll(tag);
-
             if (tag is jabber.protocol.stream.Error) 
             {
                 // Stream error.  Race condition!  Two cases:
@@ -638,7 +644,17 @@ namespace jabber.connection
                         m_reconnectTimer.Dispose();
                     }
                 }
+
+                if (OnStreamError != null)
+                    CheckedInvoke(OnStreamError, new object[] {this, tag});
+
+                return;
             }
+            if (OnProtocol != null)
+                CheckedInvoke(OnProtocol, new object[] {this, tag});
+
+            CheckAll(tag);
+
         }
 
         /// <summary>
@@ -685,6 +701,10 @@ namespace jabber.connection
             this.State = ConnectedState.Instance;
 
             m_sock = newsocket;
+
+            if (OnConnect != null)
+                CheckedInvoke(OnConnect, new object[] {this, m_sock});
+
             m_sock.RequestRead();
             if (m_accept != null)
             {
@@ -742,6 +762,9 @@ namespace jabber.connection
             lock (m_stateLock)
             {
                 this.State = ConnectedState.Instance;
+                if (OnConnect != null)
+                    CheckedInvoke(OnConnect, new Object[] {this, sock});
+
                 jabber.protocol.stream.Stream str = new jabber.protocol.stream.Stream(m_doc, NS);
                 str.To = this.Host;
                 Write(str.StartTag());

@@ -66,6 +66,8 @@ namespace Example
         private System.Windows.Forms.MenuItem menuItem1;
         private System.ComponentModel.IContainer components;
 
+        private bool m_err = false;
+
         public MainForm()
         {
             //
@@ -103,27 +105,27 @@ namespace Example
             this.components = new System.ComponentModel.Container();
             System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(MainForm));
             this.sb = new System.Windows.Forms.StatusBar();
+            this.pnlCon = new System.Windows.Forms.StatusBarPanel();
+            this.pnlPresence = new System.Windows.Forms.StatusBarPanel();
             this.jc = new jabber.client.JabberClient(this.components);
             this.rm = new jabber.client.RosterManager(this.components);
             this.pm = new jabber.client.PresenceManager(this.components);
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tpDebug = new System.Windows.Forms.TabPage();
-            this.debug = new System.Windows.Forms.RichTextBox();
             this.tpRoster = new System.Windows.Forms.TabPage();
             this.roster = new System.Windows.Forms.TreeView();
             this.ilPresence = new System.Windows.Forms.ImageList(this.components);
-            this.pnlCon = new System.Windows.Forms.StatusBarPanel();
-            this.pnlPresence = new System.Windows.Forms.StatusBarPanel();
+            this.tpDebug = new System.Windows.Forms.TabPage();
+            this.debug = new System.Windows.Forms.RichTextBox();
             this.mnuPresence = new System.Windows.Forms.ContextMenu();
             this.mnuAvailable = new System.Windows.Forms.MenuItem();
             this.mnuAway = new System.Windows.Forms.MenuItem();
-            this.mnuOffline = new System.Windows.Forms.MenuItem();
             this.menuItem1 = new System.Windows.Forms.MenuItem();
-            this.tabControl1.SuspendLayout();
-            this.tpDebug.SuspendLayout();
-            this.tpRoster.SuspendLayout();
+            this.mnuOffline = new System.Windows.Forms.MenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pnlCon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pnlPresence)).BeginInit();
+            this.tabControl1.SuspendLayout();
+            this.tpRoster.SuspendLayout();
+            this.tpDebug.SuspendLayout();
             this.SuspendLayout();
             // 
             // sb
@@ -138,22 +140,38 @@ namespace Example
             this.sb.TabIndex = 0;
             this.sb.PanelClick += new System.Windows.Forms.StatusBarPanelClickEventHandler(this.sb_PanelClick);
             // 
+            // pnlCon
+            // 
+            this.pnlCon.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Spring;
+            this.pnlCon.Text = "Click on \"Offline\", and select a presence to log in.";
+            this.pnlCon.Width = 569;
+            // 
+            // pnlPresence
+            // 
+            this.pnlPresence.Alignment = System.Windows.Forms.HorizontalAlignment.Right;
+            this.pnlPresence.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Contents;
+            this.pnlPresence.Text = "Offline";
+            this.pnlPresence.Width = 47;
+            // 
             // jc
             // 
+            this.jc.AutoReconnect = 3F;
             this.jc.InvokeControl = this;
             this.jc.Password = null;
             this.jc.User = null;
-            this.jc.OnAuthenticate += new bedrock.ObjectHandler(this.jc_OnAuthenticate);
             this.jc.OnAuthError += new jabber.client.IQHandler(this.jc_OnAuthError);
-            this.jc.OnWriteText += new bedrock.TextHandler(this.jc_OnWriteText);
-            this.jc.OnPresence += new jabber.client.PresenceHandler(this.jc_OnPresence);
-            this.jc.OnError += new bedrock.ExceptionHandler(this.jc_OnError);
-            this.jc.OnIQ += new jabber.client.IQHandler(this.jc_OnIQ);
-            this.jc.OnDisconnect += new bedrock.ObjectHandler(this.jc_OnDisconnect);
-            this.jc.OnRegistered += new jabber.client.IQHandler(this.jc_OnRegistered);
             this.jc.OnReadText += new bedrock.TextHandler(this.jc_OnReadText);
             this.jc.OnRegisterInfo += new jabber.client.IQHandler(this.jc_OnRegisterInfo);
+            this.jc.OnWriteText += new bedrock.TextHandler(this.jc_OnWriteText);
+            this.jc.OnAuthenticate += new bedrock.ObjectHandler(this.jc_OnAuthenticate);
             this.jc.OnMessage += new jabber.client.MessageHandler(this.jc_OnMessage);
+            this.jc.OnIQ += new jabber.client.IQHandler(this.jc_OnIQ);
+            this.jc.OnDisconnect += new bedrock.ObjectHandler(this.jc_OnDisconnect);
+            this.jc.OnPresence += new jabber.client.PresenceHandler(this.jc_OnPresence);
+            this.jc.OnRegistered += new jabber.client.IQHandler(this.jc_OnRegistered);
+            this.jc.OnStreamError += new jabber.protocol.ProtocolHandler(this.jc_OnStreamError);
+            this.jc.OnError += new bedrock.ExceptionHandler(this.jc_OnError);
+            this.jc.OnConnect += new bedrock.net.AsyncSocketHandler(this.jc_OnConnect);
             // 
             // rm
             // 
@@ -176,26 +194,6 @@ namespace Example
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(632, 244);
             this.tabControl1.TabIndex = 2;
-            // 
-            // tpDebug
-            // 
-            this.tpDebug.Controls.AddRange(new System.Windows.Forms.Control[] {
-                                                                                  this.debug});
-            this.tpDebug.Location = new System.Drawing.Point(4, 22);
-            this.tpDebug.Name = "tpDebug";
-            this.tpDebug.Size = new System.Drawing.Size(624, 218);
-            this.tpDebug.TabIndex = 0;
-            this.tpDebug.Text = "Debug";
-            // 
-            // debug
-            // 
-            this.debug.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.debug.Name = "debug";
-            this.debug.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.debug.Size = new System.Drawing.Size(624, 218);
-            this.debug.TabIndex = 2;
-            this.debug.Text = "";
-            this.debug.WordWrap = false;
             // 
             // tpRoster
             // 
@@ -225,18 +223,25 @@ namespace Example
             this.ilPresence.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("ilPresence.ImageStream")));
             this.ilPresence.TransparentColor = System.Drawing.Color.Transparent;
             // 
-            // pnlCon
+            // tpDebug
             // 
-            this.pnlCon.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Spring;
-            this.pnlCon.Text = "Click on \"Offline\", and select a presence to log in.";
-            this.pnlCon.Width = 569;
+            this.tpDebug.Controls.AddRange(new System.Windows.Forms.Control[] {
+                                                                                  this.debug});
+            this.tpDebug.Location = new System.Drawing.Point(4, 22);
+            this.tpDebug.Name = "tpDebug";
+            this.tpDebug.Size = new System.Drawing.Size(624, 218);
+            this.tpDebug.TabIndex = 0;
+            this.tpDebug.Text = "Debug";
             // 
-            // pnlPresence
+            // debug
             // 
-            this.pnlPresence.Alignment = System.Windows.Forms.HorizontalAlignment.Right;
-            this.pnlPresence.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Contents;
-            this.pnlPresence.Text = "Offline";
-            this.pnlPresence.Width = 47;
+            this.debug.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.debug.Name = "debug";
+            this.debug.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+            this.debug.Size = new System.Drawing.Size(624, 218);
+            this.debug.TabIndex = 2;
+            this.debug.Text = "";
+            this.debug.WordWrap = false;
             // 
             // mnuPresence
             // 
@@ -260,16 +265,16 @@ namespace Example
             this.mnuAway.Text = "Away";
             this.mnuAway.Click += new System.EventHandler(this.mnuAway_Click);
             // 
+            // menuItem1
+            // 
+            this.menuItem1.Index = 2;
+            this.menuItem1.Text = "-";
+            // 
             // mnuOffline
             // 
             this.mnuOffline.Index = 3;
             this.mnuOffline.Text = "Offline";
             this.mnuOffline.Click += new System.EventHandler(this.mnuOffline_Click);
-            // 
-            // menuItem1
-            // 
-            this.menuItem1.Index = 2;
-            this.menuItem1.Text = "-";
             // 
             // MainForm
             // 
@@ -282,11 +287,11 @@ namespace Example
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
             this.Text = "MainForm";
-            this.tabControl1.ResumeLayout(false);
-            this.tpDebug.ResumeLayout(false);
-            this.tpRoster.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pnlCon)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pnlPresence)).EndInit();
+            this.tabControl1.ResumeLayout(false);
+            this.tpRoster.ResumeLayout(false);
+            this.tpDebug.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -356,12 +361,18 @@ namespace Example
         {
             roster.Nodes.Clear();
             pnlPresence.Text = "Offline";
-            pnlCon.Text = "Disconnected";
+            if (!m_err)
+                pnlCon.Text = "Disconnected";
         }
 
         private void jc_OnError(object sender, System.Exception ex)
         {
             pnlCon.Text = "Error!";
+            debug.SelectionColor = Color.Green;
+            debug.AppendText("ERROR: ");
+            debug.SelectionColor = Color.Black;
+            debug.AppendText(ex.ToString());
+            debug.AppendText("\r\n");
         }
 
 
@@ -494,6 +505,18 @@ namespace Example
         {
             if (jc.IsAuthenticated)
                 jc.Close();
+        }
+
+        private void jc_OnConnect(object sender, bedrock.net.AsyncSocket sock)
+        {
+            m_err = false;
+            debug.AppendText("Connected to: " + sock.Address.IP + "\r\n");
+        }
+
+        private void jc_OnStreamError(object sender, System.Xml.XmlElement rp)
+        {
+            m_err = true;
+            pnlCon.Text = "Stream error: " + rp.InnerText;
         }
     }
 

@@ -37,6 +37,11 @@ using bedrock.util;
 namespace bedrock.net
 {
     /// <summary>
+    /// Delegate for members that receive a socket.
+    /// </summary>
+    public delegate void AsyncSocketHandler(object sender, AsyncSocket sock);
+
+    /// <summary>
     /// Lame exception, since I couldn't find one I liked.
     /// </summary>
     [RCS(@"$Header$")]
