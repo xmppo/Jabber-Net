@@ -67,7 +67,6 @@ namespace jabber.server
     public class JabberService : 
         jabber.connection.SocketElementStream
     {
-        private string        m_name   = null;
         private string        m_secret = null;
         private ComponentType m_type   = ComponentType.Accept;
         private XmlDocument   m_doc    = new XmlDocument();
@@ -91,11 +90,10 @@ namespace jabber.server
             string name,
             string secret) : base()
         {
-            this.Server = host;
+            this.Server = name;
+            this.NetworkHost = host;
             this.Port = port;
-            
 
-            m_name   = name;
             m_secret = secret;
             m_type = ComponentType.Accept;
         }
@@ -108,9 +106,9 @@ namespace jabber.server
         /// <param name="secret">Component secret</param>
         public JabberService(int port, string name, string secret) : base()
         {
+            this.Server = name;
             this.Port = port;
             
-            m_name   = name;
             m_secret = secret;
             m_type   = ComponentType.Connect;
         }
@@ -154,8 +152,21 @@ namespace jabber.server
         [Category("Component")]
         public string ComponentID
         {
-            get { return m_name; }
-            set { m_name = value; }
+            get { return Server; }
+            set { Server = value; }
+        }
+
+        /// <summary>
+        /// The name of the server to connect to.  
+        /// </summary>
+        [Description("The name of the Jabber server.")]
+        [DefaultValue("jabber.com")]
+        [Category("Jabber")]
+        [Browsable(false)]
+        public override string Server
+        {
+            get { return base.Server; }
+            set { base.Server = value; }
         }
 
         /// <summary>
@@ -253,7 +264,7 @@ namespace jabber.server
             else
             {
                 Stream s = new Stream(m_doc, URI.ACCEPT);
-                s.From = m_name;
+                s.From = Server;
                 StreamID = s.ID;
                 Write(s.StartTag());
             }

@@ -264,7 +264,7 @@ namespace jabber.connection
         [Description("The name of the Jabber server.")]
         [DefaultValue("jabber.com")]
         [Category("Jabber")]
-        public string Server
+        public virtual string Server
         {
             get { return m_to; }
             set { m_to = value; }
@@ -860,6 +860,10 @@ namespace jabber.connection
             }
             else
             {
+                lock (m_stateLock)
+                {
+                    m_state = NonSASLAuthState.Instance;
+                }
                 hack = true;
             }
 
