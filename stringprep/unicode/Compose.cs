@@ -60,6 +60,8 @@ namespace stringprep.unicode
             int index_a, index_b;
 
             index_a = Index(a);
+            // for stuff in this range, there is only one possible combination for the character
+            // on the left
             if ((index_a >= ComposeData.FIRST_SINGLE_START) && (index_a < ComposeData.SECOND_START))
             {
                 if (b == ComposeData.FirstSingle[index_a - ComposeData.FIRST_SINGLE_START, 0])
@@ -75,6 +77,7 @@ namespace stringprep.unicode
             }
 
             index_b = Index(b);
+            // for this range, only one possible combination to the right.
             if (index_b >= ComposeData.SECOND_SINGLE_START)
             {
                 if (a ==
@@ -93,7 +96,7 @@ namespace stringprep.unicode
             if ((index_a >= ComposeData.FIRST_START) && 
                 (index_a < ComposeData.FIRST_SINGLE_START) && 
                 (index_b >= ComposeData.SECOND_START) && 
-                (index_a < ComposeData.SECOND_SINGLE_START))
+                (index_b < ComposeData.SECOND_SINGLE_START))  // TODO: check to see if this should be b
             {
                 char res = ComposeData.Array[index_a - ComposeData.FIRST_START, 
                     index_b - ComposeData.SECOND_START];

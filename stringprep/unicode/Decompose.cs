@@ -55,6 +55,24 @@ namespace stringprep.unicode
             m_offset = offset;
         }
 
+        
+        /// <summary>
+        /// The character to be decomposed.
+        /// </summary>
+        public char Character
+        {
+            get { return m_ch; }
+        }
+
+        /// <summary>
+        /// The offset into the Expansion array
+        /// </summary>
+        public int Offset
+        {
+            get { return m_offset; }
+        }
+        
+
         /// <summary>
         /// Used for BinarySearch.
         /// </summary>
@@ -88,32 +106,19 @@ namespace stringprep.unicode
         }
 
         /// <summary>
-        /// What is the combining class for the given character?
-        /// </summary>
-        /// <param name="c">Character to look up</param>
-        /// <returns>Combining class for this character</returns>
-        public static int CombiningClass(char c) 
-        {
-            int page = c >> 8;
-            if (DecomposeData.CombiningClasses[page] == 255)
-                return 0;
-            else
-                return DecomposeData.Data[DecomposeData.CombiningClasses[page], c & 0xff];
-        }
-
-        /// <summary>
         /// Reorder characters in the given range into their correct cannonical ordering with
         /// respect to combining class.
         /// </summary>
         /// <param name="buf">Buffer to reorder</param>
-        /// <param name="start">Start of segment to reorder</param>
+        /// <param name="offset">Start of segment to reorder</param>
         /// <param name="len">Lenght of segment to reorder</param>
-        public static void CanonicalOrdering(StringBuilder buf, int start, int len)
+        public static void CanonicalOrdering(StringBuilder buf, int offset, int len)
         {
             int i, j;
             bool swap = false;
             int p_a, p_b;
             char t;
+            int start = offset;
             int stop = start + len - 1;
 
             // From Unicode 3.0, section 3.10
@@ -126,16 +131,16 @@ namespace stringprep.unicode
             do 
             {
                 swap = false;
-                p_a = CombiningClass(buf[start]);
+                p_a = Combining.Class(buf[start]);
 
                 for (i = start; i < stop; i++)
                 {
-                    p_b = CombiningClass(buf[i + 1]);
+                    p_b = Combining.Class(buf[i + 1]);
                     if ((p_b != 0) && (p_a > p_b))
                     {
                         for (j = i; j > 0; j--)
                         {
-                            if (CombiningClass(buf[j]) <= p_b)
+                            if (Combining.Class(buf[j]) <= p_b)
                                 break;
 
                             t = buf[j + 1];
@@ -144,10 +149,16 @@ namespace stringprep.unicode
                             swap = true;
                         }
                         /* We're re-entering the loop looking at the old
-                           character again.  */
-                        p_b = p_a;
+                           character again.  Don't reset p_a.*/
+                        continue;
                     }
                     p_a = p_b;
+
+                    // once we get to a start character without any swaps, 
+                    // there can be no further changes.  No sense constantly 
+                    // rechecking stuff we've already checked.
+                    if (!swap && (p_a == 0))
+                        start = i;
                 }
             } while (swap);
         }
