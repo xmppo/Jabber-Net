@@ -102,6 +102,8 @@ namespace jabber.protocol
             XmlElement e = this[name];
             if (e == null)
                 return null;
+            if (!e.HasChildNodes)
+                return null;
             return e.InnerText;
         }
         /// <summary>
@@ -112,22 +114,14 @@ namespace jabber.protocol
         protected void SetElem(string name, string value)
         {
             XmlElement e = this[name];
-            if (e == null)
-            {
-                e = this.OwnerDocument.CreateElement(null, name, this.NamespaceURI);
-                this.AppendChild(e);
-            }
-            if (value == null)
-            {
-                if (e.HasChildNodes)
-                {
-                    e.InnerXml = null;
-                }
-            }
-            else
-            {
+            if (e != null)
+                this.RemoveChild(e);
+
+            e = this.OwnerDocument.CreateElement(null, name, this.NamespaceURI);
+            this.AppendChild(e);
+
+            if (value != null)
                 e.InnerText = value;
-            }
         }
         
         /// <summary>
