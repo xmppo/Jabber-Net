@@ -35,7 +35,7 @@ using System.Xml;
 
 using jabber.protocol.client;
 
-namespace jabber.client
+namespace jabber.connection
 {
     /// <summary>
     /// Received a response to an IQ request.
@@ -47,28 +47,25 @@ namespace jabber.client
     /// </summary>
     public class IQTracker
     {
-        // this hash doesn't need concurrency control, i don't think, since no id will be re-used.
-        private Hashtable       m_pending = new Hashtable();
-        private JabberClient    m_cli     = null;
+        private Hashtable           m_pending = new Hashtable();
+        private SocketElementStream m_cli     = null;
 
         /// <summary>
         /// Create a new IQ tracker
         /// </summary>
-        /// <param name="cli">The client to send/receive on</param>
-        public IQTracker(JabberClient cli)
+        /// <param name="stream">The client to send/receive on</param>
+        public IQTracker(SocketElementStream stream)
         {
-            m_cli = cli;
-            m_cli.OnIQ += new IQHandler(OnIQ);
+            m_cli = stream;
+            m_cli.OnProtocol += new jabber.xml.ProtocolHandler(OnIQ);
         }
-
-        /// <summary>
-        /// Received an XDB element on Component.  
-        /// Is this a response to a tracked request?
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="iq"></param>
-        private void OnIQ(object sender, IQ iq)
+        
+        private void OnIQ(object sender, XmlElement elem)
         {
+            IQ iq = elem as IQ;
+            if (iq == null)
+                return;
+
             string id = iq.ID;
             TrackerData td;
 
