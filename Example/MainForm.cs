@@ -331,23 +331,9 @@ namespace Example
 
         private void Connect()
         {
-            muzzle.ClientLogin log = new muzzle.ClientLogin();
-            log.User = jc.User;
-            log.Password = jc.Password;
-            log.Server = jc.Server;
-            log.Port = jc.Port;
-#if !NO_SSL
-            log.SSL = jc.SSL;
-#endif            
+            muzzle.ClientLogin log = new muzzle.ClientLogin(jc);
             if (log.ShowDialog() == DialogResult.OK)
             {
-                jc.User = log.User;
-                jc.Password = log.Password;
-                jc.Server = log.Server;
-                jc.Port = log.Port;
-#if !NO_SSL
-                jc.SSL = log.SSL;
-#endif
                 jc.Connect();
             }
         }
