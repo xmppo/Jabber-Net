@@ -16,10 +16,10 @@
  * Copyrights
  * 
  * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * Copyright (c) 2002-2004 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at http://www.cursive.net/.
  *
- * Portions Copyright (c) 2002 Joe Hildebrand.
+ * Portions Copyright (c) 2002-2004 Joe Hildebrand.
  * 
  * Acknowledgements
  * 
@@ -31,6 +31,7 @@ using System;
 using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
+using System.ComponentModel.Design;
 using System.Windows.Forms;
 
 namespace muzzle
@@ -116,7 +117,30 @@ namespace muzzle
         /// </summary>
         public jabber.client.JabberClient Client
         {
-            get { return m_cli; }
+            get 
+            {
+                // If we are running in the designer, let's try to auto-hook a JabberClient
+                if ((m_cli == null) && DesignMode)
+                {
+                    IDesignerHost host = (IDesignerHost) base.GetService(typeof(IDesignerHost));
+                    if (host != null)
+                    {
+                        Component root = host.RootComponent as Component;
+                        if (root != null)
+                        {
+                            foreach (Component c in root.Container.Components)
+                            {
+                                if (c is jabber.client.JabberClient)
+                                {
+                                    m_cli = (jabber.client.JabberClient) c;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                return m_cli; 
+            }
             set { SetAll(value); }
         }
 

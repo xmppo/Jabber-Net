@@ -16,10 +16,10 @@
  * Copyrights
  * 
  * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * Copyright (c) 2002-2004 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at http://www.cursive.net/.
  *
- * Portions Copyright (c) 2002 Joe Hildebrand.
+ * Portions Copyright (c) 2002-2004 Joe Hildebrand.
  * 
  * Acknowledgements
  * 
@@ -57,8 +57,6 @@ namespace Example
         private System.Windows.Forms.TabPage tpDebug;
         private System.Windows.Forms.RichTextBox debug;
         private System.Windows.Forms.TabPage tpRoster;
-        private System.Windows.Forms.TreeView roster;
-        private System.Windows.Forms.ImageList ilPresence;
         private System.Windows.Forms.StatusBarPanel pnlCon;
         private System.Windows.Forms.StatusBarPanel pnlPresence;
         private System.Windows.Forms.ContextMenu mnuPresence;
@@ -69,6 +67,7 @@ namespace Example
         private System.ComponentModel.IContainer components;
         private System.Windows.Forms.Splitter splitter1;
         private System.Windows.Forms.TextBox txtDebugInput;
+        private muzzle.RosterTree roster;
 
         private bool m_err = false;
 
@@ -116,11 +115,10 @@ namespace Example
             this.pm = new jabber.client.PresenceManager(this.components);
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tpRoster = new System.Windows.Forms.TabPage();
-            this.roster = new System.Windows.Forms.TreeView();
-            this.ilPresence = new System.Windows.Forms.ImageList(this.components);
+            this.roster = new muzzle.RosterTree();
             this.tpDebug = new System.Windows.Forms.TabPage();
-            this.debug = new System.Windows.Forms.RichTextBox();
             this.splitter1 = new System.Windows.Forms.Splitter();
+            this.debug = new System.Windows.Forms.RichTextBox();
             this.txtDebugInput = new System.Windows.Forms.TextBox();
             this.mnuPresence = new System.Windows.Forms.ContextMenu();
             this.mnuAvailable = new System.Windows.Forms.MenuItem();
@@ -163,7 +161,9 @@ namespace Example
             // 
             this.jc.AutoReconnect = 3F;
             this.jc.InvokeControl = this;
+            this.jc.LocalCertificate = null;
             this.jc.Password = null;
+            this.jc.Synchronous = true;
             this.jc.User = null;
             this.jc.OnAuthError += new jabber.client.IQHandler(this.jc_OnAuthError);
             this.jc.OnReadText += new bedrock.TextHandler(this.jc_OnReadText);
@@ -173,7 +173,6 @@ namespace Example
             this.jc.OnMessage += new jabber.client.MessageHandler(this.jc_OnMessage);
             this.jc.OnIQ += new jabber.client.IQHandler(this.jc_OnIQ);
             this.jc.OnDisconnect += new bedrock.ObjectHandler(this.jc_OnDisconnect);
-            this.jc.OnPresence += new jabber.client.PresenceHandler(this.jc_OnPresence);
             this.jc.OnRegistered += new jabber.client.IQHandler(this.jc_OnRegistered);
             this.jc.OnStreamError += new jabber.protocol.ProtocolHandler(this.jc_OnStreamError);
             this.jc.OnError += new bedrock.ExceptionHandler(this.jc_OnError);
@@ -182,9 +181,7 @@ namespace Example
             // rm
             // 
             this.rm.Client = this.jc;
-            this.rm.OnRosterBegin += new bedrock.ObjectHandler(this.rm_OnRosterBegin);
             this.rm.OnRosterEnd += new bedrock.ObjectHandler(this.rm_OnRosterEnd);
-            this.rm.OnRosterItem += new jabber.client.RosterItemHandler(this.rm_OnRosterItem);
             // 
             // pm
             // 
@@ -212,21 +209,19 @@ namespace Example
             // 
             // roster
             // 
+            this.roster.Client = this.jc;
             this.roster.Dock = System.Windows.Forms.DockStyle.Fill;
             this.roster.ImageIndex = 1;
-            this.roster.ImageList = this.ilPresence;
             this.roster.Location = new System.Drawing.Point(0, 0);
             this.roster.Name = "roster";
+            this.roster.PresenceManager = this.pm;
+            this.roster.RosterManager = this.rm;
+            this.roster.ShowLines = false;
             this.roster.ShowRootLines = false;
             this.roster.Size = new System.Drawing.Size(624, 390);
+            this.roster.Sorted = true;
             this.roster.TabIndex = 0;
             this.roster.DoubleClick += new System.EventHandler(this.roster_DoubleClick);
-            // 
-            // ilPresence
-            // 
-            this.ilPresence.ImageSize = new System.Drawing.Size(20, 20);
-            this.ilPresence.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("ilPresence.ImageStream")));
-            this.ilPresence.TransparentColor = System.Drawing.Color.Transparent;
             // 
             // tpDebug
             // 
@@ -239,6 +234,15 @@ namespace Example
             this.tpDebug.TabIndex = 0;
             this.tpDebug.Text = "Debug";
             // 
+            // splitter1
+            // 
+            this.splitter1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.splitter1.Location = new System.Drawing.Point(0, 339);
+            this.splitter1.Name = "splitter1";
+            this.splitter1.Size = new System.Drawing.Size(624, 3);
+            this.splitter1.TabIndex = 3;
+            this.splitter1.TabStop = false;
+            // 
             // debug
             // 
             this.debug.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -248,15 +252,6 @@ namespace Example
             this.debug.TabIndex = 2;
             this.debug.Text = "";
             this.debug.WordWrap = false;
-            // 
-            // splitter1
-            // 
-            this.splitter1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.splitter1.Location = new System.Drawing.Point(0, 339);
-            this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(624, 3);
-            this.splitter1.TabIndex = 3;
-            this.splitter1.TabStop = false;
             // 
             // txtDebugInput
             // 
@@ -380,7 +375,6 @@ namespace Example
 
         private void jc_OnDisconnect(object sender)
         {
-            roster.Nodes.Clear();
             pnlPresence.Text = "Offline";
             if (!m_err)
                 pnlCon.Text = "Disconnected";
@@ -437,7 +431,9 @@ namespace Example
             jabber.protocol.x.Data x = msg["x", URI.XDATA] as jabber.protocol.x.Data;
             if (x != null)
             {
-                new muzzle.XDataForm(x).ShowDialog(this);
+                muzzle.XDataForm f = new muzzle.XDataForm(msg);
+                f.ShowDialog(this);
+                jc.Write(f.GetResponse());
             }
             else
                 MessageBox.Show(this, msg.Body, msg.From, MessageBoxButtons.OK);
@@ -468,41 +464,12 @@ namespace Example
             }
         }
 
-        private void rm_OnRosterBegin(object sender)
-        {
-            roster.BeginUpdate();
-        }
-
-        private void rm_OnRosterEnd(object sender)
-        {
-            roster.EndUpdate();
-        }
-
-        private void rm_OnRosterItem(object sender, jabber.protocol.iq.Item ri)
-        {
-            roster.Nodes.Add(new RosterNode(ri, pm));
-        }
-
-        private void jc_OnPresence(object sender, jabber.protocol.client.Presence pres)
-        {
-            string bareFrom = pres.From.Bare;
-            foreach (RosterNode n in roster.Nodes)
-            {
-                if (n.jid == bareFrom)
-                {
-                    n.ImageIndex = (pres.Type == PresenceType.available) ? 0 : 1;
-                    n.SelectedImageIndex = n.ImageIndex;
-                    break;
-                }
-            }
-        }
-
         private void roster_DoubleClick(object sender, System.EventArgs e)
         {
-            RosterNode n = roster.SelectedNode as RosterNode;
+            muzzle.RosterTree.ItemNode n = roster.SelectedNode as muzzle.RosterTree.ItemNode;
             if (n == null)
                 return;
-            new SendMessage(jc, n.jid).Show();
+            new SendMessage(jc, n.JID).Show();
         }
 
         private void sb_PanelClick(object sender, System.Windows.Forms.StatusBarPanelClickEventArgs e)
@@ -577,20 +544,10 @@ namespace Example
         {
             MessageBox.Show(e.ExceptionObject.ToString(), "Unhandled exception: " + e.GetType().ToString());
         }
-    }
 
-    public class RosterNode : TreeNode
-    {
-        private jabber.protocol.iq.Item i;
-        private jabber.client.PresenceManager p;
-        public string jid;
-
-        public RosterNode(jabber.protocol.iq.Item ri, jabber.client.PresenceManager pm) :
-            base(ri.Nickname, (pm[ri.JID] == null) ? 1 : 0, (pm[ri.JID] == null) ? 1 : 0)
+        private void rm_OnRosterEnd(object sender)
         {
-            i = ri;
-            p = pm;
-            jid = i.JID;
+            roster.ExpandAll();
         }
     }
 }

@@ -16,10 +16,10 @@
  * Copyrights
  * 
  * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * Copyright (c) 2002-2004 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at http://www.cursive.net/.
  *
- * Portions Copyright (c) 2003 Joe Hildebrand.
+ * Portions Copyright (c) 2002-2004 Joe Hildebrand.
  * 
  * --------------------------------------------------------------------------*/
 using System;

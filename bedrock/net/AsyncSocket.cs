@@ -16,15 +16,15 @@
  * Copyrights
  * 
  * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * Copyright (c) 2002-2004 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at http://www.cursive.net/.
  *
- * Portions Copyright (c) 2002 Joe Hildebrand.
- * Portions Copyright (c) 2002 David Waite.
+ * Portions Copyright (c) 2002-2004 Joe Hildebrand.
  * 
  * Acknowledgements
  * 
- * Special thanks to Dave Smith (dizzyd) for the design work.
+ * Special thanks to Dave Smith (dizzyd) for the design work, and to 
+ * David Waite for bug fixes.
  * 
  * --------------------------------------------------------------------------*/
 using System;

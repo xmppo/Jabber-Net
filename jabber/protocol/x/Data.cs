@@ -16,10 +16,10 @@
  * Copyrights
  * 
  * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * Copyright (c) 2002-2004 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at http://www.cursive.net/.
  *
- * Portions Copyright (c) 2002 Joe Hildebrand.
+ * Portions Copyright (c) 2002-2004 Joe Hildebrand.
  * 
  * Acknowledgements
  * 
@@ -483,6 +483,34 @@ namespace jabber.protocol.x
         {
             Option o = new Option(this.OwnerDocument);
             AddChild(o);
+            return o;
+        }
+
+        /// <summary>
+        /// Add a field option, with a value
+        /// </summary>
+        /// <param name="val">Value of the option</param>
+        /// <returns></returns>
+        public Option AddOption(String val)
+        {
+            Option o = new Option(this.OwnerDocument);
+            AddChild(o);
+            o.Val = val;
+            return o;
+        }
+
+        /// <summary>
+        /// Add a field option, with a value
+        /// </summary>
+        /// <param name="label">Label for the option</param>
+        /// <param name="val">Value of the option</param>
+        /// <returns></returns>
+        public Option AddOption(String label, String val)
+        {
+            Option o = new Option(this.OwnerDocument);
+            AddChild(o);
+            o.Val = val;
+            o.Label = label;
             return o;
         }
     }

@@ -16,10 +16,10 @@
 ' Copyrights
 ' 
 ' Portions created by or assigned to Cursive Systems, Inc. are 
-' Copyright (c) 2002 Cursive Systems, Inc.  All Rights Reserved.  Contact
+' Copyright (c) 2002-2004 Cursive Systems, Inc.  All Rights Reserved.  Contact
 ' information for Cursive Systems, Inc. is available at http://www.cursive.net/.
 '
-' Portions Copyright (c) 2003 Joe Hildebrand.
+' Portions Copyright (c) 2002-2004 Joe Hildebrand.
 ' 
 ' Acknowledgements
 ' 
@@ -80,32 +80,32 @@ Public Class MainForm
     Friend WithEvents TabControl1 As System.Windows.Forms.TabControl
     Friend WithEvents tpRoster As System.Windows.Forms.TabPage
     Friend WithEvents tpDebug As System.Windows.Forms.TabPage
-    Friend WithEvents roster As System.Windows.Forms.TreeView
     Friend WithEvents debug As System.Windows.Forms.RichTextBox
     Friend WithEvents mnuAvailable As System.Windows.Forms.MenuItem
     Friend WithEvents mnuAway As System.Windows.Forms.MenuItem
     Friend WithEvents mnuOffline As System.Windows.Forms.MenuItem
+    Friend WithEvents roster As muzzle.RosterTree
 
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container()
+        Me.components = New System.ComponentModel.Container
         Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(MainForm))
-        Me.sb = New System.Windows.Forms.StatusBar()
-        Me.pnlCon = New System.Windows.Forms.StatusBarPanel()
-        Me.pnlPresence = New System.Windows.Forms.StatusBarPanel()
+        Me.sb = New System.Windows.Forms.StatusBar
+        Me.pnlCon = New System.Windows.Forms.StatusBarPanel
+        Me.pnlPresence = New System.Windows.Forms.StatusBarPanel
         Me.jc = New jabber.client.JabberClient(Me.components)
         Me.rm = New jabber.client.RosterManager(Me.components)
         Me.pm = New jabber.client.PresenceManager(Me.components)
         Me.ilPresence = New System.Windows.Forms.ImageList(Me.components)
-        Me.mnuPresence = New System.Windows.Forms.ContextMenu()
-        Me.mnuAvailable = New System.Windows.Forms.MenuItem()
-        Me.mnuAway = New System.Windows.Forms.MenuItem()
-        Me.MenuItem3 = New System.Windows.Forms.MenuItem()
-        Me.mnuOffline = New System.Windows.Forms.MenuItem()
-        Me.TabControl1 = New System.Windows.Forms.TabControl()
-        Me.tpRoster = New System.Windows.Forms.TabPage()
-        Me.roster = New System.Windows.Forms.TreeView()
-        Me.tpDebug = New System.Windows.Forms.TabPage()
-        Me.debug = New System.Windows.Forms.RichTextBox()
+        Me.mnuPresence = New System.Windows.Forms.ContextMenu
+        Me.mnuAvailable = New System.Windows.Forms.MenuItem
+        Me.mnuAway = New System.Windows.Forms.MenuItem
+        Me.MenuItem3 = New System.Windows.Forms.MenuItem
+        Me.mnuOffline = New System.Windows.Forms.MenuItem
+        Me.TabControl1 = New System.Windows.Forms.TabControl
+        Me.tpRoster = New System.Windows.Forms.TabPage
+        Me.tpDebug = New System.Windows.Forms.TabPage
+        Me.debug = New System.Windows.Forms.RichTextBox
+        Me.roster = New muzzle.RosterTree
         CType(Me.pnlCon, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pnlPresence, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabControl1.SuspendLayout()
@@ -139,7 +139,9 @@ Public Class MainForm
         '
         Me.jc.AutoReconnect = 3.0!
         Me.jc.InvokeControl = Me
+        Me.jc.LocalCertificate = Nothing
         Me.jc.Password = Nothing
+        Me.jc.Synchronous = True
         Me.jc.User = Nothing
         '
         'rm
@@ -152,7 +154,6 @@ Public Class MainForm
         '
         'ilPresence
         '
-        Me.ilPresence.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit
         Me.ilPresence.ImageSize = New System.Drawing.Size(20, 20)
         Me.ilPresence.ImageStream = CType(resources.GetObject("ilPresence.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.ilPresence.TransparentColor = System.Drawing.Color.Transparent
@@ -183,8 +184,10 @@ Public Class MainForm
         '
         'TabControl1
         '
-        Me.TabControl1.Controls.AddRange(New System.Windows.Forms.Control() {Me.tpRoster, Me.tpDebug})
+        Me.TabControl1.Controls.Add(Me.tpRoster)
+        Me.TabControl1.Controls.Add(Me.tpDebug)
         Me.TabControl1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TabControl1.Location = New System.Drawing.Point(0, 0)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
         Me.TabControl1.Size = New System.Drawing.Size(632, 244)
@@ -192,24 +195,16 @@ Public Class MainForm
         '
         'tpRoster
         '
-        Me.tpRoster.Controls.AddRange(New System.Windows.Forms.Control() {Me.roster})
+        Me.tpRoster.Controls.Add(Me.roster)
         Me.tpRoster.Location = New System.Drawing.Point(4, 22)
         Me.tpRoster.Name = "tpRoster"
         Me.tpRoster.Size = New System.Drawing.Size(624, 218)
         Me.tpRoster.TabIndex = 0
         Me.tpRoster.Text = "Roster"
         '
-        'roster
-        '
-        Me.roster.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.roster.ImageList = Me.ilPresence
-        Me.roster.Name = "roster"
-        Me.roster.Size = New System.Drawing.Size(624, 218)
-        Me.roster.TabIndex = 0
-        '
         'tpDebug
         '
-        Me.tpDebug.Controls.AddRange(New System.Windows.Forms.Control() {Me.debug})
+        Me.tpDebug.Controls.Add(Me.debug)
         Me.tpDebug.Location = New System.Drawing.Point(4, 22)
         Me.tpDebug.Name = "tpDebug"
         Me.tpDebug.Size = New System.Drawing.Size(624, 218)
@@ -219,16 +214,33 @@ Public Class MainForm
         'debug
         '
         Me.debug.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.debug.Location = New System.Drawing.Point(0, 0)
         Me.debug.Name = "debug"
         Me.debug.Size = New System.Drawing.Size(624, 218)
         Me.debug.TabIndex = 0
         Me.debug.Text = ""
         '
+        'roster
+        '
+        Me.roster.Client = Me.jc
+        Me.roster.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.roster.ImageIndex = 1
+        Me.roster.Location = New System.Drawing.Point(0, 0)
+        Me.roster.Name = "roster"
+        Me.roster.PresenceManager = Me.pm
+        Me.roster.RosterManager = Me.rm
+        Me.roster.ShowLines = False
+        Me.roster.ShowRootLines = False
+        Me.roster.Size = New System.Drawing.Size(624, 218)
+        Me.roster.Sorted = True
+        Me.roster.TabIndex = 0
+        '
         'MainForm
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
         Me.ClientSize = New System.Drawing.Size(632, 266)
-        Me.Controls.AddRange(New System.Windows.Forms.Control() {Me.TabControl1, Me.sb})
+        Me.Controls.Add(Me.TabControl1)
+        Me.Controls.Add(Me.sb)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "MainForm"
         Me.Text = "MainForm"
@@ -326,7 +338,6 @@ Public Class MainForm
     End Sub
 
     Private Sub jc_OnDisconnect(ByVal sender As Object) Handles jc.OnDisconnect
-        roster.Nodes.Clear()
         pnlPresence.Text = "Offline"
 
         If Not m_err Then
@@ -391,40 +402,13 @@ Public Class MainForm
     End Sub
 
 
-    Private Sub rm_OnRosterBegin(ByVal sender As Object) Handles rm.OnRosterBegin
-        roster.BeginUpdate()
-    End Sub
-
     Private Sub rm_OnRosterEnd(ByVal sender As Object) Handles rm.OnRosterEnd
-        roster.EndUpdate()
+        roster.ExpandAll()
     End Sub
 
-    Private Sub rm_OnRosterItem(ByVal sender As Object, ByVal ri As jabber.protocol.iq.Item) Handles rm.OnRosterItem
-        roster.Nodes.Add(New RosterNode(ri, pm))
-    End Sub
-
-    Private Sub jc_OnPresence(ByVal sender As Object, ByVal pres As jabber.protocol.client.Presence) Handles jc.OnPresence
-        Dim n As RosterNode
-        Dim bareFrom As String = pres.From.Bare
-
-        For Each n In roster.Nodes
-            If n.jid = bareFrom Then
-                If pres.Type = PresenceType.available Then
-                    n.ImageIndex = 0
-                    n.SelectedImageIndex = 0
-                Else
-                    n.ImageIndex = 1
-                    n.SelectedImageIndex = 1
-                End If
-
-                Exit For
-            End If
-        Next
-    End Sub
-
-    Private Sub roster_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles roster.DoubleClick
-        Dim n As RosterNode = DirectCast(roster.SelectedNode, RosterNode)
-        Dim sm As New SendMessage(jc, n.jid)
+    Private Sub roster_DoubleClick(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        Dim n As muzzle.RosterTree.ItemNode = DirectCast(roster.SelectedNode, muzzle.RosterTree.ItemNode)
+        Dim sm As New SendMessage(jc, n.JID.ToString())
         sm.Show()
     End Sub
 
@@ -433,29 +417,6 @@ Public Class MainForm
         pnlCon.Text = "Stream error: " + rp.InnerText
     End Sub
 End Class
-
-Public Class RosterNode
-    Inherits TreeNode
-
-    Private i As jabber.protocol.iq.Item
-    Private p As jabber.client.PresenceManager
-    Public jid As String
-
-    Public Sub New(ByVal ri As jabber.protocol.iq.Item, ByVal pm As jabber.client.PresenceManager)
-        MyBase.New(ri.Nickname)
-
-        Dim image As Integer = 0
-        If pm.Item(ri.JID) Is Nothing Then image = 1
-
-        Me.ImageIndex = image
-        Me.SelectedImageIndex = image
-
-        i = ri
-        p = pm
-        jid = i.JID.ToString()
-    End Sub
-End Class
-
 
 '-------------------------- Add packet type -----------------------
 ' don't forget to call AddFactory() in OnConnect!

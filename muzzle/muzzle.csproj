@@ -148,6 +148,20 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "RosterTree.bmp"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "RosterTree.cs"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "RosterTree.resx"
+                    DependentUpon = "RosterTree.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "StripChart.bmp"
                     BuildAction = "EmbeddedResource"
                 />

@@ -16,10 +16,10 @@
  * Copyrights
  * 
  * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * Copyright (c) 2002-2004 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at http://www.cursive.net/.
  *
- * Portions Copyright (c) 2002 Joe Hildebrand.
+ * Portions Copyright (c) 2002-2004 Joe Hildebrand.
  * 
  * Acknowledgements
  * 
@@ -126,8 +126,8 @@ namespace jabber.protocol.client
         /// </summary>
         public XmlElement Query
         {
-            get { return this["query"]; }
-            set { AddChild(value); }
+            get { return this.GetFirstChildElement(); }
+            set { this.InnerXml = ""; this.AddChild(value); }
         }
     }
 }
