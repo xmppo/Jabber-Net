@@ -1,0 +1,86 @@
+<project>
+    <assemblies>
+        <assembly location="C:\src\jabber-net-new\bin\Debug\jabber-net.dll" documentation="C:\src\jabber-net-new\jabber-net.xml" />
+    </assemblies>
+    <namespaces>
+        <namespace name="bedrock.io">Input/output classes</namespace>
+        <namespace name="jabber.protocol">Jabber protocol implementation</namespace>
+        <namespace name="jabber.server">Service connections and utilties for extending the functionality of a Jabber server.</namespace>
+        <namespace name="jabber.connection">Base classes for client and service connections</namespace>
+        <namespace name="bedrock">Low-level utility routines.</namespace>
+        <namespace name="jabber.protocol.client">jabber:client namespace.  The meat of the protocol.</namespace>
+        <namespace name="jabber.protocol.stream">etherx namespace.  stream:stream and friends.</namespace>
+        <namespace name="bedrock.net">Async network access</namespace>
+        <namespace name="jabber">Jabber-specific classes</namespace>
+        <namespace name="bedrock.collections">Collection classes not in the .Net framework</namespace>
+        <namespace name="jabber.protocol.x">The jabber:x:* namespaces.</namespace>
+        <namespace name="jabber.client">Client connection oriented classes</namespace>
+        <namespace name="jabber.xml">Jabber-specific XML processing clases.  Packetization, etc.</namespace>
+        <namespace name="jabber.protocol.accept">jabber:component:accept namespace, for services.</namespace>
+        <namespace name="jabber.protocol.iq">The jabber:iq:* namespaces.</namespace>
+        <namespace name="bedrock.util">General utilities</namespace>
+    </namespaces>
+    <documenters>
+        <documenter name="JavaDoc">
+            <property name="Title" value="NDoc" />
+            <property name="OutputDirectory" value=".\docs\JavaDoc\" />
+            <property name="ShowMissingSummaries" value="False" />
+            <property name="ShowMissingRemarks" value="False" />
+            <property name="ShowMissingParams" value="False" />
+            <property name="ShowMissingReturns" value="False" />
+            <property name="ShowMissingValues" value="False" />
+            <property name="DocumentInternals" value="False" />
+            <property name="DocumentProtected" value="True" />
+            <property name="DocumentPrivates" value="False" />
+            <property name="DocumentEmptyNamespaces" value="False" />
+            <property name="IncludeAssemblyVersion" value="False" />
+            <property name="CopyrightText" value="" />
+            <property name="CopyrightHref" value="" />
+            <property name="SkipNamespacesWithoutSummaries" value="False" />
+            <property name="AddPropertyBackerSummaries" value="False" />
+        </documenter>
+        <documenter name="MSDN">
+            <property name="OutputDirectory" value="Msdn\" />
+            <property name="HtmlHelpName" value="jabber-net" />
+            <property name="IncludeFavorites" value="False" />
+            <property name="Title" value="Jabber-Net Documentation" />
+            <property name="SplitTOCs" value="False" />
+            <property name="DefaulTOC" value="" />
+            <property name="ShowVisualBasic" value="False" />
+            <property name="OmitObjectTags" value="False" />
+            <property name="RootPageTOCName" value="Getting Started" />
+            <property name="RootPageFileName" value="howto.htm" />
+            <property name="ShowMissingSummaries" value="False" />
+            <property name="ShowMissingRemarks" value="False" />
+            <property name="ShowMissingParams" value="False" />
+            <property name="ShowMissingReturns" value="False" />
+            <property name="ShowMissingValues" value="False" />
+            <property name="DocumentInternals" value="False" />
+            <property name="DocumentProtected" value="True" />
+            <property name="DocumentPrivates" value="False" />
+            <property name="DocumentEmptyNamespaces" value="False" />
+            <property name="IncludeAssemblyVersion" value="True" />
+            <property name="CopyrightText" value="Copyright © 2002 Cursive Systems" />
+            <property name="CopyrightHref" value="http://www.cursive.net/" />
+            <property name="SkipNamespacesWithoutSummaries" value="True" />
+            <property name="AddPropertyBackerSummaries" value="False" />
+        </documenter>
+        <documenter name="XML">
+            <property name="OutputFile" value=".\docs\doc.xml" />
+            <property name="ShowMissingSummaries" value="False" />
+            <property name="ShowMissingRemarks" value="False" />
+            <property name="ShowMissingParams" value="False" />
+            <property name="ShowMissingReturns" value="False" />
+            <property name="ShowMissingValues" value="False" />
+            <property name="DocumentInternals" value="False" />
+            <property name="DocumentProtected" value="True" />
+            <property name="DocumentPrivates" value="False" />
+            <property name="DocumentEmptyNamespaces" value="False" />
+            <property name="IncludeAssemblyVersion" value="False" />
+            <property name="CopyrightText" value="" />
+            <property name="CopyrightHref" value="" />
+            <property name="SkipNamespacesWithoutSummaries" value="False" />
+            <property name="AddPropertyBackerSummaries" value="False" />
+        </documenter>
+    </documenters>
+</project>

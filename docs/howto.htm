@@ -1,0 +1,105 @@
+<html>
+	<head>
+		<title>Jabber-Net Home Page</title>
+		<meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5">
+        <style TYPE="text/css">
+<!--
+body { font-family: Verdana, Arial, Helvetica }
+.notes       { color: #008080; font-family: Technical, Arial, Helvetica; text-decoration: none; vertical-align: top;
+                font-weight: bold }
+.topic       { color: #FFFFFF; font-family: Verdana, Arial, Helvetica; text-decoration: none; vertical-align: top;
+                font-weight: bold; background-color: #606060 }
+.links { color: #FFFFFF; font-family: Verdana, Arial, Helvetica; text-decoration:none;  }
+.links:Visited { color: #FFFFFF; font-family: Verdana, Arial, Helvetica; text-decoration:none;   }
+.links:hover { color: #008080; font-family: Verdana, Arial, Helvetica; text-decoration: none;  }
+.links:Active { color: #606060; font-family: Verdana, Arial, Helvetica; text-decoration:none;   }
+.here        { color: #000000; font-family: Verdana, Arial, Helvetica; text-decoration: none; }
+.here:visited { color: #000000; font-family: Verdana, Arial, Helvetica; text-decoration: none;  }
+.here:hover  { color: #008080; font-family: Verdana, Arial, Helvetica; text-decoration: none;  }
+.here:Active { color: #606060; font-family: Verdana, Arial, Helvetica; text-decoration:none;  }
+td { font-family: Verdana, Arial, Helvetica }
+ul { font-family: Verdana, Arial, Helvetica }
+h3 { font-family: Verdana, Arial, Helvetica; Color: #303030}
+-->
+</style>
+	</head>
+	<body bgcolor="#ffffff">
+<div class="topic">Jabber.Net</div>
+
+<p>A set of libraries for connecting to <a href="http://www.jabber.org/">Jabber</a>
+using <a href="http://msdn.microsoft.com/net">.Net</a> technology.</p>
+<p>
+<b>Note:&nbsp;<br>
+</b>No, there are no current plans for a server implementation.&nbsp; If you 
+are interested in leading a sub-project to do that, drop me a line.
+</p>
+
+<p><b>WHAT IS JABBER-NET?</b></p>
+<p>Jabber-Net is a set of libraries for accessing Jabber functionality from .Net. 
+It is written in C#, but should be accessible from other .Net languages such as 
+VB.Net. Components exist for connecting to a Jabber server either as a client 
+or as a component. As you explore, you'll find there are some other goodies 
+buried inside, like Trees, CommandLine processing, etc.</p>
+
+<p>If you wanted to use JabberCOM from .Net, but had difficulties, you should try 
+Jabber-Net instead.</p>
+
+<p><b>HOW DO I USE JABBER-NET?</b></p>
+	<ul>
+		<li>
+		Create a new windows app in VS.Net.
+		<li>
+		Right-click in toolbox, select Customize Toolbox
+		<li>
+		Select .the .Net Framework Components tab
+		<li>
+		Click browse, and select jabber-net.dll, prefereably in the bin/Debug directory, 
+		where it gets built
+		<li>
+		Do the same for muzzle.dll (UI elements) if you 
+		want
+		<li>
+		Click OK, to add a the components
+		<li>
+		Drop a JabberClient component on your form
+		<li>
+		Set connection parameters in the property box
+		<li>
+        Call jabberClient1.Connect() in the Form.OnLoad event handler
+		<li>
+		Go to events in the property box (the lightning bolt), double-click OnMessage
+		<li>
+			Write code to handle Message's, like this:</li>
+	</ul>
+<pre>
+private void jabberClient1_OnMessage(object sender, Message msg)
+{
+  jabber.protocol.client.Message reply = new jabber.protocol.client.Message(jabberClient1.Document);			
+  reply.Body = &quot;Hello!&quot;;
+  reply.To = msg.From;
+  jabberClient1.Write(reply);
+}
+</pre>
+
+<p>Note that packet types such as Message are sub-classes of XmlElement with 
+easy-to-use getters and setters.</p>
+
+<p><b>HOW DO I FIND OUT MORE?</b></p>
+<p>Included in both the source, CVS, and the binary release is a <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/htmlhelp/html/vsconHH1Start.asp">
+		.chm</a> file, generated with <a href="http://ndoc.sourceforge.net/">NDoc</a>, 
+	which fully documents the API.&nbsp; If you prefer javadoc-style, you should be 
+	able to generate it pretty easily.</p>
+	
+<p><b>WHERE DID ALL OF THE LAYERS GO?</b></p>
+<p>People complained about the namespace names, and how hard it was to find
+stuff.&nbsp; The new hierarchy should be a lot easier to use, at the expense of
+a slightly larger .dll for some people than they might otherwise have.</p>
+<p><b>WHERE DO I FIND JABBER-NET?</b></p>
+<p><A href="http://sourceforge.net"><IMG src="http://sourceforge.net/sflogo.php?group_id=30092" border="0" alt="SourceForge Logo" align="left"></A>
+ The project <font color="#FF0000">HAS BEEN MOVED</font> to <a href="http://jabber-net.jabberstudio.org">http://jabber-net.jabberstudio.org</a>, 
+	and the JabberStudio project is at TBD.&nbsp; Join the <a href="http://lists.sourceforge.net/lists/listinfo/jabber-net-developers">
+		mailing list</a> to get involved.</p>
+
+<p>For more information, contact <a href="mailto:joe-sourceforge@cursive.net">joe-sourceforge@cursive.net</a>.</p>
+	</body>
+</html>
