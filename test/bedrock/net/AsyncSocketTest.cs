@@ -45,12 +45,14 @@ namespace test.bedrock.net
                 Monitor.Wait(done);
             }
             Assert.AreEqual("5678901234", success);
+            connect.Close();
+            listen.Close();
         }
 
         [Test] public void Test_Ops()
         {
             SocketWatcher w = new SocketWatcher(20);
-            Address a = new Address("127.0.0.1", 7001);
+            Address a = new Address("127.0.0.1", 7002);
             a.Resolve();
             AsyncSocket one = w.CreateListenSocket(this, a);
             AsyncSocket two = null;
@@ -100,6 +102,8 @@ namespace test.bedrock.net
             {
                 Assert.IsTrue(false);
             }
+            one.Close();
+            two.Close();
         }
 
         #region Implementation of ISocketEventListener

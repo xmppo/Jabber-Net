@@ -316,7 +316,6 @@ namespace bedrock.net
                                     ProtocolType.Tcp);
 #endif
 
-                //m_sock.Blocking = m_synch;
                 // Always reuse address.
                 m_sock.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, 1);
                 m_sock.Bind(m_addr.Endpoint);
@@ -377,7 +376,6 @@ namespace bedrock.net
 
         private void AcceptDone(AsyncSocket cliCon)
         {
-            //cliCon.m_sock.Blocking = m_synch;
             cliCon.m_addr = m_addr;
             cliCon.Address.IP = ((IPEndPoint) cliCon.m_sock.RemoteEndPoint).Address;
             cliCon.State = SocketState.Connected;
@@ -511,7 +509,6 @@ namespace bedrock.net
                 m_sock.SetSocketOption(SocketOptionLevel.Socket, 
                     SocketOptionName.ReceiveBuffer, 
                     4 * m_buf.Length);
-                //m_sock.Blocking = m_synch;
             }
              
             if (m_synch)

@@ -55,11 +55,12 @@
             <property name="RootPageTOCName" value="Getting Started" />
             <property name="RootPageFileName" value="howto.htm" />
             <property name="AssemblyVersionInfo" value="AssemblyVersion" />
-            <property name="CopyrightText" value="Copyright © 2002-2005 Cursive Systems" />
+            <property name="CopyrightText" value="Copyright &amp;copy; 2002-2005 Cursive Systems" />
             <property name="CopyrightHref" value="http://www.cursive.net/" />
             <property name="FeedbackEmailAddress" value="joe-jabber-net@cursive.net" />
             <property name="DocumentAttributes" value="True" />
             <property name="DocumentedAttributes" value="RCS,Version" />
+            <property name="IncludeDefaultThreadSafety" value="False" />
             <property name="CleanIntermediates" value="True" />
         </documenter>
         <documenter name="MSDN 2003">

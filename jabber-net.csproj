@@ -154,11 +154,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "bedrock\io\PipeStream.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "bedrock\io\ReadEventStream.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -583,3 +578,4 @@
         </Files>
     </CSHARP>
 </VisualStudioProject>
+
