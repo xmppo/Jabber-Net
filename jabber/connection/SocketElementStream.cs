@@ -489,7 +489,7 @@ namespace jabber.connection
                         m_sock = proxy;
                         break;
                         
-                    case None:
+                    case ProxyType.None:
                         m_sock = new AsyncSocket(m_watcher, this);
                         break;
                 }
