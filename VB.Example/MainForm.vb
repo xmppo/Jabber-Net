@@ -28,6 +28,7 @@
 ' 
 ' --------------------------------------------------------------------------*/
 Imports System.Diagnostics
+Imports System.Xml
 
 Imports jabber
 Imports jabber.protocol
@@ -295,6 +296,7 @@ Public Class MainForm
     Private Sub jc_OnConnect(ByVal sender As Object, ByVal sock As bedrock.net.AsyncSocket) Handles jc.OnConnect
         m_err = False
         debug.AppendText("Connected to: " & sock.Address.IP.ToString() & vbCrLf)
+        jc.AddFactory(New Factory)
     End Sub
 
     Private Sub jc_OnReadText(ByVal sender As Object, ByVal txt As String) Handles jc.OnReadText
@@ -452,4 +454,67 @@ Public Class RosterNode
         p = pm
         jid = i.JID.ToString()
     End Sub
+End Class
+
+
+'-------------------------- Add packet type -----------------------
+' don't forget to call AddFactory() in OnConnect!
+
+' Convenience class, used for creating outbound IQ's with this type
+Public Class FooIQ
+    Inherits jabber.protocol.client.IQ
+
+    Public Sub New(ByVal doc As XmlDocument)
+        MyBase.New(doc)
+        AppendChild(New Foo(doc))
+    End Sub
+End Class
+
+' The type of the first child of IQ.  Example packet:
+'
+' <iq>
+'   <query xmlns='urn:foo'>
+'     <bar>A value</bar>
+'   </query>
+' </iq>
+Public Class Foo
+    Inherits jabber.protocol.Element
+
+    ' the namespace
+    Public Const NS As String = "urn:foo"
+
+    Public Sub New(ByVal doc As XmlDocument)
+        MyBase.New("query", NS, doc)
+    End Sub
+
+    Public Sub New(ByVal prefix As String, ByVal qname As XmlQualifiedName, ByVal doc As XmlDocument)
+        MyBase.New(prefix, qname, doc)
+    End Sub
+
+    ' this property gets and sets a child element called "bar".
+    Public Property Bar() As String
+        Get
+            Return GetElem("bar")
+        End Get
+        Set(ByVal Value As String)
+            SetElem("bar", Value)
+        End Set
+    End Property
+End Class
+
+
+' The factory class.  This ends up adding a mapping from urn:foo|foo to the constructor for the Foo class,
+' under the covers.  The namespace|elementname of an inbound element will be looked up in the map to
+' figure out how to create the correct type.
+Public Class Factory
+    Implements jabber.protocol.IPacketTypes
+
+    Private Shared ReadOnly s_qnames As jabber.protocol.QnameType() = _
+        {New jabber.protocol.QnameType("query", Foo.NS, GetType(Foo))}
+
+    Public ReadOnly Property Types() As jabber.protocol.QnameType() Implements jabber.protocol.IPacketTypes.Types
+        Get
+            Return s_qnames
+        End Get
+    End Property
 End Class
