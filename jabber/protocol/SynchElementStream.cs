@@ -54,7 +54,9 @@ namespace jabber.protocol
                 reader.SetFeature(AElfred.SaxDriver.FEATURE + "external-general-entities", false);
                 reader.ErrorHandler = this;
                 reader.ContentHandler = this;
-                reader.Parse(new StreamInputSource(m_stream));
+                InputSource inSource = new StreamInputSource(m_stream);
+                inSource.Encoding = "UTF-8";
+                reader.Parse(inSource);
             }
             catch (Exception e)
             {
