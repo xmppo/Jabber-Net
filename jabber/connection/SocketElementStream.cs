@@ -703,6 +703,11 @@ namespace jabber.connection
         /// </summary>
         public virtual void Connect()
         {
+            if (System.Reflection.Assembly.GetExecutingAssembly().ImageRuntimeVersion == "v1.1.4322")
+            {
+                throw new NotSupportedException("This version of the Common Language Runtime is not supported.  You have installed the CLR 1.1 Service Pack 1.  There is no known work-around at this time.");
+            }
+
             Debug.Assert(m_port > 0);
             Debug.Assert(m_to != null);
 			m_conEvent.Reset();
@@ -780,7 +785,14 @@ namespace jabber.connection
         {
             Debug.Assert(m_synch, "Cannot call SynchConnectThread unless in synch mode");
             Address addr = new Address(GetHost(), m_port);
-            m_sock.Connect(addr);
+            try
+            {
+                m_sock.Connect(addr);
+            }
+            catch (Exception e)
+            {
+                FireOnError(e);
+            }
         }
 
         /// <summary>
