@@ -1,7 +1,6 @@
 <project>
     <assemblies>
-        <assembly location="C:\src\jabber\jabber-net\bin\Debug\jabber-net.dll" documentation="C:\src\jabber\jabber-net\bin\Debug\jabber-net.xml" />
-        <assembly location="C:\src\jabber\jabber-net\muzzle\bin\Debug\muzzle.dll" documentation="C:\src\jabber\jabber-net\muzzle\bin\Debug\muzzle.xml" />
+        <assembly location="D:\src\jabber-net\bin\Debug\jabber-net.dll" documentation="D:\src\jabber-net\bin\Debug\jabber-net.xml" />
     </assemblies>
     <namespaces>
         <namespace name="bedrock">Low-level utility routines.</namespace>
@@ -33,11 +32,13 @@
             <property name="DocumentInternals" value="False" />
             <property name="DocumentProtected" value="True" />
             <property name="DocumentPrivates" value="False" />
+            <property name="DocumentProtectedInternalAsProtected" value="False" />
             <property name="DocumentEmptyNamespaces" value="False" />
             <property name="IncludeAssemblyVersion" value="True" />
             <property name="CopyrightText" value="Copyright © 2002 Cursive Systems" />
             <property name="CopyrightHref" value="http://www.cursive.net/" />
             <property name="SkipNamespacesWithoutSummaries" value="False" />
+            <property name="UseNamespaceDocSummaries" value="False" />
             <property name="AutoPropertyBackerSummaries" value="False" />
             <property name="AutoDocumentConstructors" value="True" />
             <property name="DocumentAttributes" value="False" />
@@ -58,11 +59,13 @@
             <property name="DocumentInternals" value="False" />
             <property name="DocumentProtected" value="True" />
             <property name="DocumentPrivates" value="False" />
+            <property name="DocumentProtectedInternalAsProtected" value="False" />
             <property name="DocumentEmptyNamespaces" value="False" />
             <property name="IncludeAssemblyVersion" value="False" />
             <property name="CopyrightText" value="" />
             <property name="CopyrightHref" value="" />
             <property name="SkipNamespacesWithoutSummaries" value="False" />
+            <property name="UseNamespaceDocSummaries" value="False" />
             <property name="AutoPropertyBackerSummaries" value="False" />
             <property name="AutoDocumentConstructors" value="True" />
             <property name="DocumentAttributes" value="False" />
@@ -78,11 +81,14 @@
             <property name="DefaulTOC" value="" />
             <property name="IncludeHierarchy" value="True" />
             <property name="ShowVisualBasic" value="False" />
-            <property name="OmitObjectTags" value="False" />
             <property name="RootPageTOCName" value="Getting Started" />
             <property name="RootPageFileName" value="howto.htm" />
             <property name="RootPageContainsNamespaces" value="False" />
             <property name="SortTOCByNamespace" value="True" />
+            <property name="OutputTarget" value="HtmlHelpAndWeb" />
+            <property name="HeaderHtml" value="" />
+            <property name="FooterHtml" value="" />
+            <property name="FilesToInclude" value="" />
             <property name="ShowMissingSummaries" value="False" />
             <property name="ShowMissingRemarks" value="False" />
             <property name="ShowMissingParams" value="False" />
@@ -91,11 +97,13 @@
             <property name="DocumentInternals" value="False" />
             <property name="DocumentProtected" value="True" />
             <property name="DocumentPrivates" value="False" />
+            <property name="DocumentProtectedInternalAsProtected" value="False" />
             <property name="DocumentEmptyNamespaces" value="False" />
             <property name="IncludeAssemblyVersion" value="True" />
             <property name="CopyrightText" value="Copyright © 2002 Cursive Systems" />
             <property name="CopyrightHref" value="http://www.cursive.net/" />
             <property name="SkipNamespacesWithoutSummaries" value="False" />
+            <property name="UseNamespaceDocSummaries" value="False" />
             <property name="AutoPropertyBackerSummaries" value="False" />
             <property name="AutoDocumentConstructors" value="True" />
             <property name="DocumentAttributes" value="True" />
@@ -112,11 +120,13 @@
             <property name="DocumentInternals" value="False" />
             <property name="DocumentProtected" value="True" />
             <property name="DocumentPrivates" value="False" />
+            <property name="DocumentProtectedInternalAsProtected" value="False" />
             <property name="DocumentEmptyNamespaces" value="False" />
             <property name="IncludeAssemblyVersion" value="False" />
             <property name="CopyrightText" value="" />
             <property name="CopyrightHref" value="" />
             <property name="SkipNamespacesWithoutSummaries" value="False" />
+            <property name="UseNamespaceDocSummaries" value="False" />
             <property name="AutoPropertyBackerSummaries" value="False" />
             <property name="AutoDocumentConstructors" value="True" />
             <property name="DocumentAttributes" value="False" />
