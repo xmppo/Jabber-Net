@@ -108,17 +108,18 @@ namespace bedrock.net
 			{
 				IPHostEntry server = Dns.Resolve(RemoteAddress.Hostname);
 				IPAddress ip_addr = server.AddressList[0];
-				long addr = ip_addr.Address;
+				byte[] addr = ip_addr.GetAddressBytes();
 				int port = RemoteAddress.Port;
 				byte [] buffer = new Byte[14];
 				buffer[0] = 4;	// protocol version.
 				buffer[1] = 1;	// connect.
 				buffer[2] = (byte)(port >> 8);
 				buffer[3] = (byte)port;
-				buffer[4] = (byte)(addr >> 24);
-				buffer[5] = (byte)(addr >> 16);
-				buffer[6] = (byte)(addr >> 8);
-				buffer[7] = (byte)addr;
+                // TODO: test byte order!
+				buffer[4] = addr[3];
+				buffer[5] = addr[2];
+				buffer[6] = addr[1];
+				buffer[7] = addr[0];
 				buffer[8] = (byte)'i';
 				buffer[9] = (byte)'d';
 				buffer[10] = (byte)'e';
