@@ -63,8 +63,8 @@ namespace stringprep.steps
         /// <summary>
         /// Perform mapping for each character of input.
         /// </summary>
-        /// <param name="result"></param>
-        /// <param name="flags"></param>
+        /// <param name="result">Result is modified in place.</param>
+        /// <param name="flags">Skip this step if the flags for this step are set in flags (or the opposite if invert is true)</param>
         public override void Prepare(System.Text.StringBuilder result, ProfileFlags flags)
         {
             if (IsBitSet(flags))
@@ -79,68 +79,25 @@ namespace stringprep.steps
             int pos;
             for (int i=0; i<result.Length; i++)
             {
-                pos = FindCharacterInTable(result[i]);
+                pos = Array.BinarySearch(m_table, result[i]);
                 if (pos < 0)
                     continue;
+
                 if (m_table[pos].map0 == '\x0')
-                {
+                { // mapped to nothing
                     result.Remove(i, 1);
                     i--;
                 }
                 else
-                {
+                { // mapped to at least one char
                     result[i] = m_table[pos].map0;
                     if (m_table[pos].map != null)
-                    {
+                    { // mapped to > 1 char.  Example: (tm) -> t + m
                         result.Insert(i+1, m_table[pos].map);
                         i += m_table[pos].map.Length;
                     }
                 }
             }
-            /*
-            while ((pos = FindStringInTable(result, out i)) != -1)
-            {
-                if (m_table[i].map0 == '\x0')
-                {
-                    result.Remove(pos, 1);
-                }
-                else
-                {
-                    result[pos] = m_table[i].map0;
-                    if (m_table[i].map != null)
-                    {
-                        result.Insert(pos+1, m_table[i].map);
-                    }
-                }
-            }
-            */
-
         }
-
-        protected int FindCharacterInTable(char c)
-        {
-            int pos = Array.BinarySearch(m_table, c);
-            if (pos < 0)
-                pos = -1;
-            return pos;
-        }
-
-        /*
-        protected int FindStringInTable(StringBuilder s, out int tablepos)
-        {
-            int pos;
-             
-            for (int j=0; j<s.Length; j++)
-            {
-                if ((pos = FindCharacterInTable(s[j])) != -1)
-                {
-                    tablepos = pos;
-                    return j;
-                }
-            }
-            tablepos = -1;
-            return -1;
-        }
-        */
     }
 }

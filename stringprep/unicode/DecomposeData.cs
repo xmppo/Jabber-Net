@@ -2,7 +2,7 @@
 
 namespace stringprep.unicode
 {
-    public class DecomposeData
+    internal class DecomposeData
     {
         public const ushort LAST_CHAR = 0xffff;
         public const ushort MAX_TABLE_INDEX = 1000;

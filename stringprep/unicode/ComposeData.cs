@@ -2,7 +2,7 @@
 
 namespace stringprep.unicode
 {
-    public class ComposeData
+    internal class ComposeData
     {
         public const int FIRST_START = 1;
         public const int FIRST_SINGLE_START = 147;

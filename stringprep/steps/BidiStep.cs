@@ -75,9 +75,11 @@ namespace stringprep.steps
         /// <li> If a string contains any RandALCat character, a RandALCat
         /// character MUST be the first character of the string, and a
         /// RandALCat character MUST be the last character of the string.</li>
+        /// </ol>
         /// </summary>
-        /// <param name="result"></param>
-        /// <param name="flags"></param>
+        /// <param name="result">Result is modified in place.</param>
+        /// <param name="flags">Skip this step if NO_BIDI is step in flags</param>
+        /// <exception cref="BidiException">A BiDi problem exists</exception>
         public override void Prepare(System.Text.StringBuilder result, ProfileFlags flags)
         {
             if (!IsBitSet(flags))
@@ -100,14 +102,14 @@ namespace stringprep.steps
 
         }
 
-        class BidiProbibitStep : ProhibitStep
+        private class BidiProbibitStep : ProhibitStep
         {
             public BidiProbibitStep() : base(stringprep.RFC3454.C_8, "C.8")
             {
             }
         }
 
-        class BidiRALStep : ProhibitStep
+        private class BidiRALStep : ProhibitStep
         {
             public BidiRALStep() : base(stringprep.RFC3454.D_1, "D.1")
             {

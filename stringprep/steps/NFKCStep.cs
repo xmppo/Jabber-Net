@@ -40,15 +40,28 @@ using stringprep.unicode;
 
 namespace stringprep.steps
 {
+    /// <summary>
+    /// Perform Unicode Normalization Form KC.
+    /// </summary>
     public class NFKCStep : ProfileStep
     {
-
-        public NFKCStep() : base("NFKC")
+        /// <summary>
+        /// Create an NFKC step.
+        /// </summary>
+        public NFKCStep() : base("NFKC", ProfileFlags.NO_NFKC, false)
         {
         }
 
+        /// <summary>
+        /// Perform NFKC.  General overview: Decompose, Reorder, Compose
+        /// </summary>
+        /// <param name="result"></param>
+        /// <param name="flags"></param>
         public override void Prepare(StringBuilder result, ProfileFlags flags)
         {
+            if (IsBitSet(flags))
+                return;
+
             // From Unicode TR15:
             // R1. Normalization Form C
             // The Normalization Form C for a string S is obtained by applying the following process, 
@@ -61,11 +74,8 @@ namespace stringprep.steps
             // If C is not blocked from the last starter L, and it can be primary combined with L, 
             // then replace L by the composite L-C, and remove C. 
 
-            if ((flags & ProfileFlags.NO_NFKC) == ProfileFlags.NO_NFKC)
-                return;
-
             int decomp;
-            int len;
+            int offset;
             int last_start = 0;
             int old_len;
             char[] insert = new char[16];
@@ -81,9 +91,9 @@ namespace stringprep.steps
                 if (decomp >= 0)
                 {
                     // 0, 0 terminates.
-                    for (len = decomp, j=0; Decompose.More(len); len += 2, j++)
+                    for (offset = decomp, j=0; Decompose.More(offset); offset += 2, j++)
                     {
-                        insert[j] = Decompose.Expand(len);
+                        insert[j] = Decompose.Expand(offset);
                     }
 
                     switch (j)
@@ -94,10 +104,12 @@ namespace stringprep.steps
                         i--;
                         break;
                     case 1:
+                        // exactly one.  Just replace that char.
                         result[i] = insert[0];
                         break;
                     default:
-                        // for subsequent characters, remember them all, so we can do ONE insert.
+                        // more than one.  replace the 0th char, and insert the rest.
+                        // yes, it would have been cool to have a function like this in StringBuilder.
                         result[i] = insert[0];
                         result.Insert(i+1, insert, 1, j-1);
                         i += (j-1);
@@ -108,7 +120,7 @@ namespace stringprep.steps
                 if ((result.Length > 0) && (old_len < result.Length))
                 {
                     if (Decompose.CombiningClass(result[old_len]) == 0)
-                    {
+                    { 
                         Decompose.CanonicalOrdering(result, last_start, result.Length - last_start);
                         last_start = old_len;
                     }
@@ -125,12 +137,12 @@ namespace stringprep.steps
             // Combine all combinable characters.
             if (result.Length > 0)
             {
-                int i, cc;
+                int cc;
                 int last_cc = 0;
                 char c;
                 last_start = 0;
 
-                for (i=0; i<result.Length; i++)
+                for (int i=0; i<result.Length; i++)
                 {
                     cc = Decompose.CombiningClass(result[i]);
                     if ((i > 0) &&

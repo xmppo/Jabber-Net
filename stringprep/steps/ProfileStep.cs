@@ -32,40 +32,55 @@ using System.Text;
 
 namespace stringprep.steps
 {
+    /// <summary>
+    /// Base class for steps in a stringprep profile.
+    /// </summary>
     public abstract class ProfileStep
     {
         private ProfileFlags m_flags;
         private bool m_invert;
         private string m_name;
 
-        public ProfileStep(string name)
+        protected ProfileStep(string name)
         {
             m_name = name;
             m_flags = 0;
             m_invert = false;
         }
 
-        public ProfileStep(string name, ProfileFlags flags, bool inverted)
+        protected ProfileStep(string name, ProfileFlags flags, bool inverted)
         {
             m_name = name;
             m_flags = flags;
             m_invert = inverted;
         }
 
+        /// <summary>
+        /// The name of the step.
+        /// </summary>
         public virtual string Name
         {
             get { return m_name; }
         }
 
+        /// <summary>
+        /// Is m_flags all set in flags, or if invert, m_flags not all set in flags?
+        /// </summary>
+        /// <param name="flags"></param>
+        /// <returns></returns>
         protected bool IsBitSet(ProfileFlags flags)
         {
             if (m_flags == 0)
                 return false;
 
-            // if m_flags all set in flags, or if invert, m_flags not all set in flags.
             return m_invert ^ ((m_flags & flags) == m_flags);
         }
 
+        /// <summary>
+        /// This is the workhorse function, to be implemented in each subclass.
+        /// </summary>
+        /// <param name="result">Result will be modified in place</param>
+        /// <param name="flags">Certain steps will be skipped, if flags are set</param>
         public abstract void Prepare(StringBuilder result, ProfileFlags flags);
     }
 }

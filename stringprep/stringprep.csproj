@@ -84,10 +84,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "gen-stringprep-tables.pl"
-                    BuildAction = "None"
-                />
-                <File
                     RelPath = "Nameprep.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -106,10 +102,6 @@
                     RelPath = "rfc3454.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "rfc3454.txt"
-                    BuildAction = "None"
                 />
                 <File
                     RelPath = "Table.cs"
@@ -175,10 +167,6 @@
                     RelPath = "unicode\DecomposeData.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "unicode\gen-unicode-tables.pl"
-                    BuildAction = "None"
                 />
             </Include>
         </Files>
