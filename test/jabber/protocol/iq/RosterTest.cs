@@ -107,5 +107,19 @@ namespace test.jabber.protocol.iq
 			Assertion.AssertEquals(1, i.GetGroups().Length);
 			Assertion.AssertEquals(null, i.GetGroup("foo"));
 		}
+        public void Test_Ask()
+        {
+            RosterIQ riq = new RosterIQ(doc);
+            Roster r = (Roster) riq.Query;
+            Item i = r.AddItem();
+            Assertion.AssertEquals("", i.GetAttribute("ask"));
+            Assertion.AssertEquals(Ask.NONE, i.Ask);
+            i.Ask = Ask.subscribe;
+            Assertion.AssertEquals("subscribe", i.GetAttribute("ask"));
+            Assertion.AssertEquals(Ask.subscribe, i.Ask);
+            i.Ask = Ask.NONE;
+            Assertion.AssertEquals("", i.GetAttribute("ask"));
+            Assertion.AssertEquals(Ask.NONE, i.Ask);
+        }
     }
 }

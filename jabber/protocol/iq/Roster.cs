@@ -139,6 +139,10 @@ namespace jabber.protocol.iq
     public enum Ask
     {
         /// <summary>
+        /// No Ask specified.
+        /// </summary>
+        NONE = -1,
+        /// <summary>
         /// this entity is asking to subscribe to that contact's presence
         /// </summary>
         subscribe,
@@ -205,8 +209,14 @@ namespace jabber.protocol.iq
         /// </summary>
         public Ask Ask
         {
-            get { return (Ask) GetEnumAttr("subscription", typeof(Ask)); }
-            set { SetAttribute("ask", value.ToString()); }
+            get { return (Ask) GetEnumAttr("ask", typeof(Ask)); }
+            set 
+            { 
+                if (value == Ask.NONE) 
+                    RemoveAttribute("ask");
+                else
+                    SetAttribute("ask", value.ToString()); 
+            }
         }
 
         /// <summary>
