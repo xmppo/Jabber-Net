@@ -44,6 +44,8 @@ namespace muzzle
         private const int EXPANDED   = 6;
         private const int COLLAPSED  = 7;
 
+        private const string UNFILED = "Unfiled";
+
         private RosterManager   m_roster = null;
         private PresenceManager m_pres   = null;
         private JabberClient    m_client = null;
@@ -274,10 +276,16 @@ namespace muzzle
         private void m_roster_OnRosterItem(object sender, jabber.protocol.iq.Item ri)
         {
             Group[] groups = ri.GetGroups();
+            for (int i=groups.Length-1; i>=0; i--)
+            {
+                if (groups[i].GroupName == "")
+                    groups[i].GroupName = UNFILED;
+            }
+
             if (groups.Length == 0) 
             {
                 groups = new Group[] { new Group(ri.OwnerDocument) };
-                groups[0].GroupName = "Unfiled";
+                groups[0].GroupName = UNFILED;
             }
 
             LinkedList nodelist = (LinkedList) m_items[ri.JID.ToString()];
