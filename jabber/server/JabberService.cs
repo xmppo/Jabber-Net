@@ -211,6 +211,15 @@ namespace jabber.server
         }
 
         /// <summary>
+        /// The host for the to attribute of the stream:stream for this connection.
+        /// </summary>
+        [Browsable(false)]
+        protected override string Host
+        {
+            get { return m_name; }
+        }
+
+        /// <summary>
         /// Connect to the jabberd, or wait for it to connect to us.
         /// Either way, this call returns immediately.
         /// </summary>

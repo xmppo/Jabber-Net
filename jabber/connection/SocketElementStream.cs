@@ -271,6 +271,15 @@ namespace jabber.connection
         }
 
         /// <summary>
+        /// The host for the to attribute of the stream:stream for this connection.
+        /// </summary>
+        [Browsable(false)]
+        protected virtual string Host
+        {
+            get { return m_server; }
+        }
+
+        /// <summary>
         /// Add new packet types that the incoming stream knows how to create.  
         /// If you create your own packet types, create a packet factory as well. 
         /// </summary>
@@ -468,7 +477,7 @@ namespace jabber.connection
         {
             this.State = ConnectedState.Instance;
             jabber.protocol.stream.Stream str = new jabber.protocol.stream.Stream(m_doc, Namespace);
-            str.To = m_server;
+            str.To = this.Host;
             Write(str.StartTag());
             sock.RequestRead();
         }
