@@ -36,7 +36,6 @@ using bedrock.util;
 using bedrock.net;
 
 using jabber.protocol;
-using jabber.xml;
 
 namespace jabber.connection
 {
