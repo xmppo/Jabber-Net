@@ -118,13 +118,13 @@ namespace Example
             this.ilPresence = new System.Windows.Forms.ImageList(this.components);
             this.tpDebug = new System.Windows.Forms.TabPage();
             this.debug = new System.Windows.Forms.RichTextBox();
+            this.splitter1 = new System.Windows.Forms.Splitter();
+            this.txtDebugInput = new System.Windows.Forms.TextBox();
             this.mnuPresence = new System.Windows.Forms.ContextMenu();
             this.mnuAvailable = new System.Windows.Forms.MenuItem();
             this.mnuAway = new System.Windows.Forms.MenuItem();
             this.menuItem1 = new System.Windows.Forms.MenuItem();
             this.mnuOffline = new System.Windows.Forms.MenuItem();
-            this.splitter1 = new System.Windows.Forms.Splitter();
-            this.txtDebugInput = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pnlCon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pnlPresence)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -204,7 +204,7 @@ namespace Example
             this.tpRoster.Controls.Add(this.roster);
             this.tpRoster.Location = new System.Drawing.Point(4, 22);
             this.tpRoster.Name = "tpRoster";
-            this.tpRoster.Size = new System.Drawing.Size(624, 218);
+            this.tpRoster.Size = new System.Drawing.Size(624, 390);
             this.tpRoster.TabIndex = 1;
             this.tpRoster.Text = "Roster";
             // 
@@ -216,7 +216,7 @@ namespace Example
             this.roster.Location = new System.Drawing.Point(0, 0);
             this.roster.Name = "roster";
             this.roster.ShowRootLines = false;
-            this.roster.Size = new System.Drawing.Size(624, 218);
+            this.roster.Size = new System.Drawing.Size(624, 390);
             this.roster.TabIndex = 0;
             this.roster.DoubleClick += new System.EventHandler(this.roster_DoubleClick);
             // 
@@ -246,6 +246,26 @@ namespace Example
             this.debug.TabIndex = 2;
             this.debug.Text = "";
             this.debug.WordWrap = false;
+            // 
+            // splitter1
+            // 
+            this.splitter1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.splitter1.Location = new System.Drawing.Point(0, 339);
+            this.splitter1.Name = "splitter1";
+            this.splitter1.Size = new System.Drawing.Size(624, 3);
+            this.splitter1.TabIndex = 3;
+            this.splitter1.TabStop = false;
+            // 
+            // txtDebugInput
+            // 
+            this.txtDebugInput.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.txtDebugInput.Location = new System.Drawing.Point(0, 342);
+            this.txtDebugInput.Multiline = true;
+            this.txtDebugInput.Name = "txtDebugInput";
+            this.txtDebugInput.Size = new System.Drawing.Size(624, 48);
+            this.txtDebugInput.TabIndex = 4;
+            this.txtDebugInput.Text = "";
+            this.txtDebugInput.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtDebugInput_KeyUp);
             // 
             // mnuPresence
             // 
@@ -279,26 +299,6 @@ namespace Example
             this.mnuOffline.Index = 3;
             this.mnuOffline.Text = "Offline";
             this.mnuOffline.Click += new System.EventHandler(this.mnuOffline_Click);
-            // 
-            // splitter1
-            // 
-            this.splitter1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.splitter1.Location = new System.Drawing.Point(0, 339);
-            this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(624, 3);
-            this.splitter1.TabIndex = 3;
-            this.splitter1.TabStop = false;
-            // 
-            // txtDebugInput
-            // 
-            this.txtDebugInput.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.txtDebugInput.Location = new System.Drawing.Point(0, 342);
-            this.txtDebugInput.Multiline = true;
-            this.txtDebugInput.Name = "txtDebugInput";
-            this.txtDebugInput.Size = new System.Drawing.Size(624, 48);
-            this.txtDebugInput.TabIndex = 4;
-            this.txtDebugInput.Text = "";
-            this.txtDebugInput.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtDebugInput_KeyUp);
             // 
             // MainForm
             // 
@@ -432,7 +432,15 @@ namespace Example
 
         private void jc_OnMessage(object sender, jabber.protocol.client.Message msg)
         {
-            MessageBox.Show(this, msg.Body, msg.From, MessageBoxButtons.OK);
+            /*
+            jabber.protocol.x.Data x = msg["x", URI.XDATA] as jabber.protocol.x.Data;
+            if (x != null)
+            {
+                new muzzle.XDataForm(x).ShowDialog(this);
+            }
+            else
+            */
+                MessageBox.Show(this, msg.Body, msg.From, MessageBoxButtons.OK);
         }
 
         private void jc_OnIQ(object sender, jabber.protocol.client.IQ iq)
