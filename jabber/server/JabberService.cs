@@ -243,7 +243,6 @@ namespace jabber.server
                 base.Connect();
             else
             {
-                //Tracer.Trace(TraceLevel.Verbose, "Listening on: " + m_addr.Port);
                 BeginAccept();
             }
         }

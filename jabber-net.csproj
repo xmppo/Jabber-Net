@@ -172,27 +172,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "bedrock\util\Complex.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "bedrock\util\ConfigFile.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "bedrock\util\CRC32.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "bedrock\util\GetOptBase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "bedrock\util\Tracer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -485,7 +485,6 @@ namespace jabber.connection
         bool ISocketEventListener.OnAccept(bedrock.net.AsyncSocket newsocket)
         {
             Debug.Assert(this.State == AcceptingState.Instance);
-            //Tracer.Trace(TraceLevel.Verbose, "Accepted new socket");
 
             this.State = ConnectedState.Instance;
 

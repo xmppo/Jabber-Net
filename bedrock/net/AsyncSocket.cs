@@ -712,7 +712,7 @@ namespace bedrock.net
             }
             if (e is SocketException)
             {
-                Tracer.Trace(TraceLevel.Warning, "Sock errno: " + ((SocketException) e).ErrorCode);
+                Debug.WriteLine("Sock errno: " + ((SocketException) e).ErrorCode);
             }
             m_watcher.CleanupSocket(this);
             m_listener.OnError(this, e);
