@@ -159,6 +159,31 @@ namespace jabber.protocol
                 this.RemoveChild(e);
         }
         /// <summary>
+        /// Remove all of the matching elements from this element.
+        /// </summary>
+        /// <param name="name">Element local name</param>
+        protected void RemoveElems(string name)
+        {
+            XmlNodeList nl = GetElementsByTagName(name);
+            foreach (XmlElement e in nl)
+            {
+                this.RemoveChild(e);
+            }
+        }
+        /// <summary>
+        /// Remove all of the matching elements from this element.
+        /// </summary>
+        /// <param name="name">Element local name</param>
+        /// <param name="namespaceURI">Element namespace URI.</param>
+        protected void RemoveElems(string name, string namespaceURI)
+        {
+            XmlNodeList nl = GetElementsByTagName(name, namespaceURI);
+            foreach (XmlElement e in nl)
+            {
+                this.RemoveChild(e);
+            }
+        }
+        /// <summary>
         /// Get the value of an attribute, as a value in the given Enum type.
         /// </summary>
         /// <param name="name"></param>
