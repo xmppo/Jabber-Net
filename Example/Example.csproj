@@ -7,7 +7,7 @@
     >
         <Build>
             <Settings
-                ApplicationIcon = "App.ico"
+                ApplicationIcon = ""
                 AssemblyKeyContainerName = ""
                 AssemblyName = "Example"
                 AssemblyOriginatorKeyFile = ""
@@ -79,7 +79,7 @@
                 />
                 <Reference
                     Name = "System.XML"
-                    AssemblyName = "System.XML"
+                    AssemblyName = "System.Xml"
                     HintPath = "..\..\..\..\WINNT\Microsoft.NET\Framework\v1.0.3705\System.XML.dll"
                 />
                 <Reference
@@ -96,10 +96,6 @@
         </Build>
         <Files>
             <Include>
-                <File
-                    RelPath = "App.ico"
-                    BuildAction = "Content"
-                />
                 <File
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
