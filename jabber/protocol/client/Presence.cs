@@ -71,7 +71,11 @@ namespace jabber.protocol.client
         /// <summary>
         /// A presence error.
         /// </summary>
-        error
+        error,
+        /// <summary>
+        /// Invisible presence: we're unavailable to them, but still see 
+        /// theirs.
+        invisible
     }
 
     /// <summary>
