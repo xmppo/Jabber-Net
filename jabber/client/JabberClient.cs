@@ -141,7 +141,7 @@ namespace jabber.client
         /// Agents query returned.  JabberClient.Agents is now valid.
         /// </summary>
         [Category("Protocol")]
-        [Description("We received the anwer to our agents query.")]
+        [Description("We received the answer to our agents query.")]
         public event IQHandler OnAgents;
 
         /// <summary>
@@ -159,7 +159,7 @@ namespace jabber.client
         /// After calling Register(), the registration succeeded or failed.
         /// </summary>
         [Category("Protocol")]
-        [Description("We received the anwer to our agents query.")]
+        [Description("After calling Register(), the registration succeeded or failed.")]
         public event IQHandler OnRegistered;
 
         /// <summary>
@@ -167,7 +167,7 @@ namespace jabber.client
         /// with the requested information.
         /// </summary>
         [Category("Protocol")]
-        [Description("We received the anwer to our agents query.")]
+        [Description("After calling Register, information about the user is required.")]
         public event IQHandler OnRegisterInfo;
 
         /// <summary>
