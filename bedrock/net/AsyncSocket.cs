@@ -140,6 +140,11 @@ namespace bedrock.net
         /// but it's unlikely that you trust jabbber.org or jabber.com's relatively bogus certificate roots.
         /// </summary>
         public static bool UntrustedRootOK = false;
+        /// <summary>
+        /// The types of SSL to support.  SSL3 and TLS1 by default.  That should be good enough for 
+        /// most apps, and was hard-coded to start with.
+        /// </summary>
+        public static SecureProtocol SSLProtocols = SecureProtocol.Ssl3 | SecureProtocol.Tls1;
 
         private byte[]               m_buf            = new byte[BUFSIZE];
         private State                m_state          = State.Created;
@@ -173,7 +178,7 @@ namespace bedrock.net
         {
             m_watcher = w;
             if (SSL)
-                m_secureProtocol = SecureProtocol.Ssl3 | SecureProtocol.Tls1;
+                m_secureProtocol = SSLProtocols;
         }
 
         private AsyncSocket(SocketWatcher w) : base()
@@ -465,7 +470,7 @@ namespace bedrock.net
         {
             SecurityOptions options = new SecurityOptions();
             options.certificate = null; // do not use client authentication
-            options.secureProtocol = SecureProtocol.Tls1;
+            options.secureProtocol = SSLProtocols;
 
             // TODO: enable for servers, too.
             options.use = m_credUse;
