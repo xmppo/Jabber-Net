@@ -63,7 +63,7 @@ namespace stringprep.steps
             if (IsBitSet(flags))
                 return;
 
-            // From Unicode TR15:
+            // From Unicode TR15: (http://www.unicode.org/reports/tr15)
             // R1. Normalization Form C
             // The Normalization Form C for a string S is obtained by applying the following process, 
             // or any other process that leads to the same result:
@@ -78,52 +78,86 @@ namespace stringprep.steps
 
             if (result.Length > 0)
             {
-                Decompose.CanonicalOrdering(result, 0, result.Length);
+                CanonicalOrdering(result);
                 Comp(result);
             }
         }
       
+
         private void Decomp(StringBuilder result)
         {
-
-            int offset;
-            char[] insert = new char[16];
-            int j;
+            int len;
+            char[] ex;
 
             // Decompose
             for (int i=0; i< result.Length; i++)
             {
-                char c = result[i];
+                ex = Decompose.Find(result[i]);
+                if (ex == null)
+                    continue;
 
-                offset = Decompose.Find(c);
-                if (offset >= 0)
+                result[i] = ex[0];
+                len = ex.Length - 1;
+                if (len > 0)
                 {
-                    for (j=0; DecomposeData.Expansion[offset+j] != 0; j++)
-                    {
-                        insert[j] = DecomposeData.Expansion[offset+j];
-                    }
-
-                    switch (j)
-                    {
-                    case 0:
-                        // there were no characters in the replacement.  just remove the existing char.
-                        result.Remove(i, 1);
-                        i--;
-                        break;
-                    case 1:
-                        // exactly one.  Just replace that char.
-                        result[i] = insert[0];
-                        break;
-                    default:
-                        // more than one.  replace the 0th char, and insert the rest.
-                        // yes, it would have been cool to have a function like this in StringBuilder.
-                        result[i] = insert[0];
-                        result.Insert(i+1, insert, 1, j-1);
-                        i += (j-1);
-                        break;
-                    }
-                }
+                    result.Insert(i+1, ex, 1, len);
+                    i += len;
+                }                
             }
+        }
+
+        /// <summary>
+        /// Reorder characters in the given range into their correct cannonical ordering with
+        /// respect to combining class.
+        /// </summary>
+        /// <param name="buf">Buffer to reorder</param>
+        private void CanonicalOrdering(StringBuilder buf)
+        {
+            int i, j;
+            bool swap = false;
+            int p_a, p_b;
+            char t;
+            int start = 0;
+            int stop = buf.Length - 1;
+
+            // From Unicode 3.0, section 3.10
+            // R1 For each character x in D, let p(x) be the combining class of x
+            // R2 Wenever any pair (A, B) of adjacent characters in D is such that p(B)!=0 and
+            //    p(A)>p(B), exchange those characters
+            // R3 Repeat step R2 until no exchanges can be made among any of the characters in D
+            do 
+            {
+                swap = false;
+                p_a = Combining.Class(buf[start]);
+
+                for (i = start; i < stop; i++)
+                {
+                    p_b = Combining.Class(buf[i + 1]);
+                    if ((p_b != 0) && (p_a > p_b))
+                    {
+                        for (j = i; j > 0; j--)
+                        {
+                            if (Combining.Class(buf[j]) <= p_b)
+                                break;
+
+                            t = buf[j + 1];
+                            buf[j + 1] = buf[j];
+                            buf[j] = t;
+                            swap = true;
+                        }
+                        /* We're re-entering the loop looking at the old
+                           character again.  Don't reset p_a.*/
+                        continue;
+                    }
+                    p_a = p_b;
+
+                    // once we get to a start character without any swaps, 
+                    // there can be no further changes.  No sense constantly 
+                    // rechecking stuff we've already checked.
+                    if (!swap && (p_a == 0))
+                        start = i;
+                }
+            } while (swap);
         }
 
         private void Comp(StringBuilder result)
@@ -137,7 +171,7 @@ namespace stringprep.steps
 
             for (int i=0; i<result.Length; i++)
             {
-                cc = Decompose.CombiningClass(result[i]);
+                cc = Combining.Class(result[i]);
                 if ((i > 0) &&
                     ((last_cc == 0) || (last_cc != cc)) &&
                     Compose.Combine(result[last_start], result[i], out c))
@@ -149,7 +183,7 @@ namespace stringprep.steps
                     if (i == last_start)
                         last_cc = 0;
                     else
-                        last_cc = Decompose.CombiningClass(result[i - 1]);
+                        last_cc = Combining.Class(result[i - 1]);
 
                     continue;
                 }

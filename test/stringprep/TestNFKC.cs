@@ -97,6 +97,7 @@ namespace test.stringprep
 
             // a-diaeresis + underdot => a + underdot + diaeresis
             TryOne("\x00e4\x0323", "\x1ea1\x0308"); 
+            TryOne("\x00e4\x0323\x00e4\x0323\x00e4\x0323", "\x1ea1\x0308\x1ea1\x0308\x1ea1\x0308"); 
 
             // a + diaeresis + underdot => a + underdot + diaeresis
             TryOne("a\x0308\x0323", "\x1ea1\x0308");

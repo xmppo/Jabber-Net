@@ -171,7 +171,7 @@ namespace stringprep
                 // must be in the range.  Hit!
                 return 0;
             }
-            if (obj is Prohibit)
+            else if (obj is Prohibit)
             {
                 // well.. if this is a Prohibit, then just check the starts, since there 
                 // shouldn't be any overlap.

@@ -303,5 +303,12 @@ namespace test.jabber
             Assertion.AssertEquals(-1, j.CompareTo(new JID("FOO@BOO/BAR")));
         }
 
+        public void Test_Config()
+        {
+            JID j = new JID("config@-internal");
+            Assertion.AssertEquals("config", j.User);
+            Assertion.AssertEquals("-internal", j.Server);
+            Assertion.AssertEquals(null, j.Resource);
+        }
     }
 }

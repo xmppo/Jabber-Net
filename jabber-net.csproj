@@ -79,6 +79,11 @@
                     AssemblyName = "Org.Mentalis.Security"
                     HintPath = "Org.Mentalis.Security.dll"
                 />
+                <Reference
+                    Name = "System.Data"
+                    AssemblyName = "System.Data"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -258,6 +263,11 @@
                     RelPath = "jabber\connection\SocketElementStream.cs"
                     SubType = "Component"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "jabber\connection\SocketElementStream.resx"
+                    DependentUpon = "SocketElementStream.cs"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "jabber\connection\States.cs"
@@ -524,6 +534,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "stringprep\unicode\Combining.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "stringprep\unicode\Compose.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -535,11 +550,6 @@
                 />
                 <File
                     RelPath = "stringprep\unicode\Decompose.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "stringprep\unicode\DecomposeData.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
