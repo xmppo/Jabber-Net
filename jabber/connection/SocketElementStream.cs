@@ -467,7 +467,7 @@ namespace jabber.connection
         /// Write these bytes to the socket.
         /// </summary>
         /// <param name="buf"></param>
-        public void Write(byte[] buf)
+        public virtual void Write(byte[] buf)
         {
             m_sock.Write(buf);
         }
@@ -476,7 +476,7 @@ namespace jabber.connection
         /// Write this string to the socket, encoded as UTF-8.
         /// </summary>
         /// <param name="buf"></param>
-        public void Write(string buf)
+        public virtual void Write(string buf)
         {
             m_sock.Write(ENC.GetBytes(buf));
         }
@@ -485,7 +485,7 @@ namespace jabber.connection
         /// Send the given packet to the server.
         /// </summary>
         /// <param name="elem"></param>
-        public void Write(XmlElement elem)
+        public virtual void Write(XmlElement elem)
         {
             Write(elem.OuterXml);
         }
