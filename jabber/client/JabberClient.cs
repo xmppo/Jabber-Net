@@ -590,13 +590,19 @@ namespace jabber.client
             {
                 a.SetDigest(m_user, m_password, StreamID);
             }
-            else if (this.PlaintextAuth && (res["password"] != null))
+            else if (res["password"] != null)
             {
+                if (!SSLon && !this.PlaintextAuth)
+                {
+                    FireOnError(new AuthenticationFailedException("Plaintext authentication forbidden."));
+                    return;
+                }
                 a.SetAuth(m_user, m_password);
             }
             else
             {
                 FireOnError(new NotImplementedException("Authentication method not implemented for:\n" + i));
+                return;
             }
             if (res["resource"] != null)
                 a.Resource = m_resource;
@@ -712,7 +718,10 @@ namespace jabber.client
                             OnLoginRequired(this);
                     }
                     else
+                    {
                         FireOnError(new InvalidOperationException("If AutoLogin is false, you must supply a OnLoginRequired event handler"));
+                        return;
+                    }
                 }
             }
             else

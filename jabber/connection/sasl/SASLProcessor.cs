@@ -55,6 +55,13 @@ namespace jabber.connection.sasl
         /// </summary>
         public AuthenticationFailedException() : base()
         {}
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message"></param>
+        public AuthenticationFailedException(string message) : base(message) 
+        {}
     }
 
     /// <summary>

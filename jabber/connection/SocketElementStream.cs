@@ -310,6 +310,17 @@ namespace jabber.connection
         }
 
         /// <summary>
+        /// Is the current connection SSL/TLS protected?
+        /// </summary>
+        [Description("Is the current connection SSL/TLS protected?")]
+        [DefaultValue(false)]
+        [Category("Jabber")]
+        public bool SSLon
+        {
+            get { return m_sslOn; }
+        }
+
+        /// <summary>
         /// Do SSL3/TLS1 on startup.
         /// </summary>
         [Description("Do SSL3/TLS1 on startup.")]
@@ -319,12 +330,12 @@ namespace jabber.connection
         {
             get { return m_ssl; }
             set 
-			{ 
+            { 
 #if NO_SSL
 				Debug.Assert(!value, "SSL support not compiled in");
 #endif
-				m_ssl = value; 
-			}
+                m_ssl = value; 
+            }
         }
 
 #if !NO_SSL
@@ -1031,7 +1042,7 @@ namespace jabber.connection
                         break;
                     case "failure":
                         FireOnError(new AuthenticationFailedException());
-                        break;
+                        return;
                 }
             }
             else if (m_state == SASLAuthedState.Instance)
