@@ -35,7 +35,7 @@ namespace test.bedrock.net
         private string success = null;
         private AsyncSocket m_listen;
         private AsyncSocket m_cli;
-        Address a = new Address("localhost", 7002);
+        Address a = new Address("localhost", 7003);
 
         [Test] public void Test_Write()
         {
