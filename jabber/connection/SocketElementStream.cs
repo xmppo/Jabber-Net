@@ -453,12 +453,21 @@ namespace jabber.connection
         protected virtual void BeginAccept()
         {
             this.State = AcceptingState.Instance;
-            m_accept = m_watcher.CreateListenSocket(this, new Address(this.Port), true);
+            m_accept = m_watcher.CreateListenSocket(this, new Address(this.Port));
             m_accept.RequestAccept();
         }
 
         #region Implementation of ISocketEventListener
-        ISocketEventListener ISocketEventListener.GetListener(AsyncSocket listen_sock, System.Net.IPAddress addr)
+        /// <summary>
+        /// An accept socket is about to be bound, or a connect socket is about to connect, 
+        /// or an incoming socket just came in.  Use this as an opportunity to 
+        /// </summary>
+        /// <param name="new_sock">The new socket that is about to be connected.</param>
+        void ISocketEventListener.OnInit(AsyncSocket new_sock)
+        {
+        }
+
+        ISocketEventListener ISocketEventListener.GetListener(AsyncSocket listen_sock)
         {
             return this;
         }
@@ -478,20 +487,20 @@ namespace jabber.connection
             return false;           
         }
 
-        bool ISocketEventListener.OnRead(bedrock.net.AsyncSocket sock, byte[] buf)
+        bool ISocketEventListener.OnRead(bedrock.net.AsyncSocket sock, byte[] buf, int offset, int length)
         {
             m_stream.Push(buf);
 
             if (OnReadText != null)
-                CheckedInvoke(OnReadText, new object[] {sock, ENC.GetString(buf)});
+                CheckedInvoke(OnReadText, new object[] {sock, ENC.GetString(buf, offset, length)});
 
             return true;
         }
 
-        void ISocketEventListener.OnWrite(bedrock.net.AsyncSocket sock, byte[] buf)
+        void ISocketEventListener.OnWrite(bedrock.net.AsyncSocket sock, byte[] buf, int offset, int length)
         {
             if (OnWriteText != null)
-                CheckedInvoke(OnWriteText, new object[] {sock, ENC.GetString(buf)});
+                CheckedInvoke(OnWriteText, new object[] {sock, ENC.GetString(buf, offset, length)});
         }
 
         void ISocketEventListener.OnError(bedrock.net.AsyncSocket sock, System.Exception ex)

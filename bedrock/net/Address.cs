@@ -152,7 +152,6 @@ namespace bedrock.net
             {
                 if (m_ip == null)
                     return null;
-                Debug.Assert(Port > 0, "NULL_ADDRESS used");
                 return new IPEndPoint(m_ip, Port);
             }
             set

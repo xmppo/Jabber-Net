@@ -31,6 +31,8 @@ using System;
 using System.Collections;
 using System.Diagnostics;
 using bedrock.util;
+using bedrock.collections;
+
 namespace bedrock.net
 {
     /// <summary>
@@ -48,8 +50,8 @@ namespace bedrock.net
             Stopped
         };
 
-        private AsyncSocket m_pending = null;
-        private IList       m_socks;
+        private ISet        m_pending = new Set(SetImplementation.SkipList);
+        private ISet        m_socks   = new Set(SetImplementation.SkipList);
         private object      m_lock = new object();
         private int         m_maxSocks;
 
@@ -59,7 +61,6 @@ namespace bedrock.net
         public SocketWatcher()
         {
             m_maxSocks = -1;
-            m_socks = new ArrayList();
         }
 
         /// <summary>
@@ -69,9 +70,7 @@ namespace bedrock.net
         /// this is mostly for rate-limiting purposes.</param>
         public SocketWatcher(int maxsockets)
         {
-            // replace with linkedlist?
             m_maxSocks = maxsockets;
-            m_socks = new ArrayList(m_maxSocks);
         }
 
         /// <summary>
@@ -84,10 +83,13 @@ namespace bedrock.net
             get { return m_maxSocks; }
             set 
             { 
-                if ((value >= 0) && (m_socks.Count >= value))
-                    throw new InvalidOperationException("Too many sockets: " + m_socks.Count);
+                lock(m_lock)
+                {
+                    if ((value >= 0) && (m_socks.Count >= value))
+                        throw new InvalidOperationException("Too many sockets: " + m_socks.Count);
                 
-                m_maxSocks = value; 
+                    m_maxSocks = value; 
+                }
             }
         }
 
@@ -96,15 +98,13 @@ namespace bedrock.net
         /// </summary>
         /// <param name="listener">Where to send notifications</param>
         /// <param name="addr">Address to connect to</param>
-        /// <param name="reuseaddr">Set the ReuseAddr socket option?</param>
         /// <returns>A socket that is ready for calling RequestAccept()</returns>
         public AsyncSocket CreateListenSocket(ISocketEventListener listener,
-                                              Address              addr,
-                                              bool                 reuseaddr)
+                                              Address              addr)
         {
             //Debug.Assert(m_maxSocks > 1);
             AsyncSocket result = new AsyncSocket(this, listener);
-            result.Accept(addr, reuseaddr);
+            result.Accept(addr);
             return result;
         }
 
@@ -166,10 +166,17 @@ namespace bedrock.net
             {
                 m_socks.Remove(s);
                 
-                if (m_pending != null)
+                if (m_pending.Contains(s))
                 {
-                    m_pending.RequestAccept();
-                    m_pending = null;
+                    m_pending.Remove(s);
+                }
+                else 
+                {
+                    foreach (AsyncSocket sock in m_pending)
+                    {
+                        sock.RequestAccept();
+                    }
+                    m_pending.Clear();
                 }
             }
         }
@@ -183,8 +190,7 @@ namespace bedrock.net
         {
             lock (m_lock)
             {
-                Debug.Assert(m_pending == null, "you currently can't have more than one listen socket in a socketwatcher at a time");
-                m_pending = s;
+                m_pending.Add(s);
             }
         }
 
@@ -195,11 +201,12 @@ namespace bedrock.net
         {
             lock (m_lock)
             {
-                m_pending = null;
+                m_pending.Clear();
                 foreach (AsyncSocket s in m_socks)
                 {
                     s.Close();
                 }
+                m_socks.Clear();
             }
         }        
     }

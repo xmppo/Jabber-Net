@@ -54,13 +54,13 @@ namespace bedrock.net
     /// An asynchronous socket, which calls a listener class when interesting things happen.
     /// </summary>
     [RCS(@"$Header$")]
-    public class AsyncSocket
+    public class AsyncSocket : IComparable
     {
         /// <summary>
         /// Socket states.
         /// </summary>
         [RCS(@"$Header$")]
-        public enum State
+        private enum State
         {
             /// <summary>
             /// Socket has been created.
@@ -105,21 +105,7 @@ namespace bedrock.net
         private Address              m_addr;
         private int                  m_keepAlive  = 0;
         private Timer                m_timer      = null;
-        private int                  m_hashcode   = Guid.NewGuid().GetHashCode();
-
-        /*
-        /// <summary>
-        /// Create a Async socket from a Socket.  Only called by Accept().
-        /// </summary>
-        /// <param name="w">SocketWatcher to watch this socket</param>
-        /// <param name="cli">Socket to async on.  Should already be connected.</param>
-        /// <param name="listener">The listener for this socket</param>
-        protected AsyncSocket(SocketWatcher w, Socket cli, ISocketEventListener listener) : this(w, listener)
-        {
-            m_sock    = cli;
-            m_state   = State.Connected;
-        }
-        */
+        private Guid                 m_id         = Guid.NewGuid();
 
         /// <summary>
         /// Called from SocketWatcher.
@@ -138,8 +124,9 @@ namespace bedrock.net
             m_watcher = w;
         }
 
+        /*
         /// <summary>
-        /// Return the state of the socket
+        /// Return the state of the socket.  WARNING: don't use this.
         /// </summary>
         public State Socket_State
         {
@@ -148,6 +135,8 @@ namespace bedrock.net
                 return m_state;
             }
         }
+        */
+
         /// <summary>
         /// For connect sockets, the remote address.  For Accept sockets, the local address.
         /// </summary>
@@ -171,7 +160,8 @@ namespace bedrock.net
         }
 
         /// <summary>
-        /// Keep-alive interval in milliseconds.
+        /// Keep-alive interval in milliseconds.  
+        /// When >0, sends a space byte (0x20) every this many milliseconds
         /// </summary>
         public int KeepAlive
         {
@@ -212,26 +202,62 @@ namespace bedrock.net
 
         private void DoKeepAlive(object state)
         {
-            Debug.Assert(m_state == State.Connected);
+//          Debug.Assert(m_state == State.Connected);
             Write(new byte[] {32});
+        }
+
+        /// <summary>
+        /// Sets the specified option to the specified value.
+        /// </summary>
+        /// <param name="optionLevel"></param>
+        /// <param name="optionName"></param>
+        /// <param name="optionValue"></param>
+        public void SetSocketOption(SocketOptionLevel optionLevel, 
+                                    SocketOptionName optionName, 
+                                    byte[] optionValue)
+        {
+            m_sock.SetSocketOption(optionLevel, optionName, optionValue);
+        }
+
+        /// <summary>
+        /// Sets the specified option to the specified value.
+        /// </summary>
+        /// <param name="optionLevel"></param>
+        /// <param name="optionName"></param>
+        /// <param name="optionValue"></param>
+        public void SetSocketOption(SocketOptionLevel optionLevel, 
+                                    SocketOptionName optionName, 
+                                    int optionValue)
+        {
+            m_sock.SetSocketOption(optionLevel, optionName, optionValue);
+        }
+
+        /// <summary>
+        /// Sets the specified option to the specified value.
+        /// </summary>
+        /// <param name="optionLevel"></param>
+        /// <param name="optionName"></param>
+        /// <param name="optionValue"></param>
+        public void SetSocketOption(SocketOptionLevel optionLevel, 
+                                    SocketOptionName optionName, 
+                                    object optionValue)
+        {
+            m_sock.SetSocketOption(optionLevel, optionName, optionValue);
         }
 
         /// <summary>
         /// Prepare to start accepting inbound requests.  Call RequestAccept() to start the async process.
         /// </summary>
         /// <param name="addr">Address to listen on</param>
-        /// <param name="reuseAddr">Set the ReuseAddress socketoption?</param>
-        public void Accept(Address addr, bool reuseAddr)
+        public void Accept(Address addr)
         {
             m_addr = addr;
             m_sock = new Socket(AddressFamily.InterNetwork, 
                                 SocketType.Stream, 
                                 ProtocolType.Tcp);
             m_sock.Blocking = false;
-            if (reuseAddr)
-            {
-                m_sock.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, 1);
-            }
+            // Always reuse address.
+            m_sock.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, 1);
             m_sock.Bind(m_addr.Endpoint);
             m_sock.Listen(5);
             m_state = State.Listening;
@@ -267,11 +293,10 @@ namespace bedrock.net
             AsyncSocket cliCon = new AsyncSocket(m_watcher);
             cliCon.m_addr = m_addr;
             cliCon.Address.IP = ((IPEndPoint) cli.RemoteEndPoint).Address;
-            cliCon.m_state = State.Connecting;
             cliCon.m_sock = cli;
+            cliCon.m_state = State.Connected;
 
-            ISocketEventListener l = m_listener.GetListener(cliCon, 
-                                                            ((IPEndPoint) cli.RemoteEndPoint).Address);
+            ISocketEventListener l = m_listener.GetListener(cliCon);
             if (l == null)
             {
                 // if the listener returns null, close the socket and quit, instead of
@@ -296,13 +321,12 @@ namespace bedrock.net
                 // they really don't need this error, we don't think.
                 // Error(e);
 
-                // the the watcher that when it gets its act together,
+                // tell the watcher that when it gets its act together,
                 // we'd appreciate it if it would restart the RequestAccept().
                 m_watcher.PendingAccept(this);
                 return;
             }
 
-            cliCon.m_state = State.Connected;
             if (l.OnAccept(cliCon))
             {
                 RequestAccept();
@@ -399,13 +423,6 @@ namespace bedrock.net
         /// </summary>
         public void RequestRead()
         {
-            lock (m_state_lock)
-            {
-                if (m_state != State.Connected)
-                {
-                    throw new InvalidOperationException("Socket must be connected before reading");
-                }
-            }
             try
             {
                 m_sock.BeginReceive(m_buf, 0, m_buf.Length, 
@@ -469,15 +486,12 @@ namespace bedrock.net
             }
             if (count > 0)
             {
-                byte[] ret = new byte[count];
-                Buffer.BlockCopy(m_buf, 0, ret, 0, count);
+                //byte[] ret = new byte[count];
+                //Buffer.BlockCopy(m_buf, 0, ret, 0, count);
 
-                lock (m_state_lock)
+                if (m_listener.OnRead(this, m_buf, 0, count))
                 {
-                    if ((m_listener.OnRead(this, ret)) && (m_state == State.Connected))
-                    {
-                        RequestRead();
-                    }
+                    RequestRead();
                 }
             }
             else
@@ -570,7 +584,8 @@ namespace bedrock.net
             }
             if (count > 0)
             {
-                m_listener.OnWrite(this, (byte[]) ar.AsyncState);
+                byte[] buf = (byte[]) ar.AsyncState;
+                m_listener.OnWrite(this, buf, 0, buf.Length);
             }
             else
             {
@@ -668,7 +683,19 @@ namespace bedrock.net
         /// <returns></returns>
         public override int GetHashCode()
         {
-            return m_hashcode;
+            return m_id.GetHashCode();
+        }
+
+        int IComparable.CompareTo(object val)
+        {
+            if (val == null)
+                return 1;
+
+            AsyncSocket sock = val as AsyncSocket;
+            if (sock == null)
+                throw new ArgumentException("value compared to is not an AsyncSocket");
+    
+            return this.m_id.CompareTo(sock.m_id);
         }
     }
 }

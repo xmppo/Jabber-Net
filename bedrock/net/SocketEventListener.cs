@@ -40,16 +40,21 @@ namespace bedrock.net
     public interface ISocketEventListener
     {
         /// <summary>
+        /// An accept socket is about to be bound, or a connect socket is about to connect, 
+        /// or an incoming socket just came in.  Use this as an opportunity to 
+        /// </summary>
+        /// <param name="new_sock">The new socket that is about to be connected.</param>
+        void OnInit(AsyncSocket new_sock);
+
+        /// <summary>
         /// We accepted a socket, and need to get a listener.
         /// If the return value is null, then the socket will be closed, 
         /// and RequestAccept will ALWAYS be called.
         /// </summary>
         /// <param name="new_sock">The new socket.</param>
-        /// <param name="addr">the address of the remote connection for the accepted socket.  
-        /// Used for blacklisting.</param>
         /// <returns>The listener for the *new* socket, as compared to 
         /// the listener for the *listen* socket</returns>
-        ISocketEventListener GetListener(AsyncSocket new_sock, System.Net.IPAddress addr);
+        ISocketEventListener GetListener(AsyncSocket new_sock);
 
         /// <summary>
         /// A new incoming connection was accepted.
@@ -78,14 +83,18 @@ namespace bedrock.net
         /// </summary>
         /// <param name="sock">The socket that was read from.</param>
         /// <param name="buf">The bytes that were read.</param>
+        /// <param name="offset">Offset into the buffer to start at</param>
+        /// <param name="length">Number of bytes to use out of the buffer</param>
         /// <returns>true if RequestRead() should be called automatically again</returns>
-        bool OnRead (AsyncSocket sock, byte[] buf);
+        bool OnRead (AsyncSocket sock, byte[] buf, int offset, int length);
         /// <summary>
         /// Bytes were written to the socket.
         /// </summary>
         /// <param name="sock">The socket that was written to.</param>
         /// <param name="buf">The bytes that were written.</param>
-        void OnWrite(AsyncSocket sock, byte[] buf);
+        /// <param name="offset">Offset into the buffer to start at</param>
+        /// <param name="length">Number of bytes to use out of the buffer</param>
+        void OnWrite(AsyncSocket sock, byte[] buf, int offset, int length);
     }
     /// <summary>
     /// Default, empty implementation of ISocketEventListener
@@ -95,16 +104,23 @@ namespace bedrock.net
     {
         #region Implementation of ISocketEventListener
         /// <summary>
+        /// An accept socket is about to be bound, or a connect socket is about to connect, 
+        /// or an incoming socket just came in.  Use this as an opportunity to 
+        /// </summary>
+        /// <param name="new_sock">The new socket that is about to be connected.</param>
+        public virtual void OnInit(AsyncSocket new_sock)
+        {
+        }
+
+        /// <summary>
         /// We accepted a socket, and need to get a listener.
         /// If the return value is null, then the socket will be closed, 
         /// and RequestAccept will ALWAYS be called.
         /// </summary>
         /// <param name="new_sock">The new socket.</param>
-        /// <param name="addr">the address of the remote connection for the accepted socket.  
-        /// Used for blacklisting.</param>
         /// <returns>The listener for the *new* socket, as compared to 
         /// the listener for the *listen* socket</returns>
-        public virtual ISocketEventListener GetListener(AsyncSocket new_sock, System.Net.IPAddress addr)
+        public virtual ISocketEventListener GetListener(AsyncSocket new_sock)
         {
             return this;
         }
@@ -150,7 +166,9 @@ namespace bedrock.net
         /// <param name="sock">The socket that was read from.</param>
         /// <param name="buf">The bytes that were read.</param>
         /// <returns>true if RequestRead() should be called automatically again</returns>
-        public virtual bool OnRead(AsyncSocket sock, byte[] buf)
+        /// <param name="offset">Offset into the buffer to start at</param>
+        /// <param name="length">Number of bytes to use out of the buffer</param>
+        public virtual bool OnRead(AsyncSocket sock, byte[] buf, int offset, int length)
         {
             return true;
         }
@@ -160,7 +178,9 @@ namespace bedrock.net
         /// </summary>
         /// <param name="sock">The socket that was written to.</param>
         /// <param name="buf">The bytes that were written.</param>
-        public virtual void OnWrite(AsyncSocket sock, byte[] buf)
+        /// <param name="offset">Offset into the buffer to start at</param>
+        /// <param name="length">Number of bytes to use out of the buffer</param>
+        public virtual void OnWrite(AsyncSocket sock, byte[] buf, int offset, int length)
         {
         }    
         #endregion
