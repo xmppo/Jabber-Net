@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<project default="test" name="test">
+  <property name="debug" value="true"/>
+  <property name="dir.bin" value=".\bin"/>
+  <property name="target.type" value="library"/>
+  <property name="project.FormalName" value="test"/>
+  <target name="init" description="Initialize properties for the build" depends="init-Debug,init-Release">
+	<tstamp/>
+	<mkdir dir="${dir.output}"/>
+	<property name="project.output" value="${project.FormalName}.dll"/>
+	<property name="vbc.optionCompare" value=""/>
+	<property name="vbc.optionExplicit" value="false"/>
+	<property name="vbc.optionStrict" value="false"/>
+	<property name="rootNamespace" value="test"/>
+  </target>
+  <target name="init-Debug" if="${debug}">
+	<property name="define" value="DEBUG;TRACE"/>
+	<property name="optimize" value="false"/>
+	<property name="incremental" value="false"/>
+	<property name="unsafe" value="/unsafe-"/>
+	<property name="debug" value="true"/>
+	<property name="removeintchecks" value="false"/>
+	<property name="tdir" value="Debug"/>	
+	<property name="dir.output" value="${dir.bin}\${tdir}"/>
+	<mkdir dir="${dir.output}"/>
+	<property name="doc" value=""/>
+  </target>
+  <target name="init-Release" unless="${debug}">
+	<property name="define" value="TRACE"/>
+	<property name="optimize" value="true"/>
+	<property name="incremental" value="false"/>
+	<property name="unsafe" value="/unsafe-"/>
+	<property name="debug" value="false"/>
+	<property name="removeintchecks" value="false"/>
+	<property name="tdir" value="Release"/>
+	<property name="dir.output" value="${dir.bin}\${tdir}"/>
+	<mkdir dir="${dir.output}"/>
+	<property name="doc" value=""/>
+  </target>
+  <target name="compile" description="Compile project" depends="init">
+	<csc
+	  target="${target.type}" 
+	  output="${dir.output}\${project.output}" 
+	  debug="${debug}"
+	  define="${define}"
+	  doc="${doc}"
+	  optioncompare="${vbc.optionCompare}"
+	  optionexplicit="${vbc.optionExplicit}"
+	  optionstrict="${vbc.optionStrict}"
+	  removeintchecks="${removeIntChecks}"
+	  rootnamespace="${rootNamespace}">
+	  <arg value="${unsafe}"/>
+	  <sources>
+		<includes name="AssemblyInfo.cs"/>
+		<includes name="bedrock\collections\ByteStackTest.cs"/>
+		<includes name="bedrock\collections\SetTest.cs"/>
+		<includes name="bedrock\collections\SkipListTest.cs"/>
+		<includes name="bedrock\collections\TreeTest.cs"/>
+		<includes name="bedrock\collections\TrieNodeTest.cs"/>
+		<includes name="bedrock\collections\TrieTest.cs"/>
+		<includes name="bedrock\io\PipeStreamTest.cs"/>
+		<includes name="bedrock\util\ComplexTest.cs"/>
+		<includes name="bedrock\util\GetOptBaseTest.cs"/>
+		<includes name="bedrock\util\VersionTest.cs"/>
+		<includes name="jabber\JIDTest.cs"/>
+		<includes name="jabber\client\PresenceManagerTest.cs"/>
+		<includes name="jabber\client\RosterManagerTest.cs"/>
+		<includes name="jabber\protocol\ElementStreamTest.cs"/>
+		<includes name="jabber\protocol\PacketTest.cs"/>
+		<includes name="jabber\protocol\accept\RouteTest.cs"/>
+		<includes name="jabber\protocol\client\IQTest.cs"/>
+		<includes name="jabber\protocol\client\MessageTest.cs"/>
+		<includes name="jabber\protocol\client\PresenceTest.cs"/>
+		<includes name="jabber\protocol\iq\AgentTest.cs"/>
+		<includes name="jabber\protocol\iq\AuthTest.cs"/>
+		<includes name="jabber\protocol\iq\RegisterTest.cs"/>
+		<includes name="jabber\protocol\iq\RosterTest.cs"/>
+		<includes name="jabber\protocol\stream\FactoryTest.cs"/>
+		<includes name="jabber\protocol\stream\StreamTest.cs"/>
+		<includes name="jabber\protocol\x\DataTest.cs"/>
+		<includes name="jabber\protocol\x\EventTest.cs"/>
+	  </sources>
+	  <references>
+		<includes name="System.dll"/>
+		<includes name="System.Data.dll"/>
+		<includes name="System.Xml.dll"/>
+		<includes name="..\bin\${tdir}\jabber-net.dll"/>
+		<includes name=".\nunit\nunit.framework.dll"/>
+	  </references>
+	</csc>
+  </target>
+  <target name="test" depends="init,compile"/>
+  <target name="clean" depends="init" description="Delete output of a build">
+	<delete file="${dir.output}\${project.output}" verbose="true" failonerror="false"/>
+	<delete file="${dir.output}\${project.FormalName}.pdb" verbose="true" failonerror="false"/>
+	<delete file="${doc}" verbose="true" failonerror="false"/>
+  </target>
+</project>
