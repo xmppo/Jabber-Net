@@ -34,6 +34,9 @@ namespace stringprep
 
     public struct CharMap : IComparable
     {
+        /// <summary>
+        /// The char to map from.
+        /// </summary>
         public char ch;
         /// <summary>
         /// The first character to map to.  Subsequent characters will be in map.
@@ -65,7 +68,7 @@ namespace stringprep
         {
             ch = s;
 
-            if (m.Length > 0)
+            if ((m != null) && (m.Length > 0))
             {
                 map0 = m[0];
                 if (m.Length > 1)
@@ -80,6 +83,12 @@ namespace stringprep
             }
         }
 
+        /// <summary>
+        /// Used for Array.BinarySearch, to look up a character.  This is a perversion of the spirit of
+        /// BinarySearch, but it seems to work just fine.  :)
+        /// </summary>
+        /// <param name="obj">The character to compare to this instance</param>
+        /// <returns>-1, 0, 1 for less, equal, more</returns>
         int IComparable.CompareTo(object obj)
         {
             if (obj is char)
@@ -95,6 +104,9 @@ namespace stringprep
         }
     }
 
+    /// <summary>
+    /// A character (or character range) to be prohibited in an input string.
+    /// </summary>
     public struct Prohibit : IComparable
     {
         /// <summary>
@@ -108,9 +120,9 @@ namespace stringprep
         public char end;
 
         /// <summary>
-        /// Entry for a single character.  Typically for prohibit tables.
+        /// Entry for a single character.
         /// </summary>
-        /// <param name="s"></param>
+        /// <param name="s">The character to prohibit.</param>
         public Prohibit(char s)
         {
             start = s;
@@ -118,34 +130,44 @@ namespace stringprep
         }
 
         /// <summary>
-        /// Character range.  Typically for prohibit tables.
+        /// Character range, from start to end inclusive.
         /// </summary>
-        /// <param name="s"></param>
-        /// <param name="e"></param>
-        public Prohibit(char s, char e)
+        /// <param name="start">The start of the range</param>
+        /// <param name="end">The end of the range</param>
+        public Prohibit(char start, char end)
         {
-            start = s;
-            end = e;
+            this.start = start;
+            this.end = end;
         }
-
       
+        /// <summary>
+        /// Used for Array.BinarySearch, to look up a character.  This is a perversion of the spirit of
+        /// BinarySearch, but it seems to work just fine.  :)
+        /// </summary>
+        /// <param name="obj">The character to compare to this instance</param>
+        /// <returns>-1, 0, 1 for less, equal, more</returns>
         int IComparable.CompareTo(object obj)
         {
             if (obj is char)
             {
                 char c = (char) obj;
                 if (end == '\x0') 
-                {
+                { // a single character version.  just compare to that char.
                     return start.CompareTo(c);
                 }
+
                 if (c < start)
                     return 1;
                 if (c > end)
                     return -1;
+
+                // must be in the range.  Hit!
                 return 0;
             }
             if (obj is Prohibit)
             {
+                // well.. if this is a Prohibit, then just check the starts, since there 
+                // shouldn't be any overlap.
                 Prohibit p = (Prohibit) obj;
                 return start.CompareTo(p.start);
             }

@@ -55,6 +55,7 @@ namespace stringprep.unicode
         /// <returns>True if combination occurred</returns>
         public static bool Combine(char a, char b, out char result)
         {
+            // TODO: understand how this works.
             int index_a, index_b;
 
             index_a = Index(a);
