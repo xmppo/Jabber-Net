@@ -8,17 +8,10 @@ namespace stringprep.unicode
     /// </summary>
     public class Decompose
     {
-        private static OffsetComparer m_offset = new OffsetComparer();
-
         /// <summary>
         /// Look up the given character, and return the offset for it.
         /// </summary>
-        /// <param name="ch">Character to loop up</param>
-        /// <returns>-1 if not found</returns>
-       /// <summary>
-        /// Look up the given character, and return the offset for it.
-        /// </summary>
-        /// <param name="ch">Character to loop up</param>
+        /// <param name="ch">Character to look up</param>
         /// <returns>-1 if not found</returns>
         public static char[] Find(char ch)
         {
