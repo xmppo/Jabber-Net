@@ -138,6 +138,13 @@ namespace jabber.client
         public event IQHandler OnAuthError;
 
         /// <summary>
+        /// Agents query returned.  JabberClient.Agents is now valid.
+        /// </summary>
+        [Category("Protocol")]
+        [Description("We received the anwer to our agents query.")]
+        public event IQHandler OnAgents;
+
+        /// <summary>
         /// AutoLogin is false, and it's time to log in.
         /// This callback will receive the results of the IQ type=get 
         /// in the jabber:iq:auth namespace.  When login is complete, 
@@ -413,13 +420,23 @@ namespace jabber.client
         {
             AgentsIQ aiq = new AgentsIQ(Document);
             aiq.Type = IQType.get;
+            aiq.To = this.Server;
             Tracker.BeginIQ(aiq, new IqCB(GotAgents), null);
         }
 
         private void GotAgents(object sender, IQ iq, object state)
         {
             AgentsQuery aq = (AgentsQuery) iq["query", URI.AGENTS];
-            m_agents = aq.GetAgents();
+            if (iq.Type != IQType.error)
+            {
+                m_agents = aq.GetAgents();
+                if (OnAgents != null)
+                    CheckedInvoke(OnAgents, new object[] {this, iq});
+            }
+            else
+            {
+                FireOnError(new ProtocolException(iq));
+            }
         }
 
         /// <summary>
