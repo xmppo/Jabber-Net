@@ -426,6 +426,42 @@ namespace jabber.client
         }
 
         /// <summary>
+        /// Send a message packet to another user
+        /// </summary>
+        /// <param name="t">What kind?</param>
+        /// <param name="to">Who to send it to?</param>
+        /// <param name="body">The message.</param>
+        public void Message(MessageType t,
+            string to,
+            string body)
+        {
+            if (IsAuthenticated) 
+            {
+                Message msg = new Message(Document);
+                msg.Type = t;
+                msg.To = to;
+                msg.Body = body;
+                Write(msg);
+            }
+            else
+            {
+                throw new InvalidOperationException("Client must be authenticated before sending messages.");
+            }
+        }
+ 
+        /// <summary>
+        /// Send a message packet to another user
+        /// </summary>
+        /// <param name="to">Who to send it to?</param>
+        /// <param name="body">The message.</param>
+        public void Message(
+            string to,
+            string body)
+        {
+            Message(MessageType.chat, to, body);
+        }
+
+        /// <summary>
         /// Request a new copy of the roster.
         /// </summary>
         public void GetRoster()
