@@ -27,6 +27,8 @@
  * suggestions and support of Jabber.
  * 
  * --------------------------------------------------------------------------*/
+#if !NO_STRINGPREP
+
 using System;
 using System.Text;
 
@@ -94,4 +96,4 @@ namespace stringprep.steps
         public abstract void Prepare(StringBuilder result, ProfileFlags flags);
     }
 }
-
+#endif

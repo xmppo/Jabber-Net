@@ -1,5 +1,7 @@
-using System;
+/* This file is auto-generated.  DO NOT EDIT! */
 
+#if !NO_STRINGPREP
+using System;
 namespace stringprep
 {
     /// <summary>
@@ -2903,3 +2905,4 @@ namespace stringprep
 
     }
 }
+#endif

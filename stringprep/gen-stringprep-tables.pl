@@ -36,8 +36,10 @@ my ($line, $start, $end, @map);
 open(FH, ">$filename") or die "cannot open $filename for writing";
 
 print FH <<EOF;
-using System;
+/* This file is auto-generated.  DO NOT EDIT! */
 
+#if !NO_STRINGPREP
+using System;
 namespace stringprep
 {
     /// <summary>
@@ -141,5 +143,6 @@ while(<>) {
 print FH <<EOF;
     }
 }
+#endif
 EOF
 close FH or die "cannot close $filename";

@@ -33,6 +33,7 @@
  * 
  * Look over here.  Something shiny!
  */
+#if !NO_STRINGPREP
 
 using System;
 using System.Text;
@@ -169,3 +170,4 @@ namespace stringprep.steps
       
     }
 }
+#endif

@@ -27,6 +27,7 @@
  * suggestions and support of Jabber.
  * 
  * --------------------------------------------------------------------------*/
+#if !NO_STRINGPREP
 using System;
 using System.Text;
 using System.Diagnostics;
@@ -152,3 +153,4 @@ namespace stringprep.unicode
         }
     }
 }
+#endif

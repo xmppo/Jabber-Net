@@ -27,6 +27,7 @@
  * suggestions and support of Jabber.
  * 
  * --------------------------------------------------------------------------*/
+#if !NO_STRINGPREP
 using System;
 
 namespace stringprep.steps
@@ -44,3 +45,4 @@ namespace stringprep.steps
         }
     }
 }
+#endif

@@ -84,9 +84,11 @@ namespace jabber
     [RCS(@"$Header$")]
     public class JID : IComparable
     {
+#if !NO_STRINGPREP
         private static readonly stringprep.Profile s_nodeprep     = new stringprep.XmppNode();
         private static readonly stringprep.Profile s_nameprep     = new stringprep.Nameprep();
         private static readonly stringprep.Profile s_resourceprep = new stringprep.XmppResource();
+#endif
 
         private string m_user     = null;
         private string m_server   = null;
@@ -114,10 +116,17 @@ namespace jabber
         {
             Debug.Assert(server != null, "server must be non-null");
 
+#if !NO_STRINGPREP
             m_user     = (user == null) ? null : s_nodeprep.Prepare(user);
             m_server   = s_nameprep.Prepare(server);
             m_resource = (resource == null) ? null : s_resourceprep.Prepare(resource);
+#else
+            m_user     = (user == null) ? null : user.ToLower();
+            m_server   = server.ToLower();
+            m_resource = resource;
+#endif
             m_JID      = build(m_user, m_server, m_resource);
+
         }
 
         private static string build(string user, string server, string resource)
@@ -199,10 +208,15 @@ namespace jabber
             if ((resource != null) && (resource.Length == 0)) // null is ok, but "" is not.
                 throw new JIDFormatException(m_JID);
 
+#if !NO_STRINGPREP
             m_user = (user == null) ? null : s_nodeprep.Prepare(user);
-            m_server = (server == null) ? null : s_nameprep.Prepare(server);
+            m_server = s_nameprep.Prepare(server);
             m_resource = (resource == null) ? null : s_resourceprep.Prepare(resource);
-
+#else
+            m_user = (user == null) ? null : user.ToLower();
+            m_server = server.ToLower();
+            m_resource = resource;
+#endif
             // Make the case right, for fast equality comparisons
             m_JID = build(m_user, m_server, m_resource);
         }
