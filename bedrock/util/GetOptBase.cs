@@ -35,12 +35,14 @@ namespace bedrock.util
     using System.Reflection;
     using System.Text;
     using System.Text.RegularExpressions;
+    using System.Windows.Forms;
+
     /// <summary>
     /// GetOpt should be subclassed to create a class that handles 
     /// command-line parameters.  The subclass should use fields or properties 
     /// that have the CommandLine attribute set on them.  Fields and properties
-    /// of type bool will be toggle flags, other types will take a value as either 
-    /// the next command-line parameter or following a colon.
+    /// of type bool will be toggle flags, other types will take a value as
+    /// either the next command-line parameter or following a colon.
     /// Also, now, you can create an instance of GetOpt, and pass in
     /// TODO: Give examples of sublcass and calling example.
     /// </summary>
@@ -458,6 +460,18 @@ namespace bedrock.util
         {
             Console.Error.WriteLine(Usage);
             Environment.Exit(64);
+        }
+
+        /// <summary>
+        /// Echo Command-Line requirements for a GUI app via a MessageBox
+        /// (since we do not have user-visible stdout)
+        /// </summary>
+        public virtual void UsageGUIExit()
+        {                       
+          MessageBox.Show
+            (Usage, "Command-line argument usage",
+             MessageBoxButtons.OK, MessageBoxIcon.Error);
+          Environment.Exit(64);
         }
     }
     /// <summary>

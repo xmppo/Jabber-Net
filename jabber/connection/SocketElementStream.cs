@@ -137,6 +137,7 @@ namespace jabber.connection
 		/// <param name="aso"></param>
 		public SocketElementStream(AsyncSocket aso)
 		{
+			m_accept = m_sock = null;
 			m_watcher = aso.SocketWatcher;
 			m_ns = new XmlNamespaceManager(m_doc.NameTable);
             m_timer = new Timer(new TimerCallback(DoKeepAlive), null, Timeout.Infinite, Timeout.Infinite);
@@ -192,6 +193,12 @@ namespace jabber.connection
         /// </summary>
         [Category("Stream")]
         public event ProtocolHandler OnProtocol;
+        /// <summary>
+        /// Get notified of the stream header, as a packet.
+        /// </summary>
+        [Category("Stream")]
+        public event ProtocolHandler OnStreamHeader;
+
         /// <summary>
         /// The connection is complete, and the user is authenticated.
         /// </summary>
@@ -526,9 +533,18 @@ namespace jabber.connection
         /// </summary>
         public virtual void Close()
         {
+            Close(true);
+        }
+
+        /// <summary>
+        /// Close down the connection
+        /// </summary>
+        /// <param name="clean">true for graceful shutdown</param>
+        public virtual void Close(bool clean)
+        {
             lock (StateLock)
             {
-                if (m_state == RunningState.Instance)
+                if ((m_state == RunningState.Instance) && (clean))
                 {
                     Write("</stream:stream>");
                 }
@@ -574,6 +590,8 @@ namespace jabber.connection
             if (str == null)
                 return;
             m_streamID = str.ID;
+            if (OnStreamHeader != null)
+                CheckedInvoke(OnStreamHeader, new object[] {this, tag});
             CheckAll(tag);
         }
         
@@ -647,8 +665,10 @@ namespace jabber.connection
 
             m_sock = newsocket;
             m_sock.RequestRead();
-
-            m_accept.Close();
+            if (m_accept != null)
+            {
+                m_accept.Close();
+            }
 
             return false;           
         }
