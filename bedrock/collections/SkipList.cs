@@ -110,10 +110,12 @@ namespace bedrock.collections
         /// <param name="key">Key for later retrieval.  
         /// Must implement IComparable.</param>
         /// <param name="val">The value to store</param>
+        /// <exception cref="ArgumentException">Thrown if the same key is added twice</exception>
+        /// <exception cref="ArgumentNullException">Thrown if key is null</exception>
         public void Add(object key, object val)
         {
             if (key == null)
-                throw new ArgumentException("Null keys not allowed");
+                throw new ArgumentNullException("Null keys not allowed");
 
             SkipListNode update = new SkipListNode(m_max_level);
             SkipListNode n = m_header;
@@ -134,7 +136,8 @@ namespace bedrock.collections
                 (n[0] != null) && 
                 (m_comparator.Compare(n[0].Key, key) == 0))
             { // already here
-                n.Value = val;
+                //n.Value = val;
+                throw new ArgumentException("Can't add the same key twice");
             }
             else
             { // need to insert

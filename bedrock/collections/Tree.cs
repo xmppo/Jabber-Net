@@ -121,8 +121,13 @@ namespace bedrock.collections
         /// </summary>
         /// <param name="key">The key for the item</param>
         /// <param name="value">The data to store with this key</param>
+        /// <exception cref="ArgumentException">Thrown if the same key is added twice</exception>
+        /// <exception cref="ArgumentNullException">Thrown if key is null</exception>
         public void Add(object key,object value)
         {
+            if (key == null)
+                throw new ArgumentNullException("Key must not be null");
+
             Node n = root;
 
             if (n == null) 
@@ -137,8 +142,9 @@ namespace bedrock.collections
                 int cmp = comparator.Compare(key, n.key);
                 if (cmp == 0) 
                 {
-                    n.value = value;
-                    return;
+                    //n.value = value;
+                    //return;
+                    throw new ArgumentException("Can't add the same key twice");
                 } 
                 else if (cmp < 0) 
                 {

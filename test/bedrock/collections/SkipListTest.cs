@@ -43,13 +43,27 @@ namespace test.bedrock.collections
     public class SkipListTest
     {
         private System.Text.Encoding ENC = System.Text.Encoding.Default;
+
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void Test_Null_Key()
+        {
+            SkipList sl = new SkipList();
+            sl.Add(null, "one");
+        }
+
+        [ExpectedException(typeof(ArgumentException))]
+        public void Test_Key_Twice()
+        {
+            SkipList sl = new SkipList();
+            sl.Add("one", "one");
+            sl.Add("one", "one");
+        }
+
         public void Test_Add()
         {
             SkipList sl = new SkipList();
             Assertion.AssertEquals(0, sl.Count);
             sl.Add("1", "bar");
-            Assertion.AssertEquals(1, sl.Count);
-            sl.Add("1", "baz");
             Assertion.AssertEquals(1, sl.Count);
             sl.Add("2", "baz");
             Assertion.AssertEquals(2, sl.Count);
