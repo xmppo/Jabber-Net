@@ -129,23 +129,20 @@ namespace muzzle
             if (m_cli == null)
                 return;
 
-            if (m_cli != null)
-            {
-                m_cli.User          = User;
-                m_cli.Server        = Server;
-                m_cli.Password      = Password;
-                m_cli.Port          = Port;                
-                m_cli.NetworkHost   = NetworkHost;
-                m_cli.PlaintextAuth = PlaintextAuth;
-                m_cli.Proxy         = ProxyType;
-                m_cli.ProxyHost     = ProxyHost;
-                m_cli.ProxyPort     = ProxyPort;
-                m_cli.ProxyUsername = ProxyUser;
-                m_cli.ProxyPassword = ProxyPassword;
+            m_cli.User          = User;
+            m_cli.Server        = Server;
+            m_cli.Password      = Password;
+            m_cli.Port          = Port;                
+            m_cli.NetworkHost   = NetworkHost;
+            m_cli.PlaintextAuth = PlaintextAuth;
+            m_cli.Proxy         = ProxyType;
+            m_cli.ProxyHost     = ProxyHost;
+            m_cli.ProxyPort     = ProxyPort;
+            m_cli.ProxyUsername = ProxyUser;
+            m_cli.ProxyPassword = ProxyPassword;
 #if !NO_SSL
-                m_cli.SSL      = SSL;
+            m_cli.SSL      = SSL;
 #endif
-            }
         }
 
         private string Prop(XmlElement root, string elem)
