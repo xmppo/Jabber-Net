@@ -59,7 +59,7 @@ namespace stringprep.steps
         /// <summary>
         /// Create a new BidiStep.
         /// </summary>
-        public BidiStep() : base("BIDI", ProfileFlags.NO_BIDI, true)
+        public BidiStep() : base("BIDI")
         {
         }
 
@@ -79,15 +79,11 @@ namespace stringprep.steps
         /// </ol>
         /// </summary>
         /// <param name="result">Result is modified in place.</param>
-        /// <param name="flags">Skip this step if NO_BIDI is step in flags</param>
         /// <exception cref="BidiException">A BiDi problem exists</exception>
-        public override void Prepare(System.Text.StringBuilder result, ProfileFlags flags)
+        public override void Prepare(System.Text.StringBuilder result)
         {
-            if (!IsBitSet(flags))
-                return;
-
             // prohibit section 5.8
-            m_prohibit.Prepare(result, flags);
+            m_prohibit.Prepare(result);
 
             if (m_ral.FindStringInTable(result) >= 0)
             {

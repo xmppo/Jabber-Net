@@ -56,6 +56,31 @@ namespace stringprep
         public string map;  /* remaining characters of map string */
 
         /// <summary>
+        /// Map from first character in string to remaing chars in string.
+        /// </summary>
+        /// <param name="fromto"></param>
+        public CharMap(string fromto)
+        {
+            ch = fromto[0];
+            int len = fromto.Length;
+            switch (len)
+            {
+            case 1:
+                map0 = '\x0';
+                map = null;
+                break;
+            case 2:
+                map0 = fromto[1];
+                map = null;
+                break;
+            default:
+                map0 = fromto[1];
+                map = fromto.Substring(2);
+                break;
+            }
+        }
+
+        /// <summary>
         /// Map to nothing.
         /// </summary>
         /// <param name="s"></param>
@@ -64,30 +89,6 @@ namespace stringprep
             ch = s;
             map0 = '\x0';
             map = null;
-        }
-
-        /// <summary>
-        /// Character mapping, from one character to 0 or more.
-        /// </summary>
-        /// <param name="s"></param>
-        /// <param name="m"></param>
-        public CharMap(char s, char[] m)
-        {
-            ch = s;
-
-            if ((m != null) && (m.Length > 0))
-            {
-                map0 = m[0];
-                if (m.Length > 1)
-                    map = new string(m, 1, m.Length - 1);
-                else
-                    map = null;
-            }
-            else
-            {
-                map0 = '\x0';
-                map = null;
-            }
         }
 
         /// <summary>
@@ -106,77 +107,6 @@ namespace stringprep
             {
                 CharMap cm = (CharMap) obj;
                 return ch.CompareTo(cm.ch);
-            }
-            throw new ArgumentException("Bad class", "obj");
-        }
-    }
-
-    /// <summary>
-    /// A character (or character range) to be prohibited in an input string.
-    /// </summary>
-    public struct Prohibit : IComparable
-    {
-        /// <summary>
-        /// The start character that this row applies to.
-        /// </summary>
-        public char start;
-        /// <summary>
-        /// The end of the character range for this row.  
-        /// If this row is for a single character, this will be 0.
-        /// </summary>
-        public char end;
-
-        /// <summary>
-        /// Entry for a single character.
-        /// </summary>
-        /// <param name="s">The character to prohibit.</param>
-        public Prohibit(char s)
-        {
-            start = s;
-            end = '\x0';
-        }
-
-        /// <summary>
-        /// Character range, from start to end inclusive.
-        /// </summary>
-        /// <param name="start">The start of the range</param>
-        /// <param name="end">The end of the range</param>
-        public Prohibit(char start, char end)
-        {
-            this.start = start;
-            this.end = end;
-        }
-      
-        /// <summary>
-        /// Used for Array.BinarySearch, to look up a character.  This is a perversion of the spirit of
-        /// BinarySearch, but it seems to work just fine.  :)
-        /// </summary>
-        /// <param name="obj">The character to compare to this instance</param>
-        /// <returns>-1, 0, 1 for less, equal, more</returns>
-        int IComparable.CompareTo(object obj)
-        {
-            if (obj is char)
-            {
-                char c = (char) obj;
-                if (end == '\x0') 
-                { // a single character version.  just compare to that char.
-                    return start.CompareTo(c);
-                }
-
-                if (c < start)
-                    return 1;
-                if (c > end)
-                    return -1;
-
-                // must be in the range.  Hit!
-                return 0;
-            }
-            else if (obj is Prohibit)
-            {
-                // well.. if this is a Prohibit, then just check the starts, since there 
-                // shouldn't be any overlap.
-                Prohibit p = (Prohibit) obj;
-                return start.CompareTo(p.start);
             }
             throw new ArgumentException("Bad class", "obj");
         }

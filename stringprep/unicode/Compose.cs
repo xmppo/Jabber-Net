@@ -41,10 +41,17 @@ namespace stringprep.unicode
         private static int Index(char c)
         {
             int p = c >> 8;
+            if (p >= ComposeData.Table.Length)
+                return 0;
             if (ComposeData.Table[p] == 255)
                 return 0;
             else
                 return ComposeData.Data[ComposeData.Table[p], c & 0xff];
+        }
+
+        private static bool Between(int x, int start, int end)
+        {
+            return (x >= start) && (x < end);
         }
 
         /// <summary>
@@ -56,17 +63,22 @@ namespace stringprep.unicode
         /// <returns>True if combination occurred</returns>
         public static bool Combine(char a, char b, out char result)
         {
-            // TODO: understand how this works.
             int index_a, index_b;
+
+            // FIRST_START..FIRST_SINGLE_START: 
+            // FIRST_SINGLE_START..SECOND_START: look up a to see if b matches
+            // SECOND_START..SECOND_SINGLE_START: 
+            // SECOND_SINGLE_START..: look up b to see if a matches
 
             index_a = Index(a);
             // for stuff in this range, there is only one possible combination for the character
             // on the left
-            if ((index_a >= ComposeData.FIRST_SINGLE_START) && (index_a < ComposeData.SECOND_START))
+            if (Between(index_a, ComposeData.FIRST_SINGLE_START, ComposeData.SECOND_START))
             {
-                if (b == ComposeData.FirstSingle[index_a - ComposeData.FIRST_SINGLE_START, 0])
+                int offset = (index_a - ComposeData.FIRST_SINGLE_START) * 2;
+                if (b == ComposeData.FirstSingle[offset])
                 {
-                    result = ComposeData.FirstSingle[index_a - ComposeData.FIRST_SINGLE_START, 1];
+                    result = ComposeData.FirstSingle[offset + 1];
                     return true;
                 }
                 else
@@ -80,10 +92,10 @@ namespace stringprep.unicode
             // for this range, only one possible combination to the right.
             if (index_b >= ComposeData.SECOND_SINGLE_START)
             {
-                if (a ==
-                    ComposeData.SecondSingle[index_b - ComposeData.SECOND_SINGLE_START, 0])
+                int offset = (index_b - ComposeData.SECOND_SINGLE_START) * 2;
+                if (a == ComposeData.SecondSingle[offset])
                 {
-                    result =  ComposeData.SecondSingle[index_b - ComposeData.SECOND_SINGLE_START, 1];
+                    result =  ComposeData.SecondSingle[offset + 1];
                     return true;
                 }
                 else
@@ -93,13 +105,12 @@ namespace stringprep.unicode
                 }
             }
 
-            if ((index_a >= ComposeData.FIRST_START) && 
-                (index_a < ComposeData.FIRST_SINGLE_START) && 
-                (index_b >= ComposeData.SECOND_START) && 
-                (index_b < ComposeData.SECOND_SINGLE_START))  // TODO: check to see if this should be b
+            if (Between(index_a, ComposeData.FIRST_START, ComposeData.FIRST_SINGLE_START) &&
+                Between(index_b, ComposeData.SECOND_START, ComposeData.SECOND_SINGLE_START))
             {
-                char res = ComposeData.Array[index_a - ComposeData.FIRST_START, 
-                    index_b - ComposeData.SECOND_START];
+                int offset = (index_a - ComposeData.FIRST_START) * ComposeData.N_SECOND + 
+                    (index_b - ComposeData.SECOND_START);
+                char res = ComposeData.Array[offset];
 
                 if (res != '\x0')
                 {

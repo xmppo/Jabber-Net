@@ -97,30 +97,27 @@ while(<>) {
 	if (length($start) > 4) {
 	  # do nothing
 	} elsif ($map[3]) {
-	    printf FH "            new CharMap('\\x%04s', new char[] { '\\x%04s',%*s/* %s */\n                   '\\x%04s', '\\x%04s', '\\x%04s' }),\n",
-	    $start, $map[0], $tab-length($line)-13, " ", $line,
-	    $map[1], $map[2], $map[3];
+	    printf FH "            new CharMap(\"\\x%04s\\x%04s\\x%04s\\x%04s\\x%04s\"), %*s/* %s */\n",
+	    $start, $map[0], $map[1], $map[2], $map[3], $tab-length($line)-13, " ", $line;
 	} elsif ($map[2]) {
-	    printf FH "            new CharMap('\\x%04s', new char[] { '\\x%04s',%*s/* %s */\n                   '\\x%04s', '\\x%04s' }),\n",
-	    $start, $map[0], $tab-length($line)-14, " ", $line,
-	    $map[1], $map[2];
+	    printf FH "            new CharMap(\"\\x%04s\\x%04s\\x%04s\\x%04s\"), %*s/* %s */\n",
+	    $start, $map[0], $map[1], $map[2], $tab-length($line)-20, " ", $line;
 	} elsif ($map[1]) {
-	    printf FH "            new CharMap('\\x%04s', new char[] { '\\x%04s',%*s/* %s */\n                   '\\x%04s' }),\n",
-	    $start, $map[0], $tab-length($line)-14, " ", $line,
-	    $map[1];
+	    printf FH "            new CharMap(\"\\x%04s\\x%04s\\x%04s\"), %*s/* %s */\n",
+	    $start, $map[0], $map[1], $tab-length($line)-19, " ", $line,
 	} elsif ($map[0]) {
-	    printf FH "            new CharMap('\\x%04s', new char[] { '\\x%04s' }),%*s/* %s */\n",
+	    printf FH "            new CharMap(\"\\x%04s\\x%04s\"),%*s/* %s */\n",
 	    $start, $map[0], $tab-length($line)-17, " ",  $line;
 	} elsif ($end) {
 	    printf FH "            new Prohibit('\\x%04s', '\\x%04s'),%*s/* %s */\n",
-	    $start, $end, $tab-length($line)-11, " ",  $line;
+	    $start, $end, $tab-length($line)-46, " ",  $line;
 	} else {
 		if ($varname =~ /^B/) {
 	        printf FH "            new CharMap('\\x%04s'),%*s/* %s */\n",
 	            $start, $tab-length($line)-11, " ",  $line;
 	    } else {
 	        printf FH "            new Prohibit('\\x%04s'),%*s/* %s */\n",
-        	    $start, $tab-length($line)-11, " ",  $line;
+        	    $start, $tab-length($line)-41, " ",  $line;
 	    }
 	}
     } else {

@@ -250,11 +250,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "stringprep\TestGeneric.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "stringprep\TestNameprep.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

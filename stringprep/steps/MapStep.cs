@@ -45,18 +45,7 @@ namespace stringprep.steps
         /// </summary>
         /// <param name="tab">Mapping table</param>
         /// <param name="name">Name of the step</param>
-        public MapStep(CharMap[] tab, string name) : this(tab, name, 0, false)
-        {
-        }
-
-        /// <summary>
-        /// Create a MapStep that might look at flags.
-        /// </summary>
-        /// <param name="tab">Mapping table</param>
-        /// <param name="name">name of the step</param>
-        /// <param name="flags">Flags that apply for this step.  If the flag specified here is set in the Prepare method, no-op.</param>
-        /// <param name="inverted">Are the flags inverted?</param>
-        public MapStep(CharMap[] tab, string name, ProfileFlags flags, bool inverted) : base(name, flags, inverted)
+        public MapStep(CharMap[] tab, string name) : base(name)
         {
             m_table = tab;
         }
@@ -65,12 +54,8 @@ namespace stringprep.steps
         /// Perform mapping for each character of input.
         /// </summary>
         /// <param name="result">Result is modified in place.</param>
-        /// <param name="flags">Skip this step if the flags for this step are set in flags (or the opposite if invert is true)</param>
-        public override void Prepare(System.Text.StringBuilder result, ProfileFlags flags)
+        public override void Prepare(System.Text.StringBuilder result)
         {
-            if (IsBitSet(flags))
-                return;
-
             // From RFC3454, section 3: 
             // Mapped characters are not re-scanned during the mapping step.  That
             // is, if character A at position X is mapped to character B, character

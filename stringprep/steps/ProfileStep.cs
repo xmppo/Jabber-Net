@@ -39,8 +39,6 @@ namespace stringprep.steps
     /// </summary>
     public abstract class ProfileStep
     {
-        private ProfileFlags m_flags;
-        private bool m_invert;
         private string m_name;
 
         /// <summary>
@@ -50,21 +48,6 @@ namespace stringprep.steps
         protected ProfileStep(string name)
         {
             m_name = name;
-            m_flags = 0;
-            m_invert = false;
-        }
-
-        /// <summary>
-        /// Create a named profile step, with the given flags and inversion.
-        /// </summary>
-        /// <param name="name">The profile name</param>
-        /// <param name="flags">When these flags are set in Prepare, skip this step.</param>
-        /// <param name="inverted">Invert the flags: when these flags are not set, skip this step.</param>
-        protected ProfileStep(string name, ProfileFlags flags, bool inverted)
-        {
-            m_name = name;
-            m_flags = flags;
-            m_invert = inverted;
         }
 
         /// <summary>
@@ -76,24 +59,10 @@ namespace stringprep.steps
         }
 
         /// <summary>
-        /// Is m_flags all set in flags, or if invert, m_flags not all set in flags?
-        /// </summary>
-        /// <param name="flags"></param>
-        /// <returns></returns>
-        protected bool IsBitSet(ProfileFlags flags)
-        {
-            if (m_flags == 0)
-                return false;
-
-            return m_invert ^ ((m_flags & flags) == m_flags);
-        }
-
-        /// <summary>
         /// This is the workhorse function, to be implemented in each subclass.
         /// </summary>
         /// <param name="result">Result will be modified in place</param>
-        /// <param name="flags">Certain steps will be skipped, if flags are set</param>
-        public abstract void Prepare(StringBuilder result, ProfileFlags flags);
+        public abstract void Prepare(StringBuilder result);
     }
 }
 #endif

@@ -44,7 +44,7 @@ namespace test.stringprep
 
         private void TryOne(string input, string expected)
         {
-            string output = resourceprep.Prepare(input, 0);
+            string output = resourceprep.Prepare(input);
             Assertion.AssertEquals(expected, output);
         }
 

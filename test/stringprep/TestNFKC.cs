@@ -45,7 +45,7 @@ namespace test.stringprep
         private void TryOne(string input, string expected)
         {
             StringBuilder i = new StringBuilder(input);
-            step.Prepare(i, 0);
+            step.Prepare(i);
             Assertion.AssertEquals(expected, i.ToString());
         }
 

@@ -35,28 +35,7 @@ using stringprep.steps;
 
 namespace stringprep
 {
-    /// <summary>
-    /// Flags to turn off certain profile steps.  I'm not convinced that these are required, 
-    /// but it was more work than it should have been to get them to work, so they stay for 
-    /// now.
-    /// </summary>
-    [Flags]
-    public enum ProfileFlags
-    {
-        /// <summary>
-        /// Don't perform NFKC normalization.
-        /// </summary>
-        NO_NFKC         = (1 << 0),
-        /// <summary>
-        /// Don't perform bidirectional checks.
-        /// </summary>
-        NO_BIDI         = (1 << 1),
-        /// <summary>
-        /// Don't check for unassigned characters.
-        /// </summary>
-        NO_UNASSIGNED   = (1 << 2),
-    };
- 
+   
  	/// <summary>
 	/// Summary description for Prep.
 	/// </summary>
@@ -69,11 +48,11 @@ namespace stringprep
         /// <summary>
         /// RFC 3454, Appendix B.2
         /// </summary>
-        public static readonly MapStep B_2 = new MapStep(RFC3454.B_2, "B.2", ProfileFlags.NO_NFKC, false);
+        public static readonly MapStep B_2 = new MapStep(RFC3454.B_2, "B.2");
         /// <summary>
         /// RFC 3454, Appendix B.3
         /// </summary>
-        public static readonly MapStep B_3 = new MapStep(RFC3454.B_3, "B.3", ProfileFlags.NO_NFKC, true);
+        public static readonly MapStep B_3 = new MapStep(RFC3454.B_3, "B.3");
 
         /// <summary>
         /// RFC 3454, Appendix C.1.1
@@ -131,7 +110,7 @@ namespace stringprep
         /// <summary>
         /// RFC 3454, Section 7
         /// </summary>
-        public static readonly ProhibitStep UNASSIGNED = new ProhibitStep(RFC3454.A_1, "A.1", ProfileFlags.NO_UNASSIGNED, false);
+        public static readonly ProhibitStep UNASSIGNED = new ProhibitStep(RFC3454.A_1, "A.1");
 
         private ProfileStep[] m_profile;
 
@@ -152,30 +131,7 @@ namespace stringprep
         public string Prepare(string input)
         {
             StringBuilder result = new StringBuilder(input);
-            Prepare(result, 0);
-            return result.ToString();
-        }
-
-        /// <summary>
-        /// Prepare a string, according to the specified profile, in place.
-        /// Not thread safe; make sure the input is locked, if appropriate.
-        /// </summary>
-        /// <param name="result">The string to prepare in place</param>
-        public void Prepare(StringBuilder result)
-        {
-            Prepare(result, 0);
-        }
-
-        /// <summary>
-        /// Prepare a string, according to the specified profile.
-        /// </summary>
-        /// <param name="input">The string to prepare</param>
-        /// <param name="flags">Flags to turn off certain operations</param>
-        /// <returns>The prepared string</returns>
-        public string Prepare(string input, ProfileFlags flags)
-        {
-            StringBuilder result = new StringBuilder(input);
-            Prepare(result, flags);
+            Prepare(result);
             return result.ToString();
         }
 
@@ -186,12 +142,11 @@ namespace stringprep
         /// subclasses if necessary)
         /// </summary>
         /// <param name="result">The string to prepare in place</param>
-        /// <param name="flags">Flags to turn off certain operations</param>
-        public virtual void Prepare(StringBuilder result, ProfileFlags flags)
+        public virtual void Prepare(StringBuilder result)
         { 
             foreach (ProfileStep step in m_profile)
             {
-                step.Prepare(result, flags);            
+                step.Prepare(result);
             }
         }
 	}

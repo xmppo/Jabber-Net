@@ -464,7 +464,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "stringprep\Generic.cs"
+                    RelPath = "stringprep\CharMap.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -484,12 +484,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "stringprep\rfc3454.cs"
+                    RelPath = "stringprep\Prohibit.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "stringprep\Table.cs"
+                    RelPath = "stringprep\rfc3454.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -529,11 +529,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "stringprep\steps\UnassignedStep.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "stringprep\unicode\Combining.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -550,6 +545,11 @@
                 />
                 <File
                     RelPath = "stringprep\unicode\Decompose.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "stringprep\unicode\Util.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -20,35 +20,35 @@ namespace test.stringprep
         {
             string input = "\x0066\x006f\x006f\x00ad\x034f\x1806\x180b\x0062\x0061\x0072\x200b\x2060\x0062\x0061\x007a\xfe00\xfe08\xfe0f\xfeff";
             string expected = "\x0066\x006f\x006f\x0062\x0061\x0072\x0062\x0061\x007a";
-            Assertion.AssertEquals(expected, nameprep.Prepare(input, 0));
+            Assertion.AssertEquals(expected, nameprep.Prepare(input));
         }
         // 4.2 Case folding ASCII U+0043 U+0041 U+0046 U+0045
         public void Test_4_02()
         {
             string input = "\x0043\x0041\x0046\x0045";
             string expected = "\x0063\x0061\x0066\x0065";
-            Assertion.AssertEquals(expected, nameprep.Prepare(input, 0));
+            Assertion.AssertEquals(expected, nameprep.Prepare(input));
         }
         // 4.3 Case folding 8bit U+00DF (german sharp s)
         public void Test_4_03()
         {
             string input = "\x00df";
             string expected = "\x0073\x0073";
-            Assertion.AssertEquals(expected, nameprep.Prepare(input, 0));
+            Assertion.AssertEquals(expected, nameprep.Prepare(input));
         }
         // 4.4 Case folding U+0130 (turkish capital I with dot)
         public void Test_4_04()
         {
             string input = "\x0130";
             string expected = "\x0069\x0307";
-            Assertion.AssertEquals(expected, nameprep.Prepare(input, 0));
+            Assertion.AssertEquals(expected, nameprep.Prepare(input));
         }
         // 4.5 Case folding multibyte U+0143 U+037A
         public void Test_4_05()
         {
             string input = "\x0143\x037a";
             string expected = "\x0144\x0020\x03b9";
-            Assertion.AssertEquals(expected, nameprep.Prepare(input, 0));
+            Assertion.AssertEquals(expected, nameprep.Prepare(input));
         }
         [Ignore("fails, due to lack of UTF-16 in .Net")]
         // 4.6 Case folding U+2121 U+33C6 U+1D7BB
@@ -56,70 +56,70 @@ namespace test.stringprep
         {
             string input = "\x2121\x33c6\xd835\xdfbb";
             string expected = "\x0074\x0065\x006c\x0063\x2215\x006b\x0067\x03c3";
-            Assertion.AssertEquals(expected, nameprep.Prepare(input, 0));
+            Assertion.AssertEquals(expected, nameprep.Prepare(input));
         }
         // 4.7 Normalization of U+006a U+030c U+00A0 U+00AA
         public void Test_4_07()
         {
             string input = "\x006a\x030c\x00a0\x00aa";
             string expected = "\x01f0\x0020\x0061";
-            Assertion.AssertEquals(expected, nameprep.Prepare(input, 0));
+            Assertion.AssertEquals(expected, nameprep.Prepare(input));
         }
         // 4.8 Case folding U+1FB7 and normalization
         public void Test_4_08()
         {
             string input = "\x1fb7";
             string expected = "\x1fb6\x03b9";
-            Assertion.AssertEquals(expected, nameprep.Prepare(input, 0));
+            Assertion.AssertEquals(expected, nameprep.Prepare(input));
         }
         // 4.9 Self-reverting case folding U+01F0 and normalization
         public void Test_4_09()
         {
             string input = "\x01f0";
             string expected = "\x01f0";
-            Assertion.AssertEquals(expected, nameprep.Prepare(input, 0));
+            Assertion.AssertEquals(expected, nameprep.Prepare(input));
         }
         // 4.10 Self-reverting case folding U+0390 and normalization
         public void Test_4_10()
         {
             string input = "\x0390";
             string expected = "\x0390";
-            Assertion.AssertEquals(expected, nameprep.Prepare(input, 0));
+            Assertion.AssertEquals(expected, nameprep.Prepare(input));
         }
         // 4.11 Self-reverting case folding U+03B0 and normalization
         public void Test_4_11()
         {
             string input = "\x03b0";
             string expected = "\x03b0";
-            Assertion.AssertEquals(expected, nameprep.Prepare(input, 0));
+            Assertion.AssertEquals(expected, nameprep.Prepare(input));
         }
         // 4.12 Self-reverting case folding U+1E96 and normalization
         public void Test_4_12()
         {
             string input = "\x1e96";
             string expected = "\x1e96";
-            Assertion.AssertEquals(expected, nameprep.Prepare(input, 0));
+            Assertion.AssertEquals(expected, nameprep.Prepare(input));
         }
         // 4.13 Self-reverting case folding U+1F56 and normalization
         public void Test_4_13()
         {
             string input = "\x1f56";
             string expected = "\x1f56";
-            Assertion.AssertEquals(expected, nameprep.Prepare(input, 0));
+            Assertion.AssertEquals(expected, nameprep.Prepare(input));
         }
         // 4.14 ASCII space character U+0020
         public void Test_4_14()
         {
             string input = "\x0020";
             string expected = "\x0020";
-            Assertion.AssertEquals(expected, nameprep.Prepare(input, 0));
+            Assertion.AssertEquals(expected, nameprep.Prepare(input));
         }
         // 4.15 Non-ASCII 8bit space character U+00A0
         public void Test_4_15()
         {
             string input = "\x00a0";
             string expected = "\x0020";
-            Assertion.AssertEquals(expected, nameprep.Prepare(input, 0));
+            Assertion.AssertEquals(expected, nameprep.Prepare(input));
         }
         // 4.16 Non-ASCII multibyte space character U+1680
         public void Test_4_16()
@@ -128,7 +128,7 @@ namespace test.stringprep
             string expected = "";
             try
             {
-                expected = nameprep.Prepare(input, 0);
+                expected = nameprep.Prepare(input);
                 Assertion.Assert("Expected ProhibitedCharacterException", false);
             }
             catch (ProhibitedCharacterException)
@@ -149,28 +149,28 @@ namespace test.stringprep
         {
             string input = "\x2000";
             string expected = "\x0020";
-            Assertion.AssertEquals(expected, nameprep.Prepare(input, 0));
+            Assertion.AssertEquals(expected, nameprep.Prepare(input));
         }
         // 4.18 Zero Width Space U+200b
         public void Test_4_18()
         {
             string input = "\x200b";
             string expected = "";
-            Assertion.AssertEquals(expected, nameprep.Prepare(input, 0));
+            Assertion.AssertEquals(expected, nameprep.Prepare(input));
         }
         // 4.19 Non-ASCII multibyte space character U+3000
         public void Test_4_19()
         {
             string input = "\x3000";
             string expected = "\x0020";
-            Assertion.AssertEquals(expected, nameprep.Prepare(input, 0));
+            Assertion.AssertEquals(expected, nameprep.Prepare(input));
         }
         // 4.20 ASCII control characters U+0010 U+007F
         public void Test_4_20()
         {
             string input = "\x0010\x007f";
             string expected = "\x0010\x007f";
-            Assertion.AssertEquals(expected, nameprep.Prepare(input, 0));
+            Assertion.AssertEquals(expected, nameprep.Prepare(input));
         }
         // 4.21 Non-ASCII 8bit control character U+0085
         public void Test_4_21()
@@ -179,7 +179,7 @@ namespace test.stringprep
             string expected = "";
             try
             {
-                expected = nameprep.Prepare(input, 0);
+                expected = nameprep.Prepare(input);
                 Assertion.Assert("Expected ProhibitedCharacterException", false);
             }
             catch (ProhibitedCharacterException)
@@ -202,7 +202,7 @@ namespace test.stringprep
             string expected = "";
             try
             {
-                expected = nameprep.Prepare(input, 0);
+                expected = nameprep.Prepare(input);
                 Assertion.Assert("Expected ProhibitedCharacterException", false);
             }
             catch (ProhibitedCharacterException)
@@ -223,7 +223,7 @@ namespace test.stringprep
         {
             string input = "\xfeff";
             string expected = "";
-            Assertion.AssertEquals(expected, nameprep.Prepare(input, 0));
+            Assertion.AssertEquals(expected, nameprep.Prepare(input));
         }
         // 4.24 Non-ASCII control character U+1D175
         public void Test_4_24()
@@ -232,7 +232,7 @@ namespace test.stringprep
             string expected = "";
             try
             {
-                expected = nameprep.Prepare(input, 0);
+                expected = nameprep.Prepare(input);
                 Assertion.Assert("Expected ProhibitedCharacterException", false);
             }
             catch (ProhibitedCharacterException)
@@ -255,7 +255,7 @@ namespace test.stringprep
             string expected = "";
             try
             {
-                expected = nameprep.Prepare(input, 0);
+                expected = nameprep.Prepare(input);
                 Assertion.Assert("Expected ProhibitedCharacterException", false);
             }
             catch (ProhibitedCharacterException)
@@ -278,7 +278,7 @@ namespace test.stringprep
             string expected = "";
             try
             {
-                expected = nameprep.Prepare(input, 0);
+                expected = nameprep.Prepare(input);
                 Assertion.Assert("Expected ProhibitedCharacterException", false);
             }
             catch (ProhibitedCharacterException)
@@ -301,7 +301,7 @@ namespace test.stringprep
             string expected = "";
             try
             {
-                expected = nameprep.Prepare(input, 0);
+                expected = nameprep.Prepare(input);
                 Assertion.Assert("Expected ProhibitedCharacterException", false);
             }
             catch (ProhibitedCharacterException)
@@ -324,7 +324,7 @@ namespace test.stringprep
             string expected = "";
             try
             {
-                expected = nameprep.Prepare(input, 0);
+                expected = nameprep.Prepare(input);
                 Assertion.Assert("Expected ProhibitedCharacterException", false);
             }
             catch (ProhibitedCharacterException)
@@ -347,7 +347,7 @@ namespace test.stringprep
             string expected = "";
             try
             {
-                expected = nameprep.Prepare(input, 0);
+                expected = nameprep.Prepare(input);
                 Assertion.Assert("Expected ProhibitedCharacterException", false);
             }
             catch (ProhibitedCharacterException)
@@ -370,7 +370,7 @@ namespace test.stringprep
             string expected = "";
             try
             {
-                expected = nameprep.Prepare(input, 0);
+                expected = nameprep.Prepare(input);
                 Assertion.Assert("Expected ProhibitedCharacterException", false);
             }
             catch (ProhibitedCharacterException)
@@ -393,7 +393,7 @@ namespace test.stringprep
             string expected = "";
             try
             {
-                expected = nameprep.Prepare(input, 0);
+                expected = nameprep.Prepare(input);
                 Assertion.Assert("Expected ProhibitedCharacterException", false);
             }
             catch (ProhibitedCharacterException)
@@ -416,7 +416,7 @@ namespace test.stringprep
             string expected = "";
             try
             {
-                expected = nameprep.Prepare(input, 0);
+                expected = nameprep.Prepare(input);
                 Assertion.Assert("Expected ProhibitedCharacterException", false);
             }
             catch (ProhibitedCharacterException)
@@ -437,7 +437,7 @@ namespace test.stringprep
         {
             string input = "\x0341";
             string expected = "\x0301";
-            Assertion.AssertEquals(expected, nameprep.Prepare(input, 0));
+            Assertion.AssertEquals(expected, nameprep.Prepare(input));
         }
         // 4.34 Left-to-right mark U+200E
         public void Test_4_34()
@@ -446,7 +446,7 @@ namespace test.stringprep
             string expected = "";
             try
             {
-                expected = nameprep.Prepare(input, 0);
+                expected = nameprep.Prepare(input);
                 Assertion.Assert("Expected ProhibitedCharacterException", false);
             }
             catch (ProhibitedCharacterException)
@@ -469,7 +469,7 @@ namespace test.stringprep
             string expected = "";
             try
             {
-                expected = nameprep.Prepare(input, 0);
+                expected = nameprep.Prepare(input);
                 Assertion.Assert("Expected ProhibitedCharacterException", false);
             }
             catch (ProhibitedCharacterException)
@@ -492,7 +492,7 @@ namespace test.stringprep
             string expected = "";
             try
             {
-                expected = nameprep.Prepare(input, 0);
+                expected = nameprep.Prepare(input);
                 Assertion.Assert("Expected ProhibitedCharacterException", false);
             }
             catch (ProhibitedCharacterException)
@@ -515,7 +515,7 @@ namespace test.stringprep
             string expected = "";
             try
             {
-                expected = nameprep.Prepare(input, 0);
+                expected = nameprep.Prepare(input);
                 Assertion.Assert("Expected ProhibitedCharacterException", false);
             }
             catch (ProhibitedCharacterException)
@@ -538,7 +538,7 @@ namespace test.stringprep
             string expected = "";
             try
             {
-                expected = nameprep.Prepare(input, 0);
+                expected = nameprep.Prepare(input);
                 Assertion.Assert("Expected BidiException", false);
             }
             catch (BidiException)
@@ -561,7 +561,7 @@ namespace test.stringprep
             string expected = "";
             try
             {
-                expected = nameprep.Prepare(input, 0);
+                expected = nameprep.Prepare(input);
                 Assertion.Assert("Expected BidiException", false);
             }
             catch (BidiException)
@@ -582,7 +582,7 @@ namespace test.stringprep
         {
             string input = "\x0066\x006f\x006f\xfe76\x0062\x0061\x0072";
             string expected = "\x0066\x006f\x006f\x0020\x064e\x0062\x0061\x0072";
-            Assertion.AssertEquals(expected, nameprep.Prepare(input, 0));
+            Assertion.AssertEquals(expected, nameprep.Prepare(input));
         }
         // 4.41 Bidi: RandALCat without trailing RandALCat U+0627 U+0031
         public void Test_4_41()
@@ -591,7 +591,7 @@ namespace test.stringprep
             string expected = "";
             try
             {
-                expected = nameprep.Prepare(input, 0);
+                expected = nameprep.Prepare(input);
                 Assertion.Assert("Expected BidiException", false);
             }
             catch (BidiException)
@@ -612,7 +612,7 @@ namespace test.stringprep
         {
             string input = "\x0627\x0031\x0628";
             string expected = "\x0627\x0031\x0628";
-            Assertion.AssertEquals(expected, nameprep.Prepare(input, 0));
+            Assertion.AssertEquals(expected, nameprep.Prepare(input));
         }
         // 4.43 Unassigned code point U+E0002
         public void Test_4_43()
@@ -621,7 +621,7 @@ namespace test.stringprep
             string expected = "";
             try
             {
-                expected = nameprep.Prepare(input, 0);
+                expected = nameprep.Prepare(input);
                 Assertion.Assert("Expected ProhibitedCharacterException", false);
             }
             catch (ProhibitedCharacterException)
@@ -642,14 +642,14 @@ namespace test.stringprep
         {
             string input = "\x0058\x00ad\x00df\x0130\x2121\x006a\x030c\x00a0\x00aa\x03b0\x2000";
             string expected = "\x0078\x0073\x0073\x0069\x0307\x0074\x0065\x006c\x01f0\x0020\x0061\x03b0\x0020";
-            Assertion.AssertEquals(expected, nameprep.Prepare(input, 0));
+            Assertion.AssertEquals(expected, nameprep.Prepare(input));
         }
         // 4.45 Larger test (expanding)
         public void Test_4_45()
         {
             string input = "\x0058\x00df\x3316\x0130\x2121\x249f\x3300";
             string expected = "\x0078\x0073\x0073\x30ad\x30ed\x30e1\x30fc\x30c8\x30eb\x0069\x0307\x0074\x0065\x006c\x0028\x0064\x0029\x30a2\x30d1\x30fc\x30c8";
-            Assertion.AssertEquals(expected, nameprep.Prepare(input, 0));
+            Assertion.AssertEquals(expected, nameprep.Prepare(input));
         }
     }
 }

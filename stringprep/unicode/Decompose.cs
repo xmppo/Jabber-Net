@@ -9,44 +9,20 @@ namespace stringprep.unicode
     public class Decompose
     {
         /// <summary>
-        /// Look up the given character, and return the offset for it.
+        /// Look up the expansion, if any, for the given character.
         /// </summary>
-        /// <param name="ch">Character to look up</param>
-        /// <returns>-1 if not found</returns>
+        /// <param name="ch">The character to find</param>
+        /// <returns>the expansion, or null if none found.</returns>
         public static char[] Find(char ch)
         {
-            int start = 0;
-            int end = Offsets.Length;
-            int found = -1;
-
-            if ((ch < Offsets[0]) || (ch > Offsets[end - 2]))
+            char offset = Util.Find(ch, Offsets);
+            if (offset == Util.NOT_FOUND)
                 return null;
 
-            int half;
-            while (true)
-            {
-                half = ((start + end) / 4) * 2;
-                if (ch == Offsets[half])
-                {
-                    found = half;
-                    break;
-                }
-                else if (half == start)
-                    break; // done
-                else if (ch > Offsets[half])
-                    start = half;
-                else
-                    end = half;
-            }
-
-            if (found == -1)
-                return null;
-
-            int first = Offsets[found+1];
             int len = 0;
-            while (Expansion[first + len] != '\x0000')
+            while (Expansion[offset + len] != '\x0000')
                 len++;
-            return Expansion.ToCharArray(first, len);
+            return Expansion.ToCharArray(offset, len);
         }
 
         /// <summary>

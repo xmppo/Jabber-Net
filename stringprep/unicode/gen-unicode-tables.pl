@@ -709,44 +709,20 @@ namespace stringprep.unicode
     public class Decompose
     {
         /// <summary>
-        /// Look up the given character, and return the offset for it.
+        /// Look up the expansion, if any, for the given character.
         /// </summary>
-        /// <param name="ch">Character to loop up</param>
-        /// <returns>-1 if not found</returns>
+        /// <param name="ch">The character to find</param>
+        /// <returns>the expansion, or null if none found.</returns>
         public static char[] Find(char ch)
         {
-            int start = 0;
-            int end = Offsets.Length;
-            int found = -1;
-
-            if ((ch < Offsets[0]) || (ch > Offsets[end - 2]))
+            char offset = Util.Find(ch, Offsets);
+            if (offset == Util.NOT_FOUND)
                 return null;
 
-            int half;
-            while (true)
-            {
-                half = ((start + end) / 4) * 2;
-                if (ch == Offsets[half])
-                {
-                    found = half;
-                    break;
-                }
-                else if (half == start)
-                    break; // done
-                else if (ch > Offsets[half])
-                    start = half;
-                else
-                    end = half;
-            }
-
-            if (found == -1)
-                return null;
-
-            int first = Offsets[found+1];
             int len = 0;
-            while (Expansion[first + len] != '\\x0000')
+            while (Expansion[offset + len] != '\\x0000')
                 len++;
-            return Expansion.ToCharArray(first, len);
+            return Expansion.ToCharArray(offset, len);
         }
 
         /// <summary>
@@ -1083,9 +1059,11 @@ namespace stringprep.unicode
     {
 
         /// <summary>
-        /// This looks like it's always one.  Who know what that means.
+        /// Where the first range of offsets from Data starts.
+        /// These are used for checking the first character
+        /// in a pair with a second character in Array.
         /// </summary>
-        public const int FIRST_START = $total;
+        public const short FIRST_START = $total;
 EOF
     for $code (keys %first) {
       $vals{$code} = $first{$code} + $total;
@@ -1098,7 +1076,7 @@ EOF
         /// <summary>
         /// Who knows what this means.
         /// </summary> 
-        public const int FIRST_SINGLE_START = $total;
+        public const short FIRST_SINGLE_START = $total;
 EOF
     for $record (@first_singletons) {
       my $code = $record->[0];
@@ -1110,7 +1088,7 @@ EOF
         /// <summary>
         /// Who knows what this means.
         /// </summary> 
-        public const int SECOND_START = $total;
+        public const short SECOND_START = $total;
 EOF
     for $code (keys %second) {
       $vals{$code} = $second{$code} + $total;
@@ -1122,7 +1100,7 @@ EOF
         /// <summary>
         /// Who knows what this means.
         /// </summary> 
-        public const int SECOND_SINGLE_START = $total;
+        public const short SECOND_SINGLE_START = $total;
         
 EOF
     for $record (@second_singletons) {
@@ -1140,7 +1118,7 @@ EOF
         /// <summary>
         /// Who knows what this means.
         /// </summary> 
-        public static readonly int[,] Data = new int[,]
+        public static readonly short[,] Data = new short[,]
         {
 EOF
     
@@ -1162,9 +1140,10 @@ EOF
       print OUT "            ", $row[$count / 256];
       $bytes_out += 4;
     }
-    for (my $count = $last; $count < 256*255; $count += 256) {
-      print OUT ",\n            0";
-    }
+    
+    #for (my $count = $last; $count < 256*255; $count += 256) {
+    #  print OUT ",\n            0";
+    #}
     print OUT "\n        };\n\n";
 
     # Output first singletons
@@ -1173,16 +1152,15 @@ EOF
         /// <summary>
         /// Who knows what this means.  "First singletons"
         /// </summary> 
-        public static readonly char[,] FirstSingle = new char[,]
-        {
+        public const string FirstSingle =         
 EOF
 
     $i = 0;                  
     for $record (@first_singletons) {
-      print OUT ",\n" if $i++ > 0;
-      printf OUT "            { '\\x%04x', '\\x%04x' }", $record->[1], $record->[2];
+      print OUT "+\n" if $i++ > 0;
+      printf OUT "            \"\\x%04x\\x%04x\" ", $record->[1], $record->[2];
     }
-    print OUT "\n        };\n\n";
+    print OUT ";\n\n";
                      
     $bytes_out += @first_singletons * 4;                     
           
@@ -1192,16 +1170,15 @@ EOF
         /// <summary>
         /// Who knows what this means.  "Second singletons"
         /// </summary> 
-        public static readonly char[,] SecondSingle = new char[,]
-        {
+        public const string SecondSingle = 
 EOF
 
     $i = 0;                  
     for $record (@second_singletons) {
-      print OUT ",\n" if $i++ > 0;
-      printf OUT "            { '\\x%04x', '\\x%04x' }", $record->[1], $record->[2];
+      print OUT " +\n" if $i++ > 0;
+      printf OUT "            \"\\x%04x\\x%04x\"", $record->[1], $record->[2];
     }
-    print OUT "\n        };\n\n";
+    print OUT ";\n\n";
                      
     $bytes_out += @second_singletons * 4;                    
           
@@ -1209,29 +1186,32 @@ EOF
 
     print OUT <<EOT;
         /// <summary>
+        /// How many characters are in a row in Array.
+        /// </summary>
+        public const int N_SECOND = $n_second;
+        
+        /// <summary>
         /// Array of composition pairs.
         /// </summary> 
-        public static readonly char[,] Array = new char[,]
-        {
+        public static readonly string Array = 
 EOT
             
     for (my $i = 0; $i < $n_first; $i++) {
-      print OUT ",\n" if $i;
-      print OUT "            { ";
+      print OUT " +\n" if $i;
+      print OUT "            \"";
       for (my $j = 0; $j < $n_second; $j++) {
-        print OUT ", " if $j;
+        #print OUT ", " if $j;
         if (exists $reverse{"$i|$j"}) {
-          printf OUT "'\\x%04x'", $reverse{"$i|$j"};
+          printf OUT "\\x%04x", $reverse{"$i|$j"};
         } else {
-          print  OUT "'\\x0000'";
+          print  OUT "\\x0000";
         }
       }
-      print OUT "        }";
+      print OUT "\"";
     }
-    print OUT "\n";
+    print OUT ";\n";
 
     print OUT <<EOT;
-        };
     }
 }
 #endif

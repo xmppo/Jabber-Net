@@ -114,7 +114,7 @@ EOF
       print OUT <<EOF;
             try
             {
-                expected = nameprep.Prepare(input, 0);
+                expected = nameprep.Prepare(input);
                 Assertion.Assert("Expected ProhibitedCharacterException", false);
             }
             catch (ProhibitedCharacterException)
@@ -137,7 +137,7 @@ EOF
       print OUT <<EOF;
             try
             {
-                expected = nameprep.Prepare(input, 0);
+                expected = nameprep.Prepare(input);
                 Assertion.Assert("Expected BidiException", false);
             }
             catch (BidiException)
@@ -160,7 +160,7 @@ EOF
       print OUT <<EOF;
             try
             {
-                expected = nameprep.Prepare(input, 0);
+                expected = nameprep.Prepare(input);
                 Assertion.Assert("Expected BidiException", false);
             }
             catch (BidiException)
@@ -184,7 +184,7 @@ EOF
       $state = 1;
       print OUT "\";\n";
       print OUT <<EOF;
-            Assertion.AssertEquals(expected, nameprep.Prepare(input, 0));
+            Assertion.AssertEquals(expected, nameprep.Prepare(input));
         }
 EOF
     } else {

@@ -56,7 +56,7 @@ namespace test.stringprep
                 buf[i] = (byte) input[i];
             }
             string in_enc = ENC.GetString(buf);
-            string output = nameprep.Prepare(in_enc, 0);
+            string output = nameprep.Prepare(in_enc);
 
             buf = new byte[expected.Length];
             for (int i=0; i<expected.Length; i++)
@@ -70,7 +70,7 @@ namespace test.stringprep
 
         public void Test_NFKC_CaseFold()
         {
-            string result = nameprep.Prepare("Henry \x2163", 0);
+            string result = nameprep.Prepare("Henry \x2163");
             Assertion.AssertEquals("henry iv", result);
         }
 

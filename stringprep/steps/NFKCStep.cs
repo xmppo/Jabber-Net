@@ -49,7 +49,7 @@ namespace stringprep.steps
         /// <summary>
         /// Create an NFKC step.
         /// </summary>
-        public NFKCStep() : base("NFKC", ProfileFlags.NO_NFKC, false)
+        public NFKCStep() : base("NFKC")
         {
         }
 
@@ -57,12 +57,8 @@ namespace stringprep.steps
         /// Perform NFKC.  General overview: Decompose, Reorder, Compose
         /// </summary>
         /// <param name="result"></param>
-        /// <param name="flags"></param>
-        public override void Prepare(StringBuilder result, ProfileFlags flags)
+        public override void Prepare(StringBuilder result)
         {
-            if (IsBitSet(flags))
-                return;
-
             // From Unicode TR15: (http://www.unicode.org/reports/tr15)
             // R1. Normalization Form C
             // The Normalization Form C for a string S is obtained by applying the following process, 
