@@ -27,6 +27,7 @@
  * suggestions and support of Jabber.
  * 
  * --------------------------------------------------------------------------*/
+#if !NO_STRINGPREP
 using System;
 using System.Text;
 using NUnit.Framework;
@@ -147,3 +148,4 @@ namespace test.stringprep
         }
 	}
 }
+#endif
