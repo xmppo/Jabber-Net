@@ -51,8 +51,10 @@ namespace jabber.protocol.iq
             new QnameType("agent", URI.AGENTS,   typeof(jabber.protocol.iq.Agent)),
             new QnameType("query", URI.OOB,      typeof(jabber.protocol.iq.OOB)),
             new QnameType("query", URI.TIME,     typeof(jabber.protocol.iq.Time)),
-            new QnameType("query", URI.VERSION,  typeof(jabber.protocol.iq.Version))
-    };
+            new QnameType("query", URI.VERSION,  typeof(jabber.protocol.iq.Version)),
+            new QnameType("item",  URI.BROWSE,   typeof(jabber.protocol.iq.Browse)),
+        };
+
         QnameType[] IPacketTypes.Types { get { return s_qnt; } }
     }
 }

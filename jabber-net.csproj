@@ -339,6 +339,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "jabber\protocol\iq\Browse.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "jabber\protocol\iq\Factory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -404,11 +409,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "jabber\server\JabberS2S.cs"
-                    SubType = "Component"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "jabber\server\JabberService.bmp"
                     BuildAction = "EmbeddedResource"
                 />
@@ -427,7 +427,6 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <Folder RelPath = "jabber\xml\" />
             </Include>
         </Files>
     </CSHARP>

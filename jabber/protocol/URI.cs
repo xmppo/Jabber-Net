@@ -97,6 +97,10 @@ namespace jabber.protocol
         /// Client or server version
         /// </summary>
         public const string VERSION  = "jabber:iq:version";
+        /// <summary>
+        /// Jabber Browsing
+        /// </summary>
+        public const string BROWSE   = "jabber:iq:browse";
 
         // X
         /// <summary>
