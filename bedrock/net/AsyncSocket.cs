@@ -331,7 +331,7 @@ namespace bedrock.net
                                     ProtocolType.Tcp);
 #endif
 
-                m_sock.Blocking = m_synch;
+                //m_sock.Blocking = m_synch;
                 // Always reuse address.
                 m_sock.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, 1);
                 m_sock.Bind(m_addr.Endpoint);
@@ -392,7 +392,7 @@ namespace bedrock.net
 
         private void AcceptDone(AsyncSocket cliCon)
         {
-            cliCon.m_sock.Blocking = m_synch;
+            //cliCon.m_sock.Blocking = m_synch;
             cliCon.m_addr = m_addr;
             cliCon.Address.IP = ((IPEndPoint) cliCon.m_sock.RemoteEndPoint).Address;
             cliCon.State = SocketState.Connected;
@@ -445,6 +445,7 @@ namespace bedrock.net
         /// <param name="addr"></param>
         public override void Connect(Address addr)
         {
+            Debug.WriteLine("starting connect to " + addr.ToString());
             State = SocketState.Resolving;
             if (m_synch)
             {
@@ -463,6 +464,7 @@ namespace bedrock.net
         /// <param name="addr"></param>
         private void OnConnectResolved(Address addr)
         {
+            Debug.WriteLine("connectresolved");
             lock (this)
             {
                 if (State != SocketState.Resolving)
@@ -486,6 +488,7 @@ namespace bedrock.net
 
                 if (Socket.SupportsIPv6 && (m_addr.Endpoint.AddressFamily == AddressFamily.InterNetworkV6))
                 {
+                    Debug.WriteLine("ipv6");
                     m_sock = new SecureSocket(AddressFamily.InterNetworkV6, 
                         SocketType.Stream, 
                         ProtocolType.Tcp,
@@ -493,6 +496,7 @@ namespace bedrock.net
                 }
                 else
                 {
+                    Debug.WriteLine("ipv4");
                     m_sock = new SecureSocket(AddressFamily.InterNetwork, 
                         SocketType.Stream, 
                         ProtocolType.Tcp,
@@ -502,6 +506,7 @@ namespace bedrock.net
 #if !OLD_CLR
                 if (Socket.SupportsIPv6 && (m_addr.Endpoint.AddressFamily == AddressFamily.InterNetworkV6))
                 {
+                    Debug.WriteLine("ipv6");
                     m_sock = new Socket(AddressFamily.InterNetworkV6, 
                         SocketType.Stream, 
                         ProtocolType.Tcp);
@@ -509,6 +514,7 @@ namespace bedrock.net
                 else
 #endif
                 {
+                    Debug.WriteLine("ipv4");
                     m_sock = new Socket(AddressFamily.InterNetwork, 
                         SocketType.Stream, 
                         ProtocolType.Tcp);
@@ -520,13 +526,14 @@ namespace bedrock.net
                 m_sock.SetSocketOption(SocketOptionLevel.Socket, 
                     SocketOptionName.ReceiveBuffer, 
                     4 * m_buf.Length);
-                m_sock.Blocking = m_synch;
+                //m_sock.Blocking = m_synch;
             }
              
             if (m_synch)
             {
                 try 
                 {
+                    Debug.WriteLine("synch connect");
                     m_sock.Connect(m_addr.Endpoint);
                 }
                 catch (SocketException ex) 
@@ -551,6 +558,7 @@ namespace bedrock.net
             }
             else
             {
+                Debug.WriteLine("begin connect");
                 m_sock.BeginConnect(m_addr.Endpoint, new AsyncCallback(ExecuteConnect), null);
             }
         }
@@ -595,6 +603,7 @@ namespace bedrock.net
         /// <param name="ar"></param>
         private void ExecuteConnect(IAsyncResult ar)
         {
+            Debug.WriteLine("ExecuteConnect");
             lock (this)
             {
                 try
@@ -859,6 +868,7 @@ namespace bedrock.net
         /// </summary>
         public override void Close()
         {
+            Debug.WriteLine("Close");
             lock (this)
             {
                 /*
