@@ -28,39 +28,35 @@
  * 
  * --------------------------------------------------------------------------*/
 using System;
+using System.Resources;
+using System.Reflection;
 
-namespace stringprep.unicode
+namespace stringprep.steps
 {
-	public class Combining
+	class ResourceLoader
 	{
-        private static bool s_init = false;
-        private static byte[,] s_classes = null;
-        private static byte[] s_pages = null;
+        private const string RFC3454 = "stringprep.steps.rfc3454";
+        private static ResourceManager m_rfc_res = null;
 
-        /// <summary>
-        /// What is the combining class for the given character?
-        /// </summary>
-        /// <param name="c">Character to look up</param>
-        /// <returns>Combining class for this character</returns>
-        public static int Class(char c) 
+        private static ResourceManager Resources
         {
-            if (!s_init)
+            get
             {
-                lock (typeof(Combining))
+                if (m_rfc_res == null)
                 {
-                    if (!s_init)
+                    lock (typeof(ResourceLoader))
                     {
-                        s_classes = (byte[,]) ResourceLoader.LoadRes("Combining.Classes");
-                        s_pages = (byte[]) ResourceLoader.LoadRes("Combining.Pages");
-                        s_init = true;
+                        if (m_rfc_res == null)
+                            m_rfc_res = new ResourceManager(RFC3454, Assembly.GetExecutingAssembly());
                     }
                 }
+                return m_rfc_res;
             }
-            int page = c >> 8;
-            if (s_pages[page] == 255)
-                return 0;
-            else
-                return s_classes[s_pages[page], c & 0xff];
         }
-	}
+
+        public static object LoadRes(string name)
+        {
+            return Resources.GetObject(name);
+        }
+    }
 }

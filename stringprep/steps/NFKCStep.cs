@@ -33,8 +33,6 @@
  * 
  * Look over here.  Something shiny!
  */
-#if !NO_STRINGPREP
-
 using System;
 using System.Text;
 using stringprep.unicode;
@@ -83,7 +81,7 @@ namespace stringprep.steps
         private void Decomp(StringBuilder result)
         {
             int len;
-            char[] ex;
+            string ex;
 
             // Decompose
             for (int i=0; i< result.Length; i++)
@@ -96,7 +94,7 @@ namespace stringprep.steps
                 len = ex.Length - 1;
                 if (len > 0)
                 {
-                    result.Insert(i+1, ex, 1, len);
+                    result.Insert(i+1, ex.ToCharArray(1, ex.Length-1));
                     i += len;
                 }                
             }
@@ -192,4 +190,3 @@ namespace stringprep.steps
         }
     }
 }
-#endif

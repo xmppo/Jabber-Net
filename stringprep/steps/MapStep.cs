@@ -27,9 +27,9 @@
  * suggestions and support of Jabber.
  * 
  * --------------------------------------------------------------------------*/
-#if !NO_STRINGPREP
 using System;
 using System.Text;
+using System.Collections;
 
 namespace stringprep.steps
 {
@@ -38,16 +38,16 @@ namespace stringprep.steps
     /// </summary>
     public class MapStep : ProfileStep
     {
-        private CharMap[] m_table;
+        private string[] m_table = null;
+        private static IComparer m_comp = new CharMapComparer();
 
         /// <summary>
         /// Create a MapStep that doesn't look at flags.
         /// </summary>
         /// <param name="tab">Mapping table</param>
         /// <param name="name">Name of the step</param>
-        public MapStep(CharMap[] tab, string name) : base(name)
+        public MapStep(string name) : base(name)
         {
-            m_table = tab;
         }
 
         /// <summary>
@@ -56,6 +56,17 @@ namespace stringprep.steps
         /// <param name="result">Result is modified in place.</param>
         public override void Prepare(System.Text.StringBuilder result)
         {
+            if (m_table == null)
+            {
+                lock (this)
+                {
+                    if (m_table == null)
+                    {
+                        m_table = (string[]) ResourceLoader.LoadRes(Name);
+                    }
+                }
+            }
+
             // From RFC3454, section 3: 
             // Mapped characters are not re-scanned during the mapping step.  That
             // is, if character A at position X is mapped to character B, character
@@ -63,28 +74,46 @@ namespace stringprep.steps
             // table.
 
             int pos;
+            string map;
+            int len;
             for (int i=0; i<result.Length; i++)
             {
-                pos = Array.BinarySearch(m_table, result[i]);
+                pos = Array.BinarySearch(m_table, result[i], m_comp);
                 if (pos < 0)
                     continue;
 
-                if (m_table[pos].map0 == '\x0')
-                { // mapped to nothing
+                map = m_table[pos];
+                len = map.Length;
+                if (len == 1)
+                {
                     result.Remove(i, 1);
                     i--;
                 }
                 else
-                { // mapped to at least one char
-                    result[i] = m_table[pos].map0;
-                    if (m_table[pos].map != null)
-                    { // mapped to > 1 char.  Example: (tm) -> t + m
-                        result.Insert(i+1, m_table[pos].map);
-                        i += m_table[pos].map.Length;
+                {
+                    result[i] = map[1];
+                    if (len > 2) 
+                    {
+                        result.Insert(i+1, map.ToCharArray(2, len - 2));
+                        i += len - 2;
                     }
                 }
             }
         }
+
+        private class CharMapComparer : IComparer
+        {
+            #region IComparer Members
+
+            public int Compare(object x, object y)
+            {
+                return ((string)x)[0].CompareTo(y);
+            }
+
+            #endregion
+
+        }
+
+
     }
 }
-#endif

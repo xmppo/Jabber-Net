@@ -27,7 +27,6 @@
  * suggestions and support of Jabber.
  * 
  * --------------------------------------------------------------------------*/
-#if !NO_STRINGPREP
 using System;
 
 namespace stringprep.steps
@@ -52,9 +51,9 @@ namespace stringprep.steps
     /// </summary>
     public class BidiStep : ProfileStep
 	{
-        private static BidiProbibitStep m_prohibit = new BidiProbibitStep();
-        private static BidiRALStep      m_ral      = new BidiRALStep();
-        private static BidiLCatStep     m_lcat     = new BidiLCatStep();
+        private static ProhibitStep m_prohibit = new ProhibitStep("RFC3454.C_8");
+        private static BidiRALStep  m_ral      = new BidiRALStep();
+        private static ProhibitStep m_lcat     = new ProhibitStep("RFC3454.D_2");
 
         /// <summary>
         /// Create a new BidiStep.
@@ -99,16 +98,9 @@ namespace stringprep.steps
 
         }
 
-        private class BidiProbibitStep : ProhibitStep
-        {
-            public BidiProbibitStep() : base(stringprep.RFC3454.C_8, "C.8")
-            {
-            }
-        }
-
         private class BidiRALStep : ProhibitStep
         {
-            public BidiRALStep() : base(stringprep.RFC3454.D_1, "D.1")
+            public BidiRALStep() : base("RFC3454.D_1")
             {
             }
 
@@ -123,15 +115,7 @@ namespace stringprep.steps
                 }
             }
         }
-
-        class BidiLCatStep : ProhibitStep
-        {
-            public BidiLCatStep() : base(stringprep.RFC3454.D_2, "D.2")
-            {
-            }
-        }
     }
 
 
 }
-#endif

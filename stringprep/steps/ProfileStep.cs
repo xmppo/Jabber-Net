@@ -27,8 +27,6 @@
  * suggestions and support of Jabber.
  * 
  * --------------------------------------------------------------------------*/
-#if !NO_STRINGPREP
-
 using System;
 using System.Text;
 
@@ -37,7 +35,7 @@ namespace stringprep.steps
     /// <summary>
     /// Base class for steps in a stringprep profile.
     /// </summary>
-    public abstract class ProfileStep
+    public abstract class ProfileStep 
     {
         private string m_name;
 
@@ -65,4 +63,3 @@ namespace stringprep.steps
         public abstract void Prepare(StringBuilder result);
     }
 }
-#endif

@@ -27,8 +27,8 @@
  * suggestions and support of Jabber.
  * 
  * --------------------------------------------------------------------------*/
-#if !NO_STRINGPREP
 using System;
+using System.Collections;
 using System.Text;
 
 namespace stringprep.steps
@@ -60,16 +60,35 @@ namespace stringprep.steps
     /// </summary>
     public class ProhibitStep : ProfileStep
     {
-        private Prohibit[] m_table;
+        private char[][] m_table = null;
+        private ProhibitComparer m_comp = new ProhibitComparer();
 
         /// <summary>
         /// Create an instance.
         /// </summary>
         /// <param name="tab">The prohibit table to be checked</param>
         /// <param name="name">The name of the step (for debugging purposes)</param>
-        public ProhibitStep(Prohibit[] tab, string name) : base(name)
+        public ProhibitStep(string name) : base(name)
         {
-            m_table = tab;
+        }
+
+        public ProhibitStep(char[][] table, string name): base(name)
+        {
+            m_table = table;
+        }
+
+        private void Load()
+        {
+            if (m_table == null)
+            {
+                lock (this)
+                {
+                    if (m_table == null)
+                    {
+                        m_table = (char[][]) ResourceLoader.LoadRes(Name);
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -79,7 +98,9 @@ namespace stringprep.steps
         /// <returns>True if the character is prohibited</returns>
         protected bool Contains(char c)
         {
-            return (Array.BinarySearch(m_table, c) >= 0);
+            Load();
+
+            return (Array.BinarySearch(m_table, c, m_comp) >= 0);
         }
 
         /// <summary>
@@ -107,12 +128,36 @@ namespace stringprep.steps
         /// <exception cref="ProhibitedCharacterException">Invalid character detected.</exception>
         public override void Prepare(System.Text.StringBuilder result)
         {
+            Load();
             int j = FindStringInTable(result);
             if (j >= 0)
                 throw new ProhibitedCharacterException(this, result[j]);
         }
+
+        private class ProhibitComparer : IComparer
+        {
+            #region IComparer Members
+
+            public int Compare(object x, object y)
+            {
+                char[] bounds = (char[]) x;
+                if (bounds[1] == '\x0000')
+                    return bounds[0].CompareTo(y);
+
+                char c = (char) y;
+                if (c < bounds[0])
+                    return 1;
+                
+                if (c > bounds[1])
+                    return -1;
+
+                return 0;
+            }
+
+            #endregion
+        }
+
     }
 
 
 }
-#endif
