@@ -63,7 +63,10 @@
   <target name="make-test" depends="init,compile">
 	<nant buildfile="test\test.build"/>
   </target>
-  <target name="test" depends="init,compile,make-muzzle,make-test"/>
+  <target name="make-example" depends="init,compile">
+	<nant buildfile="Example\Example.build"/>
+  </target>
+  <target name="test" depends="init,compile,make-muzzle,make-test,make-example"/>
   <target name="clean" depends="init" description="Delete output of a build">
 	<delete file="${dir.output}\${project.output}" 
 	        verbose="true" failonerror="false"/>
@@ -72,5 +75,6 @@
 	<delete file="${doc}" verbose="true" failonerror="false"/>
 	<nant buildfile="muzzle\muzzle.build" target="clean"/>
 	<nant buildfile="test\test.build" target="clean"/>
+	<nant buildfile="Example\Example.build" target="clean"/>
   </target>
 </project>
