@@ -262,6 +262,8 @@ namespace bedrock.net
             cli.Blocking = false;
 
             AsyncSocket cliCon = new AsyncSocket(m_watcher);
+            cliCon.m_addr = m_addr;
+            cliCon.Address.IP = ((IPEndPoint) cli.RemoteEndPoint).Address;
             cliCon.m_state = State.Connecting;
             cliCon.m_sock = cli;
 
@@ -596,6 +598,9 @@ namespace bedrock.net
 
                 m_state = State.Closing;
             }
+
+            m_listener.OnClose(this);
+
             try
             {
                 m_sock.Shutdown(SocketShutdown.Both);
@@ -607,7 +612,6 @@ namespace bedrock.net
             }
             catch {}
             m_watcher.CleanupSocket(this);
-            m_listener.OnClose(this);
         }
 
         /// <summary>
