@@ -170,7 +170,7 @@ namespace muzzle
             this.label2.Location = new System.Drawing.Point(8, 69);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(48, 23);
-            this.label2.TabIndex = 1;
+            this.label2.TabIndex = 4;
             this.label2.Text = "Server:";
             // 
             // label3
@@ -178,7 +178,7 @@ namespace muzzle
             this.label3.Location = new System.Drawing.Point(8, 100);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(48, 23);
-            this.label3.TabIndex = 2;
+            this.label3.TabIndex = 6;
             this.label3.Text = "Port:";
             // 
             // button1
@@ -186,7 +186,7 @@ namespace muzzle
             this.button1.Location = new System.Drawing.Point(15, 129);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(48, 23);
-            this.button1.TabIndex = 3;
+            this.button1.TabIndex = 8;
             this.button1.Text = "OK";
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -196,7 +196,7 @@ namespace muzzle
             this.button2.Location = new System.Drawing.Point(103, 129);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(48, 23);
-            this.button2.TabIndex = 4;
+            this.button2.TabIndex = 9;
             this.button2.Text = "Cancel";
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
@@ -204,14 +204,14 @@ namespace muzzle
             // 
             this.txtUser.Location = new System.Drawing.Point(67, 8);
             this.txtUser.Name = "txtUser";
-            this.txtUser.TabIndex = 5;
+            this.txtUser.TabIndex = 1;
             this.txtUser.Text = "";
             // 
             // txtServer
             // 
             this.txtServer.Location = new System.Drawing.Point(67, 70);
             this.txtServer.Name = "txtServer";
-            this.txtServer.TabIndex = 6;
+            this.txtServer.TabIndex = 5;
             this.txtServer.Text = "";
             // 
             // txtPort
@@ -226,7 +226,7 @@ namespace muzzle
             this.txtPass.Location = new System.Drawing.Point(67, 39);
             this.txtPass.Name = "txtPass";
             this.txtPass.PasswordChar = '*';
-            this.txtPass.TabIndex = 9;
+            this.txtPass.TabIndex = 3;
             this.txtPass.Text = "";
             // 
             // label4
@@ -234,7 +234,7 @@ namespace muzzle
             this.label4.Location = new System.Drawing.Point(8, 38);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(64, 23);
-            this.label4.TabIndex = 8;
+            this.label4.TabIndex = 2;
             this.label4.Text = "Password:";
             // 
             // ClientLogin
