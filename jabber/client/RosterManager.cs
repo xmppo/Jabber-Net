@@ -92,8 +92,8 @@ namespace jabber.client
             {
                 m_client = value;
                 m_client.OnIQ += new IQHandler(GotIQ);
-				m_client.OnDisconnect += new bedrock.ObjectHandler(GotDisconnect);
-			}
+                m_client.OnDisconnect += new bedrock.ObjectHandler(GotDisconnect);
+            }
         }
 
         /// <summary>
@@ -124,17 +124,26 @@ namespace jabber.client
         public Item this[JID jid]
         {
             get 
-			{ 
-				lock (this)
-					return (Item) m_items[jid]; 
-			}
+            { 
+                lock (this)
+                    return (Item) m_items[jid]; 
+            }
         }
 
-		private void GotDisconnect(object sender)
-		{
-			lock (this)
-				m_items.Clear();
-		}
+        private void GotDisconnect(object sender)
+        {
+            lock (this)
+                m_items.Clear();
+        }
+
+        /// <summary>
+        /// Add a new roster item to the database.
+        /// </summary>
+        /// <param name="iq">An IQ containing a roster query.</param>
+        public void AddRoster(IQ iq)
+        {
+            GotIQ(this, iq);
+        }
 
         private void GotIQ(object sender, IQ iq)
         {
@@ -157,6 +166,8 @@ namespace jabber.client
 					}
 					else
 					{
+                        if (m_items.Contains(i.JID))
+                            m_items.Remove(i.JID);
 						m_items[i.JID] = i;
 					}
 				}

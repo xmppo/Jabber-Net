@@ -115,11 +115,16 @@ namespace jabber.client
 
 				if (t == PresenceType.available) 
 				{
-					if (pt == null)
-					{
-						pt = new Tree();
-						m_items[f.Bare] = pt;
-					}
+                    if (pt == null)
+                    {
+                        pt = new Tree();
+                        m_items[f.Bare] = pt;
+                    }
+                    else if (pt.Contains(f.Resource))
+                    {
+                        pt.Remove(f.Resource);
+                    }
+                    
 					pt[f.Resource] = p;
 				}
 				else

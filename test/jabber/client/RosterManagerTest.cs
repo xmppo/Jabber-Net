@@ -35,6 +35,7 @@ using bedrock.util;
 using jabber;
 using jabber.client;
 using jabber.protocol.client;
+using jabber.protocol.iq;
 
 namespace test.jabber.client1 // TODO: Client1 due to a bug in NUnit.  
 {
@@ -43,54 +44,41 @@ namespace test.jabber.client1 // TODO: Client1 due to a bug in NUnit.
     /// </summary>
     [RCS(@"$Header$")]
     [TestFixture]
-    public class PPDBTest
+    public class RosterManagerTest
     {
         XmlDocument doc = new XmlDocument();
 
         public void Test_Create()
         {
-            PPDB pp = new PPDB();
-            Assertion.AssertEquals("jabber.client.PPDB", pp.GetType().FullName);
+            RosterManager rm = new RosterManager();
+            Assertion.AssertEquals("jabber.client.RosterManager", rm.GetType().FullName);
         }
         public void TestAdd()
         {
-            PPDB pp = new PPDB();
-            Presence pres = new Presence(doc);
-            JID f = new JID("foo", "bar", "baz");
-            pres.From = f;
-            pp.AddPresence(pres);
-            Assertion.AssertEquals("foo@bar/baz", pp[f].From.ToString());
-            f.Resource = null;
-            Assertion.AssertEquals("foo@bar/baz", pp[f].From.ToString());
+            RosterManager rm = new RosterManager();
 
-            pres = new Presence(doc);
-            pres.Status = "wandering";
-            pres.From = new JID("foo", "bar", "baz");
-            pp.AddPresence(pres);
-            Assertion.AssertEquals("wandering", pp[f].Status);
+            RosterIQ riq = new RosterIQ(doc);
+            riq.Type = IQType.set;
+            Roster r = (Roster) riq.Query;
+            Item i = r.AddItem();
+            i.JID = new JID("foo", "bar", null);
+            i.Nickname = "FOO";
+            i.Subscription = Subscription.both;
+
+            rm.AddRoster(riq);
+            Assertion.AssertEquals(Subscription.both, rm["foo@bar"].Subscription);
+            Assertion.AssertEquals("FOO", rm["foo@bar"].Nickname);
+
+            riq = new RosterIQ(doc);
+            riq.Type = IQType.set;
+            r = (Roster) riq.Query;
+            i = r.AddItem();
+            i.JID = new JID("foo", "bar", null);
+            i.Nickname = "BAR";
+            i.Subscription = Subscription.to;
+            rm.AddRoster(riq);
+            Assertion.AssertEquals(Subscription.to, rm["foo@bar"].Subscription);
+            Assertion.AssertEquals("BAR", rm["foo@bar"].Nickname);
         }
-		public void TestRetrieve()
-		{
-			PPDB pp = new PPDB();
-			Presence pres = new Presence(doc);
-			JID f = new JID("foo", "bar", "baz");
-			pres.From = f;
-			pres.Priority = "0";
-			pp.AddPresence(pres);
-			Assertion.AssertEquals("foo@bar/baz", pp[f.Bare].From.ToString());
-
-			pres = new Presence(doc);
-			f = new JID("foo", "bar", "bay");
-			pres.From = f;
-			pres.Priority = "1";
-			pp.AddPresence(pres);
-			Assertion.AssertEquals("foo@bar/bay", pp[f.Bare].From.ToString());
-
-			pres = new Presence(doc);
-			pres.From = f;
-			pres.Type = PresenceType.unavailable;
-			pp.AddPresence(pres);
-			Assertion.AssertEquals("foo@bar/baz", pp[f.Bare].From.ToString());
-		}
     }
 }
