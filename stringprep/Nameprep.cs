@@ -17,11 +17,11 @@ using stringprep.steps;
 
 namespace stringprep
 {
-	/// <summary>
-	/// RFC 3491, "nameprep" profile, for internationalized domain names.
-	/// </summary>
-	public class Nameprep : Profile
-	{
+    /// <summary>
+    /// RFC 3491, "nameprep" profile, for internationalized domain names.
+    /// </summary>
+    public class Nameprep : Profile
+    {
         /// <summary>
         /// Create a nameprep instance.
         /// </summary>
@@ -31,5 +31,5 @@ namespace stringprep
                                         BIDI, UNASSIGNED} )
         {
         }
-	}
+    }
 }

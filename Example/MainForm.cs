@@ -18,7 +18,6 @@ using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
-using System.Data;
 
 using jabber;
 using jabber.protocol;

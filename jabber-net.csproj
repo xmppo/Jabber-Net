@@ -80,24 +80,19 @@
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "System.Windows.Forms"
-                    AssemblyName = "System.Windows.Forms"
-                    HintPath = "..\..\..\WINNT\Microsoft.NET\Framework\v1.1.4322\System.Windows.Forms.dll"
-                />
-                <Reference
-                    Name = "System.Data"
-                    AssemblyName = "System.Data"
-                    HintPath = "..\..\..\WINNT\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
-                />
-                <Reference
-                    Name = "System.Drawing"
-                    AssemblyName = "System.Drawing"
-                    HintPath = "..\..\..\WINNT\Microsoft.NET\Framework\v1.1.4322\System.Drawing.dll"
-                />
-                <Reference
                     Name = "Org.Mentalis.Security"
                     AssemblyName = "Org.Mentalis.Security"
-                    HintPath = "Org.Mentalis.Security.dll"
+                    HintPath = "lib\Org.Mentalis.Security.dll"
+                />
+                <Reference
+                    Name = "SAX"
+                    AssemblyName = "SAX"
+                    HintPath = "lib\SAX.dll"
+                />
+                <Reference
+                    Name = "AElfred"
+                    AssemblyName = "AElfred"
+                    HintPath = "lib\AElfred.dll"
                 />
             </References>
         </Build>

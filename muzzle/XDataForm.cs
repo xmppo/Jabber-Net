@@ -27,11 +27,11 @@ using Msg = jabber.protocol.client.Message;
 
 namespace muzzle
 {
-	/// <summary>
-	/// Summary description for XData.
-	/// </summary>
-	public class XDataForm : System.Windows.Forms.Form
-	{
+    /// <summary>
+    /// Summary description for XData.
+    /// </summary>
+    public class XDataForm : System.Windows.Forms.Form
+    {
         private static Regex WS = new Regex("\\s+", RegexOptions.Compiled);
 
         private Packet      m_parent   = null;
@@ -52,13 +52,13 @@ namespace muzzle
         /// <summary>
         /// Create an x:data form with no contents.
         /// </summary>
-		public XDataForm()
-		{
-			//
-			// Required for Windows Form Designer support
-			//
-			InitializeComponent();
-		}
+        public XDataForm()
+        {
+            //
+            // Required for Windows Form Designer support
+            //
+            InitializeComponent();
+        }
 
         /// <summary>
         /// Create an x:data form from the given message stanza.
@@ -142,28 +142,28 @@ namespace muzzle
             return WS.Replace(input, " ");
         }
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if(components != null)
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose( bool disposing )
+        {
+            if( disposing )
+            {
+                if(components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose( disposing );
+        }
 
-		#region Windows Form Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        #region Windows Form Designer generated code
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             this.components = new System.ComponentModel.Container();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
@@ -271,7 +271,7 @@ namespace muzzle
             this.ResumeLayout(false);
 
         }
-		#endregion
+        #endregion
 
         private void btnOK_Click(object sender, System.EventArgs e)
         {

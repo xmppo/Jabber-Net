@@ -134,6 +134,13 @@ namespace test.stringprep
             TryOne("\xFF76\x3099", "\x30AC"); //t' hw_ka + ten
             // TryOne("", ""); // can't find "kaks": I think it's Hangul.
         }
-	}
+
+        // http://www.unicode.org/review/pr-29.html
+        public void Test_PR29()
+        {
+            //TODO: Try again with NFC, rather than NFKC.
+            TryOne("\x1100\x0300\x1161", "\x1100\x0300\x1161");
+        }
+    }
 }
 #endif

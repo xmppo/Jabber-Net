@@ -22,12 +22,12 @@ using bedrock.util;
 
 namespace jabber.protocol
 {
-	/// <summary>
-	/// Summary description for AsynchElementStream.
-	/// </summary>
+    /// <summary>
+    /// Summary description for AsynchElementStream.
+    /// </summary>
     [RCS(@"$Header$")]
     public class AsynchElementStream : ElementStream
-	{
+    {
         private object m_parseLock = new object();
 
         /// <summary>
@@ -84,6 +84,10 @@ namespace jabber.protocol
         /// </summary>
         private void Parse(object ignored)
         {
+            // TODO: add support for IXmlReaderControl to the AElfred parser, and
+            // use it here.
+            throw new NotImplementedException("Removed for the moment, due to bugs in System.Xml.XmlReader introduced with CLR 1.1 SP1");
+#if false
             lock (m_parseLock)
             {
                 try
@@ -135,6 +139,7 @@ namespace jabber.protocol
                     return;
                 }
             }
+#endif
         }
-	}
+    }
 }

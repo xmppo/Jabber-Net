@@ -77,7 +77,7 @@ namespace jabber.connection.sasl
         public MissingDirectiveException(string message) : base(message)
         {}
     }
-	
+    
     /// <summary>
     /// Server sent an invalid challenge
     /// </summary>
@@ -91,12 +91,12 @@ namespace jabber.connection.sasl
         public InvalidServerChallengeException(string message) : base(message)
         {}
     }
-	/// <summary>
-	/// Summary description for SASLProcessor.
-	/// </summary>
+    /// <summary>
+    /// Summary description for SASLProcessor.
+    /// </summary>
     [RCS(@"$Header$")]
     public abstract class SASLProcessor
-	{
+    {
         /// <summary>
         /// SASL username
         /// </summary>
@@ -107,25 +107,25 @@ namespace jabber.connection.sasl
         public const string PASSWORD = "password";
 
         /// <summary>
-		/// 
-		/// </summary>
-		private Hashtable m_directives = new Hashtable();
-		
-		/// <summary>
-		/// 
-		/// </summary>
-		public SASLProcessor()
-		{
-		}
+        /// 
+        /// </summary>
+        private Hashtable m_directives = new Hashtable();
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public SASLProcessor()
+        {
+        }
 
-		/// <summary>
-		/// Create a new SASLProcessor, of the best type possible
-		/// </summary>
-		/// <param name="mt">The types the server implements</param>
-		/// <param name="plaintextOK">Is it ok to select insecure types?</param>
-		/// <returns></returns>
-		public static SASLProcessor createProcessor(MechanismType mt, bool plaintextOK)
-		{
+        /// <summary>
+        /// Create a new SASLProcessor, of the best type possible
+        /// </summary>
+        /// <param name="mt">The types the server implements</param>
+        /// <param name="plaintextOK">Is it ok to select insecure types?</param>
+        /// <returns></returns>
+        public static SASLProcessor createProcessor(MechanismType mt, bool plaintextOK)
+        {
             if ((mt & MechanismType.DIGEST_MD5) == MechanismType.DIGEST_MD5)
             {
                 return new MD5Processor();
@@ -146,13 +146,13 @@ namespace jabber.connection.sasl
             set { m_directives[directive] = value; }
         }
 
-		/// <summary>
-		/// Perform the next step
-		/// </summary>
-		/// <param name="s">Null if it's the initial response</param>
-		/// <param name="doc">Document to create Steps in</param>
-		/// <returns></returns>
-		public abstract Step step(Step s, XmlDocument doc);
+        /// <summary>
+        /// Perform the next step
+        /// </summary>
+        /// <param name="s">Null if it's the initial response</param>
+        /// <param name="doc">Document to create Steps in</param>
+        /// <returns></returns>
+        public abstract Step step(Step s, XmlDocument doc);
 
         /// <summary>
         /// byte array as a hex string, two chars per byte.
@@ -168,5 +168,5 @@ namespace jabber.connection.sasl
             }
             return sb.ToString();            
         }
-	}
+    }
 }

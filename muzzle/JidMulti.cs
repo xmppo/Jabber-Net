@@ -21,11 +21,11 @@ using System.Windows.Forms;
 
 namespace muzzle
 {
-	/// <summary>
-	/// Summary description for JidMulti.
-	/// </summary>
-	public class JidMulti : System.Windows.Forms.UserControl
-	{
+    /// <summary>
+    /// Summary description for JidMulti.
+    /// </summary>
+    public class JidMulti : System.Windows.Forms.UserControl
+    {
         private System.Windows.Forms.ListBox lstJID;
         private System.Windows.Forms.ToolTip tip;
         private System.Windows.Forms.ErrorProvider error;
@@ -38,29 +38,29 @@ namespace muzzle
         /// <summary>
         /// Create a JidMulti control
         /// </summary>
-		public JidMulti()
-		{
-			// This call is required by the Windows.Forms Form Designer.
-			InitializeComponent();
+        public JidMulti()
+        {
+            // This call is required by the Windows.Forms Form Designer.
+            InitializeComponent();
 
-			// TODO: Add any initialization after the InitializeComponent call
+            // TODO: Add any initialization after the InitializeComponent call
 
-		}
+        }
 
-		/// <summary> 
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if(components != null)
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose( bool disposing )
+        {
+            if( disposing )
+            {
+                if(components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose( disposing );
+        }
 
         /// <summary>
         /// Add a range of JIDs or strings to the list.
@@ -85,13 +85,13 @@ namespace muzzle
             return vals;
         }
 
-		#region Component Designer generated code
-		/// <summary> 
-		/// Required method for Designer support - do not modify 
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        #region Component Designer generated code
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             this.components = new System.ComponentModel.Container();
             this.lstJID = new System.Windows.Forms.ListBox();
             this.tip = new System.Windows.Forms.ToolTip(this.components);
@@ -173,7 +173,7 @@ namespace muzzle
             this.ResumeLayout(false);
 
         }
-		#endregion
+        #endregion
 
         private void btnAdd_Click(object sender, System.EventArgs e)
         {
@@ -223,5 +223,5 @@ namespace muzzle
             if (lstJID.SelectedIndex >= 0)
                 txtEntry.Text = lstJID.Items[lstJID.SelectedIndex].ToString();
         }
-	}
+    }
 }

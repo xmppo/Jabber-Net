@@ -40,12 +40,12 @@ namespace bedrock.net
         }
     }
 
-	/// <summary>
-	/// Make a JEP-25 (http://www.jabber.org/jeps/jep-0025.html) polling "connection" look like a socket.
-	/// </summary>
+    /// <summary>
+    /// Make a JEP-25 (http://www.jabber.org/jeps/jep-0025.html) polling "connection" look like a socket.
+    /// </summary>
     [RCS(@"$Header$")]
     public class JEP25Socket : BaseSocket 
-	{
+    {
         private const string CONTENT_TYPE = "application/x-www-form-urlencoded";
         private const string METHOD       = "POST";
 
@@ -132,7 +132,7 @@ namespace bedrock.net
         {
             throw new NotImplementedException("HTTP polling server not implemented yet");
         }
-	
+    
         /// <summary>
         /// Stop polling.
         /// </summary>

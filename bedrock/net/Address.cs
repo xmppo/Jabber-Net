@@ -162,7 +162,12 @@ namespace bedrock.net
             }
             else
             {
+#if MONO
+                Resolve();
+                callback(this);
+#else
                 Dns.BeginResolve(m_hostname, new AsyncCallback(OnResolved), callback);
+#endif
             }
         }
         /// <summary>

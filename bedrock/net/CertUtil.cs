@@ -19,12 +19,12 @@ using bedrock.util;
 
 namespace bedrock.net
 {
-	/// <summary>
-	/// Utilities for creating certificates
-	/// </summary>
+    /// <summary>
+    /// Utilities for creating certificates
+    /// </summary>
     [RCS(@"$Header$")]
     public class CertUtil
-	{
+    {
         /// <summary>
         /// Can this cert be used for server authentication?
         /// </summary>

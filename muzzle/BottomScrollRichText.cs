@@ -9,11 +9,11 @@ using System.Runtime.InteropServices;
 namespace muzzle
 {
 
-	/// <summary>
-	/// Summary description for BottomScrollRichText.
-	/// </summary>
-	public class BottomScrollRichText : System.Windows.Forms.RichTextBox
-	{
+    /// <summary>
+    /// Summary description for BottomScrollRichText.
+    /// </summary>
+    public class BottomScrollRichText : System.Windows.Forms.RichTextBox
+    {
         private const int SB_HORZ             = 0;
         private const int SB_VERT             = 1;
         private const int SB_CTL              = 2;
@@ -91,22 +91,22 @@ namespace muzzle
         private static extern int SetScrollInfo(IntPtr hWnd, int fnBar, ref SCROLLINFO lpsi, bool fRedraw);
 
 
-		/// <summary> 
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.Container components = null;
+        /// <summary> 
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.Container components = null;
 
         /// <summary>
         /// Create a RichText that can scroll to the bottom easily.
         /// </summary>
-		public BottomScrollRichText()
-		{
-			// This call is required by the Windows.Forms Form Designer.
-			InitializeComponent();
+        public BottomScrollRichText()
+        {
+            // This call is required by the Windows.Forms Form Designer.
+            InitializeComponent();
 
-			// TODO: Add any initialization after the InitializeComponent call
+            // TODO: Add any initialization after the InitializeComponent call
 
-		}
+        }
 
         /// <summary>
         /// Is the text currently scrolled to the bottom?
@@ -116,31 +116,31 @@ namespace muzzle
             get { return m_bottom; }
         }
 
-		/// <summary> 
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if(components != null)
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose( bool disposing )
+        {
+            if( disposing )
+            {
+                if(components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose( disposing );
+        }
 
-		#region Component Designer generated code
-		/// <summary> 
-		/// Required method for Designer support - do not modify 
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
-			components = new System.ComponentModel.Container();
-		}
-		#endregion
+        #region Component Designer generated code
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            components = new System.ComponentModel.Container();
+        }
+        #endregion
 
         /// <summary>
         /// The message pump.  Overriden to catch the WM_VSCROLL events.
@@ -186,5 +186,5 @@ namespace muzzle
             if (bottom)
                 ScrollToBottom();
         }
-	}
+    }
 }

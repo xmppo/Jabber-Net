@@ -19,14 +19,14 @@ using bedrock.util;
 
 namespace jabber.protocol
 {
-	/// <summary>
-	/// Replacement for XmlElementList that removes the safety belt of checking for changes during traversal, 
-	/// but removes the big old memory leak in MS's implementation.  Also, only returns first-level children, 
-	/// rather than all children below here with the given name.  Thanks, MS.
-	/// </summary>
-	[RCS(@"$Header$")]
-	public class ElementList : XmlNodeList
-	{
+    /// <summary>
+    /// Replacement for XmlElementList that removes the safety belt of checking for changes during traversal, 
+    /// but removes the big old memory leak in MS's implementation.  Also, only returns first-level children, 
+    /// rather than all children below here with the given name.  Thanks, MS.
+    /// </summary>
+    [RCS(@"$Header$")]
+    public class ElementList : XmlNodeList
+    {
         private XmlElement m_parent = null;
         private string m_name       = null;
         private string m_uri        = null;
@@ -35,10 +35,10 @@ namespace jabber.protocol
         /// Create an element list that is for all child elements.
         /// </summary>
         /// <param name="parent">Parent to search</param>
-		public ElementList(XmlElement parent)
-		{
+        public ElementList(XmlElement parent)
+        {
             m_parent = parent;
-		}
+        }
 
         /// <summary>
         /// Create an element list that is for all child elements with the given name;
@@ -175,5 +175,5 @@ namespace jabber.protocol
 
             #endregion
         }
-	}
+    }
 }

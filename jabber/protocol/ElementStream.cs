@@ -50,14 +50,9 @@ namespace jabber.protocol
         protected XmlDocument m_doc;
 
         /// <summary>
-        /// The actual parsing logic
+        /// The element factory.
         /// </summary>
-        protected XmlReader   m_reader;
-
-        /// <summary>
-        /// The factory that creates DOM elements of the right subclass 
-        /// </summary>
-        protected XmlLoader   m_loader;
+        protected ElementFactory m_factory = new ElementFactory();
 
         /// <summary>
         /// The document started.  This will have a full element, even
@@ -77,15 +72,18 @@ namespace jabber.protocol
         public event ProtocolHandler       OnElement;
 
         /// <summary>
+        /// An XML parsing error occurred.
+        /// </summary>
+        public event bedrock.ExceptionHandler OnError;
+
+        /// <summary>
         /// Create a parser that will report events to the listener.  
         /// </summary>
         protected ElementStream(Stream stream)
         {
             m_stream = stream;
             m_doc    = new XmlDocument();
-            m_reader = new XmlTextReader(m_stream);
-            m_loader = new XmlLoader(m_reader, m_doc);
-            m_loader.Factory.AddType(new jabber.protocol.stream.Factory());
+            m_factory.AddType(new jabber.protocol.stream.Factory());
         }
 
         /// <summary>
@@ -104,7 +102,7 @@ namespace jabber.protocol
         /// <param name="pf"></param>
         public void AddFactory(IPacketTypes pf)
         {
-            m_loader.Factory.AddType(pf);
+            m_factory.AddType(pf);
         }
 
         /// <summary>
@@ -115,7 +113,7 @@ namespace jabber.protocol
         /// <param name="t">Type to create</param>
         public void AddType(string localName, string ns, Type t)
         {
-            m_loader.Factory.AddType(localName, ns, t);
+            m_factory.AddType(localName, ns, t);
         }
 
         /// <summary>
@@ -145,6 +143,16 @@ namespace jabber.protocol
         {
             if (OnDocumentEnd != null)
                 OnDocumentEnd(this);
+        }
+
+        /// <summary>
+        /// Fire the OnError event
+        /// </summary>
+        /// <param name="ex">The exception that was thrown</param>
+        protected void FireOnError(Exception ex)
+        {
+            if (OnError != null)
+                OnError(this, ex);
         }
     }
 }

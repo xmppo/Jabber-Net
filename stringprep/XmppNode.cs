@@ -17,9 +17,9 @@ using stringprep.steps;
 
 namespace stringprep
 {
-	/// <summary>
-	/// A stringprep profile for draft-ietf-xmpp-nodeprep-02, for Jabber nodes (the "user" part).
-	/// </summary>
+    /// <summary>
+    /// A stringprep profile for draft-ietf-xmpp-nodeprep-02, for Jabber nodes (the "user" part).
+    /// </summary>
     public class XmppNode : Profile
     {
         private static readonly ProhibitStep XmppNodeprepProhibit = 
@@ -44,7 +44,7 @@ namespace stringprep
                                         C_3, C_4, C_5, C_6, C_7, C_8, C_9,
                                         XmppNodeprepProhibit,
                                         BIDI, UNASSIGNED} )
-		{
-		}
-	}
+        {
+        }
+    }
 }

@@ -40,11 +40,11 @@ namespace jabber.protocol.iq
             new QnameType("query", URI.LAST,     typeof(jabber.protocol.iq.Last)),
             new QnameType("item",  URI.BROWSE,   typeof(jabber.protocol.iq.Browse)),
 
-			// VCard
-			new QnameType("vCard", URI.VCARD, typeof(jabber.protocol.iq.VCard)),
-			new QnameType("N",     URI.VCARD, typeof(jabber.protocol.iq.VCard.VName)),
-			new QnameType("ORG",   URI.VCARD, typeof(jabber.protocol.iq.VCard.VOrganization)),
-			new QnameType("TEL",   URI.VCARD, typeof(jabber.protocol.iq.VCard.VTelephone)),
+            // VCard
+            new QnameType("vCard", URI.VCARD, typeof(jabber.protocol.iq.VCard)),
+            new QnameType("N",     URI.VCARD, typeof(jabber.protocol.iq.VCard.VName)),
+            new QnameType("ORG",   URI.VCARD, typeof(jabber.protocol.iq.VCard.VOrganization)),
+            new QnameType("TEL",   URI.VCARD, typeof(jabber.protocol.iq.VCard.VTelephone)),
             new QnameType("EMAIL", URI.VCARD, typeof(jabber.protocol.iq.VCard.VEmail)),
             new QnameType("GEO",   URI.VCARD, typeof(jabber.protocol.iq.VCard.VGeo)),
             new QnameType("PHOTO", URI.VCARD, typeof(jabber.protocol.iq.VCard.VPhoto)),

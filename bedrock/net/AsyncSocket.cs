@@ -1064,15 +1064,15 @@ namespace bedrock.net
 
         #endregion
 
-		/// <summary>
-		/// Retrieve the socketwatcher used by this instance of AsyncSocket
-		/// </summary>
-		public SocketWatcher SocketWatcher
-		{
-			get
-			{
-				return m_watcher;
-			}
-		}
+        /// <summary>
+        /// Retrieve the socketwatcher used by this instance of AsyncSocket
+        /// </summary>
+        public SocketWatcher SocketWatcher
+        {
+            get
+            {
+                return m_watcher;
+            }
+        }
     }
 }

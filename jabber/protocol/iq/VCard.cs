@@ -409,9 +409,9 @@ namespace jabber.protocol.iq
         {
             get
             {
-				VEmail vemail = GetEmail(EmailType.internet);
-				return vemail == null ? null : vemail.UserId;
-			}
+                VEmail vemail = GetEmail(EmailType.internet);
+                return vemail == null ? null : vemail.UserId;
+            }
         }    
 
         /// <summary>

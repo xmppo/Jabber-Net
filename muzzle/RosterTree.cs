@@ -27,13 +27,13 @@ using jabber.protocol.iq;
 
 namespace muzzle
 {
-	/// <summary>
-	/// A TreeView optimized for showing Jabber roster items.  Make sure that the 
-	/// form you drop this on has a JabberClient, a PresenceManager, and a RosterManager
-	/// on the form first, and this widget will automatically connect to them.
-	/// </summary>
-	public class RosterTree : System.Windows.Forms.TreeView
-	{
+    /// <summary>
+    /// A TreeView optimized for showing Jabber roster items.  Make sure that the 
+    /// form you drop this on has a JabberClient, a PresenceManager, and a RosterManager
+    /// on the form first, and this widget will automatically connect to them.
+    /// </summary>
+    public class RosterTree : System.Windows.Forms.TreeView
+    {
         // image list offsets
         private const int OFFLINE    = 0;
         private const int ONLINE     = 1;
@@ -60,10 +60,10 @@ namespace muzzle
         /// <summary>
         /// Create a new RosterTree
         /// </summary>
-		public RosterTree()
-		{
-			// This call is required by the Windows.Forms Form Designer.
-			InitializeComponent();
+        public RosterTree()
+        {
+            // This call is required by the Windows.Forms Form Designer.
+            InitializeComponent();
             this.ImageIndex = 1;
             this.ImageList = il;
             this.ShowRootLines = false;
@@ -71,28 +71,28 @@ namespace muzzle
             this.Sorted = true;
         }
 
-		/// <summary> 
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if(components != null)
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose( bool disposing )
+        {
+            if( disposing )
+            {
+                if(components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose( disposing );
+        }
 
-		#region Component Designer generated code
-		/// <summary> 
-		/// Required method for Designer support - do not modify 
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        #region Component Designer generated code
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             this.components = new System.ComponentModel.Container();
             System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(RosterTree));
             this.il = new System.Windows.Forms.ImageList(this.components);
@@ -105,7 +105,7 @@ namespace muzzle
             this.il.TransparentColor = System.Drawing.Color.Magenta;
 
         }
-		#endregion
+        #endregion
 
         /// <summary>
         /// The RosterManager for this view

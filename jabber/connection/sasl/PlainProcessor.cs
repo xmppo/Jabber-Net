@@ -21,12 +21,12 @@ using jabber.protocol.stream;
 
 namespace jabber.connection.sasl
 {
-	/// <summary>
-	/// SASL Mechanism PLAIN as specified in RFC 2595.
-	/// </summary>
-	[RCS("$Header$")]
-	public class PlainProcessor : SASLProcessor
-	{
+    /// <summary>
+    /// SASL Mechanism PLAIN as specified in RFC 2595.
+    /// </summary>
+    [RCS("$Header$")]
+    public class PlainProcessor : SASLProcessor
+    {
         /// <summary>
         /// Perform the next step
         /// </summary>

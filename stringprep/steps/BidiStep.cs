@@ -35,7 +35,7 @@ namespace stringprep.steps
     /// If the NO_BIDI flag is set, this is a no-op.
     /// </summary>
     public class BidiStep : ProfileStep
-	{
+    {
         private static ProhibitStep m_prohibit = new ProhibitStep("RFC3454.C_8");
         private static BidiRALStep  m_ral      = new BidiRALStep();
         private static ProhibitStep m_lcat     = new ProhibitStep("RFC3454.D_2");

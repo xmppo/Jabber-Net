@@ -16,8 +16,8 @@ using System;
 
 namespace stringprep.unicode
 {
-	public class Combining
-	{
+    public class Combining
+    {
         private static bool s_init = false;
         private static byte[,] s_classes = null;
         private static byte[] s_pages = null;
@@ -48,5 +48,5 @@ namespace stringprep.unicode
             else
                 return s_classes[s_pages[page], c & 0xff];
         }
-	}
+    }
 }

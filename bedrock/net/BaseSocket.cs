@@ -17,11 +17,11 @@ using System.Diagnostics;
 
 namespace bedrock.net
 {
-	/// <summary>
-	/// Base class for AsyncSocket and proxies for AsyncSocket
-	/// </summary>
-	public abstract class BaseSocket
-	{
+    /// <summary>
+    /// Base class for AsyncSocket and proxies for AsyncSocket
+    /// </summary>
+    public abstract class BaseSocket
+    {
         /// <summary>
         /// Call through this interface when events happen.  WARNING: AsyncSocket assumes this is not NULL.
         /// </summary>
@@ -142,5 +142,5 @@ namespace bedrock.net
         /// Attempts to do a shutdown() first.
         /// </summary>
         public abstract void Close();
-	}
+    }
 }

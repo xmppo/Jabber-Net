@@ -23,8 +23,8 @@ namespace test.stringprep
     /// Summary description for TestGeneric.
     /// </summary>
     [TestFixture]
-	public class TestDecompose
-	{
+    public class TestDecompose
+    {
         public void Test_Decomp()
         {
             char[] d = Decompose.Find('\x2000');
@@ -32,6 +32,6 @@ namespace test.stringprep
             Assertion.AssertEquals(1, d.Length);
             Assertion.AssertEquals('\x0020', d[0]);
         }
-	}
+    }
 }
 #endif

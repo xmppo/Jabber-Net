@@ -141,17 +141,17 @@ namespace jabber.client
             }
         }
 
-		/// <summary>
-		/// Get the number of items currently in the roster.
-		/// </summary>
-		public int Count
-		{
-			get 
-			{
-				lock (this)
-					return m_items.Count;
-			}
-		}
+        /// <summary>
+        /// Get the number of items currently in the roster.
+        /// </summary>
+        public int Count
+        {
+            get 
+            {
+                lock (this)
+                    return m_items.Count;
+            }
+        }
 
         private void GotDisconnect(object sender)
         {

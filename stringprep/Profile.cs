@@ -20,11 +20,11 @@ using stringprep.steps;
 namespace stringprep
 {
    
- 	/// <summary>
-	/// Summary description for Prep.
-	/// </summary>
-	public class Profile
-	{
+    /// <summary>
+    /// Summary description for Prep.
+    /// </summary>
+    public class Profile
+    {
         /// <summary>
         /// RFC 3454, Appendix B.1
         /// </summary>
@@ -102,10 +102,10 @@ namespace stringprep
         /// Create a new profile, with the given steps.
         /// </summary>
         /// <param name="profile">The steps to perform</param>
-		public Profile(ProfileStep[] profile)
-		{
+        public Profile(ProfileStep[] profile)
+        {
             m_profile = profile;
-		}
+        }
 
         /// <summary>
         /// Prepare a string, according to the specified profile.
@@ -133,5 +133,5 @@ namespace stringprep
                 step.Prepare(result);
             }
         }
-	}
+    }
 }

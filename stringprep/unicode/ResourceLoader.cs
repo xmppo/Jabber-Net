@@ -18,8 +18,8 @@ using System.Reflection;
 
 namespace stringprep.unicode
 {
-	class ResourceLoader
-	{
+    class ResourceLoader
+    {
         private const string UNICODE = "stringprep.unicode.Unicode";
         private static ResourceManager m_uni_res = null;
 

@@ -20,8 +20,8 @@ namespace stringprep.unicode
     /// Combine combining characters, where possible.
     /// Note: this is still Black Magic, as far as I can tell.
     /// </summary>
-	public class Compose
-	{
+    public class Compose
+    {
         private static bool s_init = false;
         private static int  s_firstStart = -1;
         private static int  s_firstSingleStart = -1;

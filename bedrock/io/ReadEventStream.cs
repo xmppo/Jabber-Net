@@ -18,22 +18,22 @@ using bedrock.util;
 
 namespace bedrock.io
 {
-	/// <summary>
-	/// Wrap a stream, so that OnRead events can be fired.
-	/// </summary>
+    /// <summary>
+    /// Wrap a stream, so that OnRead events can be fired.
+    /// </summary>
     [RCS(@"$Header$")]
     public class ReadEventStream : Stream
-	{
+    {
         private Stream m_stream;
 
         /// <summary>
         /// Create a new stream.
         /// </summary>
         /// <param name="s"></param>
-		public ReadEventStream(Stream s)
-		{
+        public ReadEventStream(Stream s)
+        {
             m_stream = s;
-		}
+        }
 
         /// <summary>
         /// Bytes have been read from the underlying stream.
@@ -80,7 +80,7 @@ namespace bedrock.io
             get { return m_stream.Position; }
             set { m_stream.Position = value; }
         }
-	
+    
         /// <summary>
         /// Begins an asynchronous read operation.
         /// </summary>

@@ -1,3 +1,16 @@
+/* --------------------------------------------------------------------------
+ * Copyrights
+ * 
+ * Portions created by or assigned to Cursive Systems, Inc. are 
+ * Copyright (c) 2002-2004 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * information for Cursive Systems, Inc. is available at
+ * http://www.cursive.net/.
+ *
+ * License
+ * 
+ * Jabber-Net can be used under either JOSL or the GPL.  
+ * See LICENSE.txt for details.
+ * --------------------------------------------------------------------------*/
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
@@ -13,7 +26,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyProduct("")]
 [assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]		
+[assembly: AssemblyCulture("")]     
 
 //
 // Version information for an assembly consists of the following four values:

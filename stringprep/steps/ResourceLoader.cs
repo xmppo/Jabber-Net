@@ -18,8 +18,8 @@ using System.Reflection;
 
 namespace stringprep.steps
 {
-	class ResourceLoader
-	{
+    class ResourceLoader
+    {
         private const string RFC3454 = "stringprep.steps.rfc3454";
         private static ResourceManager m_rfc_res = null;
 

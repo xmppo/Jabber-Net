@@ -46,6 +46,6 @@ namespace test.stringprep
         {
             TryOne("Test\x180E", null);
         }
-	}
+    }
 }
 #endif

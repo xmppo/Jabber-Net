@@ -15,32 +15,74 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_271588F817A84205BF818B8E36E0634A"
-        "OwnerKey" = "8:_504CCA4EEBDC47B99BE98422B38A6A61"
+        "MsmKey" = "8:_2F3B76E77327469B9CBE1326F9C2528E"
+        "OwnerKey" = "8:_82A1D3CB65A4BD3686FCA78FBC8BE302"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_271588F817A84205BF818B8E36E0634A"
+        "MsmKey" = "8:_2F3B76E77327469B9CBE1326F9C2528E"
+        "OwnerKey" = "8:_916265FFB12CD0867E63B4D6737306C4"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_2F3B76E77327469B9CBE1326F9C2528E"
         "OwnerKey" = "8:_A8697F6F61DF49488D8D24F28B93891F"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_271588F817A84205BF818B8E36E0634A"
+        "MsmKey" = "8:_2F3B76E77327469B9CBE1326F9C2528E"
         "OwnerKey" = "8:_98D9B1D607E847299FECF26CC41CB4ED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_271588F817A84205BF818B8E36E0634A"
+        "MsmKey" = "8:_2F3B76E77327469B9CBE1326F9C2528E"
         "OwnerKey" = "8:_7B94447456C0424B94C1523D140ACD22"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_2F3B76E77327469B9CBE1326F9C2528E"
+        "OwnerKey" = "8:_504CCA4EEBDC47B99BE98422B38A6A61"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_2F3B76E77327469B9CBE1326F9C2528E"
+        "OwnerKey" = "8:_6C6A4C78DF5ECA0A9CF5A014C2A6C327"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_2F3B76E77327469B9CBE1326F9C2528E"
+        "OwnerKey" = "8:_EEE16B56B09530F280549C8ACDC797D9"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_2F3B76E77327469B9CBE1326F9C2528E"
+        "OwnerKey" = "8:_D3DAC8E54B92B80E303AF8B7983ADD6D"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_504CCA4EEBDC47B99BE98422B38A6A61"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6C6A4C78DF5ECA0A9CF5A014C2A6C327"
+        "OwnerKey" = "8:_504CCA4EEBDC47B99BE98422B38A6A61"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6C6A4C78DF5ECA0A9CF5A014C2A6C327"
+        "OwnerKey" = "8:_A8697F6F61DF49488D8D24F28B93891F"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -57,6 +99,72 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_82A1D3CB65A4BD3686FCA78FBC8BE302"
+        "OwnerKey" = "8:_98D9B1D607E847299FECF26CC41CB4ED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_82A1D3CB65A4BD3686FCA78FBC8BE302"
+        "OwnerKey" = "8:_7B94447456C0424B94C1523D140ACD22"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_82A1D3CB65A4BD3686FCA78FBC8BE302"
+        "OwnerKey" = "8:_916265FFB12CD0867E63B4D6737306C4"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_82A1D3CB65A4BD3686FCA78FBC8BE302"
+        "OwnerKey" = "8:_A8697F6F61DF49488D8D24F28B93891F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_82A1D3CB65A4BD3686FCA78FBC8BE302"
+        "OwnerKey" = "8:_6C6A4C78DF5ECA0A9CF5A014C2A6C327"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_82A1D3CB65A4BD3686FCA78FBC8BE302"
+        "OwnerKey" = "8:_504CCA4EEBDC47B99BE98422B38A6A61"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_916265FFB12CD0867E63B4D6737306C4"
+        "OwnerKey" = "8:_504CCA4EEBDC47B99BE98422B38A6A61"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_916265FFB12CD0867E63B4D6737306C4"
+        "OwnerKey" = "8:_7B94447456C0424B94C1523D140ACD22"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_916265FFB12CD0867E63B4D6737306C4"
+        "OwnerKey" = "8:_98D9B1D607E847299FECF26CC41CB4ED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_916265FFB12CD0867E63B4D6737306C4"
+        "OwnerKey" = "8:_A8697F6F61DF49488D8D24F28B93891F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_916265FFB12CD0867E63B4D6737306C4"
+        "OwnerKey" = "8:_6C6A4C78DF5ECA0A9CF5A014C2A6C327"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_98D9B1D607E847299FECF26CC41CB4ED"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -65,6 +173,66 @@
         {
         "MsmKey" = "8:_A8697F6F61DF49488D8D24F28B93891F"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D3DAC8E54B92B80E303AF8B7983ADD6D"
+        "OwnerKey" = "8:_504CCA4EEBDC47B99BE98422B38A6A61"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D3DAC8E54B92B80E303AF8B7983ADD6D"
+        "OwnerKey" = "8:_A8697F6F61DF49488D8D24F28B93891F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D3DAC8E54B92B80E303AF8B7983ADD6D"
+        "OwnerKey" = "8:_98D9B1D607E847299FECF26CC41CB4ED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D3DAC8E54B92B80E303AF8B7983ADD6D"
+        "OwnerKey" = "8:_7B94447456C0424B94C1523D140ACD22"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D3DAC8E54B92B80E303AF8B7983ADD6D"
+        "OwnerKey" = "8:_6C6A4C78DF5ECA0A9CF5A014C2A6C327"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_EEE16B56B09530F280549C8ACDC797D9"
+        "OwnerKey" = "8:_6C6A4C78DF5ECA0A9CF5A014C2A6C327"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_EEE16B56B09530F280549C8ACDC797D9"
+        "OwnerKey" = "8:_A8697F6F61DF49488D8D24F28B93891F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_EEE16B56B09530F280549C8ACDC797D9"
+        "OwnerKey" = "8:_98D9B1D607E847299FECF26CC41CB4ED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_EEE16B56B09530F280549C8ACDC797D9"
+        "OwnerKey" = "8:_7B94447456C0424B94C1523D140ACD22"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_EEE16B56B09530F280549C8ACDC797D9"
+        "OwnerKey" = "8:_504CCA4EEBDC47B99BE98422B38A6A61"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -132,6 +300,37 @@
         }
         "File"
         {
+            "{FB480208-1853-44D0-9ABD-A3B734C3FAAA}:_6C6A4C78DF5ECA0A9CF5A014C2A6C327"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:jabber-net, Version=1.0.1719.25370, Culture=neutral, PublicKeyToken=924c5b18328d6f09"
+                "ScatterAssemblies"
+                {
+                    "_6C6A4C78DF5ECA0A9CF5A014C2A6C327"
+                    {
+                    "Name" = "8:jabber-net.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:jabber-net.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_BE6198C000D6491DA28459E62520961A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{A582A373-4685-4296-BEFE-614B80A702C3}:_701684B2AA11450B890FBF820A143149"
             {
             "SourcePath" = "8:..\\docs\\jabber-net.chm"
@@ -150,6 +349,130 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{FB480208-1853-44D0-9ABD-A3B734C3FAAA}:_82A1D3CB65A4BD3686FCA78FBC8BE302"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:SAX, Version=0.9.7.1, Culture=neutral, PublicKeyToken=924c5b18328d6f09"
+                "ScatterAssemblies"
+                {
+                    "_82A1D3CB65A4BD3686FCA78FBC8BE302"
+                    {
+                    "Name" = "8:SAX.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:SAX.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_BE6198C000D6491DA28459E62520961A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{FB480208-1853-44D0-9ABD-A3B734C3FAAA}:_916265FFB12CD0867E63B4D6737306C4"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:AElfred, Version=1.0.1719.24639, Culture=neutral, PublicKeyToken=924c5b18328d6f09"
+                "ScatterAssemblies"
+                {
+                    "_916265FFB12CD0867E63B4D6737306C4"
+                    {
+                    "Name" = "8:AElfred.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:AElfred.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_BE6198C000D6491DA28459E62520961A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{FB480208-1853-44D0-9ABD-A3B734C3FAAA}:_D3DAC8E54B92B80E303AF8B7983ADD6D"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Org.Mentalis.Security, Version=1.0.13.700, Culture=neutral, PublicKeyToken=924c5b18328d6f09"
+                "ScatterAssemblies"
+                {
+                    "_D3DAC8E54B92B80E303AF8B7983ADD6D"
+                    {
+                    "Name" = "8:Org.Mentalis.Security.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Org.Mentalis.Security.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_BE6198C000D6491DA28459E62520961A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{FB480208-1853-44D0-9ABD-A3B734C3FAAA}:_EEE16B56B09530F280549C8ACDC797D9"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:stringprep, Version=1.0.1719.25363, Culture=neutral, PublicKeyToken=924c5b18328d6f09"
+                "ScatterAssemblies"
+                {
+                    "_EEE16B56B09530F280549C8ACDC797D9"
+                    {
+                    "Name" = "8:stringprep.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:stringprep.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_BE6198C000D6491DA28459E62520961A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
         }
@@ -230,7 +553,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Jabber-Net"
         "ProductCode" = "8:{311A8241-0714-47E5-AACF-711A7461C9D5}"
-        "PackageCode" = "8:{611E131F-D001-46E7-AB68-EA72B60D6644}"
+        "PackageCode" = "8:{DBD3E08D-EC09-41E3-ADD3-30632022DB74}"
         "UpgradeCode" = "8:{5E24CBFF-C2D9-4E37-9B20-CE0550E106A0}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
@@ -741,7 +1064,7 @@
         }
         "MergeModule"
         {
-            "{35A69C6E-5BA4-440D-803D-762B59A45393}:_271588F817A84205BF818B8E36E0634A"
+            "{35A69C6E-5BA4-440D-803D-762B59A45393}:_2F3B76E77327469B9CBE1326F9C2528E"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
@@ -763,7 +1086,7 @@
             "SourcePath" = "8:..\\muzzle\\obj\\Debug\\muzzle.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
-            "Folder" = "8:_178148E311244D04BDAA1ECDF737CE22"
+            "Folder" = "8:_BE6198C000D6491DA28459E62520961A"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -819,7 +1142,7 @@
             "SourcePath" = "8:..\\obj\\Debug\\jabber-net.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
-            "Folder" = "8:_178148E311244D04BDAA1ECDF737CE22"
+            "Folder" = "8:_BE6198C000D6491DA28459E62520961A"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"

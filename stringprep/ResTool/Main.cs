@@ -18,17 +18,17 @@ using System.Reflection;
 
 namespace ResTool
 {
-	/// <summary>
-	/// Summary description for Class1.
-	/// </summary>
-	class MainApp
-	{
-		/// <summary>
-		/// The main entry point for the application.
-		/// </summary>
-		[STAThread]
-		static void Main(string[] args)
-		{
+    /// <summary>
+    /// Summary description for Class1.
+    /// </summary>
+    class MainApp
+    {
+        /// <summary>
+        /// The main entry point for the application.
+        /// </summary>
+        [STAThread]
+        static void Main(string[] args)
+        {
             if (args.Length < 2)
             {
                 Console.WriteLine("Usage: ResTool <assembly> <resxfile>");
@@ -50,6 +50,6 @@ namespace ResTool
                 }
             }
             resx.Close();
-		}
-	}
+        }
+    }
 }

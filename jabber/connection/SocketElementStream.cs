@@ -83,7 +83,7 @@ namespace jabber.connection
         private string         m_to             = "jabber.com";
         private string         m_streamID       = null;
         private object         m_stateLock      = new object();
-		private ManualResetEvent m_conEvent     = new ManualResetEvent(false);
+        private ManualResetEvent m_conEvent     = new ManualResetEvent(false);
         private ArrayList      m_callbacks      = new ArrayList();
         private int            m_keepAlive      = 20000;
         private Timer          m_timer          = null;
@@ -105,14 +105,14 @@ namespace jabber.connection
         private bool           m_plaintext      = false;
 
         // XMPP v1 stuff
-        private string	        m_serverVersion = null;
-        private bool			m_requireSASL   = false;
+        private string          m_serverVersion = null;
+        private bool            m_requireSASL   = false;
         private SASLProcessor   m_saslProc      = null;
 
         private XmlNamespaceManager m_ns;
 
         private ISynchronizeInvoke m_invoker = null;
-		//private XmlTextWriter m_writer = new XmlTextWriter(Console.Out);
+        //private XmlTextWriter m_writer = new XmlTextWriter(Console.Out);
         
         /// <summary>
         /// Required designer variable.
@@ -143,13 +143,13 @@ namespace jabber.connection
             m_timer = new Timer(new TimerCallback(DoKeepAlive), null, Timeout.Infinite, Timeout.Infinite);
         }
 
-		/// <summary>
-		/// Create a SocketElementStream out of an accepted socket.
-		/// </summary>
-		/// <param name="aso"></param>
-		public SocketElementStream(BaseSocket aso)
-		{
-			m_accept = m_sock = null;
+        /// <summary>
+        /// Create a SocketElementStream out of an accepted socket.
+        /// </summary>
+        /// <param name="aso"></param>
+        public SocketElementStream(BaseSocket aso)
+        {
+            m_accept = m_sock = null;
             if (aso is AsyncSocket)
             {
                 m_watcher = ((AsyncSocket) aso).SocketWatcher;
@@ -157,8 +157,8 @@ namespace jabber.connection
             m_ns = new XmlNamespaceManager(m_doc.NameTable);
             m_timer = new Timer(new TimerCallback(DoKeepAlive), null, Timeout.Infinite, Timeout.Infinite);
             InitializeStream();
-			m_state = jabber.connection.AcceptingState.Instance;
-		}
+            m_state = jabber.connection.AcceptingState.Instance;
+        }
 
         /// <summary>
         /// Create a SocketElementStream with an existing SocketWatcher, so that you can do
@@ -192,9 +192,10 @@ namespace jabber.connection
             m_stream.OnDocumentStart += new ProtocolHandler(OnDocumentStart);
             m_stream.OnDocumentEnd += new bedrock.ObjectHandler(OnDocumentEnd);
             m_stream.OnElement += new ProtocolHandler(OnElement);
+            m_stream.OnError += new bedrock.ExceptionHandler(m_stream_OnError);
 
             // notify that we're done
-			m_conEvent.Set();
+            m_conEvent.Set();
         }
 
         /// <summary>
@@ -333,7 +334,7 @@ namespace jabber.connection
             set 
             { 
 #if NO_SSL
-				Debug.Assert(!value, "SSL support not compiled in");
+                Debug.Assert(!value, "SSL support not compiled in");
 #endif
                 m_ssl = value; 
             }
@@ -627,28 +628,28 @@ namespace jabber.connection
             get;
         }
 
-		/// <summary>
-		/// Is SASL required?  This will default to true in the future.
-		/// </summary>
-		[Description("Is SASL required?  This will default to true in the future.")]
-		[DefaultValue(false)]
-		public bool RequiresSASL
-		{
-			get { return m_requireSASL; }
-			set {m_requireSASL = value; }
-		}
+        /// <summary>
+        /// Is SASL required?  This will default to true in the future.
+        /// </summary>
+        [Description("Is SASL required?  This will default to true in the future.")]
+        [DefaultValue(false)]
+        public bool RequiresSASL
+        {
+            get { return m_requireSASL; }
+            set {m_requireSASL = value; }
+        }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		[Description("The version string returned in the server's open stream element")]
-		[DefaultValue(null)]
-		public string ServerVersion
-		{
-			get {return m_serverVersion;}
-		}
-		
-		/// <summary>
+        /// <summary>
+        /// 
+        /// </summary>
+        [Description("The version string returned in the server's open stream element")]
+        [DefaultValue(null)]
+        public string ServerVersion
+        {
+            get {return m_serverVersion;}
+        }
+        
+        /// <summary>
         /// Add new packet types that the incoming stream knows how to create.  
         /// If you create your own packet types, create a packet factory as well. 
         /// </summary>
@@ -705,7 +706,7 @@ namespace jabber.connection
         {
             Debug.Assert(m_port > 0);
             Debug.Assert(m_to != null);
-			m_conEvent.Reset();
+            m_conEvent.Reset();
             m_sslOn = m_ssl;
 
             lock (StateLock)
@@ -773,7 +774,7 @@ namespace jabber.connection
             }
 
             if (m_synch)
-			    m_conEvent.WaitOne(); 
+                m_conEvent.WaitOne(); 
         }
 
         private void SynchConnectThread()
@@ -920,8 +921,10 @@ namespace jabber.connection
             lock (StateLock)
             {
                 m_state = ClosingState.Instance;
-                if (m_sock != null)
-                    m_sock.Close();
+                // No need to close stream any more.  AElfred does this for us, even though
+                // the docs say it doesn't.
+                //if (m_sock != null)
+                    //m_sock.Close();
             }
         }
 
@@ -1091,54 +1094,59 @@ namespace jabber.connection
             }
             CheckAll(tag);
         }
-		
-		/// <summary>
-		/// The SASLClient is reporting an exception
-		/// </summary>
-		/// <param name="e"></param>
-		public void OnSASLException(ApplicationException e)
-		{
-			// lets throw the exception
-			FireOnError(e);
-		}
-		
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="message"></param>
-		public void OnSASLException(string message)
-		{
-			// lets throw it!
-			FireOnError(new ApplicationException(message));
-		}
+        
+        /// <summary>
+        /// The SASLClient is reporting an exception
+        /// </summary>
+        /// <param name="e"></param>
+        public void OnSASLException(ApplicationException e)
+        {
+            // lets throw the exception
+            FireOnError(e);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message"></param>
+        public void OnSASLException(string message)
+        {
+            // lets throw it!
+            FireOnError(new ApplicationException(message));
+        }
 
-		private void SendNewStreamHeader()
-		{
-			jabber.protocol.stream.Stream str = new jabber.protocol.stream.Stream(m_doc, NS);
-			str.To = m_to;
+        private void SendNewStreamHeader()
+        {
+            jabber.protocol.stream.Stream str = new jabber.protocol.stream.Stream(m_doc, NS);
+            str.To = m_to;
             str.Version = "1.0";
-			Write(str.StartTag());
-			m_timer.Change(m_keepAlive, m_keepAlive);
+            Write(str.StartTag());
+            m_timer.Change(m_keepAlive, m_keepAlive);
 
-			InitializeStream();
+            InitializeStream();
 
-			if (m_synch)
-			{
-				// Blocks!!!
-				Debug.Assert(m_stream != null);
-				((SynchElementStream)m_stream).Start();
-			}
-			else
-			{
-				m_sock.RequestRead();
-			}
-		}
+            if (m_synch)
+            {
+                // Blocks!!!
+                Debug.Assert(m_stream != null);
+                ((SynchElementStream)m_stream).Start();
+            }
+            else
+            {
+                m_sock.RequestRead();
+            }
+        }
         /// <summary>
         /// Fire the OnError event.
         /// </summary>
         /// <param name="e"></param>
         protected void FireOnError(Exception e)
         {
+            // ignore spurious IO errors on shutdown.
+            if (((State == ClosingState.Instance) || (State == ClosedState.Instance)) &&
+                ((e is System.IO.IOException) || (e.InnerException is System.IO.IOException)))
+                return;
+
             if (OnError != null)
             {
                 if (InvokeRequired)
@@ -1147,7 +1155,8 @@ namespace jabber.connection
                     OnError(this, e);
             }
 
-            Close();
+            if ((State != ClosingState.Instance) && (State == ClosedState.Instance))
+                Close();
         }
 
         /// <summary>
@@ -1336,7 +1345,7 @@ namespace jabber.connection
                 else
                     OnConnect(this, sock);
             }
-			SendNewStreamHeader();
+            SendNewStreamHeader();
         }
 
         private void Reconnect(object state)
@@ -1479,6 +1488,11 @@ namespace jabber.connection
                     sender.FireOnError(e);
                 }
             }
+        }
+
+        private void m_stream_OnError(object sender, Exception ex)
+        {
+            FireOnError(ex);
         }
     }
 }
