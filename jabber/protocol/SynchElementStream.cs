@@ -164,8 +164,7 @@ namespace jabber.protocol
 
         void IErrorHandler.Warning(ParseError error)
         {
-            Debug.WriteLine("XML parse warning: " + error);
-            //FireOnError(new SaxParseException(error));
+            Debug.WriteLine("XML parse warning: " + error.Message + " at line number: " + error.LineNumber);
         }
 
         void IErrorHandler.Error(ParseError error)
