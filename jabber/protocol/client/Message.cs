@@ -43,7 +43,7 @@ namespace jabber.protocol.client
         /// <summary>
         /// Normal message
         /// </summary>
-        normal, 
+        normal = -1, 
         /// <summary>
         /// Error message
         /// </summary>
@@ -94,7 +94,13 @@ namespace jabber.protocol.client
         public MessageType Type
         {
             get { return (MessageType) GetEnumAttr("type", typeof(MessageType)); }
-            set { SetAttribute("type", value.ToString()); }
+            set 
+            { 
+                if (value == MessageType.normal)
+                    RemoveAttribute("type");
+                else
+                    SetAttribute("type", value.ToString()); 
+            }
         }
 
         /// <summary>

@@ -67,5 +67,17 @@ namespace test.jabber.protocol.client
             msg.Body = null;
             Assertion.AssertEquals(null, msg.Body);
         }
+        public void Test_Normal()
+        {
+            Message msg = new Message(doc);
+            Assertion.AssertEquals(MessageType.normal, msg.Type);
+            Assertion.AssertEquals("", msg.GetAttribute("type"));
+            msg.Type = MessageType.chat;
+            Assertion.AssertEquals(MessageType.chat, msg.Type);
+            Assertion.AssertEquals("chat", msg.GetAttribute("type"));
+            msg.Type = MessageType.normal;
+            Assertion.AssertEquals(MessageType.normal, msg.Type);
+            Assertion.AssertEquals("", msg.GetAttribute("type"));
+        }
     }
 }

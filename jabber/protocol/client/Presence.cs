@@ -105,15 +105,14 @@ namespace jabber.protocol.client
         /// </summary>
         public PresenceType Type
         {
-            get
+            get { return (PresenceType) GetEnumAttr("type", typeof(PresenceType)); }
+            set 
             { 
-                int i = (int) GetEnumAttr("type", typeof(PresenceType));
-                if (i == -1)
-                    return PresenceType.available;
+                if (value == PresenceType.available)
+                    RemoveAttribute("type");
                 else
-                    return (PresenceType) i;
+                    SetAttribute("type", value.ToString()); 
             }
-            set { SetAttribute("type", value.ToString()); }
         }
 
         /// <summary>
