@@ -78,7 +78,7 @@ namespace jabber.server
     /// Summary description for ServerComponent.
     /// </summary>
     [RCS(@"$Header$")]
-    public class ServerComponent : 
+    public class JabberService : 
         jabber.connection.SocketElementStream
     {
         private string        m_name   = null;
@@ -89,7 +89,7 @@ namespace jabber.server
         /// <summary>
         /// Create a a connect component.
         /// </summary>
-        public ServerComponent() : base()
+        public JabberService() : base()
         {
         }
 
@@ -100,10 +100,10 @@ namespace jabber.server
         /// <param name="port">Jabberd port to connect to</param>
         /// <param name="name">Component name</param>
         /// <param name="secret">Component secret</param>
-        public ServerComponent(string host,
-                               int port,
-                               string name,
-                               string secret) : base()
+        public JabberService(string host,
+                             int port,
+                             string name,
+                             string secret) : base()
         {
             this.Server = host;
             this.Port = port;
@@ -119,7 +119,7 @@ namespace jabber.server
         /// <param name="port">Port jabberd will connect to</param>
         /// <param name="name">Component name</param>
         /// <param name="secret">Component secret</param>
-        public ServerComponent(int port, string name, string secret) : base()
+        public JabberService(int port, string name, string secret) : base()
         {
             this.Port = port;
             

@@ -49,13 +49,13 @@ namespace jabber.server
         // this hash doesn't need concurrency control, i don't think,
         // since no id will be re-used.
         private Hashtable       m_pending = new Hashtable();
-        private ServerComponent m_comp    = null;
+        private JabberService   m_comp    = null;
 
         /// <summary>
         /// Create a new XDB tracker
         /// </summary>
         /// <param name="comp">The component to send/receive on</param>
-        public XdbTracker(ServerComponent comp)
+        public XdbTracker(JabberService comp)
         {
             m_comp = comp;
             m_comp.OnXdb += new XdbHandler(OnXdb);
