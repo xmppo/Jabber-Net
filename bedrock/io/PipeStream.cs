@@ -181,14 +181,19 @@ namespace bedrock.io
                         {
                             return 0;
                         }
-                        // Note: this gives up the lock
-                        Monitor.Wait(m_readLock);
+                        do 
+                        {
+                            // Note: this gives up the lock, but may return spuriously.
+                            Monitor.Wait(m_readLock);
+                            if (m_closed)
+                                return -1;
+                        } while (m_queue.Count == 0);
                     }
                     buf = (byte[]) m_queue.Dequeue();
                     m_leftOffset = 0;
                 }
                 // read up to count bytes from the next chunk, or from the leftover bytes
-                int len    = buf.Length - m_leftOffset;
+                int len  = buf.Length - m_leftOffset;
                 read     = Math.Min(len, count);
                 int left = len - read;
                 Buffer.BlockCopy(buf, m_leftOffset, buffer, offset, read);
