@@ -152,6 +152,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "jabber\client\RosterManagerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "jabber\protocol\ElementStreamTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
