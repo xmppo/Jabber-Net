@@ -175,6 +175,8 @@ namespace bedrock.net
                 throw new InvalidOperationException("Call Connect() first");
         }
 
+#if !NO_SSL
+
         /// <summary>
         /// Start TLS over this connection.  Not implemented.
         /// </summary>
@@ -182,6 +184,7 @@ namespace bedrock.net
         {
             throw new NotImplementedException();
         }
+#endif
     
         /// <summary>
         /// Send bytes to the jabber server

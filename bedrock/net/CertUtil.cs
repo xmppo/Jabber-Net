@@ -13,6 +13,7 @@
  * --------------------------------------------------------------------------*/
 using System;
 
+#if !NO_SSL
 using Org.Mentalis.Security.Certificates;
 using bedrock.util;
 
@@ -56,3 +57,4 @@ namespace bedrock.net
         }
     }
 }
+#endif

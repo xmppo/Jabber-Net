@@ -951,6 +951,7 @@ namespace jabber.connection
                     return;
                 }
 
+#if !NO_SSL
                 // don't do starttls if we're already on an SSL socket.
                 // bad server setup, but no skin off our teeth, we're already
                 // SSL'd.  Also, start-tls won't work when polling.
@@ -964,6 +965,7 @@ namespace jabber.connection
                     this.Write(new StartTLS(m_doc));
                     return;
                 }
+#endif
 
                 // not authenticated yet.  Note: we'll get a stream:features
                 // after the last sasl restart, so we shouldn't try to iq:auth
@@ -1031,6 +1033,7 @@ namespace jabber.connection
                     return;
                 }
             }
+#if !NO_SSL
             else if (m_state == StartTLSState.Instance)
             {
                 switch (tag.Name)
@@ -1045,6 +1048,7 @@ namespace jabber.connection
                         return;
                 }
             }
+#endif
             else if (m_state == SASLAuthedState.Instance)
             {
                 Features f = tag as Features;
