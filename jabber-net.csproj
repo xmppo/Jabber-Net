@@ -112,7 +112,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "bedrock\collections\ISet.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "bedrock\collections\LinkedList.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "bedrock\collections\Set.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -97,6 +97,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "bedrock\collections\SetTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "bedrock\collections\SkipListTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
