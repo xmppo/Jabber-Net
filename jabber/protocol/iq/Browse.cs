@@ -63,7 +63,7 @@ namespace jabber.protocol.iq
         /// </summary>
         /// <param name="doc"></param>
         public Browse(XmlDocument doc) : 
-            base("item", URI.AUTH, doc)
+            base("query", URI.BROWSE, doc)
         {
         }
 
