@@ -54,6 +54,8 @@ namespace muzzle
         private System.Windows.Forms.Panel pnlFields;
         private System.Windows.Forms.ErrorProvider error;
         private System.Windows.Forms.ToolTip tip;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Panel panel3;
         private System.ComponentModel.IContainer components;
 
         /// <summary>
@@ -139,18 +141,21 @@ namespace muzzle
             this.pnlFields = new System.Windows.Forms.Panel();
             this.error = new System.Windows.Forms.ErrorProvider();
             this.tip = new System.Windows.Forms.ToolTip(this.components);
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.panel3 = new System.Windows.Forms.Panel();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
             // 
             this.panel1.CausesValidation = false;
+            this.panel1.Controls.Add(this.panel2);
             this.panel1.Controls.Add(this.btnCancel);
             this.panel1.Controls.Add(this.btnOK);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 234);
+            this.panel1.Location = new System.Drawing.Point(0, 232);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(292, 32);
+            this.panel1.Size = new System.Drawing.Size(292, 34);
             this.panel1.TabIndex = 2;
             // 
             // btnCancel
@@ -158,7 +163,7 @@ namespace muzzle
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.CausesValidation = false;
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(212, 5);
+            this.btnCancel.Location = new System.Drawing.Point(212, 7);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.TabIndex = 1;
             this.btnCancel.Text = "Cancel";
@@ -166,7 +171,7 @@ namespace muzzle
             // btnOK
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOK.Location = new System.Drawing.Point(132, 5);
+            this.btnOK.Location = new System.Drawing.Point(132, 7);
             this.btnOK.Name = "btnOK";
             this.btnOK.TabIndex = 0;
             this.btnOK.Text = "OK";
@@ -174,7 +179,7 @@ namespace muzzle
             // 
             // lblInstructions
             // 
-            this.lblInstructions.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblInstructions.BackColor = System.Drawing.SystemColors.Control;
             this.lblInstructions.Dock = System.Windows.Forms.DockStyle.Top;
             this.lblInstructions.ForeColor = System.Drawing.SystemColors.HotTrack;
             this.lblInstructions.Location = new System.Drawing.Point(0, 0);
@@ -190,14 +195,32 @@ namespace muzzle
             this.pnlFields.DockPadding.Left = 6;
             this.pnlFields.DockPadding.Right = 6;
             this.pnlFields.DockPadding.Top = 3;
-            this.pnlFields.Location = new System.Drawing.Point(0, 16);
+            this.pnlFields.Location = new System.Drawing.Point(0, 20);
             this.pnlFields.Name = "pnlFields";
-            this.pnlFields.Size = new System.Drawing.Size(292, 218);
+            this.pnlFields.Size = new System.Drawing.Size(292, 212);
             this.pnlFields.TabIndex = 0;
             // 
             // error
             // 
             this.error.ContainerControl = this;
+            // 
+            // panel2
+            // 
+            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel2.Location = new System.Drawing.Point(0, 0);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(292, 4);
+            this.panel2.TabIndex = 2;
+            // 
+            // panel3
+            // 
+            this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel3.Location = new System.Drawing.Point(0, 16);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(292, 4);
+            this.panel3.TabIndex = 3;
             // 
             // XDataForm
             // 
@@ -207,6 +230,7 @@ namespace muzzle
             this.ClientSize = new System.Drawing.Size(292, 266);
             this.ControlBox = false;
             this.Controls.Add(this.pnlFields);
+            this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.lblInstructions);
             this.HelpButton = true;
@@ -237,7 +261,7 @@ namespace muzzle
             SizeF s = lblInstructions.Size;
             s.Height = 0;
             SizeF textSize = graphics.MeasureString(lblInstructions.Text, lblInstructions.Font, s);
-            lblInstructions.Height = (int) (textSize.Height);
+            lblInstructions.Height = (int) (textSize.Height) + 2;
         }
 
         private class FormField
@@ -313,8 +337,9 @@ namespace muzzle
                         break;
 
                     case FieldType.list_multi:
-                        ListBox lb = new ListBox();
-                        lb.SelectionMode = SelectionMode.MultiExtended;
+                        //ListBox lb = new ListBox();
+                        CheckedListBox lb = new CheckedListBox();
+                        //lb.SelectionMode = SelectionMode.MultiExtended;
                         lb.VisibleChanged += new EventHandler(lb_VisibleChanged);
                         m_control = lb;
                         break;
@@ -491,7 +516,7 @@ namespace muzzle
                 // event handler code below can happen while there is an event still in the queue.
                 // Apparently that message that is already in the queue fires this callback again, 
                 // even though it's been removed.
-                ListBox lb = (ListBox) sender;
+                CheckedListBox lb = (CheckedListBox) sender;
                 if (lb.Handle == IntPtr.Zero)
                     return;
 
@@ -505,7 +530,8 @@ namespace muzzle
                 {
                     int i = lb.Items.Add(o);
                     if (m_field.IsValSet(o.Val))
-                        lb.SetSelected(i, true);
+                        //lb.SetSelected(i, true);
+                        lb.SetItemChecked(i, true);
                 }
                 lb.EndUpdate();
 
