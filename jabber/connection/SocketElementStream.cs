@@ -90,6 +90,7 @@ namespace jabber.connection
         private ArrayList      m_callbacks  = new ArrayList();
         private int            m_keepAlive  = 20000;
         private Timer          m_timer      = null;
+        private Timer          m_reconnectTimer = null;
 
         private int            m_port       = 5222;
         private int            m_autoReconnect = 30000;
@@ -617,7 +618,27 @@ namespace jabber.connection
         {
             if (OnProtocol != null)
                 CheckedInvoke(OnProtocol, new object[] {this, tag});
+
             CheckAll(tag);
+
+            if (tag is jabber.protocol.stream.Error) 
+            {
+                // Stream error.  Race condition!  Two cases:
+                // 1) OnClose has already fired, in which case we are in ClosedState, and the reconnect timer is pending.
+                // 2) OnClose hasn't fired, in which case we trick it into not starting the reconnect timer.
+                lock (m_stateLock)
+                {
+                    if (m_state != ClosedState.Instance)
+                    {
+                        m_state = ClosingState.Instance;
+                    }
+                    else if (m_reconnectTimer != null)
+                    {
+                        Debug.WriteLine("Disposing of timer");
+                        m_reconnectTimer.Dispose();
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -747,7 +768,7 @@ namespace jabber.connection
                 // close was requested, or autoreconnect turned off.
                 if ((old != ClosingState.Instance) && (m_autoReconnect >= 0))
                 {
-                    new System.Threading.Timer(new System.Threading.TimerCallback(Reconnect), 
+                    m_reconnectTimer = new System.Threading.Timer(new System.Threading.TimerCallback(Reconnect), 
                         null, 
                         m_autoReconnect, 
                         System.Threading.Timeout.Infinite );
