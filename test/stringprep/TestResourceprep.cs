@@ -28,38 +28,35 @@
  * 
  * --------------------------------------------------------------------------*/
 using System;
+using NUnit.Framework;
+using stringprep;
 using stringprep.steps;
 
-namespace stringprep
+namespace test.stringprep
 {
-	/// <summary>
-	/// A stringprep profile for draft-ietf-xmpp-nodeprep-02, for Jabber nodes (the "user" part).
-	/// </summary>
-    public class XmppNode : Profile
+    [TestFixture]
+    public class TestResourceprep
     {
-        private static readonly ProhibitStep XmppNodeprepProhibit = 
-            new ProhibitStep(new Prohibit[] 
-                {   // note: these *must* be sorted by code.
-                    new Prohibit('"'),
-                    new Prohibit('&'),
-                    new Prohibit('\''),
-                    new Prohibit('/'),
-                    new Prohibit(':'),
-                    new Prohibit('<'),
-                    new Prohibit('>'),
-                    new Prohibit('@')
-                }, "XMPP Node");
+        private static System.Text.Encoding ENC = System.Text.Encoding.UTF8;
 
-        /// <summary>
-        /// Create a new XmppNode profile instance.
-        /// </summary>
-        public XmppNode() : 
-            base( new ProfileStep[] {   B_1, B_2, NFKC,
-                                        C_1_1, C_1_2, C_2_1, C_2_2,
-                                        C_3, C_4, C_5, C_6, C_7, C_8, C_9,
-                                        XmppNodeprepProhibit,
-                                        BIDI, UNASSIGNED} )
-		{
-		}
+        private Profile resourceprep = new XmppResource();
+
+        private void TryOne(string input, string expected)
+        {
+            string output = resourceprep.Prepare(input, 0);
+            Assertion.AssertEquals(expected, output);
+        }
+
+        public void Test_Good()
+        {
+            TryOne("Test", "Test");
+            TryOne("test", "test");
+        }
+
+        [ExpectedException(typeof(ProhibitedCharacterException))]
+        public void Test_Bad()
+        {
+            TryOne("Test\x180E", null);
+        }
 	}
 }

@@ -882,6 +882,7 @@ namespace jabber.protocol.iq
             {
             }
 
+            /*
             /// <summary>
             /// 
             /// </summary>
@@ -904,6 +905,7 @@ namespace jabber.protocol.iq
                     return null;
                 }
             }
+            */
         }
 
     }

@@ -37,7 +37,10 @@ namespace stringprep.steps
     /// </summary>
     public class ProhibitedCharacterException : Exception
     {
-        public char InvalidChar = '\x00';
+        /// <summary>
+        /// The character that was invalid.
+        /// </summary>
+        public char InvalidChar;
         
         /// <summary>
         /// Create an instance.

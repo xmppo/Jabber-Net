@@ -41,6 +41,10 @@ namespace stringprep.steps
         private bool m_invert;
         private string m_name;
 
+        /// <summary>
+        /// Create a named profile step, with no flags.
+        /// </summary>
+        /// <param name="name">The profile name</param>
         protected ProfileStep(string name)
         {
             m_name = name;
@@ -48,6 +52,12 @@ namespace stringprep.steps
             m_invert = false;
         }
 
+        /// <summary>
+        /// Create a named profile step, with the given flags and inversion.
+        /// </summary>
+        /// <param name="name">The profile name</param>
+        /// <param name="flags">When these flags are set in Prepare, skip this step.</param>
+        /// <param name="inverted">Invert the flags: when these flags are not set, skip this step.</param>
         protected ProfileStep(string name, ProfileFlags flags, bool inverted)
         {
             m_name = name;

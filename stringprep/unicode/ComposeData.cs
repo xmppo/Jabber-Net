@@ -2,15 +2,34 @@
 
 namespace stringprep.unicode
 {
+    /// <summary>
+    /// Data for composition of characters.  The algorithms here are still black box to me.
+    /// </summary>
     public class ComposeData
     {
-        public const int FIRST_START = 1;
-        public const int FIRST_SINGLE_START = 147;
-        public const int SECOND_START = 357;
-        public const int SECOND_SINGLE_START = 388;
 
+        /// <summary>
+		/// This looks like it's always one.  Who know what that means.
+        /// </summary>
+        public const int FIRST_START = 1;
+        /// <summary>
+		/// Who knows what this means.
+        /// </summary> 
+        public const int FIRST_SINGLE_START = 147;
+        /// <summary>
+		/// Who knows what this means.
+        /// </summary> 
+        public const int SECOND_START = 357;
+        /// <summary>
+		/// Who knows what this means.
+        /// </summary> 
+        public const int SECOND_SINGLE_START = 388;
+		
+        /// <summary>
+		/// Who knows what this means.
+        /// </summary> 
         public static readonly int[,] Data = new int[,]
-        {
+		{
             { /* page 0, index 0 */
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
@@ -229,56 +248,59 @@ namespace stringprep.unicode
             }
         };
 
-        public static readonly short[] Table = new short[]
-        {
+        /// <summary>
+		/// Who knows what this means.
+        /// </summary> 
+        public static readonly byte[] Table = new byte[]
+		{
             0 /* page 0 */,
             1 /* page 1 */,
             2 /* page 2 */,
             3 /* page 3 */,
             4 /* page 4 */,
-            -1,
+            255,
             5 /* page 6 */,
-            -1,
-            -1,
+            255,
+            255,
             6 /* page 9 */,
-            -1,
+            255,
             7 /* page 11 */,
             8 /* page 12 */,
             9 /* page 13 */,
-            -1,
-            -1,
+            255,
+            255,
             10 /* page 16 */,
-            -1,
-            -1,
-            -1,
-            -1,
-            -1,
-            -1,
-            -1,
-            -1,
-            -1,
-            -1,
-            -1,
-            -1,
-            -1,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
             11 /* page 30 */,
             12 /* page 31 */,
-            -1,
+            255,
             13 /* page 33 */,
             14 /* page 34 */,
-            -1,
-            -1,
-            -1,
-            -1,
-            -1,
-            -1,
-            -1,
-            -1,
-            -1,
-            -1,
-            -1,
-            -1,
-            -1,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
+            255,
             15 /* page 48 */,
             0,
             0,
@@ -489,8 +511,11 @@ namespace stringprep.unicode
             0
         };
 
+        /// <summary>
+		/// Who knows what this means.  "First singletons"
+        /// </summary> 
         public static readonly char[,] FirstSingle = new char[,]
-        {
+		{
             { '\x0338', '\x226e' },
             { '\x0338', '\x2260' },
             { '\x0338', '\x226f' },
@@ -703,8 +728,11 @@ namespace stringprep.unicode
             { '\x3099', '\x30fe' }
         };
 
+        /// <summary>
+		/// Who knows what this means.  "Second singletons"
+        /// </summary> 
         public static readonly char[,] SecondSingle = new char[,]
-        {
+		{
             { '\x0627', '\x0622' },
             { '\x0627', '\x0623' },
             { '\x0627', '\x0625' },
@@ -725,6 +753,9 @@ namespace stringprep.unicode
             { '\x0dd9', '\x0dde' }
         };
 
+        /// <summary>
+		/// Array of composition pairs.
+        /// </summary> 
         public static readonly char[,] Array = new char[,]
         {
             { '\x00c0', '\x00c1', '\x00c2', '\x00c3', '\x0100', '\x0102', '\x0226', '\x00c4', '\x1ea2', '\x00c5', '\x0000', '\x01cd', '\x0200', '\x0202', '\x0000', '\x0000', '\x0000', '\x1ea0', '\x0000', '\x1e00', '\x0000', '\x0000', '\x0104', '\x0000', '\x0000', '\x0000', '\x0000', '\x0000', '\x0000', '\x0000', '\x0000'        },

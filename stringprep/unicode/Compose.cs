@@ -40,7 +40,7 @@ namespace stringprep.unicode
         private static int Index(char c)
         {
             int p = c >> 8;
-            if (ComposeData.Table[p] == -1)
+            if (ComposeData.Table[p] == 255)
                 return 0;
             else
                 return ComposeData.Data[ComposeData.Table[p], c & 0xff];

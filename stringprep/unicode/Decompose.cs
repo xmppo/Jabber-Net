@@ -94,12 +94,19 @@ namespace stringprep.unicode
         public static int CombiningClass(char c) 
         {
             int page = c >> 8;
-            if (DecomposeData.CombiningClasses[page] == -1)
+            if (DecomposeData.CombiningClasses[page] == 255)
                 return 0;
             else
                 return DecomposeData.Data[DecomposeData.CombiningClasses[page], c & 0xff];
         }
 
+        /// <summary>
+        /// Reorder characters in the given range into their correct cannonical ordering with
+        /// respect to combining class.
+        /// </summary>
+        /// <param name="buf">Buffer to reorder</param>
+        /// <param name="start">Start of segment to reorder</param>
+        /// <param name="len">Lenght of segment to reorder</param>
         public static void CanonicalOrdering(StringBuilder buf, int start, int len)
         {
             int i, j;

@@ -32,6 +32,12 @@ using System;
 namespace stringprep
 {
 
+    /// <summary>
+    /// A map from an input character to zero or more output characters.  The output characters
+    /// are split into the first character and subsequent characters, to facilitate replacement
+    /// and subsequent insertion.  This should turn out to be a slight perf win for chars less
+    /// than U+00FF (western Europe and US).
+    /// </summary>
     public struct CharMap : IComparable
     {
         /// <summary>

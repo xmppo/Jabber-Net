@@ -31,17 +31,16 @@ using System;
 
 namespace stringprep.steps
 {
+    /// <summary>
+    /// Check for unassigned code points in the input.
+    /// </summary>
     public class UnassignedStep : ProhibitStep
     {
-        public UnassignedStep() : base(RFC3454.A_1, "A.1")
+        /// <summary>
+        /// Create a new unassigned step.
+        /// </summary>
+        public UnassignedStep() : base(RFC3454.A_1, "A.1", ProfileFlags.NO_UNASSIGNED, false)
         {
-        }
-
-        public override void Prepare(System.Text.StringBuilder result, ProfileFlags flags)
-        {
-            if ((flags & ProfileFlags.NO_UNASSIGNED) == ProfileFlags.NO_UNASSIGNED)
-                return;
-            base.Prepare(result, flags);
         }
     }
 }

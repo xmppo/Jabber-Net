@@ -116,7 +116,8 @@ namespace test.bedrock.util
         public void Test_Env()
         {
             TestGetOpt go = new TestGetOpt(null);
-            Assertion.Assert(go.assembly.StartsWith("test"));
+            
+            Assertion.Assert(go.Args[0].StartsWith("test"));
         }
         public void Test_CaseInsensitive()
         {

@@ -2,13 +2,16 @@ using System;
 
 namespace stringprep
 {
+    /// <summary>
+	/// Constants from RFC 3454, Stringprep.
+	/// </summary>
     public class RFC3454
     {
 
-        /*
-         * A.1 Unassigned code points in Unicode 3.2
-         * 
-         */
+        /// <summary>
+        /// A.1 Unassigned code points in Unicode 3.2
+        /// 
+        /// </summary>
         public static readonly Prohibit[] A_1 = new Prohibit[]
         {
             new Prohibit('\x0221'),                                            /* 0221 */
@@ -363,10 +366,10 @@ namespace stringprep
         };
 
 
-        /*
-         * B.1 Commonly mapped to nothing
-         * 
-         */
+        /// <summary>
+        /// B.1 Commonly mapped to nothing
+        /// 
+        /// </summary>
         public static readonly CharMap[] B_1 = new CharMap[]
         {
             new CharMap('\x00AD'),                          /* 00AD; ; Map to nothing */
@@ -399,10 +402,10 @@ namespace stringprep
         };
 
 
-        /*
-         * B.2 Mapping for case-folding used with NFKC
-         * 
-         */
+        /// <summary>
+        /// B.2 Mapping for case-folding used with NFKC
+        /// 
+        /// </summary>
         public static readonly CharMap[] B_2 = new CharMap[]
         {
             new CharMap('\x0041', new char[] { '\x0061' }),                      /* 0041; 0061; Case map */
@@ -1454,10 +1457,10 @@ namespace stringprep
         };
 
 
-        /*
-         * B.3 Mapping for case-folding used with no normalization
-         * 
-         */
+        /// <summary>
+        /// B.3 Mapping for case-folding used with no normalization
+        /// 
+        /// </summary>
         public static readonly CharMap[] B_3 = new CharMap[]
         {
             new CharMap('\x0041', new char[] { '\x0061' }),                      /* 0041; 0061; Case map */
@@ -2366,19 +2369,19 @@ namespace stringprep
         };
 
 
-        /*
-         * C.1.1 ASCII space characters
-         * 
-         */
+        /// <summary>
+        /// C.1.1 ASCII space characters
+        /// 
+        /// </summary>
         public static readonly Prohibit[] C_1_1 = new Prohibit[]
         {
             new Prohibit('\x0020'),                                     /* 0020; SPACE */
         };
 
 
-        /*
-         * C.1.2 Non-ASCII space characters
-         *          */
+        /// <summary>
+        /// C.1.2 Non-ASCII space characters
+        ///         /// </summary>
         public static readonly Prohibit[] C_1_2 = new Prohibit[]
         {
             new Prohibit('\x00A0'),                            /* 00A0; NO-BREAK SPACE */
@@ -2401,10 +2404,10 @@ namespace stringprep
         };
 
 
-        /*
-         * C.2.1 ASCII control characters
-         * 
-         */
+        /// <summary>
+        /// C.2.1 ASCII control characters
+        /// 
+        /// </summary>
         public static readonly Prohibit[] C_2_1 = new Prohibit[]
         {
             new Prohibit('\x0000', '\x001F'),                 /* 0000-001F; [CONTROL CHARACTERS] */
@@ -2412,10 +2415,10 @@ namespace stringprep
         };
 
 
-        /*
-         * C.2.2 Non-ASCII control characters
-         * 
-         */
+        /// <summary>
+        /// C.2.2 Non-ASCII control characters
+        /// 
+        /// </summary>
         public static readonly Prohibit[] C_2_2 = new Prohibit[]
         {
             new Prohibit('\x0080', '\x009F'),                 /* 0080-009F; [CONTROL CHARACTERS] */
@@ -2436,20 +2439,20 @@ namespace stringprep
         };
 
 
-        /*
-         * C.3 Private use
-         * 
-         */
+        /// <summary>
+        /// C.3 Private use
+        /// 
+        /// </summary>
         public static readonly Prohibit[] C_3 = new Prohibit[]
         {
             new Prohibit('\xE000', '\xF8FF'),               /* E000-F8FF; [PRIVATE USE, PLANE 0] */
         };
 
 
-        /*
-         * C.4 Non-character code points
-         * 
-         */
+        /// <summary>
+        /// C.4 Non-character code points
+        /// 
+        /// </summary>
         public static readonly Prohibit[] C_4 = new Prohibit[]
         {
             new Prohibit('\xFDD0', '\xFDEF'),           /* FDD0-FDEF; [NONCHARACTER CODE POINTS] */
@@ -2457,20 +2460,20 @@ namespace stringprep
         };
 
 
-        /*
-         * C.5 Surrogate codes
-         * 
-         */
+        /// <summary>
+        /// C.5 Surrogate codes
+        /// 
+        /// </summary>
         public static readonly Prohibit[] C_5 = new Prohibit[]
         {
             new Prohibit('\xD800', '\xDFFF'),                    /* D800-DFFF; [SURROGATE CODES] */
         };
 
 
-        /*
-         * C.6 Inappropriate for plain text
-         * 
-         */
+        /// <summary>
+        /// C.6 Inappropriate for plain text
+        /// 
+        /// </summary>
         public static readonly Prohibit[] C_6 = new Prohibit[]
         {
             new Prohibit('\xFFF9'),             /* FFF9; INTERLINEAR ANNOTATION ANCHOR */
@@ -2481,20 +2484,20 @@ namespace stringprep
         };
 
 
-        /*
-         * C.7 Inappropriate for canonical representation
-         * 
-         */
+        /// <summary>
+        /// C.7 Inappropriate for canonical representation
+        /// 
+        /// </summary>
         public static readonly Prohibit[] C_7 = new Prohibit[]
         {
             new Prohibit('\x2FF0', '\x2FFB'), /* 2FF0-2FFB; [IDEOGRAPHIC DESCRIPTION CHARACTERS] */
         };
 
 
-        /*
-         * C.8 Change display properties or are deprecated
-         * 
-         */
+        /// <summary>
+        /// C.8 Change display properties or are deprecated
+        /// 
+        /// </summary>
         public static readonly Prohibit[] C_8 = new Prohibit[]
         {
             new Prohibit('\x0340'),                 /* 0340; COMBINING GRAVE TONE MARK */
@@ -2515,19 +2518,19 @@ namespace stringprep
         };
 
 
-        /*
-         * C.9 Tagging characters
-         * 
-         */
+        /// <summary>
+        /// C.9 Tagging characters
+        /// 
+        /// </summary>
         public static readonly Prohibit[] C_9 = new Prohibit[]
         {
         };
 
 
-        /*
-         * D.1 Characters with bidirectional property "R" or "AL"
-         * 
-         */
+        /// <summary>
+        /// D.1 Characters with bidirectional property "R" or "AL"
+        /// 
+        /// </summary>
         public static readonly Prohibit[] D_1 = new Prohibit[]
         {
             new Prohibit('\x05BE'),                                            /* 05BE */
@@ -2567,10 +2570,10 @@ namespace stringprep
         };
 
 
-        /*
-         * D.2 Characters with bidirectional property "L"
-         * 
-         */
+        /// <summary>
+        /// D.2 Characters with bidirectional property "L"
+        /// 
+        /// </summary>
         public static readonly Prohibit[] D_2 = new Prohibit[]
         {
             new Prohibit('\x0041', '\x005A'),                                       /* 0041-005A */

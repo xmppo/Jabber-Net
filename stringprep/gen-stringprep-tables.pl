@@ -40,6 +40,9 @@ using System;
 
 namespace stringprep
 {
+    /// <summary>
+	/// Constants from RFC 3454, Stringprep.
+	/// </summary>
     public class RFC3454
     {
 EOF
@@ -123,9 +126,9 @@ while(<>) {
 	$tablename = $1;
 
 	($varname = $tablename) =~ tr/./_/;
-	$header =~ s/\n/\n         * /s;
+	$header =~ s/\n/\n        \/\/\/ /s;
 
-	print FH "\n        /*\n         * $header         */\n";
+	print FH "\n        /// <summary>\n        /// $header        /// </summary>\n";
 	if ($varname =~ /^B/) {
 	    print FH "        public static readonly CharMap\[\] ${varname} = new CharMap[]\n        {\n";
 	} else {

@@ -19,14 +19,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example", "Example\Example.
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "stringprep", "stringprep\stringprep.csproj", "{3FDD6E3E-E4F5-4BA1-A76C-18571B7A105B}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestStringprep", "TestStringprep\TestStringprep.csproj", "{7B314314-01EF-4A94-8D86-441679A2E6A7}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -52,14 +44,6 @@ Global
 		{F7208FC2-C9FF-4019-96D8-E0F5001FDBFD}.Debug.Build.0 = Debug|.NET
 		{F7208FC2-C9FF-4019-96D8-E0F5001FDBFD}.Release.ActiveCfg = Release|.NET
 		{F7208FC2-C9FF-4019-96D8-E0F5001FDBFD}.Release.Build.0 = Release|.NET
-		{3FDD6E3E-E4F5-4BA1-A76C-18571B7A105B}.Debug.ActiveCfg = Debug|.NET
-		{3FDD6E3E-E4F5-4BA1-A76C-18571B7A105B}.Debug.Build.0 = Debug|.NET
-		{3FDD6E3E-E4F5-4BA1-A76C-18571B7A105B}.Release.ActiveCfg = Release|.NET
-		{3FDD6E3E-E4F5-4BA1-A76C-18571B7A105B}.Release.Build.0 = Release|.NET
-		{7B314314-01EF-4A94-8D86-441679A2E6A7}.Debug.ActiveCfg = Debug|.NET
-		{7B314314-01EF-4A94-8D86-441679A2E6A7}.Debug.Build.0 = Debug|.NET
-		{7B314314-01EF-4A94-8D86-441679A2E6A7}.Release.ActiveCfg = Release|.NET
-		{7B314314-01EF-4A94-8D86-441679A2E6A7}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

@@ -84,19 +84,24 @@ namespace jabber
     [RCS(@"$Header$")]
     public class JID : IComparable
     {
+        private static readonly stringprep.Profile s_nodeprep     = new stringprep.XmppNode();
+        private static readonly stringprep.Profile s_nameprep     = new stringprep.Nameprep();
+        private static readonly stringprep.Profile s_resourceprep = new stringprep.XmppResource();
+
         private string m_user     = null;
         private string m_server   = null;
         private string m_resource = null;
         private string m_JID      = null;
 
         /// <summary>
-        /// Create a JID from a string.  Lazy parsing.
+        /// Create a JID from a string.  This will parse and stringprep.
         /// </summary>
-        /// <param name="jid"></param>
+        /// <param name="jid">Jabber ID, in string form</param>
         public JID(string jid)
         {
             Debug.Assert(jid != null, "jid must be non-null");
             m_JID = jid;
+            parse();
         }
 
         /// <summary>
@@ -107,10 +112,12 @@ namespace jabber
         /// <param name="resource">The current resource</param>
         public JID(string user, string server, string resource)
         {
-            m_user     = user;
-            m_server   = server;
-            m_resource = resource;
-            m_JID = build(user, server, resource);
+            Debug.Assert(server != null, "server must be non-null");
+
+            m_user     = (user == null) ? null : s_nodeprep.Prepare(user);
+            m_server   = s_nameprep.Prepare(server);
+            m_resource = (resource == null) ? null : s_resourceprep.Prepare(resource);
+            m_JID      = build(m_user, m_server, m_resource);
         }
 
         private static string build(string user, string server, string resource)
@@ -131,7 +138,6 @@ namespace jabber
             return sb.ToString();
         }
 
-        //TODO: cannonicalize and lowercase.
         private void parse()
         {
             if (m_server != null)
@@ -193,9 +199,9 @@ namespace jabber
             if ((resource != null) && (resource.Length == 0)) // null is ok, but "" is not.
                 throw new JIDFormatException(m_JID);
 
-            m_user = (user == null) ? null : user.ToLower();
-            m_server = (server == null) ? null : server.ToLower();
-            m_resource = resource;
+            m_user = (user == null) ? null : s_nodeprep.Prepare(user);
+            m_server = (server == null) ? null : s_nameprep.Prepare(server);
+            m_resource = (resource == null) ? null : s_resourceprep.Prepare(resource);
 
             // Make the case right, for fast equality comparisons
             m_JID = build(m_user, m_server, m_resource);
@@ -207,7 +213,6 @@ namespace jabber
         /// <returns></returns>
         public override int GetHashCode()
         {
-            parse();
             return m_JID.GetHashCode();
         }
 
@@ -233,8 +238,7 @@ namespace jabber
                 return m_JID.Equals(other);
             if (! (other is JID))
                 return false;
-            this.parse();
-            ((JID)other).parse();
+
             return m_JID.Equals(((JID)other).m_JID);
         }
 

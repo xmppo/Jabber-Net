@@ -642,7 +642,7 @@ sub print_row
 		if ($values[0] != 0) {
 			print "BAD VALUE!!!\n";
 		}
-		return -1;
+		return 255;
 	#return $values[0] . " + DecomposeData.MAX_TABLE_INDEX";
     }
 
@@ -687,23 +687,39 @@ sub print_decomp
 print OUT <<EOF;
 namespace stringprep.unicode
 {
+    /// <summary>
+    /// Decomposition data for NFKC.
+    /// </summary>
     public class DecomposeData
     {
 EOF
-    #printf OUT "        public const ushort LAST_CHAR = 0x%04x;\n", $last;
-
-    #printf OUT "        public const ushort MAX_TABLE_INDEX = 1000;\n\n";
 
     my ($count, @row);
     $table_index = 0;
-    printf OUT "        public static readonly byte[,] Data =  new byte[,]\n        {\n";
+    printf OUT <<EOF;
+		/// <summary>
+		/// Combining classes for different pages.  All pages unspecified here will return
+		/// combining class 0.
+		/// </summary>
+        public static readonly byte[,] Data =  new byte[,]
+        {
+EOF
     for ($count = 0; $count <= $last; $count += 256)
     {
 	$row[$count / 256] = &print_row ($count, 1, \&fetch_cclass);
     }
     printf OUT "\n        };\n\n";
 
-    print OUT "        public static readonly sbyte[] CombiningClasses = new sbyte[]\n        {\n";
+    print OUT <<EOF;
+		/// <summary>
+		/// Offset into the Data array for each page, since Data is sparse.
+		/// 255 here means that all of the combining classes for that page
+		/// are 0.
+		/// </summary>
+        public static readonly byte[] CombiningClasses = new byte[]
+        {
+EOF
+	
     for ($count = 0; $count <= $last; $count += 256)
     {
 	print OUT ",\n" if $count > 0;
@@ -712,7 +728,16 @@ EOF
     }
     print OUT "\n        };\n\n";
 
-    print OUT "        public static readonly Decompose[] Offsets = new Decompose[]\n        {\n";
+    print OUT <<EOF;
+		/// <summary>
+		/// Offset into the Expansion string for each decomposable character.
+		/// One way to make this faster might be to have this not be sparse, so that the lookup
+		/// could be direct rather than a binary search.  That would add several hundred K to the
+		/// library size, though, or time at startup to initialize an array from this.
+		/// </summary>
+        public static readonly Decompose[] Offsets = new Decompose[]
+        {
+EOF
     my ($iter);
     my ($first) = 1;
     my ($decomp_string) = "";
@@ -772,10 +797,18 @@ EOF
     }
     print OUT "\n        };\n\n";
 
-#    printf OUT "        public static readonly char[] Expansion = new char[]\n        {%s\n        };\n", $decomp_string;
-    printf OUT "        public const string Expansion = %s\n            \"\";\n", $decomp_string;
-#    print OUT "#endif /* DECOMP_H */\n";
-    print OUT "    }\n}";
+    printf OUT <<"EOF";
+		/// <summary>
+		/// How to expand characters.  Since multiple input characters output the same string, 
+		/// this table is compressed to only have one copy of each, and the Offsets table
+		/// gives offsets into this for each input.  This is a string so that it can be
+		/// loaded in the data segment, and not take any extra time at startup.
+		/// </summary>
+        public const string Expansion = $decomp_string
+            "";
+    }
+}
+EOF
     printf STDERR "Generated %d bytes in decomp tables\n", $bytes_out;
 }
 
@@ -1040,32 +1073,55 @@ sub output_composition_table
 
 namespace stringprep.unicode
 {
+    /// <summary>
+    /// Data for composition of characters.  The algorithms here are still black box to me.
+    /// </summary>
     public class ComposeData
     {
+
+        /// <summary>
+		/// This looks like it's always one.  Who know what that means.
+        /// </summary>
+        public const int FIRST_START = $total;
 EOF
-  
-    printf OUT "        public const int FIRST_START = %d;\n", $total;
     for $code (keys %first) {
 	$vals{$code} = $first{$code} + $total;
 	$last = $code if $code > $last;
     }
     $total += $n_first;
     $i = 0;
-    printf OUT "        public const int FIRST_SINGLE_START = %d;\n", $total;
+	
+    printf OUT <<"EOF";
+        /// <summary>
+		/// Who knows what this means.
+        /// </summary> 
+        public const int FIRST_SINGLE_START = $total;
+EOF
     for $record (@first_singletons) {
 	my $code = $record->[0];
 	$vals{$code} = $i++ + $total;
 	$last = $code if $code > $last;
     }
     $total += @first_singletons;
-    printf OUT "        public const int SECOND_START = %d;\n", $total;
+    printf OUT <<"EOF";
+        /// <summary>
+		/// Who knows what this means.
+        /// </summary> 
+        public const int SECOND_START = $total;
+EOF
     for $code (keys %second) {
 	$vals{$code} = $second{$code} + $total;
 	$last = $code if $code > $last;
     }
     $total += $n_second;
     $i = 0;
-    printf OUT "        public const int SECOND_SINGLE_START = %d;\n\n", $total;
+    printf OUT <<"EOF";
+        /// <summary>
+		/// Who knows what this means.
+        /// </summary> 
+        public const int SECOND_SINGLE_START = $total;
+		
+EOF
     for $record (@second_singletons) {
 	my $code = $record->[0];
 	$vals{$code} = $i++ + $total;
@@ -1076,14 +1132,29 @@ EOF
 
     my @row;						  
     $table_index = 0;
-    printf OUT "        public static readonly int[,] Data = new int[,]\n        {\n";
+	
+    printf OUT <<"EOF";
+        /// <summary>
+		/// Who knows what this means.
+        /// </summary> 
+        public static readonly int[,] Data = new int[,]
+		{
+EOF
+	
     for (my $count = 0; $count <= $last; $count += 256)
     {
 	$row[$count / 256] = &print_row ($count, 2, sub { exists $vals{$_[0]} ? $vals{$_[0]} : 0; });
     }
     printf OUT "\n        };\n\n";
 
-    print OUT "        public static readonly short[] Table = new short[]\n        {\n";
+    printf OUT <<"EOF";
+        /// <summary>
+		/// Who knows what this means.
+        /// </summary> 
+        public static readonly byte[] Table = new byte[]
+		{
+EOF
+
     for (my $count = 0; $count <= $last; $count += 256)
     {
 	print OUT ",\n" if $count > 0;
@@ -1098,7 +1169,14 @@ EOF
 
     # Output first singletons
 
-    print OUT "        public static readonly char[,] FirstSingle = new char[,]\n        {\n";
+    printf OUT <<"EOF";
+        /// <summary>
+		/// Who knows what this means.  "First singletons"
+        /// </summary> 
+        public static readonly char[,] FirstSingle = new char[,]
+		{
+EOF
+
     $i = 0;				     
     for $record (@first_singletons) {
 	print OUT ",\n" if $i++ > 0;
@@ -1110,7 +1188,14 @@ EOF
 		  
     # Output second singletons
 
-    print OUT "        public static readonly char[,] SecondSingle = new char[,]\n        {\n";
+    printf OUT <<"EOF";
+        /// <summary>
+		/// Who knows what this means.  "Second singletons"
+        /// </summary> 
+        public static readonly char[,] SecondSingle = new char[,]
+		{
+EOF
+
     $i = 0;				     
     for $record (@second_singletons) {
 	print OUT ",\n" if $i++ > 0;
@@ -1123,6 +1208,9 @@ EOF
     # Output array of composition pairs
 
     print OUT <<EOT;
+        /// <summary>
+		/// Array of composition pairs.
+        /// </summary> 
         public static readonly char[,] Array = new char[,]
         {
 EOT

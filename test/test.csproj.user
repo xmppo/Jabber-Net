@@ -13,7 +13,7 @@
                     StartAction = "Program"
                     StartArguments = "test.dll"
                     StartPage = ""
-                    StartProgram = "D:\src\jabber-net\test\nunit\nunit-gui.exe"
+                    StartProgram = "C:\src\jabber\jabber-net\test\nunit\nunit-gui.exe"
                     StartURL = ""
                     StartWorkingDirectory = ""
                     StartWithIE = "true"
