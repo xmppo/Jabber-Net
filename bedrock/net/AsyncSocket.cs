@@ -40,13 +40,41 @@ namespace bedrock.net
     /// Lame exception, since I couldn't find one I liked.
     /// </summary>
     [RCS(@"$Header$")]
-    public class AsyncSocketConnectionException : Exception
+    [Serializable]
+    public class AsyncSocketConnectionException : System.SystemException
     {
         /// <summary>
         /// Create a new exception instance.
         /// </summary>
         /// <param name="description"></param>
         public AsyncSocketConnectionException(string description) : base(description)
+        {
+        }
+
+        /// <summary>
+        /// Create a new exception instance.
+        /// </summary>
+        public AsyncSocketConnectionException() : base()
+        {
+        }
+
+        /// <summary>
+        /// Create a new exception instance, wrapping another exception.
+        /// </summary>
+        /// <param name="description">Desecription of the exception</param>
+        /// <param name="e">Inner exception</param>
+        public AsyncSocketConnectionException(string description, Exception e) : base(description, e)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the AsyncSocketConnectionException class with serialized data.
+        /// </summary>
+        /// <param name="info">The object that holds the serialized object data.</param>
+        /// <param name="ctx">The contextual information about the source or destination.</param>
+        protected AsyncSocketConnectionException(System.Runtime.Serialization.SerializationInfo info, 
+            System.Runtime.Serialization.StreamingContext ctx) : 
+            base(info, ctx)
         {
         }
     }
@@ -554,9 +582,9 @@ namespace bedrock.net
         /// when the data has been written.  A trimmed copy is made of the data, internally.
         /// </summary>
         /// <param name="buf">Buffer to output</param>
-        /// <param name="off">Offset into buffer</param>
+        /// <param name="offset">Offset into buffer</param>
         /// <param name="len">Number of bytes to output</param>
-        public void Write(byte[] buf, int off, int len)
+        public void Write(byte[] buf, int offset, int len)
         {
             lock (m_state_lock)
             {
@@ -567,7 +595,7 @@ namespace bedrock.net
 
                 // make copy, since we might be a while in async-land
                 byte[] ret = new byte[len];
-                Buffer.BlockCopy(buf, off, ret, 0, len);
+                Buffer.BlockCopy(buf, offset, ret, 0, len);
                 try
                 {
                     m_sock.BeginSend(ret, 0, ret.Length, 
@@ -727,16 +755,119 @@ namespace bedrock.net
             return m_id.GetHashCode();
         }
 
+        #region IComparable
         int IComparable.CompareTo(object val)
         {
             if (val == null)
                 return 1;
 
             AsyncSocket sock = val as AsyncSocket;
-            if (sock == null)
+            if ((object)sock == null)
                 throw new ArgumentException("value compared to is not an AsyncSocket", "val");
     
             return this.m_id.CompareTo(sock.m_id);
         }
+
+        /// <summary>
+        /// IComparable's need to implement Equals().  This checks the guid's for each socket to see 
+        /// if they are the same.
+        /// </summary>
+        /// <param name="val">The AsyncSocket to check against.</param>
+        /// <returns></returns>
+        public override bool Equals(object val)
+        {
+            AsyncSocket sock = val as AsyncSocket;
+            if (sock == null)
+                return false;
+            return (this.m_id == sock.m_id);
+        }
+
+        /// <summary>
+        /// IComparable's need to implement ==.  Checks for guid equality.
+        /// </summary>
+        /// <param name="one">First socket to compare</param>
+        /// <param name="two">Second socket to compare</param>
+        /// <returns></returns>
+        public static bool operator==(AsyncSocket one, AsyncSocket two)
+        {
+            if ((object)one == null)
+                return ((object)two == null);
+            if ((object)two == null)
+                return false;
+
+            return (one.m_id == two.m_id);
+        }
+
+        /// <summary>
+        /// IComparable's need to implement comparison operators.  Checks compares guids.
+        /// </summary>
+        /// <param name="one">First socket to compare</param>
+        /// <param name="two">Second socket to compare</param>
+        /// <returns></returns>
+        public static bool operator!=(AsyncSocket one, AsyncSocket two)
+        {
+            if ((object)one == null)
+                return ((object)two != null);
+            if ((object)two == null)
+                return true;
+
+            return (one.m_id != two.m_id);
+        }
+
+        /// <summary>
+        /// IComparable's need to implement comparison operators.  Checks compares guids.
+        /// </summary>
+        /// <param name="one">First socket to compare</param>
+        /// <param name="two">Second socket to compare</param>
+        /// <returns></returns>
+        public static bool operator<(AsyncSocket one, AsyncSocket two)
+        {
+            if ((object)one == null)
+            {
+                return ((object)two != null);
+            }
+            return (((IComparable)one).CompareTo(two) < 0);
+        }
+        /// <summary>
+        /// IComparable's need to implement comparison operators.  Checks compares guids.
+        /// </summary>
+        /// <param name="one">First socket to compare</param>
+        /// <param name="two">Second socket to compare</param>
+        /// <returns></returns>
+        public static bool operator<=(AsyncSocket one, AsyncSocket two)
+        {
+            if ((object)one == null)
+                return true;
+
+            return (((IComparable)one).CompareTo(two) <= 0);
+        }
+        /// <summary>
+        /// IComparable's need to implement comparison operators.  Checks compares guids.
+        /// </summary>
+        /// <param name="one">First socket to compare</param>
+        /// <param name="two">Second socket to compare</param>
+        /// <returns></returns>
+        public static bool operator>(AsyncSocket one, AsyncSocket two)
+        {
+            if ((object)one == null)
+                return false;
+            return (((IComparable)one).CompareTo(two) > 0);
+        }
+        /// <summary>
+        /// IComparable's need to implement comparison operators.  Checks compares guids.
+        /// </summary>
+        /// <param name="one">First socket to compare</param>
+        /// <param name="two">Second socket to compare</param>
+        /// <returns></returns>
+        public static bool operator>=(AsyncSocket one, AsyncSocket two)
+        {
+            if ((object)one == null)
+            {
+                return (two == null);
+            }
+            return (((IComparable)one).CompareTo(two) >= 0);
+        }
+
+        #endregion
     }
 }

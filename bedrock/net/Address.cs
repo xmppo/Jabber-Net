@@ -62,12 +62,12 @@ namespace bedrock.net
         /// <summary>
         /// New connection endpoint.
         /// </summary>
-        /// <param name="Hostname">Host name or dotted-quad IP address</param>
+        /// <param name="hostname">Host name or dotted-quad IP address</param>
         /// <param name="port">Port number</param>
-        public Address(string Hostname, int port) : this(port)
+        public Address(string hostname, int port) : this(port)
         {
-            Debug.Assert(Hostname != null, "must supply a host name");
-            this.Hostname = Hostname;
+            Debug.Assert(hostname != null, "must supply a host name");
+            this.Hostname = hostname;
         }
         /// <summary>
         /// Create a new connection endpoint, where the IP address is already known.

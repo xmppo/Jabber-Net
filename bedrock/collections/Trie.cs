@@ -49,18 +49,22 @@ namespace bedrock.collections
     public class Trie : IDictionary
     {
         private static readonly System.Text.Encoding ENCODING = System.Text.Encoding.Default;
+
         /// <summary>
         /// The root node of the trie.
         /// </summary>
-        protected TrieNode m_root  = new TrieNode(null, 0);
+        private TrieNode m_root  = new TrieNode(null, 0);
+
         /// <summary>
         /// The number of nodes are in the trie
         /// </summary>
-        protected int      m_count = 0;
+        private int      m_count = 0;
+
         /// <summary>
         /// Create an empty trie
         /// </summary>
         public Trie() {}
+
         /// <summary>
         /// Find a node for a given key, somewhere under the root.
         /// </summary>
@@ -94,7 +98,7 @@ namespace bedrock.collections
         /// This is likely to cause problems for non 7-bit ASCII text.
         /// </summary>
         /// <param name="key"> </param>
-        protected static byte[] keyBytes(object key)
+        protected static byte[] KeyBytes(object key)
         {
             if (key is byte[])
             {
@@ -111,7 +115,7 @@ namespace bedrock.collections
         /// <param name="key"> </param>
         public virtual void Increment(object key)
         {
-            TrieNode e = FindNode(keyBytes(key), true);
+            TrieNode e = FindNode(KeyBytes(key), true);
             if (e.Value == null)
             {
                 e.Value = 1;
@@ -187,12 +191,12 @@ namespace bedrock.collections
         {
             get
             {
-                TrieNode e = FindNode(keyBytes(key), false);
+                TrieNode e = FindNode(KeyBytes(key), false);
                 return (e == null) ? null : e.Value;
             }
             set
             {
-                TrieNode e = FindNode(keyBytes(key), true);
+                TrieNode e = FindNode(KeyBytes(key), true);
                 e.Value = value;
                 m_count++;
             }
@@ -256,7 +260,7 @@ namespace bedrock.collections
         /// <param name="key"> </param>
         public void Remove(object key)
         {
-            TrieNode current = FindNode(keyBytes(key), false);
+            TrieNode current = FindNode(KeyBytes(key), false);
             if (current == null)
             {
                 return;
@@ -319,7 +323,7 @@ namespace bedrock.collections
         /// <param name="key"> </param>
         public bool Contains(object key)
         {
-            TrieNode current = FindNode(keyBytes(key), false);
+            TrieNode current = FindNode(KeyBytes(key), false);
             return current != null;
         }
 

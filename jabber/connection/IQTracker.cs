@@ -109,19 +109,19 @@ namespace jabber.connection
         /// <summary>
         /// Do a synchronous IQ request, which waits for a response.
         /// </summary>
-        /// <param name="iq">An IQ packet to send, and wait for.</param>
+        /// <param name="iqp">An IQ packet to send, and wait for.</param>
         /// <param name="millisecondsTimeout">Time to wait for response, in milliseconds</param>
-        public IQ IQ(IQ iq, int millisecondsTimeout)
+        public IQ IQ(IQ iqp, int millisecondsTimeout)
         {
             TrackerData td = new TrackerData();
             td.cb   = new IqCB(SignalEvent);
             AutoResetEvent are = new AutoResetEvent(false);
             td.data = are;
-            string id = iq.ID;
+            string id = iqp.ID;
             lock (m_pending)
             {
                 m_pending[id] = td;
-                m_cli.Write(iq);
+                m_cli.Write(iqp);
                 if (!are.WaitOne(millisecondsTimeout, true))
                 {
                     throw new Exception("Timeout waiting for IQ response");

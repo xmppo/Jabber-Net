@@ -41,18 +41,21 @@ namespace bedrock.collections
     {
         private Tree m_indexes    = new Tree();
         private int  m_maxResults = 100;
+
         /// <summary>
         /// 
         /// </summary>
         public IndexedTrie()  {}
+
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="MaxResults"></param>
-        public IndexedTrie(int MaxResults)
+        /// <param name="maxResults"></param>
+        public IndexedTrie(int maxResults)
         {
-            m_maxResults = MaxResults;
+            m_maxResults = maxResults;
         }
+
         /// <summary>
         /// The maximum number of results to return from any query.  This is an approximate number.
         /// </summary>

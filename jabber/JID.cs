@@ -39,32 +39,41 @@ namespace jabber
     /// An attempt was made to parse a badly-formatted JID.
     /// </summary>
     [RCS(@"$Header$")]
-    public class JIDFormatException : Exception
+    public class JIDFormatException : ApplicationException
     {
-        private string m_jid;
-
         /// <summary>
         /// Bad JID.
         /// </summary>
-        /// <param name="BadJid">The invalid JID</param>
-        public JIDFormatException(string BadJid)
+        /// <param name="badJid">The invalid JID</param>
+        public JIDFormatException(string badJid) : base("Bad JID: (" + badJid + ")")
         {
-            m_jid = BadJid;
         }
+
         /// <summary>
-        /// The bad JID.
+        /// Create a new exception instance.
         /// </summary>
-        public string JID
+        public JIDFormatException() : base()
         {
-            get { return m_jid; }
         }
+
         /// <summary>
-        /// Format a string containing the bad JID.
+        /// Create a new exception instance, wrapping another exception.
         /// </summary>
-        /// <returns></returns>
-        public override string ToString()
+        /// <param name="badJid">Ill-formatted JID</param>
+        /// <param name="e">Inner exception</param>
+        public JIDFormatException(string badJid, Exception e) : base("Bad JID: (" + badJid + ")", e)
         {
-            return "Bad JID: (" + m_jid + ")\r\n" + base.ToString();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the AsyncSocketConnectionException class with serialized data.
+        /// </summary>
+        /// <param name="info">The object that holds the serialized object data.</param>
+        /// <param name="ctx">The contextual information about the source or destination.</param>
+        protected JIDFormatException(System.Runtime.Serialization.SerializationInfo info, 
+            System.Runtime.Serialization.StreamingContext ctx) : 
+            base(info, ctx)
+        {
         }
     }
 
@@ -178,10 +187,10 @@ namespace jabber
                 if (user.IndexOf('/') != -1) throw new JIDFormatException(m_JID);
             }
 
-            if ((server == null) || (server == "")) throw new JIDFormatException(m_JID);
+            if ((server == null) || (server.Length == 0)) throw new JIDFormatException(m_JID);
             if (server.IndexOf('@') != -1) throw new JIDFormatException(m_JID);
             if (server.IndexOf('/') != -1) throw new JIDFormatException(m_JID);
-            if (resource == "") // null is ok, but "" is not.
+            if (resource.Length == 0) // null is ok, but "" is not.
                 throw new JIDFormatException(m_JID);
 
             m_user = (user == null) ? null : user.ToLower();

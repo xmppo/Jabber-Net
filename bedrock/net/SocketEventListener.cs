@@ -43,18 +43,18 @@ namespace bedrock.net
         /// An accept socket is about to be bound, or a connect socket is about to connect, 
         /// or an incoming socket just came in.  Use this as an opportunity to 
         /// </summary>
-        /// <param name="new_sock">The new socket that is about to be connected.</param>
-        void OnInit(AsyncSocket new_sock);
+        /// <param name="newSock">The new socket that is about to be connected.</param>
+        void OnInit(AsyncSocket newSock);
 
         /// <summary>
         /// We accepted a socket, and need to get a listener.
         /// If the return value is null, then the socket will be closed, 
         /// and RequestAccept will ALWAYS be called.
         /// </summary>
-        /// <param name="new_sock">The new socket.</param>
+        /// <param name="newSock">The new socket.</param>
         /// <returns>The listener for the *new* socket, as compared to 
         /// the listener for the *listen* socket</returns>
-        ISocketEventListener GetListener(AsyncSocket new_sock);
+        ISocketEventListener GetListener(AsyncSocket newSock);
 
         /// <summary>
         /// A new incoming connection was accepted.
@@ -107,8 +107,8 @@ namespace bedrock.net
         /// An accept socket is about to be bound, or a connect socket is about to connect, 
         /// or an incoming socket just came in.  Use this as an opportunity to 
         /// </summary>
-        /// <param name="new_sock">The new socket that is about to be connected.</param>
-        public virtual void OnInit(AsyncSocket new_sock)
+        /// <param name="newSock">The new socket that is about to be connected.</param>
+        public virtual void OnInit(AsyncSocket newSock)
         {
         }
 
@@ -117,10 +117,10 @@ namespace bedrock.net
         /// If the return value is null, then the socket will be closed, 
         /// and RequestAccept will ALWAYS be called.
         /// </summary>
-        /// <param name="new_sock">The new socket.</param>
+        /// <param name="newSock">The new socket.</param>
         /// <returns>The listener for the *new* socket, as compared to 
         /// the listener for the *listen* socket</returns>
-        public virtual ISocketEventListener GetListener(AsyncSocket new_sock)
+        public virtual ISocketEventListener GetListener(AsyncSocket newSock)
         {
             return this;
         }

@@ -20,7 +20,7 @@
  * information for Cursive Systems, Inc. is available at http://www.cursive.net/.
  *
  * Portions Copyright (c) 2002 Joe Hildebrand.
- * 
+  
  * Acknowledgements
  * 
  * Special thanks to the Jabber Open Source Contributors for their
@@ -186,7 +186,7 @@ namespace jabber.protocol
         protected object GetEnumAttr(string name, Type enumType)
         {
             string a = this.GetAttribute(name);
-            if ((a == null) || (a == ""))
+            if ((a == null) || (a.Length == 0))
                 return -1;
             try
             {
@@ -206,7 +206,7 @@ namespace jabber.protocol
         protected int GetIntAttr(string name)
         {
             string a = this.GetAttribute(name);
-            if ((a == null) || (a == ""))
+            if ((a == null) || (a.Length == 0))
                 return -1;
             try
             {

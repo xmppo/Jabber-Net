@@ -64,10 +64,10 @@ namespace jabber.protocol.accept
         /// performing the digest operation.
         /// </summary>
         /// <param name="secret"></param>
-        /// <param name="StreamID"></param>
-        public void SetAuth(string secret, string StreamID)
+        /// <param name="streamID"></param>
+        public void SetAuth(string secret, string streamID)
         {
-            this.Digest = ShaHash(StreamID, secret);
+            this.Digest = ShaHash(streamID, secret);
         }
 
         /// <summary>

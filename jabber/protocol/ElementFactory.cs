@@ -54,19 +54,19 @@ namespace jabber.protocol
         /// <summary>
         /// Type to create for NS/Name pair
         /// </summary>
-        protected internal Type   Class;
+        protected internal Type  ElementType;
 
         /// <summary>
         /// Create a QnameType
         /// </summary>
-        /// <param name="Name"></param>
-        /// <param name="NS"></param>
-        /// <param name="Class"></param>
-        public QnameType(string Name, string NS, Type Class)
+        /// <param name="name"></param>
+        /// <param name="ns"></param>
+        /// <param name="typ"></param>
+        public QnameType(string name, string ns, Type typ)
         {
-            this.Name  = Name;
-            this.NS    = NS;
-            this.Class = Class;
+            this.Name  = name;
+            this.NS    = ns;
+            this.ElementType = typ;
         }
     }
 
@@ -137,7 +137,7 @@ namespace jabber.protocol
         {
             foreach (QnameType qn in list.Types)
             {
-                this.AddType(qn.Name, qn.NS, qn.Class);
+                this.AddType(qn.Name, qn.NS, qn.ElementType);
             }
         }
         /*

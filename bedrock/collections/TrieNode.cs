@@ -186,7 +186,7 @@ namespace bedrock.collections
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public bool hasChild(byte key)
+        public bool HasChild(byte key)
         {
             return this[key] != null;
         }

@@ -383,16 +383,6 @@ namespace bedrock.collections
         {
             return root.ToString();
         }
-        /// <summary>
-        /// Iterate over a subtree.
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        private IEnumerator SubTree(object key)
-        {
-            Node n = getNode(key);
-            return new TreeEnumerator(this, n);
-        }
         #region hidden
         private static Node first(Node n) 
         {

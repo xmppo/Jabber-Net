@@ -47,7 +47,7 @@ namespace bedrock.collections
         /// .5 will be slightly less variable in run time, 
         /// and take up more space
         /// </summary>
-        public const float DEFAULT_PROBABILITY = 0.25F;
+        private const float DEFAULT_PROBABILITY = 0.25F;
 
         /// <summary>
         /// The maximum depth for searching.
@@ -60,7 +60,7 @@ namespace bedrock.collections
         /// TODO: automatically reset max_level when Length
         /// goes above n.
         /// </summary>
-        public const int DEFAULT_MAX_LEVEL = 6;
+        private const int DEFAULT_MAX_LEVEL = 6;
 
         private float        m_probability;
         private int          m_max_level = DEFAULT_MAX_LEVEL;
@@ -88,11 +88,11 @@ namespace bedrock.collections
         /// Create a skiplist.
         /// </summary>
         /// <param name="probability">Probability of adding a new level</param>
-        /// <param name="max_level">Highest level in the list</param>
-        public SkipList(float probability, int max_level)
+        /// <param name="maxLevel">Highest level in the list</param>
+        public SkipList(float probability, int maxLevel)
         {
             m_probability = probability;
-            m_max_level = max_level;
+            m_max_level = maxLevel;
             m_header = new SkipListNode(1, new Ali(), null);
         }
 

@@ -60,10 +60,10 @@ namespace bedrock.io
         /// <summary>
         /// New PipeStream with the specified AutoClose setting.
         /// </summary>
-        /// <param name="AutoClose"></param>
-        public PipeStream(bool AutoClose) : this()
+        /// <param name="autoClose"></param>
+        public PipeStream(bool autoClose) : this()
         {
-            m_autoClose = AutoClose;
+            m_autoClose = autoClose;
         }
         /// <summary>
         /// When AutoClose is true, Read() always returns 0 when there
