@@ -104,6 +104,20 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "BottomScrollRichText.bmp"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "BottomScrollRichText.cs"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BottomScrollRichText.resx"
+                    DependentUpon = "BottomScrollRichText.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "ClientLogin.cs"
                     SubType = "Form"
                     BuildAction = "Compile"
