@@ -119,7 +119,8 @@ namespace bedrock.net
             m_sock    = cli;
             m_state   = State.Connected;
         }
-*/
+        */
+
         /// <summary>
         /// Called from SocketWatcher.
         /// </summary>
@@ -447,6 +448,7 @@ namespace bedrock.net
             catch (SocketException e)
             {
                 AsyncClose();
+
                 // closed in middle of read
                 if (e.ErrorCode != 64)
                 {
@@ -472,7 +474,7 @@ namespace bedrock.net
 
                 lock (m_state_lock)
                 {
-                    if ((m_listener.OnRead(this, ret)) && (m_state != State.Closing))
+                    if ((m_listener.OnRead(this, ret)) && (m_state == State.Connected))
                     {
                         RequestRead();
                     }
@@ -480,13 +482,7 @@ namespace bedrock.net
             }
             else
             {
-                lock (m_state_lock)
-                {
-                    if (m_state != State.Closing)
-                    {
-                        AsyncClose();
-                    }
-                }
+                AsyncClose();
             }
         }
         /// <summary>
@@ -529,7 +525,8 @@ namespace bedrock.net
                 catch (SocketException e)
                 {
                     Close();
-                    // closed in middle of read
+
+                    // closed in middle of write
                     if (e.ErrorCode != 10054)
                     {
                         FireError(e);
@@ -555,9 +552,14 @@ namespace bedrock.net
             {
                 count = m_sock.EndSend(ar);
             }
+            catch (SocketException)
+            {
+                AsyncClose();
+                return;
+            }
             catch (ObjectDisposedException)
             {
-                //socket is closed - this is a pending write failing
+                AsyncClose();
                 return;
             }
             catch (Exception e)
@@ -590,34 +592,45 @@ namespace bedrock.net
                     m_timer = null;
                 }
 
+                /*
                 switch (m_state)
                 {
-                    case State.Closed:
-                        throw new InvalidOperationException("Socket already closed");
-                    case State.Closing:
-                        throw new InvalidOperationException("Socket already closing");
+                case State.Closed:
+                    throw new InvalidOperationException("Socket already closed");
+                case State.Closing:
+                    throw new InvalidOperationException("Socket already closing");
+                }
+                */
+
+                State oldState = m_state;
+
+                if (m_sock.Connected)
+                {
+                    m_state = State.Closing;
+                    try
+                    {
+                        m_sock.Shutdown(SocketShutdown.Both);
+                    }
+                    catch {}
+                    try
+                    {
+                        m_sock.Close();
+                    }
+                    catch {}
+                    
                 }
 
-                m_state = State.Closing;
-            }
+                if (oldState <= State.Connected)
+                    m_listener.OnClose(this);
 
-            m_listener.OnClose(this);
-
-            try
-            {
-                m_sock.Shutdown(SocketShutdown.Both);
+                m_watcher.CleanupSocket(this);
+                m_state = State.Closed;
             }
-            catch {}
-            try
-            {
-                m_sock.Close();
-            }
-            catch {}
-            m_watcher.CleanupSocket(this);
         }
 
+
         /// <summary>
-        /// Close, called from async places, so that Errors get fire, appropriately.
+        /// Close, called from async places, so that Errors get fired, appropriately.
         /// </summary>
         protected void AsyncClose()
         {
@@ -655,13 +668,6 @@ namespace bedrock.net
         /// <returns></returns>
         public override int GetHashCode()
         {
-            /*
-            if (m_sock == null)
-            {
-                throw new InvalidOperationException("Must set socket first");
-            }
-            return m_sock.GetHashCode();
-            */
             return m_hashcode;
         }
     }

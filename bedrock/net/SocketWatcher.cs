@@ -168,8 +168,7 @@ namespace bedrock.net
                 
                 if (m_pending != null)
                 {
-                    if (!object.ReferenceEquals(m_pending, s))
-                        m_pending.RequestAccept();
+                    m_pending.RequestAccept();
                     m_pending = null;
                 }
             }
@@ -184,6 +183,7 @@ namespace bedrock.net
         {
             lock (m_lock)
             {
+                Debug.Assert(m_pending == null, "you currently can't have more than one listen socket in a socketwatcher at a time");
                 m_pending = s;
             }
         }
