@@ -36,7 +36,7 @@ namespace jabber.protocol.client
 	/// </summary>
 	public class ProtocolException : Exception
 	{
-		private int m_code;
+		private ErrorCode m_code;
 		private string m_message;
 
 		/// <summary>
@@ -54,7 +54,7 @@ namespace jabber.protocol.client
 		/// <summary>
 		/// The Jabber error number
 		/// </summary>
-		public int Code
+		public ErrorCode Code
 		{
 			get { return m_code; }
 		}

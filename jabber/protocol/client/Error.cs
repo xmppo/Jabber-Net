@@ -152,9 +152,18 @@ namespace jabber.protocol.client
         }
 
         /// <summary>
-        /// The error code
+        /// The error code, as an enumeration.
         /// </summary>
-        public int Code
+        public ErrorCode Code 
+        {
+            get { return (ErrorCode) IntCode; }
+            set { IntCode = (int) value; }
+        }
+
+        /// <summary>
+        /// The error code, as an integer.
+        /// </summary>
+        public int IntCode
         {
             get { return GetIntAttr("code"); } 
             set { this.SetAttribute("code", value.ToString()); }
