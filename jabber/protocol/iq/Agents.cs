@@ -171,7 +171,7 @@ namespace jabber.protocol.iq
         /// </summary>
         public bool Transport 
         {
-            get { return GetElem("transport") != null; }
+            get { return this["transport"] != null; }
             set 
             { 
                 if (value)
@@ -190,7 +190,7 @@ namespace jabber.protocol.iq
         /// </summary>
         public bool Groupchat 
         {
-            get { return GetElem("groupchat") != null; }
+            get { return this["groupchat"] != null; }
             set 
             { 
                 if (value)
@@ -218,7 +218,7 @@ namespace jabber.protocol.iq
         /// </summary>
         public bool Register 
         {
-            get { return GetElem("register") != null; }
+            get { return this["register"] != null; }
             set 
             { 
                 if (value)
@@ -237,7 +237,7 @@ namespace jabber.protocol.iq
         /// </summary>
         public bool Search 
         {
-            get { return GetElem("search") != null; }
+            get { return this["search"] != null; }
             set 
             { 
                 if (value)
