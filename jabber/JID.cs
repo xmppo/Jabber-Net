@@ -355,6 +355,7 @@ namespace jabber
             }
             set
             {
+                parse();
                 m_user = value;
                 m_JID = build(m_user, m_server, m_resource);
             }
@@ -372,6 +373,7 @@ namespace jabber
             }
             set 
             {
+                parse();
                 m_server = value;
                 m_JID = build(m_user, m_server, m_resource);
             }
@@ -389,6 +391,7 @@ namespace jabber
             }
             set 
             {
+                parse();
                 m_resource = value;
                 m_JID = build(m_user, m_server, m_resource);
             }
