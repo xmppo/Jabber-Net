@@ -364,11 +364,12 @@ namespace jabber.protocol
         {
             s_counter = 0;
         }
+
         /// <summary>
         /// Increment the ID counter, and get the new value.
         /// </summary>
         /// <returns>The new ID.</returns>
-        protected static string NextID()
+        public static string NextID()
         {
             System.Threading.Interlocked.Increment(ref s_counter);
             return "JN_" + s_counter.ToString();
