@@ -27,6 +27,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "stringprep", "stringprep\st
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleClient", "ConsoleClient\ConsoleClient.csproj", "{049FB855-89C4-4539-9E5E-0996834D6A0E}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -60,6 +64,10 @@ Global
 		{060A98C7-BF17-4685-A528-F84C0D8D89AE}.Debug.Build.0 = Debug|.NET
 		{060A98C7-BF17-4685-A528-F84C0D8D89AE}.Release.ActiveCfg = Release|.NET
 		{060A98C7-BF17-4685-A528-F84C0D8D89AE}.Release.Build.0 = Release|.NET
+		{049FB855-89C4-4539-9E5E-0996834D6A0E}.Debug.ActiveCfg = Debug|.NET
+		{049FB855-89C4-4539-9E5E-0996834D6A0E}.Debug.Build.0 = Debug|.NET
+		{049FB855-89C4-4539-9E5E-0996834D6A0E}.Release.ActiveCfg = Release|.NET
+		{049FB855-89C4-4539-9E5E-0996834D6A0E}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
