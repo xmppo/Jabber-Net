@@ -158,19 +158,19 @@ namespace jabber.client
 
             foreach (Item i in r.GetItems())
             {
-				lock (this)
-				{
-					if (i.Subscription == Subscription.remove)
-					{
-						m_items.Remove(i.JID);
-					}
-					else
-					{
+                lock (this)
+                {
+                    if (i.Subscription == Subscription.remove)
+                    {
+                        m_items.Remove(i.JID);
+                    }
+                    else
+                    {
                         if (m_items.Contains(i.JID))
                             m_items.Remove(i.JID);
-						m_items[i.JID] = i;
-					}
-				}
+                        m_items[i.JID] = i;
+                    }
+                }
                 if (OnRosterItem != null)
                     OnRosterItem(this, i);
             }

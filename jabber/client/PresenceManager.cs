@@ -82,15 +82,15 @@ namespace jabber.client
             {
                 m_client = value;
                 m_client.OnPresence += new PresenceHandler(GotPresence);
-				m_client.OnDisconnect += new bedrock.ObjectHandler(GotDisconnect);
+                m_client.OnDisconnect += new bedrock.ObjectHandler(GotDisconnect);
             }
         }
 
-		private void GotDisconnect(object sender)
-		{
-			lock(this)
-				m_items.Clear();
-		}
+        private void GotDisconnect(object sender)
+        {
+            lock(this)
+                m_items.Clear();
+        }
 
         /// <summary>
         /// Add a new available or unavailable presence packet to the database.
@@ -109,12 +109,12 @@ namespace jabber.client
                 return;
 
             JID f = p.From;
-			lock (this)
-			{
-				UserPresenceManager upm = (UserPresenceManager)m_items[f.Bare];
+            lock (this)
+            {
+                UserPresenceManager upm = (UserPresenceManager)m_items[f.Bare];
 
-				if (t == PresenceType.available) 
-				{
+                if (t == PresenceType.available) 
+                {
                     if (upm == null)
                     {
                         upm = new UserPresenceManager();
@@ -122,34 +122,34 @@ namespace jabber.client
                     }
 
                     upm.AddPresence(p);
-				}
-				else
-				{
-					if (upm != null)
-					{
-						upm.RemovePresence(p);
-						if (upm.Count == 0)
-						{
-							m_items.Remove(f.Bare);
-						}
-					}
-				}
-			}
+                }
+                else
+                {
+                    if (upm != null)
+                    {
+                        upm.RemovePresence(p);
+                        if (upm.Count == 0)
+                        {
+                            m_items.Remove(f.Bare);
+                        }
+                    }
+                }
+            }
         }
 
-		/// <summary>
-		/// Is this user online with any resource?  This performs better than retrieving 
-		/// the particular associated presence packet.
-		/// </summary>
-		/// <param name="jid">The JID to look up.</param>
-		/// <returns></returns>
-		public bool IsAvailable(JID jid)
-		{
-			lock (this)
-			{
-				return (m_items[jid.Bare] != null);
-			}
-		}
+        /// <summary>
+        /// Is this user online with any resource?  This performs better than retrieving 
+        /// the particular associated presence packet.
+        /// </summary>
+        /// <param name="jid">The JID to look up.</param>
+        /// <returns></returns>
+        public bool IsAvailable(JID jid)
+        {
+            lock (this)
+            {
+                return (m_items[jid.Bare] != null);
+            }
+        }
 
         /// <summary>
         /// If given a bare JID, get the primary presence.
@@ -159,13 +159,13 @@ namespace jabber.client
         {
             get
             {
-				lock (this)
-				{
-					UserPresenceManager upm = (UserPresenceManager)m_items[jid.Bare];
-					if (upm == null)
-						return null;
+                lock (this)
+                {
+                    UserPresenceManager upm = (UserPresenceManager)m_items[jid.Bare];
+                    if (upm == null)
+                        return null;
                     return upm[jid.Resource];
-				}
+                }
             }
         }
 

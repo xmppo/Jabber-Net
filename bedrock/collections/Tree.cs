@@ -862,7 +862,5 @@ namespace bedrock.collections
             }
         }
         #endregion
-
-
     }
 }

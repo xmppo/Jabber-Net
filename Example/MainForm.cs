@@ -1,3 +1,32 @@
+/* --------------------------------------------------------------------------
+ *
+ * License
+ *
+ * The contents of this file are subject to the Jabber Open Source License
+ * Version 1.0 (the "License").  You may not copy or use this file, in either
+ * source code or executable form, except in compliance with the License.  You
+ * may obtain a copy of the License at http://www.jabber.com/license/ or at
+ * http://www.opensource.org/.  
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied.  See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * Copyrights
+ * 
+ * Portions created by or assigned to Cursive Systems, Inc. are 
+ * Copyright (c) 2002 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * information for Cursive Systems, Inc. is available at http://www.cursive.net/.
+ *
+ * Portions Copyright (c) 2002 Joe Hildebrand.
+ * 
+ * Acknowledgements
+ * 
+ * Special thanks to the Jabber Open Source Contributors for their
+ * suggestions and support of Jabber.
+ * 
+ * --------------------------------------------------------------------------*/
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -13,11 +42,11 @@ using jabber.protocol.iq;
 
 namespace Example
 {
-	/// <summary>
-	/// Summary description for MainForm.
-	/// </summary>
-	public class MainForm : System.Windows.Forms.Form
-	{
+    /// <summary>
+    /// Summary description for MainForm.
+    /// </summary>
+    public class MainForm : System.Windows.Forms.Form
+    {
         private System.Windows.Forms.StatusBar sb;
         private jabber.client.JabberClient jc;
         private jabber.client.RosterManager rm;
@@ -37,40 +66,40 @@ namespace Example
         private System.Windows.Forms.MenuItem menuItem1;
         private System.ComponentModel.IContainer components;
 
-		public MainForm()
-		{
-			//
-			// Required for Windows Form Designer support
-			//
-			InitializeComponent();
+        public MainForm()
+        {
+            //
+            // Required for Windows Form Designer support
+            //
+            InitializeComponent();
 
-			//
-			// TODO: Add any constructor code after InitializeComponent call
-			//
-		}
+            //
+            // TODO: Add any constructor code after InitializeComponent call
+            //
+        }
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if (components != null) 
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose( bool disposing )
+        {
+            if( disposing )
+            {
+                if (components != null) 
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose( disposing );
+        }
 
-		#region Windows Form Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+                #region Windows Form Designer generated code
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             this.components = new System.ComponentModel.Container();
             System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(MainForm));
             this.sb = new System.Windows.Forms.StatusBar();
@@ -261,16 +290,16 @@ namespace Example
             this.ResumeLayout(false);
 
         }
-		#endregion
+                #endregion
 
-		/// <summary>
-		/// The MainForm entry point for the application.
-		/// </summary>
-		[STAThread]
-		static void Main() 
-		{
-			Application.Run(new MainForm());
-		}
+        /// <summary>
+        /// The MainForm entry point for the application.
+        /// </summary>
+        [STAThread]
+        static void Main() 
+        {
+            Application.Run(new MainForm());
+        }
 
         private void mnuExit_Click(object sender, System.EventArgs e)
         {
@@ -466,7 +495,7 @@ namespace Example
             if (jc.IsAuthenticated)
                 jc.Close();
         }
-	}
+    }
 
     public class RosterNode : TreeNode
     {

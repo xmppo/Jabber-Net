@@ -98,14 +98,14 @@ namespace jabber.client
             m_tracker = new IQTracker(this);
         }
 
-		/// <summary>
-		/// Create a new JabberClient, reusing an existing SocketWatcher.
-		/// </summary>
-		/// <param name="watcher">SocketWatcher to use.</param>
-		public JabberClient(SocketWatcher watcher) : base(watcher)
-		{
-			m_tracker = new IQTracker(this);
-		}
+        /// <summary>
+        /// Create a new JabberClient, reusing an existing SocketWatcher.
+        /// </summary>
+        /// <param name="watcher">SocketWatcher to use.</param>
+        public JabberClient(SocketWatcher watcher) : base(watcher)
+        {
+            m_tracker = new IQTracker(this);
+        }
 
         /// <summary>
         /// We received a presence packet.
@@ -199,9 +199,9 @@ namespace jabber.client
         /// server doesn't support digest and PlaintextAuth is true.
         /// </summary>
         [Description("The password to use for connecting.  " +
-                     "This may be sent across the wire plaintext, " +
-                     "if the server doesn't support digest, " +
-                     "and PlaintextAuth is true")]
+             "This may be sent across the wire plaintext, " +
+             "if the server doesn't support digest, " +
+             "and PlaintextAuth is true")]
         [Category("Jabber")]
         public string Password
         {
@@ -274,7 +274,7 @@ namespace jabber.client
         /// Used to identify a unique connection.
         /// </summary>
         [Description("The connecting resource.  " + 
-                     "Used to identify a unique connection.")]
+             "Used to identify a unique connection.")]
         [DefaultValue("Jabber.Net")]
         [Category("Jabber")]
         public string Resource
@@ -330,7 +330,7 @@ namespace jabber.client
                         GetRoster();
                     if (m_autoPres)
                         Presence(PresenceType.available,
-                                 "online", null, m_priority);
+                            "online", null, m_priority);
                 }
             }
         }
@@ -401,28 +401,28 @@ namespace jabber.client
         /// <param name="priority">How to prioritize this connection.
         /// Higher number mean higher priority.  0 minumum.</param>
         public void Presence(PresenceType t,
-                             string status,
-                             string show,
-                             int priority)
+            string status,
+            string show,
+            int priority)
         {
- 			if (IsAuthenticated) 
- 			{
- 				Presence p = new Presence(Document);
- 				if (status != null)
- 					p.Status = status;
- 				if (t != PresenceType.available)
- 				{
- 					p.Type = t;
- 				}
- 				if (show != null)
- 					p.Show = show;
- 				p.Priority = priority.ToString();
- 				Write(p);
- 			}
- 			else
- 			{
- 				throw new InvalidOperationException("Client must be authenticated before sending presence.");
- 			}
+            if (IsAuthenticated) 
+            {
+                Presence p = new Presence(Document);
+                if (status != null)
+                    p.Status = status;
+                if (t != PresenceType.available)
+                {
+                    p.Type = t;
+                }
+                if (show != null)
+                    p.Show = show;
+                p.Priority = priority.ToString();
+                Write(p);
+            }
+            else
+            {
+                throw new InvalidOperationException("Client must be authenticated before sending presence.");
+            }
         }
 
         /// <summary>
@@ -430,16 +430,16 @@ namespace jabber.client
         /// </summary>
         public void GetRoster()
         {
- 			if (IsAuthenticated) 
- 			{
- 				RosterIQ riq = new RosterIQ(Document);
- 				riq.Type = IQType.get;
- 				Write(riq);
- 			}
- 			else
- 			{
- 				throw new InvalidOperationException("Client must be authenticated before getting roster.");
- 			}
+            if (IsAuthenticated) 
+            {
+                RosterIQ riq = new RosterIQ(Document);
+                riq.Type = IQType.get;
+                Write(riq);
+            }
+            else
+            {
+                throw new InvalidOperationException("Client must be authenticated before getting roster.");
+            }
         }
         
         /// <summary>
@@ -523,7 +523,7 @@ namespace jabber.client
         /// <param name="sender"></param>
         /// <param name="tag"></param>
         protected override void OnDocumentStart(object sender,
-                                                System.Xml.XmlElement tag)
+            System.Xml.XmlElement tag)
         {
             base.OnDocumentStart(sender, tag);
 

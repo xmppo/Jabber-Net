@@ -181,8 +181,8 @@ namespace jabber
             if ((server == null) || (server == "")) throw new JIDFormatException(m_JID);
             if (server.IndexOf('@') != -1) throw new JIDFormatException(m_JID);
             if (server.IndexOf('/') != -1) throw new JIDFormatException(m_JID);
-			if (resource == "") // null is ok, but "" is not.
-				throw new JIDFormatException(m_JID);
+            if (resource == "") // null is ok, but "" is not.
+                throw new JIDFormatException(m_JID);
 
             m_user = (user == null) ? null : user.ToLower();
             m_server = (server == null) ? null : server.ToLower();

@@ -53,12 +53,12 @@ namespace bedrock.collections
         SkipList
     }
 
-	/// <summary>
-	/// Set backed into a Tree.
-	/// </summary>
+    /// <summary>
+    /// Set backed into a Tree.
+    /// </summary>
     [RCS(@"$Header$")]
     public class Set : ISet
-	{
+    {
         private static readonly object s_nothing = new object();
 
         private IDictionary m_dict;
@@ -66,10 +66,10 @@ namespace bedrock.collections
         /// <summary>
         /// Create a new, empty Set backed into a hash table.
         /// </summary>
-		public Set()
-		{
+        public Set()
+        {
             m_dict = new Hashtable();
-		}
+        }
 
         /// <summary>
         /// Create a set with the given back-end implementation.
@@ -79,17 +79,17 @@ namespace bedrock.collections
         {
             switch (impl)
             {
-            case SetImplementation.Hashtable:
-                m_dict = new Hashtable();
-                break;
-            case SetImplementation.Tree:
-                m_dict = new Tree();
-                break;
-            case SetImplementation.SkipList:
-                m_dict = new SkipList();
-                break;
-            default:
-                throw new NotImplementedException("Unknown SetImplementation");
+                case SetImplementation.Hashtable:
+                    m_dict = new Hashtable();
+                    break;
+                case SetImplementation.Tree:
+                    m_dict = new Tree();
+                    break;
+                case SetImplementation.SkipList:
+                    m_dict = new SkipList();
+                    break;
+                default:
+                    throw new NotImplementedException("Unknown SetImplementation");
             }
         }
 
@@ -233,5 +233,5 @@ namespace bedrock.collections
             }
             #endregion
         }
-	}
+    }
 }

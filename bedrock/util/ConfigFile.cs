@@ -69,7 +69,7 @@ namespace bedrock.util
         {
             // Don't call Tracer from here!
             m_doc = new XmlDocument();
-			string d = Path.GetDirectoryName(System.Environment.GetCommandLineArgs()[0]);
+                        string d = Path.GetDirectoryName(System.Environment.GetCommandLineArgs()[0]);
             DirectoryInfo p;
             while (d != null)
             {

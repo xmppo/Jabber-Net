@@ -33,12 +33,12 @@ using bedrock.util;
 
 namespace bedrock.collections
 {
-	/// <summary>
-	/// Set operations.
-	/// </summary>
-	[RCS(@"$Header$")]
+    /// <summary>
+    /// Set operations.
+    /// </summary>
+    [RCS(@"$Header$")]
     public interface ISet : ICollection
-	{
+    {
         /// <summary>
         /// Add an object to the set
         /// </summary>
@@ -75,5 +75,5 @@ namespace bedrock.collections
         /// are in this list *and* the other set.
         /// </summary>
         ISet Intersection(ISet other);
-	}
+    }
 }

@@ -1,3 +1,32 @@
+/* --------------------------------------------------------------------------
+ *
+ * License
+ *
+ * The contents of this file are subject to the Jabber Open Source License
+ * Version 1.0 (the "License").  You may not copy or use this file, in either
+ * source code or executable form, except in compliance with the License.  You
+ * may obtain a copy of the License at http://www.jabber.com/license/ or at
+ * http://www.opensource.org/.  
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied.  See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * Copyrights
+ * 
+ * Portions created by or assigned to Cursive Systems, Inc. are 
+ * Copyright (c) 2002 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * information for Cursive Systems, Inc. is available at http://www.cursive.net/.
+ *
+ * Portions Copyright (c) 2002 Joe Hildebrand.
+ * 
+ * Acknowledgements
+ * 
+ * Special thanks to the Jabber Open Source Contributors for their
+ * suggestions and support of Jabber.
+ * 
+ * --------------------------------------------------------------------------*/
 using System;
 using System.Drawing;
 using System.Collections;
@@ -6,11 +35,11 @@ using System.Windows.Forms;
 
 namespace Example
 {
-	/// <summary>
-	/// Summary description for SendMessage.
-	/// </summary>
-	public class SendMessage : System.Windows.Forms.Form
-	{
+    /// <summary>
+    /// Summary description for SendMessage.
+    /// </summary>
+    public class SendMessage : System.Windows.Forms.Form
+    {
         private jabber.client.JabberClient m_jc;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label1;
@@ -20,48 +49,48 @@ namespace Example
         private System.Windows.Forms.Button btnSend;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.TextBox txtBody;
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.Container components = null;
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.Container components = null;
 
         public SendMessage(jabber.client.JabberClient jc, string toJid) : this(jc)
         {
             txtTo.Text = toJid;
         }
 
-		public SendMessage(jabber.client.JabberClient jc)
-		{
-			//
-			// Required for Windows Form Designer support
-			//
-			InitializeComponent();
+        public SendMessage(jabber.client.JabberClient jc)
+        {
+            //
+            // Required for Windows Form Designer support
+            //
+            InitializeComponent();
 
             m_jc = jc;
-		}
+        }
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if(components != null)
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose( bool disposing )
+        {
+            if( disposing )
+            {
+                if(components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose( disposing );
+        }
 
-		#region Windows Form Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+                #region Windows Form Designer generated code
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(SendMessage));
             this.panel1 = new System.Windows.Forms.Panel();
             this.txtBody = new System.Windows.Forms.TextBox();
@@ -172,7 +201,7 @@ namespace Example
             this.ResumeLayout(false);
 
         }
-		#endregion
+                #endregion
 
         private void btnSend_Click(object sender, System.EventArgs e)
         {
@@ -189,5 +218,5 @@ namespace Example
         {
             this.Close();
         }
-	}
+    }
 }
