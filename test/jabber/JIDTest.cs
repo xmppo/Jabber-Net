@@ -130,19 +130,39 @@ namespace test.jabber
             Assertion.AssertEquals("boo", j.Server);
             Assertion.AssertEquals("/foo", j.Resource);
         }
-        public void Test_Parse_12()
+        public void Test_EmptyResource()
         {
-            JID j = new JID("boo/");
-            Assertion.AssertEquals(null, j.User);
-            Assertion.AssertEquals("boo", j.Server);
-            Assertion.AssertEquals("", j.Resource);
+			try
+			{
+				JID j = new JID("boo/");
+				string u = j.User;
+				Assertion.Assert(false);
+			}
+			catch (JIDFormatException)
+			{
+				Assertion.Assert(true);
+			}
+			catch (Exception)
+			{
+				Assertion.Assert(false);
+			}
         }
-        public void Test_Parse_13()
+        public void Test_EmptyResourceUser()
         {
-            JID j = new JID("boo@foo/");
-            Assertion.AssertEquals("boo", j.User);
-            Assertion.AssertEquals("foo", j.Server);
-            Assertion.AssertEquals("", j.Resource);
+			try
+			{
+				JID j = new JID("boo@foo/");
+				string u = j.User;
+				Assertion.Assert(false);
+			}
+			catch (JIDFormatException)
+			{
+				Assertion.Assert(true);
+			}
+			catch (Exception)
+			{
+				Assertion.Assert(false);
+			}
         }
 
         public void Test_NoHost()
@@ -201,9 +221,6 @@ namespace test.jabber
             JID j = new JID("foo@bar/baz");
             Assertion.AssertEquals(0, j.CompareTo(j));
             Assertion.AssertEquals(0, j.CompareTo(new JID("foo@bar/baz")));
-            j = new JID("foo@bar/");
-            Assertion.AssertEquals(0, j.CompareTo(j));
-            Assertion.AssertEquals(0, j.CompareTo(new JID("foo@bar/")));
             j = new JID("foo@bar");
             Assertion.AssertEquals(0, j.CompareTo(j));
             Assertion.AssertEquals(0, j.CompareTo(new JID("foo@bar")));
@@ -233,10 +250,8 @@ namespace test.jabber
             Assertion.AssertEquals(-1, j.CompareTo(new JID("fop@bar/baz")));
             Assertion.AssertEquals(-1, j.CompareTo(new JID("fop@bar")));
             Assertion.AssertEquals(-1, j.CompareTo(new JID("foo@bar/baz")));
-            Assertion.AssertEquals(-1, j.CompareTo(new JID("foo@bar/")));
             j = new JID("bar");
             Assertion.AssertEquals(-1, j.CompareTo(new JID("foo@bar/baz")));
-            Assertion.AssertEquals(-1, j.CompareTo(new JID("foo@bar/")));
             Assertion.AssertEquals(-1, j.CompareTo(new JID("foo@bar")));
             Assertion.AssertEquals(-1, j.CompareTo(new JID("bas")));
             Assertion.AssertEquals(-1, j.CompareTo(new JID("bas/baz")));
@@ -250,13 +265,6 @@ namespace test.jabber
             Assertion.AssertEquals(1, j.CompareTo(new JID("foo@bap/baz")));
             Assertion.AssertEquals(1, j.CompareTo(new JID("fon@bar/baz")));
             Assertion.AssertEquals(1, j.CompareTo(new JID("foo@bar/bay")));
-            Assertion.AssertEquals(1, j.CompareTo(new JID("foo@bar/")));
-            Assertion.AssertEquals(1, j.CompareTo(new JID("foo@bar")));
-            Assertion.AssertEquals(1, j.CompareTo(new JID("bar")));
-            Assertion.AssertEquals(1, j.CompareTo(new JID("bar/baz")));
-            j = new JID("foo@bar/");
-            Assertion.AssertEquals(1, j.CompareTo(new JID("foo@bap/baz")));
-            Assertion.AssertEquals(1, j.CompareTo(new JID("fon@bar/baz")));
             Assertion.AssertEquals(1, j.CompareTo(new JID("foo@bar")));
             Assertion.AssertEquals(1, j.CompareTo(new JID("bar")));
             Assertion.AssertEquals(1, j.CompareTo(new JID("bar/baz")));

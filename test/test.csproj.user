@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP>
         <Build>
-            <Settings ReferencePath = "C:\src\jabber-net-new\test\nunit\;C:\src\jabber-net\test\nunit\" >
+            <Settings ReferencePath = "C:\src\jabber-net-new\test\nunit\;C:\src\jabber-net\test\nunit\;D:\src\jabber-net\test\nunit\" >
                 <Config
                     Name = "Debug"
                     EnableASPDebugging = "false"
@@ -13,7 +13,7 @@
                     StartAction = "Program"
                     StartArguments = "/assembly:test.dll"
                     StartPage = ""
-                    StartProgram = "C:\src\jabber-net\test\nunit\nunit-gui.exe"
+                    StartProgram = "D:\src\jabber-net\test\nunit\nunit-gui.exe"
                     StartURL = ""
                     StartWorkingDirectory = ""
                     StartWithIE = "true"

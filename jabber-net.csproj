@@ -239,6 +239,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "jabber\client\RosterManager.resx"
+                    DependentUpon = "RosterManager.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "jabber\connection\IQTracker.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
