@@ -57,15 +57,20 @@
 	  </references>
 	</csc>
   </target>
+  <target name="make-muzzle" depends="init,compile">
+	<nant buildfile="muzzle\muzzle.build"/>
+  </target>
   <target name="make-test" depends="init,compile">
 	<nant buildfile="test\test.build"/>
   </target>
-  <target name="test" depends="init,compile,make-test"/>
+  <target name="test" depends="init,compile,make-muzzle,make-test"/>
   <target name="clean" depends="init" description="Delete output of a build">
 	<delete file="${dir.output}\${project.output}" 
 	        verbose="true" failonerror="false"/>
 	<delete file="${dir.output}\${project.FormalName}.pdb" 
 	        verbose="true" failonerror="false"/>
 	<delete file="${doc}" verbose="true" failonerror="false"/>
+	<nant buildfile="muzzle\muzzle.build" target="clean"/>
+	<nant buildfile="test\test.build" target="clean"/>
   </target>
 </project>
