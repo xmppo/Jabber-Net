@@ -167,7 +167,7 @@ namespace bedrock.net
         /// <param name="callback">Called when resolution complete.</param>
         public void Resolve(AddressResolved callback)
         {
-            if ((m_ip != null) && (m_ip != IPAddress.Any))
+            if ((m_ip != null) && (m_ip != IPAddress.Any) && (m_ip != IPAddress.IPv6Any))
             {
                 callback(this);
             }
@@ -181,7 +181,7 @@ namespace bedrock.net
         /// </summary>
         public void Resolve()
         {
-            if ((m_ip != null) && (m_ip != IPAddress.Any))
+            if ((m_ip != null) && (m_ip != IPAddress.Any) && (m_ip != IPAddress.IPv6Any))
             {
                 return;
             }
@@ -211,8 +211,9 @@ namespace bedrock.net
                     m_ip = ent.AddressList[0];
                 }
             }
-            catch (SocketException)
+            catch (SocketException e)
             {
+                Debug.WriteLine(e.ToString());
                 m_ip = null;
             }
             AddressResolved callback = (AddressResolved) ar.AsyncState;

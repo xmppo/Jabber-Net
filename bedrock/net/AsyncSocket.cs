@@ -312,16 +312,7 @@ namespace bedrock.net
         /// <param name="addr"></param>
         public override void Connect(Address addr)
         {
-            m_sock = new Socket(AddressFamily.InterNetwork, 
-                                SocketType.Stream, 
-                                ProtocolType.Tcp);
-            // well, of course this isn't right.
-            m_sock.SetSocketOption(SocketOptionLevel.Socket, 
-                                   SocketOptionName.ReceiveBuffer, 
-                                   4 * m_buf.Length);
-            m_sock.Blocking = false;
             m_state = State.Resolving;
-            m_watcher.RegisterSocket(this);
             addr.Resolve(new AddressResolved(OnConnectResolved));
         }
 
@@ -338,16 +329,36 @@ namespace bedrock.net
                     // closed in the mean time.   Probably not an error.
                     return;
                 }
-                if ((addr == null) || (addr.IP == null))
+                if ((addr == null) || (addr.IP == null) || (addr.Endpoint == null))
                 {
                     FireError(new AsyncSocketConnectionException("Bad host: " + addr.Hostname));
                 }
-                else
-                {
-                    m_addr = addr;
-                    m_state = State.Connecting;
-                    m_sock.BeginConnect(m_addr.Endpoint, new AsyncCallback(ExecuteConnect), null);
-                }
+
+
+                m_watcher.RegisterSocket(this);
+
+                m_addr = addr;
+                m_state = State.Connecting;
+
+
+				if (Socket.SupportsIPv6 && (m_addr.Endpoint.AddressFamily == AddressFamily.InterNetworkV6))
+				{
+					m_sock = new Socket(AddressFamily.InterNetworkV6, 
+						SocketType.Stream, 
+						ProtocolType.Tcp);
+				}
+				else
+				{
+					m_sock = new Socket(AddressFamily.InterNetwork, 
+						SocketType.Stream, 
+						ProtocolType.Tcp);
+				}
+				// well, of course this isn't right.
+				m_sock.SetSocketOption(SocketOptionLevel.Socket, 
+					SocketOptionName.ReceiveBuffer, 
+					4 * m_buf.Length);
+				m_sock.Blocking = false;
+				m_sock.BeginConnect(m_addr.Endpoint, new AsyncCallback(ExecuteConnect), null);
             }
         }
         /// <summary>
