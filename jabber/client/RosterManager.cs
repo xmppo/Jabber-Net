@@ -104,6 +104,21 @@ namespace jabber.client
         public event RosterItemHandler OnRosterItem;
 
         /// <summary>
+        /// Fired when a roster result starts, before any OnRosterItem events fire.
+        /// This will not fire for type='set', which is probably what you want.
+        /// </summary>
+        [Description("Roster result about to start being processed.")]
+        [Category("Jabber")]        
+        public event bedrock.ObjectHandler OnRosterBegin;
+
+        /// <summary>
+        /// Fired when a roster result is completed being processed.
+        /// </summary>
+        [Description("Roster result finished being processed.")]
+        [Category("Jabber")]        
+        public event bedrock.ObjectHandler OnRosterEnd;
+
+        /// <summary>
         /// Get the currently-known version of a roster item for this jid.
         /// </summary>
         public Item this[JID jid]
@@ -129,6 +144,9 @@ namespace jabber.client
                 return;
 
             Roster r = (Roster) iq.Query;
+            if ((iq.Type == IQType.result) && (OnRosterBegin != null))
+                OnRosterBegin(this);
+
             foreach (Item i in r.GetItems())
             {
 				lock (this)
@@ -145,6 +163,9 @@ namespace jabber.client
                 if (OnRosterItem != null)
                     OnRosterItem(this, i);
             }
+
+            if ((iq.Type == IQType.result) && (OnRosterEnd != null))
+                OnRosterEnd(this);
         }
 
 
