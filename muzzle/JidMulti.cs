@@ -50,6 +50,9 @@ namespace muzzle
         private System.Windows.Forms.TextBox txtEntry;
         private System.ComponentModel.IContainer components;
 
+        /// <summary>
+        /// Create a JidMulti control
+        /// </summary>
 		public JidMulti()
 		{
 			// This call is required by the Windows.Forms Form Designer.
@@ -74,11 +77,19 @@ namespace muzzle
 			base.Dispose( disposing );
 		}
 
+        /// <summary>
+        /// Add a range of JIDs or strings to the list.
+        /// </summary>
+        /// <param name="range"></param>
         public void AddRange(object[] range)
         {
             lstJID.Items.AddRange(range);
         }
 
+        /// <summary>
+        /// Get the list of JIDs in the control currently.
+        /// </summary>
+        /// <returns></returns>
         public string[] GetValues()
         {
             string[] vals = new string[lstJID.Items.Count];
