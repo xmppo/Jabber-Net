@@ -88,6 +88,16 @@ namespace jabber.protocol.client
             }
         }
 
+        private void NormalizeHtml(XmlElement body, string html)
+        {
+            XmlDocument d = new XmlDocument();
+            d.LoadXml("<html xmlns='" + URI.XHTML + "'>" + html + "</html>");
+            foreach (XmlNode node in d.DocumentElement.ChildNodes)
+            {
+                body.AppendChild(this.OwnerDocument.ImportNode(node, true));
+            }
+        }
+
         /// <summary>
         /// On set, creates both an html element, and a body element, which will
         /// have the de-html'd version of the html element.
@@ -96,21 +106,28 @@ namespace jabber.protocol.client
         {
             get
             { 
-                //FIXME: return body contents
-                return GetElem("html"); 
+                // Thanks, Mr. Postel.
+                XmlElement h = this["html"];
+                if (h == null)
+                    return "";
+                XmlElement b = h["body"];
+                if (b == null)
+                    return "";
+                string xml = b.InnerXml;
+                // HACK: yeah, yeah, I know.
+                return xml.Replace(" xmlns=\"" + URI.XHTML + "\"", "");
             }
             set 
             { 
-                XmlElement old = this["html", URI.XHTML];
+                XmlElement old = this["html"];
                 if (old != null)
                     this.RemoveChild(old);
-                XmlElement html = this.OwnerDocument.CreateElement(null, "html", URI.XHTML);
+                XmlElement html = this.OwnerDocument.CreateElement(null, "html", URI.XHTML_IM);
                 XmlElement body = this.OwnerDocument.CreateElement(null, "body", URI.XHTML);
-                body.InnerXml = value;
+                NormalizeHtml(body, value);
                 html.AppendChild(body);
                 this.AppendChild(html);
-                // TODO: strip HTML tags
-                //this.Body = body.InnerText;
+                this.Body = body.InnerText;
             }
         }
 

@@ -25,9 +25,13 @@ namespace jabber.protocol
     public class URI
     {
         /// <summary>
-        /// XHTML namespace
+        /// XHTML namespace, for &lt;body&gt; element
         /// </summary>
         public const string XHTML  = "http://www.w3.org/1999/xhtml";
+        /// <summary>
+        /// XHTML-IM namespace, for &lt;html&gt; element
+        /// </summary>
+        public const string XHTML_IM = "http://jabber.org/protocol/xhtml-im";
         /// <summary>
         /// stream:stream
         /// </summary>

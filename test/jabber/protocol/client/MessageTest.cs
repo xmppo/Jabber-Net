@@ -39,9 +39,11 @@ namespace test.jabber.protocol.client
         {
             Message msg = new Message(doc);
             msg.Html = "foo";
+            Assertion.AssertEquals("<message id=\"JN_1\"><html xmlns=\"http://jabber.org/protocol/xhtml-im\"><body xmlns=\"http://www.w3.org/1999/xhtml\">foo</body></html><body>foo</body></message>", msg.ToString());
             // TODO: deal with the namespace problem here
-            // msg.Html = "f<b>o</b>o";
-            Assertion.AssertEquals("<message id=\"JN_1\"><html xmlns=\"http://www.w3.org/1999/xhtml\"><body>foo</body></html></message>", msg.ToString());
+            msg.Html = "f<a href=\"http://www.jabber.org\">o</a>o";
+            Assertion.AssertEquals("<message id=\"JN_1\"><html xmlns=\"http://jabber.org/protocol/xhtml-im\"><body xmlns=\"http://www.w3.org/1999/xhtml\">f<a href=\"http://www.jabber.org\">o</a>o</body></html><body>foo</body></message>", msg.ToString());
+            Assertion.AssertEquals("f<a href=\"http://www.jabber.org\">o</a>o", msg.Html);
         }
         public void Test_NullBody()
         {
