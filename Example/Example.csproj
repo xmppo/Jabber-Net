@@ -99,6 +99,11 @@
                     Project = "{071A79A9-E23F-418F-A6B7-63D3A3E59EEB}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
+                <Reference
+                    Name = "Org.Mentalis.Security"
+                    AssemblyName = "Org.Mentalis.Security"
+                    HintPath = "..\Org.Mentalis.Security.dll"
+                />
             </References>
         </Build>
         <Files>

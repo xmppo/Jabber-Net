@@ -313,12 +313,15 @@ namespace Example
             log.Password = jc.Password;
             log.Server = jc.Server;
             log.Port = jc.Port;
+            log.SSL = jc.SSL;
+            
             if (log.ShowDialog() == DialogResult.OK)
             {
                 jc.User = log.User;
                 jc.Password = log.Password;
                 jc.Server = log.Server;
                 jc.Port = log.Port;
+                jc.SSL = log.SSL;
                 jc.Connect();
             }
         }
@@ -362,14 +365,16 @@ namespace Example
 
         private void jc_OnError(object sender, System.Exception ex)
         {
-            pnlCon.Text = "Error!";
+            if (ex is Org.Mentalis.Security.Certificates.CertificateException)
+                m_err = true;
+
+            pnlCon.Text = "Error: " + ex.Message;
             debug.SelectionColor = Color.Green;
             debug.AppendText("ERROR: ");
             debug.SelectionColor = Color.Black;
             debug.AppendText(ex.ToString());
             debug.AppendText("\r\n");
         }
-
 
         private void jc_OnAuthError(object sender, jabber.protocol.client.IQ iq)
         {
@@ -507,7 +512,13 @@ namespace Example
         private void jc_OnConnect(object sender, bedrock.net.AsyncSocket sock)
         {
             m_err = false;
-            debug.AppendText("Connected to: " + sock.Address.IP + "\r\n");
+            debug.AppendText("Connected to: " + sock.Address.IP + ":" + sock.Address.Port + "\r\n");
+            
+            if (sock.SSL)
+            {
+                debug.AppendText("\r\nServer Certificate:\r\n-------------------\r\n");
+                debug.AppendText(sock.RemoteCertificate.ToString(true) + "\r\n");
+            }
         }
 
         private void jc_OnStreamError(object sender, System.Xml.XmlElement rp)

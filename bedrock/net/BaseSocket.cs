@@ -112,6 +112,11 @@ namespace bedrock.net
         public abstract void Connect(Address addr);
 
         /// <summary>
+        /// Start TLS processing on an open socket.
+        /// </summary>
+        public abstract void StartTLS();
+
+        /// <summary>
         /// Start an async read from the socket.  Listener.OnRead() is eventually called
         /// when data arrives.
         /// </summary>

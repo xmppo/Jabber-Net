@@ -30,8 +30,12 @@
 using System;
 using System.Collections;
 using System.Diagnostics;
+using System.IO;
+
 using bedrock.util;
 using bedrock.collections;
+
+using Org.Mentalis.Security.Certificates;
 
 namespace bedrock.net
 {
@@ -54,6 +58,7 @@ namespace bedrock.net
         private ISet        m_socks   = new Set(SetImplementation.SkipList);
         private object      m_lock = new object();
         private int         m_maxSocks;
+        private Certificate m_cert = null;
 
         /// <summary>
         /// Create a new instance, which will manage an unlimited number of sockets.
@@ -94,18 +99,81 @@ namespace bedrock.net
         }
 
         /// <summary>
+        /// The certificate to be used for listen sockets, with SSL on.
+        /// </summary>
+        public Certificate LocalCertificate
+        {
+            get { return m_cert; }
+            set { m_cert = value; }
+        }
+
+        /// <summary>
+        /// Set the certificate to be used for accept sockets.  To generate a test .pfx file using openssl,
+        /// add this to openssl.conf:
+        ///   <blockquote>
+        ///   [ serverex ]
+        ///   extendedKeyUsage=1.3.6.1.5.5.7.3.1
+        ///   </blockquote>
+        /// and run the following commands:
+        ///   <blockquote>
+        ///   openssl req -new -x509 -newkey rsa:1024 -keyout privkey.pem -out key.pem -extensions serverex
+        ///   openssl pkcs12 -export -in key.pem -in key privkey.pem -name localhost -out localhost.pfx
+        ///   </blockquote>
+        /// If you leave the certificate null, and you are doing Accept, the SSL class will try to find a
+        /// default server cert on your box.  If you have IIS installed with a cert, this might just go...
+        /// </summary>
+        /// <param name="filename">A .pfx or .cer file</param>
+        /// <param name="password">The password, if this is a .pfx file, null if .cer file.</param>
+        public void SetCertificateFile(string filename, string password)
+        {
+            if (!File.Exists(filename)) 
+            {
+                throw new CertificateException("File does not exist: " + filename);
+            }
+            CertificateStore cs;
+            if (password != null) 
+            {
+                cs = CertificateStore.CreateFromPfxFile(filename, password);
+            } 
+            else 
+            {
+                cs = CertificateStore.CreateFromCerFile(filename);
+            }
+            m_cert = cs.FindCertificate(new string[] {"1.3.6.1.5.5.7.3.1"});
+            if (m_cert == null)
+                throw new CertificateException("The certificate file does not contain a server authentication certificate.");
+        }
+
+        /// <summary>
+        /// Set the certificate from a system store.  Try "MY" for the ones listed in IE.
+        /// </summary>
+        /// <param name="storeName"></param>
+        public void SetCertificateStore(string storeName)
+        {
+            CertificateStore cs = new CertificateStore(storeName);
+            m_cert = cs.FindCertificate(new string[] {"1.3.6.1.5.5.7.3.1"});
+            if (m_cert == null)
+                throw new CertificateException("The certificate file does not contain a server authentication certificate.");
+        }
+
+        /// <summary>
         /// Create a socket that is listening for inbound connections.
         /// </summary>
         /// <param name="listener">Where to send notifications</param>
         /// <param name="addr">Address to connect to</param>
-        /// <param name="backlog">The Maximum length of the queue of pending connections</param>
+        /// <param name="backlog">The maximum length of the queue of pending connections</param>
+        /// <param name="SSL">Do SSL3/TLS1 on connect</param>
         /// <returns>A socket that is ready for calling RequestAccept()</returns>
         public AsyncSocket CreateListenSocket(ISocketEventListener listener,
                                               Address              addr,
-                                              int                  backlog)
+                                              int                  backlog,
+                                              bool                 SSL)
         {
             //Debug.Assert(m_maxSocks > 1);
-            AsyncSocket result = new AsyncSocket(this, listener);
+            AsyncSocket result = new AsyncSocket(this, listener, SSL);
+            if (SSL)
+                result.LocalCertificate = m_cert;
+
             result.Accept(addr, backlog);
             return result;
         }
@@ -115,14 +183,39 @@ namespace bedrock.net
         /// </summary>
         /// <param name="listener">Where to send notifications</param>
         /// <param name="addr">Address to connect to</param>
+        /// <param name="SSL">Do SSL3/TLS1 on connect</param>
         /// <returns>A socket that is ready for calling RequestAccept()</returns>
         public AsyncSocket CreateListenSocket(ISocketEventListener listener,
-                                              Address              addr)
+                                              Address              addr,
+                                              bool                 SSL)
         {
-            //Debug.Assert(m_maxSocks > 1);
-            AsyncSocket result = new AsyncSocket(this, listener);
-            result.Accept(addr);
-            return result;
+            return CreateListenSocket(listener, addr, 5, SSL);
+        }
+
+        /// <summary>
+        /// Create a socket that is listening for inbound connections, with no SSL/TLS.
+        /// </summary>
+        /// <param name="listener">Where to send notifications</param>
+        /// <param name="addr">Address to connect to</param>
+        /// <returns>A socket that is ready for calling RequestAccept()</returns>
+        public AsyncSocket CreateListenSocket(ISocketEventListener listener,
+            Address              addr)
+        {
+            return CreateListenSocket(listener, addr, 5, false);
+        }
+
+        /// <summary>
+        /// Create a socket that is listening for inbound connections, with no SSL/TLS.
+        /// </summary>
+        /// <param name="listener">Where to send notifications</param>
+        /// <param name="addr">Address to connect to</param>
+        /// <param name="backlog">The maximum length of the queue of pending connections</param>
+        /// <returns>A socket that is ready for calling RequestAccept()</returns>
+        public AsyncSocket CreateListenSocket(ISocketEventListener listener,
+                                              Address              addr,
+                                              int                  backlog)
+        {
+            return CreateListenSocket(listener, addr, backlog, false);
         }
 
         /// <summary>
@@ -134,10 +227,27 @@ namespace bedrock.net
         public AsyncSocket CreateConnectSocket(ISocketEventListener listener,
                                                Address              addr)
         {
+            return CreateConnectSocket(listener, addr, false);
+        }
+
+        /// <summary>
+        /// Create an outbound socket.
+        /// </summary>
+        /// <param name="listener">Where to send notifications</param>
+        /// <param name="addr">Address to connect to</param>
+        /// <param name="SSL">Do SSL3/TLS1 on startup</param>
+        /// <returns>Socket that is in the process of connecting</returns>
+        public AsyncSocket CreateConnectSocket(ISocketEventListener listener,
+                                               Address              addr,
+                                               bool                 SSL)
+        {
             AsyncSocket result;
    
             // Create the socket:
-            result = new AsyncSocket(this, listener);
+            result = new AsyncSocket(this, listener, SSL);
+            if (SSL)
+                result.LocalCertificate = m_cert;
+
             // Start the connect process:
             result.Connect(addr);
             return result;

@@ -42,6 +42,7 @@ namespace bedrock.net
 		private string         m_username = null;
 		private string         m_password = null;
 		private Address        m_remote_addr = null;
+        private bool           m_ssl = false;
 
 		/// <summary>
 		/// Wrap an existing socket event listener with a proxy.  Make SURE to set Socket after this.
@@ -86,6 +87,15 @@ namespace bedrock.net
 			get { return m_port; }
 			set { m_port = value; }
 		}
+
+        /// <summary>
+        /// Do SSL **after** connected through the proxy.
+        /// </summary>
+        public bool SSL
+        {
+            get { return m_ssl; }
+            set { m_ssl = value; }
+        }
 
 		/// <summary>
 		/// the auth username for the proxy
@@ -139,6 +149,14 @@ namespace bedrock.net
 			m_sock.Connect(proxy_addr);
 			// we'll end up in OnConnected below.
 		}
+
+        /// <summary>
+        /// Start TLS processing on an open socket.
+        /// </summary>
+        public override void StartTLS()
+        {
+            m_sock.StartTLS();
+        }
 
 		/// <summary>
 		/// Start the flow of async accepts.  Flow will continue while 
@@ -208,6 +226,8 @@ namespace bedrock.net
 		/// <param name="sock"></param>
 		public virtual void OnConnect(AsyncSocket sock)
 		{
+            if (m_ssl)
+                m_sock.StartTLS();
 			m_listener.OnConnect(sock);
 		}
 

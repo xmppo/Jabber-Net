@@ -100,6 +100,7 @@ namespace jabber.connection
         private int            m_ProxyPort = 1080;
         private string         m_ProxyUsername = null;
         private string         m_ProxyPassword = null;
+        private bool           m_ssl           = false;
 
         private XmlNamespaceManager m_ns;
 
@@ -246,6 +247,18 @@ namespace jabber.connection
         {
             get { return m_port; }
             set { m_port = value; }
+        }
+
+        /// <summary>
+        /// Do SSL3/TLS1 on startup.
+        /// </summary>
+        [Description("Do SSL3/TLS1 on startup.")]
+        [DefaultValue(false)]
+        [Category("Jabber")]
+        public bool SSL
+        {
+            get { return m_ssl; }
+            set { m_ssl = value; }
         }
 
         /// <summary>
@@ -520,7 +533,7 @@ namespace jabber.connection
                         break;
                        
                     case ProxyType.None:
-                        m_sock = new AsyncSocket(m_watcher, this);
+                        m_sock = new AsyncSocket(m_watcher, this, m_ssl);
                         break;
 
 					default:

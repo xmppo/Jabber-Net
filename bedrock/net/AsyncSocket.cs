@@ -34,6 +34,10 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using bedrock.util;
+
+using Org.Mentalis.Security.Ssl;
+using Org.Mentalis.Security.Certificates;
+
 namespace bedrock.net
 {
     /// <summary>
@@ -93,7 +97,7 @@ namespace bedrock.net
         /// Socket states.
         /// </summary>
         [RCS(@"$Header$")]
-        private enum State
+            private enum State
         {
             /// <summary>
             /// Socket has been created.
@@ -129,13 +133,24 @@ namespace bedrock.net
             Error
         }
 
-        private byte[]               m_buf        = new byte[4096];
-        private State                m_state      = State.Created;
-        private Socket               m_sock       = null;
-        private SocketWatcher        m_watcher    = null;
+        private const int BUFSIZE = 4096;
+
+        /// <summary>
+        /// Are untrusted root certificates OK when connecting using SSL?  Setting this to true is insecure, 
+        /// but it's unlikely that you trust jabbber.org or jabber.com's relatively bogus certificate roots.
+        /// </summary>
+        public static bool UntrustedRootOK = false;
+
+        private byte[]               m_buf            = new byte[BUFSIZE];
+        private State                m_state          = State.Created;
+        private SecureSocket         m_sock           = null;
+        private SocketWatcher        m_watcher        = null;
         private Address              m_addr;
-        private Guid                 m_id         = Guid.NewGuid();
-        private bool                 m_reading    = false;
+        private Guid                 m_id             = Guid.NewGuid();
+        private bool                 m_reading        = false;
+        private SecureProtocol       m_secureProtocol = SecureProtocol.None;
+        private CredentialUse        m_credUse        = CredentialUse.Client;
+        private Certificate          m_cert           = null;
 
         /// <summary>
         /// Called from SocketWatcher.
@@ -145,6 +160,20 @@ namespace bedrock.net
         public AsyncSocket(SocketWatcher w, ISocketEventListener listener) : base(listener)
         {
             m_watcher = w;
+        }
+
+        /// <summary>
+        /// Called from SocketWatcher.
+        /// </summary>
+        /// <param name="w"></param>
+        /// <param name="listener">The listener for this socket</param>
+        /// <param name="SSL">Do SSL3 and TLS1 on startup 
+        /// (call StartTLS later if this is false, and TLS only is needed later)</param>
+        public AsyncSocket(SocketWatcher w, ISocketEventListener listener, bool SSL) : base(listener)
+        {
+            m_watcher = w;
+            if (SSL)
+                m_secureProtocol = SecureProtocol.Ssl3 | SecureProtocol.Tls1;
         }
 
         private AsyncSocket(SocketWatcher w) : base()
@@ -174,6 +203,31 @@ namespace bedrock.net
             {
                 return m_addr;
             }
+        }
+
+        /// <summary>
+        /// Get the certificate of the remote endpoint of the socket.
+        /// </summary>
+        public Certificate RemoteCertificate
+        {
+            get { return m_sock.RemoteCertificate; }
+        }
+
+        /// <summary>
+        /// The local certificate of the socket.
+        /// </summary>
+        public Certificate LocalCertificate
+        {
+            get { return m_cert; }
+            set { m_cert = value; }
+        }
+
+        /// <summary>
+        /// Are we using SSL/TLS?
+        /// </summary>
+        public bool SSL
+        {
+            get { return (m_secureProtocol != SecureProtocol.None); }
         }
 
         /// <summary>
@@ -222,10 +276,20 @@ namespace bedrock.net
         /// <param name="backlog">The Maximum length of the queue of pending connections</param>
         public override void Accept(Address addr, int backlog)
         {
+            m_credUse = CredentialUse.Server;
             m_addr = addr;
-            m_sock = new Socket(AddressFamily.InterNetwork, 
-                                SocketType.Stream, 
-                                ProtocolType.Tcp);
+            SecurityOptions options = new SecurityOptions();
+            options.certificate = m_cert;
+            options.secureProtocol = m_secureProtocol;
+            options.use = m_credUse; 
+            options.commonName = addr.Hostname;
+            options.verifyType = CredentialVerification.Auto;
+            options.flags = SecurityFlags.Default; // use the default flags
+
+            m_sock = new SecureSocket(AddressFamily.InterNetwork, 
+                                      SocketType.Stream, 
+                                      ProtocolType.Tcp,
+                                      options);
             m_sock.Blocking = false;
             // Always reuse address.
             m_sock.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, 1);
@@ -258,7 +322,7 @@ namespace bedrock.net
         /// <param name="ar"></param>
         private void ExecuteAccept(IAsyncResult ar)
         {
-            Socket cli = m_sock.EndAccept(ar);
+            SecureSocket cli = (SecureSocket) m_sock.EndAccept(ar);
             cli.Blocking = false;
 
             AsyncSocket cliCon = new AsyncSocket(m_watcher);
@@ -266,6 +330,7 @@ namespace bedrock.net
             cliCon.Address.IP = ((IPEndPoint) cli.RemoteEndPoint).Address;
             cliCon.m_sock = cli;
             cliCon.m_state = State.Connected;
+            cliCon.m_credUse = CredentialUse.Server;
 
             ISocketEventListener l = m_listener.GetListener(cliCon);
             if (l == null)
@@ -340,19 +405,30 @@ namespace bedrock.net
                 m_addr = addr;
                 m_state = State.Connecting;
 
+                SecurityOptions options = new SecurityOptions();
+                options.certificate = m_cert;
+                options.secureProtocol = m_secureProtocol;
+                options.use = m_credUse;
+                options.commonName = addr.Hostname;
+                options.verifyType = CredentialVerification.Manual; // we'll use our own certificate verification delegate
+                options.verifier = new CertVerifyEventHandler(OnVerify);
+                options.flags = SecurityFlags.Default; // use the default flags
 
 				if (Socket.SupportsIPv6 && (m_addr.Endpoint.AddressFamily == AddressFamily.InterNetworkV6))
 				{
-					m_sock = new Socket(AddressFamily.InterNetworkV6, 
+					m_sock = new SecureSocket(AddressFamily.InterNetworkV6, 
 						SocketType.Stream, 
-						ProtocolType.Tcp);
+						ProtocolType.Tcp,
+                        options);
 				}
 				else
 				{
-					m_sock = new Socket(AddressFamily.InterNetwork, 
+					m_sock = new SecureSocket(AddressFamily.InterNetwork, 
 						SocketType.Stream, 
-						ProtocolType.Tcp);
+						ProtocolType.Tcp,
+                        options);
 				}
+
 				// well, of course this isn't right.
 				m_sock.SetSocketOption(SocketOptionLevel.Socket, 
 					SocketOptionName.ReceiveBuffer, 
@@ -361,6 +437,46 @@ namespace bedrock.net
 				m_sock.BeginConnect(m_addr.Endpoint, new AsyncCallback(ExecuteConnect), null);
             }
         }
+
+        /// <summary>
+        /// Verifies a certificate received from the remote host.
+        /// </summary>
+        /// <param name="socket">The SecureSocket that received the certificate.</param>
+        /// <param name="remote">The received certificate.</param>
+        /// <param name="e">The event parameters.</param>
+        protected void OnVerify(SecureSocket socket, Certificate remote, VerifyEventArgs e) 
+        {
+            CertificateChain cc = new CertificateChain(remote);
+            CertificateStatus status = cc.VerifyChain(socket.CommonName, AuthType.Server);
+
+            // Sigh.  Jabber.org and jabber.com both have untrusted roots.
+            if (!((status == CertificateStatus.ValidCertificate)  ||
+                 (UntrustedRootOK && (status == CertificateStatus.UntrustedRoot))))
+            {
+                FireError(new CertificateException("Invalid certificate: " + status.ToString()));
+                e.Valid = false;
+            }
+        }
+
+        /// <summary>
+        /// Start TLS processing on an open socket.
+        /// </summary>
+        public override void StartTLS()
+        {
+            SecurityOptions options = new SecurityOptions();
+            options.certificate = null; // do not use client authentication
+            options.secureProtocol = SecureProtocol.Tls1;
+
+            // TODO: enable for servers, too.
+            options.use = m_credUse;
+            options.commonName = m_addr.Hostname;
+            options.verifyType = CredentialVerification.Manual; // we'll use our own certificate verification delegate
+            options.verifier = new CertVerifyEventHandler(OnVerify);
+            options.flags = SecurityFlags.Default; // use the default flags
+
+            m_sock.ChangeSecurityProtocol(options);
+        }
+
         /// <summary>
         /// Connection complete.
         /// </summary>

@@ -74,6 +74,11 @@
                     AssemblyName = "System.Xml"
                     HintPath = "..\..\WINDOWS\Microsoft.NET\Framework\v1.0.3705\System.XML.dll"
                 />
+                <Reference
+                    Name = "Org.Mentalis.Security"
+                    AssemblyName = "Org.Mentalis.Security"
+                    HintPath = "Org.Mentalis.Security.dll"
+                />
             </References>
         </Build>
         <Files>

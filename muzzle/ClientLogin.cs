@@ -60,13 +60,15 @@ namespace muzzle
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox txtUser;
         private System.Windows.Forms.TextBox txtServer;
         private System.Windows.Forms.TextBox txtPort;
         private System.Windows.Forms.TextBox txtPass;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.Button btnOK;
+        private System.Windows.Forms.CheckBox cbSSL;
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -124,6 +126,15 @@ namespace muzzle
         }
 
         /// <summary>
+        /// Do SSL3/TLS1 on Connect?
+        /// </summary>
+        public bool SSL
+        {
+            get { return cbSSL.Checked; }
+            set { cbSSL.Checked = value; }
+        }
+
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         protected override void Dispose( bool disposing )
@@ -138,7 +149,7 @@ namespace muzzle
             base.Dispose( disposing );
         }
 
-                #region Windows Form Designer generated code
+        #region Windows Form Designer generated code
         /// <summary>
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
@@ -148,13 +159,16 @@ namespace muzzle
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
             this.txtUser = new System.Windows.Forms.TextBox();
             this.txtServer = new System.Windows.Forms.TextBox();
             this.txtPort = new System.Windows.Forms.TextBox();
             this.txtPass = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.btnCancel = new System.Windows.Forms.Button();
+            this.btnOK = new System.Windows.Forms.Button();
+            this.cbSSL = new System.Windows.Forms.CheckBox();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -181,51 +195,44 @@ namespace muzzle
             this.label3.TabIndex = 6;
             this.label3.Text = "Port:";
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(15, 129);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(48, 23);
-            this.button1.TabIndex = 8;
-            this.button1.Text = "OK";
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // button2
-            // 
-            this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button2.Location = new System.Drawing.Point(103, 129);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(48, 23);
-            this.button2.TabIndex = 9;
-            this.button2.Text = "Cancel";
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
             // txtUser
             // 
+            this.txtUser.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+                | System.Windows.Forms.AnchorStyles.Right)));
             this.txtUser.Location = new System.Drawing.Point(67, 8);
             this.txtUser.Name = "txtUser";
+            this.txtUser.Size = new System.Drawing.Size(148, 20);
             this.txtUser.TabIndex = 1;
             this.txtUser.Text = "";
             // 
             // txtServer
             // 
+            this.txtServer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+                | System.Windows.Forms.AnchorStyles.Right)));
             this.txtServer.Location = new System.Drawing.Point(67, 70);
             this.txtServer.Name = "txtServer";
+            this.txtServer.Size = new System.Drawing.Size(148, 20);
             this.txtServer.TabIndex = 5;
             this.txtServer.Text = "";
             // 
             // txtPort
             // 
+            this.txtPort.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+                | System.Windows.Forms.AnchorStyles.Right)));
             this.txtPort.Location = new System.Drawing.Point(67, 101);
             this.txtPort.Name = "txtPort";
+            this.txtPort.Size = new System.Drawing.Size(148, 20);
             this.txtPort.TabIndex = 7;
             this.txtPort.Text = "5222";
             // 
             // txtPass
             // 
+            this.txtPass.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+                | System.Windows.Forms.AnchorStyles.Right)));
             this.txtPass.Location = new System.Drawing.Point(67, 39);
             this.txtPass.Name = "txtPass";
             this.txtPass.PasswordChar = '*';
+            this.txtPass.Size = new System.Drawing.Size(148, 20);
             this.txtPass.TabIndex = 3;
             this.txtPass.Text = "";
             // 
@@ -237,40 +244,94 @@ namespace muzzle
             this.label4.TabIndex = 2;
             this.label4.Text = "Password:";
             // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.btnCancel);
+            this.panel1.Controls.Add(this.btnOK);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel1.Location = new System.Drawing.Point(0, 158);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(224, 40);
+            this.panel1.TabIndex = 9;
+            // 
+            // btnCancel
+            // 
+            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnCancel.Location = new System.Drawing.Point(168, 8);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(48, 23);
+            this.btnCancel.TabIndex = 11;
+            this.btnCancel.Text = "Cancel";
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
+            // btnOK
+            // 
+            this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnOK.Location = new System.Drawing.Point(112, 8);
+            this.btnOK.Name = "btnOK";
+            this.btnOK.Size = new System.Drawing.Size(48, 23);
+            this.btnOK.TabIndex = 10;
+            this.btnOK.Text = "OK";
+            this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
+            // 
+            // cbSSL
+            // 
+            this.cbSSL.Location = new System.Drawing.Point(67, 128);
+            this.cbSSL.Name = "cbSSL";
+            this.cbSSL.Size = new System.Drawing.Size(101, 24);
+            this.cbSSL.TabIndex = 8;
+            this.cbSSL.Text = "SSL";
+            this.cbSSL.CheckedChanged += new System.EventHandler(this.cbSSL_CheckedChanged);
+            // 
             // ClientLogin
             // 
-            this.AcceptButton = this.button1;
+            this.AcceptButton = this.btnOK;
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-            this.CancelButton = this.button2;
-            this.ClientSize = new System.Drawing.Size(176, 171);
-            this.Controls.AddRange(new System.Windows.Forms.Control[] {
-                                                                          this.txtPass,
-                                                                          this.label4,
-                                                                          this.txtPort,
-                                                                          this.txtServer,
-                                                                          this.txtUser,
-                                                                          this.button2,
-                                                                          this.button1,
-                                                                          this.label3,
-                                                                          this.label2,
-                                                                          this.label1});
+            this.CancelButton = this.btnCancel;
+            this.ClientSize = new System.Drawing.Size(224, 198);
+            this.Controls.Add(this.cbSSL);
+            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.txtPass);
+            this.Controls.Add(this.txtPort);
+            this.Controls.Add(this.txtServer);
+            this.Controls.Add(this.txtUser);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
             this.Name = "ClientLogin";
             this.Text = "Login";
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
-                #endregion
+        #endregion
 
-        private void button1_Click(object sender, System.EventArgs e)
-        {
-            this.DialogResult = DialogResult.OK;
-            this.Close();
-        }
-
-        private void button2_Click(object sender, System.EventArgs e)
+        private void btnCancel_Click(object sender, System.EventArgs e)
         {
             this.DialogResult = DialogResult.Cancel;
-            this.Close();
+            this.Close();        
+        }
+
+        private void btnOK_Click(object sender, System.EventArgs e)
+        {
+            this.DialogResult = DialogResult.OK;
+            this.Close();        
+        }
+
+        private void cbSSL_CheckedChanged(object sender, System.EventArgs e)
+        {
+            if (cbSSL.Checked)
+            {
+                if (txtPort.Text == "5222")
+                    txtPort.Text = "5223";
+            }
+            else
+            {
+                if (txtPort.Text == "5223")
+                    txtPort.Text = "5222";
+            }
         }
     }
 }
