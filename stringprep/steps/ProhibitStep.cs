@@ -69,6 +69,18 @@ namespace stringprep.steps
         }
 
         /// <summary>
+        /// Create an instance.
+        /// </summary>
+        /// <param name="tab">The prohibit table to be checked</param>
+        /// <param name="name">The name of the step (for debugging purposes)</param>
+        /// <param name="flags">Skip this step if these flags are set</param>
+        /// <param name="invert">Invert the meaning of the flags</param>
+        public ProhibitStep(Prohibit[] tab, string name, ProfileFlags flags, bool invert) : base(name, flags, invert)
+        {
+            m_table = tab;
+        }
+
+        /// <summary>
         /// Does this step prohibit the given character?
         /// </summary>
         /// <param name="c">The character to check</param>
@@ -104,6 +116,9 @@ namespace stringprep.steps
         /// <exception cref="ProhibitedCharacterException">Invalid character detected.</exception>
         public override void Prepare(System.Text.StringBuilder result, ProfileFlags flags)
         {
+            if (IsBitSet(flags))
+                return;
+
             int j = FindStringInTable(result);
             if (j >= 0)
                 throw new ProhibitedCharacterException(this, result[j]);

@@ -144,11 +144,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "steps\UnassignedStep.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "unicode\Compose.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

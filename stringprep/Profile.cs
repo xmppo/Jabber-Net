@@ -65,7 +65,7 @@ namespace stringprep
 
         public static readonly NFKCStep NFKC = new NFKCStep();
         public static readonly BidiStep BIDI = new BidiStep();
-        public static readonly UnassignedStep UNASSIGNED = new UnassignedStep();
+        public static readonly ProhibitStep UNASSIGNED = new ProhibitStep(RFC3454.A_1, "A.1", ProfileFlags.NO_UNASSIGNED, false);
 
         private ProfileStep[] m_profile;
         //private const int MAX_MAP_CHARS = 4;

@@ -33,17 +33,33 @@ using System.Diagnostics;
 
 namespace stringprep.unicode
 {
+    /// <summary>
+    /// Hold an offset into a decomposition table for a given character.
+    /// Also, provide static functions for decomposition.
+    /// For example, Angstrom -> A + ring.
+    /// </summary>
     public struct Decompose : IComparable
     {
         private char m_ch;
         private int m_offset;
 
+        /// <summary>
+        /// Hold the index into the Offsets table for this character.
+        /// </summary>
+        /// <param name="ch"></param>
+        /// <param name="offset"></param>
         public Decompose(char ch, int offset)
         {
             m_ch = ch;
             m_offset = offset;
         }
 
+        /// <summary>
+        /// Used for BinarySearch.
+        /// </summary>
+        /// <param name="obj">A char or Decompose to compare against</param>
+        /// <returns>-1, 0, 1 for less, equal, greater</returns>
+        /// <exception cref="ArgumentException">obj is not a char or Decompose</exception>
         int IComparable.CompareTo(object obj)
         {
             if (obj is char)
@@ -54,6 +70,11 @@ namespace stringprep.unicode
             throw new ArgumentException("Invalid type", "obj");
         }
 
+        /// <summary>
+        /// Look up the given character, and return the offset for it.
+        /// </summary>
+        /// <param name="ch">Character to loop up</param>
+        /// <returns>-1 if not found</returns>
         public static int Find(char ch)
         {
             int offset = Array.BinarySearch(DecomposeData.Offsets, ch);
@@ -65,23 +86,18 @@ namespace stringprep.unicode
             return -1;
         }
 
+        /// <summary>
+        /// What is the combining class for the given character?
+        /// </summary>
+        /// <param name="c">Character to look up</param>
+        /// <returns>Combining class for this character</returns>
         public static int CombiningClass(char c) 
         {
             int page = c >> 8;
-            if (DecomposeData.CombiningClasses[page] >= DecomposeData.MAX_TABLE_INDEX)
-                return DecomposeData.CombiningClasses[page] - DecomposeData.MAX_TABLE_INDEX;
+            if (DecomposeData.CombiningClasses[page] == -1)
+                return 0;
             else
                 return DecomposeData.Data[DecomposeData.CombiningClasses[page], c & 0xff];
-        }
-
-        public static char Expand(int offset)
-        {
-            return (char) (DecomposeData.Expansion[offset] << 8 | DecomposeData.Expansion[offset + 1]);
-        }
-
-        public static bool More(int offset)
-        { // 0, 0 terminates.
-            return (DecomposeData.Expansion[offset] != 0) || (DecomposeData.Expansion[offset + 1] != 0);
         }
 
         public static void CanonicalOrdering(StringBuilder buf, int start, int len)

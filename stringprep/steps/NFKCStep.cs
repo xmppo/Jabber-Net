@@ -74,7 +74,6 @@ namespace stringprep.steps
             // If C is not blocked from the last starter L, and it can be primary combined with L, 
             // then replace L by the composite L-C, and remove C. 
 
-            int decomp;
             int offset;
             int last_start = 0;
             int old_len;
@@ -87,13 +86,12 @@ namespace stringprep.steps
                 char c = result[i];
 
                 old_len = result.Length;
-                decomp = Decompose.Find(c);
-                if (decomp >= 0)
+                offset = Decompose.Find(c);
+                if (offset >= 0)
                 {
-                    // 0, 0 terminates.
-                    for (offset = decomp, j=0; Decompose.More(offset); offset += 2, j++)
+                    for (j=0; DecomposeData.Expansion[offset+j] != 0; j++)
                     {
-                        insert[j] = Decompose.Expand(offset);
+                        insert[j] = DecomposeData.Expansion[offset+j];
                     }
 
                     switch (j)
