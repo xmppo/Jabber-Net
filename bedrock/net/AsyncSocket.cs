@@ -35,8 +35,10 @@ using System.Net.Sockets;
 using System.Threading;
 using bedrock.util;
 
+#if !NO_SSL
 using Org.Mentalis.Security.Ssl;
 using Org.Mentalis.Security.Certificates;
+#endif
 
 namespace bedrock.net
 {
@@ -140,22 +142,30 @@ namespace bedrock.net
         /// but it's unlikely that you trust jabbber.org or jabber.com's relatively bogus certificate roots.
         /// </summary>
         public static bool UntrustedRootOK = false;
+#if !NO_SSL
         /// <summary>
         /// The types of SSL to support.  SSL3 and TLS1 by default.  That should be good enough for 
         /// most apps, and was hard-coded to start with.
         /// </summary>
         public static SecureProtocol SSLProtocols = SecureProtocol.Ssl3 | SecureProtocol.Tls1;
+#endif
 
         private byte[]               m_buf            = new byte[BUFSIZE];
         private State                m_state          = State.Created;
+#if !NO_SSL
         private SecureSocket         m_sock           = null;
+#else
+        private Socket               m_sock           = null;
+#endif
         private SocketWatcher        m_watcher        = null;
         private Address              m_addr;
         private Guid                 m_id             = Guid.NewGuid();
         private bool                 m_reading        = false;
+#if !NO_SSL
         private SecureProtocol       m_secureProtocol = SecureProtocol.None;
         private CredentialUse        m_credUse        = CredentialUse.Client;
         private Certificate          m_cert           = null;
+#endif
 
         /// <summary>
         /// Called from SocketWatcher.
@@ -178,7 +188,13 @@ namespace bedrock.net
         {
             m_watcher = w;
             if (SSL)
+            {
+#if !NO_SSL
                 m_secureProtocol = SSLProtocols;
+#else
+                throw new NotImplementedException("SSL not compiled in");
+#endif
+            }
         }
 
         private AsyncSocket(SocketWatcher w) : base()
@@ -210,6 +226,7 @@ namespace bedrock.net
             }
         }
 
+#if !NO_SSL
         /// <summary>
         /// Get the certificate of the remote endpoint of the socket.
         /// </summary>
@@ -226,13 +243,18 @@ namespace bedrock.net
             get { return m_cert; }
             set { m_cert = value; }
         }
+#endif
 
         /// <summary>
         /// Are we using SSL/TLS?
         /// </summary>
         public bool SSL
         {
+#if !NO_SSL
             get { return (m_secureProtocol != SecureProtocol.None); }
+#else
+            get { return false; }
+#endif
         }
 
         /// <summary>
@@ -281,8 +303,9 @@ namespace bedrock.net
         /// <param name="backlog">The Maximum length of the queue of pending connections</param>
         public override void Accept(Address addr, int backlog)
         {
-            m_credUse = CredentialUse.Server;
             m_addr = addr;
+#if !NO_SSL
+            m_credUse = CredentialUse.Server;
             SecurityOptions options = new SecurityOptions();
             options.certificate = m_cert;
             options.secureProtocol = m_secureProtocol;
@@ -295,6 +318,12 @@ namespace bedrock.net
                                       SocketType.Stream, 
                                       ProtocolType.Tcp,
                                       options);
+#else
+            m_sock = new Socket(AddressFamily.InterNetwork, 
+                                      SocketType.Stream, 
+                                      ProtocolType.Tcp);
+#endif
+
             m_sock.Blocking = false;
             // Always reuse address.
             m_sock.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, 1);
@@ -327,7 +356,11 @@ namespace bedrock.net
         /// <param name="ar"></param>
         private void ExecuteAccept(IAsyncResult ar)
         {
+#if !NO_SSL
             SecureSocket cli = (SecureSocket) m_sock.EndAccept(ar);
+#else
+            Socket cli = (Socket) m_sock.EndAccept(ar);
+#endif
             cli.Blocking = false;
 
             AsyncSocket cliCon = new AsyncSocket(m_watcher);
@@ -335,7 +368,9 @@ namespace bedrock.net
             cliCon.Address.IP = ((IPEndPoint) cli.RemoteEndPoint).Address;
             cliCon.m_sock = cli;
             cliCon.m_state = State.Connected;
+#if !NO_SSL
             cliCon.m_credUse = CredentialUse.Server;
+#endif
 
             ISocketEventListener l = m_listener.GetListener(cliCon);
             if (l == null)
@@ -410,6 +445,7 @@ namespace bedrock.net
                 m_addr = addr;
                 m_state = State.Connecting;
 
+#if !NO_SSL
                 SecurityOptions options = new SecurityOptions();
                 options.certificate = m_cert;
                 options.secureProtocol = m_secureProtocol;
@@ -419,7 +455,7 @@ namespace bedrock.net
                 options.verifier = new CertVerifyEventHandler(OnVerify);
                 options.flags = SecurityFlags.Default; // use the default flags
 
-				if (Socket.SupportsIPv6 && (m_addr.Endpoint.AddressFamily == AddressFamily.InterNetworkV6))
+                if (Socket.SupportsIPv6 && (m_addr.Endpoint.AddressFamily == AddressFamily.InterNetworkV6))
 				{
 					m_sock = new SecureSocket(AddressFamily.InterNetworkV6, 
 						SocketType.Stream, 
@@ -433,6 +469,21 @@ namespace bedrock.net
 						ProtocolType.Tcp,
                         options);
 				}
+#else
+                if (Socket.SupportsIPv6 && (m_addr.Endpoint.AddressFamily == AddressFamily.InterNetworkV6))
+                {
+                    m_sock = new Socket(AddressFamily.InterNetworkV6, 
+                        SocketType.Stream, 
+                        ProtocolType.Tcp);
+                }
+                else
+                {
+                    m_sock = new Socket(AddressFamily.InterNetwork, 
+                        SocketType.Stream, 
+                        ProtocolType.Tcp);
+                }
+                
+#endif
 
 				// well, of course this isn't right.
 				m_sock.SetSocketOption(SocketOptionLevel.Socket, 
@@ -443,6 +494,7 @@ namespace bedrock.net
             }
         }
 
+#if !NO_SSL
         /// <summary>
         /// Verifies a certificate received from the remote host.
         /// </summary>
@@ -481,6 +533,7 @@ namespace bedrock.net
 
             m_sock.ChangeSecurityProtocol(options);
         }
+#endif
 
         /// <summary>
         /// Connection complete.

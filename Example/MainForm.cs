@@ -543,11 +543,13 @@ namespace Example
             m_err = false;
             debug.AppendText("Connected to: " + sock.Address.IP + ":" + sock.Address.Port + "\r\n");
             
+#if !NO_SSL
             if (sock.SSL)
             {
                 debug.AppendText("\r\nServer Certificate:\r\n-------------------\r\n");
                 debug.AppendText(sock.RemoteCertificate.ToString(true) + "\r\n");
             }
+#endif
         }
 
         private void jc_OnStreamError(object sender, System.Xml.XmlElement rp)

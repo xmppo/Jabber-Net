@@ -172,8 +172,13 @@ namespace bedrock.net
             //Debug.Assert(m_maxSocks > 1);
             AsyncSocket result = new AsyncSocket(this, listener, SSL);
             if (SSL)
+            {
+#if !NO_SSL
                 result.LocalCertificate = m_cert;
-
+#else
+                throw new NotImplementedException("SSL not compiled in");
+#endif
+            }
             result.Accept(addr, backlog);
             return result;
         }
@@ -246,8 +251,13 @@ namespace bedrock.net
             // Create the socket:
             result = new AsyncSocket(this, listener, SSL);
             if (SSL)
+            {
+#if !NO_SSL
                 result.LocalCertificate = m_cert;
-
+#else
+                throw new NotImplementedException("SSL not compiled in");
+#endif
+            }
             // Start the connect process:
             result.Connect(addr);
             return result;

@@ -150,6 +150,7 @@ namespace bedrock.net
 			// we'll end up in OnConnected below.
 		}
 
+#if !NO_SSL
         /// <summary>
         /// Start TLS processing on an open socket.
         /// </summary>
@@ -157,6 +158,7 @@ namespace bedrock.net
         {
             m_sock.StartTLS();
         }
+#endif
 
 		/// <summary>
 		/// Start the flow of async accepts.  Flow will continue while 
@@ -227,7 +229,13 @@ namespace bedrock.net
 		public virtual void OnConnect(AsyncSocket sock)
 		{
             if (m_ssl)
+            {
+#if !NO_SSL
                 m_sock.StartTLS();
+#else
+                throw new NotImplementedException("SSL not compiled in");
+#endif
+            }
 			m_listener.OnConnect(sock);
 		}
 

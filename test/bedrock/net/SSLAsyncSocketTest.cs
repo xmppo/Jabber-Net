@@ -34,6 +34,7 @@ using bedrock.net;
 using bedrock.util;
 namespace test.bedrock.net
 {
+#if !NO_SSL
     /// <summary>
     ///    Summary description for AsyncSocketTest.
     /// </summary>
@@ -120,4 +121,5 @@ namespace test.bedrock.net
         }
         #endregion
     }
+#endif
 }

@@ -68,7 +68,9 @@ namespace muzzle
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnOK;
+#if !NO_SSL
         private System.Windows.Forms.CheckBox cbSSL;
+#endif
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -125,6 +127,7 @@ namespace muzzle
             set { txtPort.Text = value.ToString(); }
         }
 
+#if !NO_SSL
         /// <summary>
         /// Do SSL3/TLS1 on Connect?
         /// </summary>
@@ -133,6 +136,7 @@ namespace muzzle
             get { return cbSSL.Checked; }
             set { cbSSL.Checked = value; }
         }
+#endif
 
         /// <summary>
         /// Clean up any resources being used.
@@ -167,7 +171,9 @@ namespace muzzle
             this.panel1 = new System.Windows.Forms.Panel();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
+#if !NO_SSL
             this.cbSSL = new System.Windows.Forms.CheckBox();
+#endif
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -274,6 +280,7 @@ namespace muzzle
             this.btnOK.TabIndex = 10;
             this.btnOK.Text = "OK";
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
+#if !NO_SSL
             // 
             // cbSSL
             // 
@@ -283,6 +290,7 @@ namespace muzzle
             this.cbSSL.TabIndex = 8;
             this.cbSSL.Text = "SSL";
             this.cbSSL.CheckedChanged += new System.EventHandler(this.cbSSL_CheckedChanged);
+#endif
             // 
             // ClientLogin
             // 
@@ -290,7 +298,9 @@ namespace muzzle
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(224, 198);
+#if !NO_SSL
             this.Controls.Add(this.cbSSL);
+#endif
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.txtPass);
             this.Controls.Add(this.txtPort);
@@ -320,6 +330,7 @@ namespace muzzle
             this.Close();        
         }
 
+#if !NO_SSL
         private void cbSSL_CheckedChanged(object sender, System.EventArgs e)
         {
             if (cbSSL.Checked)
@@ -333,5 +344,6 @@ namespace muzzle
                     txtPort.Text = "5222";
             }
         }
+#endif
     }
 }

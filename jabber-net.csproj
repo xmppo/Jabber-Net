@@ -28,7 +28,7 @@
                     BaseAddress = "285212672"
                     CheckForOverflowUnderflow = "false"
                     ConfigurationOverrideFile = ""
-                    DefineConstants = "DEBUG;TRACE;STRINGPREP"
+                    DefineConstants = "DEBUG;TRACE"
                     DocumentationFile = "jabber-net.xml"
                     DebugSymbols = "true"
                     FileAlignment = "4096"
