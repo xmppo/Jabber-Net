@@ -1074,7 +1074,8 @@ EOF
     
     printf OUT <<"EOF";
         /// <summary>
-        /// Who knows what this means.
+        /// Where the offsets of the range of characters where there is 
+        /// only one match for the second character, with a given first character.
         /// </summary> 
         public const short FIRST_SINGLE_START = $total;
 EOF
@@ -1086,7 +1087,8 @@ EOF
     $total += @first_singletons;
     printf OUT <<"EOF";
         /// <summary>
-        /// Who knows what this means.
+        /// Where the offsets of the range of second characters that match a given first
+        /// character starts.
         /// </summary> 
         public const short SECOND_START = $total;
 EOF
@@ -1098,7 +1100,8 @@ EOF
     $i = 0;
     printf OUT <<"EOF";
         /// <summary>
-        /// Who knows what this means.
+        /// When there is only a single match to the left for these characters on the
+        /// right, the offsets for that chunk of characters starts here.
         /// </summary> 
         public const short SECOND_SINGLE_START = $total;
         
@@ -1116,7 +1119,8 @@ EOF
     
     printf OUT <<"EOF";
         /// <summary>
-        /// Who knows what this means.
+        /// The offset into Array for each character.  This array is compressed using
+        /// the Table table, which provides page offsets for the pages that are non-zero.
         /// </summary> 
         public static readonly short[,] Data = new short[,]
         {
@@ -1129,7 +1133,7 @@ EOF
 
     printf OUT <<"EOF";
         /// <summary>
-        /// Who knows what this means.
+        /// Page offsets into Data for each page of characters.
         /// </summary> 
         public static readonly byte[] Table = new byte[]
         {
@@ -1150,7 +1154,10 @@ EOF
 
     printf OUT <<"EOF";
         /// <summary>
-        /// Who knows what this means.  "First singletons"
+        /// When the offset for the  first character is in the range 
+        /// [FIRST_SINGLE_START, SECOND_START), look up the corresponding 
+        /// character here with the offset from Data to see if it is 
+        /// the second character.  If not, there is no combination.
         /// </summary> 
         public const string FirstSingle =         
 EOF
@@ -1168,7 +1175,10 @@ EOF
 
     printf OUT <<"EOF";
         /// <summary>
-        /// Who knows what this means.  "Second singletons"
+        /// When the offset for the second character is in the range 
+        /// [SECOND_SINGLE_START...), look up the corresponding 
+        /// character here with the offset from Data to see if it is 
+        /// the first character.  If not, there is no combination.
         /// </summary> 
         public const string SecondSingle = 
 EOF
@@ -1191,9 +1201,10 @@ EOF
         public const int N_SECOND = $n_second;
         
         /// <summary>
-        /// Array of composition pairs.
+        /// Array of composition pairs, indexed by offset (from Data) of first
+        /// character, and offset of second character.
         /// </summary> 
-        public static readonly string Array = 
+        public const string Array = 
 EOT
             
     for (my $i = 0; $i < $n_first; $i++) {

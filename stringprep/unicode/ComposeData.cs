@@ -16,20 +16,24 @@ namespace stringprep.unicode
         /// </summary>
         public const short FIRST_START = 1;
         /// <summary>
-        /// Who knows what this means.
+        /// Where the offsets of the range of characters where there is 
+        /// only one match for the second character, with a given first character.
         /// </summary> 
         public const short FIRST_SINGLE_START = 147;
         /// <summary>
-        /// Who knows what this means.
+        /// Where the offsets of the range of second characters that match a given first
+        /// character starts.
         /// </summary> 
         public const short SECOND_START = 357;
         /// <summary>
-        /// Who knows what this means.
+        /// When there is only a single match to the left for these characters on the
+        /// right, the offsets for that chunk of characters starts here.
         /// </summary> 
         public const short SECOND_SINGLE_START = 388;
         
         /// <summary>
-        /// Who knows what this means.
+        /// The offset into Array for each character.  This array is compressed using
+        /// the Table table, which provides page offsets for the pages that are non-zero.
         /// </summary> 
         public static readonly short[,] Data = new short[,]
         {
@@ -252,7 +256,7 @@ namespace stringprep.unicode
         };
 
         /// <summary>
-        /// Who knows what this means.
+        /// Page offsets into Data for each page of characters.
         /// </summary> 
         public static readonly byte[] Table = new byte[]
         {
@@ -308,7 +312,10 @@ namespace stringprep.unicode
         };
 
         /// <summary>
-        /// Who knows what this means.  "First singletons"
+        /// When the offset for the  first character is in the range 
+        /// [FIRST_SINGLE_START, SECOND_START), look up the corresponding 
+        /// character here with the offset from Data to see if it is 
+        /// the second character.  If not, there is no combination.
         /// </summary> 
         public const string FirstSingle =         
             "\x0338\x226e" +
@@ -523,7 +530,10 @@ namespace stringprep.unicode
             "\x3099\x30fe" ;
 
         /// <summary>
-        /// Who knows what this means.  "Second singletons"
+        /// When the offset for the second character is in the range 
+        /// [SECOND_SINGLE_START...), look up the corresponding 
+        /// character here with the offset from Data to see if it is 
+        /// the first character.  If not, there is no combination.
         /// </summary> 
         public const string SecondSingle = 
             "\x0627\x0622" +
@@ -549,11 +559,12 @@ namespace stringprep.unicode
         /// How many characters are in a row in Array.
         /// </summary>
         public const int N_SECOND = 31;
-
+        
         /// <summary>
-        /// Array of composition pairs.
+        /// Array of composition pairs, indexed by offset (from Data) of first
+        /// character, and offset of second character.
         /// </summary> 
-        public static readonly string Array = 
+        public const string Array = 
             "\x00c0\x00c1\x00c2\x00c3\x0100\x0102\x0226\x00c4\x1ea2\x00c5\x0000\x01cd\x0200\x0202\x0000\x0000\x0000\x1ea0\x0000\x1e00\x0000\x0000\x0104\x0000\x0000\x0000\x0000\x0000\x0000\x0000\x0000" +
             "\x0000\x0000\x0000\x0000\x0000\x0000\x1e02\x0000\x0000\x0000\x0000\x0000\x0000\x0000\x0000\x0000\x0000\x1e04\x0000\x0000\x0000\x0000\x0000\x0000\x0000\x0000\x1e06\x0000\x0000\x0000\x0000" +
             "\x0000\x0106\x0108\x0000\x0000\x0000\x010a\x0000\x0000\x0000\x0000\x010c\x0000\x0000\x0000\x0000\x0000\x0000\x0000\x0000\x0000\x00c7\x0000\x0000\x0000\x0000\x0000\x0000\x0000\x0000\x0000" +
