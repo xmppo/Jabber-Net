@@ -58,7 +58,7 @@ namespace bedrock.util
         // -a
         // -a:foo
         private static readonly Regex FLAG_REGEX = 
-            new Regex("[/-]([a-z0-9_]+)(:(.*))?", RegexOptions.IgnoreCase);
+            new Regex("[/-]([a-z0-9_]+)([:=](.*))?", RegexOptions.IgnoreCase);
         /// <summary>
         /// Really only useful for subclasses, I think.
         /// </summary>
