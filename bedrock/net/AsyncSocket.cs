@@ -105,6 +105,7 @@ namespace bedrock.net
         private Address              m_addr;
         private int                  m_keepAlive  = 0;
         private Timer                m_timer      = null;
+        private int                  m_hashcode   = Guid.NewGuid().GetHashCode();
 
         /*
         /// <summary>
@@ -654,11 +655,14 @@ namespace bedrock.net
         /// <returns></returns>
         public override int GetHashCode()
         {
+            /*
             if (m_sock == null)
             {
                 throw new InvalidOperationException("Must set socket first");
             }
             return m_sock.GetHashCode();
+            */
+            return m_hashcode;
         }
     }
 }
