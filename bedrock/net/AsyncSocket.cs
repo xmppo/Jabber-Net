@@ -247,9 +247,20 @@ namespace bedrock.net
 
         /// <summary>
         /// Prepare to start accepting inbound requests.  Call RequestAccept() to start the async process.
+        /// Default the listen queue size to 5.
         /// </summary>
         /// <param name="addr">Address to listen on</param>
         public void Accept(Address addr)
+        {
+            Accept(addr, 5);
+        }
+
+        /// <summary>
+        /// Prepare to start accepting inbound requests.  Call RequestAccept() to start the async process.
+        /// </summary>
+        /// <param name="addr">Address to listen on</param>
+        /// <param name="backlog">The Maximum length of the queue of pending connections</param>
+        public void Accept(Address addr, int backlog)
         {
             m_addr = addr;
             m_sock = new Socket(AddressFamily.InterNetwork, 
@@ -259,7 +270,7 @@ namespace bedrock.net
             // Always reuse address.
             m_sock.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, 1);
             m_sock.Bind(m_addr.Endpoint);
-            m_sock.Listen(5);
+            m_sock.Listen(backlog);
             m_state = State.Listening;
             m_watcher.RegisterSocket(this);
         }
