@@ -36,18 +36,14 @@ namespace test.bedrock.util
     ///    Summary description for GetOptBaseTest.
     /// </summary>
     [RCS(@"$Header$")]
-    public class GetOptTest : TestCase
+    [TestFixture]
+    public class GetOptTest
     {
-        public GetOptTest(string name) : base(name) {}
-        public static ITest Suite
-        {
-            get { return new TestSuite(typeof(GetOptTest)); }
-        }
         public void Test_Construct()
         {
             TestGetOpt t = new TestGetOpt(new string[] {"/f", "/bar", "baz"});
-            AssertEquals(true, t.foo);
-            AssertEquals("baz", t.bar);
+            Assertion.AssertEquals(true, t.foo);
+            Assertion.AssertEquals("baz", t.bar);
         }
         public void Test_Usage()
         {
@@ -57,134 +53,154 @@ namespace test.bedrock.util
         public void Test_Int()
         {
             TestGetOpt t = new TestGetOpt(new string[] {"/some", "1", "/other", "2", "blah"});
-            AssertEquals(1, t.iSome);
-            AssertEquals(2, t.other);
-            AssertEquals("one", t.bar);
+            Assertion.AssertEquals(1, t.iSome);
+            Assertion.AssertEquals(2, t.other);
+            Assertion.AssertEquals("one", t.bar);
         }
         public void Test_Private()
         {
             // hrmph.  This should probably throw an error, if I don't have the right permissions.
             TestGetOpt t = new TestGetOpt(new string[] {"/private", "one"});
-            AssertEquals("one", t.baz);
+            Assertion.AssertEquals("one", t.baz);
         }
         public void Test_Args()
         {
             TestGetOpt t = new TestGetOpt(new string[] {"/some", "1", "/other", "2", "blah", "bloo", "boo"});
-            AssertEquals(3, t.Args.Length);
-            AssertEquals("blah", t.Args[0]);
-            AssertEquals("bloo", t.Args[1]);
-            AssertEquals("boo", t.Args[2]);
+            Assertion.AssertEquals(3, t.Args.Length);
+            Assertion.AssertEquals("blah", t.Args[0]);
+            Assertion.AssertEquals("bloo", t.Args[1]);
+            Assertion.AssertEquals("boo", t.Args[2]);
         }
         public void Test_Colon()
         {
             TestGetOpt t = new TestGetOpt(new string[] {"/some:1", "/other:2", "blah", "bloo", "boo"});
-            AssertEquals(1, t.iSome);
-            AssertEquals(2, t.other);
-            AssertEquals(3, t.Args.Length);
+            Assertion.AssertEquals(1, t.iSome);
+            Assertion.AssertEquals(2, t.other);
+            Assertion.AssertEquals(3, t.Args.Length);
         }
         public void Test_Bool()
         {
             TestGetOpt go = new TestGetOpt(new string[] {"/a", "/b", "four", "one", "more"});
-            AssertEquals(true,   go.a);
-            AssertEquals(false,  go.b);
-            AssertEquals(false,  go.c);
-            AssertEquals(true,   go.d);
-            AssertEquals(3,      go.Args.Length);
-            AssertEquals("four", go.Args[0]);
-            AssertEquals("one",  go.Args[1]);
-            AssertEquals("more", go.Args[2]);
+            Assertion.AssertEquals(true,   go.a);
+            Assertion.AssertEquals(false,  go.b);
+            Assertion.AssertEquals(false,  go.c);
+            Assertion.AssertEquals(true,   go.d);
+            Assertion.AssertEquals(3,      go.Args.Length);
+            Assertion.AssertEquals("four", go.Args[0]);
+            Assertion.AssertEquals("one",  go.Args[1]);
+            Assertion.AssertEquals("more", go.Args[2]);
         }
         public void Test_DashBool()
         {
             TestGetOpt go = new TestGetOpt(new string[] {"-a", "-b", "four", "one", "more"});
-            AssertEquals(true,   go.a);
-            AssertEquals(false,  go.b);
-            AssertEquals(false,  go.c);
-            AssertEquals(true,   go.d);
-            AssertEquals(3,      go.Args.Length);
-            AssertEquals("four", go.Args[0]);
-            AssertEquals("one",  go.Args[1]);
-            AssertEquals("more", go.Args[2]);
+            Assertion.AssertEquals(true,   go.a);
+            Assertion.AssertEquals(false,  go.b);
+            Assertion.AssertEquals(false,  go.c);
+            Assertion.AssertEquals(true,   go.d);
+            Assertion.AssertEquals(3,      go.Args.Length);
+            Assertion.AssertEquals("four", go.Args[0]);
+            Assertion.AssertEquals("one",  go.Args[1]);
+            Assertion.AssertEquals("more", go.Args[2]);
         }
         
         public void Test_DashArgs()
         {
             TestGetOpt go = new TestGetOpt(new string[] {"-bar", "four", "-baz:one", "more"});
-            AssertEquals("four", go.bar);
-            AssertEquals("one",  go.baz);
-            AssertEquals(null,   go.e);
-            AssertEquals(1,      go.Args.Length);
-            AssertEquals("more", go.Args[0]);
+            Assertion.AssertEquals("four", go.bar);
+            Assertion.AssertEquals("one",  go.baz);
+            Assertion.AssertEquals(null,   go.e);
+            Assertion.AssertEquals(1,      go.Args.Length);
+            Assertion.AssertEquals("more", go.Args[0]);
         }
         
         public void Test_Env()
         {
             TestGetOpt go = new TestGetOpt(null);
-            Assert(!go.Args[0].StartsWith("NUnit"));
+            Assertion.Assert(go.assembly.StartsWith("test"));
         }
         public void Test_CaseInsensitive()
         {
             TestGetOpt go = new TestGetOpt(new string[] {"-BaZ:boo"});
-            AssertEquals("boo", go.baz);
+            Assertion.AssertEquals("boo", go.baz);
+        }
+        public void Test_Equals()
+        {
+            TestGetOpt go = new TestGetOpt(new string[] {"-baz=boo"});
+            Assertion.AssertEquals("boo", go.baz);
+        }
+        public void Test_DoubleColon()
+        {
+            TestGetOpt go = new TestGetOpt(new string[] {"/baz:boo:bar"});
+            Assertion.AssertEquals("boo:bar", go.baz);
+        }
+        public void Test_DoubleSlash()
+        {
+            TestGetOpt go = new TestGetOpt(new string[] {"/baz:boo/bar"});
+            Assertion.AssertEquals("boo/bar", go.baz);
+        }
+        public void Test_NunitProblem()
+        {
+            TestGetOpt go = new TestGetOpt(new string[] {@"/assembly:test.dll"});
+            Assertion.AssertEquals(@"test.dll", go.assembly);
         }
         public void Test_Enum()
         {
             TestGetOpt go = new TestGetOpt(new string[] {"-fb:bar"});
-            AssertEquals(TestOptEnum.BAR, go.fb);
+            Assertion.AssertEquals(TestOptEnum.BAR, go.fb);
         }
         public void Test_Method()
         {
             TestGetOpt go = new TestGetOpt(new string[] {"-method"});
-            AssertEquals("after", go.m);
+            Assertion.AssertEquals("after", go.m);
         }
         public void Test_MethodParam()
         {
             TestGetOpt go = new TestGetOpt(new string[] {"-methodparam", "2"});
-            AssertEquals(2, go.mp);
+            Assertion.AssertEquals(2, go.mp);
             go = new TestGetOpt(new string[] {"-methodparams", "2", "after"});
-            AssertEquals(2, go.m2);
-            AssertEquals("after", go.mp2);
+            Assertion.AssertEquals(2, go.m2);
+            Assertion.AssertEquals("after", go.mp2);
         }
         public void Test_NonChild()
         {
             NonChild nc = new NonChild();
             GetOpt go = new GetOpt(nc);
             go.Process(new string[] {"-test", "foo"});
-            AssertEquals("foo", nc.test);
+            Assertion.AssertEquals("foo", nc.test);
         }
         public void Test_Indexer()
         {
             NonChild nc = new NonChild();
             GetOpt go = new GetOpt(nc);
             go["test"] = "foo";
-            AssertEquals("foo", nc.test);
+            Assertion.AssertEquals("foo", nc.test);
         }
-        [ExpectException(typeof(FormatException))]
+        [ExpectedException(typeof(FormatException))]
         public void Test_BadInt()
         {
             TestGetOpt t = new TestGetOpt(new string[] {"/some", "one"});
         }
-        [ExpectException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentException))]
         public void Test_Error()
         {
             TestGetOpt go = new TestGetOpt(new string[] {"/broncos"});
         }
-        [ExpectException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentException))]
         public void Test_DashError()
         {
             TestGetOpt go = new TestGetOpt(new string[] {"-broncos"});
         }
-        [ExpectException(typeof(IndexOutOfRangeException))]
+        [ExpectedException(typeof(IndexOutOfRangeException))]
         public void Test_InsufficientError()
         {
             TestGetOpt go = new TestGetOpt(new string[] {"/some"});
         }
-        [ExpectException(typeof(IndexOutOfRangeException))]
+        [ExpectedException(typeof(IndexOutOfRangeException))]
         public void Test_DashInsufficientError()
         {
             TestGetOpt go = new TestGetOpt(new string[] {"-some"});
         }
-        [ExpectException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentException))]
         public void Test_BadRequired()
         {
             BadOpt bo = new BadOpt();
@@ -193,14 +209,14 @@ namespace test.bedrock.util
         public void Test_Required()
         {
             ReqOpt bo = new ReqOpt(new string[] {"/req:here"});
-            AssertEquals("here", bo.Req);
+            Assertion.AssertEquals("here", bo.Req);
         }
-        [ExpectException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentException))]
         public void Test_RequiredNotPassed()
         {
             ReqOpt bo = new ReqOpt(new string[] {});
         }
-        [ExpectException(typeof(IndexOutOfRangeException))]
+        [ExpectedException(typeof(IndexOutOfRangeException))]
         public void Test_MethodNotEnoughParams()
         {
             TestGetOpt go = new TestGetOpt(new string[] {"-methodparams", "2"});
@@ -260,6 +276,9 @@ namespace test.bedrock.util
         
         [CommandLine]
         public TestOptEnum fb = TestOptEnum.FOO;
+
+        [CommandLine]
+        public string assembly;
 
         public string m = "before";
         public int mp = -1;

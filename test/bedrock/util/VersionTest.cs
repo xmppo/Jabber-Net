@@ -36,14 +36,9 @@ namespace test.bedrock.util
     ///    Summary description for AssemblyXMLTest.
     /// </summary>
     [RCS(@"$Header$")]
-    public class VersionTest : TestCase
+    [TestFixture]
+    public class VersionTest
     {
-        public VersionTest(string name) : base(name) {}
-        public static ITest Suite
-        {
-            get { return new TestSuite(typeof(VersionTest)); }
-        }
-    
         [StarTeam("$" + "Header" + "$")]
         private class vFoo
         {
@@ -80,78 +75,78 @@ namespace test.bedrock.util
         public void Test_Empty() 
         {
             SourceVersionAttribute foo = SourceVersionAttribute.GetVersion(typeof(vFoo));
-            AssertEquals("Revision", null,               foo.Revision);
-            AssertEquals("Date",     DateTime.MinValue,  foo.Date);
-            AssertEquals("Author",   null,               foo.Author);
-            AssertEquals("Version",  null,               foo.Version);
-            AssertEquals("Archive",  null,               foo.Archive);
+            Assertion.AssertEquals("Revision", null,               foo.Revision);
+            Assertion.AssertEquals("Date",     DateTime.MinValue,  foo.Date);
+            Assertion.AssertEquals("Author",   null,               foo.Author);
+            Assertion.AssertEquals("Version",  null,               foo.Version);
+            Assertion.AssertEquals("Archive",  null,               foo.Archive);
         }
         public void Test_Full()
         {
             SourceVersionAttribute bar = SourceVersionAttribute.GetVersion(typeof(vBar));
-            AssertEquals("Revision", "1.11",             bar.Revision);
-            AssertEquals("Date",
+            Assertion.AssertEquals("Revision", "1.11",             bar.Revision);
+            Assertion.AssertEquals("Date",
                          new DateTime(2001, 2, 12, 18, 25, 4), 
                          bar.Date);
-            AssertEquals("Author",   "Joe Hildebrand",   bar.Author);
-            AssertEquals("Version",  new Version(1, 11), bar.Version);
-            AssertEquals("Archive",  @"C:\Prj\Dognapper\Microsoft\Common\src\com.ilg.Util\Test\VersionTest.cs", bar.Archive);
+            Assertion.AssertEquals("Author",   "Joe Hildebrand",   bar.Author);
+            Assertion.AssertEquals("Version",  new Version(1, 11), bar.Version);
+            Assertion.AssertEquals("Archive",  @"C:\Prj\Dognapper\Microsoft\Common\src\com.ilg.Util\Test\VersionTest.cs", bar.Archive);
         }
         public void Test_Ind()
         {
             SourceVersionAttribute ind = SourceVersionAttribute.GetVersion(typeof(vInd));
-            AssertEquals("ToString", 
+            Assertion.AssertEquals("ToString", 
                          "$" + @"Header: C:\Prj\Dognapper\Microsoft\Common\src\com.ilg.Util\Test\VersionTest.cs, 1, 02/12/2001 6:25:04 PM, Joe Hildebrand" + "$",
                          ind.ToString());
         }
         public void Test_PlainRev()
         {
             SourceVersionAttribute baz = SourceVersionAttribute.GetVersion(typeof(vBaz));
-            AssertEquals("Revision", "11",               baz.Revision);
-            AssertEquals("Date",
+            Assertion.AssertEquals("Revision", "11",               baz.Revision);
+            Assertion.AssertEquals("Date",
                          new DateTime(2001, 2, 12, 18, 25, 4), 
                          baz.Date);
-            AssertEquals("Author",   "Joe Hildebrand",   baz.Author);
-            AssertEquals("Version",  new Version(1, 11), baz.Version);
-            AssertEquals("Archive",  @"C:\Prj\Dognapper\Microsoft\Common\src\com.ilg.Util\Test\VersionTest.cs", baz.Archive);
+            Assertion.AssertEquals("Author",   "Joe Hildebrand",   baz.Author);
+            Assertion.AssertEquals("Version",  new Version(1, 11), baz.Version);
+            Assertion.AssertEquals("Archive",  @"C:\Prj\Dognapper\Microsoft\Common\src\com.ilg.Util\Test\VersionTest.cs", baz.Archive);
         }
         public void Test_RCS()
         {
             RCSAttribute c = (RCSAttribute) SourceVersionAttribute.GetVersion(typeof(RCSVer));
-            AssertEquals("Revision", "1.1",               c.Revision);
-            AssertEquals("Date",
+            Assertion.AssertEquals("Revision", "1.1",               c.Revision);
+            Assertion.AssertEquals("Date",
                          new DateTime(2001, 2, 12, 18, 25, 4), 
                          c.Date);
-            AssertEquals("Author",   "kingdon",           c.Author);
-            AssertEquals("Version",  new Version(1, 1),   c.Version);
-            AssertEquals("Archive",  @"/u1/html/cvsroot/www.cyclic.com/RCS-html/info-ref.html,v", c.Archive);
-            AssertEquals("State",    "Exp",               c.State);
+            Assertion.AssertEquals("Author",   "kingdon",           c.Author);
+            Assertion.AssertEquals("Version",  new Version(1, 1),   c.Version);
+            Assertion.AssertEquals("Archive",  @"/u1/html/cvsroot/www.cyclic.com/RCS-html/info-ref.html,v", c.Archive);
+            Assertion.AssertEquals("State",    "Exp",               c.State);
         }
         public void Test_VSS()
         {
             SourceSafeAttribute c = (SourceSafeAttribute) SourceVersionAttribute.GetVersion(typeof(VssVer));
-            AssertEquals("Revision", "1",                 c.Revision);
-            AssertEquals("Date",
+            Assertion.AssertEquals("Revision", "1",                 c.Revision);
+            Assertion.AssertEquals("Date",
                          new DateTime(2001, 2, 12, 18, 25, 0), 
                          c.Date);
-            AssertEquals("Author",   "Hildebzj",          c.Author);
-            AssertEquals("Version",  new Version(1, 1),   c.Version);
-            AssertEquals("Archive",  @"/t.cs",            c.Archive);
+            Assertion.AssertEquals("Author",   "Hildebzj",          c.Author);
+            Assertion.AssertEquals("Version",  new Version(1, 1),   c.Version);
+            Assertion.AssertEquals("Archive",  @"/t.cs",            c.Archive);
         }
         
         public void Test_GetAll()
         {
             SourceVersionCollection tv = SourceVersionAttribute.GetVersion();
-            Assert(tv["test.bedrock.util.VersionTest+vFoo"]   != null);
-            Assert(tv[typeof(vBar).FullName]   != null);
-            Assert(tv[typeof(vBaz)]   != null);
-            Assert(tv["test.bedrock.util.VersionTest+RCSVer"] != null);
-            Assert(tv["test.bedrock.util.VersionTest+VssVer"] != null);
-            Assert(tv["test.bedrock.util.VersionTest+vBax"]   == null);
+            Assertion.Assert(tv["test.bedrock.util.VersionTest+vFoo"]   != null);
+            Assertion.Assert(tv[typeof(vBar).FullName]   != null);
+            Assertion.Assert(tv[typeof(vBaz)]   != null);
+            Assertion.Assert(tv["test.bedrock.util.VersionTest+RCSVer"] != null);
+            Assertion.Assert(tv["test.bedrock.util.VersionTest+VssVer"] != null);
+            Assertion.Assert(tv["test.bedrock.util.VersionTest+vBax"]   == null);
             foreach (string c in tv)
             {
                 //Console.WriteLine("<{0}>", c);
-                Assert(tv[c] != null);
+                Assertion.Assert(tv[c] != null);
             }
         }
     }

@@ -43,22 +43,19 @@ namespace test.jabber.protocol.iq
     /// Test Agents
     /// </summary>
     [RCS(@"$Header$")]
-    public class AgentTest : TestCase
+    [TestFixture]
+    public class AgentTest
     {
-        public AgentTest(string name) : base(name) {}
-        public static ITest Suite
-        {
-            get { return new TestSuite(typeof(AgentTest)); }
-        }
         XmlDocument doc = new XmlDocument();
-        protected override void SetUp()
+        [SetUp]
+        private void SetUp()
         {
             Element.ResetID();
         }
         public void Test_Create()
         {
             AgentsQuery r = new AgentsQuery(doc);
-            AssertEquals("<query xmlns=\"jabber:iq:agents\" />", r.ToString());
+            Assertion.AssertEquals("<query xmlns=\"jabber:iq:agents\" />", r.ToString());
         }
     
         public void Test_Item()
@@ -67,7 +64,7 @@ namespace test.jabber.protocol.iq
             AgentsQuery q = (AgentsQuery) aiq.Query;
             Agent a = q.AddAgent();
             a.JID = new JID("hildjj@jabber.com");
-            AssertEquals("<iq id=\"JN_1\" type=\"get\"><query xmlns=\"jabber:iq:agents\">" +
+            Assertion.AssertEquals("<iq id=\"JN_1\" type=\"get\"><query xmlns=\"jabber:iq:agents\">" +
                          "<agent jid=\"hildjj@jabber.com\" /></query></iq>",
                          aiq.ToString());
         }
@@ -80,9 +77,9 @@ namespace test.jabber.protocol.iq
             a = r.AddAgent();
             a.JID = new JID("hildjj@jabber.org");
             Agent[] agents = r.GetAgents();
-            AssertEquals(agents.Length, 2);
-            AssertEquals(agents[0].JID, "hildjj@jabber.com");
-            AssertEquals(agents[1].JID, "hildjj@jabber.org");
+            Assertion.AssertEquals(agents.Length, 2);
+            Assertion.AssertEquals(agents[0].JID, "hildjj@jabber.com");
+            Assertion.AssertEquals(agents[1].JID, "hildjj@jabber.org");
         }
         public void Test_Transport()
         {
@@ -92,15 +89,15 @@ namespace test.jabber.protocol.iq
             Agent a = r.AddAgent();
             a.JID = new JID("hildjj@jabber.com");
             a.Transport = true;
-            AssertEquals(a.Transport, true);
-            AssertEquals("<iq id=\"JN_1\" type=\"result\"><query xmlns=\"jabber:iq:agents\">" +
+            Assertion.AssertEquals(a.Transport, true);
+            Assertion.AssertEquals("<iq id=\"JN_1\" type=\"result\"><query xmlns=\"jabber:iq:agents\">" +
                 "<agent jid=\"hildjj@jabber.com\"><transport /></agent></query></iq>",
                 aiq.ToString());
             a.Transport = false;
-            AssertEquals(a.Transport, false);
+            Assertion.AssertEquals(a.Transport, false);
             a.Groupchat = true;
-            AssertEquals(a.Groupchat, true);
-            AssertEquals("<iq id=\"JN_1\" type=\"result\"><query xmlns=\"jabber:iq:agents\">" +
+            Assertion.AssertEquals(a.Groupchat, true);
+            Assertion.AssertEquals("<iq id=\"JN_1\" type=\"result\"><query xmlns=\"jabber:iq:agents\">" +
                 "<agent jid=\"hildjj@jabber.com\"><groupchat /></agent></query></iq>",
                 aiq.ToString());
         }

@@ -40,21 +40,17 @@ namespace test.jabber.protocol.accept
     /// Summary description for IQTest.
     /// </summary>
     [RCS(@"$Header$")]
-    public class RouteTest : TestCase
+    [TestFixture]
+    public class RouteTest
     {
-        public RouteTest(string name) : base(name) {}
-        public static ITest Suite
-        {
-            get { return new TestSuite(typeof(RouteTest)); }
-        }
         XmlDocument doc = new XmlDocument();
         public void Test_Create()
         {
             Route r = new Route(doc);
             r.Contents = doc.CreateElement("foo");
-            AssertEquals("<route><foo /></route>", r.OuterXml);
+            Assertion.AssertEquals("<route><foo /></route>", r.OuterXml);
             XmlElement foo = r.Contents;
-            AssertEquals("<foo />", foo.OuterXml);
+            Assertion.AssertEquals("<foo />", foo.OuterXml);
         }
     }
 }

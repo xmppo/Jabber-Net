@@ -41,15 +41,12 @@ namespace test.jabber.protocol.client
     /// Summary description for MessageTest.
     /// </summary>
     [RCS(@"$Header$")]
-    public class MessageTest : TestCase
+    [TestFixture]
+    public class MessageTest
     {
-        public MessageTest(string name) : base(name) {}
-        public static ITest Suite
-        {
-            get { return new TestSuite(typeof(MessageTest)); }
-        }
         XmlDocument doc = new XmlDocument();
-        protected override void SetUp()
+        [SetUp]
+        private void SetUp()
         {
             Element.ResetID();
         }
@@ -59,7 +56,7 @@ namespace test.jabber.protocol.client
             msg.Html = "foo";
             // TODO: deal with the namespace problem here
             // msg.Html = "f<b>o</b>o";
-            AssertEquals("<message id=\"JN_1\"><html xmlns=\"http://www.w3.org/1999/xhtml\"><body>foo</body></html><body>foo</body></message>", msg.ToString());
+            Assertion.AssertEquals("<message id=\"JN_1\"><html xmlns=\"http://www.w3.org/1999/xhtml\"><body>foo</body></html><body>foo</body></message>", msg.ToString());
         }
     }
 }

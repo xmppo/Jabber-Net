@@ -42,26 +42,25 @@ namespace test.jabber.protocol.client
     /// Summary description for IQTest.
     /// </summary>
     [RCS(@"$Header$")]
-    public class IQTest : TestCase
+    [TestFixture]
+    public class IQTest
     {
-        public IQTest(string name) : base(name) {}
-        public static ITest Suite
-        {
-            get { return new TestSuite(typeof(IQTest)); }
-        }
         XmlDocument doc = new XmlDocument();
-        protected override void SetUp()
+
+        [SetUp]
+        private void SetUp()
         {
             Element.ResetID();
         }
-        public void Test_Create()
+        [Test]
+        public void Create()
         {
             IQ iq = new IQ(doc);
-            AssertEquals("<iq id=\"JN_1\" type=\"get\" />", iq.ToString());
+            Assertion.AssertEquals("<iq id=\"JN_1\" type=\"get\" />", iq.ToString());
             iq = new IQ(doc);
-            AssertEquals("<iq id=\"JN_2\" type=\"get\" />", iq.ToString());
+            Assertion.AssertEquals("<iq id=\"JN_2\" type=\"get\" />", iq.ToString());
             iq.Query = new Auth(doc);
-            AssertEquals("<iq id=\"JN_2\" type=\"get\"><query xmlns=\"jabber:iq:auth\" /></iq>", iq.ToString());
+            Assertion.AssertEquals("<iq id=\"JN_2\" type=\"get\"><query xmlns=\"jabber:iq:auth\" /></iq>", iq.ToString());
         }
     }
 }

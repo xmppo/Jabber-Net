@@ -37,13 +37,9 @@ namespace test.bedrock.collections
     ///    Summary description for TemplateTest.
     /// </summary>
     [RCS(@"$Header$")]
-    public class TrieNodeTest : TestCase
+    [TestFixture]
+    public class TrieNodeTest
     {
-        public TrieNodeTest(string name) : base(name) {}
-        public static ITest Suite
-        {
-            get { return new TestSuite(typeof(TrieNodeTest)); }
-        }
         public void Test_Main() 
         {
             System.Text.Encoding ENC = System.Text.Encoding.Default;
@@ -56,7 +52,7 @@ namespace test.bedrock.collections
                 current = current[b, true];
             }
             current.Value = "foo";
-            AssertEquals(ENC.GetString(key), ENC.GetString(current.Key));
+            Assertion.AssertEquals(ENC.GetString(key), ENC.GetString(current.Key));
         }
     }
 }

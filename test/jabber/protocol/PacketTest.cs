@@ -40,38 +40,34 @@ namespace test.jabber.protocol
     /// Summary description for PacketTest.
     /// </summary>
     [RCS(@"$Header$")]
-    public class PacketTest : TestCase
+    [TestFixture]
+    public class PacketTest
     {
-        public PacketTest(string name) : base(name) {}
-        public static ITest Suite
-        {
-            get { return new TestSuite(typeof(PacketTest)); }
-        }
         XmlDocument doc = new XmlDocument();
         
         public void Test_Create()
         {
             Packet p = new Packet("foo", doc);
-            AssertEquals("<foo />", p.ToString());
+            Assertion.AssertEquals("<foo />", p.ToString());
             p.To = "one";
-            AssertEquals("<foo to=\"one\" />", p.ToString());
+            Assertion.AssertEquals("<foo to=\"one\" />", p.ToString());
             p.From = "two";
-            AssertEquals("<foo to=\"one\" from=\"two\" />", p.ToString());
+            Assertion.AssertEquals("<foo to=\"one\" from=\"two\" />", p.ToString());
             p.Swap();
-            AssertEquals("<foo to=\"two\" from=\"one\" />", p.ToString());
+            Assertion.AssertEquals("<foo to=\"two\" from=\"one\" />", p.ToString());
         }
 
         public void Test_JabberDate()
         {
             string sdt = "20020504T20:39:42";
             DateTime dt = Element.JabberDate(sdt);
-            AssertEquals(2002, dt.Year);
-            AssertEquals(5, dt.Month);
-            AssertEquals(4, dt.Day);
-            AssertEquals(20, dt.Hour);
-            AssertEquals(39, dt.Minute);
-            AssertEquals(42, dt.Second);
-            AssertEquals(sdt, Element.JabberDate(dt));
+            Assertion.AssertEquals(2002, dt.Year);
+            Assertion.AssertEquals(5, dt.Month);
+            Assertion.AssertEquals(4, dt.Day);
+            Assertion.AssertEquals(20, dt.Hour);
+            Assertion.AssertEquals(39, dt.Minute);
+            Assertion.AssertEquals(42, dt.Second);
+            Assertion.AssertEquals(sdt, Element.JabberDate(dt));
         }
     }
 }

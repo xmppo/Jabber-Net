@@ -39,32 +39,26 @@ namespace test.bedrock.collections
     /// Summary description for SkipListTest.
     /// </summary>
     [RCS(@"$Header$")]
-    public class SkipListTest : TestCase
+    [TestFixture]
+    public class SkipListTest
     {
         private System.Text.Encoding ENC = System.Text.Encoding.Default;
-        public SkipListTest(string name) : base(name) {}
-
-        public static ITest Suite
-        {
-            get { return new TestSuite(typeof(SkipListTest)); }
-        }
-
         public void Test_Add()
         {
             SkipList sl = new SkipList();
-            AssertEquals(0, sl.Count);
+            Assertion.AssertEquals(0, sl.Count);
             sl.Add("1", "bar");
-            AssertEquals(1, sl.Count);
+            Assertion.AssertEquals(1, sl.Count);
             sl.Add("1", "baz");
-            AssertEquals(1, sl.Count);
+            Assertion.AssertEquals(1, sl.Count);
             sl.Add("2", "baz");
-            AssertEquals(2, sl.Count);
+            Assertion.AssertEquals(2, sl.Count);
         }
         public void Test_Get()
         {
             SkipList sl = new SkipList();
             sl.Add("1", "bar");
-            AssertEquals("bar", sl["1"]);
+            Assertion.AssertEquals("bar", sl["1"]);
         }
         public void Test_Lots_InOrder()
         {
@@ -73,10 +67,10 @@ namespace test.bedrock.collections
             {
                 sl[i] = i.ToString();
             }
-            AssertEquals(4096, sl.Count);
+            Assertion.AssertEquals(4096, sl.Count);
             for (int i=0; i<4096; i++)
             {
-                AssertEquals(i.ToString(), sl[i]);
+                Assertion.AssertEquals(i.ToString(), sl[i]);
             }
         }
         public void Test_Lots_Random()
@@ -94,10 +88,10 @@ namespace test.bedrock.collections
                 }
                 sl[nums[i]] = i.ToString();
             }
-            AssertEquals(4096, sl.Count);
+            Assertion.AssertEquals(4096, sl.Count);
             for (int i=0; i<4096; i++)
             {
-                AssertEquals(i.ToString(), sl[nums[i]]);
+                Assertion.AssertEquals(i.ToString(), sl[nums[i]]);
             }
         }
         public void Test_Iteration()
@@ -107,15 +101,15 @@ namespace test.bedrock.collections
             {
                 sl[i] = i.ToString();
             }
-            AssertEquals(4096, sl.Count);
+            Assertion.AssertEquals(4096, sl.Count);
             int count = 0;
             foreach (DictionaryEntry de in sl)
             {
-                AssertEquals(count, de.Key);
-                AssertEquals(count.ToString(), de.Value);
+                Assertion.AssertEquals(count, de.Key);
+                Assertion.AssertEquals(count.ToString(), de.Value);
                 count++;
             }
-            AssertEquals(4096, count);
+            Assertion.AssertEquals(4096, count);
         }
 
         public void Test_DictIteration()
@@ -125,25 +119,25 @@ namespace test.bedrock.collections
             {
                 sl[i] = i.ToString();
             }
-            AssertEquals(4096, sl.Count);
+            Assertion.AssertEquals(4096, sl.Count);
             int count = 0;
             IDictionaryEnumerator e = sl.GetEnumerator();
             while (e.MoveNext())
             {
-                AssertEquals(count, e.Key);
-                AssertEquals(count.ToString(), e.Value);
+                Assertion.AssertEquals(count, e.Key);
+                Assertion.AssertEquals(count.ToString(), e.Value);
                 count++;
             }
-            AssertEquals(4096, count);
+            Assertion.AssertEquals(4096, count);
         }
     
         public void Test_Remove()
         {
             SkipList sl = new SkipList();
             sl[0] = 0;
-            AssertEquals(1, sl.Count);
+            Assertion.AssertEquals(1, sl.Count);
             sl.Remove(0);
-            AssertEquals(0, sl.Count);
+            Assertion.AssertEquals(0, sl.Count);
         }
 
         public void Test_Clear()
@@ -153,9 +147,9 @@ namespace test.bedrock.collections
             {
                 sl[i] = i.ToString();
             }
-            AssertEquals(4096, sl.Count);
+            Assertion.AssertEquals(4096, sl.Count);
             sl.Clear();
-            AssertEquals(0, sl.Count);
+            Assertion.AssertEquals(0, sl.Count);
         }
     }
 }

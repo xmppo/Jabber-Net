@@ -40,13 +40,9 @@ namespace test.jabber.protocol.stream
     /// Summary description for StreamFactoryTest.
     /// </summary>
     [RCS(@"$Header$")]
-    public class StreamFactoryTest : TestCase
+    [TestFixture]
+    public class StreamFactoryTest
     {
-        public StreamFactoryTest(string name) : base(name) {}
-        public static ITest Suite
-        {
-            get { return new TestSuite(typeof(StreamFactoryTest)); }
-        }
         public void Test_Create()
         {
             ElementFactory pf = new ElementFactory();

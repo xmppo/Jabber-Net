@@ -35,50 +35,38 @@ namespace test.bedrock.util
 {
     
     [RCS(@"$Header$")]
-    public class ComplexTest : TestCase
+    [TestFixture]
+    public class ComplexTest
     {
-        public ComplexTest(string name) : base(name)
-        {}
-        public static ITest Suite
-        {
-            get { return new TestSuite(typeof(ComplexTest)); }
-        }
-        private void AssertEquals(double first, double second)
-        {
-            bool pass = Math.Abs(first - second) < 1e-7;
-            if (!pass)
-                Console.WriteLine("{0} != {1}", first, second);
-            Assert(pass);
-        }
         public void Test_ToString()
         {
             Complex c = new Complex(2, 3);
-            AssertEquals("2 + 3i", c.ToString());
+            Assertion.AssertEquals("2 + 3i", c.ToString());
             c.Imaginary = 0;
-            AssertEquals("2", c.ToString());
+            Assertion.AssertEquals("2", c.ToString());
             c.Imaginary = -3;
-            AssertEquals("2 - 3i", c.ToString());
+            Assertion.AssertEquals("2 - 3i", c.ToString());
             c.Real = 0;
-            AssertEquals("-3i", c.ToString());
+            Assertion.AssertEquals("-3i", c.ToString());
             
             c.Imaginary = 3;
-            AssertEquals("3i", c.ToString());
+            Assertion.AssertEquals("3i", c.ToString());
             
             c.Imaginary = Double.PositiveInfinity;
-            AssertEquals("Infinity", c.ToString());
+            Assertion.AssertEquals("Infinity", c.ToString());
             
             c.Imaginary = Double.NaN;
-            AssertEquals("NaN", c.ToString());
+            Assertion.AssertEquals("NaN", c.ToString());
         }
         
         public void Test_Equals()
         {
             Complex z = new Complex(2, 3);
             Complex w = new Complex(2, 3);
-            AssertEquals(z, w);
-            Assert(z == w);
+            Assertion.AssertEquals(z, w);
+            Assertion.Assert(z == w);
             z = 3d;
-            Assert(z == 3d);
+            Assertion.Assert(z == 3d);
         }
         
         public void Test_Cast()
@@ -89,229 +77,230 @@ namespace test.bedrock.util
             float f = 4;
             double d = 4;
             
-            Assert( z == i );
-            Assert( z == l );        
-            Assert( z == f );
-            Assert( z == d );
-            Assert( z == (Complex)i );
-            Assert( z == (Complex)l );        
-            Assert( z == (Complex)f );
-            Assert( z == (Complex)d );
+            Assertion.Assert( z == i );
+            Assertion.Assert( z == l );        
+            Assertion.Assert( z == f );
+            Assertion.Assert( z == d );
+            Assertion.Assert( z == (Complex)i );
+            Assertion.Assert( z == (Complex)l );        
+            Assertion.Assert( z == (Complex)f );
+            Assertion.Assert( z == (Complex)d );
         }
         
         public void Test_Add()
         {
             Complex z = new Complex(2, 3);
             Complex w = new Complex(2, -5);
-            AssertEquals(z + w, new Complex(4, -2));
+            Assertion.AssertEquals(z + w, new Complex(4, -2));
         }
         public void Test_Mult()
         {
             Complex z = new Complex(2, 3);
             Complex w = new Complex(2, -5);
-            AssertEquals(new Complex(19, -4), z * w);
+            Assertion.AssertEquals(new Complex(19, -4), z * w);
         }
         
         public void Test_Div()
         {
             Complex z = new Complex(3, 5);
             Complex w = new Complex(3, -1);
-            AssertEquals(new Complex(.4, 1.8), z / w);
+            Assertion.AssertEquals(new Complex(.4, 1.8), z / w);
             w = new Complex(1, 3);
-            AssertEquals(new Complex(1.8, -0.4), z / w);
+            Assertion.AssertEquals(new Complex(1.8, -0.4), z / w);
             
             z = new Complex(3, 6);
-            AssertEquals(new Complex(1, 2), z / 3);
+            Assertion.AssertEquals(new Complex(1, 2), z / 3);
         }
         public void Test_Conj()
         {
             Complex z = new Complex(7, 5);
-            AssertEquals(new Complex(7, -5), z.Conjugate());
+            Assertion.AssertEquals(new Complex(7, -5), z.Conjugate());
         }
         public void Test_Abs()
         {
             Complex z = new Complex(3, 4);
-            AssertEquals(z.Abs(),  5d);
+            Assertion.AssertEquals(z.Abs(),  5d, 1e-7);
             z = new Complex(99, 20);
-            AssertEquals(z.Abs(), 101d);
+            Assertion.AssertEquals(z.Abs(), 101d, 1e-7);
             z = new Complex(3);
-            AssertEquals(z.Abs(), 3);
+            Assertion.AssertEquals(z.Abs(), 3d, 1e-7);
             z = new Complex(0,3);
-            AssertEquals(z.Abs(), 3);
+            Assertion.AssertEquals(z.Abs(), 3d, 1e-7);
         }
         
         public void Test_Neg()
         {
             Complex z = new Complex(3, 4);
-            AssertEquals(new Complex(-3, -4), -z);
+            Assertion.AssertEquals(new Complex(-3, -4), -z);
         }
         
         public void Test_Sqrt()
         {
             double s2 = Math.Sqrt(2);
             Complex z = new Complex(3, 4);
-            AssertEquals(new Complex(2, 1), z.Sqrt());
+            Assertion.AssertEquals(new Complex(2, 1), z.Sqrt());
             z = new Complex(6,8);
-            AssertEquals(new Complex(2 * s2, s2), z.Sqrt());
+            Assertion.AssertEquals(new Complex(2 * s2, s2), z.Sqrt());
             z = new Complex(0,0);
-            AssertEquals(new Complex(0,0), z.Sqrt());
+            Assertion.AssertEquals(new Complex(0,0), z.Sqrt());
             z = new Complex(2);
-            AssertEquals(new Complex(s2, 0), z.Sqrt());
+            Assertion.AssertEquals(new Complex(s2, 0), z.Sqrt());
             z = new Complex(0, 8);
-            AssertEquals(new Complex(2, 2), z.Sqrt());
+            Assertion.AssertEquals(new Complex(2, 2), z.Sqrt());
             z = new Complex(99, 20);
-            AssertEquals(new Complex(10,1), z.Sqrt());
+            Assertion.AssertEquals(new Complex(10,1), z.Sqrt());
         }
         public void Test_Exp()
         {
             Complex z = new Complex(0, Math.PI);
-            AssertEquals(new Complex(-1), z.Exp());
+            Assertion.AssertEquals(new Complex(-1), z.Exp());
             z = new Complex(1,1);
-            AssertEquals(new Complex(1.468693939915885, 2.287355287178842),
+            Assertion.AssertEquals(new Complex(1.468693939915885, 2.287355287178842),
                          z.Exp());
         }
         public void Test_Polar()
         {
             Complex z = Complex.Polar(1, Math.PI);
-            AssertEquals(new Complex(-1), z);
+            Assertion.AssertEquals(new Complex(-1), z);
         }
         public void Test_Pow()
         {
             Complex z = new Complex(1, 1);
-            AssertEquals(new Complex(-2, 2), z.Pow(3));
-            AssertEquals(new Complex(-0.265653998849241, 0.3198181138561361),
+            Assertion.AssertEquals(new Complex(-2, 2), z.Pow(3));
+            Assertion.AssertEquals(new Complex(-0.265653998849241, 0.3198181138561361),
                          z.Pow(new Complex(2,2)));
         }
         public void Test_Arg()
         {
             Complex z = new Complex(1, 1);
-            AssertEquals(0.7853981633974483, z.Arg());
+            Assertion.AssertEquals(0.7853981633974483, z.Arg());
         }
         public void Test_Log()
         {
             Complex z = new Complex(1,1);
-            AssertEquals(new Complex(0.3465735902799727, 0.7853981633974483),
+            Assertion.AssertEquals(new Complex(0.3465735902799727, 0.7853981633974483),
                          z.Log());
         }
         public void Test_Sin()
         {
             Complex z = new Complex(1,1);
-            AssertEquals(new Complex(1.298457581415977, 0.6349639147847361),
+            Assertion.AssertEquals(new Complex(1.298457581415977, 0.6349639147847361),
                          z.Sin());
         }
         public void Test_Cos()
         {
             Complex z = new Complex(1,1);
-            AssertEquals(new Complex(0.8337300251311491, -0.9888977057628651),
+            Assertion.AssertEquals(new Complex(0.8337300251311491, -0.9888977057628651),
                          z.Cos());
         }
         public void Test_Tan()
         {
             Complex z = new Complex(1,1);
-            AssertEquals(new Complex(0.2717525853195117, 1.083923327338695),
+            Assertion.AssertEquals(new Complex(0.2717525853195117, 1.083923327338695),
                          z.Tan());
         }
         
         public void Test_Inv()
         {
             Complex z = new Complex(1,2);
-            AssertEquals(new Complex(0.2d, -0.4d), z.Inverse());      
+            Assertion.AssertEquals(new Complex(0.2d, -0.4d), z.Inverse());      
             z = new Complex(2,1);
-            AssertEquals(new Complex(0.4d, -0.2d), z.Inverse());      
+            Assertion.AssertEquals(new Complex(0.4d, -0.2d), z.Inverse());      
         }
         public void Test_Sinh()
         {
             Complex z = new Complex(1,1);
-            AssertEquals(new Complex(0.6349639147847361, 1.298457581415977),
+            Assertion.AssertEquals(new Complex(0.6349639147847361, 1.298457581415977),
                          z.Sinh());      
             
         }
         public void Test_Cosh()
         {
             Complex z = new Complex(1,1);
-            AssertEquals(new Complex(0.8337300251311491, 0.9888977057628651),
+            Assertion.AssertEquals(new Complex(0.8337300251311491, 0.9888977057628651),
                          z.Cosh());      
             
         }
         public void Test_Tanh()
         {
             Complex z = new Complex(1,1);
-            AssertEquals(new Complex(1.083923327338695, 0.2717525853195117),
+            Assertion.AssertEquals(new Complex(1.083923327338695, 0.2717525853195117),
                          z.Tanh());      
             
         }
         public void Test_Asin()
         {
             Complex z = new Complex(1,1);
-            AssertEquals(new Complex(0.6662394324925153, 1.061275061905036),
+            Assertion.AssertEquals(new Complex(0.6662394324925153, 1.061275061905036),
                          z.Asin());      
             
         }
         public void Test_Acos()
         {
             Complex z = new Complex(1,1);
-            AssertEquals(new Complex(0.9045568943023814, -1.061275061905036),
+            Assertion.AssertEquals(new Complex(0.9045568943023814, -1.061275061905036),
                          z.Acos());      
             
         }
         public void Test_Atan()
         {
             Complex z = new Complex(1,1);
-            AssertEquals(new Complex(1.017221967897851, 0.4023594781085251),
+            Assertion.AssertEquals(new Complex(1.017221967897851, 0.4023594781085251),
                          z.Atan());        
         }
         public void Test_Asinh()
         {
             Complex z = new Complex(1,1);
-            AssertEquals(new Complex(1.061275061905036, 0.6662394324925153),
+            Assertion.AssertEquals(new Complex(1.061275061905036, 0.6662394324925153),
                          z.Asinh());        
         }
         public void Test_Acosh()
         {
             Complex z = new Complex(1,1);
-            AssertEquals(new Complex(1.061275061905036, 0.9045568943023814),
+            Assertion.AssertEquals(new Complex(1.061275061905036, 0.9045568943023814),
                          z.Acosh());        
         }
         public void Test_Atanh()
         {
             Complex z = new Complex(.5,.5);
-            AssertEquals(new Complex(0.4023594781085251, 0.5535743588970453),
+            Assertion.AssertEquals(new Complex(0.4023594781085251, 0.5535743588970453),
                          z.Atanh());        
         }
         public void Test_Nan()
         {
             Complex z = new Complex(Double.NaN);
-            Assert(z.IsNaN());
+            Assertion.Assert(z.IsNaN());
             z.Real = 4;
-            Assert(!z.IsNaN());
+            Assertion.Assert(!z.IsNaN());
             z.Imaginary = Double.NaN;
-            Assert(z.IsNaN());      
+            Assertion.Assert(z.IsNaN());      
         }
         
         public void Test_Infinity()
         {
             Complex z = new Complex(Double.PositiveInfinity);
-            Assert(z.IsInfinity());
+            Assertion.Assert(z.IsInfinity());
             z.Real = 4;
-            Assert(!z.IsInfinity());
+            Assertion.Assert(!z.IsInfinity());
             z.Imaginary = Double.NegativeInfinity;
-            Assert(z.IsInfinity());      
+            Assertion.Assert(z.IsInfinity());      
         }
-        [ExpectException(typeof(ArgumentOutOfRangeException))]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void Test_Tolerance()
         {
             Complex.Tolerance = -1;
         }
+
         public void Test_Format()
         {
             Complex z = new Complex(1, 2);
             string f = string.Format("{0}", z);
-            AssertEquals("1 + 2i", f);
+            Assertion.AssertEquals("1 + 2i", f);
             f = string.Format("{0:f2}", z);
-            AssertEquals("1.00 + 2.00i", f);
+            Assertion.AssertEquals("1.00 + 2.00i", f);
             z = new Complex(1, -2);
             f = string.Format("{0:c2}", z);
-            AssertEquals("$1.00 - $2.00i", f);
+            Assertion.AssertEquals("$1.00 - $2.00i", f);
         }
     }
 }

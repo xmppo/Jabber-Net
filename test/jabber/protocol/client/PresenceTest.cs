@@ -40,20 +40,16 @@ namespace test.jabber.protocol.client
     /// Summary description for PresenceTest.
     /// </summary>
     [RCS(@"$Header$")]
-    public class PresenceTest : TestCase
+    [TestFixture]
+    public class PresenceTest
     {
-        public PresenceTest(string name) : base(name) {}
-        public static ITest Suite
-        {
-            get { return new TestSuite(typeof(PresenceTest)); }
-        }
         XmlDocument doc = new XmlDocument();
         public void Test_Create()
         {
             Presence p = new Presence(doc);
             p.Type   = PresenceType.available;
             p.Status = "foo";
-            AssertEquals("<presence type=\"available\"><status>foo</status></presence>", p.ToString());
+            Assertion.AssertEquals("<presence type=\"available\"><status>foo</status></presence>", p.ToString());
         }
     }
 }

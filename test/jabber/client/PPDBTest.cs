@@ -36,25 +36,21 @@ using jabber;
 using jabber.client;
 using jabber.protocol.client;
 
-namespace test.jabber.client
+namespace test.jabber.client1 // TODO: Client1 due to a bug in NUnit.  
 {
     /// <summary>
     /// Summary description for PPDP.
     /// </summary>
     [RCS(@"$Header$")]
-    public class PPDBTest : TestCase
+    [TestFixture]
+    public class PPDBTest
     {
-        public PPDBTest(string name) : base(name) {}
-        public static ITest Suite
-        {
-            get { return new TestSuite(typeof(PPDBTest)); }
-        }
         XmlDocument doc = new XmlDocument();
 
         public void Test_Create()
         {
             PPDB pp = new PPDB();
-            AssertEquals("jabber.client.PPDB", pp.GetType().FullName);
+            Assertion.AssertEquals("jabber.client.PPDB", pp.GetType().FullName);
         }
         public void TestAdd()
         {
@@ -63,9 +59,9 @@ namespace test.jabber.client
             JID f = new JID("foo", "bar", "baz");
             pres.From = f;
             pp.AddPresence(pres);
-            AssertEquals("foo@bar/baz", pp[f].From.ToString());
+            Assertion.AssertEquals("foo@bar/baz", pp[f].From.ToString());
             f.Resource = null;
-            AssertEquals("foo@bar/baz", pp[f].From.ToString());
+            Assertion.AssertEquals("foo@bar/baz", pp[f].From.ToString());
         }
 		public void TestRetrieve()
 		{
@@ -75,20 +71,20 @@ namespace test.jabber.client
 			pres.From = f;
 			pres.Priority = "0";
 			pp.AddPresence(pres);
-			AssertEquals("foo@bar/baz", pp[f.Bare].From.ToString());
+			Assertion.AssertEquals("foo@bar/baz", pp[f.Bare].From.ToString());
 
 			pres = new Presence(doc);
 			f = new JID("foo", "bar", "bay");
 			pres.From = f;
 			pres.Priority = "1";
 			pp.AddPresence(pres);
-			AssertEquals("foo@bar/bay", pp[f.Bare].From.ToString());
+			Assertion.AssertEquals("foo@bar/bay", pp[f.Bare].From.ToString());
 
 			pres = new Presence(doc);
 			pres.From = f;
 			pres.Type = PresenceType.unavailable;
 			pp.AddPresence(pres);
-			AssertEquals("foo@bar/baz", pp[f.Bare].From.ToString());
+			Assertion.AssertEquals("foo@bar/baz", pp[f.Bare].From.ToString());
 		}
     }
 }

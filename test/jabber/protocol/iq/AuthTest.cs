@@ -42,22 +42,19 @@ namespace test.jabber.protocol.iq
     /// Summary description for AuthTest.
     /// </summary>
     [RCS(@"$Header$")]
-    public class AuthTest : TestCase
+    [TestFixture]
+    public class AuthTest
     {
-        public AuthTest(string name) : base(name) {}
-        public static ITest Suite
-        {
-            get { return new TestSuite(typeof(AuthTest)); }
-        }
         XmlDocument doc = new XmlDocument();
-        protected override void SetUp()
+        [SetUp]
+        private void SetUp()
         {
             Element.ResetID();
         }
         public void Test_Create()
         {
             IQ iq = new AuthIQ(doc);
-            AssertEquals("<iq id=\"JN_1\" type=\"get\"><query xmlns=\"jabber:iq:auth\" /></iq>", iq.ToString());
+            Assertion.AssertEquals("<iq id=\"JN_1\" type=\"get\"><query xmlns=\"jabber:iq:auth\" /></iq>", iq.ToString());
         }
         public void Test_Hash()
         {
@@ -66,7 +63,7 @@ namespace test.jabber.protocol.iq
             Auth a = (Auth) iq.Query;
             a.SetDigest("foo", "bar", "3B513636");
             a.Resource = "Home";
-            AssertEquals("<iq id=\"JN_1\" type=\"set\"><query xmlns=\"jabber:iq:auth\">" + 
+            Assertion.AssertEquals("<iq id=\"JN_1\" type=\"set\"><query xmlns=\"jabber:iq:auth\">" + 
                          "<username>foo</username>" + 
                          "<digest>37d9c887967a35d53b81f07916a309a5b8d7e8cc</digest>" + 
                          "<resource>Home</resource>" + 
@@ -85,7 +82,7 @@ SENT: <iq type="set" id="JCOM_15"><query xmlns="jabber:iq:auth"><username>zerokt
             Auth a = (Auth) iq.Query;
             a.SetZeroK("zeroktest", "test", "3C7A6B0A", 499);
             a.Resource = "Winjab";
-            AssertEquals("<iq id=\"JN_1\" type=\"set\"><query xmlns=\"jabber:iq:auth\">" + 
+            Assertion.AssertEquals("<iq id=\"JN_1\" type=\"set\"><query xmlns=\"jabber:iq:auth\">" + 
                 "<username>zeroktest</username>" + 
                 "<hash>e00c83748492a3bc7e4831c9e973d117082c3abe</hash>" + 
                 "<resource>Winjab</resource>" + 

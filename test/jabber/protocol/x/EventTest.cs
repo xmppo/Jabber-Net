@@ -41,36 +41,33 @@ namespace test.jabber.protocol.x
 	/// Summary description for AuthTest.
 	/// </summary>
 	[RCS(@"$Header$")]
-	public class EventTest : TestCase
+    [TestFixture]
+    public class EventTest
 	{
-		public EventTest(string name) : base(name) {}
-		public static ITest Suite
-		{
-			get { return new TestSuite(typeof(EventTest)); }
-		}
 		XmlDocument doc = new XmlDocument();
-		protected override void SetUp()
+        [SetUp]
+		private void SetUp()
 		{
 			Element.ResetID();
 		}
 		public void Test_Create()
 		{
 			Event e = new Event(doc);
-			AssertEquals("<x xmlns=\"jabber:x:event\" />", e.ToString());
+			Assertion.AssertEquals("<x xmlns=\"jabber:x:event\" />", e.ToString());
 			e.ID = "foo";
-			AssertEquals("<x xmlns=\"jabber:x:event\"><id>foo</id></x>", e.ToString());
-			AssertEquals("foo", e.ID);
-			AssertEquals(EventType.NONE, e.Type);
+			Assertion.AssertEquals("<x xmlns=\"jabber:x:event\"><id>foo</id></x>", e.ToString());
+			Assertion.AssertEquals("foo", e.ID);
+			Assertion.AssertEquals(EventType.NONE, e.Type);
 			e.Type = EventType.composing;
-			AssertEquals(EventType.composing, e.Type);
+			Assertion.AssertEquals(EventType.composing, e.Type);
 			e.Type = EventType.delivered;
-			AssertEquals(EventType.delivered, e.Type);
-			AssertEquals("<x xmlns=\"jabber:x:event\"><id>foo</id><delivered /></x>", e.ToString());
-			AssertEquals(true, e.IsDelivered);
-			AssertEquals(false, e.IsComposing);
+			Assertion.AssertEquals(EventType.delivered, e.Type);
+			Assertion.AssertEquals("<x xmlns=\"jabber:x:event\"><id>foo</id><delivered /></x>", e.ToString());
+			Assertion.AssertEquals(true, e.IsDelivered);
+			Assertion.AssertEquals(false, e.IsComposing);
 			e.IsComposing = true;
-			AssertEquals("<x xmlns=\"jabber:x:event\"><id>foo</id><delivered /><composing /></x>", e.ToString());
-			AssertEquals(EventType.composing | EventType.delivered, e.Type);
+			Assertion.AssertEquals("<x xmlns=\"jabber:x:event\"><id>foo</id><delivered /><composing /></x>", e.ToString());
+			Assertion.AssertEquals(EventType.composing | EventType.delivered, e.Type);
 		}
 	}
 }

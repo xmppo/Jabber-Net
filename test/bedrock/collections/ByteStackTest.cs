@@ -39,69 +39,65 @@ namespace test.bedrock.collections
     ///    Summary description for TemplateTest.
     /// </summary>
     [RCS(@"$Header$")]
-    public class ByteStackTest : TestCase
+    [TestFixture]
+    public class ByteStackTest
     {
         private System.Text.Encoding ENC = System.Text.Encoding.Default;
-        public ByteStackTest(string name) : base(name) {}
-        public static ITest Suite
-        {
-            get { return new TestSuite(typeof(ByteStackTest)); }
-        }
         public void Test_Main() 
         {
             ByteStack bs = new ByteStack();
-            AssertEquals(0, bs.Count);
+            Assertion.AssertEquals(0, bs.Count);
             bs.Push((byte) 'a');
-            AssertEquals(1, bs.Count);
+            Assertion.AssertEquals(1, bs.Count);
             byte b = bs.Pop();
-            AssertEquals(b, (byte)'a');
-            AssertEquals(0, bs.Count);
+            Assertion.AssertEquals(b, (byte)'a');
+            Assertion.AssertEquals(0, bs.Count);
         }
         public void Test_Empty()
         {
             ByteStack bs = new ByteStack();
             byte[] buf = bs;
-            AssertEquals(0, buf.Length);
+            Assertion.AssertEquals(0, buf.Length);
         }
         public void Test_Init()
         {
             ByteStack bs = new ByteStack(ENC.GetBytes("foo"));
-            AssertEquals("foo", bs.ToString());
+            Assertion.AssertEquals("foo", bs.ToString());
             bs.Push((byte) 't');
-            AssertEquals("foot", bs.ToString());
+            Assertion.AssertEquals("foot", bs.ToString());
             bs = new ByteStack(ENC.GetBytes("f"));
             bs.Push((byte) 't');
-            AssertEquals("ft", bs.ToString());
+            Assertion.AssertEquals("ft", bs.ToString());
         }
         public void Test_Growth()
         {
             ByteStack bs = new ByteStack(4);
             
             bs.Push((byte) 'b');
-            AssertEquals("b", bs.ToString());
+            Assertion.AssertEquals("b", bs.ToString());
             bs.Push((byte) 'c');
-            AssertEquals("bc", bs.ToString());
+            Assertion.AssertEquals("bc", bs.ToString());
             bs.Push((byte) 'd');
-            AssertEquals("bcd", bs.ToString());
+            Assertion.AssertEquals("bcd", bs.ToString());
             bs.Push((byte) 'e');
-            AssertEquals("bcde", bs.ToString());
+            Assertion.AssertEquals("bcde", bs.ToString());
             bs.Push((byte) 'b');
-            AssertEquals("bcdeb", bs.ToString());
+            Assertion.AssertEquals("bcdeb", bs.ToString());
             bs.Push((byte) 'c');
-            AssertEquals("bcdebc", bs.ToString());
+            Assertion.AssertEquals("bcdebc", bs.ToString());
             bs.Push((byte) 'd');
-            AssertEquals("bcdebcd", bs.ToString());
+            Assertion.AssertEquals("bcdebcd", bs.ToString());
             bs.Push((byte) 'e');
-            AssertEquals("bcdebcde", bs.ToString());
-            bs.Push((byte) 'b');
-            bs.Push((byte) 'c');
-            bs.Push((byte) 'd');
-            bs.Push((byte) 'e');
+            Assertion.AssertEquals("bcdebcde", bs.ToString());
             bs.Push((byte) 'b');
             bs.Push((byte) 'c');
             bs.Push((byte) 'd');
             bs.Push((byte) 'e');
-            AssertEquals("bcdebcdebcdebcde", bs.ToString());
+            bs.Push((byte) 'b');
+            bs.Push((byte) 'c');
+            bs.Push((byte) 'd');
+            bs.Push((byte) 'e');
+            Assertion.AssertEquals("bcdebcdebcdebcde", bs.ToString());
         }
     }
 }

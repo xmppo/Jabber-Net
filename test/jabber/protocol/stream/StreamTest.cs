@@ -43,18 +43,14 @@ namespace test.jabber.protocol.stream
     /// Summary description for StreamTest.
     /// </summary>
     [RCS(@"$Header$")]
-    public class StreamTest : TestCase
+    [TestFixture]
+    public class StreamTest
     {
-        public StreamTest(string name) : base(name) {}
-        public static ITest Suite
-        {
-            get { return new TestSuite(typeof(StreamTest)); }
-        }
         XmlDocument doc = new XmlDocument();
         public void Test_Create()
         {
             Stream s = new Stream(doc, "jabber:client");
-            Assert(s.ToString(), 
+            Assertion.Assert(s.ToString(), 
                    Regex.IsMatch(s.ToString(), 
                                  "<stream:stream id=\"[a-z0-9]+\" xmlns=\"jabber:client\" xmlns:stream=\"http://etherx\\.jabber\\.org/streams\" />",
                                  RegexOptions.IgnoreCase));
@@ -63,18 +59,18 @@ namespace test.jabber.protocol.stream
         {
             Error err = new Error(doc);
             err.Message = "foo";
-            AssertEquals("<stream:error " + 
+            Assertion.AssertEquals("<stream:error " + 
                 "xmlns:stream=\"http://etherx.jabber.org/streams\">foo</stream:error>", err.ToString());
             ElementFactory sf = new ElementFactory();
             sf.AddType(new fact());
             XmlQualifiedName qname = new XmlQualifiedName(err.LocalName, err.NamespaceURI);
             Element p = (Element) sf.GetElement(err.Prefix, qname, doc);
-            AssertEquals(typeof(Error), p.GetType());
+            Assertion.AssertEquals(typeof(Error), p.GetType());
         }
         public void Test_StartTag()
         {
             Stream s = new Stream(doc, "jabber:client");
-            Assert(s.StartTag(), 
+            Assertion.Assert(s.StartTag(), 
                    Regex.IsMatch(s.StartTag(), 
                                  "<stream:stream xmlns:stream=\"http://etherx\\.jabber\\.org/streams\" id=\"[a-z0-9]+\" xmlns=\"jabber:client\">",
                                  RegexOptions.IgnoreCase));

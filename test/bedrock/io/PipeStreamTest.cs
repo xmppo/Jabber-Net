@@ -38,13 +38,9 @@ namespace test.bedrock.io
     ///    Summary description for PipeStreamTest.
     /// </summary>
     [RCS(@"$Header$")]
-    public class PipeStreamTest : TestCase
+    [TestFixture]
+    public class PipeStreamTest
     {
-        public PipeStreamTest(string name) : base(name) {}
-        public static ITest Suite
-        {
-            get { return new TestSuite(typeof(PipeStreamTest)); }
-        }
         private PipeStream p = new PipeStream();
         private static System.Text.Encoding ENC = System.Text.Encoding.ASCII;
         public void Test_GT()
@@ -54,34 +50,34 @@ namespace test.bedrock.io
             int len;
             p.Write(b, 0, b.Length);
             len = p.Read(r, 0, r.Length);
-            AssertEquals(b.Length, len);
-            AssertEquals("<foo/>", ENC.GetString(r, 0, len));
+            Assertion.AssertEquals(b.Length, len);
+            Assertion.AssertEquals("<foo/>", ENC.GetString(r, 0, len));
             b = ENC.GetBytes("<foo/><foo/>");
             p.Write(b, 0, b.Length);
             len = p.Read(r, 0, r.Length);
-            AssertEquals("<foo/>", ENC.GetString(r, 0, len));
+            Assertion.AssertEquals("<foo/>", ENC.GetString(r, 0, len));
             len = p.Read(r, 0, r.Length);
-            AssertEquals("<foo/>", ENC.GetString(r, 0, len));
+            Assertion.AssertEquals("<foo/>", ENC.GetString(r, 0, len));
             b = ENC.GetBytes("<foo/><fo");
             p.Write(b, 0, b.Length);
             len = p.Read(r, 0, r.Length);
-            AssertEquals("<foo/>", ENC.GetString(r, 0, len));
+            Assertion.AssertEquals("<foo/>", ENC.GetString(r, 0, len));
             len = p.Read(r, 0, r.Length);
-            AssertEquals("<fo", ENC.GetString(r, 0, len));
+            Assertion.AssertEquals("<fo", ENC.GetString(r, 0, len));
             b = ENC.GetBytes("><foo/>");
             p.Write(b, 0, b.Length);
             len = p.Read(r, 0, r.Length);
-            AssertEquals(">", ENC.GetString(r, 0, len));
+            Assertion.AssertEquals(">", ENC.GetString(r, 0, len));
             len = p.Read(r, 0, r.Length);
-            AssertEquals("<foo/>", ENC.GetString(r, 0, len));
+            Assertion.AssertEquals("<foo/>", ENC.GetString(r, 0, len));
             b = ENC.GetBytes("<foo><bar/></foo>");
             p.Write(b, 0, b.Length);
             len = p.Read(r, 0, r.Length);
-            AssertEquals("<foo>", ENC.GetString(r, 0, len));
+            Assertion.AssertEquals("<foo>", ENC.GetString(r, 0, len));
             len = p.Read(r, 0, r.Length);
-            AssertEquals("<bar/>", ENC.GetString(r, 0, len));
+            Assertion.AssertEquals("<bar/>", ENC.GetString(r, 0, len));
             len = p.Read(r, 0, r.Length);
-            AssertEquals("</foo>", ENC.GetString(r, 0, len));
+            Assertion.AssertEquals("</foo>", ENC.GetString(r, 0, len));
         }
         public void Test_All()
         {
@@ -90,20 +86,20 @@ namespace test.bedrock.io
             int len;
             p.Write(b, 0, b.Length);
             len = p.Read(r, 0, r.Length);
-            AssertEquals(b.Length, len);
-            AssertEquals("Hello", ENC.GetString(r, 0, len));
+            Assertion.AssertEquals(b.Length, len);
+            Assertion.AssertEquals("Hello", ENC.GetString(r, 0, len));
             b = ENC.GetBytes("Hello");
             p.Write(b);
             len = p.Read(r, 0, r.Length);
-            AssertEquals(b.Length, len);
-            AssertEquals("Hello", ENC.GetString(r, 0, len));
+            Assertion.AssertEquals(b.Length, len);
+            Assertion.AssertEquals("Hello", ENC.GetString(r, 0, len));
             // sync/blocking
             new Thread(new ThreadStart(delay)).Start();
             len = p.Read(r, 0, 2);
-            AssertEquals("Do", ENC.GetString(r, 0, len));
+            Assertion.AssertEquals("Do", ENC.GetString(r, 0, len));
             
             len = p.Read(r, 0, r.Length);
-            AssertEquals("ne!!!", ENC.GetString(r, 0, len));
+            Assertion.AssertEquals("ne!!!", ENC.GetString(r, 0, len));
         }
         private void delay()
         {
