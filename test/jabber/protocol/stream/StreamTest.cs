@@ -51,9 +51,9 @@ namespace test.jabber.protocol.stream
         {
             Stream s = new Stream(doc, "jabber:client");
             Assertion.Assert(s.ToString(), 
-                   Regex.IsMatch(s.ToString(), 
-                                 "<stream:stream id=\"[a-z0-9]+\" xmlns=\"jabber:client\" xmlns:stream=\"http://etherx\\.jabber\\.org/streams\" />",
-                                 RegexOptions.IgnoreCase));
+                Regex.IsMatch(s.ToString(), 
+                "<stream:stream id=\"[a-z0-9]+\" xmlns=\"jabber:client\" xmlns:stream=\"http://etherx\\.jabber\\.org/streams\" />",
+                RegexOptions.IgnoreCase));
         }
         public void Test_Error()
         {
@@ -71,9 +71,9 @@ namespace test.jabber.protocol.stream
         {
             Stream s = new Stream(doc, "jabber:client");
             Assertion.Assert(s.StartTag(), 
-                   Regex.IsMatch(s.StartTag(), 
-                                 "<stream:stream xmlns:stream=\"http://etherx\\.jabber\\.org/streams\" id=\"[a-z0-9]+\" xmlns=\"jabber:client\">",
-                                 RegexOptions.IgnoreCase));
+                Regex.IsMatch(s.StartTag(), 
+                "<stream:stream xmlns:stream=\"http://etherx\\.jabber\\.org/streams\" id=\"[a-z0-9]+\" xmlns=\"jabber:client\">",
+                RegexOptions.IgnoreCase));
         }
     }
 }

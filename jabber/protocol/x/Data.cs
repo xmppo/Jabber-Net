@@ -58,10 +58,10 @@ namespace jabber.protocol.x
         cancel
     }
 
-	/// <summary>
-	/// jabber:x:data support, as in http://www.jabber.org/jeps/jep-0004.html.
-	/// </summary>
-	[RCS(@"$Header$")]
+    /// <summary>
+    /// jabber:x:data support, as in http://www.jabber.org/jeps/jep-0004.html.
+    /// </summary>
+    [RCS(@"$Header$")]
     public class Data : Element
     {
         /// <summary>

@@ -115,11 +115,11 @@ namespace jabber.protocol
         /// Send roster entries to another user.
         /// </summary>
         public const string XROSTER  = "jabber:x:roster";
-		/// <summary>
-		/// The jabber:x:event namespace qualifies extensions used to request and respond to 
-		/// events relating to the delivery, display, and composition of messages.
-		/// </summary>
-		public const string XEVENT = "jabber:x:event";
+        /// <summary>
+        /// The jabber:x:event namespace qualifies extensions used to request and respond to 
+        /// events relating to the delivery, display, and composition of messages.
+        /// </summary>
+        public const string XEVENT = "jabber:x:event";
         /// <summary>
         /// jabber:x:data, as described in JEP-0004.
         /// </summary>

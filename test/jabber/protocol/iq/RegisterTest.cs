@@ -38,30 +38,30 @@ using jabber.protocol.iq;
 
 namespace test.jabber.protocol.iq
 {
-	/// <summary>
-	/// Summary description for RosterTest.
-	/// </summary>
-	[RCS(@"$Header$")]
-	[TestFixture]
-	public class RegisterTest
-	{
-		XmlDocument doc = new XmlDocument();
-		[SetUp]
-		private void SetUp()
-		{
-			Element.ResetID();
-		}
-		public void Test_Create()
-		{
-			Register r = new Register(doc);
-			Assertion.AssertEquals("<query xmlns=\"jabber:iq:register\" />", r.ToString());
-		}
-		public void Test_Registered()
-		{
-			Register r = new Register(doc);
-			r.Registered = true;
-			Assertion.AssertEquals("<query xmlns=\"jabber:iq:register\"><registered /></query>", r.ToString());
-			Assertion.Assert(r.Registered);
-		}
-	}
+    /// <summary>
+    /// Summary description for RosterTest.
+    /// </summary>
+    [RCS(@"$Header$")]
+    [TestFixture]
+    public class RegisterTest
+    {
+        XmlDocument doc = new XmlDocument();
+        [SetUp]
+        private void SetUp()
+        {
+            Element.ResetID();
+        }
+        public void Test_Create()
+        {
+            Register r = new Register(doc);
+            Assertion.AssertEquals("<query xmlns=\"jabber:iq:register\" />", r.ToString());
+        }
+        public void Test_Registered()
+        {
+            Register r = new Register(doc);
+            r.Registered = true;
+            Assertion.AssertEquals("<query xmlns=\"jabber:iq:register\"><registered /></query>", r.ToString());
+            Assertion.Assert(r.Registered);
+        }
+    }
 }

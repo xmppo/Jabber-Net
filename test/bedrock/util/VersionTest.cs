@@ -40,35 +40,35 @@ namespace test.bedrock.util
     public class VersionTest
     {
         [StarTeam("$" + "Header" + "$")]
-        private class vFoo
+            private class vFoo
         {
             
         }
         [StarTeam(Archive="$" + @"Header: C:\Prj\Dognapper\Microsoft\Common\src\com.ilg.Util\Test\VersionTest.cs" + "$",
-                  Author="$" + "Author: Joe Hildebrand" + "$", 
-                  DateString="02/12/2001 6:25:04 PM", 
-                  Revision="1")]
-        private class vInd
+             Author="$" + "Author: Joe Hildebrand" + "$", 
+             DateString="02/12/2001 6:25:04 PM", 
+             Revision="1")]
+            private class vInd
         {
             
         }
         [StarTeam("$" + @"Header: C:\Prj\Dognapper\Microsoft\Common\src\com.ilg.Util\Test\VersionTest.cs, 1.11, 02/12/2001 6:25:04 PM, Joe Hildebrand" + "$")]
-        private class vBar
+            private class vBar
         {
             
         }
         [StarTeam("$" + @"Header: C:\Prj\Dognapper\Microsoft\Common\src\com.ilg.Util\Test\VersionTest.cs, 11, 02/12/2001 6:25:04 PM, Joe Hildebrand" + "$")]
-        private class vBaz
+            private class vBaz
         {
             
         }
         [RCS("$" + @"Header: /u1/html/cvsroot/www.cyclic.com/RCS-html/info-ref.html,v 1.1 2001/02/12 18:25:04 kingdon Exp " + "$")]
-        private class RCSVer
+            private class RCSVer
         {
             
         }
         [SourceSafe("$" + @"Header: /t.cs 1     2/12/01 6:25p Hildebzj " + "$")]
-        private class VssVer
+            private class VssVer
         {
             
         }
@@ -86,8 +86,8 @@ namespace test.bedrock.util
             SourceVersionAttribute bar = SourceVersionAttribute.GetVersion(typeof(vBar));
             Assertion.AssertEquals("Revision", "1.11",             bar.Revision);
             Assertion.AssertEquals("Date",
-                         new DateTime(2001, 2, 12, 18, 25, 4), 
-                         bar.Date);
+                new DateTime(2001, 2, 12, 18, 25, 4), 
+                bar.Date);
             Assertion.AssertEquals("Author",   "Joe Hildebrand",   bar.Author);
             Assertion.AssertEquals("Version",  new Version(1, 11), bar.Version);
             Assertion.AssertEquals("Archive",  @"C:\Prj\Dognapper\Microsoft\Common\src\com.ilg.Util\Test\VersionTest.cs", bar.Archive);
@@ -96,16 +96,16 @@ namespace test.bedrock.util
         {
             SourceVersionAttribute ind = SourceVersionAttribute.GetVersion(typeof(vInd));
             Assertion.AssertEquals("ToString", 
-                         "$" + @"Header: C:\Prj\Dognapper\Microsoft\Common\src\com.ilg.Util\Test\VersionTest.cs, 1, 02/12/2001 6:25:04 PM, Joe Hildebrand" + "$",
-                         ind.ToString());
+                "$" + @"Header: C:\Prj\Dognapper\Microsoft\Common\src\com.ilg.Util\Test\VersionTest.cs, 1, 02/12/2001 6:25:04 PM, Joe Hildebrand" + "$",
+                ind.ToString());
         }
         public void Test_PlainRev()
         {
             SourceVersionAttribute baz = SourceVersionAttribute.GetVersion(typeof(vBaz));
             Assertion.AssertEquals("Revision", "11",               baz.Revision);
             Assertion.AssertEquals("Date",
-                         new DateTime(2001, 2, 12, 18, 25, 4), 
-                         baz.Date);
+                new DateTime(2001, 2, 12, 18, 25, 4), 
+                baz.Date);
             Assertion.AssertEquals("Author",   "Joe Hildebrand",   baz.Author);
             Assertion.AssertEquals("Version",  new Version(1, 11), baz.Version);
             Assertion.AssertEquals("Archive",  @"C:\Prj\Dognapper\Microsoft\Common\src\com.ilg.Util\Test\VersionTest.cs", baz.Archive);
@@ -115,8 +115,8 @@ namespace test.bedrock.util
             RCSAttribute c = (RCSAttribute) SourceVersionAttribute.GetVersion(typeof(RCSVer));
             Assertion.AssertEquals("Revision", "1.1",               c.Revision);
             Assertion.AssertEquals("Date",
-                         new DateTime(2001, 2, 12, 18, 25, 4), 
-                         c.Date);
+                new DateTime(2001, 2, 12, 18, 25, 4), 
+                c.Date);
             Assertion.AssertEquals("Author",   "kingdon",           c.Author);
             Assertion.AssertEquals("Version",  new Version(1, 1),   c.Version);
             Assertion.AssertEquals("Archive",  @"/u1/html/cvsroot/www.cyclic.com/RCS-html/info-ref.html,v", c.Archive);
@@ -127,8 +127,8 @@ namespace test.bedrock.util
             SourceSafeAttribute c = (SourceSafeAttribute) SourceVersionAttribute.GetVersion(typeof(VssVer));
             Assertion.AssertEquals("Revision", "1",                 c.Revision);
             Assertion.AssertEquals("Date",
-                         new DateTime(2001, 2, 12, 18, 25, 0), 
-                         c.Date);
+                new DateTime(2001, 2, 12, 18, 25, 0), 
+                c.Date);
             Assertion.AssertEquals("Author",   "Hildebzj",          c.Author);
             Assertion.AssertEquals("Version",  new Version(1, 1),   c.Version);
             Assertion.AssertEquals("Archive",  @"/t.cs",            c.Archive);

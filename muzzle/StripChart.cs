@@ -213,7 +213,7 @@ namespace muzzle
         /// This must be set before adding any points.
         /// </summary>
         [Description("Reset min and max as necessary to show all points.  " + 
-                     "This must be set before adding any points.")]
+             "This must be set before adding any points.")]
         [DefaultValue(true)]
         [Category("Chart")]
         public bool AutoSize
@@ -432,39 +432,39 @@ namespace muzzle
                 // every time through the loop.
                 switch (m_style)
                 {
-                case ChartStyle.Bar:
-                    RectangleF[] rects = new RectangleF[m_list.Count];
-                    foreach (float val in m_list)
-                    {
-                        y = h * (1 - (val - m_min) / s) + fh;
-                        rects[count] = new RectangleF(count * stripw, y, stripw, h - y);
-                        count++;
-                    }
-                    g.FillRectangles(new SolidBrush(ForeColor), rects);
-                    break;
-                case ChartStyle.Point:
-                    Brush brush = new SolidBrush(ForeColor);
-                    float p2 = fh - (m_pointSize / 2F);
-                    foreach (float val in m_list)
-                    {
-                        y = h * (1 - (val - m_min) / s) + p2;
-                        g.FillEllipse(brush, count * stripw, y, m_pointSize, m_pointSize);
-                        count++;
-                    }
-                    break;
-                case ChartStyle.Line:
-                    if (m_list.Count > 1)
-                    {
-                        PointF[] points = new PointF[m_list.Count];
+                    case ChartStyle.Bar:
+                        RectangleF[] rects = new RectangleF[m_list.Count];
                         foreach (float val in m_list)
                         {
                             y = h * (1 - (val - m_min) / s) + fh;
-                            points[count] = new PointF(count * stripw, y);
+                            rects[count] = new RectangleF(count * stripw, y, stripw, h - y);
                             count++;
                         }
-                        g.DrawLines(new Pen(ForeColor), points);
-                    }
-                    break;
+                        g.FillRectangles(new SolidBrush(ForeColor), rects);
+                        break;
+                    case ChartStyle.Point:
+                        Brush brush = new SolidBrush(ForeColor);
+                        float p2 = fh - (m_pointSize / 2F);
+                        foreach (float val in m_list)
+                        {
+                            y = h * (1 - (val - m_min) / s) + p2;
+                            g.FillEllipse(brush, count * stripw, y, m_pointSize, m_pointSize);
+                            count++;
+                        }
+                        break;
+                    case ChartStyle.Line:
+                        if (m_list.Count > 1)
+                        {
+                            PointF[] points = new PointF[m_list.Count];
+                            foreach (float val in m_list)
+                            {
+                                y = h * (1 - (val - m_min) / s) + fh;
+                                points[count] = new PointF(count * stripw, y);
+                                count++;
+                            }
+                            g.DrawLines(new Pen(ForeColor), points);
+                        }
+                        break;
                 }
             }
             Brush textBrush = new SolidBrush(m_textColor);

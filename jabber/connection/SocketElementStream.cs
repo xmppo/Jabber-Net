@@ -84,7 +84,7 @@ namespace jabber.connection
         public SocketElementStream(System.ComponentModel.IContainer container)
         {
             container.Add(this);
-			m_watcher = new SocketWatcher();
+            m_watcher = new SocketWatcher();
             m_ns = new XmlNamespaceManager(m_doc.NameTable);
         }
 
@@ -93,18 +93,18 @@ namespace jabber.connection
         /// </summary>
         public SocketElementStream()
         {
-			m_watcher = new SocketWatcher();
+            m_watcher = new SocketWatcher();
             m_ns = new XmlNamespaceManager(m_doc.NameTable);
         }
 
-		/// <summary>
-		/// Create a SocketElementStream with an existing SocketWatcher, so that you can do
-		/// lots of concurrent connections.
-		/// </summary>
-		/// <param name="watcher"></param>
-		public SocketElementStream(SocketWatcher watcher)
-		{
-			m_watcher = watcher;
+        /// <summary>
+        /// Create a SocketElementStream with an existing SocketWatcher, so that you can do
+        /// lots of concurrent connections.
+        /// </summary>
+        /// <param name="watcher"></param>
+        public SocketElementStream(SocketWatcher watcher)
+        {
+            m_watcher = watcher;
             m_ns = new XmlNamespaceManager(m_doc.NameTable);
         }
 

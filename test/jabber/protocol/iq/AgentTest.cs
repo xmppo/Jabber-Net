@@ -65,8 +65,8 @@ namespace test.jabber.protocol.iq
             Agent a = q.AddAgent();
             a.JID = new JID("hildjj@jabber.com");
             Assertion.AssertEquals("<iq id=\"JN_1\" type=\"get\"><query xmlns=\"jabber:iq:agents\">" +
-                         "<agent jid=\"hildjj@jabber.com\" /></query></iq>",
-                         aiq.ToString());
+                "<agent jid=\"hildjj@jabber.com\" /></query></iq>",
+                aiq.ToString());
         }
         public void Test_GetItems()
         {

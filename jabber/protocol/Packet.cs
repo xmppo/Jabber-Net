@@ -71,12 +71,12 @@ namespace jabber.protocol
         {
             get { return new JID(this.GetAttribute("to")); }
             set 
-			{ 
-				if (value == null)
-					this.RemoveAttribute("to");
-				else
-					this.SetAttribute("to", value); 
-			}
+            { 
+                if (value == null)
+                    this.RemoveAttribute("to");
+                else
+                    this.SetAttribute("to", value); 
+            }
         }
 
         /// <summary>
@@ -85,14 +85,14 @@ namespace jabber.protocol
         public JID From
         {
             get { return new JID(this.GetAttribute("from")); }
-			set
-			{ 
-				if (value == null)
-					this.RemoveAttribute("from");
-				else
-					this.SetAttribute("from", value); 
-			}
-		}
+            set
+            { 
+                if (value == null)
+                    this.RemoveAttribute("from");
+                else
+                    this.SetAttribute("from", value); 
+            }
+        }
    
         /// <summary>
         /// The packet ID.

@@ -92,8 +92,8 @@ namespace jabber.protocol
         private Hashtable m_types = new Hashtable();
         private static readonly Type[] s_constructorTypes = 
             new Type[] { typeof(string), 
-                         typeof(XmlQualifiedName), 
-                         typeof(XmlDocument) };
+                           typeof(XmlQualifiedName), 
+                           typeof(XmlDocument) };
         /// <summary>
         /// Add a type to the packet factory.
         /// </summary>

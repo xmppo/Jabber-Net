@@ -281,11 +281,11 @@ namespace jabber.protocol
         public static DateTime JabberDate(string dt)
         {
             return new DateTime(int.Parse(dt.Substring(0, 4)),
-                                int.Parse(dt.Substring(4, 2)),
-                                int.Parse(dt.Substring(6, 2)),
-                                int.Parse(dt.Substring(9,2)),
-                                int.Parse(dt.Substring(12,2)),
-                                int.Parse(dt.Substring(15,2)));
+                int.Parse(dt.Substring(4, 2)),
+                int.Parse(dt.Substring(6, 2)),
+                int.Parse(dt.Substring(9,2)),
+                int.Parse(dt.Substring(12,2)),
+                int.Parse(dt.Substring(15,2)));
         }
         /// <summary>
         /// Get a jabber-formated date for the DateTime.   Example date: 20020504T20:39:42

@@ -107,16 +107,16 @@ namespace jabber.protocol
             m_loader.Factory.AddType(pf);
         }
 
-		/// <summary>
-		/// Add a type to the packet factory.
-		/// </summary>
-		/// <param name="localName">Local Name (e.g. query)</param>
-		/// <param name="ns">Namespace URI (e.g. jabber:iq:roster)</param>
-		/// <param name="t">Type to create</param>
-		public void AddType(string localName, string ns, Type t)
-		{
-			m_loader.Factory.AddType(localName, ns, t);
-		}
+        /// <summary>
+        /// Add a type to the packet factory.
+        /// </summary>
+        /// <param name="localName">Local Name (e.g. query)</param>
+        /// <param name="ns">Namespace URI (e.g. jabber:iq:roster)</param>
+        /// <param name="t">Type to create</param>
+        public void AddType(string localName, string ns, Type t)
+        {
+            m_loader.Factory.AddType(localName, ns, t);
+        }
 
         /// <summary>
         /// Put bytes into the parser.
@@ -192,18 +192,18 @@ namespace jabber.protocol
                         m_stream.AutoClose = false;
                         switch (m_reader.Depth)
                         {
-                        case 0:  // stream:stream
-                            XmlElement stream = m_loader.ReadStartTag();
-                            if (OnDocumentStart != null)
-                                OnDocumentStart(this, stream);
-                            break;
-                        case 1:  // protocol element
-                            XmlElement tag = (XmlElement) m_loader.ReadCurrentNode();
-                            if (OnElement != null)
-                                OnElement(this, tag);
-                            break;
-                        default:
-                            throw new InvalidOperationException("Protocol de-synchronized: " + m_reader.Name);
+                            case 0:  // stream:stream
+                                XmlElement stream = m_loader.ReadStartTag();
+                                if (OnDocumentStart != null)
+                                    OnDocumentStart(this, stream);
+                                break;
+                            case 1:  // protocol element
+                                XmlElement tag = (XmlElement) m_loader.ReadCurrentNode();
+                                if (OnElement != null)
+                                    OnElement(this, tag);
+                                break;
+                            default:
+                                throw new InvalidOperationException("Protocol de-synchronized: " + m_reader.Name);
                         }
                         //TODO: detect the end of document, and call OnDocumentEnd();
                     }

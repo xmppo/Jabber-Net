@@ -69,29 +69,29 @@ namespace test.jabber.client1 // TODO: Client1 due to a bug in NUnit.
             pp.AddPresence(pres);
             Assertion.AssertEquals("wandering", pp[f].Status);
         }
-		public void TestRetrieve()
-		{
-			PresenceManager pp = new PresenceManager();
-			Presence pres = new Presence(doc);
-			JID f = new JID("foo", "bar", "baz");
-			pres.From = f;
-			pres.Priority = "0";
-			pp.AddPresence(pres);
-			Assertion.AssertEquals("foo@bar/baz", pp[f.Bare].From.ToString());
+        public void TestRetrieve()
+        {
+            PresenceManager pp = new PresenceManager();
+            Presence pres = new Presence(doc);
+            JID f = new JID("foo", "bar", "baz");
+            pres.From = f;
+            pres.Priority = "0";
+            pp.AddPresence(pres);
+            Assertion.AssertEquals("foo@bar/baz", pp[f.Bare].From.ToString());
 
-			pres = new Presence(doc);
-			f = new JID("foo", "bar", "bay");
-			pres.From = f;
-			pres.Priority = "1";
-			pp.AddPresence(pres);
-			Assertion.AssertEquals("foo@bar/bay", pp[f.Bare].From.ToString());
+            pres = new Presence(doc);
+            f = new JID("foo", "bar", "bay");
+            pres.From = f;
+            pres.Priority = "1";
+            pp.AddPresence(pres);
+            Assertion.AssertEquals("foo@bar/bay", pp[f.Bare].From.ToString());
 
-			pres = new Presence(doc);
-			pres.From = f;
-			pres.Type = PresenceType.unavailable;
-			pp.AddPresence(pres);
-			Assertion.AssertEquals("foo@bar/baz", pp[f.Bare].From.ToString());
-		}
+            pres = new Presence(doc);
+            pres.From = f;
+            pres.Type = PresenceType.unavailable;
+            pp.AddPresence(pres);
+            Assertion.AssertEquals("foo@bar/baz", pp[f.Bare].From.ToString());
+        }
         public void TestUserHost()
         {
             PresenceManager pp = new PresenceManager();

@@ -38,13 +38,13 @@ using jabber.protocol;
 
 namespace test.jabber.protocol
 {
-	/// <summary>
-	/// Summary description for ElementStreamTest.
-	/// </summary>
+    /// <summary>
+    /// Summary description for ElementStreamTest.
+    /// </summary>
     [RCS(@"$Header$")]
     [TestFixture]
     public class ElementStreamTest
-	{
+    {
         private bool fail = false;
         private System.Text.Encoding ENC = System.Text.Encoding.UTF8;
 

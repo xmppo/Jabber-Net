@@ -96,7 +96,7 @@ namespace jabber.protocol
         {
             XmlElement tag = null;
             XmlQualifiedName qname  = new XmlQualifiedName(reader.LocalName, 
-                                                           reader.NamespaceURI);
+                reader.NamespaceURI);
             tag = m_factory.GetElement(reader.Prefix, qname, doc);
             ReadAttributes(tag);
             return tag;
@@ -118,132 +118,132 @@ namespace jabber.protocol
             XmlNodeType             nodeType = reader.NodeType;
             switch (nodeType)
             {
-            case XmlNodeType.Element:
-                XmlElement currentElem = null;
-                XmlQualifiedName qname = new XmlQualifiedName(reader.LocalName, 
-                                                              reader.NamespaceURI);
-                currentElem = m_factory.GetElement(reader.Prefix, qname, doc);
-                bool isEmpty = currentElem.IsEmpty = reader.IsEmptyElement;
-                ReadAttributes(currentElem);
+                case XmlNodeType.Element:
+                    XmlElement currentElem = null;
+                    XmlQualifiedName qname = new XmlQualifiedName(reader.LocalName, 
+                        reader.NamespaceURI);
+                    currentElem = m_factory.GetElement(reader.Prefix, qname, doc);
+                    bool isEmpty = currentElem.IsEmpty = reader.IsEmptyElement;
+                    ReadAttributes(currentElem);
                 
-                if (! isEmpty)
-                {
-                    LoadChildren(currentElem);
-                }
-                lastNode = currentElem;
-                break;
-                
-            case XmlNodeType.Attribute:
-                if (reader.IsDefault)
-                {
-                    throw new NotImplementedException();
-                    /* // XmlUnspecifiedAttribute is private.
-                    XmlUnspecifiedAttribute uAttr =
-                        new XmlUnspecifiedAttribute(reader.Prefix,
-                                                    reader.LocalName,
-                                                    reader.NamespaceURI,
-                                                    doc);
-                    this.LoadAttributeChildren(uAttr);
-                    uAttr.SetSpecified = false;
-                    lastNode = uAttr;
-                    */
-                }
-                else
-                {
-                    attr = doc.CreateAttribute(reader.Prefix,
-                                               reader.LocalName,
-                                               reader.NamespaceURI);
-                    this.LoadAttributeChildren(attr);
-                    lastNode = attr;
-                }
-                break;
-            case XmlNodeType.SignificantWhitespace:
-                if (this.PreserveWhitespace)
-                {
-                    lastNode = doc.CreateSignificantWhitespace(reader.Value);
-                }
-                else
-                {
-                    do
+                    if (! isEmpty)
                     {
-                        if (! reader.Read())
-                        {
-                            return null;
-                        }
+                        LoadChildren(currentElem);
                     }
-                    while (reader.NodeType == XmlNodeType.SignificantWhitespace);
-                    lastNode = this.ReadCurrentNode();
-                }
-                break;
-            case XmlNodeType.Whitespace:
-                if (this.PreserveWhitespace)
-                {
-                    lastNode = doc.CreateWhitespace(reader.Value);
-                }
-                else
-                {
-                    do
+                    lastNode = currentElem;
+                    break;
+                
+                case XmlNodeType.Attribute:
+                    if (reader.IsDefault)
                     {
-                        if (! reader.Read())
-                        {
-                            return null;
-                        }
+                        throw new NotImplementedException();
+                        /* // XmlUnspecifiedAttribute is private.
+                        XmlUnspecifiedAttribute uAttr =
+                            new XmlUnspecifiedAttribute(reader.Prefix,
+                                                        reader.LocalName,
+                                                        reader.NamespaceURI,
+                                                        doc);
+                        this.LoadAttributeChildren(uAttr);
+                        uAttr.SetSpecified = false;
+                        lastNode = uAttr;
+                        */
                     }
-                    while (reader.NodeType == XmlNodeType.Whitespace);
-                    lastNode = this.ReadCurrentNode();
-                }
-                break;
-            case XmlNodeType.Text:
-                lastNode = doc.CreateTextNode(reader.Value);
-                break;
+                    else
+                    {
+                        attr = doc.CreateAttribute(reader.Prefix,
+                            reader.LocalName,
+                            reader.NamespaceURI);
+                        this.LoadAttributeChildren(attr);
+                        lastNode = attr;
+                    }
+                    break;
+                case XmlNodeType.SignificantWhitespace:
+                    if (this.PreserveWhitespace)
+                    {
+                        lastNode = doc.CreateSignificantWhitespace(reader.Value);
+                    }
+                    else
+                    {
+                        do
+                        {
+                            if (! reader.Read())
+                            {
+                                return null;
+                            }
+                        }
+                        while (reader.NodeType == XmlNodeType.SignificantWhitespace);
+                        lastNode = this.ReadCurrentNode();
+                    }
+                    break;
+                case XmlNodeType.Whitespace:
+                    if (this.PreserveWhitespace)
+                    {
+                        lastNode = doc.CreateWhitespace(reader.Value);
+                    }
+                    else
+                    {
+                        do
+                        {
+                            if (! reader.Read())
+                            {
+                                return null;
+                            }
+                        }
+                        while (reader.NodeType == XmlNodeType.Whitespace);
+                        lastNode = this.ReadCurrentNode();
+                    }
+                    break;
+                case XmlNodeType.Text:
+                    lastNode = doc.CreateTextNode(reader.Value);
+                    break;
                 
-            case XmlNodeType.CDATA:
-                lastNode = doc.CreateCDataSection(reader.Value);
-                break;
-            case XmlNodeType.EntityReference:
-                eRef = doc.CreateEntityReference(reader.Name);
-                if ((this.loadMode == XmlLoaderMode.ExpandEnity) || 
-                    (this.loadMode == XmlLoaderMode.ExpandEntityReference))
-                {
-                    this.ExpandEntityReference(eRef);
-                }
-                else
-                {
-                    reader.ResolveEntity();
-                    this.LoadChildren(eRef);
-                }
-                lastNode = eRef;
-                break;
-            case XmlNodeType.XmlDeclaration:
-                version = encoding = standalone =null;
-                ParseXmlDeclarationValue(reader.Value,
-                                         out version,
-                                         out encoding,
-                                         out standalone);
-                lastNode = doc.CreateXmlDeclaration(version, encoding, standalone);
-                break;
+                case XmlNodeType.CDATA:
+                    lastNode = doc.CreateCDataSection(reader.Value);
+                    break;
+                case XmlNodeType.EntityReference:
+                    eRef = doc.CreateEntityReference(reader.Name);
+                    if ((this.loadMode == XmlLoaderMode.ExpandEnity) || 
+                        (this.loadMode == XmlLoaderMode.ExpandEntityReference))
+                    {
+                        this.ExpandEntityReference(eRef);
+                    }
+                    else
+                    {
+                        reader.ResolveEntity();
+                        this.LoadChildren(eRef);
+                    }
+                    lastNode = eRef;
+                    break;
+                case XmlNodeType.XmlDeclaration:
+                    version = encoding = standalone =null;
+                    ParseXmlDeclarationValue(reader.Value,
+                        out version,
+                        out encoding,
+                        out standalone);
+                    lastNode = doc.CreateXmlDeclaration(version, encoding, standalone);
+                    break;
                 
-            case XmlNodeType.ProcessingInstruction:
-                lastNode = doc.CreateProcessingInstruction(reader.LocalName,
-                                                           reader.Value);
-                break;
-            case XmlNodeType.Comment:
-                lastNode = doc.CreateComment(reader.Value);
-                break;
-            case XmlNodeType.DocumentType:
-                V_11 = doc.CreateDocumentType(reader.LocalName,
-                                              String.Empty,
-                                              String.Empty,
-                                              String.Empty);
-                V_11.Value = reader.Value;
-                this.LoadDocumentType(V_11);
-                lastNode = V_11;        
-                break;
-            case XmlNodeType.EndElement:
-            case XmlNodeType.EndEntity:
-                break;
-            default:
-                throw new InvalidOperationException("Unknown node type: " + nodeType);
+                case XmlNodeType.ProcessingInstruction:
+                    lastNode = doc.CreateProcessingInstruction(reader.LocalName,
+                        reader.Value);
+                    break;
+                case XmlNodeType.Comment:
+                    lastNode = doc.CreateComment(reader.Value);
+                    break;
+                case XmlNodeType.DocumentType:
+                    V_11 = doc.CreateDocumentType(reader.LocalName,
+                        String.Empty,
+                        String.Empty,
+                        String.Empty);
+                    V_11.Value = reader.Value;
+                    this.LoadDocumentType(V_11);
+                    lastNode = V_11;        
+                    break;
+                case XmlNodeType.EndElement:
+                case XmlNodeType.EndEntity:
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown node type: " + nodeType);
             }
             return lastNode;
         }
@@ -251,7 +251,7 @@ namespace jabber.protocol
         {
             XmlNode lastNode = null;
             while (reader.Read() &&
-                   ((lastNode = this.ReadCurrentNode()) != null))
+                ((lastNode = this.ReadCurrentNode()) != null))
             {
                 if (parent.NodeType != XmlNodeType.Document)
                 {
@@ -268,38 +268,38 @@ namespace jabber.protocol
                 V_1 = reader.NodeType;
                 switch (V_1)
                 {
-                case XmlNodeType.EndEntity:
-                    return;
+                    case XmlNodeType.EndEntity:
+                        return;
                     
-                case XmlNodeType.Text:
-                    parent.AppendChild(doc.CreateTextNode(reader.Value));
-                    break;
-                case XmlNodeType.EntityReference:
-                    V_0 = doc.CreateEntityReference(reader.LocalName);
-                    if ((loadMode == XmlLoaderMode.ExpandEnity) || 
-                        (loadMode == XmlLoaderMode.ExpandEntityReference))
-                    {
-                        this.ExpandEntityReference(V_0);
-                    }
-                    else
-                    {
-                        reader.ResolveEntity();
-                        this.LoadAttributeChildren(V_0);
-                    }
-                    parent.AppendChild(V_0);
-                    break;
+                    case XmlNodeType.Text:
+                        parent.AppendChild(doc.CreateTextNode(reader.Value));
+                        break;
+                    case XmlNodeType.EntityReference:
+                        V_0 = doc.CreateEntityReference(reader.LocalName);
+                        if ((loadMode == XmlLoaderMode.ExpandEnity) || 
+                            (loadMode == XmlLoaderMode.ExpandEntityReference))
+                        {
+                            this.ExpandEntityReference(V_0);
+                        }
+                        else
+                        {
+                            reader.ResolveEntity();
+                            this.LoadAttributeChildren(V_0);
+                        }
+                        parent.AppendChild(V_0);
+                        break;
                     
-                case XmlNodeType.CDATA:
-                default:
-                    throw new InvalidOperationException();
+                    case XmlNodeType.CDATA:
+                    default:
+                        throw new InvalidOperationException();
                 }
             }
         }
         
         private static void ParseXmlDeclarationValue(String strValue,
-                                                     out String version,
-                                                     out String encoding,
-                                                     out String standalone)
+            out String version,
+            out String encoding,
+            out String standalone)
         {
             XmlTextReader r;
             string        n;

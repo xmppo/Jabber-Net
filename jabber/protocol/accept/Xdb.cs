@@ -94,7 +94,7 @@ namespace jabber.protocol.accept
         /// <param name="doc"></param>
         public Xdb(XmlDocument doc) : base("xdb", doc)
         {
-			ID = NextID();
+            ID = NextID();
         }
 
         /// <summary>

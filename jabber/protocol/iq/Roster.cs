@@ -225,82 +225,82 @@ namespace jabber.protocol.iq
         /// <returns></returns>
         public Group AddGroup(string name)
         {
-			Group g = GetGroup(name);
-			if (g == null)
-			{
-				g = new Group(this.OwnerDocument);
-				g.GroupName = name;
-				AddChild(g);
-			}
+            Group g = GetGroup(name);
+            if (g == null)
+            {
+                g = new Group(this.OwnerDocument);
+                g.GroupName = name;
+                AddChild(g);
+            }
             return g;
         }
 
-		/// <summary>
-		/// Remove a group of the given name.  Does nothing if that group is not found.
-		/// </summary>
-		/// <param name="name"></param>
-		public void RemoveGroup(string name)
-		{
-			XmlNodeList nl = GetElementsByTagName("group", URI.ROSTER);
-			foreach (Group g in nl)
-			{
-				if (g.GroupName == name)
-				{
-					this.RemoveChild(g);
-					return;
-				}
-			}
-		}
+        /// <summary>
+        /// Remove a group of the given name.  Does nothing if that group is not found.
+        /// </summary>
+        /// <param name="name"></param>
+        public void RemoveGroup(string name)
+        {
+            XmlNodeList nl = GetElementsByTagName("group", URI.ROSTER);
+            foreach (Group g in nl)
+            {
+                if (g.GroupName == name)
+                {
+                    this.RemoveChild(g);
+                    return;
+                }
+            }
+        }
 
-		/// <summary>
-		/// List of item groups
-		/// </summary>
-		/// <returns></returns>
-		public Group[] GetGroups()
-		{
-			XmlNodeList nl = GetElementsByTagName("group", URI.ROSTER);
-			Group[] groups = new Group[nl.Count];
-			int i=0;
-			foreach (XmlNode n in nl)
-			{
-				groups[i] = (Group) n;
-				i++;
-			}
-			return groups;
-		}
+        /// <summary>
+        /// List of item groups
+        /// </summary>
+        /// <returns></returns>
+        public Group[] GetGroups()
+        {
+            XmlNodeList nl = GetElementsByTagName("group", URI.ROSTER);
+            Group[] groups = new Group[nl.Count];
+            int i=0;
+            foreach (XmlNode n in nl)
+            {
+                groups[i] = (Group) n;
+                i++;
+            }
+            return groups;
+        }
 
-		/// <summary>
-		/// Is this item in the specified group?
-		/// </summary>
-		/// <param name="name">The name of the group to check</param>
-		/// <returns></returns>
-		public bool HasGroup(string name)
-		{
-			Group[] gl = GetGroups();
-			foreach (Group g in gl)
-			{
-				if (g.GroupName == name)
-					return true;
-			}
-			return false;
-		}
+        /// <summary>
+        /// Is this item in the specified group?
+        /// </summary>
+        /// <param name="name">The name of the group to check</param>
+        /// <returns></returns>
+        public bool HasGroup(string name)
+        {
+            Group[] gl = GetGroups();
+            foreach (Group g in gl)
+            {
+                if (g.GroupName == name)
+                    return true;
+            }
+            return false;
+        }
 
-		/// <summary>
-		/// Get the group object of the given name in this item.  
-		/// If there is no group of that name, returns null.
-		/// </summary>
-		/// <param name="name">The name of the group to return</param>
-		/// <returns>null if none found.</returns>
-		public Group GetGroup(string name)
-		{
-			Group[] gl = GetGroups();
-			foreach (Group g in gl)
-			{
-				if (g.GroupName == name)
-					return g;
-			}
-			return null;
-		}
+        /// <summary>
+        /// Get the group object of the given name in this item.  
+        /// If there is no group of that name, returns null.
+        /// </summary>
+        /// <param name="name">The name of the group to return</param>
+        /// <returns>null if none found.</returns>
+        public Group GetGroup(string name)
+        {
+            Group[] gl = GetGroups();
+            foreach (Group g in gl)
+            {
+                if (g.GroupName == name)
+                    return g;
+            }
+            return null;
+        }
     }
     /// <summary>
     /// Roster item groups.  &lt;group&gt;GroupName&lt;/group&gt;

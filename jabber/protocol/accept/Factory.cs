@@ -46,7 +46,7 @@ namespace jabber.protocol.accept
             new QnameType("route",     URI.ACCEPT, typeof(Route)),
             new QnameType("xdb",       URI.ACCEPT, typeof(Xdb)),
             new QnameType("log",       URI.ACCEPT, typeof(Log))
-    };
+        };
         QnameType[] IPacketTypes.Types { get { return s_qnt; } }
     }
 }

@@ -38,13 +38,13 @@ using jabber.protocol.x;
 
 namespace test.jabber.protocol.x
 {
-	/// <summary>
-	/// Summary description for DataTest.
-	/// </summary>
+    /// <summary>
+    /// Summary description for DataTest.
+    /// </summary>
     [RCS(@"$Header$")]
     [TestFixture]
     public class DataTest
-	{
+    {
         private const string tstring = @"<x xmlns='jabber:x:data'>
       <instructions>
         Welcome to the BloodBank-Service!  We thank you for registering with
@@ -122,5 +122,5 @@ namespace test.jabber.protocol.x
             Assertion.AssertEquals("Two", options[2].Label);
             Assertion.AssertEquals("2", options[2].Val);
         }
-	}
+    }
 }

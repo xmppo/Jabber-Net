@@ -37,37 +37,37 @@ using jabber.protocol.x;
 
 namespace test.jabber.protocol.x
 {
-	/// <summary>
-	/// Summary description for AuthTest.
-	/// </summary>
-	[RCS(@"$Header$")]
+    /// <summary>
+    /// Summary description for AuthTest.
+    /// </summary>
+    [RCS(@"$Header$")]
     [TestFixture]
     public class EventTest
-	{
-		XmlDocument doc = new XmlDocument();
+    {
+        XmlDocument doc = new XmlDocument();
         [SetUp]
-		private void SetUp()
-		{
-			Element.ResetID();
-		}
-		public void Test_Create()
-		{
-			Event e = new Event(doc);
-			Assertion.AssertEquals("<x xmlns=\"jabber:x:event\" />", e.ToString());
-			e.ID = "foo";
-			Assertion.AssertEquals("<x xmlns=\"jabber:x:event\"><id>foo</id></x>", e.ToString());
-			Assertion.AssertEquals("foo", e.ID);
-			Assertion.AssertEquals(EventType.NONE, e.Type);
-			e.Type = EventType.composing;
-			Assertion.AssertEquals(EventType.composing, e.Type);
-			e.Type = EventType.delivered;
-			Assertion.AssertEquals(EventType.delivered, e.Type);
-			Assertion.AssertEquals("<x xmlns=\"jabber:x:event\"><id>foo</id><delivered /></x>", e.ToString());
-			Assertion.AssertEquals(true, e.IsDelivered);
-			Assertion.AssertEquals(false, e.IsComposing);
-			e.IsComposing = true;
-			Assertion.AssertEquals("<x xmlns=\"jabber:x:event\"><id>foo</id><delivered /><composing /></x>", e.ToString());
-			Assertion.AssertEquals(EventType.composing | EventType.delivered, e.Type);
-		}
-	}
+        private void SetUp()
+        {
+            Element.ResetID();
+        }
+        public void Test_Create()
+        {
+            Event e = new Event(doc);
+            Assertion.AssertEquals("<x xmlns=\"jabber:x:event\" />", e.ToString());
+            e.ID = "foo";
+            Assertion.AssertEquals("<x xmlns=\"jabber:x:event\"><id>foo</id></x>", e.ToString());
+            Assertion.AssertEquals("foo", e.ID);
+            Assertion.AssertEquals(EventType.NONE, e.Type);
+            e.Type = EventType.composing;
+            Assertion.AssertEquals(EventType.composing, e.Type);
+            e.Type = EventType.delivered;
+            Assertion.AssertEquals(EventType.delivered, e.Type);
+            Assertion.AssertEquals("<x xmlns=\"jabber:x:event\"><id>foo</id><delivered /></x>", e.ToString());
+            Assertion.AssertEquals(true, e.IsDelivered);
+            Assertion.AssertEquals(false, e.IsComposing);
+            e.IsComposing = true;
+            Assertion.AssertEquals("<x xmlns=\"jabber:x:event\"><id>foo</id><delivered /><composing /></x>", e.ToString());
+            Assertion.AssertEquals(EventType.composing | EventType.delivered, e.Type);
+        }
+    }
 }

@@ -132,37 +132,37 @@ namespace test.jabber
         }
         public void Test_EmptyResource()
         {
-			try
-			{
-				JID j = new JID("boo/");
-				string u = j.User;
-				Assertion.Assert(false);
-			}
-			catch (JIDFormatException)
-			{
-				Assertion.Assert(true);
-			}
-			catch (Exception)
-			{
-				Assertion.Assert(false);
-			}
+            try
+            {
+                JID j = new JID("boo/");
+                string u = j.User;
+                Assertion.Assert(false);
+            }
+            catch (JIDFormatException)
+            {
+                Assertion.Assert(true);
+            }
+            catch (Exception)
+            {
+                Assertion.Assert(false);
+            }
         }
         public void Test_EmptyResourceUser()
         {
-			try
-			{
-				JID j = new JID("boo@foo/");
-				string u = j.User;
-				Assertion.Assert(false);
-			}
-			catch (JIDFormatException)
-			{
-				Assertion.Assert(true);
-			}
-			catch (Exception)
-			{
-				Assertion.Assert(false);
-			}
+            try
+            {
+                JID j = new JID("boo@foo/");
+                string u = j.User;
+                Assertion.Assert(false);
+            }
+            catch (JIDFormatException)
+            {
+                Assertion.Assert(true);
+            }
+            catch (Exception)
+            {
+                Assertion.Assert(false);
+            }
         }
 
         public void Test_NoHost()

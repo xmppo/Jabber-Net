@@ -98,7 +98,7 @@ namespace jabber.server
         /// <param name="cb"></param>
         /// <param name="cbArg"></param>
         public void BeginXdbGet(string owner, string ns, 
-                                XdbCB cb, object cbArg)
+            XdbCB cb, object cbArg)
         {
             BeginXdb(null, XdbType.get, owner, ns, XdbAction.NONE, cb, cbArg); 
         }
@@ -112,7 +112,7 @@ namespace jabber.server
         /// <param name="cb"></param>
         /// <param name="cbArg"></param>
         public void BeginXdbSet(XmlElement root, string owner, string ns, 
-                                XdbCB cb, object cbArg)
+            XdbCB cb, object cbArg)
         {
             BeginXdb(root, XdbType.set, owner, ns, XdbAction.NONE, cb, cbArg); 
         }
@@ -127,8 +127,8 @@ namespace jabber.server
         /// <param name="cb"></param>
         /// <param name="cbArg"></param>
         public void BeginXdb(XmlElement root, XdbType xtype, 
-                             string owner, string ns,
-                             XdbCB cb, object cbArg)
+            string owner, string ns,
+            XdbCB cb, object cbArg)
         {
             BeginXdb(root, xtype, owner, ns, XdbAction.NONE, cb, cbArg);
         }
@@ -144,8 +144,8 @@ namespace jabber.server
         /// <param name="cb"></param>
         /// <param name="cbArg"></param>
         public void BeginXdb(XmlElement root, XdbType xtype, 
-                             string owner, string ns, XdbAction action,
-                             XdbCB cb, object cbArg)
+            string owner, string ns, XdbAction action,
+            XdbCB cb, object cbArg)
         {
             Debug.Assert(owner != null);
             Debug.Assert(ns    != null);

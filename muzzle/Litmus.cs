@@ -205,41 +205,41 @@ namespace muzzle
             int cc = 0;
             switch (m_scheme)
             {
-            case LitmusColorScheme.Blue:
-                foreach (byte[] buf in m_list)
-                {
-                    cc = 0;
-                    foreach (byte b in buf)
+                case LitmusColorScheme.Blue:
+                    foreach (byte[] buf in m_list)
                     {
-                        /*
-                        */
-                        brush.Color = Color.FromArgb(0, 0, 255 - b);
-                        g.FillRectangle(brush, sc * stripw, cc * striph, stripw, striph);
-                        cc++;
+                        cc = 0;
+                        foreach (byte b in buf)
+                        {
+                            /*
+                            */
+                            brush.Color = Color.FromArgb(0, 0, 255 - b);
+                            g.FillRectangle(brush, sc * stripw, cc * striph, stripw, striph);
+                            cc++;
+                        }
+                        sc++;
                     }
-                    sc++;
-                }
-                break;
-            case LitmusColorScheme.Multicolor:
-                foreach (byte[] buf in m_list)
-                {
-                    cc = 0;
-                    foreach (byte b in buf)
+                    break;
+                case LitmusColorScheme.Multicolor:
+                    foreach (byte[] buf in m_list)
                     {
-                        if (b == 0)
-                            brush.Color = Color.White;
-                        else if (b < 65)
-                            brush.Color = Color.FromArgb(b * 4 - 1, 0, 0);
-                        else if (b < 128)
-                            brush.Color = Color.FromArgb(0, 0, b * 2);
-                        else
-                            brush.Color = Color.FromArgb(0, (b - 128) * 2, 0);
-                        g.FillRectangle(brush, sc * stripw, cc * striph, stripw, striph);
-                        cc++;
+                        cc = 0;
+                        foreach (byte b in buf)
+                        {
+                            if (b == 0)
+                                brush.Color = Color.White;
+                            else if (b < 65)
+                                brush.Color = Color.FromArgb(b * 4 - 1, 0, 0);
+                            else if (b < 128)
+                                brush.Color = Color.FromArgb(0, 0, b * 2);
+                            else
+                                brush.Color = Color.FromArgb(0, (b - 128) * 2, 0);
+                            g.FillRectangle(brush, sc * stripw, cc * striph, stripw, striph);
+                            cc++;
+                        }
+                        sc++;
                     }
-                    sc++;
-                }
-                break;
+                    break;
             }
             pictureBox1.Image = bm;
         }

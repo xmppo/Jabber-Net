@@ -34,13 +34,13 @@ using bedrock.util;
 
 namespace test.bedrock.collections
 {
-	/// <summary>
-	/// Summary description for SetTest.
-	/// </summary>
+    /// <summary>
+    /// Summary description for SetTest.
+    /// </summary>
     [RCS(@"$Header$")]
     [TestFixture]
     public class SetTest
-	{
+    {
         //[ExpectedException(typeof(ArgumentException))]
         public void Test_Hashtable_Double_Add()
         {

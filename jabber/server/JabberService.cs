@@ -102,9 +102,9 @@ namespace jabber.server
         /// <param name="name">Component name</param>
         /// <param name="secret">Component secret</param>
         public JabberService(string host,
-                             int port,
-                             string name,
-                             string secret) : base()
+            int port,
+            string name,
+            string secret) : base()
         {
             this.Server = host;
             this.Port = port;
@@ -164,8 +164,8 @@ namespace jabber.server
         /// The service name.  Needs to be in the id attribute in the
         /// jabber.xml file.  </summary>
         [Description("The service name.  The id attribute in the jabber.xml file.")]
-		[DefaultValue(null)]
-		[Category("Component")]
+        [DefaultValue(null)]
+        [Category("Component")]
         public string ComponentID
         {
             get { return m_name; }
@@ -176,9 +176,9 @@ namespace jabber.server
         /// Component secret.
         /// </summary>
         [Description("Component secret.")]
-		[DefaultValue(null)]
-		[Category("Component")]
-		public string Secret
+        [DefaultValue(null)]
+        [Category("Component")]
+        public string Secret
         {
             get { return m_secret; }
             set { m_secret = value; }
@@ -190,8 +190,8 @@ namespace jabber.server
         /// </summary>
         [Description("Is this an outgoing connection (base_accept), or an incoming connection (base_connect).")]
         [DefaultValue(ComponentType.Accept)]
-		[Category("Component")]
-		public ComponentType Type
+        [Category("Component")]
+        public ComponentType Type
         {
             get { return m_type; }
             set 
