@@ -29,6 +29,7 @@
  * --------------------------------------------------------------------------*/
 using System;
 using System.ComponentModel;
+using System.ComponentModel.Design;
 using System.Collections;
 using System.Diagnostics;
 
@@ -87,7 +88,32 @@ namespace jabber.client
         [Category("Jabber")]        
         public JabberClient Client
         {
-            get { return m_client; }
+            get 
+            { 
+                // If we are running in the designer, let's try to get an invoke control
+                // from the environment.  VB programmers can't seem to follow directions.
+                if ((this.m_client == null) && DesignMode)
+                {
+                    IDesignerHost host = (IDesignerHost) base.GetService(typeof(IDesignerHost));
+                    if (host != null)
+                    {
+                        Component root = host.RootComponent as Component;
+                        if (root != null)
+                        {
+                            foreach (Component c in root.Container.Components)
+                            {
+                                if (c is JabberClient)
+                                {
+                                    m_client = (JabberClient) c;
+                                    break;
+                                }
+                            }
+                        } 
+                    }
+                }
+                return m_client; 
+            }
+
             set
             {
                 m_client = value;
