@@ -210,7 +210,7 @@ namespace jabber.protocol
                 }
                 catch(XmlException e)
                 {
-                    Tracer.Trace(TraceLevel.Verbose, e.ToString());
+                    Debug.WriteLine(e.ToString());
                     if (OnDocumentEnd != null)
                         OnDocumentEnd(this);
                     m_stream.Close();

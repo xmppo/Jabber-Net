@@ -131,12 +131,10 @@ namespace bedrock.util
                 if (n != null)
                 {
                     val = n.InnerText;
-                    Tracer.Trace(TraceLevel.Verbose, "Got config: {0} = {1}", xpath, val);
                 }
                 else
                 {
                     val = defaultValue;
-                    Tracer.Trace(TraceLevel.Verbose, "Got default config: {0} = {1}", xpath, val);
                 }
                 return val;
             }
