@@ -496,7 +496,12 @@ namespace jabber.client
             {
                 m_agents = aq.GetAgents();
                 if (OnAgents != null)
-                    CheckedInvoke(OnAgents, new object[] {this, iq});
+                {
+                    if (InvokeRequired)
+                        CheckedInvoke(OnAgents, new object[] {this, iq});
+                    else
+                        OnAgents(this, iq);
+                }
             }
             else
             {
@@ -525,7 +530,12 @@ namespace jabber.client
             if (iq.Type == IQType.error)
             {
                 if (OnRegistered != null)
-                    CheckedInvoke(OnRegistered, new object[] {this, iq});
+                {
+                    if (InvokeRequired)
+                        CheckedInvoke(OnRegistered, new object[] {this, iq});
+                    else
+                        OnRegistered(this, iq);
+                }
             }
             else if (iq.Type == IQType.result)
             {
@@ -541,15 +551,24 @@ namespace jabber.client
                 Debug.Assert(r != null);
                 r.Username = jid.User;
 
-                CheckedInvoke(OnRegisterInfo, new object[] {this, iq});
+                if (InvokeRequired)
+                    CheckedInvoke(OnRegisterInfo, new object[] {this, iq});
+                else
+                    OnRegisterInfo(this, iq);
+
                 Tracker.BeginIQ(iq, new IqCB(OnSetRegister), jid);
             }
         }
 
         private void OnSetRegister(object sender, IQ iq, object data)
         {
-            if (OnRegistered != null)
+            if (OnRegistered == null)
+                return;
+
+            if (InvokeRequired)
                 CheckedInvoke(OnRegistered, new object[] {this, iq});
+            else
+                OnRegistered(this, iq);
         }
 
         /// <summary>
@@ -572,7 +591,12 @@ namespace jabber.client
                     State = ManualLoginState.Instance;
                 }
                 if (OnLoginRequired != null)
-                    CheckedInvoke(OnLoginRequired, new object[]{this});
+                {
+                    if (InvokeRequired)
+                        CheckedInvoke(OnLoginRequired, new object[]{this});
+                    else
+                        OnLoginRequired(this);
+                }
                 else
                     FireOnError(new InvalidOperationException("If AutoLogin is false, you must supply a OnLoginRequired event handler"));
             }
@@ -647,7 +671,10 @@ namespace jabber.client
                 Presence p = tag as Presence;
                 if (p != null)
                 {
-                    CheckedInvoke(OnPresence, new object[] {this, p});
+                    if (InvokeRequired)
+                        CheckedInvoke(OnPresence, new object[] {this, p});
+                    else
+                        OnPresence(this, p);
                     return;
                 }
             }
@@ -656,7 +683,10 @@ namespace jabber.client
                 Message m = tag as Message;
                 if (m != null)
                 {
-                    CheckedInvoke(OnMessage, new object[] {this, m});
+                    if (InvokeRequired)
+                        CheckedInvoke(OnMessage, new object[] {this, m});
+                    else
+                        OnMessage(this, m);
                     return;
                 }
             }
@@ -665,7 +695,10 @@ namespace jabber.client
                 IQ i = tag as IQ;
                 if (i != null)
                 {
-                    CheckedInvoke(OnIQ, new object[] {this, i});
+                    if (InvokeRequired)
+                        CheckedInvoke(OnIQ, new object[] {this, i});
+                    else
+                        OnIQ(this, i);
                     return;
                 }
             }
@@ -680,7 +713,12 @@ namespace jabber.client
         public void FireAuthError(IQ i)
         {
             if (OnAuthError != null)
-                CheckedInvoke(OnAuthError, new object[] {this, i});
+            {
+                if (InvokeRequired)
+                    CheckedInvoke(OnAuthError, new object[] {this, i});
+                else
+                    OnAuthError(this, i);
+            }
             else
                 FireOnError(new ProtocolException(i));
         }

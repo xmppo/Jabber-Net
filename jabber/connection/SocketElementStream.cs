@@ -433,7 +433,12 @@ namespace jabber.connection
                         Close();
                 }
                 if (OnAuthenticate != null)
-                    CheckedInvoke(OnAuthenticate, new object[] {this});
+                {
+                    if (InvokeRequired)
+                        CheckedInvoke(OnAuthenticate, new object[] {this});
+                    else
+                        OnAuthenticate(this);
+                }
             }
         }
 
@@ -582,8 +587,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Check to see if this method needs to be invoked.  
-        /// If so, invokes it on the Invoker, otherwise just calls the method in this thread.
+        /// Invokes the given method on the Invoker, and does some exception handling.
         /// </summary>
         /// <param name="method"></param>
         /// <param name="args"></param>
@@ -591,16 +595,30 @@ namespace jabber.connection
         {
             try
             {
-                if ((m_invoker != null) && m_invoker.InvokeRequired)
-                    m_invoker.BeginInvoke(method, args);
-                else
-                    // ew.  this is probably slow.
-                    method.DynamicInvoke(args);
+                Debug.Assert(m_invoker != null, "Check for this.InvokeControl == null before calling CheckedInvoke");
+                Debug.Assert(m_invoker.InvokeRequired, "Check for InvokeRequired before calling CheckedInvoke");
+
+                m_invoker.BeginInvoke(method, args);
             }
             catch (System.Reflection.TargetInvocationException e)
             {
                 Debug.WriteLine("Exception passed along by SocketElementStream: " + e.ToString());
                 throw e.InnerException;
+            }
+        }
+
+        /// <summary>
+        /// To call callbacks, do we need to call Invoke to get onto the GUI thread?
+        /// Only if InvokeControl is set, and we aren't on the GUI thread already.
+        /// </summary>
+        /// <returns></returns>
+        protected bool InvokeRequired
+        {
+            get 
+            {
+                if (m_invoker == null)
+                    return false;
+                return m_invoker.InvokeRequired;
             }
         }
 
@@ -616,7 +634,12 @@ namespace jabber.connection
                 return;
             m_streamID = str.ID;
             if (OnStreamHeader != null)
-                CheckedInvoke(OnStreamHeader, new object[] {this, tag});
+            {
+                if (InvokeRequired)
+                    CheckedInvoke(OnStreamHeader, new object[] {this, tag});
+                else
+                    OnStreamHeader(this, tag);
+            }
             CheckAll(tag);
         }
         
@@ -659,12 +682,21 @@ namespace jabber.connection
                 }
 
                 if (OnStreamError != null)
-                    CheckedInvoke(OnStreamError, new object[] {this, tag});
-
+                {
+                    if (InvokeRequired)
+                        CheckedInvoke(OnStreamError, new object[] {this, tag});
+                    else
+                        OnStreamError(this, tag);
+                }
                 return;
             }
             if (OnProtocol != null)
-                CheckedInvoke(OnProtocol, new object[] {this, tag});
+            {
+                if (InvokeRequired)
+                    CheckedInvoke(OnProtocol, new object[] {this, tag});
+                else
+                    OnProtocol(this, tag);
+            }
 
             CheckAll(tag);
 
@@ -677,7 +709,12 @@ namespace jabber.connection
         protected void FireOnError(Exception e)
         {
             if (OnError != null)
-                CheckedInvoke(OnError, new object[] {this, e});
+            {
+                if (InvokeRequired)
+                    CheckedInvoke(OnError, new object[] {this, e});
+                else
+                    OnError(this, e);
+            }
 
             Close();
         }
@@ -716,7 +753,14 @@ namespace jabber.connection
             m_sock = newsocket;
 
             if (OnConnect != null)
-                CheckedInvoke(OnConnect, new object[] {this, m_sock});
+            {
+                if (InvokeRequired)
+                    CheckedInvoke(OnConnect, new object[] {this, m_sock});
+                else
+                    // Um.  This cast might not be right, but I don't want to break backward compatibility 
+                    // if I don't have to by changing the delegate interface.
+                    OnConnect(this, (AsyncSocket) m_sock);
+            }
 
             m_sock.RequestRead();
             if (m_accept != null)
@@ -733,7 +777,12 @@ namespace jabber.connection
             m_stream.Push(buf, offset, count);
 
             if (OnReadText != null)
-                CheckedInvoke(OnReadText, new object[] {sock, ENC.GetString(buf, offset, count)});
+            {
+                if (InvokeRequired)
+                    CheckedInvoke(OnReadText, new object[] {sock, ENC.GetString(buf, offset, count)});
+                else
+                    OnReadText(sock, ENC.GetString(buf, offset, count));
+            }
 
             return true;
         }
@@ -743,7 +792,12 @@ namespace jabber.connection
             m_timer.Change(m_keepAlive, m_keepAlive);
 
             if (OnWriteText != null)
-                CheckedInvoke(OnWriteText, new object[] {sock, ENC.GetString(buf, offset, count)});
+            {
+                if (InvokeRequired)
+                    CheckedInvoke(OnWriteText, new object[] {sock, ENC.GetString(buf, offset, count)});
+                else
+                    OnWriteText(sock, ENC.GetString(buf, offset, count));
+            }
         }
 
         void ISocketEventListener.OnError(bedrock.net.AsyncSocket sock, System.Exception ex)
@@ -767,7 +821,12 @@ namespace jabber.connection
             }
 
             if (OnError != null)
-                CheckedInvoke(OnError, new object[] {sock, ex});
+            {
+                if (InvokeRequired)
+                    CheckedInvoke(OnError, new object[] {sock, ex});
+                else
+                    OnError(sock, ex);
+            }
         }
 
         void ISocketEventListener.OnConnect(bedrock.net.AsyncSocket sock)
@@ -776,7 +835,12 @@ namespace jabber.connection
             {
                 this.State = ConnectedState.Instance;
                 if (OnConnect != null)
-                    CheckedInvoke(OnConnect, new Object[] {this, sock});
+                {
+                    if (InvokeRequired)
+                        CheckedInvoke(OnConnect, new Object[] {this, sock});
+                    else
+                        OnConnect(this, sock);
+                }
 
                 jabber.protocol.stream.Stream str = new jabber.protocol.stream.Stream(m_doc, NS);
                 str.To = this.Host;
@@ -811,7 +875,12 @@ namespace jabber.connection
                 }
             }
             if (OnDisconnect != null)
-                CheckedInvoke(OnDisconnect, new object[]{this});
+            {
+                if (InvokeRequired)
+                    CheckedInvoke(OnDisconnect, new object[]{this});
+                else
+                    OnDisconnect(this);
+            }
         }
         #endregion
 
@@ -910,7 +979,10 @@ namespace jabber.connection
                     XmlNode n = elem.SelectSingleNode(m_xpath, sender.m_ns);
                     if (n != null)
                     {
-                        sender.CheckedInvoke(m_cb, new object[] {sender, elem} );
+                        if (sender.InvokeRequired)
+                            sender.CheckedInvoke(m_cb, new object[] {sender, elem} );
+                        else
+                            m_cb(sender, elem);
                     }
                 }
                 catch (Exception e)

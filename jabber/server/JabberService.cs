@@ -329,20 +329,35 @@ namespace jabber.server
             {
                 Route route = tag as Route;
                 if (route != null)
-                    CheckedInvoke(OnRoute, new object[] {this, route});
+                {
+                    if (InvokeRequired)
+                        CheckedInvoke(OnRoute, new object[] {this, route});
+                    else
+                        OnRoute(this, route);
+                }
             }
             // TODO: add XdbTracker stuff
             if (OnXdb != null)
             {
                 Xdb xdb = tag as Xdb;
                 if (xdb != null)
-                    CheckedInvoke(OnXdb, new object[] {this, xdb});
+                {
+                    if (InvokeRequired)
+                        CheckedInvoke(OnXdb, new object[] {this, xdb});
+                    else
+                        OnXdb(this, xdb);
+                }
             }
             if (OnLog != null)
             {
                 Log log = tag as Log;
                 if (log != null)
-                    CheckedInvoke(OnLog, new object[] {this, log});
+                {
+                    if (InvokeRequired)
+                        CheckedInvoke(OnLog, new object[] {this, log});
+                    else
+                        OnLog(this, log);
+                }
             }
         }
     }
