@@ -196,6 +196,10 @@ namespace muzzle
             t = Prop(root, "proxy");
             if ((t != null) && (t != ""))
                 ProxyType = (ProxyType) ProxyType.Parse(typeof(ProxyType), t);
+            t = Prop(root, "ssl");
+            if ((t != null) && (t != ""))
+                SSL = bool.Parse(t);
+
             WriteCli();
         }
 
@@ -220,6 +224,7 @@ namespace muzzle
             root.AppendChild(doc.CreateElement("proxyport")).InnerText = ProxyPort.ToString();
             root.AppendChild(doc.CreateElement("proxyuser")).InnerText = ProxyUser;
             root.AppendChild(doc.CreateElement("proxypassword")).InnerText = ProxyPassword;
+            root.AppendChild(doc.CreateElement("ssl")).InnerText = SSL.ToString();
 
             XmlTextWriter xw = new XmlTextWriter(file, System.Text.Encoding.UTF8);
             xw.Formatting = Formatting.Indented;
