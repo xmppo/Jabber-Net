@@ -101,6 +101,10 @@ namespace jabber.protocol
         /// Jabber Browsing
         /// </summary>
         public const string BROWSE   = "jabber:iq:browse";
+		/// <summary>
+		/// Profile information
+		/// </summary>
+		public const string VCARD    = "vcard-temp";
 
         // X
         /// <summary>

@@ -53,7 +53,16 @@ namespace jabber.protocol.iq
             new QnameType("query", URI.TIME,     typeof(jabber.protocol.iq.Time)),
             new QnameType("query", URI.VERSION,  typeof(jabber.protocol.iq.Version)),
             new QnameType("item",  URI.BROWSE,   typeof(jabber.protocol.iq.Browse)),
-        };
+
+			// VCard
+			new QnameType("vCard", URI.VCARD, typeof(jabber.protocol.iq.VCard)),
+			new QnameType("N",     URI.VCARD, typeof(jabber.protocol.iq.VCard.VName)),
+			new QnameType("ORG",   URI.VCARD, typeof(jabber.protocol.iq.VCard.VOrganization)),
+			new QnameType("TEL",   URI.VCARD, typeof(jabber.protocol.iq.VCard.VTelephone)),
+            new QnameType("EMAIL", URI.VCARD, typeof(jabber.protocol.iq.VCard.VEmail)),
+            new QnameType("GEO",   URI.VCARD, typeof(jabber.protocol.iq.VCard.Geo)),
+            new QnameType("PHOTO",   URI.VCARD, typeof(jabber.protocol.iq.VCard.VPhoto))
+    };
 
         QnameType[] IPacketTypes.Types { get { return s_qnt; } }
     }

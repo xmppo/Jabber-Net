@@ -369,6 +369,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "jabber\protocol\iq\VCard.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "jabber\protocol\iq\Version.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
