@@ -30,6 +30,7 @@
 using System;
 using System.Collections;
 using System.ComponentModel;
+using System.ComponentModel.Design.IDesignerHost;
 using System.Diagnostics;
 using System.Threading;
 using System.Xml;
@@ -269,7 +270,26 @@ namespace jabber.connection
         [Category("Jabber")]
         public ISynchronizeInvoke InvokeControl
         {
-            get { return m_invoker; }
+            get 
+            { 
+                // If we are running in the designer, let's try to get an invoke control
+                // from the environment.  VB programmers can't seem to follow directions.
+                if ((this.m_invoker == null) && DesignMode)
+                {
+                    IDesignerHost host = (IDesignerHost) base.GetService(typeof(IDesignerHost));
+                    if (host != null)
+                    {
+                        object root = host.RootComponent;
+                        if ((root != null) && (root is ISynchronizeInvoke))
+                        {
+                            m_invoker = (ISynchronizeInvoke) root;
+                            // TODO: fire some sort of propertyChanged event, 
+                            // so that old code gets cleaned up correctly.
+                        } 
+                    }
+                }
+                return m_invoker; 
+            }
             set { m_invoker = value; }
         }
 
