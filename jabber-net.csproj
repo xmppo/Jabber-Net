@@ -167,12 +167,27 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "bedrock\net\ProxySocket.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "bedrock\net\ShttpProxy.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "bedrock\net\SocketEventListener.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "bedrock\net\SocketWatcher.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "bedrock\net\Socks4Proxy.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

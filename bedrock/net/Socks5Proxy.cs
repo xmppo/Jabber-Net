@@ -26,175 +26,249 @@
  * 
  * --------------------------------------------------------------------------*/
 using System;
+using System.Diagnostics;
+using System.Text;
 
 namespace bedrock.net
 {
 	/// <summary>
 	/// Proxy object for sockets that want to do SOCKS proxying.
 	/// </summary>
-	public class Socks5Proxy : BaseSocket, ISocketEventListener
+	public class Socks5Proxy : ProxySocket
 	{
-        private BaseSocket m_sock = null;
+		private enum States { None, Connecting, GettingMethods, WaitingForAuth, RequestingProxy, Running, Closed }
+		private States m_state = States.None;
 
-        private string         m_host = null;
-        private int            m_port = 1080;
-        private string         m_username = null;
-        private string         m_password = null;
-
-        /// <summary>
-        /// Wrap an existing socket event listener with SOCKS.  Make SURE to set Socket after this.
-        /// </summary>
-        /// <param name="chain">Event listener to pass events through to.</param>
+		/// <summary>
+		/// Wrap an existing socket event listener with a Socks5 proxy.  Make SURE to set Socket after this.
+		/// </summary>
+		/// <param name="chain">Event listener to pass events through to.</param>
 		public Socks5Proxy(ISocketEventListener chain) : base(chain)
 		{
 		}
 
         /// <summary>
-        /// The lower level socket
-        /// </summary>
-        public BaseSocket Socket
-        {
-            get { return m_sock; }
-            set { m_sock = value; }
-        }
-
-        /// <summary>
-        /// the host running the proxy
-        /// </summary>
-        public string Host
-        {
-            get { return m_host; }
-            set { m_host = value; }
-        }
-
-        /// <summary>
-        /// the port to talk to the proxy host on
-        /// </summary>
-        public int Port
-        {
-            get { return m_port; }
-            set { m_port = value; }
-        }
-
-        /// <summary>
-        /// the auth username for the socks5 proxy
-        /// </summary>
-        public string Username
-        {
-            get { return m_username; }
-            set { m_username = value; }
-        }
-
-        /// <summary>
-        /// the auth password for the socks5 proxy
-        /// </summary>
-        public string Password
-        {
-            get { return m_password; }
-            set { m_password = value; }
-        }
-
-        /// <summary>
-        /// Prepare to start accepting inbound requests.  Call RequestAccept() to start the async process.
-        /// </summary>
-        /// <param name="addr">Address to listen on</param>
-        /// <param name="backlog">The Maximum length of the queue of pending connections</param>
-        public override void Accept(bedrock.net.Address addr, int backlog)
-        {
-            m_sock.Accept(addr, backlog);
-        }
-
-        /// <summary>
-        /// Close the socket.  This is NOT async.  .Net doesn't have async closes.  
-        /// But, it can be *called* async, particularly from GotData.
-        /// Attempts to do a shutdown() first.
-        /// </summary>
-        public override void Close()
-        {
-            m_sock.Close();
-        }
-
-        /// <summary>
-        /// Outbound connection.  Eventually calls Listener.OnConnect() when 
-        /// the connection comes up.  Don't forget to call RequestRead() in
-        /// OnConnect()!
+        /// Saves the address passed in, and really connects to ProxyHost:ProxyPort to begin SOCKS5 handshake.
         /// </summary>
         /// <param name="addr"></param>
         public override void Connect(bedrock.net.Address addr)
         {
-            m_sock.Connect(addr);
+			m_state = States.Connecting;
+			base.Connect(addr);
         }
 
-        /// <summary>
-        /// Start the flow of async accepts.  Flow will continue while 
-        /// Listener.OnAccept() returns true.  Otherwise, call RequestAccept() again
-        /// to continue.
-        /// </summary>
-        public override void RequestAccept()
+		#region Socks5 private methods.
+
+		/*
+		 * The SOCKS request is formed as follows:
+		 * 
+		 * 		+----+-----+-------+------+----------+----------+
+		 * 		|VER | CMD |  RSV  | ATYP | DST.ADDR | DST.PORT |
+		 * 		+----+-----+-------+------+----------+----------+
+		 * 		| 1  |  1  | X'00' |  1   | Variable |    2     |
+		 * 		+----+-----+-------+------+----------+----------+
+		 * 
+		 * 	 Where:
+		 * 
+		 * 		  o  VER    protocol version: X'05'
+		 * 		  o  CMD
+		 * 			 o  CONNECT X'01'
+		 * 			 o  BIND X'02'
+		 * 			 o  UDP ASSOCIATE X'03'
+		 * 		  o  RSV    RESERVED
+		 * 		  o  ATYP   address type of following address
+		 * 			 o  IP V4 address: X'01'
+		 * 			 o  DOMAINNAME: X'03'
+		 * 			 o  IP V6 address: X'04'
+		 * 		  o  DST.ADDR    desired destination address
+		 * 		  o  DST.PORT    desired destination port in network octet order
+		 */
+		private void RequestProxyConnection()
+		{
+			m_state = States.RequestingProxy;
+
+			int n = RemoteAddress.Hostname.Length;
+			byte [] buffer = new Byte[7 + n];
+			buffer[0] = 5; // protocol version.
+			buffer[1] = 1; // connect
+			buffer[2] = 0; // reserved.
+			buffer[3] = 3; // DOMAINNAME
+			buffer[4] = (byte)n;
+			Encoding.ASCII.GetBytes(RemoteAddress.Hostname, 0, n, buffer, 5);
+			buffer[5+n] = (byte)(RemoteAddress.Port >> 8);
+			buffer[6+n] = (byte)RemoteAddress.Port;
+			Debug.WriteLine("sending request to proxy to " + RemoteAddress);
+			Write(buffer);
+		}
+
+		private bool HandleGetMethodsResponse(int ver, int method)
+		{
+			if (ver != 5) 
+			{
+				Debug.WriteLine("bogus version  from proxy: " + ver);
+				return false;
+			}
+			if (method == 0xff) 
+			{
+				Debug.WriteLine("no valid method returned from proxy");
+				return false;
+			} 
+
+			Debug.WriteLine("proxy accepted our connection: " + method);
+			switch (method) 
+			{
+				case 2:
+					/*
+					 * +----+------+----------+------+----------+
+					 * |VER | ULEN |  UNAME   | PLEN |  PASSWD  |
+					 * +----+------+----------+------+----------+
+					 * | 1  |  1   | 1 to 255 |  1   | 1 to 255 |
+					 * +----+------+----------+------+----------+
+					 */
+					m_state = States.WaitingForAuth;
+					byte [] buffer = new Byte[3 + Username.Length + Password.Length];
+					buffer[0] = 1; // version of this subnegotiation.
+					buffer[1] = (byte)Username.Length;
+					Encoding.ASCII.GetBytes(Username, 0, Username.Length, buffer, 2);
+					int pw_offset = 2 + Username.Length;
+					buffer[pw_offset] = (byte)Password.Length;
+					Encoding.ASCII.GetBytes(Password, 0, Password.Length, buffer, pw_offset + 1);
+					Debug.WriteLine("sending plain auth to proxy");
+					Write(buffer);
+					return true;
+				case 0:
+					RequestProxyConnection();
+					return true;
+				default:
+					Debug.WriteLine("bogus auth method: " + method);
+					return false;
+			}
+		}
+
+		private bool HandleAuthResponse(int ver, int status)
+		{
+			if (ver != 1) 
+			{
+				Debug.WriteLine("bogus subnegotiation version from proxy: " + ver);
+				return false;
+			}
+			if (status != 0) 
+			{
+				Debug.WriteLine("username/password auth failed on proxy");
+				return false;
+			} 
+			
+			Debug.WriteLine("proxy accepted our auth handshake");
+			RequestProxyConnection();
+			return true;
+		}
+
+		/*
+		 * +----+-----+-------+------+----------+----------+
+		 * |VER | REP |  RSV  | ATYP | BND.ADDR | BND.PORT |
+		 * +----+-----+-------+------+----------+----------+
+		 * | 1  |  1  | X'00' |  1   | Variable |    2     |
+		 * +----+-----+-------+------+----------+----------+
+		 * 
+		 *     Where:
+		 * 
+		 *           o  VER    protocol version: X'05'
+		 *           o  REP    Reply field:
+		 *              o  X'00' succeeded
+		 *              o  X'01' general SOCKS server failure
+		 *              o  X'02' connection not allowed by ruleset
+		 *              o  X'03' Network unreachable
+		 *              o  X'04' Host unreachable
+		 *              o  X'05' Connection refused
+		 *              o  X'06' TTL expired
+		 *              o  X'07' Command not supported
+		 *              o  X'08' Address type not supported
+		 *              o  X'09' to X'FF' unassigned
+		 */
+		private bool HandleRequestResponse(int ver, int reply)
+		{
+			if (ver != 5) 
+			{
+				Debug.WriteLine("bogus version in reply from proxy: " + ver);
+				return false;
+			}
+			if (reply != 0) 
+			{
+				Debug.WriteLine("request failed on proxy: " + reply);
+				return false;
+			} 
+			
+			Debug.WriteLine("proxy complete");
+			m_state = States.Running;
+			return true;
+		}
+
+		#endregion
+
+		#region Implementation of ISocketEventListener
+
+		/// <summary>
+		/// overridden OnConnect to start off Socks5 protocol.
+		/// </summary>
+		/// <param name="sock"></param>
+		public override void OnConnect(bedrock.net.AsyncSocket sock)
+		{
+			if (m_state == States.Connecting)
+			{
+				byte [] buffer = new Byte[4];
+				buffer[0] = 5; // protocol version.
+				buffer[1] = 2; // number of methods.
+				buffer[2] = 0; // no auth.
+				buffer[3] = 2; // username password.
+				Debug.WriteLine("sending auth methods to proxy...");
+				Write(buffer);
+				RequestRead();
+				m_state = States.GettingMethods;
+			}
+		}
+
+		/// <summary>
+		/// Overridden OnRead to handle 4 Socks5 states... 
+		/// </summary>
+		/// <param name="sock"></param>
+		/// <param name="buf"></param>
+		/// <param name="offset"></param>
+		/// <param name="length"></param>
+		/// <returns></returns>
+        public override bool OnRead(bedrock.net.AsyncSocket sock, byte[] buf, int offset, int length)
         {
-            m_sock.RequestAccept();
+			switch (m_state) 
+			{
+				case States.GettingMethods:
+					return HandleGetMethodsResponse(buf[offset], buf[offset + 1]);
+				case States.WaitingForAuth:
+					return HandleAuthResponse(buf[offset], buf[offset + 1]);
+				case States.RequestingProxy:
+					bool ret = HandleRequestResponse(buf[offset], buf[offset + 1]);
+					if (ret) 
+					{
+						m_listener.OnConnect(sock);	// tell the real listener that we're connected.
+						// they'll call RequestRead(), so we can return false here.
+					}
+					return false;
+				default:
+					return base.OnRead(sock, buf, offset, length);
+			}
         }
 
-        /// <summary>
-        /// Start an async read from the socket.  Listener.OnRead() is eventually called
-        /// when data arrives.
-        /// </summary>
-        public override void RequestRead()
+		/// <summary>
+		/// Overridden OnWrite to ensure that the base only gets called when in running state.
+		/// </summary>
+		/// <param name="sock"></param>
+		/// <param name="buf"></param>
+		/// <param name="offset"></param>
+		/// <param name="length"></param>
+        public override void OnWrite(bedrock.net.AsyncSocket sock, byte[] buf, int offset, int length)
         {
-            m_sock.RequestRead();
-        }
-
-        /// <summary>
-        /// Async write to the socket.  Listener.OnWrite will be called eventually
-        /// when the data has been written.  A trimmed copy is made of the data, internally.
-        /// </summary>
-        /// <param name="buf">Buffer to output</param>
-        /// <param name="offset">Offset into buffer</param>
-        /// <param name="len">Number of bytes to output</param>
-        public override void Write(byte[] buf, int offset, int len)
-        {
-            m_sock.Write(buf, offset, len);
-        }
-
-        #region Implementation of ISocketEventListener
-        void ISocketEventListener.OnInit(bedrock.net.AsyncSocket newSock)
-        {
-            m_listener.OnInit(newSock);
-        }
-
-        bedrock.net.ISocketEventListener ISocketEventListener.GetListener(bedrock.net.AsyncSocket newSock)
-        {
-            return m_listener.GetListener(newSock);
-        }
-
-        bool ISocketEventListener.OnAccept(bedrock.net.AsyncSocket newsocket)
-        {
-            return m_listener.OnAccept(newsocket);
-        }
-
-        void ISocketEventListener.OnConnect(bedrock.net.AsyncSocket sock)
-        {
-            m_listener.OnConnect(sock);
-        }
-
-        void ISocketEventListener.OnClose(bedrock.net.AsyncSocket sock)
-        {
-            m_listener.OnClose(sock);
-        }
-
-        void ISocketEventListener.OnError(bedrock.net.AsyncSocket sock, System.Exception ex)
-        {
-            m_listener.OnError(sock, ex);
-        }
-
-        bool ISocketEventListener.OnRead(bedrock.net.AsyncSocket sock, byte[] buf, int offset, int length)
-        {
-            return m_listener.OnRead(sock, buf, offset, length);
-        }
-
-        void ISocketEventListener.OnWrite(bedrock.net.AsyncSocket sock, byte[] buf, int offset, int length)
-        {
-            m_listener.OnWrite(sock, buf, offset, length);
+			if (m_state == States.Running) 
+			{
+				base.OnWrite(sock, buf, offset, length);
+			}
         }
         #endregion
 	}
