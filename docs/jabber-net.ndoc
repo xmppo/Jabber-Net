@@ -1,7 +1,7 @@
 <project>
     <assemblies>
-        <assembly location="C:\src\jabber-net\bin\Debug\jabber-net.dll" documentation="C:\src\jabber-net\bin\Debug\jabber-net.xml" />
-        <assembly location="C:\src\jabber-net\muzzle\bin\Debug\muzzle.dll" documentation="C:\src\jabber-net\muzzle\bin\Debug\muzzle.xml" />
+        <assembly location="C:\src\jabber\jabber-net\bin\Debug\jabber-net.dll" documentation="C:\src\jabber\jabber-net\bin\Debug\jabber-net.xml" />
+        <assembly location="C:\src\jabber\jabber-net\muzzle\bin\Debug\muzzle.dll" documentation="C:\src\jabber\jabber-net\muzzle\bin\Debug\muzzle.xml" />
     </assemblies>
     <namespaces>
         <namespace name="bedrock">Low-level utility routines.</namespace>
@@ -98,8 +98,8 @@
             <property name="SkipNamespacesWithoutSummaries" value="False" />
             <property name="AutoPropertyBackerSummaries" value="False" />
             <property name="AutoDocumentConstructors" value="True" />
-            <property name="DocumentAttributes" value="False" />
-            <property name="DocumentedAttributes" value="" />
+            <property name="DocumentAttributes" value="True" />
+            <property name="DocumentedAttributes" value="RCS,Version" />
             <property name="GetExternalSummaries" value="True" />
         </documenter>
         <documenter name="XML">
