@@ -318,6 +318,21 @@ namespace jabber.protocol
             sb.Append(">");
             return sb.ToString();
         }
+
+        /// <summary>
+        /// Get the first child element of this element.
+        /// </summary>
+        /// <returns>null if none found.</returns>
+        public XmlElement GetFirstChildElement()
+        {
+            foreach (XmlNode n in this)
+            {
+                if (n.NodeType == XmlNodeType.Element)
+                    return (XmlElement) n;
+            }
+            return null;
+        }
+
         /// <summary>
         /// System-wide one-up counter, for numbering packets.
         /// </summary>
