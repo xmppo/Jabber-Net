@@ -30,10 +30,13 @@
 using System;
 using System.Collections;
 using System.Diagnostics;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Xml;
+
 using bedrock.util;
+
 namespace jabber.protocol
 {
     /// <summary>
@@ -350,6 +353,43 @@ namespace jabber.protocol
                     return (XmlElement) n;
             }
             return null;
+        }
+
+        private static readonly Type[] s_constructor_parms = 
+            new Type[] 
+            {   
+                typeof(string), 
+                typeof(XmlQualifiedName), 
+                typeof(XmlDocument)
+            };
+
+        /// <summary>
+        /// Clone this node, preserving type information.
+        /// </summary>
+        /// <param name="deep">Clone child nodes too?</param>
+        /// <returns>Cloned node, with type info intact</returns>
+        public override XmlNode CloneNode(bool deep)
+        {
+            ConstructorInfo ci = this.GetType().GetConstructor(s_constructor_parms);
+            if (ci == null)
+                return base.CloneNode(deep);
+
+            XmlElement el = (Element) ci.Invoke(new object[] {this.Prefix, new XmlQualifiedName(this.Name, this.NamespaceURI), this.OwnerDocument});
+            if (el.IsEmpty != this.IsEmpty)
+                el.IsEmpty = this.IsEmpty;
+
+            if (this.HasAttributes)
+            {
+                foreach (XmlAttribute attr in this.Attributes)
+                    el.Attributes.Append((XmlAttribute) attr.CloneNode(true));
+            }
+
+            if (deep)
+            {
+                foreach (XmlNode n in this.ChildNodes)
+                    el.AppendChild(n.CloneNode(deep));
+            }
+            return el;
         }
 
         /// <summary>
