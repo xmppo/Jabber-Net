@@ -250,11 +250,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "jabber\server\JabberServiceTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "stringprep\TestDraft.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
