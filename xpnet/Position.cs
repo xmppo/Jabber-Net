@@ -10,54 +10,61 @@
  * 
  * Jabber-Net can be used under either JOSL or the GPL.  
  * See LICENSE.txt for details.
+ * 
+ * xpnet is a deriviative of James Clark's XP.  See copying.txt for more info.
  * --------------------------------------------------------------------------*/
 namespace xpnet
 {
 
-/**
- * Represents a position in an entity.
- * A position can be modified by <code>Encoding.movePosition</code>.
- * @see Encoding#movePosition
- * @version $Revision$ $Date$
- */
+    /**
+     * Represents a position in an entity.
+     * A position can be modified by <code>Encoding.movePosition</code>.
+     * @see Encoding#movePosition
+     * @version $Revision$ $Date$
+     */
+    [bedrock.util.RCS(@"$Header$")]
     public class Position : System.ICloneable
-{
-    private int lineNumber;
-    private int columnNumber;
+    {
+        private int lineNumber;
+        private int columnNumber;
 
-  /**
-   * Creates a position for the start of an entity: the line number is
-   * 1 and the column number is 0.
-   */
-  public Position() {
-    lineNumber = 1;
-    columnNumber = 0;
-  }
+        /**
+         * Creates a position for the start of an entity: the line number is
+         * 1 and the column number is 0.
+         */
+        public Position() 
+        {
+            lineNumber = 1;
+            columnNumber = 0;
+        }
 
-  /**
-   * Returns the line number.
-   * The first line number is 1.
-   */
-  public int LineNumber {
-      get {return lineNumber;}
-      set {lineNumber = value;}
-  }
+        /**
+         * Returns the line number.
+         * The first line number is 1.
+         */
+        public int LineNumber 
+        {
+            get {return lineNumber;}
+            set {lineNumber = value;}
+        }
 
-  /**
-   * Returns the column number.
-   * The first column number is 0.
-   * A tab character is not treated specially.
-   */
-  public int ColumnNumber {
-      get { return columnNumber; }
-      set { columnNumber = value; }
-  }
+        /**
+         * Returns the column number.
+         * The first column number is 0.
+         * A tab character is not treated specially.
+         */
+        public int ColumnNumber 
+        {
+            get { return columnNumber; }
+            set { columnNumber = value; }
+        }
 
-  /**
-   * Returns a copy of this position.
-   */
-  public object Clone() {
-      throw new System.NotImplementedException();
-  }
-}
+        /**
+         * Returns a copy of this position.
+         */
+        public object Clone() 
+        {
+            throw new System.NotImplementedException();
+        }
+    }
 }

@@ -10,12 +10,15 @@
  * 
  * Jabber-Net can be used under either JOSL or the GPL.  
  * See LICENSE.txt for details.
+ * 
+ * xpnet is a deriviative of James Clark's XP.  See copying.txt for more info.
  * --------------------------------------------------------------------------*/
 namespace xpnet
 {
     /// <summary>
     /// A token that was parsed.
     /// </summary>
+    [bedrock.util.RCS(@"$Header$")]
     public class Token
     {
         private int tokenEnd = -1;

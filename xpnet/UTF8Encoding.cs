@@ -10,12 +10,15 @@
  * 
  * Jabber-Net can be used under either JOSL or the GPL.  
  * See LICENSE.txt for details.
+ * 
+ * xpnet is a deriviative of James Clark's XP.  See copying.txt for more info.
  * --------------------------------------------------------------------------*/
 namespace xpnet
 {
     /// <summary>
     /// UTF-8 specific tokenizer.
     /// </summary>
+    [bedrock.util.RCS(@"$Header$")]
     public class UTF8Encoding : Encoding
     {
         private static readonly int[] utf8HiTypeTable = new int[]

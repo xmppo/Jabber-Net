@@ -10,12 +10,15 @@
  * 
  * Jabber-Net can be used under either JOSL or the GPL.  
  * See LICENSE.txt for details.
+ * 
+ * xpnet is a deriviative of James Clark's XP.  See copying.txt for more info.
  * --------------------------------------------------------------------------*/
 namespace xpnet
 {
     /// <summary>
     /// Base class for other exceptions
     /// </summary>
+    [bedrock.util.RCS(@"$Header$")]
     public class TokenException : System.Exception
     {
     }
@@ -24,6 +27,7 @@ namespace xpnet
     /// An empty token was detected.  This only happens with a buffer of length 0 is passed in
     /// to the parser.
     /// </summary>
+    [bedrock.util.RCS(@"$Header$")]
     public class EmptyTokenException : TokenException
     {
     }
@@ -31,6 +35,7 @@ namespace xpnet
     /// <summary>
     /// End of prolog.
     /// </summary>
+    [bedrock.util.RCS(@"$Header$")]
     public class EndOfPrologException : TokenException
     {
     }
@@ -41,6 +46,7 @@ namespace xpnet
      * would throw this if the byte subarray consists of a legal XML name.
      * @version $Revision$ $Date$
      */
+    [bedrock.util.RCS(@"$Header$")]
     public class ExtensibleTokenException : TokenException
     {
         private TOK tokType;
@@ -66,6 +72,7 @@ namespace xpnet
     /// <summary>
     /// Several kinds of token problems.
     /// </summary>
+    [bedrock.util.RCS(@"$Header$")]
     public class InvalidTokenException : TokenException
     {
         private int offset;
@@ -128,6 +135,7 @@ namespace xpnet
      * more bytes were added.
      * @version $Revision$ $Date$
      */
+    [bedrock.util.RCS(@"$Header$")]
     public class PartialCharException : PartialTokenException
     {
         private int leadByteIndex;
@@ -154,6 +162,7 @@ namespace xpnet
     /// <summary>
     /// A partial token was received.  Try again, after you add more bytes to the buffer.
     /// </summary>
+    [bedrock.util.RCS(@"$Header$")]
     public class PartialTokenException : TokenException
     {
     }
