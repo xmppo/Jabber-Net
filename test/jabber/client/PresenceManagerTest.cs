@@ -143,5 +143,17 @@ namespace test.jabber.client1 // TODO: Client1 due to a bug in NUnit.
             pp.AddPresence(pres);
             Assertion.AssertEquals("Working", pp[f].Status);
         }
+        public void TestNumeric()
+        {
+            PresenceManager pp = new PresenceManager();
+            Presence pres = new Presence(doc);
+            JID f = new JID("support", "conference.192.168.32.109", "bob");
+            pres.From = f;
+            pres.Status = "Working";
+            pp.AddPresence(pres);
+            Assertion.AssertEquals("support@conference.192.168.32.109/bob", pp[f].From.ToString());
+            f.Resource = null;
+            Assertion.AssertEquals("support@conference.192.168.32.109/bob", pp[f].From.ToString());
+        }        
     }
 }

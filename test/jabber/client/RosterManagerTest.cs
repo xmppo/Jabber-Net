@@ -80,5 +80,21 @@ namespace test.jabber.client1 // TODO: Client1 due to a bug in NUnit.
             Assertion.AssertEquals(Subscription.to, rm["foo@bar"].Subscription);
             Assertion.AssertEquals("BAR", rm["foo@bar"].Nickname);
         }
+        public void TestNumeric()
+        {
+            RosterManager rm = new RosterManager();
+
+            RosterIQ riq = new RosterIQ(doc);
+            riq.Type = IQType.set;
+            Roster r = (Roster) riq.Query;
+            Item i = r.AddItem();
+            i.JID = new JID("support", "conference.192.168.32.109", null);
+            i.Nickname = "FOO";
+            i.Subscription = Subscription.both;
+
+            rm.AddRoster(riq);
+            Assertion.AssertEquals(Subscription.both, rm["support@conference.192.168.32.109"].Subscription);
+            Assertion.AssertEquals("FOO", rm["support@conference.192.168.32.109"].Nickname);
+        }
     }
 }
