@@ -62,10 +62,10 @@ namespace test.bedrock.io
             p.Write(b, 0, b.Length);
             len = p.Read(r, 0, r.Length);
             Assertion.AssertEquals("<foo/>", ENC.GetString(r, 0, len));
-            len = p.Read(r, 0, r.Length);
-            Assertion.AssertEquals("<fo", ENC.GetString(r, 0, len));
             b = ENC.GetBytes("><foo/>");
             p.Write(b, 0, b.Length);
+            len = p.Read(r, 0, r.Length);
+            Assertion.AssertEquals("<fo", ENC.GetString(r, 0, len));
             len = p.Read(r, 0, r.Length);
             Assertion.AssertEquals(">", ENC.GetString(r, 0, len));
             len = p.Read(r, 0, r.Length);
@@ -81,30 +81,30 @@ namespace test.bedrock.io
         }
         public void Test_All()
         {
-            byte[] b = ENC.GetBytes("Hello");
+            byte[] b = ENC.GetBytes("Hello>");
             byte[] r = new byte[1024];
             int len;
             p.Write(b, 0, b.Length);
             len = p.Read(r, 0, r.Length);
             Assertion.AssertEquals(b.Length, len);
-            Assertion.AssertEquals("Hello", ENC.GetString(r, 0, len));
-            b = ENC.GetBytes("Hello");
+            Assertion.AssertEquals("Hello>", ENC.GetString(r, 0, len));
+            b = ENC.GetBytes("Hello>");
             p.Write(b);
             len = p.Read(r, 0, r.Length);
             Assertion.AssertEquals(b.Length, len);
-            Assertion.AssertEquals("Hello", ENC.GetString(r, 0, len));
+            Assertion.AssertEquals("Hello>", ENC.GetString(r, 0, len));
             // sync/blocking
             new Thread(new ThreadStart(delay)).Start();
             len = p.Read(r, 0, 2);
             Assertion.AssertEquals("Do", ENC.GetString(r, 0, len));
             
             len = p.Read(r, 0, r.Length);
-            Assertion.AssertEquals("ne!!!", ENC.GetString(r, 0, len));
+            Assertion.AssertEquals("ne!!!>", ENC.GetString(r, 0, len));
         }
         private void delay()
         {
             Thread.Sleep(500);
-            p.Write(System.Text.Encoding.ASCII.GetBytes("Done!!!"));
+            p.Write(System.Text.Encoding.ASCII.GetBytes("Done!!!>"));
         }
     }
 }

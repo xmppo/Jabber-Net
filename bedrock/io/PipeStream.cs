@@ -44,11 +44,13 @@ namespace bedrock.io
     {
         // Queue is implemented as a growable circular array.
         private Queue  m_queue      = new Queue();  
+        private Queue  m_partial    = new Queue();
         private byte[] m_leftOver   = null;
         private int    m_leftOffset = 0;
         private bool   m_closed     = false;
         private bool   m_autoClose  = false;
         private object m_readLock   = new object();
+
         /// <summary>
         /// Create a new PipeStream with AutoClose off.
         /// </summary>
@@ -122,17 +124,21 @@ namespace bedrock.io
                 {
                     if (buffer[i] == '>')
                     {
+                        while (m_partial.Count > 0)
+                            m_queue.Enqueue(m_partial.Dequeue());
+
                         buf = new byte[i - mark + 1];
                         Buffer.BlockCopy(buffer, mark, buf, 0, i - mark + 1);
                         m_queue.Enqueue(buf);
                         mark = i + 1;
                     }
                 }
+                // something partial.  anything parsable would have ended with a '>'.
                 if (mark < end)
                 {
                     buf = new byte[end - mark];
                     Buffer.BlockCopy(buffer, mark, buf, 0, end - mark);
-                    m_queue.Enqueue(buf);
+                    m_partial.Enqueue(buf);
                 }
                 Monitor.Pulse(m_readLock);
             }
