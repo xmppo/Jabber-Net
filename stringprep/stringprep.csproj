@@ -3,7 +3,7 @@
         ProjectType = "Local"
         ProductVersion = "7.10.3077"
         SchemaVersion = "2.0"
-        ProjectGuid = "{3FDD6E3E-E4F5-4BA1-A76C-18571B7A105B}"
+        ProjectGuid = "{060A98C7-BF17-4685-A528-F84C0D8D89AE}"
     >
         <Build>
             <Settings
@@ -28,7 +28,7 @@
                     BaseAddress = "285212672"
                     CheckForOverflowUnderflow = "false"
                     ConfigurationOverrideFile = ""
-                    DefineConstants = "DEBUG;TRACE"
+                    DefineConstants = "STRINGPREP"
                     DocumentationFile = ""
                     DebugSymbols = "true"
                     FileAlignment = "4096"
@@ -40,7 +40,7 @@
                     RegisterForComInterop = "false"
                     RemoveIntegerChecks = "false"
                     TreatWarningsAsErrors = "false"
-                    WarningLevel = "4"
+                    WarningLevel = "1"
                 />
                 <Config
                     Name = "Release"
@@ -48,26 +48,36 @@
                     BaseAddress = "285212672"
                     CheckForOverflowUnderflow = "false"
                     ConfigurationOverrideFile = ""
-                    DefineConstants = "TRACE"
+                    DefineConstants = ""
                     DocumentationFile = ""
                     DebugSymbols = "false"
                     FileAlignment = "4096"
                     IncrementalBuild = "false"
                     NoStdLib = "false"
                     NoWarn = ""
-                    Optimize = "true"
+                    Optimize = "false"
                     OutputPath = "bin\Release\"
                     RegisterForComInterop = "false"
                     RemoveIntegerChecks = "false"
                     TreatWarningsAsErrors = "false"
-                    WarningLevel = "4"
+                    WarningLevel = "1"
                 />
             </Settings>
             <References>
                 <Reference
                     Name = "System"
                     AssemblyName = "System"
-                    HintPath = "..\..\..\WINNT\Microsoft.NET\Framework\v1.0.3705\System.dll"
+                    HintPath = "..\..\..\..\WINNT\Microsoft.NET\Framework\v1.1.4322\System.dll"
+                />
+                <Reference
+                    Name = "System.Data"
+                    AssemblyName = "System.Data"
+                    HintPath = "..\..\..\..\WINNT\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
+                />
+                <Reference
+                    Name = "System.XML"
+                    AssemblyName = "System.Xml"
+                    HintPath = "..\..\..\..\WINNT\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
             </References>
         </Build>
@@ -75,11 +85,6 @@
             <Include>
                 <File
                     RelPath = "AssemblyInfo.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Generic.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -95,16 +100,6 @@
                 />
                 <File
                     RelPath = "Profile.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "rfc3454.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Table.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -144,12 +139,21 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "unicode\Compose.cs"
+                    RelPath = "steps\ResourceLoader.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "unicode\ComposeData.cs"
+                    RelPath = "steps\RFC3454.resx"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "unicode\Combining.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "unicode\Compose.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -159,9 +163,13 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "unicode\DecomposeData.cs"
+                    RelPath = "unicode\ResourceLoader.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "unicode\Unicode.resx"
+                    BuildAction = "EmbeddedResource"
                 />
             </Include>
         </Files>

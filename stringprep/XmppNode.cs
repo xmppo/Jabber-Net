@@ -27,7 +27,6 @@
  * suggestions and support of Jabber.
  * 
  * --------------------------------------------------------------------------*/
-#if !NO_STRINGPREP
 using System;
 using stringprep.steps;
 
@@ -39,16 +38,16 @@ namespace stringprep
     public class XmppNode : Profile
     {
         private static readonly ProhibitStep XmppNodeprepProhibit = 
-            new ProhibitStep(new Prohibit[] 
+            new ProhibitStep(new char[][] 
                 {   // note: these *must* be sorted by code.
-                    new Prohibit('"'),
-                    new Prohibit('&'),
-                    new Prohibit('\''),
-                    new Prohibit('/'),
-                    new Prohibit(':'),
-                    new Prohibit('<'),
-                    new Prohibit('>'),
-                    new Prohibit('@')
+                    new char[] {'"', '\x0000'},
+                    new char[] {'&', '\x0000'},
+                    new char[] {'\'', '\x0000'},
+                    new char[] {'/', '\x0000'},
+                    new char[] {':', '\x0000'},
+                    new char[] {'<', '\x0000'},
+                    new char[] {'>', '\x0000'},
+                    new char[] {'@', '\x0000'},
                 }, "XMPP Node");
 
         /// <summary>
@@ -64,4 +63,3 @@ namespace stringprep
 		}
 	}
 }
-#endif

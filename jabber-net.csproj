@@ -28,7 +28,7 @@
                     BaseAddress = "285212672"
                     CheckForOverflowUnderflow = "false"
                     ConfigurationOverrideFile = ""
-                    DefineConstants = "DEBUG;TRACE"
+                    DefineConstants = "DEBUG;TRACE;STRINGPREP"
                     DocumentationFile = "jabber-net.xml"
                     DebugSymbols = "true"
                     FileAlignment = "4096"
@@ -83,6 +83,11 @@
                     Name = "System.Data"
                     AssemblyName = "System.Data"
                     HintPath = "..\..\..\WINNT\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
+                />
+                <Reference
+                    Name = "stringprep"
+                    Project = "{060A98C7-BF17-4685-A528-F84C0D8D89AE}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
             </References>
         </Build>
@@ -471,96 +476,6 @@
                 />
                 <File
                     RelPath = "jabber\server\XdbTracker.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "stringprep\CharMap.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "stringprep\Nameprep.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "stringprep\Plain.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "stringprep\Profile.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "stringprep\Prohibit.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "stringprep\rfc3454.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "stringprep\XmppNode.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "stringprep\XmppResource.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "stringprep\steps\BidiStep.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "stringprep\steps\MapStep.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "stringprep\steps\NFKCStep.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "stringprep\steps\ProfileStep.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "stringprep\steps\ProhibitStep.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "stringprep\unicode\Combining.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "stringprep\unicode\Compose.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "stringprep\unicode\ComposeData.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "stringprep\unicode\Decompose.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "stringprep\unicode\Util.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
