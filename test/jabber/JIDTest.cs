@@ -310,5 +310,11 @@ namespace test.jabber
             Assertion.AssertEquals("-internal", j.Server);
             Assertion.AssertEquals(null, j.Resource);
         }
+
+        public void Test_Numeric()
+        {
+            JID j = new JID("support", "conference.192.168.32.109", "bob");
+            Assertion.AssertEquals("conference.192.168.32.109", j.Server);
+        }
     }
 }
