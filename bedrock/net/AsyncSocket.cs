@@ -536,7 +536,7 @@ namespace bedrock.net
                 }
 
                 // make copy, since we might be a while in async-land
-                byte[] ret = new byte[len - off];
+                byte[] ret = new byte[len];
                 Buffer.BlockCopy(buf, off, ret, 0, len);
                 try
                 {

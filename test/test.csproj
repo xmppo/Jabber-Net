@@ -127,6 +127,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "bedrock\net\AsyncSocketTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "bedrock\util\ComplexTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
