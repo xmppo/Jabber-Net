@@ -41,7 +41,7 @@ namespace test.bedrock.collections
     [TestFixture]
     public class SetTest
 	{
-        [ExpectedException(typeof(ArgumentException))]
+        //[ExpectedException(typeof(ArgumentException))]
         public void Test_Hashtable_Double_Add()
         {
             Set s = new Set(SetImplementation.Hashtable);
@@ -50,7 +50,7 @@ namespace test.bedrock.collections
             Assertion.AssertEquals(1, s.Count);
             s.Add("one");
         }
-        [ExpectedException(typeof(ArgumentException))]
+        //[ExpectedException(typeof(ArgumentException))]
         public void Test_SkipList_Double_Add()
         {
             Set s = new Set(SetImplementation.SkipList);
@@ -59,7 +59,7 @@ namespace test.bedrock.collections
             Assertion.AssertEquals(1, s.Count);
             s.Add("one");
         }
-        [ExpectedException(typeof(ArgumentException))]
+        //[ExpectedException(typeof(ArgumentException))]
         public void Test_Tree_Double_Add()
         {
             Set s = new Set(SetImplementation.Tree);
@@ -89,6 +89,12 @@ namespace test.bedrock.collections
             s.Remove("one");
             Assertion.AssertEquals(1, s.Count);
             Assertion.Assert(!s.Contains("one"));
+            Assertion.Assert(s.Contains("two"));
+            Assertion.Assert(!s.Contains("three"));
+
+            s.Add("one");
+            Assertion.AssertEquals(2, s.Count);
+            Assertion.Assert(s.Contains("one"));
             Assertion.Assert(s.Contains("two"));
             Assertion.Assert(!s.Contains("three"));
 

@@ -101,7 +101,8 @@ namespace bedrock.collections
         /// <exception cref="ArgumentException">object was already in the set.</exception>
         public void Add(object o)
         {
-            m_dict.Add(o, s_nothing);
+            if (!m_dict.Contains(o))
+                m_dict.Add(o, s_nothing);
         }
 
         /// <summary>
@@ -158,7 +159,12 @@ namespace bedrock.collections
         /// <param name="index">The index to start at</param>
         public void CopyTo(System.Array array, int index)
         {
-            throw new NotImplementedException();
+            int count = index;
+            foreach (object o in this)
+            {
+                array.SetValue(o, count);
+                count++;
+            }
         }
 
         /// <summary>
