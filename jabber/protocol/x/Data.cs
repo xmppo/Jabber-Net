@@ -397,6 +397,17 @@ namespace jabber.protocol.x
         }
 
         /// <summary>
+        /// Add a value to a multi-value field.
+        /// </summary>
+        /// <param name="newvalue"></param>
+        public void AddValue(string newvalue)
+        {
+            XmlElement val = this.OwnerDocument.CreateElement("value", URI.XDATA);
+            val.InnerText = newvalue;
+            this.AppendChild(val);
+        }
+
+        /// <summary>
         /// The field description
         /// </summary>
         public string Desc
