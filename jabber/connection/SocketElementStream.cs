@@ -483,9 +483,7 @@ namespace jabber.connection
             m_stream.Push(buf);
 
             if (OnReadText != null)
-            {
-                OnReadText(sock, ENC.GetString(buf));
-            }
+                CheckedInvoke(OnReadText, new object[] {sock, ENC.GetString(buf)});
 
             return true;
         }
