@@ -74,10 +74,19 @@ namespace stringprep.steps
             // 2) Iterate through each character C in that decomposition, from first to last. 
             // If C is not blocked from the last starter L, and it can be primary combined with L, 
             // then replace L by the composite L-C, and remove C. 
+            Decomp(result);
+
+            if (result.Length > 0)
+            {
+                Decompose.CanonicalOrdering(result, 0, result.Length);
+                Comp(result);
+            }
+        }
+      
+        private void Decomp(StringBuilder result)
+        {
 
             int offset;
-            int last_start = 0;
-            int old_len;
             char[] insert = new char[16];
             int j;
 
@@ -86,7 +95,6 @@ namespace stringprep.steps
             {
                 char c = result[i];
 
-                old_len = result.Length;
                 offset = Decompose.Find(c);
                 if (offset >= 0)
                 {
@@ -98,7 +106,7 @@ namespace stringprep.steps
                     switch (j)
                     {
                     case 0:
-                         // there were no characters in the replacement.  just remove the existing char.
+                        // there were no characters in the replacement.  just remove the existing char.
                         result.Remove(i, 1);
                         i--;
                         break;
@@ -115,59 +123,43 @@ namespace stringprep.steps
                         break;
                     }
                 }
-
-                if ((result.Length > 0) && (old_len < result.Length))
-                {
-                    if (Decompose.CombiningClass(result[old_len]) == 0)
-                    { 
-                        Decompose.CanonicalOrdering(result, last_start, result.Length - last_start);
-                        last_start = old_len;
-                    }
-                }
             }
+        }
 
-            // stuff left at the end?
-            if (result.Length > 0)
-            {
-                Decompose.CanonicalOrdering(result, last_start, result.Length - last_start);
-            }
-
+        private void Comp(StringBuilder result)
+        {
             // All decomposed and reordered.
             // Combine all combinable characters.
-            if (result.Length > 0)
+            int cc;
+            int last_cc = 0;
+            char c;
+            int last_start = 0;
+
+            for (int i=0; i<result.Length; i++)
             {
-                int cc;
-                int last_cc = 0;
-                char c;
-                last_start = 0;
-
-                for (int i=0; i<result.Length; i++)
+                cc = Decompose.CombiningClass(result[i]);
+                if ((i > 0) &&
+                    ((last_cc == 0) || (last_cc != cc)) &&
+                    Compose.Combine(result[last_start], result[i], out c))
                 {
-                    cc = Decompose.CombiningClass(result[i]);
-                    if ((i > 0) &&
-                        ((last_cc == 0) || (last_cc != cc)) &&
-                        Compose.Combine(result[last_start], result[i], out c))
-                    {
-                        result[last_start] = c;
-                        result.Remove(i, 1);
-                        i--;
+                    result[last_start] = c;
+                    result.Remove(i, 1);
+                    i--;
 
-                        if (i == last_start)
-                            last_cc = 0;
-                        else
-                            last_cc = Decompose.CombiningClass(result[i - 1]);
+                    if (i == last_start)
+                        last_cc = 0;
+                    else
+                        last_cc = Decompose.CombiningClass(result[i - 1]);
 
-                        continue;
-                    }
-
-                    if (cc == 0)
-                        last_start = i;
-
-                    last_cc = cc;
+                    continue;
                 }
+
+                if (cc == 0)
+                    last_start = i;
+
+                last_cc = cc;
             }        
         }
-      
     }
 }
 #endif
