@@ -52,6 +52,7 @@ namespace muzzle
         private IDictionary m_items  = new SkipList();
 
         private System.Windows.Forms.ImageList il;
+        private System.Windows.Forms.ToolTip tt;
         private System.ComponentModel.IContainer components;
 
         /// <summary>
@@ -93,6 +94,7 @@ namespace muzzle
             this.components = new System.ComponentModel.Container();
             System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(RosterTree));
             this.il = new System.Windows.Forms.ImageList(this.components);
+            this.tt = new System.Windows.Forms.ToolTip(this.components);
             // 
             // il
             // 
@@ -250,6 +252,25 @@ namespace muzzle
             base.OnAfterCollapse (e);
         }
 
+        /// <summary>
+        /// When mousing over a node, show a tooltip with the full JID.
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            base.OnMouseMove(e);
+            ItemNode node = this.GetNodeAt(e.X, e.Y) as ItemNode;
+            if (node == null)
+            { // none selected, or a group
+                tt.SetToolTip(this, "");
+                return;
+            }
+            if (node.JID.ToString() != tt.GetToolTip(this))
+            {
+                tt.SetToolTip(this, node.JID.ToString());
+            }
+        }
+
         private void m_roster_OnRosterItem(object sender, jabber.protocol.iq.Item ri)
         {
             Group[] groups = ri.GetGroups();
@@ -281,6 +302,7 @@ namespace muzzle
                 nodelist.Clear();
             }
 
+            Hashtable ghash = new Hashtable();
             foreach (Group g in groups)
             {
                 TreeNode gn = (TreeNode) m_groups[g.GroupName];
@@ -290,6 +312,14 @@ namespace muzzle
                     m_groups.Add(g.GroupName, gn);
                     this.Nodes.Add(gn);
                 }
+                else
+                {
+                    // might have the same group twice.
+                    if (ghash.Contains(g.GroupName))
+                        continue;
+                }
+                ghash.Add(g.GroupName, g);
+
                 ItemNode i = new ItemNode(ri);
                 i.ChangePresence(m_pres[ri.JID]);
                 nodelist.Add(i);
@@ -351,11 +381,14 @@ namespace muzzle
             public void ChangePresence(Presence p)
             {
                 SelectedImageIndex = ImageIndex = getPresenceImage(p);
+                String nick = i.Nickname;
+                if (nick == "")
+                    nick = i.JID.User;
 
                 if ((p == null) || (p.Status == null) || (p.Status == ""))
-                    Text = i.Nickname;
+                    Text = nick;
                 else
-                    Text = i.Nickname + " (" + p.Status + ")";
+                    Text = nick + " (" + p.Status + ")";
             }
 
             private static int getPresenceImage(Presence p)
@@ -380,6 +413,7 @@ namespace muzzle
 
                 return OFFLINE;
             }
-        }        
+        }
+
     }
 }
