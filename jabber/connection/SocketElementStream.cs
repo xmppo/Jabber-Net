@@ -28,6 +28,7 @@
  * 
  * --------------------------------------------------------------------------*/
 using System;
+using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Xml;
@@ -62,6 +63,7 @@ namespace jabber.connection
         private string         m_server     = "jabber.com";
         private string         m_streamID   = null;
         private object         m_stateLock  = new object();
+        private ArrayList      m_callbacks  = new ArrayList();
 
         private int            m_port       = 5222;
         private int            m_autoReconnect = 30;
@@ -314,6 +316,39 @@ namespace jabber.connection
         }
 
         /// <summary>
+        /// Register a callback, so that if a packet arrives that matches the given xpath expression,
+        /// the callback fires.
+        /// </summary>
+        /// <param name="xpath">The xpath expression to search for</param>
+        /// <param name="cb">The callback to call when the xpath matches</param>
+        /// <returns>A guid that can be used to unregister the callback</returns>
+        public Guid AddCallback(string xpath, ProtocolHandler cb)
+        {
+            CallbackData cbd = new CallbackData(xpath, cb);
+            m_callbacks.Add(cbd);
+            return cbd.Guid;
+        }
+
+        /// <summary>
+        /// Remove the callbacks 
+        /// </summary>
+        /// <param name="guid"></param>
+        public void RemoveCallback(Guid guid)
+        {
+            int count = 0;
+            foreach (CallbackData cbd in m_callbacks)
+            {
+                if (cbd.Guid == guid)
+                {
+                    m_callbacks.RemoveAt(count);
+                    return;
+                }
+                count++;
+            }
+            throw new ArgumentException("Unknown Guid");
+        }
+
+        /// <summary>
         /// Write these bytes to the socket.
         /// </summary>
         /// <param name="buf"></param>
@@ -409,6 +444,7 @@ namespace jabber.connection
             if (str == null)
                 return;
             m_streamID = str.ID;
+            CheckAll(tag);
         }
         
         /// <summary>
@@ -433,6 +469,7 @@ namespace jabber.connection
         {
             if (OnProtocol != null)
                 CheckedInvoke(OnProtocol, new object[] {this, tag});
+            CheckAll(tag);
         }
 
         /// <summary>
@@ -487,20 +524,20 @@ namespace jabber.connection
             return false;           
         }
 
-        bool ISocketEventListener.OnRead(bedrock.net.AsyncSocket sock, byte[] buf, int offset, int length)
+        bool ISocketEventListener.OnRead(bedrock.net.AsyncSocket sock, byte[] buf, int offset, int count)
         {
-            m_stream.Push(buf);
+            m_stream.Push(buf, offset, count);
 
             if (OnReadText != null)
-                CheckedInvoke(OnReadText, new object[] {sock, ENC.GetString(buf, offset, length)});
+                CheckedInvoke(OnReadText, new object[] {sock, ENC.GetString(buf, offset, count)});
 
             return true;
         }
 
-        void ISocketEventListener.OnWrite(bedrock.net.AsyncSocket sock, byte[] buf, int offset, int length)
+        void ISocketEventListener.OnWrite(bedrock.net.AsyncSocket sock, byte[] buf, int offset, int count)
         {
             if (OnWriteText != null)
-                CheckedInvoke(OnWriteText, new object[] {sock, ENC.GetString(buf, offset, length)});
+                CheckedInvoke(OnWriteText, new object[] {sock, ENC.GetString(buf, offset, count)});
         }
 
         void ISocketEventListener.OnError(bedrock.net.AsyncSocket sock, System.Exception ex)
@@ -545,5 +582,45 @@ namespace jabber.connection
                 CheckedInvoke(OnDisconnect, new object[]{this});
         }
         #endregion
+
+        private void CheckAll(XmlElement elem)
+        {
+            foreach (CallbackData cbd in m_callbacks)
+            {
+                cbd.Check(this, elem);
+            }
+        }
+
+        private class CallbackData
+        {
+            private Guid            m_guid = Guid.NewGuid();
+            private ProtocolHandler m_cb;
+            private string          m_xpath;
+
+            public CallbackData(string xpath, ProtocolHandler cb)
+            {
+                Debug.Assert(cb != null);
+                m_cb = cb;
+                m_xpath = xpath;
+            }
+
+            public Guid Guid
+            {
+                get { return m_guid; }
+            }
+
+            public string XPath
+            {
+                get { return m_xpath; }
+            }
+
+            public void Check(SocketElementStream sender, XmlElement elem)
+            {
+                if (elem.SelectSingleNode(m_xpath) != null)
+                {
+                    sender.CheckedInvoke(m_cb, new object[] {sender, elem} );
+                }
+            }
+        }
     }
 }
