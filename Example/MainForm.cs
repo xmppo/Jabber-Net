@@ -47,6 +47,8 @@ namespace Example
     /// </summary>
     public class MainForm : System.Windows.Forms.Form
     {
+        private bedrock.net.AsyncSocket m_sock;
+
         private System.Windows.Forms.StatusBar sb;
         private jabber.client.JabberClient jc;
         private jabber.client.RosterManager rm;
@@ -72,14 +74,14 @@ namespace Example
 
         public MainForm()
         {
+            bedrock.net.AsyncSocket.UntrustedRootOK = true;
+
             //
             // Required for Windows Form Designer support
             //
             InitializeComponent();
 
-            //
-            // TODO: Add any constructor code after InitializeComponent call
-            //
+            AppDomain.CurrentDomain.UnhandledException +=new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
         }
 
         /// <summary>
@@ -365,6 +367,15 @@ namespace Example
         {
             pnlPresence.Text = "Available";
             pnlCon.Text = "Connected";
+
+#if !NO_SSL
+            if (m_sock.SSL)
+            {
+                debug.AppendText("\r\nServer Certificate:\r\n-------------------\r\n");
+                if (m_sock.RemoteCertificate != null) 
+                    debug.AppendText(m_sock.RemoteCertificate.ToString(true) + "\r\n");
+            }
+#endif
         }
 
         private void jc_OnDisconnect(object sender)
@@ -531,6 +542,8 @@ namespace Example
 
         private void jc_OnConnect(object sender, bedrock.net.AsyncSocket sock)
         {
+            m_sock = sock;
+            Debug.Assert(sock != null);
             m_err = false;
             debug.AppendText("Connected to: " + sock.Address.IP + ":" + sock.Address.Port + "\r\n");
             
@@ -538,7 +551,8 @@ namespace Example
             if (sock.SSL)
             {
                 debug.AppendText("\r\nServer Certificate:\r\n-------------------\r\n");
-                debug.AppendText(sock.RemoteCertificate.ToString(true) + "\r\n");
+                if (sock.RemoteCertificate != null) 
+                    debug.AppendText(sock.RemoteCertificate.ToString(true) + "\r\n");
             }
 #endif
         }
@@ -557,6 +571,11 @@ namespace Example
                 txtDebugInput.Clear();
             }
         
+        }
+
+        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            MessageBox.Show(e.ExceptionObject.ToString(), "Unhandled exception: " + e.GetType().ToString());
         }
     }
 
