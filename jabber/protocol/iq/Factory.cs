@@ -60,7 +60,7 @@ namespace jabber.protocol.iq
 			new QnameType("ORG",   URI.VCARD, typeof(jabber.protocol.iq.VCard.VOrganization)),
 			new QnameType("TEL",   URI.VCARD, typeof(jabber.protocol.iq.VCard.VTelephone)),
             new QnameType("EMAIL", URI.VCARD, typeof(jabber.protocol.iq.VCard.VEmail)),
-            new QnameType("GEO",   URI.VCARD, typeof(jabber.protocol.iq.VCard.Geo)),
+            new QnameType("GEO",   URI.VCARD, typeof(jabber.protocol.iq.VCard.VGeo)),
             new QnameType("PHOTO",   URI.VCARD, typeof(jabber.protocol.iq.VCard.VPhoto))
     };
 

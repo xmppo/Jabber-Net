@@ -164,7 +164,15 @@ namespace jabber.protocol.iq
         /// <param name="doc"></param>
         public VCardIQ(XmlDocument doc) : base(doc)
         {
-            this.Query = new VCard(doc);
+            AddChild(new VCard(doc));
+        }
+
+        /// <summary>
+        /// returns the vCard element for this iq.
+        /// </summary>
+        public VCard VCard 
+        {
+            get { return (VCard)this["vCard"]; }
         }
     }
 
@@ -178,9 +186,9 @@ namespace jabber.protocol.iq
         /// 
         /// </summary>
         /// <param name="doc"></param>
-        public VCard(XmlDocument doc) : base("VCARD", URI.VCARD, doc)
+        public VCard(XmlDocument doc) : base("vCard", URI.VCARD, doc)
         {
-            SetElem("PRODID", "jabber-net: " + this.GetType().Assembly.FullName);
+        //  SetElem("PRODID", "jabber-net: " + this.GetType().Assembly.FullName);
         }
 
         /// <summary>
@@ -310,7 +318,13 @@ namespace jabber.protocol.iq
             }
             return numbers;
         }
-		
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="location"></param>
+        /// <returns></returns>
         public VTelephone GetTelephone(TelephoneType type, TelephoneLocation location)
         {
             foreach (VTelephone tel in GetTelephoneList())
@@ -325,14 +339,14 @@ namespace jabber.protocol.iq
         /// List of addresses
         /// </summary>
         /// <returns></returns>
-        public Address[] GetAddressList()
+        public VAddress[] GetAddressList()
         {
             XmlNodeList nl = GetElementsByTagName("ADR", URI.VCARD);
-            Address[] addresses = new Address[nl.Count];
+            VAddress[] addresses = new VAddress[nl.Count];
             int i=0;
             foreach (XmlNode n in nl)
             {
-                addresses[i] = (Address) n;
+                addresses[i] = (VAddress) n;
                 i++;
             }
             return addresses;
@@ -343,9 +357,9 @@ namespace jabber.protocol.iq
         /// </summary>
         /// <param name="location"></param>
         /// <returns></returns>
-        public Address GetAddress(AddressLocation location)
+        public VAddress GetAddress(AddressLocation location)
         {
-            foreach (Address adr in GetAddressList())
+            foreach (VAddress adr in GetAddressList())
             {
                 if (adr.Location == location)
                     return adr;
@@ -386,6 +400,23 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
+        ///  Sets the email address for the given type.
+        /// </summary>
+        /// <param name="email"></param>
+        public void SetEmail(VEmail email)
+        {
+            VEmail existing = GetEmail(email.Type);
+            if (existing == null) 
+            {
+                AddChild(email);
+            } 
+            else 
+            {
+                existing.UserId = email.UserId;
+            }
+        }
+
+        /// <summary>
         /// Get the internet email address (default)
         /// </summary>
         /// <returns></returns>
@@ -393,12 +424,13 @@ namespace jabber.protocol.iq
         {
             get
             {
-                return GetEmail(EmailType.internet).UserId;
-            }
+				VEmail vemail = GetEmail(EmailType.internet);
+				return vemail == null ? null : vemail.UserId;
+			}
         }    
 
         /// <summary>
-        /// vCard Name Element
+        /// 
         /// </summary>
         public class VName : Element
         {
@@ -449,7 +481,7 @@ namespace jabber.protocol.iq
             }
         }
 
-        /// <summary></summary>
+        /// <summary>
         /// vCard Org Element
         /// </summary>
         public class VOrganization : Element
@@ -492,7 +524,7 @@ namespace jabber.protocol.iq
             }
         }
 
-        /// <summary></summary>
+        /// <summary>
         /// vCard Telephone Element
         /// </summary>
         public class VTelephone : Element
@@ -592,13 +624,13 @@ namespace jabber.protocol.iq
         /// <summary>
         /// vCard Address Element
         /// </summary>
-        public class Address : Element
+        public class VAddress : Element
         {
             /// <summary>
             /// 
             /// </summary>
             /// <param name="doc"></param>
-            public Address(XmlDocument doc) : base("ADR", URI.VCARD, doc)
+            public VAddress(XmlDocument doc) : base("ADR", URI.VCARD, doc)
             {
             }
 
@@ -608,7 +640,7 @@ namespace jabber.protocol.iq
             /// <param name="prefix"></param>
             /// <param name="qname"></param>
             /// <param name="doc"></param>
-            public Address(string prefix, XmlQualifiedName qname, XmlDocument doc) :
+            public VAddress(string prefix, XmlQualifiedName qname, XmlDocument doc) :
                 base(prefix, qname, doc)
             {
             }
@@ -786,13 +818,13 @@ namespace jabber.protocol.iq
         /// <summary>
         /// Geographic location
         /// </summary>
-        public class Geo : Element
+        public class VGeo : Element
         {
             /// <summary>
             /// 
             /// </summary>
             /// <param name="doc"></param>
-            public Geo(XmlDocument doc) : base("GEO", URI.VCARD, doc)
+            public VGeo(XmlDocument doc) : base("GEO", URI.VCARD, doc)
             {
             }
 
@@ -802,7 +834,7 @@ namespace jabber.protocol.iq
             /// <param name="prefix"></param>
             /// <param name="qname"></param>
             /// <param name="doc"></param>
-            public Geo(string prefix, XmlQualifiedName qname, XmlDocument doc) :
+            public VGeo(string prefix, XmlQualifiedName qname, XmlDocument doc) :
                 base(prefix, qname, doc)
             {
             }
@@ -826,6 +858,9 @@ namespace jabber.protocol.iq
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public class VPhoto : Element
         {
             /// <summary>
@@ -847,6 +882,9 @@ namespace jabber.protocol.iq
             {
             }
 
+            /// <summary>
+            /// 
+            /// </summary>
             public System.Drawing.Image Bitmap
             {
                 get
@@ -867,5 +905,6 @@ namespace jabber.protocol.iq
                 }
             }
         }
+
     }
 }
