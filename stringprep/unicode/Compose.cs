@@ -47,6 +47,7 @@ namespace stringprep.unicode
         private static byte[] s_table = null;
         private static char[,] s_firstSingle = null;
         private static char[,] s_secondSingle = null;
+        private static object s_lock = new object();
 
         private static int Index(char c)
         {
@@ -75,7 +76,7 @@ namespace stringprep.unicode
         {
             if (! s_init)
             {
-                lock (typeof(Compose))
+                lock (s_lock)
                 {
                     if (! s_init)
                     {

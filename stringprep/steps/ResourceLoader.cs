@@ -44,7 +44,7 @@ namespace stringprep.steps
             {
                 if (m_rfc_res == null)
                 {
-                    lock (typeof(ResourceLoader))
+                    lock (RFC3454)
                     {
                         if (m_rfc_res == null)
                             m_rfc_res = new ResourceManager(RFC3454, Assembly.GetExecutingAssembly());

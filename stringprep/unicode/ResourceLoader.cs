@@ -44,7 +44,7 @@ namespace stringprep.unicode
             {
                 if (m_uni_res == null)
                 {
-                    lock (typeof(ResourceLoader))
+                    lock (UNICODE)
                     {
                         if (m_uni_res == null)
                             m_uni_res = new ResourceManager(UNICODE, Assembly.GetExecutingAssembly());

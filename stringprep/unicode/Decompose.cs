@@ -40,7 +40,7 @@ namespace stringprep.unicode
         private static bool s_init = false;
         private static char[][] s_offsets = null;
         private static string[] s_expansion = null;
-        private static IComparer s_comparer = null;
+        private static IComparer s_comparer = new CharArrayComparer();
 
         /// <summary>
         /// Look up the expansion, if any, for the given character.
@@ -51,13 +51,12 @@ namespace stringprep.unicode
         {
             if (!s_init)
             {
-                lock(typeof(Decompose))
+                lock(s_comparer)
                 {
                     if (!s_init)
                     {
                         s_offsets = (char[][]) ResourceLoader.LoadRes("Decompose.Offsets");
                         s_expansion = (string[]) ResourceLoader.LoadRes("Decompose.Expansion");
-                        s_comparer = new CharArrayComparer();
                         s_init = true;
                     }
                 }

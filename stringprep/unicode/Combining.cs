@@ -36,6 +36,7 @@ namespace stringprep.unicode
         private static bool s_init = false;
         private static byte[,] s_classes = null;
         private static byte[] s_pages = null;
+        private static object s_lock = new object();
 
         /// <summary>
         /// What is the combining class for the given character?
@@ -46,7 +47,7 @@ namespace stringprep.unicode
         {
             if (!s_init)
             {
-                lock (typeof(Combining))
+                lock (s_lock)
                 {
                     if (!s_init)
                     {
