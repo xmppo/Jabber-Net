@@ -285,6 +285,7 @@ namespace jabber.protocol.iq
     /// <summary>
     /// The information associated with a disco node.
     /// </summary>
+    [RCS(@"$Header$")]
     public class DiscoInfo : Element
     {
         /// <summary>
@@ -375,6 +376,7 @@ namespace jabber.protocol.iq
     /// <summary>
     /// The identitiy associated with a disco node.
     /// </summary>
+    [RCS(@"$Header$")]
     public class DiscoIdentity : Element
     {
         /// <summary>
@@ -428,6 +430,7 @@ namespace jabber.protocol.iq
     /// <summary>
     /// A feature associated with a disco node.
     /// </summary>
+    [RCS(@"$Header$")]
     public class DiscoFeature : Element
     {
         /// <summary>
