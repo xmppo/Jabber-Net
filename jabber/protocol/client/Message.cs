@@ -125,7 +125,7 @@ namespace jabber.protocol.client
                 html.AppendChild(body);
                 this.AppendChild(html);
                 // TODO: strip HTML tags
-                this.Body = body.InnerText;
+                //this.Body = body.InnerText;
             }
         }
 
