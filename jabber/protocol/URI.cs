@@ -33,6 +33,22 @@ namespace jabber.protocol
         /// </summary>
         public const string STREAM = "http://etherx.jabber.org/streams";
         /// <summary>
+        /// Start-TLS feature namespace
+        /// </summary>
+        public const string START_TLS = "urn:ietf:params:xml:ns:xmpp-tls";
+        /// <summary>
+        /// SASL feature namespace
+        /// </summary>
+        public const string SASL = "urn:ietf:params:xml:ns:xmpp-sasl";
+        /// <summary>
+        /// Start a session
+        /// </summary>
+        public const string SESSION = "urn:ietf:params:xml:ns:xmpp-session";
+        /// <summary>
+        /// Bind a resource
+        /// </summary>
+        public const string BIND = "urn:ietf:params:xml:ns:xmpp-bind";
+        /// <summary>
         /// Jabber client connections
         /// </summary>
         public const string CLIENT = "jabber:client";
@@ -48,11 +64,6 @@ namespace jabber.protocol
         /// S2S dialback
         /// </summary>
         public const string DIALBACK = "jabber:server:dialback";
-        /// <summary>
-        /// SASL support
-        /// </summary>
-        public const string SASL = "http://www.iana.org/assignments/sasl-mechanisms";
-
         // IQ
         /// <summary>
         /// Authentication

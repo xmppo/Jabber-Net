@@ -94,6 +94,7 @@ namespace jabber.server
             this.Server = host;
             this.Port = port;
             
+
             m_name   = name;
             m_secret = secret;
             m_type = ComponentType.Accept;
@@ -199,15 +200,6 @@ namespace jabber.server
         protected override string NS
         {
             get { return URI.ACCEPT; }
-        }
-
-        /// <summary>
-        /// The host for the to attribute of the stream:stream for this connection.
-        /// </summary>
-        [Browsable(false)]
-        protected override string Host
-        {
-            get { return m_name; }
         }
 
         /// <summary>

@@ -12,34 +12,25 @@
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
-
-using System.Security.Cryptography;
 using System.Xml;
+
 using bedrock.util;
-using jabber.protocol;
 
 namespace jabber.protocol.stream
 {
     /// <summary>
-    /// The fabled stream:stream packet.  Id's get assigned automatically on allocation.
+    /// Bind start after binding
     /// </summary>
     [RCS(@"$Header$")]
-    public class Stream : Packet
+    public class Bind : Element
     {
-        private static readonly RandomNumberGenerator RNG = RandomNumberGenerator.Create();
-
         /// <summary>
         /// 
         /// </summary>
         /// <param name="doc"></param>
-        /// <param name="xmlns"></param>
-        public Stream(XmlDocument doc, string xmlns) :
-            base("stream", new XmlQualifiedName("stream", jabber.protocol.URI.STREAM), doc)
+        public Bind(XmlDocument doc) :
+            base(null, new XmlQualifiedName("bind", jabber.protocol.URI.BIND), doc)
         {
-            byte[] buf = new byte[4];
-            RNG.GetBytes(buf);
-            ID = HexString(buf);
-            NS = xmlns;
         }
 
         /// <summary>
@@ -48,27 +39,27 @@ namespace jabber.protocol.stream
         /// <param name="prefix"></param>
         /// <param name="qname"></param>
         /// <param name="doc"></param>
-        public Stream(string prefix, XmlQualifiedName qname, XmlDocument doc) : 
+        public Bind(string prefix, XmlQualifiedName qname, XmlDocument doc) : 
             base(prefix, qname, doc)
         {
         }
 
         /// <summary>
-        /// Default stream namespace.  xmlns=''.
+        /// The resource to bind to.  Null says for the server to pick.
         /// </summary>
-        public string NS
+        public string Resource
         {
-            get { return this.GetAttribute("xmlns"); }
-            set { this.SetAttribute("xmlns", value); }
+            get { return GetElem("resource"); }
+            set { SetElem("resource", value); }
         }
 
         /// <summary>
-        /// The version attribute.  "1.0" for an XMPP-core-compliant stream.
+        /// The JID that the server selected for us.
         /// </summary>
-        public string Version
+        public string JID
         {
-            get { return this.GetAttribute("version"); }
-            set { this.SetAttribute("version", value); }
+            get { return GetElem("jid"); }
+            set { SetElem("jid", value); }
         }
     }
 }

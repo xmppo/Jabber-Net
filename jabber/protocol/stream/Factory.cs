@@ -27,8 +27,22 @@ namespace jabber.protocol.stream
     {
         private static QnameType[] s_qnt = new QnameType[] 
         {
-            new QnameType("stream", URI.STREAM, typeof(Stream)),
-            new QnameType("error",  URI.STREAM, typeof(Error))
+            new QnameType("stream",     URI.STREAM,    typeof(Stream)),
+            new QnameType("error",      URI.STREAM,    typeof(Error)),
+            new QnameType("features",   URI.STREAM,    typeof(Features)),
+            new QnameType("starttls",   URI.START_TLS, typeof(StartTLS)),
+            new QnameType("proceed",    URI.START_TLS, typeof(Proceed)),
+            new QnameType("failure",    URI.START_TLS, typeof(TLSFailure)),
+            new QnameType("mechanisms", URI.SASL,      typeof(Mechanisms)),
+            new QnameType("mechanism",  URI.SASL,      typeof(Mechanism)),
+            new QnameType("auth",       URI.SASL,      typeof(Auth)),
+            new QnameType("challenge",  URI.SASL,      typeof(Challenge)),
+            new QnameType("response",   URI.SASL,      typeof(Response)),
+            new QnameType("failure",    URI.SASL,      typeof(SASLFailure)),
+            new QnameType("abort",      URI.SASL,      typeof(Abort)),
+            new QnameType("success",    URI.SASL,      typeof(Success)),
+            new QnameType("session",    URI.SESSION,   typeof(Session)),
+            new QnameType("bind",       URI.BIND,      typeof(Bind)),
         };
         QnameType[] IPacketTypes.Types { get { return s_qnt; } }
     }

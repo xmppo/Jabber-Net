@@ -95,9 +95,9 @@
                     HintPath = "..\..\..\WINNT\Microsoft.NET\Framework\v1.1.4322\System.Drawing.dll"
                 />
                 <Reference
-                    Name = "Org.Mentalis.Security"
-                    AssemblyName = "Org.Mentalis.Security"
-                    HintPath = "Org.Mentalis.Security.dll"
+                    Name = "Security Library"
+                    Project = "{5BFA5A70-D384-4417-AFCC-5C744485A85F}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
             </References>
         </Build>
@@ -301,6 +301,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "jabber\connection\sasl\MD5Processor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "jabber\connection\sasl\SASLProcessor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "jabber\protocol\AsynchElementStream.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -461,12 +471,37 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "jabber\protocol\stream\Bind.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "jabber\protocol\stream\Error.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "jabber\protocol\stream\Factory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "jabber\protocol\stream\Features.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "jabber\protocol\stream\SASL.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "jabber\protocol\stream\Session.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "jabber\protocol\stream\StartTLS.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

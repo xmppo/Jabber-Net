@@ -41,6 +41,8 @@ namespace jabber.protocol
         /// </summary>
         public void Start()
         {
+            Debug.WriteLine("--Starting new Synch parser--");
+            XmlElement elem;
             try
             {
                 // This isn't in the constructor so that this isn't called until there's something ready to parse.  
@@ -55,10 +57,14 @@ namespace jabber.protocol
                     switch (m_reader.Depth)
                     {
                         case 0:  // stream:stream
-                            FireOnDocumentStart(m_loader.ReadStartTag());
+                            elem = m_loader.ReadStartTag();
+                            Debug.WriteLine("SynchParser start: " + elem.OuterXml);
+                            FireOnDocumentStart(elem);
                             break;
                         case 1:  // protocol element
-                            FireOnElement((XmlElement) m_loader.ReadCurrentNode());
+                            elem = (XmlElement) m_loader.ReadCurrentNode();
+                            Debug.WriteLine("SynchParser elem: " + elem.OuterXml);
+                            FireOnElement(elem);
                             break;
                         default:
                             throw new InvalidOperationException("Protocol de-synchronized: " + m_reader.Name);

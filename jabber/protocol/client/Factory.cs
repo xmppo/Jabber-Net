@@ -13,7 +13,6 @@
  * --------------------------------------------------------------------------*/
 using System;
 
-
 using bedrock.util;
 using jabber.protocol;
 

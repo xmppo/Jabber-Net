@@ -292,6 +292,7 @@ namespace Example
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
             this.Text = "MainForm";
+            this.Closing += new System.ComponentModel.CancelEventHandler(this.MainForm_Closing);
             ((System.ComponentModel.ISupportInitialize)(this.pnlCon)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pnlPresence)).EndInit();
             this.tabControl1.ResumeLayout(false);
@@ -322,6 +323,7 @@ namespace Example
 
         private void jc_OnReadText(object sender, string txt)
         {
+            Debug.WriteLine("RECV: " + txt);
             debug.SelectionColor = Color.Red;
             debug.AppendText("RECV: ");
             debug.SelectionColor = Color.Black;
@@ -335,6 +337,7 @@ namespace Example
             if (txt == " ")
                 return;
 
+            Debug.WriteLine("SEND: " + txt);
             debug.SelectionColor = Color.Blue;
             debug.AppendText("SEND: ");
             debug.SelectionColor = Color.Black;
@@ -494,8 +497,10 @@ namespace Example
 
         private void jc_OnConnect(object sender, bedrock.net.AsyncSocket sock)
         {
+            if (sock == null)
+                return;
+
             m_sock = sock;
-            Debug.Assert(sock != null);
             m_err = false;
             debug.AppendText("Connected to: " + sock.Address.IP + ":" + sock.Address.Port + "\r\n");
             
@@ -533,6 +538,12 @@ namespace Example
         private void rm_OnRosterEnd(object sender)
         {
             roster.ExpandAll();
+        }
+
+        private void MainForm_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (jc.IsAuthenticated)
+                jc.Close();
         }
     }
 }

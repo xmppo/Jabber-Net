@@ -27,6 +27,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "stringprep", "stringprep\st
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Security Library", "..\Mentalis\seclib\Security Library.csproj", "{5BFA5A70-D384-4417-AFCC-5C744485A85F}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -60,6 +64,10 @@ Global
 		{060A98C7-BF17-4685-A528-F84C0D8D89AE}.Debug.Build.0 = Debug|.NET
 		{060A98C7-BF17-4685-A528-F84C0D8D89AE}.Release.ActiveCfg = Release|.NET
 		{060A98C7-BF17-4685-A528-F84C0D8D89AE}.Release.Build.0 = Release|.NET
+		{5BFA5A70-D384-4417-AFCC-5C744485A85F}.Debug.ActiveCfg = Debug|.NET
+		{5BFA5A70-D384-4417-AFCC-5C744485A85F}.Debug.Build.0 = Debug|.NET
+		{5BFA5A70-D384-4417-AFCC-5C744485A85F}.Release.ActiveCfg = Release|.NET
+		{5BFA5A70-D384-4417-AFCC-5C744485A85F}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

@@ -12,34 +12,29 @@
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
-
-using System.Security.Cryptography;
 using System.Xml;
 using bedrock.util;
-using jabber.protocol;
 
 namespace jabber.protocol.stream
 {
     /// <summary>
-    /// The fabled stream:stream packet.  Id's get assigned automatically on allocation.
+    /// Stream Features handler
+    /// </summary>
+    public delegate void FeaturesHandler(Object sender, Features feat);
+
+    /// <summary>
+    /// Stream features.  Will only be set by a version="1.0" or higher XMPP server.
     /// </summary>
     [RCS(@"$Header$")]
-    public class Stream : Packet
+    public class Features : Element
     {
-        private static readonly RandomNumberGenerator RNG = RandomNumberGenerator.Create();
-
         /// <summary>
         /// 
         /// </summary>
         /// <param name="doc"></param>
-        /// <param name="xmlns"></param>
-        public Stream(XmlDocument doc, string xmlns) :
-            base("stream", new XmlQualifiedName("stream", jabber.protocol.URI.STREAM), doc)
+        public Features(XmlDocument doc) :
+            base(null, new XmlQualifiedName("features", jabber.protocol.URI.STREAM), doc)
         {
-            byte[] buf = new byte[4];
-            RNG.GetBytes(buf);
-            ID = HexString(buf);
-            NS = xmlns;
         }
 
         /// <summary>
@@ -48,27 +43,27 @@ namespace jabber.protocol.stream
         /// <param name="prefix"></param>
         /// <param name="qname"></param>
         /// <param name="doc"></param>
-        public Stream(string prefix, XmlQualifiedName qname, XmlDocument doc) : 
+        public Features(string prefix, XmlQualifiedName qname, XmlDocument doc) : 
             base(prefix, qname, doc)
         {
         }
 
         /// <summary>
-        /// Default stream namespace.  xmlns=''.
+        /// The starttls element, or null if none found.
         /// </summary>
-        public string NS
+        public StartTLS StartTLS
         {
-            get { return this.GetAttribute("xmlns"); }
-            set { this.SetAttribute("xmlns", value); }
+            get { return this["starttls", jabber.protocol.URI.START_TLS] as StartTLS; }
+            set { ReplaceChild(value); }
         }
 
         /// <summary>
-        /// The version attribute.  "1.0" for an XMPP-core-compliant stream.
+        /// The SASL mechanisms, or null if none found.
         /// </summary>
-        public string Version
+        public Mechanisms Mechanisms
         {
-            get { return this.GetAttribute("version"); }
-            set { this.SetAttribute("version", value); }
+            get { return this["mechanisms", jabber.protocol.URI.SASL] as Mechanisms; }
+            set { ReplaceChild(value); }
         }
     }
 }

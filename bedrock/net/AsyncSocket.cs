@@ -515,7 +515,16 @@ namespace bedrock.net
              
             if (m_synch)
             {
-                m_sock.Connect(m_addr.Endpoint);
+                try 
+                {
+                    m_sock.Connect(m_addr.Endpoint);
+                }
+                catch (SocketException ex) 
+                {
+                    FireError(ex);
+                    return;
+                }
+
                 if (m_sock.Connected)
                 {
                     lock(this)

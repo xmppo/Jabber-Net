@@ -25,6 +25,7 @@ using jabber.connection;
 using jabber.protocol;
 using jabber.protocol.client;
 using jabber.protocol.iq;
+using jabber.connection.sasl;
 
 namespace jabber.client
 {
@@ -55,7 +56,6 @@ namespace jabber.client
         private string m_resource   = "Jabber.Net";
         private int    m_priority   = 0;
 
-        private bool m_plaintext  = false;
         private bool m_autoLogin  = true;
         private bool m_autoRoster = true;
         private bool m_autoPres   = true;
@@ -73,6 +73,8 @@ namespace jabber.client
             base(container)
         {
             m_tracker = new IQTracker(this);
+            this.OnSASLStart += new jabber.connection.sasl.SASLProcessorHandler(JabberClient_OnSASLStart);
+            this.OnSASLEnd += new jabber.protocol.stream.FeaturesHandler(JabberClient_OnSASLEnd);
         }
 
         /// <summary>
@@ -81,6 +83,8 @@ namespace jabber.client
         public JabberClient() : base()
         {
             m_tracker = new IQTracker(this);
+            this.OnSASLStart += new jabber.connection.sasl.SASLProcessorHandler(JabberClient_OnSASLStart);
+            this.OnSASLEnd += new jabber.protocol.stream.FeaturesHandler(JabberClient_OnSASLEnd);
         }
 
         /// <summary>
@@ -90,6 +94,8 @@ namespace jabber.client
         public JabberClient(SocketWatcher watcher) : base(watcher)
         {
             m_tracker = new IQTracker(this);
+            this.OnSASLStart += new jabber.connection.sasl.SASLProcessorHandler(JabberClient_OnSASLStart);
+            this.OnSASLEnd += new jabber.protocol.stream.FeaturesHandler(JabberClient_OnSASLEnd);
         }
 
         /// <summary>
@@ -195,18 +201,6 @@ namespace jabber.client
         }
         
         /// <summary>
-        /// Allow plaintext authentication?
-        /// </summary>
-        [Description("Allow plaintext authentication?")]
-        [DefaultValue(false)]
-        [Category("Jabber")]
-        public bool PlaintextAuth
-        {
-            get { return m_plaintext; }
-            set { m_plaintext = value; }
-        }
-
-        /// <summary>
         /// Automatically log in on connection.
         /// </summary>
         [Description("Automatically log in on connection.")]
@@ -306,6 +300,7 @@ namespace jabber.client
             get { return base.IsAuthenticated; }
             set
             {
+                BaseState oldState = this.State;
                 base.IsAuthenticated = value;
                 if (value)
                 {
@@ -566,25 +561,6 @@ namespace jabber.client
             System.Xml.XmlElement tag)
         {
             base.OnDocumentStart(sender, tag);
-
-            if (m_autoLogin)
-                Login();
-            else
-            {
-                lock (StateLock)
-                {
-                    State = ManualLoginState.Instance;
-                }
-                if (OnLoginRequired != null)
-                {
-                    if (InvokeRequired)
-                        CheckedInvoke(OnLoginRequired, new object[]{this});
-                    else
-                        OnLoginRequired(this);
-                }
-                else
-                    FireOnError(new InvalidOperationException("If AutoLogin is false, you must supply a OnLoginRequired event handler"));
-            }
         }
 
         private void OnGetAuth(object sender, IQ i, object data)
@@ -614,7 +590,7 @@ namespace jabber.client
             {
                 a.SetDigest(m_user, m_password, StreamID);
             }
-            else if (m_plaintext && (res["password"] != null))
+            else if (this.PlaintextAuth && (res["password"] != null))
             {
                 a.SetAuth(m_user, m_password);
             }
@@ -706,6 +682,105 @@ namespace jabber.client
             }
             else
                 FireOnError(new ProtocolException(i));
+        }
+
+        private void JabberClient_OnSASLStart(Object sender, jabber.connection.sasl.SASLProcessor proc)
+        {
+
+            BaseState s = null;
+            lock (StateLock)
+            {
+                s = State;
+            }
+            
+            // HACK: fire OnSASLStart with state of NonSASLAuthState to initiate old-style auth.
+            if (s == NonSASLAuthState.Instance)
+            {
+                if (m_autoLogin)
+                    Login();
+                else
+                {
+                    lock (StateLock)
+                    {
+                        State = ManualLoginState.Instance;
+                    }
+                    if (OnLoginRequired != null)
+                    {
+                        if (InvokeRequired)
+                            CheckedInvoke(OnLoginRequired, new object[]{this});
+                        else
+                            OnLoginRequired(this);
+                    }
+                    else
+                        FireOnError(new InvalidOperationException("If AutoLogin is false, you must supply a OnLoginRequired event handler"));
+                }
+            }
+            else
+            {
+                proc[SASLProcessor.USERNAME] = m_user;
+                proc[SASLProcessor.PASSWORD] = m_password;
+                proc[MD5Processor.REALM] = this.Host;
+            }
+        }
+
+        private void JabberClient_OnSASLEnd(Object sender, jabber.protocol.stream.Features feat)
+        {
+            lock (StateLock)
+            {
+                State = BindState.Instance;
+            }
+            if (feat["bind", URI.BIND] != null)
+            {
+                IQ iq = new IQ(this.Document);
+                iq.To = this.Host;
+                iq.Type = IQType.set;
+
+                jabber.protocol.stream.Bind bind = new jabber.protocol.stream.Bind(this.Document);
+                if ((m_resource != null) && (m_resource != ""))
+                    bind.Resource = m_resource;
+                                            
+                iq.AddChild(bind);
+                this.Tracker.BeginIQ(iq, new IqCB(GotResource), feat);
+            }
+            else if (feat["session", URI.SESSION] != null)
+            {
+                IQ iq = new IQ(this.Document);
+                iq.To = this.Host;
+                iq.Type = IQType.set;
+                iq.AddChild(new jabber.protocol.stream.Session(this.Document));
+                this.Tracker.BeginIQ(iq, new IqCB(GotSession), feat);
+            }
+            else
+                IsAuthenticated = true;
+        }
+
+        private void GotResource(object sender, IQ iq, object state)
+        {
+            jabber.protocol.stream.Features feat = state as jabber.protocol.stream.Features;
+            if (iq.Type != IQType.result)
+            {
+                FireOnError(new AuthenticationFailedException());
+                return;
+            }
+
+            if (feat["session", URI.SESSION] != null)
+            {
+                IQ iqs = new IQ(this.Document);
+                iqs.To = this.Host;
+                iqs.Type = IQType.set;
+                iqs.AddChild(new jabber.protocol.stream.Session(this.Document));
+                this.Tracker.BeginIQ(iqs, new IqCB(GotSession), feat);
+            }
+            else
+                IsAuthenticated = true;
+        }
+
+        private void GotSession(object sender, IQ iq, object state)
+        {
+            if (iq.Type == IQType.result)
+                IsAuthenticated = true;
+            else
+                FireOnError(new AuthenticationFailedException());
         }
     }
 

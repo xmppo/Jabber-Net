@@ -121,4 +121,81 @@ namespace jabber.connection
         /// </summary>
         public static readonly BaseState Instance = new AcceptingState();
     }
+    /// <summary>
+    /// Old-style auth, iq:auth or handshake.
+    /// </summary>
+    [RCS(@"$Header$")]
+    public class NonSASLAuthState : BaseState
+    {
+        /// <summary>
+        /// The instance that is always used.
+        /// </summary>
+        public static readonly BaseState Instance = new NonSASLAuthState();
+    }
+    /// <summary>
+    /// Waiting for the server to send the features element
+    /// </summary>
+    [RCS(@"$Header$")]
+    public class ServerFeaturesState : BaseState
+    {
+        /// <summary>
+        /// The instance that is always used.
+        /// </summary>
+        public static readonly BaseState Instance = new ServerFeaturesState();
+    }
+    /// <summary>
+    /// Start-TLS is starting to TLS.
+    /// </summary>
+    [RCS(@"$Header$")]
+    public class StartTLSState : BaseState
+    {
+        /// <summary>
+        /// The instance that is always used.
+        /// </summary>
+        public static readonly BaseState Instance = new StartTLSState();
+    }
+    /// <summary>
+    /// SASL Authentication in process
+    /// </summary>
+    [RCS(@"$Header$")]
+    public class SASLState : BaseState
+    {
+        /// <summary>
+        /// The instance that is always used.
+        /// </summary>
+        public static readonly BaseState Instance = new SASLState();
+    }
+    /// <summary>
+    /// SASL Authentication finished.  Restarting the stream for the last time.
+    /// </summary>
+    [RCS(@"$Header$")]
+    public class SASLAuthedState : BaseState
+    {
+        /// <summary>
+        /// The instance that is always used.
+        /// </summary>
+        public static readonly BaseState Instance = new SASLAuthedState();
+    }
+    /// <summary>
+    /// Binding session
+    /// </summary>
+    [RCS(@"$Header$")]
+    public class BindState : BaseState
+    {
+        /// <summary>
+        /// The instance that is always used.
+        /// </summary>
+        public static readonly BaseState Instance = new BindState();
+    }
+    /// <summary>
+    /// 
+    /// </summary>
+    [RCS(@"$Header$")]
+    public class X509AuthenticationState : BaseState
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        public static readonly BaseState Instance = new X509AuthenticationState();
+    }
 }
