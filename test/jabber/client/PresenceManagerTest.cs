@@ -92,5 +92,56 @@ namespace test.jabber.client1 // TODO: Client1 due to a bug in NUnit.
 			pp.AddPresence(pres);
 			Assertion.AssertEquals("foo@bar/baz", pp[f.Bare].From.ToString());
 		}
+        public void TestUserHost()
+        {
+            PresenceManager pp = new PresenceManager();
+            Presence pres = new Presence(doc);
+            JID f = new JID("foo", "bar", null);
+            pres.From = f;
+            pp.AddPresence(pres);
+            Assertion.AssertEquals("foo@bar", pp[f.Bare].From.ToString());
+        }
+        public void TestHost()
+        {
+            PresenceManager pp = new PresenceManager();
+            Presence pres = new Presence(doc);
+            JID f = new JID("bar");
+            pres.From = f;
+            pp.AddPresence(pres);
+            Assertion.AssertEquals("bar", pp[f.Bare].From.ToString());
+        }
+        public void TestHostResource()
+        {
+            PresenceManager pp = new PresenceManager();
+            Presence pres = new Presence(doc);
+            JID f = new JID(null, "bar", "baz");
+            pres.From = f;
+            pp.AddPresence(pres);
+            Assertion.AssertEquals("bar/baz", pp[f.Bare].From.ToString());
+        }
+        public void TestRemove()
+        {
+            PresenceManager pp = new PresenceManager();
+            Presence pres = new Presence(doc);
+            JID f = new JID("foo", "bar", "baz");
+            pres.From = f;
+            pres.Status = "Working";
+            pp.AddPresence(pres);
+            Assertion.AssertEquals("foo@bar/baz", pp[f].From.ToString());
+            f.Resource = null;
+            Assertion.AssertEquals("foo@bar/baz", pp[f].From.ToString());
+
+            pres = new Presence(doc);
+            pres.Status = "wandering";
+            pres.From = new JID("foo", "bar", "boo");
+            pp.AddPresence(pres);
+            Assertion.AssertEquals("Working", pp[f].Status);
+            pres.Priority = "2";
+            pp.AddPresence(pres);
+            Assertion.AssertEquals("wandering", pp[f].Status);
+            pres.Type = PresenceType.unavailable;
+            pp.AddPresence(pres);
+            Assertion.AssertEquals("Working", pp[f].Status);
+        }
     }
 }

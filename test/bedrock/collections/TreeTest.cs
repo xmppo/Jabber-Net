@@ -183,5 +183,12 @@ namespace test.bedrock.collections
             }
             Assertion.AssertEquals(4096, count);
         }
+
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void Test_Null()
+        {
+            Tree sl = new Tree();
+            sl[null] = "n";
+        }
     }
 }

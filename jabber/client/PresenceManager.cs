@@ -111,28 +111,24 @@ namespace jabber.client
             JID f = p.From;
 			lock (this)
 			{
-				Tree pt = (Tree)m_items[f.Bare];
+				UserPresenceManager upm = (UserPresenceManager)m_items[f.Bare];
 
 				if (t == PresenceType.available) 
 				{
-                    if (pt == null)
+                    if (upm == null)
                     {
-                        pt = new Tree();
-                        m_items[f.Bare] = pt;
+                        upm = new UserPresenceManager();
+                        m_items[f.Bare] = upm;
                     }
-                    else if (pt.Contains(f.Resource))
-                    {
-                        pt.Remove(f.Resource);
-                    }
-                    
-					pt[f.Resource] = p;
+
+                    upm.AddPresence(p);
 				}
 				else
 				{
-					if (pt != null)
+					if (upm != null)
 					{
-						pt.Remove(f.Resource);
-						if (pt.Count == 0)
+						upm.RemovePresence(p);
+						if (upm.Count == 0)
 						{
 							m_items.Remove(f.Bare);
 						}
@@ -165,36 +161,10 @@ namespace jabber.client
             {
 				lock (this)
 				{
-					Tree pt = (Tree)m_items[jid.Bare];
-					if (pt == null)
+					UserPresenceManager upm = (UserPresenceManager)m_items[jid.Bare];
+					if (upm == null)
 						return null;
-					if (jid.Resource != null)
-					{
-						return (Presence)pt[jid.Resource];
-					}
-					else
-					{
-						int curp;
-						int maxp = -1;
-						Presence rp = null;
-
-						foreach (DictionaryEntry de in pt)
-						{
-							Presence p = (Presence) de.Value;
-							string pri = p.Priority;
-							if (pri == null)
-								curp = 0;
-							else
-								curp = int.Parse(pri);
-							if ((p.Type == PresenceType.available) &&
-								(curp > maxp))
-							{
-								rp = p;
-								maxp = curp;
-							}
-						}
-						return rp;
-					}
+                    return upm[jid.Resource];
 				}
             }
         }
@@ -213,6 +183,103 @@ namespace jabber.client
         IEnumerator IEnumerable.GetEnumerator()
         {
             return m_items.GetEnumerator();
+        }
+
+        private class UserPresenceManager
+        {
+            private Tree m_items = new Tree();
+            private Presence m_pres = null;
+
+            public void AddPresence(Presence p)
+            {
+                JID from = p.From;
+                string res = from.Resource;
+                Debug.Assert(p.Type == PresenceType.available);
+                lock (this)
+                {
+                    if (res == null)
+                    {
+                        m_pres = p;
+                        return;
+                    }
+                    else
+                    {
+                        m_items.Remove(res);
+                        m_items[res] = p;
+
+                        if ((m_pres == null) || (m_pres.From.Resource == res))
+                        {
+                            m_pres = p;
+                            return;
+                        }
+                        string pri = p.Priority;
+                        int new_pri = (pri == null) ? 0 : int.Parse(pri);
+                        pri = m_pres.Priority;
+                        int old_pri = (pri == null) ? 0 : int.Parse(pri);
+                        if (new_pri > old_pri)
+                        {
+                            m_pres = p;
+                        }
+                    }
+                }
+            }
+
+            public void RemovePresence(Presence p)
+            {
+                JID from = p.From;
+                string res = from.Resource;
+                Debug.Assert(p.Type == PresenceType.unavailable);
+                lock (this)
+                {
+                    if (res != null)
+                        m_items.Remove(res);
+                    if (m_pres.From.Resource == res)
+                    {
+                        // this was the high pri resource.  Find the next highest.
+                        m_pres = null;
+
+                        int curp;
+                        int maxp = -1;
+
+                        foreach (DictionaryEntry de in m_items)
+                        {
+                            Presence tp = (Presence) de.Value;
+                            string pri = tp.Priority;
+                            curp = (pri == null) ? 0 : int.Parse(pri);
+                            if (curp > maxp)
+                            {
+                                m_pres = tp;
+                                maxp = curp;
+                            }
+                        }
+                    }
+                }
+            }
+
+            public int Count
+            {
+                get 
+                {
+                    lock (this)
+                    {
+                        if (m_items.Count > 0)
+                            return m_items.Count;
+                        if (m_pres == null)
+                            return 0;
+                        return 1;
+                    }
+                }
+            }
+
+            public Presence this[string Resource]
+            {
+                get
+                {
+                    if (Resource == null)
+                        return m_pres;
+                    return (Presence) m_items[Resource];
+                }
+            }
         }
     }
 }
