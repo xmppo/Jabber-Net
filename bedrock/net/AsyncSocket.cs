@@ -151,12 +151,22 @@ namespace bedrock.net
 
         /// <summary>
         /// Where to send notifications of interesting things.
+        /// WARNING!  Only assign to this if you are Tom Waters.
         /// </summary>
         public ISocketEventListener Listener
         {
             get 
             {
                 return m_listener;
+            }
+            set
+            {
+                lock (m_state_lock)
+                {
+                    if (m_reading)
+                        throw new InvalidOperationException("Don't set listener while reading, Tom.");
+                    m_listener = value;
+                }
             }
         }
 
