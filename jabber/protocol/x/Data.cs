@@ -70,6 +70,15 @@ namespace jabber.protocol.x
         }
         
         /// <summary>
+        /// The form title, for display at the top of a window.
+        /// </summary>
+        public string Title
+        {
+            get { return GetElem("title"); }
+            set { SetElem("title", value); }
+        }
+
+        /// <summary>
         /// List of form fields
         /// </summary>
         /// <returns></returns>
