@@ -401,6 +401,7 @@ namespace jabber.connection
             }
             catch (System.Reflection.TargetInvocationException e)
             {
+                Debug.WriteLine("Exception passed along by SocketElementStream: " + e.ToString());
                 throw e.InnerException;
             }
         }
