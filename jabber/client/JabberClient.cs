@@ -296,6 +296,7 @@ namespace jabber.client
         [DefaultValue(false)]
         public override bool IsConnected
         {
+            get { return base.IsConnected; }
             set
             {
                 base.IsConnected = value;
