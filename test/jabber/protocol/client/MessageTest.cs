@@ -58,5 +58,14 @@ namespace test.jabber.protocol.client
             // msg.Html = "f<b>o</b>o";
             Assertion.AssertEquals("<message id=\"JN_1\"><html xmlns=\"http://www.w3.org/1999/xhtml\"><body>foo</body></html><body>foo</body></message>", msg.ToString());
         }
+        public void Test_NullBody()
+        {
+            Message msg = new Message(doc);
+            Assertion.AssertEquals(null, msg.Body);
+            msg.Body = "foo";
+            Assertion.AssertEquals("foo", msg.Body);
+            msg.Body = null;
+            Assertion.AssertEquals(null, msg.Body);
+        }
     }
 }
