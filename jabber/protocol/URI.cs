@@ -110,6 +110,15 @@ namespace jabber.protocol
 		/// </summary>
 		public const string VCARD    = "vcard-temp";
 
+        /// <summary>
+        /// Discover items from an entity.
+        /// </summary>
+        public const string DISCO_ITEMS = "http://jabber.org/protocol/disco#items";
+        /// <summary>
+        /// Discover info about an entity item.
+        /// </summary>
+        public const string DISCO_INFO = "http://jabber.org/protocol/disco#info";
+
         // X
         /// <summary>
         /// Offline message timestamping.

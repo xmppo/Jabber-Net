@@ -62,8 +62,15 @@ namespace jabber.protocol.iq
 			new QnameType("TEL",   URI.VCARD, typeof(jabber.protocol.iq.VCard.VTelephone)),
             new QnameType("EMAIL", URI.VCARD, typeof(jabber.protocol.iq.VCard.VEmail)),
             new QnameType("GEO",   URI.VCARD, typeof(jabber.protocol.iq.VCard.VGeo)),
-            new QnameType("PHOTO", URI.VCARD, typeof(jabber.protocol.iq.VCard.VPhoto))
-    };
+            new QnameType("PHOTO", URI.VCARD, typeof(jabber.protocol.iq.VCard.VPhoto)),
+
+            // Disco
+            new QnameType("query",    URI.DISCO_ITEMS, typeof(jabber.protocol.iq.DiscoItems)),
+            new QnameType("item",     URI.DISCO_ITEMS, typeof(jabber.protocol.iq.DiscoItem)),
+            new QnameType("query",    URI.DISCO_INFO, typeof(jabber.protocol.iq.DiscoInfo)),
+            new QnameType("identity", URI.DISCO_INFO, typeof(jabber.protocol.iq.DiscoIdentity)),
+            new QnameType("feature",  URI.DISCO_INFO, typeof(jabber.protocol.iq.DiscoFeature)),
+        };
 
         QnameType[] IPacketTypes.Types { get { return s_qnt; } }
     }

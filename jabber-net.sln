@@ -19,6 +19,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example", "Example\Example.
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "VB.Example", "VB.Example\VB.Example.vbproj", "{B5086B0D-C448-450F-945D-5DBE681F2EE7}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -44,6 +48,10 @@ Global
 		{F7208FC2-C9FF-4019-96D8-E0F5001FDBFD}.Debug.Build.0 = Debug|.NET
 		{F7208FC2-C9FF-4019-96D8-E0F5001FDBFD}.Release.ActiveCfg = Release|.NET
 		{F7208FC2-C9FF-4019-96D8-E0F5001FDBFD}.Release.Build.0 = Release|.NET
+		{B5086B0D-C448-450F-945D-5DBE681F2EE7}.Debug.ActiveCfg = Debug|.NET
+		{B5086B0D-C448-450F-945D-5DBE681F2EE7}.Debug.Build.0 = Debug|.NET
+		{B5086B0D-C448-450F-945D-5DBE681F2EE7}.Release.ActiveCfg = Release|.NET
+		{B5086B0D-C448-450F-945D-5DBE681F2EE7}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

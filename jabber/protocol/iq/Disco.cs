@@ -1,0 +1,461 @@
+/* --------------------------------------------------------------------------
+ *
+ * License
+ *
+ * The contents of this file are subject to the Jabber Open Source License
+ * Version 1.0 (the "License").  You may not copy or use this file, in either
+ * source code or executable form, except in compliance with the License.  You
+ * may obtain a copy of the License at http://www.jabber.com/license/ or at
+ * http://www.opensource.org/.  
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied.  See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * Copyrights
+ * 
+ * Portions created by or assigned to Cursive Systems, Inc. are 
+ * Copyright (c) 2003 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * information for Cursive Systems, Inc. is available at http://www.cursive.net/.
+ *
+ * Portions Copyright (c) 2003 Joe Hildebrand.
+ * 
+ * Acknowledgements
+ * 
+ * Special thanks to the Jabber Open Source Contributors for their
+ * suggestions and support of Jabber.
+ * 
+ * --------------------------------------------------------------------------*/
+using System;
+using System.Xml;
+
+using bedrock.util;
+
+namespace jabber.protocol.iq
+{
+    /*
+     * <iq
+     *     type='result'
+     *     from='shakespeare.lit'
+     *     to='romeo@montague.net/orchard'
+     *     id='items1'>
+     *   <query xmlns='http://jabber.org/protocol/disco#items' node='music'>
+     *     <item
+     *         jid='people.shakespeare.lit'
+     *         name='Directory of Characters'/>
+     *     <item
+     *         jid='plays.shakespeare.lit'
+     *         name='Play-Specific Chatrooms'/>
+     * </iq>
+     */
+    /// <summary>
+    /// IQ packet with a disco#items query element inside.
+    /// </summary>
+    [RCS(@"$Header$")]
+    public class DiscoItemsIQ : jabber.protocol.client.IQ
+    {
+        /// <summary>
+        /// Create a disco#items IQ
+        /// </summary>
+        /// <param name="doc"></param>
+        public DiscoItemsIQ(XmlDocument doc) : base(doc)
+        {
+            this.Query = new DiscoItems(doc);
+        }
+    }
+
+    /// <summary>
+    /// IQ packet with a disco#info query element inside.
+    /// </summary>
+    [RCS(@"$Header$")]
+    public class DiscoInfoIQ : jabber.protocol.client.IQ
+    {
+        /// <summary>
+        /// Create a disco#items IQ
+        /// </summary>
+        /// <param name="doc"></param>
+        public DiscoInfoIQ(XmlDocument doc) : base(doc)
+        {
+            this.Query = new DiscoInfo(doc);
+        }
+    }
+
+    /*
+     * <iq
+     *     type='result'
+     *     from='plays.shakespeare.lit'
+     *     to='romeo@montague.net/orchard'
+     *     id='info1'>
+     *   <query xmlns='http://jabber.org/protocol/disco#info'>
+     *     <identity
+     *         category='conference'
+     *         type='text'
+     *         name='Play-Specific Chatrooms'/>
+     *     <identity
+     *         category='directory'
+     *         type='room'
+     *         name='Play-Specific Chatrooms'/>
+     *     <feature var='gc-1.0'/>
+     *     <feature var='http://jabber.org/protocol/muc'/>
+     *     <feature var='jabber:iq:register'/>
+     *     <feature var='jabber:iq:search'/>
+     *     <feature var='jabber:iq:time'/>
+     *     <feature var='jabber:iq:version'/>
+     *   </query>
+     * </iq>
+     */
+    
+
+    /// <summary>
+    /// A disco#items query element.
+    /// See <a href="http://www.jabber.org/jeps/jep-0030.html">JEP-0030</a> for more information.
+    /// </summary>
+    [RCS(@"$Header$")]
+    public class DiscoItems : Element
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="doc"></param>
+        public DiscoItems(XmlDocument doc) : base("query", URI.DISCO_ITEMS, doc)
+        {
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="prefix"></param>
+        /// <param name="qname"></param>
+        /// <param name="doc"></param>
+        public DiscoItems(string prefix, XmlQualifiedName qname, XmlDocument doc) :
+            base(prefix, qname, doc)
+        {
+        }
+
+        /// <summary>
+        /// The sub-address of the discovered entity.
+        /// </summary>
+        public string Node
+        {
+            get { return GetAttribute("node"); }
+            set { SetAttribute("node", value); }
+        }
+
+        /// <summary>
+        /// Add a disco item
+        /// </summary>
+        /// <returns></returns>
+        public DiscoItem AddItem()
+        {
+            DiscoItem i = new DiscoItem(this.OwnerDocument);
+            AddChild(i);
+            return i;
+        }
+
+        /// <summary>
+        /// List of disco items
+        /// </summary>
+        /// <returns></returns>
+        public DiscoItem[] GetItems()
+        {
+            XmlNodeList nl = GetElementsByTagName("item", URI.DISCO_ITEMS);
+            DiscoItem[] items = new DiscoItem[nl.Count];
+            int i=0;
+            foreach (XmlNode n in nl)
+            {
+                items[i] = (DiscoItem) n;
+                i++;
+            }
+            return items;
+        }
+    }
+
+    /// <summary>
+    /// Actions for iq/set in the disco#items namespace.
+    /// </summary>
+    [RCS(@"$Header$")]
+    public enum DiscoAction
+    {
+        /// <summary>
+        /// None specified
+        /// </summary>
+        NONE = -1,
+        /// <summary>
+        /// Remove this item
+        /// </summary>
+        remove,
+        /// <summary>
+        /// Update this item
+        /// </summary>
+        update
+    }
+
+    /// <summary>
+    /// An item inside a disco#items result.
+    /// </summary>
+    [RCS(@"$Header$")]
+    public class DiscoItem : Element
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="doc"></param>
+        public DiscoItem(XmlDocument doc) : base("item", URI.DISCO_ITEMS, doc)
+        {
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="prefix"></param>
+        /// <param name="qname"></param>
+        /// <param name="doc"></param>
+        public DiscoItem(string prefix, XmlQualifiedName qname, XmlDocument doc) :
+            base(prefix, qname, doc)
+        {
+        }
+
+        /// <summary>
+        /// The Jabber ID associated with the item.
+        /// </summary>
+        public JID Jid
+        {
+            get { return GetAttribute("jid"); }
+            set { SetAttribute("jid", value); }
+        }
+
+        /// <summary>
+        /// The user-visible name of this node
+        /// </summary>
+        public string Named
+        {
+            get { return GetAttribute("name"); }
+            set { SetAttribute("name", value); }
+        }
+
+        /// <summary>
+        /// The sub-node associated with this item.
+        /// </summary>
+        public string Node
+        {
+            get { return GetAttribute("node"); }
+            set { SetAttribute("node", value); }
+        }
+
+        /// <summary>
+        /// Actions for iq/set in the disco#items namespace.
+        /// </summary>
+        public DiscoAction Action
+        {
+            get { return (DiscoAction) GetEnumAttr("action", typeof(DiscoAction)); }
+            set 
+            { 
+                if (value == DiscoAction.NONE) 
+                    RemoveAttribute("action");
+                else
+                    SetAttribute("action", value.ToString()); 
+            }
+        }
+    }
+
+/*
+<iq
+    type='result'
+    from='balconyscene@plays.shakespeare.lit'
+    to='juliet@capulet.com/balcony'
+    id='info2'>
+  <query xmlns='http://jabber.org/protocol/disco#info'>
+    <identity
+        category='conference'
+        type='text'
+        name='Romeo and Juliet, Act II, Scene II'/>
+    <feature var='gc-1.0'/>
+    <feature var='http://jabber.org/protocol/muc'/>
+    <feature var='http://jabber.org/protocol/feature-neg'/>
+    <feature var='muc-password'/>
+    <feature var='muc-hidden'/>
+    <feature var='muc-temporary'/>
+    <feature var='muc-open'/>
+    <feature var='muc-unmoderated'/>
+    <feature var='muc-nonanonymous'/>
+  </query>
+</iq>
+*/
+    /// <summary>
+    /// The information associated with a disco node.
+    /// </summary>
+    public class DiscoInfo : Element
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="doc"></param>
+        public DiscoInfo(XmlDocument doc) : base("info", URI.DISCO_ITEMS, doc)
+        {
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="prefix"></param>
+        /// <param name="qname"></param>
+        /// <param name="doc"></param>
+        public DiscoInfo(string prefix, XmlQualifiedName qname, XmlDocument doc) :
+            base(prefix, qname, doc)
+        {
+        }
+
+        /// <summary>
+        /// The sub-node associated with this item.
+        /// </summary>
+        public string Node
+        {
+            get { return GetAttribute("node"); }
+            set { SetAttribute("node", value); }
+        }
+        /// <summary>
+        /// Add an identity
+        /// </summary>
+        /// <returns></returns>
+        public DiscoIdentity AddIdentity()
+        {
+            DiscoIdentity i = new DiscoIdentity(this.OwnerDocument);
+            AddChild(i);
+            return i;
+        }
+
+        /// <summary>
+        /// List of identities
+        /// </summary>
+        /// <returns></returns>
+        public DiscoIdentity[] GetIdentities()
+        {
+            XmlNodeList nl = GetElementsByTagName("identity", URI.DISCO_ITEMS);
+            DiscoIdentity[] items = new DiscoIdentity[nl.Count];
+            int i=0;
+            foreach (XmlNode n in nl)
+            {
+                items[i] = (DiscoIdentity) n;
+                i++;
+            }
+            return items;
+        }
+
+        /// <summary>
+        /// Add a feature
+        /// </summary>
+        /// <returns></returns>
+        public DiscoFeature AddItem()
+        {
+            DiscoFeature i = new DiscoFeature(this.OwnerDocument);
+            AddChild(i);
+            return i;
+        }
+
+        /// <summary>
+        /// List of features
+        /// </summary>
+        /// <returns></returns>
+        public DiscoFeature[] GetFeatures()
+        {
+            XmlNodeList nl = GetElementsByTagName("feature", URI.DISCO_ITEMS);
+            DiscoFeature[] items = new DiscoFeature[nl.Count];
+            int i=0;
+            foreach (XmlNode n in nl)
+            {
+                items[i] = (DiscoFeature) n;
+                i++;
+            }
+            return items;
+        }
+
+    }
+
+    /// <summary>
+    /// The identitiy associated with a disco node.
+    /// </summary>
+    public class DiscoIdentity : Element
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="doc"></param>
+        public DiscoIdentity(XmlDocument doc) : base("identity", URI.DISCO_ITEMS, doc)
+        {
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="prefix"></param>
+        /// <param name="qname"></param>
+        /// <param name="doc"></param>
+        public DiscoIdentity(string prefix, XmlQualifiedName qname, XmlDocument doc) :
+            base(prefix, qname, doc)
+        {
+        }
+
+        /// <summary>
+        /// The user-visible name of this node
+        /// </summary>
+        public string Named
+        {
+            get { return GetAttribute("name"); }
+            set { SetAttribute("name", value); }
+        }
+
+        /// <summary>
+        /// The category of the node
+        /// </summary>
+        public string Category
+        {
+            get { return GetAttribute("category"); }
+            set { SetAttribute("category", value); }
+        }
+
+        /// <summary>
+        /// The type of the node
+        /// </summary>
+        public string Type
+        {
+            get { return GetAttribute("type"); }
+            set { SetAttribute("type", value); }
+        }
+
+    }
+
+    /// <summary>
+    /// A feature associated with a disco node.
+    /// </summary>
+    public class DiscoFeature : Element
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="doc"></param>
+        public DiscoFeature(XmlDocument doc) : base("feature", URI.DISCO_ITEMS, doc)
+        {
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="prefix"></param>
+        /// <param name="qname"></param>
+        /// <param name="doc"></param>
+        public DiscoFeature(string prefix, XmlQualifiedName qname, XmlDocument doc) :
+            base(prefix, qname, doc)
+        {
+        }
+
+        /// <summary>
+        /// The namespace name or feature name. 
+        /// </summary>
+        public string Var
+        {
+            get { return GetAttribute("var"); }
+            set { SetAttribute("var", value); }
+        }
+    }
+}
