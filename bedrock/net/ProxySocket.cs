@@ -195,7 +195,7 @@ namespace bedrock.net
 		/// 
 		/// </summary>
 		/// <param name="newSock"></param>
-		public virtual void OnInit(AsyncSocket newSock)
+		public virtual void OnInit(BaseSocket newSock)
 		{
 			m_listener.OnInit(newSock);
 		}
@@ -205,7 +205,7 @@ namespace bedrock.net
 		/// </summary>
 		/// <param name="newSock"></param>
 		/// <returns></returns>
-		public virtual ISocketEventListener GetListener(AsyncSocket newSock)
+		public virtual ISocketEventListener GetListener(BaseSocket newSock)
 		{
 			return m_listener.GetListener(newSock);
 		}
@@ -215,7 +215,7 @@ namespace bedrock.net
 		/// </summary>
 		/// <param name="newsocket"></param>
 		/// <returns></returns>
-		public virtual bool OnAccept(AsyncSocket newsocket)
+		public virtual bool OnAccept(BaseSocket newsocket)
 		{
 			return m_listener.OnAccept(newsocket);
 		}
@@ -224,7 +224,7 @@ namespace bedrock.net
 		/// 
 		/// </summary>
 		/// <param name="sock"></param>
-		public virtual void OnConnect(AsyncSocket sock)
+		public virtual void OnConnect(BaseSocket sock)
 		{
             if (m_ssl)
             {
@@ -241,7 +241,7 @@ namespace bedrock.net
 		/// 
 		/// </summary>
 		/// <param name="sock"></param>
-		public virtual void OnClose(AsyncSocket sock)
+		public virtual void OnClose(BaseSocket sock)
 		{
 			m_listener.OnClose(sock);
 		}
@@ -251,7 +251,7 @@ namespace bedrock.net
 		/// </summary>
 		/// <param name="sock"></param>
 		/// <param name="ex"></param>
-		public virtual void OnError(AsyncSocket sock, System.Exception ex)
+		public virtual void OnError(BaseSocket sock, System.Exception ex)
 		{
 			m_listener.OnError(sock, ex);
 		}
@@ -264,7 +264,7 @@ namespace bedrock.net
 		/// <param name="offset"></param>
 		/// <param name="length"></param>
 		/// <returns></returns>
-		public virtual bool OnRead(AsyncSocket sock, byte[] buf, int offset, int length)
+		public virtual bool OnRead(BaseSocket sock, byte[] buf, int offset, int length)
 		{
 			return m_listener.OnRead(sock, buf, offset, length);
 		}
@@ -276,11 +276,21 @@ namespace bedrock.net
 		/// <param name="buf"></param>
 		/// <param name="offset"></param>
 		/// <param name="length"></param>
-		public virtual void OnWrite(AsyncSocket sock, byte[] buf, int offset, int length)
+		public virtual void OnWrite(BaseSocket sock, byte[] buf, int offset, int length)
 		{
 			m_listener.OnWrite(sock, buf, offset, length);
 		}
 
         #endregion
+
+        /// <summary>
+        /// String representation of the proxy socket.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return "Proxy connection to: " + RemoteAddress.ToString();
+        }
+
 	}
 }

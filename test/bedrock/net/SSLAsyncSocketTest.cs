@@ -84,13 +84,13 @@ namespace test.bedrock.net
         }
 
         #region Implementation of ISocketEventListener
-        public bool OnAccept(AsyncSocket newsocket)
+        public bool OnAccept(BaseSocket newsocket)
         {
             newsocket.RequestRead();
             return false;
         }
 
-        public bool OnRead(AsyncSocket sock, byte[] buf, int offset, int length)
+        public bool OnRead(BaseSocket sock, byte[] buf, int offset, int length)
         {
             success = ENC.GetString(buf, offset, length);
             lock(done)
@@ -100,33 +100,33 @@ namespace test.bedrock.net
             return false;
         }
 
-        public void OnWrite(AsyncSocket sock, byte[] buf, int offset, int length)
+        public void OnWrite(BaseSocket sock, byte[] buf, int offset, int length)
         {
             System.Diagnostics.Debug.WriteLine(ENC.GetString(buf, offset, length));
             sock.Close();
         }
 
-        public void OnError(AsyncSocket sock, System.Exception ex)
+        public void OnError(BaseSocket sock, System.Exception ex)
         {
                 
         }
 
-        public void OnConnect(AsyncSocket sock)
+        public void OnConnect(BaseSocket sock)
         {
             sock.Write(sbuf, 5, 10);
         }
 
-        public void OnClose(AsyncSocket sock)
+        public void OnClose(BaseSocket sock)
         {
                 
         }
 
-        public void OnInit(AsyncSocket new_sock)
+        public void OnInit(BaseSocket new_sock)
         {
                 
         }
 
-        public ISocketEventListener GetListener(AsyncSocket new_sock)
+        public ISocketEventListener GetListener(BaseSocket new_sock)
         {
             return this;
         }

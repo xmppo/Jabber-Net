@@ -719,7 +719,7 @@ namespace jabber.client
             {
                 proc[SASLProcessor.USERNAME] = m_user;
                 proc[SASLProcessor.PASSWORD] = m_password;
-                proc[MD5Processor.REALM] = this.Host;
+                proc[MD5Processor.REALM] = this.Server;
             }
         }
 
@@ -732,7 +732,7 @@ namespace jabber.client
             if (feat["bind", URI.BIND] != null)
             {
                 IQ iq = new IQ(this.Document);
-                iq.To = this.Host;
+                iq.To = this.Server;
                 iq.Type = IQType.set;
 
                 jabber.protocol.stream.Bind bind = new jabber.protocol.stream.Bind(this.Document);
@@ -745,7 +745,7 @@ namespace jabber.client
             else if (feat["session", URI.SESSION] != null)
             {
                 IQ iq = new IQ(this.Document);
-                iq.To = this.Host;
+                iq.To = this.Server;
                 iq.Type = IQType.set;
                 iq.AddChild(new jabber.protocol.stream.Session(this.Document));
                 this.Tracker.BeginIQ(iq, new IqCB(GotSession), feat);
@@ -766,7 +766,7 @@ namespace jabber.client
             if (feat["session", URI.SESSION] != null)
             {
                 IQ iqs = new IQ(this.Document);
-                iqs.To = this.Host;
+                iqs.To = this.Server;
                 iqs.Type = IQType.set;
                 iqs.AddChild(new jabber.protocol.stream.Session(this.Document));
                 this.Tracker.BeginIQ(iqs, new IqCB(GotSession), feat);

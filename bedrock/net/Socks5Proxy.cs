@@ -200,7 +200,7 @@ namespace bedrock.net
 		/// overridden OnConnect to start off Socks5 protocol.
 		/// </summary>
 		/// <param name="sock"></param>
-		public override void OnConnect(bedrock.net.AsyncSocket sock)
+		public override void OnConnect(bedrock.net.BaseSocket sock)
 		{
 			if (m_state == States.Connecting)
 			{
@@ -224,7 +224,7 @@ namespace bedrock.net
 		/// <param name="offset"></param>
 		/// <param name="length"></param>
 		/// <returns></returns>
-        public override bool OnRead(bedrock.net.AsyncSocket sock, byte[] buf, int offset, int length)
+        public override bool OnRead(bedrock.net.BaseSocket sock, byte[] buf, int offset, int length)
         {
 			switch (m_state) 
 			{
@@ -252,7 +252,7 @@ namespace bedrock.net
 		/// <param name="buf"></param>
 		/// <param name="offset"></param>
 		/// <param name="length"></param>
-        public override void OnWrite(bedrock.net.AsyncSocket sock, byte[] buf, int offset, int length)
+        public override void OnWrite(bedrock.net.BaseSocket sock, byte[] buf, int offset, int length)
         {
 			if (m_state == States.Running) 
 			{

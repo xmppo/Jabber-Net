@@ -30,7 +30,7 @@ namespace bedrock.net
     /// <summary>
     /// Delegate for members that receive a socket.
     /// </summary>
-    public delegate void AsyncSocketHandler(object sender, AsyncSocket sock);
+    public delegate void AsyncSocketHandler(object sender, BaseSocket sock);
 
     /// <summary>
     /// Lame exception, since I couldn't find one I liked.
@@ -84,7 +84,7 @@ namespace bedrock.net
         /// Socket states.
         /// </summary>
         [RCS(@"$Header$")]
-            private enum State
+            private enum SocketState
         {
             /// <summary>
             /// Socket has been created.
@@ -143,7 +143,7 @@ namespace bedrock.net
 #endif
 
         private byte[]               m_buf            = new byte[BUFSIZE];
-        private State                m_state          = State.Created;
+        private SocketState          m_state          = SocketState.Created;
         private SocketWatcher        m_watcher        = null;
         private Address              m_addr;
         private Guid                 m_id             = Guid.NewGuid();
@@ -200,6 +200,16 @@ namespace bedrock.net
             }
         }
         */
+        private SocketState State
+        {
+            get { return m_state; }
+            set 
+            {
+// useful for finding unexpected socket closes.
+//                Debug.WriteLine("socket state: " + m_state.ToString() + "->" + value.ToString());
+                m_state = value;
+            }
+        }
 
         /// <summary>
         /// For connect sockets, the remote address.  For Accept sockets, the local address.
@@ -326,7 +336,7 @@ namespace bedrock.net
                 m_sock.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, 1);
                 m_sock.Bind(m_addr.Endpoint);
                 m_sock.Listen(backlog);
-                m_state = State.Listening;
+                State = SocketState.Listening;
             
                 m_watcher.RegisterSocket(this);
             }
@@ -341,7 +351,7 @@ namespace bedrock.net
         {
             lock (this)
             {
-                if (m_state != State.Listening)
+                if (State != SocketState.Listening)
                 {
                     throw new InvalidOperationException("Not a listen socket");
                 }
@@ -385,7 +395,7 @@ namespace bedrock.net
             cliCon.m_sock.Blocking = m_synch;
             cliCon.m_addr = m_addr;
             cliCon.Address.IP = ((IPEndPoint) cliCon.m_sock.RemoteEndPoint).Address;
-            cliCon.m_state = State.Connected;
+            cliCon.State = SocketState.Connected;
 #if !NO_SSL
             cliCon.m_credUse = ConnectionEnd.Server;
 #endif
@@ -435,7 +445,7 @@ namespace bedrock.net
         /// <param name="addr"></param>
         public override void Connect(Address addr)
         {
-            m_state = State.Resolving;
+            State = SocketState.Resolving;
             if (m_synch)
             {
                 addr.Resolve();
@@ -455,7 +465,7 @@ namespace bedrock.net
         {
             lock (this)
             {
-                if (m_state != State.Resolving)
+                if (State != SocketState.Resolving)
                 {
                     // closed in the mean time.   Probably not an error.
                     return;
@@ -469,7 +479,7 @@ namespace bedrock.net
                 m_watcher.RegisterSocket(this);
 
                 m_addr = addr;
-                m_state = State.Connecting;
+                State = SocketState.Connecting;
 
 #if !NO_SSL
                 SecurityOptions options = new SecurityOptions(m_secureProtocol, m_cert, m_credUse, CredentialVerification.Manual, new CertVerifyEventHandler(OnVerify), addr.Hostname, SecurityFlags.Default, SslAlgorithms.ALL, null);
@@ -529,7 +539,7 @@ namespace bedrock.net
                 {
                     lock(this)
                     {
-                        m_state = State.Connected;
+                        State = SocketState.Connected;
                     }
                     m_listener.OnConnect(this);
                 }
@@ -593,7 +603,7 @@ namespace bedrock.net
                 }
                 catch (SocketException e)
                 {
-                    if (m_state != State.Connecting)
+                    if (State != SocketState.Connecting)
                     {
                         // closed in the mean time.   Probably not an error.
                         return;
@@ -603,7 +613,7 @@ namespace bedrock.net
                 }
                 if (m_sock.Connected)
                 {
-                    m_state = State.Connected;
+                    State = SocketState.Connected;
                     m_listener.OnConnect(this);
                 }
                 else
@@ -637,7 +647,7 @@ namespace bedrock.net
                 {
                     lock (this)
                     {
-                        if (m_state != State.Connected)
+                        if (State != SocketState.Connected)
                         {
                             throw new InvalidOperationException("Socket not connected.");
                         }
@@ -656,7 +666,7 @@ namespace bedrock.net
                     {
                         throw new InvalidOperationException("Cannot call RequestRead while another read is pending.");
                     }
-                    if (m_state != State.Connected)
+                    if (State != SocketState.Connected)
                     {
                         throw new InvalidOperationException("Socket not connected.");
                     }
@@ -756,9 +766,9 @@ namespace bedrock.net
         {
             lock (this)
             {
-                if (m_state != State.Connected)
+                if (State != SocketState.Connected)
                 {
-                    throw new InvalidOperationException("Socket must be connected before writing");
+                    throw new InvalidOperationException("Socket must be connected before writing.  Current state: " + State.ToString());
                 }
 
                 // make copy, since we might be a while in async-land
@@ -852,7 +862,7 @@ namespace bedrock.net
             lock (this)
             {
                 /*
-                switch (m_state)
+                switch (State)
                 {
                 case State.Closed:
                     throw new InvalidOperationException("Socket already closed");
@@ -861,11 +871,11 @@ namespace bedrock.net
                 }
                 */
 
-                State oldState = m_state;
+                SocketState oldState = State;
 
                 if (m_sock.Connected)
                 {
-                    m_state = State.Closing;
+                    State = SocketState.Closing;
                     try
                     {
                         m_sock.Shutdown(SocketShutdown.Both);
@@ -878,11 +888,11 @@ namespace bedrock.net
                     catch {}
                 }
 
-                if (oldState <= State.Connected)
+                if (oldState <= SocketState.Connected)
                     m_listener.OnClose(this);
 
                 m_watcher.CleanupSocket(this);
-                m_state = State.Closed;
+                State = SocketState.Closed;
             }
         }
 
@@ -910,7 +920,7 @@ namespace bedrock.net
         {
             lock (this)
             {
-                m_state = State.Error;
+                State = SocketState.Error;
             }
             if (e is SocketException)
             {
@@ -918,6 +928,16 @@ namespace bedrock.net
             }
             m_watcher.CleanupSocket(this);
             m_listener.OnError(this, e);
+        }
+
+
+        /// <summary>
+        /// Return a string representation of this socket
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return "AsyncSocket " + m_sock.LocalEndPoint + "->" + m_sock.RemoteEndPoint;
         }
 
         /// <summary>

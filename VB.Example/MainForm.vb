@@ -305,9 +305,9 @@ Public Class MainForm
         End If
     End Sub
 
-    Private Sub jc_OnConnect(ByVal sender As Object, ByVal sock As bedrock.net.AsyncSocket) Handles jc.OnConnect
+    Private Sub jc_OnConnect(ByVal sender As Object, ByVal sock As bedrock.net.BaseSocket) Handles jc.OnConnect
         m_err = False
-        debug.AppendText("Connected to: " & sock.Address.IP.ToString() & vbCrLf)
+        debug.AppendText("Connected to: " & sock.ToString() & vbCrLf)
         jc.AddFactory(New Factory)
     End Sub
 

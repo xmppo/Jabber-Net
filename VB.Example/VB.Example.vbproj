@@ -90,7 +90,7 @@
                 <Reference
                     Name = "Org.Mentalis.Security"
                     AssemblyName = "Org.Mentalis.Security"
-                    HintPath = "..\bin\Debug\Org.Mentalis.Security.dll"
+                    HintPath = "..\Org.Mentalis.Security.dll"
                 />
             </References>
             <Imports>

@@ -32,7 +32,7 @@ namespace Example
     /// </summary>
     public class MainForm : System.Windows.Forms.Form
     {
-        private bedrock.net.AsyncSocket m_sock;
+        private bedrock.net.BaseSocket m_sock;
 
         private System.Windows.Forms.StatusBar sb;
         private jabber.client.JabberClient jc;
@@ -352,11 +352,10 @@ namespace Example
             pnlCon.Text = "Connected";
 
 #if !NO_SSL
-            if (m_sock.SSL)
+            if ((m_sock is bedrock.net.AsyncSocket) && (((bedrock.net.AsyncSocket)m_sock).RemoteCertificate != null))
             {
                 debug.AppendText("\r\nServer Certificate:\r\n-------------------\r\n");
-                if (m_sock.RemoteCertificate != null) 
-                    debug.AppendText(m_sock.RemoteCertificate.ToString(true) + "\r\n");
+                debug.AppendText(((bedrock.net.AsyncSocket)m_sock).RemoteCertificate.ToString(true) + "\r\n");
             }
 #endif
         }
@@ -495,23 +494,14 @@ namespace Example
                 jc.Close();
         }
 
-        private void jc_OnConnect(object sender, bedrock.net.AsyncSocket sock)
+        private void jc_OnConnect(object sender, bedrock.net.BaseSocket sock)
         {
             if (sock == null)
                 return;
 
             m_sock = sock;
             m_err = false;
-            debug.AppendText("Connected to: " + sock.Address.IP + ":" + sock.Address.Port + "\r\n");
-            
-#if !NO_SSL
-            if (sock.SSL)
-            {
-                debug.AppendText("\r\nServer Certificate:\r\n-------------------\r\n");
-                if (sock.RemoteCertificate != null) 
-                    debug.AppendText(sock.RemoteCertificate.ToString(true) + "\r\n");
-            }
-#endif
+            debug.AppendText("Connected to: " + sock.ToString() + "\r\n");
         }
 
         private void jc_OnStreamError(object sender, System.Xml.XmlElement rp)

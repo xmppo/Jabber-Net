@@ -53,7 +53,11 @@ namespace jabber.connection
         /// <summary>
         /// shttp as in http://rfc-2660.rfc-list.com/rfc-2660.htm
         /// </summary>
-        SHTTP
+        SHTTP,
+        /// <summary>
+        /// HTTP Polling, as in http://www.jabber.org/jeps/jep-0025.html
+        /// </summary>
+        HTTP_Polling
     }
 
     /// <summary>
@@ -75,8 +79,8 @@ namespace jabber.connection
         private XmlDocument    m_doc            = new XmlDocument();
         private ElementStream  m_stream         = null;
         private BaseState      m_state          = ClosedState.Instance;
-        private string         m_server         = "jabber.com";
-        private string         m_to             = null;
+        private string         m_server         = null;
+        private string         m_to             = "jabber.com";
         private string         m_streamID       = null;
         private object         m_stateLock      = new object();
 		private ManualResetEvent m_conEvent     = new ManualResetEvent(false);
@@ -142,10 +146,13 @@ namespace jabber.connection
 		/// Create a SocketElementStream out of an accepted socket.
 		/// </summary>
 		/// <param name="aso"></param>
-		public SocketElementStream(AsyncSocket aso)
+		public SocketElementStream(BaseSocket aso)
 		{
 			m_accept = m_sock = null;
-			m_watcher = aso.SocketWatcher;
+            if (aso is AsyncSocket)
+            {
+                m_watcher = ((AsyncSocket) aso).SocketWatcher;
+            }
             m_ns = new XmlNamespaceManager(m_doc.NameTable);
             m_timer = new Timer(new TimerCallback(DoKeepAlive), null, Timeout.Infinite, Timeout.Infinite);
             InitializeStream();
@@ -252,45 +259,30 @@ namespace jabber.connection
         public event bedrock.ObjectHandler OnDisconnect;
         
         /// <summary>
-        /// The server to connect to.  
-        /// Once .Net and bedrock support SRV lookups,
-        /// so should this.
+        /// The name of the server to connect to.  
         /// </summary>
-        [Description("The server to connect to.")]
+        [Description("The name of the Jabber server.")]
         [DefaultValue("jabber.com")]
         [Category("Jabber")]
         public string Server
-        {
-            get { return m_server; }
-            set { m_server = value; }
-        }
-
-        /// <summary>
-        /// The *name* of the server to connect to.  
-        /// Will default to Server if not specified.  
-        /// </summary>
-        [Description("The *name* of the server to connect to.  Will default to Server if not specified.")]
-        [DefaultValue(null)]
-        [Category("Jabber")]
-        public string To
         {
             get { return m_to; }
             set { m_to = value; }
         }
 
         /// <summary>
-        /// The address to use on the to attribute of the stream:stream.  
-        /// If To is specified, returns that, otherwsie returns the Server.
+        /// The address to use on the "to" attribute of the stream:stream.  
+        /// If using HTTP polling, put the URL here.  If not, you can put
+        /// the network hostname or IP address of the server to connect to.
+        /// If none is specified, the Server will be used.
         /// </summary>
-        [Browsable(false)]
-        public string Host
+        [Description("")]
+        [DefaultValue(null)]
+        [Category("Jabber")]
+        public string NetworkHost
         {
-            get 
-            { 
-                if (m_to != null)
-                    return m_to;
-                return m_server;
-            }
+            get { return m_server; }
+            set { m_server = value; }
         }
 
         /// <summary>
@@ -342,8 +334,8 @@ namespace jabber.connection
         [Browsable(false)]
         public Certificate LocalCertificate
         {
-            get { return m_watcher.LocalCertificate; }
-            set { m_watcher.LocalCertificate = value; }
+            get { return (m_watcher == null) ? null : m_watcher.LocalCertificate; }
+            set { if (m_watcher != null) m_watcher.LocalCertificate = value; }
         }
 
 
@@ -366,7 +358,8 @@ namespace jabber.connection
         /// <param name="password">The password, if this is a .pfx file, null if .cer file.</param>
         public void SetCertificateFile(string filename, string password)
         {
-            m_watcher.SetCertificateFile(filename, password);
+            if (m_watcher != null)
+                m_watcher.SetCertificateFile(filename, password);
         }
 #endif
 
@@ -535,7 +528,8 @@ namespace jabber.connection
                 {
                     Debug.Assert(m_state == ClosedState.Instance, "Must not reset Synchronous after connecting");
                     m_synch = value;
-                    m_watcher.Synchronous = value;
+                    if (m_watcher != null)
+                        m_watcher.Synchronous = value;
                 }
             }
         }
@@ -681,7 +675,7 @@ namespace jabber.connection
         public virtual void Connect()
         {
             Debug.Assert(m_port > 0);
-            Debug.Assert(m_server != null);
+            Debug.Assert(m_to != null);
 			m_conEvent.Reset();
             m_sslOn = m_ssl;
 
@@ -702,6 +696,22 @@ namespace jabber.connection
                        
                     case ProxyType.SHTTP: 
                         proxy = new ShttpProxy(this);
+                        break;
+
+                    case ProxyType.HTTP_Polling:
+                        JEP25Socket j25s = new JEP25Socket(this);
+                        if (m_ProxyHost != null)
+                        {
+                            System.Net.WebProxy wp = new System.Net.WebProxy();
+                            wp.Address = new Uri("http://" + m_ProxyHost + ":" + m_ProxyPort);
+                            if (m_ProxyUsername != null)
+                            {
+                                wp.Credentials = new System.Net.NetworkCredential(m_ProxyUsername, m_ProxyPassword);
+                            }
+                            j25s.Proxy = wp;
+                        }
+                        j25s.URL = m_server;
+                        m_sock = j25s;
                         break;
                        
                     case ProxyType.None:
@@ -728,7 +738,7 @@ namespace jabber.connection
                 }
                 else
                 {
-                    Address addr = new Address(m_server, m_port);
+                    Address addr = new Address((m_server == null) ? m_to : m_server, m_port);
                     m_sock.Connect(addr);
                 }
             }
@@ -740,7 +750,7 @@ namespace jabber.connection
         private void SynchConnectThread()
         {
             Debug.Assert(m_synch, "Cannot call SynchConnectThread unless in synch mode");
-            Address addr = new Address(m_server, m_port);
+            Address addr = new Address((m_server == null) ? m_to : m_server, m_port);
             m_sock.Connect(addr);
         }
 
@@ -1064,7 +1074,7 @@ namespace jabber.connection
 		private void SendNewStreamHeader()
 		{
 			jabber.protocol.stream.Stream str = new jabber.protocol.stream.Stream(m_doc, NS);
-			str.To = this.Host;
+			str.To = m_to;
             str.Version = "1.0";
 			Write(str.StartTag());
 			m_timer.Change(m_keepAlive, m_keepAlive);
@@ -1141,16 +1151,16 @@ namespace jabber.connection
         /// or an incoming socket just came in.  Use this as an opportunity to 
         /// </summary>
         /// <param name="new_sock">The new socket that is about to be connected.</param>
-        void ISocketEventListener.OnInit(AsyncSocket new_sock)
+        void ISocketEventListener.OnInit(BaseSocket new_sock)
         {
         }
 
-        ISocketEventListener ISocketEventListener.GetListener(AsyncSocket listen_sock)
+        ISocketEventListener ISocketEventListener.GetListener(BaseSocket listen_sock)
         {
             return this;
         }
 
-        bool ISocketEventListener.OnAccept(bedrock.net.AsyncSocket newsocket)
+        bool ISocketEventListener.OnAccept(bedrock.net.BaseSocket newsocket)
         {
             lock (StateLock)
             {
@@ -1210,7 +1220,7 @@ namespace jabber.connection
             }
         }
 
-        bool ISocketEventListener.OnRead(bedrock.net.AsyncSocket sock, byte[] buf, int offset, int count)
+        bool ISocketEventListener.OnRead(bedrock.net.BaseSocket sock, byte[] buf, int offset, int count)
         {
             Debug.Assert(!m_synch);
             ReadComplete(sock, buf, offset, count);
@@ -1219,7 +1229,7 @@ namespace jabber.connection
             return true;
         }
 
-        void ISocketEventListener.OnWrite(bedrock.net.AsyncSocket sock, byte[] buf, int offset, int count)
+        void ISocketEventListener.OnWrite(bedrock.net.BaseSocket sock, byte[] buf, int offset, int count)
         {
             m_timer.Change(m_keepAlive, m_keepAlive);
 
@@ -1232,7 +1242,7 @@ namespace jabber.connection
             }
         }
 
-        void ISocketEventListener.OnError(bedrock.net.AsyncSocket sock, System.Exception ex)
+        void ISocketEventListener.OnError(bedrock.net.BaseSocket sock, System.Exception ex)
         {
             lock (m_stateLock)
             {
@@ -1269,7 +1279,7 @@ namespace jabber.connection
             }
         }
 
-        void ISocketEventListener.OnConnect(bedrock.net.AsyncSocket sock)
+        void ISocketEventListener.OnConnect(bedrock.net.BaseSocket sock)
         {
             Debug.Assert(sock != null);
 
@@ -1293,7 +1303,7 @@ namespace jabber.connection
             Connect();
         }
 
-        void ISocketEventListener.OnClose(bedrock.net.AsyncSocket sock)
+        void ISocketEventListener.OnClose(bedrock.net.BaseSocket sock)
         {
             lock (StateLock)
             {

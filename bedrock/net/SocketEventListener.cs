@@ -30,7 +30,7 @@ namespace bedrock.net
         /// or an incoming socket just came in.  Use this as an opportunity to 
         /// </summary>
         /// <param name="newSock">The new socket that is about to be connected.</param>
-        void OnInit(AsyncSocket newSock);
+        void OnInit(BaseSocket newSock);
 
         /// <summary>
         /// We accepted a socket, and need to get a listener.
@@ -40,30 +40,30 @@ namespace bedrock.net
         /// <param name="newSock">The new socket.</param>
         /// <returns>The listener for the *new* socket, as compared to 
         /// the listener for the *listen* socket</returns>
-        ISocketEventListener GetListener(AsyncSocket newSock);
+        ISocketEventListener GetListener(BaseSocket newSock);
 
         /// <summary>
         /// A new incoming connection was accepted.
         /// </summary>
         /// <param name="newsocket">Socket for new connection.</param>
         /// <returns>true if RequestAccept() should be called automatically again</returns>
-        bool OnAccept(AsyncSocket newsocket);
+        bool OnAccept(BaseSocket newsocket);
         /// <summary>
         /// Outbound connection was connected.
         /// </summary>
         /// <param name="sock">Connected socket.</param>
-        void OnConnect(AsyncSocket sock);
+        void OnConnect(BaseSocket sock);
         /// <summary>
         /// Connection was closed.
         /// </summary>
         /// <param name="sock">Closed socket.  Already closed!</param>
-        void OnClose(AsyncSocket sock);
+        void OnClose(BaseSocket sock);
         /// <summary>
         /// An error happened in processing.  The socket is no longer open.
         /// </summary>
         /// <param name="sock">Socket in error</param>
         /// <param name="ex">Exception that caused the error</param>
-        void OnError(AsyncSocket sock, Exception ex);
+        void OnError(BaseSocket sock, Exception ex);
         /// <summary>
         /// Bytes were read from the socket.
         /// </summary>
@@ -72,7 +72,7 @@ namespace bedrock.net
         /// <param name="offset">Offset into the buffer to start at</param>
         /// <param name="length">Number of bytes to use out of the buffer</param>
         /// <returns>true if RequestRead() should be called automatically again</returns>
-        bool OnRead (AsyncSocket sock, byte[] buf, int offset, int length);
+        bool OnRead (BaseSocket sock, byte[] buf, int offset, int length);
         /// <summary>
         /// Bytes were written to the socket.
         /// </summary>
@@ -80,7 +80,7 @@ namespace bedrock.net
         /// <param name="buf">The bytes that were written.</param>
         /// <param name="offset">Offset into the buffer to start at</param>
         /// <param name="length">Number of bytes to use out of the buffer</param>
-        void OnWrite(AsyncSocket sock, byte[] buf, int offset, int length);
+        void OnWrite(BaseSocket sock, byte[] buf, int offset, int length);
     }
     /// <summary>
     /// Default, empty implementation of ISocketEventListener
@@ -94,7 +94,7 @@ namespace bedrock.net
         /// or an incoming socket just came in.  Use this as an opportunity to 
         /// </summary>
         /// <param name="newSock">The new socket that is about to be connected.</param>
-        public virtual void OnInit(AsyncSocket newSock)
+        public virtual void OnInit(BaseSocket newSock)
         {
         }
 
@@ -106,7 +106,7 @@ namespace bedrock.net
         /// <param name="newSock">The new socket.</param>
         /// <returns>The listener for the *new* socket, as compared to 
         /// the listener for the *listen* socket</returns>
-        public virtual ISocketEventListener GetListener(AsyncSocket newSock)
+        public virtual ISocketEventListener GetListener(BaseSocket newSock)
         {
             return this;
         }
@@ -116,7 +116,7 @@ namespace bedrock.net
         /// </summary>
         /// <param name="newsocket">Socket for new connection.</param>
         /// <returns>true if RequestAccept() should be called automatically again</returns>
-        public virtual bool OnAccept(AsyncSocket newsocket)
+        public virtual bool OnAccept(BaseSocket newsocket)
         {
             return true;
         }
@@ -125,7 +125,7 @@ namespace bedrock.net
         /// Outbound connection was connected.
         /// </summary>
         /// <param name="sock">Connected socket.</param>
-        public virtual void OnConnect(AsyncSocket sock)
+        public virtual void OnConnect(BaseSocket sock)
         {
         }
 
@@ -133,7 +133,7 @@ namespace bedrock.net
         /// Connection was closed.
         /// </summary>
         /// <param name="sock">Closed socket.  Already closed!</param>
-        public virtual void OnClose(AsyncSocket sock)
+        public virtual void OnClose(BaseSocket sock)
         {
         }
 
@@ -142,7 +142,7 @@ namespace bedrock.net
         /// </summary>
         /// <param name="sock">Socket in error</param>
         /// <param name="ec">Exception that caused the error</param>
-        public virtual void OnError(AsyncSocket sock, System.Exception ec)
+        public virtual void OnError(BaseSocket sock, System.Exception ec)
         {
         }
 
@@ -154,7 +154,7 @@ namespace bedrock.net
         /// <returns>true if RequestRead() should be called automatically again</returns>
         /// <param name="offset">Offset into the buffer to start at</param>
         /// <param name="length">Number of bytes to use out of the buffer</param>
-        public virtual bool OnRead(AsyncSocket sock, byte[] buf, int offset, int length)
+        public virtual bool OnRead(BaseSocket sock, byte[] buf, int offset, int length)
         {
             return true;
         }
@@ -166,7 +166,7 @@ namespace bedrock.net
         /// <param name="buf">The bytes that were written.</param>
         /// <param name="offset">Offset into the buffer to start at</param>
         /// <param name="length">Number of bytes to use out of the buffer</param>
-        public virtual void OnWrite(AsyncSocket sock, byte[] buf, int offset, int length)
+        public virtual void OnWrite(BaseSocket sock, byte[] buf, int offset, int length)
         {
         }    
         #endregion

@@ -41,7 +41,7 @@ namespace jabber.protocol
         /// </summary>
         public void Start()
         {
-            Debug.WriteLine("--Starting new Synch parser--");
+//            Debug.WriteLine("--Starting new Synch parser--");
             XmlElement elem;
             try
             {
@@ -58,12 +58,12 @@ namespace jabber.protocol
                     {
                         case 0:  // stream:stream
                             elem = m_loader.ReadStartTag();
-                            Debug.WriteLine("SynchParser start: " + elem.OuterXml);
+//                            Debug.WriteLine("SynchParser start: " + elem.OuterXml);
                             FireOnDocumentStart(elem);
                             break;
                         case 1:  // protocol element
                             elem = (XmlElement) m_loader.ReadCurrentNode();
-                            Debug.WriteLine("SynchParser elem: " + elem.OuterXml);
+//                            Debug.WriteLine("SynchParser elem: " + elem.OuterXml);
                             FireOnElement(elem);
                             break;
                         default:
