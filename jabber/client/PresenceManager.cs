@@ -185,6 +185,10 @@ namespace jabber.client
             return m_items.GetEnumerator();
         }
 
+        /// <summary>
+        /// Manage the presence for all of the resources of a user.  No locking is performed, 
+        /// since PresenceManager is already doing locking.
+        /// </summary>
         private class UserPresenceManager
         {
             private Tree m_items = new Tree();
@@ -195,32 +199,28 @@ namespace jabber.client
                 JID from = p.From;
                 string res = from.Resource;
                 Debug.Assert(p.Type == PresenceType.available);
-                lock (this)
+                if (res == null)
                 {
-                    if (res == null)
-                    {
-                        m_pres = p;
-                        return;
-                    }
-                    else
-                    {
-                        m_items.Remove(res);
-                        m_items[res] = p;
+                    m_pres = p;
+                    return;
+                }
 
-                        if ((m_pres == null) || (m_pres.From.Resource == res))
-                        {
-                            m_pres = p;
-                            return;
-                        }
-                        string pri = p.Priority;
-                        int new_pri = (pri == null) ? 0 : int.Parse(pri);
-                        pri = m_pres.Priority;
-                        int old_pri = (pri == null) ? 0 : int.Parse(pri);
-                        if (new_pri > old_pri)
-                        {
-                            m_pres = p;
-                        }
-                    }
+                // Tree can't overwrite. Have to delete first.
+                m_items.Remove(res);
+                m_items[res] = p;
+
+                if ((m_pres == null) || (m_pres.From.Resource == res))
+                {
+                    m_pres = p;
+                    return;
+                }
+                string pri = p.Priority;
+                int new_pri = (pri == null) ? 0 : int.Parse(pri);
+                pri = m_pres.Priority;
+                int old_pri = (pri == null) ? 0 : int.Parse(pri);
+                if (new_pri > old_pri)
+                {
+                    m_pres = p;
                 }
             }
 
@@ -229,30 +229,30 @@ namespace jabber.client
                 JID from = p.From;
                 string res = from.Resource;
                 Debug.Assert(p.Type == PresenceType.unavailable);
-                lock (this)
+
+                if (res != null)
+                    m_items.Remove(res);
+
+                if (m_pres.From.Resource == res)
                 {
-                    if (res != null)
-                        m_items.Remove(res);
-                    if (m_pres.From.Resource == res)
+                    // this was the high pri resource.  Find the next highest.
+                    m_pres = null;
+
+                    int curp;
+                    int maxp = -1;
+
+                    foreach (DictionaryEntry de in m_items)
                     {
-                        // this was the high pri resource.  Find the next highest.
-                        m_pres = null;
-
-                        int curp;
-                        int maxp = -1;
-
-                        foreach (DictionaryEntry de in m_items)
+                        Presence tp = (Presence) de.Value;
+                        string pri = tp.Priority;
+                        curp = (pri == null) ? 0 : int.Parse(pri);
+                        if (curp > maxp)
                         {
-                            Presence tp = (Presence) de.Value;
-                            string pri = tp.Priority;
-                            curp = (pri == null) ? 0 : int.Parse(pri);
-                            if (curp > maxp)
-                            {
-                                m_pres = tp;
-                                maxp = curp;
-                            }
+                            m_pres = tp;
+                            maxp = curp;
                         }
                     }
+                    
                 }
             }
 
@@ -260,14 +260,11 @@ namespace jabber.client
             {
                 get 
                 {
-                    lock (this)
-                    {
-                        if (m_items.Count > 0)
-                            return m_items.Count;
-                        if (m_pres == null)
-                            return 0;
-                        return 1;
-                    }
+                    if (m_items.Count > 0)
+                        return m_items.Count;
+                    if (m_pres == null)
+                        return 0;
+                    return 1;
                 }
             }
 
