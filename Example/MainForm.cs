@@ -53,6 +53,7 @@ namespace Example
         private System.Windows.Forms.Splitter splitter1;
         private System.Windows.Forms.TextBox txtDebugInput;
         private muzzle.RosterTree roster;
+        private System.Windows.Forms.StatusBarPanel pnlSSL;
 
         private bool m_err = false;
 
@@ -94,6 +95,7 @@ namespace Example
             System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(MainForm));
             this.sb = new System.Windows.Forms.StatusBar();
             this.pnlCon = new System.Windows.Forms.StatusBarPanel();
+            this.pnlSSL = new System.Windows.Forms.StatusBarPanel();
             this.pnlPresence = new System.Windows.Forms.StatusBarPanel();
             this.jc = new jabber.client.JabberClient(this.components);
             this.rm = new jabber.client.RosterManager(this.components);
@@ -111,6 +113,7 @@ namespace Example
             this.menuItem1 = new System.Windows.Forms.MenuItem();
             this.mnuOffline = new System.Windows.Forms.MenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pnlCon)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pnlSSL)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pnlPresence)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tpRoster.SuspendLayout();
@@ -123,6 +126,7 @@ namespace Example
             this.sb.Name = "sb";
             this.sb.Panels.AddRange(new System.Windows.Forms.StatusBarPanel[] {
                                                                                   this.pnlCon,
+                                                                                  this.pnlSSL,
                                                                                   this.pnlPresence});
             this.sb.ShowPanels = true;
             this.sb.Size = new System.Drawing.Size(632, 22);
@@ -133,7 +137,12 @@ namespace Example
             // 
             this.pnlCon.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Spring;
             this.pnlCon.Text = "Click on \"Offline\", and select a presence to log in.";
-            this.pnlCon.Width = 569;
+            this.pnlCon.Width = 539;
+            // 
+            // pnlSSL
+            // 
+            this.pnlSSL.Alignment = System.Windows.Forms.HorizontalAlignment.Center;
+            this.pnlSSL.Width = 30;
             // 
             // pnlPresence
             // 
@@ -294,6 +303,7 @@ namespace Example
             this.Text = "MainForm";
             this.Closing += new System.ComponentModel.CancelEventHandler(this.MainForm_Closing);
             ((System.ComponentModel.ISupportInitialize)(this.pnlCon)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pnlSSL)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pnlPresence)).EndInit();
             this.tabControl1.ResumeLayout(false);
             this.tpRoster.ResumeLayout(false);
@@ -352,12 +362,15 @@ namespace Example
         {
             pnlPresence.Text = "Available";
             pnlCon.Text = "Connected";
-
 #if !NO_SSL
-            if ((m_sock is bedrock.net.AsyncSocket) && (((bedrock.net.AsyncSocket)m_sock).RemoteCertificate != null))
+            if (jc.SSLon)
             {
+
+                pnlSSL.Text = "SSL";
+                string cert = ((bedrock.net.AsyncSocket)m_sock).RemoteCertificate.ToString(true);
                 debug.AppendText("\r\nServer Certificate:\r\n-------------------\r\n");
-                debug.AppendText(((bedrock.net.AsyncSocket)m_sock).RemoteCertificate.ToString(true) + "\r\n");
+                debug.AppendText(cert + "\r\n");
+                pnlSSL.ToolTipText = cert;
             }
 #endif
         }
@@ -365,6 +378,9 @@ namespace Example
         private void jc_OnDisconnect(object sender)
         {
             pnlPresence.Text = "Offline";
+            pnlSSL.Text = "";
+            pnlSSL.ToolTipText = "";
+
             if (!m_err)
                 pnlCon.Text = "Disconnected";
         }
