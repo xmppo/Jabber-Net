@@ -245,7 +245,7 @@ namespace jabber.protocol.iq
         /// </summary>
         public bool Registered
         {
-            get { return GetElem("registered") != null; }
+            get { return (this["registered"] != null); }
             set 
             {  
                 if (value)
