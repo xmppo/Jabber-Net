@@ -48,6 +48,10 @@ namespace jabber.protocol.x
             new QnameType("x",     URI.XROSTER,   typeof(jabber.protocol.iq.Roster)),
             new QnameType("item",  URI.XROSTER,   typeof(jabber.protocol.iq.Item)),
             new QnameType("group", URI.XROSTER,   typeof(jabber.protocol.iq.Group)),
+
+            new QnameType("x",     URI.XDATA,     typeof(jabber.protocol.x.Data)),
+            new QnameType("field", URI.XDATA,     typeof(jabber.protocol.x.Field)),
+            new QnameType("option",URI.XDATA,     typeof(jabber.protocol.x.Option)),
         };
 		QnameType[] IPacketTypes.Types { get { return s_qnt; } }
 	}

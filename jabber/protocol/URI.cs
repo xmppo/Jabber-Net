@@ -116,5 +116,9 @@ namespace jabber.protocol
 		/// events relating to the delivery, display, and composition of messages.
 		/// </summary>
 		public const string XEVENT = "jabber:x:event";
+        /// <summary>
+        /// jabber:x:data, as described in JEP-0004.
+        /// </summary>
+        public const string XDATA = "jabber:x:data";
     }
 }

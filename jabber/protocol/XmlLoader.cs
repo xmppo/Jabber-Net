@@ -33,9 +33,8 @@ using System.Xml;
 
 using bedrock.util;
 using bedrock.io;
-using jabber.protocol;
 
-namespace bedrock.io
+namespace jabber.protocol
 {
     /// <summary>
     /// Reverse-engineered from the Beta1 System.Xml.XmlLoader, since that's private 

@@ -254,12 +254,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "jabber\protocol\ElementStream.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "jabber\protocol\Packet.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "jabber\protocol\URI.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "jabber\protocol\XmlLoader.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -374,6 +384,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "jabber\protocol\x\Data.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "jabber\protocol\x\Delay.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -386,6 +401,11 @@
                 <File
                     RelPath = "jabber\protocol\x\Factory.cs"
                     SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "jabber\server\JabberS2S.cs"
+                    SubType = "Component"
                     BuildAction = "Compile"
                 />
                 <File
@@ -407,26 +427,7 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <File
-                    RelPath = "jabber\xml\ElementStream.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "jabber\xml\ElementStream.resx"
-                    DependentUpon = "ElementStream.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "jabber\xml\ElementStreamListener.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "jabber\xml\XmlLoader.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
+                <Folder RelPath = "jabber\xml\" />
             </Include>
         </Files>
     </CSHARP>

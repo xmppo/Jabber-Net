@@ -202,6 +202,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "jabber\protocol\x\DataTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "jabber\protocol\x\EventTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

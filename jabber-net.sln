@@ -5,7 +5,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test", "test\test.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "muzzle", "muzzle\muzzle.csproj", "{071A79A9-E23F-418F-A6B7-63D3A3E59EEB}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{BEFCF9E1-1364-41B1-A62A-92D85B4B5414}"
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{FFE3CDF8-F0AF-4F9A-BBA3-1DE72A249797}"
 EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
@@ -27,8 +27,9 @@ Global
 		{071A79A9-E23F-418F-A6B7-63D3A3E59EEB}.Debug.Build.0 = Debug|.NET
 		{071A79A9-E23F-418F-A6B7-63D3A3E59EEB}.Release.ActiveCfg = Release|.NET
 		{071A79A9-E23F-418F-A6B7-63D3A3E59EEB}.Release.Build.0 = Release|.NET
-		{BEFCF9E1-1364-41B1-A62A-92D85B4B5414}.Debug.ActiveCfg = Debug
-		{BEFCF9E1-1364-41B1-A62A-92D85B4B5414}.Release.ActiveCfg = Release
+		{FFE3CDF8-F0AF-4F9A-BBA3-1DE72A249797}.Debug.ActiveCfg = Debug
+		{FFE3CDF8-F0AF-4F9A-BBA3-1DE72A249797}.Release.ActiveCfg = Release
+		{FFE3CDF8-F0AF-4F9A-BBA3-1DE72A249797}.Release.Build.0 = Release
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
