@@ -91,6 +91,7 @@ namespace jabber.connection
 
         private int            m_port           = 5222;
         private int            m_autoReconnect  = 30000;
+		private bool		   m_reconnect      = false;
 
         private ProxyType      m_ProxyType      = ProxyType.None;
         private string         m_ProxyHost      = null;
@@ -712,6 +713,7 @@ namespace jabber.connection
             lock (StateLock)
             {
                 m_state = ConnectingState.Instance;
+				m_reconnect = (m_autoReconnect >= 0);
 
                 ProxySocket proxy = null;
                 switch (m_ProxyType)
@@ -791,6 +793,25 @@ namespace jabber.connection
             }
         }
 
+		/// <summary>
+		/// If autoReconnect is on, start the timer for reconnect now.
+		/// </summary>
+		private void TryReconnect()
+		{
+			// close was not requested, or autoreconnect turned on.
+			if (m_reconnect)
+			{
+				if (m_reconnectTimer != null)
+					m_reconnectTimer.Dispose();
+
+				m_reconnectTimer = new System.Threading.Timer(
+					new System.Threading.TimerCallback(Reconnect), 
+					null, 
+					m_autoReconnect, 
+					System.Threading.Timeout.Infinite );
+			}
+		}
+
         /// <summary>
         /// Close down the connection, as gracefully as possible.
         /// </summary>
@@ -809,6 +830,7 @@ namespace jabber.connection
             {
                 if ((m_state == RunningState.Instance) && (clean))
                 {
+					m_reconnect = false;
                     Write("</stream:stream>");
                 }
                 if (m_state != ClosedState.Instance)
@@ -1147,6 +1169,9 @@ namespace jabber.connection
                 ((e is System.IO.IOException) || (e.InnerException is System.IO.IOException)))
                 return;
 
+			if (m_synch && (m_state == ConnectingState.Instance))
+				m_conEvent.Set();
+
             if (OnError != null)
             {
                 if (InvokeRequired)
@@ -1156,7 +1181,7 @@ namespace jabber.connection
             }
 
             if ((State != ClosingState.Instance) && (State == ClosedState.Instance))
-                Close();
+                Close(false);
         }
 
         /// <summary>
@@ -1294,31 +1319,20 @@ namespace jabber.connection
 
         void ISocketEventListener.OnError(bedrock.net.BaseSocket sock, System.Exception ex)
         {
-            lock (m_stateLock)
-            {
-                m_timer.Change(Timeout.Infinite, Timeout.Infinite);
+			lock (m_stateLock)
+			{
+				// if we were still trying to connect, free the connect thread to keep going.
+				if (m_synch && (m_state == ConnectingState.Instance))
+					m_conEvent.Set();
 
-                BaseState old = m_state;
-                m_state = ClosedState.Instance;
-                m_sock = null;
+				m_timer.Change(Timeout.Infinite, Timeout.Infinite);
 
-                // close was requested, or autoreconnect turned off.
-                if (old != ClosingState.Instance)
-                {
-                    if ( m_autoReconnect == 0)
-                    {
-                        if (!m_synch)
-                            Reconnect(null);
-                    }
-                    else if (m_autoReconnect > 0)
-                    {
-                        new System.Threading.Timer(new System.Threading.TimerCallback(Reconnect), 
-                            null, 
-                            m_autoReconnect, 
-                            System.Threading.Timeout.Infinite );
-                    }
-                }
-            }
+				BaseState old = m_state;
+				m_state = ClosedState.Instance;
+				m_sock = null;
+
+
+			}
 
             if (OnError != null)
             {
@@ -1327,7 +1341,9 @@ namespace jabber.connection
                 else
                     OnError(sock, ex);
             }
-        }
+
+			TryReconnect();            
+		}
 
         void ISocketEventListener.OnConnect(bedrock.net.BaseSocket sock)
         {
@@ -1355,23 +1371,16 @@ namespace jabber.connection
 
         void ISocketEventListener.OnClose(bedrock.net.BaseSocket sock)
         {
-            lock (StateLock)
-            {
-                m_timer.Change(Timeout.Infinite, Timeout.Infinite);
+			lock (StateLock)
+			{
+				m_timer.Change(Timeout.Infinite, Timeout.Infinite);
 
-                BaseState old = m_state;
-                m_state = ClosedState.Instance;
-                m_sock = null;
+				BaseState old = m_state;
+				m_state = ClosedState.Instance;
+				m_sock = null;
 
-                // close was requested, or autoreconnect turned off.
-                if ((old != ClosingState.Instance) && (m_autoReconnect >= 0))
-                {
-                    m_reconnectTimer = new System.Threading.Timer(new System.Threading.TimerCallback(Reconnect), 
-                        null, 
-                        m_autoReconnect, 
-                        System.Threading.Timeout.Infinite );
-                }
-            }
+			}
+
             if (OnDisconnect != null)
             {
                 if (InvokeRequired)
@@ -1379,7 +1388,9 @@ namespace jabber.connection
                 else
                     OnDisconnect(this);
             }
-        }
+
+			TryReconnect();
+		}
         #endregion
 
 
@@ -1493,6 +1504,7 @@ namespace jabber.connection
         private void m_stream_OnError(object sender, Exception ex)
         {
             FireOnError(ex);
+			TryReconnect();
         }
     }
 }
