@@ -156,6 +156,21 @@ namespace jabber.client
         public event bedrock.ObjectHandler OnLoginRequired;
 
         /// <summary>
+        /// After calling Register(), the registration succeeded or failed.
+        /// </summary>
+        [Category("Protocol")]
+        [Description("We received the anwer to our agents query.")]
+        public event IQHandler OnRegistered;
+
+        /// <summary>
+        /// After calling Register, information about the user is required.  Fill in the given IQ
+        /// with the requested information.
+        /// </summary>
+        [Category("Protocol")]
+        [Description("We received the anwer to our agents query.")]
+        public event IQHandler OnRegisterInfo;
+
+        /// <summary>
         /// The username to connect as.
         /// </summary>
         [Description("The username to connect as.")]
@@ -437,6 +452,54 @@ namespace jabber.client
             {
                 FireOnError(new ProtocolException(iq));
             }
+        }
+
+        /// <summary>
+        /// Attempt to register a new user.  This will fire OnRegisterInfo to retrieve 
+        /// information about the new user, and OnRegistered when the registration is complete or failed.
+        /// </summary>
+        /// <param name="jid">The user to register</param>
+        public void Register(JID jid)
+        {
+            RegisterIQ iq = new RegisterIQ(Document);
+            Register reg = (Register)iq.Query;
+            iq.Type = IQType.get;
+            iq.To = jid.Server;
+
+            reg.Username = jid.User;
+            Tracker.BeginIQ(iq, new IqCB(OnGetRegister), jid);
+        }
+
+        private void OnGetRegister(object sender, IQ iq, object data)
+        {
+            if (iq.Type == IQType.error)
+            {
+                if (OnRegistered != null)
+                    CheckedInvoke(OnRegistered, new object[] {this, iq});
+            }
+            else if (iq.Type == IQType.result)
+            {
+                if (OnRegisterInfo == null)
+                    throw new InvalidOperationException("Please set OnRegisterInfo if you are going to use Register()");
+
+                JID jid = (JID) data;
+                iq.Type = IQType.set;
+                iq.From = null;
+                iq.To = jid.Server;
+                iq.ID = Element.NextID();
+                Register r = iq.Query as Register;
+                Debug.Assert(r != null);
+                r.Username = jid.User;
+
+                CheckedInvoke(OnRegisterInfo, new object[] {this, iq});
+                Tracker.BeginIQ(iq, new IqCB(OnSetRegister), jid);
+            }
+        }
+
+        private void OnSetRegister(object sender, IQ iq, object data)
+        {
+            if (OnRegistered != null)
+                CheckedInvoke(OnRegistered, new object[] {this, iq});
         }
 
         /// <summary>
