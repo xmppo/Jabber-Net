@@ -99,7 +99,7 @@ namespace jabber.client
         public void AddPresence(Presence p)
         {
             // can't use .From, since that will cause a JID parse.
-            Debug.Assert(p.Attributes["from"] != "", 
+            Debug.Assert(p.GetAttribute("from") != "", 
                 "Do not call AddPresence by hand.  I can tell you are doing that because you didn't put a from address on your presence packet, and all presences from the server have a from address.");
             GotPresence(this, p);
         }
