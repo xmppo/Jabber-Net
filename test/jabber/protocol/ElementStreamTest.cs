@@ -51,7 +51,7 @@ namespace test.jabber.protocol
         public void Test_Partial()
         {
             fail = false;
-            ElementStream m_ElementStream = new ElementStream();
+            AsynchElementStream m_ElementStream = new AsynchElementStream();
             m_ElementStream.OnDocumentEnd += new ObjectHandler(jabOnEnd);
 
             m_ElementStream.Push(ENC.GetBytes("<stream>"));
@@ -64,7 +64,7 @@ namespace test.jabber.protocol
         public void Test_NullBody()
         {
             fail = false;
-            ElementStream m_ElementStream = new ElementStream();
+            AsynchElementStream m_ElementStream = new AsynchElementStream();
             m_ElementStream.OnDocumentEnd += new ObjectHandler(jabOnEnd);
 
             m_ElementStream.Push(ENC.GetBytes("<str"));

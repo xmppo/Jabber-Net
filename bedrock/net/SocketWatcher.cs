@@ -115,7 +115,7 @@ namespace bedrock.net
 
 #if !NO_SSL
         /// <summary>
-        /// The certificate to be used for listen sockets, with SSL on.
+        /// The certificate to be used for the local side of sockets, with SSL on.
         /// </summary>
         public Certificate LocalCertificate
         {
@@ -133,7 +133,7 @@ namespace bedrock.net
         /// and run the following commands:
         ///   <blockquote>
         ///   openssl req -new -x509 -newkey rsa:1024 -keyout privkey.pem -out key.pem -extensions serverex
-        ///   openssl pkcs12 -export -in key.pem -in key privkey.pem -name localhost -out localhost.pfx
+        ///   openssl pkcs12 -export -in key.pem -inkey privkey.pem -name localhost -out localhost.pfx
         ///   </blockquote>
         /// If you leave the certificate null, and you are doing Accept, the SSL class will try to find a
         /// default server cert on your box.  If you have IIS installed with a cert, this might just go...
@@ -146,16 +146,16 @@ namespace bedrock.net
             {
                 throw new CertificateException("File does not exist: " + filename);
             }
-            CertificateStore cs;
+            CertificateStore store;
             if (password != null) 
             {
-                cs = CertificateStore.CreateFromPfxFile(filename, password);
+                store = CertificateStore.CreateFromPfxFile(filename, password);
             } 
             else 
             {
-                cs = CertificateStore.CreateFromCerFile(filename);
+                store = CertificateStore.CreateFromCerFile(filename);
             }
-            m_cert = cs.FindCertificate(new string[] {"1.3.6.1.5.5.7.3.1"});
+            m_cert = CertUtil.FindServerCert(store);
             if (m_cert == null)
                 throw new CertificateException("The certificate file does not contain a server authentication certificate.");
         }
@@ -166,8 +166,9 @@ namespace bedrock.net
         /// <param name="storeName"></param>
         public void SetCertificateStore(string storeName)
         {
-            CertificateStore cs = new CertificateStore(storeName);
-            m_cert = cs.FindCertificate(new string[] {"1.3.6.1.5.5.7.3.1"});
+            CertificateStore store = new CertificateStore(storeName);
+            
+            m_cert = CertUtil.FindServerCert(store);
             if (m_cert == null)
                 throw new CertificateException("The certificate file does not contain a server authentication certificate.");
         }

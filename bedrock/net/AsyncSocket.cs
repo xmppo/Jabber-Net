@@ -142,31 +142,28 @@ namespace bedrock.net
         /// but it's unlikely that you trust jabbber.org or jabber.com's relatively bogus certificate roots.
         /// </summary>
         public static bool UntrustedRootOK = false;
+
 #if !NO_SSL
         /// <summary>
         /// The types of SSL to support.  SSL3 and TLS1 by default.  That should be good enough for 
         /// most apps, and was hard-coded to start with.
         /// </summary>
         public static SecureProtocol SSLProtocols = SecureProtocol.Ssl3 | SecureProtocol.Tls1;
-#endif
-
-        private byte[]               m_buf            = new byte[BUFSIZE];
-        private State                m_state          = State.Created;
-#if !NO_SSL
+        private SecureProtocol       m_secureProtocol = SecureProtocol.None;
+        private ConnectionEnd        m_credUse        = ConnectionEnd.Client;
+        private Certificate          m_cert           = null;
         private SecureSocket         m_sock           = null;
 #else
         private Socket               m_sock           = null;
 #endif
+
+        private byte[]               m_buf            = new byte[BUFSIZE];
+        private State                m_state          = State.Created;
         private SocketWatcher        m_watcher        = null;
         private Address              m_addr;
         private Guid                 m_id             = Guid.NewGuid();
         private bool                 m_reading        = false;
         private bool                 m_synch          = false;
-#if !NO_SSL
-        private SecureProtocol       m_secureProtocol = SecureProtocol.None;
-        private CredentialUse        m_credUse        = CredentialUse.Client;
-        private Certificate          m_cert           = null;
-#endif
 
         /// <summary>
         /// Called from SocketWatcher.
@@ -268,8 +265,8 @@ namespace bedrock.net
         /// <param name="optionName"></param>
         /// <param name="optionValue"></param>
         public void SetSocketOption(SocketOptionLevel optionLevel, 
-                                    SocketOptionName optionName, 
-                                    byte[] optionValue)
+            SocketOptionName optionName, 
+            byte[] optionValue)
         {
             m_sock.SetSocketOption(optionLevel, optionName, optionValue);
         }
@@ -281,8 +278,8 @@ namespace bedrock.net
         /// <param name="optionName"></param>
         /// <param name="optionValue"></param>
         public void SetSocketOption(SocketOptionLevel optionLevel, 
-                                    SocketOptionName optionName, 
-                                    int optionValue)
+            SocketOptionName optionName, 
+            int optionValue)
         {
             m_sock.SetSocketOption(optionLevel, optionName, optionValue);
         }
@@ -294,8 +291,8 @@ namespace bedrock.net
         /// <param name="optionName"></param>
         /// <param name="optionValue"></param>
         public void SetSocketOption(SocketOptionLevel optionLevel, 
-                                    SocketOptionName optionName, 
-                                    object optionValue)
+            SocketOptionName optionName, 
+            object optionValue)
         {
             m_sock.SetSocketOption(optionLevel, optionName, optionValue);
         }
@@ -322,34 +319,32 @@ namespace bedrock.net
         /// <param name="backlog">The Maximum length of the queue of pending connections</param>
         public override void Accept(Address addr, int backlog)
         {
-            m_addr = addr;
+            lock (this)
+            {
+                m_addr = addr;
 #if !NO_SSL
-            m_credUse = CredentialUse.Server;
-            SecurityOptions options = new SecurityOptions();
-            options.certificate = m_cert;
-            options.secureProtocol = m_secureProtocol;
-            options.use = m_credUse; 
-            options.commonName = addr.Hostname;
-            options.verifyType = CredentialVerification.Auto;
-            options.flags = SecurityFlags.Default; // use the default flags
+                m_credUse = ConnectionEnd.Server;
+                SecurityOptions options = new SecurityOptions(m_secureProtocol, m_cert, m_credUse, CredentialVerification.Auto, null, addr.Hostname, SecurityFlags.Default, SslAlgorithms.ALL, null);
 
-            m_sock = new SecureSocket(AddressFamily.InterNetwork, 
-                                      SocketType.Stream, 
-                                      ProtocolType.Tcp,
-                                      options);
+                m_sock = new SecureSocket(AddressFamily.InterNetwork, 
+                    SocketType.Stream, 
+                    ProtocolType.Tcp,
+                    options);
 #else
-            m_sock = new Socket(AddressFamily.InterNetwork, 
-                                      SocketType.Stream, 
-                                      ProtocolType.Tcp);
+                m_sock = new Socket(AddressFamily.InterNetwork, 
+                                    SocketType.Stream, 
+                                    ProtocolType.Tcp);
 #endif
 
-            m_sock.Blocking = m_synch;
-            // Always reuse address.
-            m_sock.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, 1);
-            m_sock.Bind(m_addr.Endpoint);
-            m_sock.Listen(backlog);
-            m_state = State.Listening;
-            m_watcher.RegisterSocket(this);
+                m_sock.Blocking = m_synch;
+                // Always reuse address.
+                m_sock.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, 1);
+                m_sock.Bind(m_addr.Endpoint);
+                m_sock.Listen(backlog);
+                m_state = State.Listening;
+            
+                m_watcher.RegisterSocket(this);
+            }
         }
 
         /// <summary>
@@ -365,21 +360,22 @@ namespace bedrock.net
                 {
                     throw new InvalidOperationException("Not a listen socket");
                 }
-                if (m_synch)
-                {                    
+            }
+            if (m_synch)
+            {                    
 #if !NO_SSL
-                    SecureSocket cli = (SecureSocket) m_sock.Accept();
+                SecureSocket cli = (SecureSocket) m_sock.Accept();
 #else
                     Socket cli = m_sock.Accept();
 #endif
-                    AsyncSocket cliCon = new AsyncSocket(m_watcher);
-                    cliCon.m_sock = cli;
-                    AcceptDone(cliCon);
-                }
-                else
-                {
-                    m_sock.BeginAccept(new AsyncCallback(ExecuteAccept), null);
-                }
+                AsyncSocket cliCon = new AsyncSocket(m_watcher);
+                cliCon.m_sock = cli;
+                cliCon.m_synch = true;
+                AcceptDone(cliCon);
+            }
+            else
+            {
+                m_sock.BeginAccept(new AsyncCallback(ExecuteAccept), null);
             }
         }
 
@@ -406,7 +402,7 @@ namespace bedrock.net
             cliCon.Address.IP = ((IPEndPoint) cliCon.m_sock.RemoteEndPoint).Address;
             cliCon.m_state = State.Connected;
 #if !NO_SSL
-            cliCon.m_credUse = CredentialUse.Server;
+            cliCon.m_credUse = ConnectionEnd.Server;
 #endif
 
             ISocketEventListener l = m_listener.GetListener(cliCon);
@@ -491,29 +487,22 @@ namespace bedrock.net
                 m_state = State.Connecting;
 
 #if !NO_SSL
-                SecurityOptions options = new SecurityOptions();
-                options.certificate = m_cert;
-                options.secureProtocol = m_secureProtocol;
-                options.use = m_credUse;
-                options.commonName = addr.Hostname;
-                options.verifyType = CredentialVerification.Manual; // we'll use our own certificate verification delegate
-                options.verifier = new CertVerifyEventHandler(OnVerify);
-                options.flags = SecurityFlags.Default; // use the default flags
+                SecurityOptions options = new SecurityOptions(m_secureProtocol, m_cert, m_credUse, CredentialVerification.Manual, new CertVerifyEventHandler(OnVerify), addr.Hostname, SecurityFlags.Default, SslAlgorithms.ALL, null);
 
                 if (Socket.SupportsIPv6 && (m_addr.Endpoint.AddressFamily == AddressFamily.InterNetworkV6))
-				{
-					m_sock = new SecureSocket(AddressFamily.InterNetworkV6, 
-						SocketType.Stream, 
-						ProtocolType.Tcp,
+                {
+                    m_sock = new SecureSocket(AddressFamily.InterNetworkV6, 
+                        SocketType.Stream, 
+                        ProtocolType.Tcp,
                         options);
-				}
-				else
-				{
-					m_sock = new SecureSocket(AddressFamily.InterNetwork, 
-						SocketType.Stream, 
-						ProtocolType.Tcp,
+                }
+                else
+                {
+                    m_sock = new SecureSocket(AddressFamily.InterNetwork, 
+                        SocketType.Stream, 
+                        ProtocolType.Tcp,
                         options);
-				}
+                }
 #else
 #if !OLD_CLR
                 if (Socket.SupportsIPv6 && (m_addr.Endpoint.AddressFamily == AddressFamily.InterNetworkV6))
@@ -532,32 +521,33 @@ namespace bedrock.net
                 
 #endif
 
-				// well, of course this isn't right.
-				m_sock.SetSocketOption(SocketOptionLevel.Socket, 
-					SocketOptionName.ReceiveBuffer, 
-					4 * m_buf.Length);
-				m_sock.Blocking = m_synch;
-                if (m_synch)
+                // well, of course this isn't right.
+                m_sock.SetSocketOption(SocketOptionLevel.Socket, 
+                    SocketOptionName.ReceiveBuffer, 
+                    4 * m_buf.Length);
+                m_sock.Blocking = m_synch;
+            }
+             
+            if (m_synch)
+            {
+                m_sock.Connect(m_addr.Endpoint);
+                if (m_sock.Connected)
                 {
-                    m_sock.Connect(m_addr.Endpoint);
-                    lock (this)
+                    lock(this)
                     {
-                        if (m_sock.Connected)
-                        {
-                            m_state = State.Connected;
-                            m_listener.OnConnect(this);
-                        }
-                        else
-                        {
-                            AsyncClose();
-                            FireError(new AsyncSocketConnectionException("could not connect"));
-                        }
+                        m_state = State.Connected;
                     }
+                    m_listener.OnConnect(this);
                 }
                 else
                 {
-                    m_sock.BeginConnect(m_addr.Endpoint, new AsyncCallback(ExecuteConnect), null);
+                    AsyncClose();
+                    FireError(new AsyncSocketConnectionException("could not connect"));
                 }
+            }
+            else
+            {
+                m_sock.BeginConnect(m_addr.Endpoint, new AsyncCallback(ExecuteConnect), null);
             }
         }
 
@@ -565,10 +555,12 @@ namespace bedrock.net
         /// <summary>
         /// Verifies a certificate received from the remote host.
         /// </summary>
-        /// <param name="socket">The SecureSocket that received the certificate.</param>
-        /// <param name="remote">The received certificate.</param>
-        /// <param name="e">The event parameters.</param>
-        protected void OnVerify(SecureSocket socket, Certificate remote, VerifyEventArgs e) 
+        /// <param name="socket">The <see cref="SecureSocket"/> that received the certificate to verify.</param>
+        /// <param name="remote">The <see cref="Certificate"/> of the remote party to verify.</param>
+        /// <param name="chain">The <see cref="CertificateChain"/> associated with the remote certificate.</param>
+        /// <param name="e">A <see cref="VerifyEventArgs"/> instance used to (in)validate the certificate.</param>
+        /// <remarks>If an error is thrown by the code in the delegate, the SecureSocket will close the connection.</remarks>
+        protected void OnVerify(SecureSocket socket, Certificate remote, CertificateChain chain, VerifyEventArgs e) 
         {
             CertificateChain cc = new CertificateChain(remote);
             CertificateStatus status = cc.VerifyChain(socket.CommonName, AuthType.Server);
@@ -587,17 +579,7 @@ namespace bedrock.net
         /// </summary>
         public override void StartTLS()
         {
-            SecurityOptions options = new SecurityOptions();
-            options.certificate = null; // do not use client authentication
-            options.secureProtocol = SSLProtocols;
-
-            // TODO: enable for servers, too.
-            options.use = m_credUse;
-            options.commonName = m_addr.Hostname;
-            options.verifyType = CredentialVerification.Manual; // we'll use our own certificate verification delegate
-            options.verifier = new CertVerifyEventHandler(OnVerify);
-            options.flags = SecurityFlags.Default; // use the default flags
-
+            SecurityOptions options = new SecurityOptions(SSLProtocols, null, m_credUse, CredentialVerification.Manual, new CertVerifyEventHandler(OnVerify), m_addr.Hostname, SecurityFlags.Default, SslAlgorithms.ALL, null);
             m_sock.ChangeSecurityProtocol(options);
         }
 #endif
@@ -637,28 +619,56 @@ namespace bedrock.net
                 }
             }
         }
+
+        private bool SyncRead()
+        {
+            int count = m_sock.Receive(m_buf, 0, m_buf.Length, SocketFlags.None);
+            if (count > 0)
+            {
+                return m_listener.OnRead(this, m_buf, 0, count);
+            }
+            Close();
+            return false;
+        }
+
         /// <summary>
         /// Start an async read from the socket.  Listener.OnRead() is eventually called
         /// when data arrives.
         /// </summary>
         public override void RequestRead()
         {
-            lock (this)
-            {
-                Debug.Assert(!m_synch);
-                if (m_reading)
-                {
-                    throw new InvalidOperationException("Cannot call RequestRead while another read is pending.");
-                }
-                if (m_state != State.Connected)
-                {
-                    throw new InvalidOperationException("Socket not connected.");
-                }
-
-                m_reading = true;
-            }
             try
             {
+                if (m_synch)
+                {
+                    lock (this)
+                    {
+                        if (m_state != State.Connected)
+                        {
+                            throw new InvalidOperationException("Socket not connected.");
+                        }
+                    }
+
+                    while (SyncRead())
+                    {
+                        ;
+                    }
+                    return;
+                }
+
+                lock (this)
+                {
+                    if (m_reading)
+                    {
+                        throw new InvalidOperationException("Cannot call RequestRead while another read is pending.");
+                    }
+                    if (m_state != State.Connected)
+                    {
+                        throw new InvalidOperationException("Socket not connected.");
+                    }
+
+                    m_reading = true;
+                }
 
                 m_sock.BeginReceive(m_buf, 0, m_buf.Length, 
                     SocketFlags.None, new AsyncCallback(GotData), null);

@@ -36,7 +36,7 @@ namespace test.bedrock.net
 {
 #if !NO_SSL
     /// <summary>
-    ///    Summary description for AsyncSocketTest.
+    ///  Not really async.
     /// </summary>
     [RCS(@"$Header$")]
     [TestFixture]
@@ -46,31 +46,58 @@ namespace test.bedrock.net
 
         private static byte[] sbuf = ENC.GetBytes("01234567890123456789012345678901234567890123456789012345678901234567890123456789");
         private object done = new object();
+        private object start = new object();
         private string success = null;
+        private AsyncSocket m_listen;
+        private AsyncSocket m_cli;
+        Address a = new Address("localhost", 7002);
 
         public void Test_Write()
         {
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
             bool old_ok = AsyncSocket.UntrustedRootOK;
             AsyncSocket.UntrustedRootOK = true;
-
-            SocketWatcher s_w = new SocketWatcher(20);
-            s_w.SetCertificateFile("../../localhost.pfx", "test");
-            Address a = new Address("localhost", 7002);
             a.Resolve();
-            AsyncSocket listen = s_w.CreateListenSocket(this, a, true);
-            listen.RequestAccept();
 
-            SocketWatcher c_w = new SocketWatcher(20);
-            AsyncSocket connect = c_w.CreateConnectSocket(this, a, true);
+            new Thread(new ThreadStart(Server)).Start();
+            lock(start)
+            {
+                Monitor.Wait(start);
+            }
+
+            new Thread(new ThreadStart(Client)).Start();
+
             lock(done)
             {
                 Monitor.Wait(done);
             }
+
+            m_listen.Close();
             Assertion.AssertEquals("5678901234", success);
             AsyncSocket.UntrustedRootOK = old_ok;
         }
 
+        private void Client()
+        {
+            SocketWatcher c_w = new SocketWatcher(20);
+            c_w.Synchronous = true;
+            m_cli = c_w.CreateConnectSocket(this, a, true);
+        }
     
+        private void Server()
+        {
+            SocketWatcher s_w = new SocketWatcher(20);
+            s_w.SetCertificateFile("../../localhost.pfx", "test");
+            s_w.Synchronous = true;
+            m_listen = s_w.CreateListenSocket(this, a, true);
+            lock(start)
+            {
+                Monitor.Pulse(start);
+            }
+
+            m_listen.RequestAccept();
+        }
+
         #region Implementation of ISocketEventListener
         public bool OnAccept(AsyncSocket newsocket)
         {
@@ -81,7 +108,6 @@ namespace test.bedrock.net
         public bool OnRead(AsyncSocket sock, byte[] buf, int offset, int length)
         {
             success = ENC.GetString(buf, offset, length);
-            sock.Close();
             lock(done)
             {
                 Monitor.Pulse(done);
@@ -120,6 +146,11 @@ namespace test.bedrock.net
             return this;
         }
         #endregion
+
+        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine(e.ExceptionObject.ToString());
+        }
     }
 #endif
 }

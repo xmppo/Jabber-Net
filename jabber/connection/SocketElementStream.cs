@@ -40,6 +40,10 @@ using bedrock.net;
 
 using jabber.protocol;
 
+#if !NO_SSL
+using Org.Mentalis.Security.Certificates;
+#endif
+
 namespace jabber.connection
 {
     /// <summary>
@@ -93,16 +97,17 @@ namespace jabber.connection
         private Timer          m_timer      = null;
         private Timer          m_reconnectTimer = null;
 
-        private int            m_port       = 5222;
+        private int            m_port          = 5222;
         private int            m_autoReconnect = 30000;
 
-        private ProxyType      m_ProxyType = ProxyType.None;
-        private string         m_ProxyHost = null;
-        private int            m_ProxyPort = 1080;
+        private ProxyType      m_ProxyType     = ProxyType.None;
+        private string         m_ProxyHost     = null;
+        private int            m_ProxyPort     = 1080;
         private string         m_ProxyUsername = null;
         private string         m_ProxyPassword = null;
         private bool           m_ssl           = false;
         private bool           m_synch         = true;
+        private Thread         m_thread        = null;
 
         private XmlNamespaceManager m_ns;
 
@@ -170,14 +175,15 @@ namespace jabber.connection
         {
             if (m_synch)
             {
+                Debug.Assert(m_sock != null);
                 System.IO.Stream sockstream = m_sock.GetStream();
                 bedrock.io.ReadEventStream eventstream = new bedrock.io.ReadEventStream(sockstream);
                 eventstream.OnRead += new bedrock.ByteOffsetHandler(ReadComplete);
-                m_stream = new ElementStream(eventstream);
+                m_stream = new SynchElementStream(eventstream);
             }
             else
             {
-                m_stream = new ElementStream();
+                m_stream = new AsynchElementStream();
             }
             m_stream.OnDocumentStart += new ProtocolHandler(OnDocumentStart);
             m_stream.OnDocumentEnd += new bedrock.ObjectHandler(OnDocumentEnd);
@@ -272,13 +278,54 @@ namespace jabber.connection
         public bool SSL
         {
             get { return m_ssl; }
-            set { m_ssl = value; }
+            set 
+			{ 
+#if NO_SSL
+				Debug.Assert(!value, "SSL support not compiled in");
+#endif
+				m_ssl = value; 
+			}
         }
+
+#if !NO_SSL
+        /// <summary>
+        /// The certificate to be used for the local side of sockets, with SSL on.
+        /// </summary>
+        [Browsable(false)]
+        public Certificate LocalCertificate
+        {
+            get { return m_watcher.LocalCertificate; }
+            set { m_watcher.LocalCertificate = value; }
+        }
+
+
+        /// <summary>
+        /// Set the certificate to be used for accept sockets.  To generate a test .pfx file using openssl,
+        /// add this to openssl.conf:
+        ///   <blockquote>
+        ///   [ serverex ]
+        ///   extendedKeyUsage=1.3.6.1.5.5.7.3.1
+        ///   </blockquote>
+        /// and run the following commands:
+        ///   <blockquote>
+        ///   openssl req -new -x509 -newkey rsa:1024 -keyout privkey.pem -out key.pem -extensions serverex
+        ///   openssl pkcs12 -export -in key.pem -inkey privkey.pem -name localhost -out localhost.pfx
+        ///   </blockquote>
+        /// If you leave the certificate null, and you are doing Accept, the SSL class will try to find a
+        /// default server cert on your box.  If you have IIS installed with a cert, this might just go...
+        /// </summary>
+        /// <param name="filename">A .pfx or .cer file</param>
+        /// <param name="password">The password, if this is a .pfx file, null if .cer file.</param>
+        public void SetCertificateFile(string filename, string password)
+        {
+            m_watcher.SetCertificateFile(filename, password);
+        }
+#endif
 
         /// <summary>
         /// Invoke() all callbacks on this control.
         /// </summary>
-        [Description("Invoke all callbakcs on this control")]
+        [Description("Invoke all callbacks on this control")]
         [DefaultValue(null)]
         [Category("Jabber")]
         public ISynchronizeInvoke InvokeControl
@@ -335,7 +382,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Seconds before automatically reconnecting if the connection drops.  -1 to disable.
+        /// Seconds before automatically reconnecting if the connection drops.  -1 to disable, 0 for immediate.
         /// </summary>
         [Description("Automatically reconnect a connection.")]
         [DefaultValue(30)]
@@ -436,8 +483,12 @@ namespace jabber.connection
             get { return m_synch; }
             set 
             {
-                m_synch = value;
-                m_watcher.Synchronous = value;
+                lock (m_stateLock)
+                {
+                    Debug.Assert(m_state == ClosedState.Instance, "Must not reset Synchronous after connecting");
+                    m_synch = value;
+                    m_watcher.Synchronous = value;
+                }
             }
         }
 
@@ -535,6 +586,7 @@ namespace jabber.connection
         /// <param name="buf"></param>
         public virtual void Write(byte[] buf)
         {
+            Debug.Assert(m_sock != null);
             m_sock.Write(buf);
         }
 
@@ -544,6 +596,7 @@ namespace jabber.connection
         /// <param name="buf"></param>
         public virtual void Write(string buf)
         {
+            Debug.Assert(m_sock != null);
             m_sock.Write(ENC.GetBytes(buf));
         }
 
@@ -563,10 +616,9 @@ namespace jabber.connection
         {
             Debug.Assert(m_port > 0);
             Debug.Assert(m_server != null);
-
+            
 			lock (StateLock)
 			{
-				Address addr = new Address(m_server, m_port);
 				m_state = ConnectingState.Instance;
 
                 ProxySocket proxy = null;
@@ -601,8 +653,25 @@ namespace jabber.connection
                     m_sock = proxy;
                 }
 
-                m_sock.Connect(addr);
+                if (m_synch)
+                {
+                    m_thread = new Thread(new ThreadStart(SynchConnectThread));
+                    m_thread.IsBackground = true;
+                    m_thread.Start();
+                }
+                else
+                {
+                    Address addr = new Address(m_server, m_port);
+                    m_sock.Connect(addr);
+                }
             }
+        }
+
+        private void SynchConnectThread()
+        {
+            Debug.Assert(m_synch, "Cannot call SynchConnectThread unless in synch mode");
+            Address addr = new Address(m_server, m_port);
+            m_sock.Connect(addr);
         }
 
         /// <summary>
@@ -699,7 +768,8 @@ namespace jabber.connection
             lock (StateLock)
             {
                 m_state = ClosingState.Instance;
-                m_sock.Close();
+                if (m_sock != null)
+                    m_sock.Close();
             }
         }
 
@@ -771,9 +841,35 @@ namespace jabber.connection
         /// </summary>
         protected virtual void BeginAccept()
         {
-            this.State = AcceptingState.Instance;
-            m_accept = m_watcher.CreateListenSocket(this, new Address(this.Port));
-            m_accept.RequestAccept();
+            lock (StateLock)
+            {
+                this.State = AcceptingState.Instance;
+                m_accept = m_watcher.CreateListenSocket(this, new Address(this.Port));
+            }
+            if (m_synch)
+            {
+                m_thread = new Thread(new ThreadStart(SynchAcceptThread));
+                m_thread.IsBackground = true;
+                m_thread.Start();
+            }
+            else
+            {
+                m_accept.RequestAccept();
+            }
+        }
+
+        private void SynchAcceptThread()
+        {
+            try
+            {
+                Debug.Assert(m_synch, "Cannot call SynchAcceptThread unless in synch mode");
+                m_accept.RequestAccept();
+                Debug.WriteLine("done");
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.ToString());
+            }
         }
 
         #region Implementation of ISocketEventListener
@@ -793,41 +889,54 @@ namespace jabber.connection
 
         bool ISocketEventListener.OnAccept(bedrock.net.AsyncSocket newsocket)
         {
-            Debug.Assert(this.State == AcceptingState.Instance);
+            lock (StateLock)
+            {
+                Debug.Assert(this.State == AcceptingState.Instance, this.State.GetType().ToString());
 
-            this.State = ConnectedState.Instance;
+                this.State = ConnectedState.Instance;
+            }
+
+            // Don't accept any more connections until this one closes
+            if (m_accept != null)
+            {
+                m_accept.Close();
+            }
 
             m_sock = newsocket;
 
             if (OnConnect != null)
             {
+                Debug.Assert(m_sock is AsyncSocket);
+
                 if (InvokeRequired)
                     CheckedInvoke(OnConnect, new object[] {this, m_sock});
                 else
+                {
                     // Um.  This cast might not be right, but I don't want to break backward compatibility 
                     // if I don't have to by changing the delegate interface.
                     OnConnect(this, (AsyncSocket) m_sock);
+                }
             }
 
+            InitializeStream();
             if (m_synch)
             {
-                m_stream.Start();
+                // Blocks!
+                ((SynchElementStream)m_stream).Start();
+                return true;
             }
             else
             {
                 m_sock.RequestRead();
             }
 
-            if (m_accept != null)
-            {
-                m_accept.Close();
-            }
 
             return false;           
         }
 
         private void ReadComplete(object sender, byte[] buf, int offset, int count)
         {
+            m_timer.Change(m_keepAlive, m_keepAlive);
             if (OnReadText != null)
             {
                 if (InvokeRequired)
@@ -839,11 +948,9 @@ namespace jabber.connection
 
         bool ISocketEventListener.OnRead(bedrock.net.AsyncSocket sock, byte[] buf, int offset, int count)
         {
-            m_timer.Change(m_keepAlive, m_keepAlive);
+            Debug.Assert(!m_synch);
             ReadComplete(sock, buf, offset, count);
-
-            if (!m_synch)
-                m_stream.Push(buf, offset, count);
+            ((AsynchElementStream)m_stream).Push(buf, offset, count);
 
             return true;
         }
@@ -872,12 +979,20 @@ namespace jabber.connection
                 m_sock = null;
 
                 // close was requested, or autoreconnect turned off.
-                if ((old != ClosingState.Instance) && (m_autoReconnect >= 0))
+                if (old != ClosingState.Instance)
                 {
-                    new System.Threading.Timer(new System.Threading.TimerCallback(Reconnect), 
-                        null, 
-                        m_autoReconnect, 
-                        System.Threading.Timeout.Infinite );
+                    if ( m_autoReconnect == 0)
+                    {
+                        if (!m_synch)
+                            Reconnect(null);
+                    }
+                    else if (m_autoReconnect > 0)
+                    {
+                        new System.Threading.Timer(new System.Threading.TimerCallback(Reconnect), 
+                            null, 
+                            m_autoReconnect, 
+                            System.Threading.Timeout.Infinite );
+                    }
                 }
             }
 
@@ -892,31 +1007,37 @@ namespace jabber.connection
 
         void ISocketEventListener.OnConnect(bedrock.net.AsyncSocket sock)
         {
+            Debug.Assert(sock != null);
+
             lock (m_stateLock)
             {
-                InitializeStream();
-
                 this.State = ConnectedState.Instance;
-                if (OnConnect != null)
-                {
-                    if (InvokeRequired)
-                        CheckedInvoke(OnConnect, new Object[] {this, sock});
-                    else
-                        OnConnect(this, sock);
-                }
+            }
 
-                jabber.protocol.stream.Stream str = new jabber.protocol.stream.Stream(m_doc, NS);
-                str.To = this.Host;
-                Write(str.StartTag());
-                if (m_synch)
-                {
-                    m_stream.Start();
-                }
+            if (OnConnect != null)
+            {
+                if (InvokeRequired)
+                    CheckedInvoke(OnConnect, new Object[] {this, sock});
                 else
-                {
-                    sock.RequestRead();
-                }
-                m_timer.Change(m_keepAlive, m_keepAlive);
+                    OnConnect(this, sock);
+            }
+            
+            jabber.protocol.stream.Stream str = new jabber.protocol.stream.Stream(m_doc, NS);
+            str.To = this.Host;
+            Write(str.StartTag());
+            m_timer.Change(m_keepAlive, m_keepAlive);
+
+            InitializeStream();
+
+            if (m_synch)
+            {
+                // Blocks!!!
+                Debug.Assert(m_stream != null);
+                ((SynchElementStream)m_stream).Start();
+            }
+            else
+            {
+                sock.RequestRead();
             }
         }
 

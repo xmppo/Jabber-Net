@@ -53,12 +53,25 @@ namespace jabber.protocol
     [RCS(@"$Header$")]
     public class ElementStream
     {
-        private object             m_parseLock = new object();
-        private Stream             m_stream;
-        private XmlDocument        m_doc;
-        private XmlReader          m_reader;
-        private XmlLoader          m_loader;
-        private Thread             m_thread = null;
+        /// <summary>
+        /// The stream to read from
+        /// </summary>
+        protected Stream      m_stream;
+
+        /// <summary>
+        /// The document to create elements in
+        /// </summary>
+        protected XmlDocument m_doc;
+
+        /// <summary>
+        /// The actual parsing logic
+        /// </summary>
+        protected XmlReader   m_reader;
+
+        /// <summary>
+        /// The factory that creates DOM elements of the right subclass 
+        /// </summary>
+        protected XmlLoader   m_loader;
 
         /// <summary>
         /// The document started.  This will have a full element, even
@@ -80,37 +93,13 @@ namespace jabber.protocol
         /// <summary>
         /// Create a parser that will report events to the listener.  
         /// </summary>
-        public ElementStream()
+        protected ElementStream(Stream stream)
         {
+            m_stream = stream;
             m_doc    = new XmlDocument();
-            m_stream = new PipeStream(true);
             m_reader = new XmlTextReader(m_stream);
             m_loader = new XmlLoader(m_reader, m_doc);
             m_loader.Factory.AddType(new jabber.protocol.stream.Factory());
-        }
-
-        /// <summary>
-        /// Create a parser that reads from the input stream synchronously, in a single thread.
-        /// </summary>
-        /// <param name="input"></param>
-        public ElementStream(Stream input)
-        {
-            m_doc    = new XmlDocument();
-            m_stream = input;
-            m_loader = new XmlLoader(null, m_doc);
-            m_loader.Factory.AddType(new jabber.protocol.stream.Factory());
-        }
-
-        /// <summary>
-        /// Start parsing, in the background.
-        /// WARNING: only call this if you passed in a stream to the constructor.
-        /// </summary>
-        public void Start()
-        {
-            Debug.Assert(! (m_stream is PipeStream));
-            m_thread = new Thread(new ThreadStart(SyncParse));
-            m_thread.IsBackground = true;
-            m_thread.Start();
         }
 
         /// <summary>
@@ -144,146 +133,32 @@ namespace jabber.protocol
         }
 
         /// <summary>
-        /// Put bytes into the parser.
-        /// If in synchronous mode, after storing a copy of the given buffer, 
-        /// the parser is called in this thread.  Otherwise, an async wakeup
-        /// is given to the parser.
+        /// Fire the OnDocumentStart event
         /// </summary>
-        /// <param name="buf">The bytes to put into the parse stream</param>
-        public void Push(byte[] buf)
+        /// <param name="stream"></param>
+        protected void FireOnDocumentStart(XmlElement stream)
         {
-            Debug.Assert(m_stream != null);
-            if (buf.Length > 0)
-            {
-                m_stream.Write(buf, 0, buf.Length);
-                
-                // heh.  I was thinking about doing this for scale,
-                // but it also has the nice side-effect of getting
-                // around any potential dead-locks here.
-                ThreadPool.QueueUserWorkItem(new WaitCallback(Parse));
-            }
+            if (OnDocumentStart != null)
+                OnDocumentStart(this, stream);
         }
 
         /// <summary>
-        /// Put bytes into the parser.
-        /// If in synchronous mode, after storing a copy of the given buffer, 
-        /// the parser is called in this thread.  Otherwise, an async wakeup
-        /// is given to the parser.
+        /// Fire the OnElement event
         /// </summary>
-        /// <param name="buf">The bytes to put into the parse stream</param>
-        /// <param name="offset">Offset into buf to start at</param>
-        /// <param name="length">Number of bytes to write</param>
-        public void Push(byte[] buf, int offset, int length)
+        /// <param name="elem"></param>
+        protected void FireOnElement(XmlElement elem)
         {
-            Debug.Assert(m_stream != null);
-            if (length > 0)
-            {
-                m_stream.Write(buf, offset, length);
-                ThreadPool.QueueUserWorkItem(new WaitCallback(Parse));
-            }
+            if (OnElement != null)
+                OnElement(this, elem);
         }
 
         /// <summary>
-        /// Read one element from the pipe stream.  This may block if a partial
-        /// protocol element has come in, but should pick back up when 
-        /// HandleReceive is called again.
+        /// Fire the OnDocumentEnd event
         /// </summary>
-        private void Parse(object ignored)
+        protected void FireOnDocumentEnd()
         {
-            lock (m_parseLock)
-            {
-                try
-                {
-                    PipeStream ps = m_stream as PipeStream;
-                    Debug.Assert(ps != null);
-
-                    while (!ps.IsEmpty)
-                    {
-                        // skip extraneous nonsense.  For the
-                        // stream:stream tag, we read the whole start
-                        // tag.  For other protocol elements, we read
-                        // the entire tag, including children, in one
-                        // gulp.  quit (don't block) if we get to the
-                        // end of the nonsense between protocol tags.
-                        ps.AutoClose = true;
-                        bool more;
-                        while (more = m_reader.Read())
-                        {
-                            if (m_reader.NodeType == XmlNodeType.Element)
-                                break;
-                        }
-                        if (!more)
-                        {
-                            return;
-                        }
-                        // block when we're in a tag we care about.
-                        ps.AutoClose = false;
-                        switch (m_reader.Depth)
-                        {
-                            case 0:  // stream:stream
-                                XmlElement stream = m_loader.ReadStartTag();
-                                if (OnDocumentStart != null)
-                                    OnDocumentStart(this, stream);
-                                break;
-                            case 1:  // protocol element
-                                XmlElement tag = (XmlElement) m_loader.ReadCurrentNode();
-                                if (OnElement != null)
-                                    OnElement(this, tag);
-                                break;
-                            default:
-                                throw new InvalidOperationException("Protocol de-synchronized: " + m_reader.Name);
-                        }
-                        //TODO: detect the end of document, and call OnDocumentEnd();
-                    }
-                }
-                catch(XmlException e)
-                {
-                    Debug.WriteLine(e.ToString());
-                    if (OnDocumentEnd != null)
-                        OnDocumentEnd(this);
-                    m_stream.Close();
-                    return;
-                }
-            }
-        }
-
-        private void SyncParse()
-        {
-            try
-            {
-                m_reader = new XmlTextReader(m_stream);
-                m_loader.Reader = m_reader;
-
-                while (m_reader.Read())
-                {
-                    if (m_reader.NodeType != XmlNodeType.Element)
-                        continue;
-                    switch (m_reader.Depth)
-                    {
-                        case 0:  // stream:stream
-                            XmlElement stream = m_loader.ReadStartTag();
-                            if (OnDocumentStart != null)
-                                OnDocumentStart(this, stream);
-                            break;
-                        case 1:  // protocol element
-                            XmlElement tag = (XmlElement) m_loader.ReadCurrentNode();
-                            if (OnElement != null)
-                                OnElement(this, tag);
-                            break;
-                        default:
-                            throw new InvalidOperationException("Protocol de-synchronized: " + m_reader.Name);
-                    }
-                    //TODO: detect the end of document, and call OnDocumentEnd();
-                }
-            }
-            catch (XmlException e)
-            {
-                Debug.WriteLine(e.ToString());
-                if (OnDocumentEnd != null)
-                    OnDocumentEnd(this);
-                m_stream.Close();
-                return;
-            }
+            if (OnDocumentEnd != null)
+                OnDocumentEnd(this);
         }
     }
 }

@@ -196,9 +196,14 @@ namespace jabber.server
             get { return m_type; }
             set 
             { 
-                m_type = value; 
-                if (m_type == ComponentType.Connect)
-                    this.AutoReconnect = -1;
+                if (m_type != value)
+                {
+                    m_type = value; 
+                    if (m_type == ComponentType.Connect)
+                    {
+                        this.AutoReconnect = 0;
+                    }
+                }
             }
         }
 

@@ -75,11 +75,6 @@
                     HintPath = "..\..\WINDOWS\Microsoft.NET\Framework\v1.0.3705\System.XML.dll"
                 />
                 <Reference
-                    Name = "Org.Mentalis.Security"
-                    AssemblyName = "Org.Mentalis.Security"
-                    HintPath = "Org.Mentalis.Security.dll"
-                />
-                <Reference
                     Name = "stringprep"
                     Project = "{060A98C7-BF17-4685-A528-F84C0D8D89AE}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
@@ -98,6 +93,11 @@
                     Name = "System.Drawing"
                     AssemblyName = "System.Drawing"
                     HintPath = "..\..\..\WINNT\Microsoft.NET\Framework\v1.1.4322\System.Drawing.dll"
+                />
+                <Reference
+                    Name = "Org.Mentalis.Security"
+                    AssemblyName = "Org.Mentalis.Security"
+                    HintPath = "Org.Mentalis.Security.dll"
                 />
             </References>
         </Build>
@@ -185,6 +185,11 @@
                 />
                 <File
                     RelPath = "bedrock\net\BaseSocket.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "bedrock\net\CertUtil.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -296,6 +301,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "jabber\protocol\AsynchElementStream.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "jabber\protocol\Element.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -317,6 +327,11 @@
                 />
                 <File
                     RelPath = "jabber\protocol\Packet.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "jabber\protocol\SynchElementStream.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
