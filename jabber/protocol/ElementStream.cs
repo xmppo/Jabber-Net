@@ -54,10 +54,11 @@ namespace jabber.protocol
     public class ElementStream
     {
         private object             m_parseLock = new object();
-        private PipeStream         m_stream;
+        private Stream             m_stream;
         private XmlDocument        m_doc;
         private XmlReader          m_reader;
         private XmlLoader          m_loader;
+        private Thread             m_thread = null;
 
         /// <summary>
         /// The document started.  This will have a full element, even
@@ -86,6 +87,30 @@ namespace jabber.protocol
             m_reader = new XmlTextReader(m_stream);
             m_loader = new XmlLoader(m_reader, m_doc);
             m_loader.Factory.AddType(new jabber.protocol.stream.Factory());
+        }
+
+        /// <summary>
+        /// Create a parser that reads from the input stream synchronously, in a single thread.
+        /// </summary>
+        /// <param name="input"></param>
+        public ElementStream(Stream input)
+        {
+            m_doc    = new XmlDocument();
+            m_stream = input;
+            m_loader = new XmlLoader(null, m_doc);
+            m_loader.Factory.AddType(new jabber.protocol.stream.Factory());
+        }
+
+        /// <summary>
+        /// Start parsing, in the background.
+        /// WARNING: only call this if you passed in a stream to the constructor.
+        /// </summary>
+        public void Start()
+        {
+            Debug.Assert(! (m_stream is PipeStream));
+            m_thread = new Thread(new ThreadStart(SyncParse));
+            m_thread.IsBackground = true;
+            m_thread.Start();
         }
 
         /// <summary>
@@ -130,7 +155,7 @@ namespace jabber.protocol
             Debug.Assert(m_stream != null);
             if (buf.Length > 0)
             {
-                m_stream.Write(buf);
+                m_stream.Write(buf, 0, buf.Length);
                 
                 // heh.  I was thinking about doing this for scale,
                 // but it also has the nice side-effect of getting
@@ -169,7 +194,10 @@ namespace jabber.protocol
             {
                 try
                 {
-                    while (!m_stream.IsEmpty)
+                    PipeStream ps = m_stream as PipeStream;
+                    Debug.Assert(ps != null);
+
+                    while (!ps.IsEmpty)
                     {
                         // skip extraneous nonsense.  For the
                         // stream:stream tag, we read the whole start
@@ -177,7 +205,7 @@ namespace jabber.protocol
                         // the entire tag, including children, in one
                         // gulp.  quit (don't block) if we get to the
                         // end of the nonsense between protocol tags.
-                        m_stream.AutoClose = true;
+                        ps.AutoClose = true;
                         bool more;
                         while (more = m_reader.Read())
                         {
@@ -189,7 +217,7 @@ namespace jabber.protocol
                             return;
                         }
                         // block when we're in a tag we care about.
-                        m_stream.AutoClose = false;
+                        ps.AutoClose = false;
                         switch (m_reader.Depth)
                         {
                             case 0:  // stream:stream
@@ -218,6 +246,44 @@ namespace jabber.protocol
                 }
             }
         }
-        
+
+        private void SyncParse()
+        {
+            try
+            {
+                m_reader = new XmlTextReader(m_stream);
+                m_loader.Reader = m_reader;
+
+                while (m_reader.Read())
+                {
+                    if (m_reader.NodeType != XmlNodeType.Element)
+                        continue;
+                    switch (m_reader.Depth)
+                    {
+                        case 0:  // stream:stream
+                            XmlElement stream = m_loader.ReadStartTag();
+                            if (OnDocumentStart != null)
+                                OnDocumentStart(this, stream);
+                            break;
+                        case 1:  // protocol element
+                            XmlElement tag = (XmlElement) m_loader.ReadCurrentNode();
+                            if (OnElement != null)
+                                OnElement(this, tag);
+                            break;
+                        default:
+                            throw new InvalidOperationException("Protocol de-synchronized: " + m_reader.Name);
+                    }
+                    //TODO: detect the end of document, and call OnDocumentEnd();
+                }
+            }
+            catch (XmlException e)
+            {
+                Debug.WriteLine(e.ToString());
+                if (OnDocumentEnd != null)
+                    OnDocumentEnd(this);
+                m_stream.Close();
+                return;
+            }
+        }
     }
 }

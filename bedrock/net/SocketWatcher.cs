@@ -60,6 +60,8 @@ namespace bedrock.net
         private ISet        m_socks   = new Set(SetImplementation.SkipList);
         private object      m_lock = new object();
         private int         m_maxSocks;
+        private bool        m_synch = false;
+
 #if !NO_SSL
         private Certificate m_cert = null;
 #endif
@@ -80,6 +82,15 @@ namespace bedrock.net
         public SocketWatcher(int maxsockets)
         {
             m_maxSocks = maxsockets;
+        }
+
+        /// <summary>
+        /// Synchronous operation
+        /// </summary>
+        public bool Synchronous
+        {
+            get { return m_synch; }
+            set { m_synch = value; }
         }
 
         /// <summary>
@@ -176,7 +187,7 @@ namespace bedrock.net
                                               bool                 SSL)
         {
             //Debug.Assert(m_maxSocks > 1);
-            AsyncSocket result = new AsyncSocket(this, listener, SSL);
+            AsyncSocket result = new AsyncSocket(this, listener, SSL, m_synch);
             if (SSL)
             {
 #if !NO_SSL
@@ -255,7 +266,7 @@ namespace bedrock.net
             AsyncSocket result;
    
             // Create the socket:
-            result = new AsyncSocket(this, listener, SSL);
+            result = new AsyncSocket(this, listener, SSL, m_synch);
             if (SSL)
             {
 #if !NO_SSL

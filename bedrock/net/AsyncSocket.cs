@@ -161,6 +161,7 @@ namespace bedrock.net
         private Address              m_addr;
         private Guid                 m_id             = Guid.NewGuid();
         private bool                 m_reading        = false;
+        private bool                 m_synch          = false;
 #if !NO_SSL
         private SecureProtocol       m_secureProtocol = SecureProtocol.None;
         private CredentialUse        m_credUse        = CredentialUse.Client;
@@ -184,9 +185,12 @@ namespace bedrock.net
         /// <param name="listener">The listener for this socket</param>
         /// <param name="SSL">Do SSL3 and TLS1 on startup 
         /// (call StartTLS later if this is false, and TLS only is needed later)</param>
-        public AsyncSocket(SocketWatcher w, ISocketEventListener listener, bool SSL) : base(listener)
+        /// <param name="synch">Synchronous operation</param>
+        public AsyncSocket(SocketWatcher w, ISocketEventListener listener, bool SSL, bool synch) : base(listener)
         {
             m_watcher = w;
+            m_synch = synch;
+
             if (SSL)
             {
 #if !NO_SSL
@@ -297,6 +301,21 @@ namespace bedrock.net
         }
 
         /// <summary>
+        /// Return a stream that can be read from and written to, in non-async fashion.
+        /// You must still call close on the AsyncSocket, and not just on the stream.
+        /// </summary>
+        /// <returns>The stream, connected up to this socket</returns>
+        public override Stream GetStream()
+        {
+            Debug.Assert(m_synch);
+#if !NO_SSL
+            return new SecureNetworkStream(m_sock, FileAccess.ReadWrite, false);
+#else
+            return new NetworkStream(m_sock, FileAccess.ReadWrite, false);
+#endif
+        }
+
+        /// <summary>
         /// Prepare to start accepting inbound requests.  Call RequestAccept() to start the async process.
         /// </summary>
         /// <param name="addr">Address to listen on</param>
@@ -324,7 +343,7 @@ namespace bedrock.net
                                       ProtocolType.Tcp);
 #endif
 
-            m_sock.Blocking = false;
+            m_sock.Blocking = m_synch;
             // Always reuse address.
             m_sock.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, 1);
             m_sock.Bind(m_addr.Endpoint);
@@ -346,7 +365,21 @@ namespace bedrock.net
                 {
                     throw new InvalidOperationException("Not a listen socket");
                 }
-                m_sock.BeginAccept(new AsyncCallback(ExecuteAccept), null);
+                if (m_synch)
+                {                    
+#if !NO_SSL
+                    SecureSocket cli = (SecureSocket) m_sock.Accept();
+#else
+                    Socket cli = m_sock.Accept();
+#endif
+                    AsyncSocket cliCon = new AsyncSocket(m_watcher);
+                    cliCon.m_sock = cli;
+                    AcceptDone(cliCon);
+                }
+                else
+                {
+                    m_sock.BeginAccept(new AsyncCallback(ExecuteAccept), null);
+                }
             }
         }
 
@@ -361,12 +394,16 @@ namespace bedrock.net
 #else
             Socket cli = (Socket) m_sock.EndAccept(ar);
 #endif
-            cli.Blocking = false;
-
             AsyncSocket cliCon = new AsyncSocket(m_watcher);
-            cliCon.m_addr = m_addr;
-            cliCon.Address.IP = ((IPEndPoint) cli.RemoteEndPoint).Address;
             cliCon.m_sock = cli;
+            AcceptDone(cliCon);
+        }
+
+        private void AcceptDone(AsyncSocket cliCon)
+        {
+            cliCon.m_sock.Blocking = m_synch;
+            cliCon.m_addr = m_addr;
+            cliCon.Address.IP = ((IPEndPoint) cliCon.m_sock.RemoteEndPoint).Address;
             cliCon.m_state = State.Connected;
 #if !NO_SSL
             cliCon.m_credUse = CredentialUse.Server;
@@ -377,7 +414,7 @@ namespace bedrock.net
             {
                 // if the listener returns null, close the socket and quit, instead of
                 // asserting.
-                cli.Close();
+                cliCon.m_sock.Close();
                 RequestAccept();
                 return;
             }
@@ -418,7 +455,15 @@ namespace bedrock.net
         public override void Connect(Address addr)
         {
             m_state = State.Resolving;
-            addr.Resolve(new AddressResolved(OnConnectResolved));
+            if (m_synch)
+            {
+                addr.Resolve();
+                OnConnectResolved(addr);
+            }
+            else
+            {
+                addr.Resolve(new AddressResolved(OnConnectResolved));
+            }
         }
 
         /// <summary>
@@ -491,8 +536,28 @@ namespace bedrock.net
 				m_sock.SetSocketOption(SocketOptionLevel.Socket, 
 					SocketOptionName.ReceiveBuffer, 
 					4 * m_buf.Length);
-				m_sock.Blocking = false;
-				m_sock.BeginConnect(m_addr.Endpoint, new AsyncCallback(ExecuteConnect), null);
+				m_sock.Blocking = m_synch;
+                if (m_synch)
+                {
+                    m_sock.Connect(m_addr.Endpoint);
+                    lock (this)
+                    {
+                        if (m_sock.Connected)
+                        {
+                            m_state = State.Connected;
+                            m_listener.OnConnect(this);
+                        }
+                        else
+                        {
+                            AsyncClose();
+                            FireError(new AsyncSocketConnectionException("could not connect"));
+                        }
+                    }
+                }
+                else
+                {
+                    m_sock.BeginConnect(m_addr.Endpoint, new AsyncCallback(ExecuteConnect), null);
+                }
             }
         }
 
@@ -580,6 +645,7 @@ namespace bedrock.net
         {
             lock (this)
             {
+                Debug.Assert(!m_synch);
                 if (m_reading)
                 {
                     throw new InvalidOperationException("Cannot call RequestRead while another read is pending.");
@@ -696,8 +762,23 @@ namespace bedrock.net
                 Buffer.BlockCopy(buf, offset, ret, 0, len);
                 try
                 {
-                    m_sock.BeginSend(ret, 0, ret.Length, 
-                        SocketFlags.None, new AsyncCallback(WroteData), ret);
+                    if (m_synch)
+                    {
+                        int count = m_sock.Send(ret, 0, ret.Length, SocketFlags.None);
+                        if (count == ret.Length)
+                        {
+                            m_listener.OnWrite(this, ret, 0, ret.Length);
+                        }
+                        else
+                        {
+                            Close();
+                        }
+                    }
+                    else
+                    {
+                        m_sock.BeginSend(ret, 0, ret.Length, 
+                            SocketFlags.None, new AsyncCallback(WroteData), ret);
+                    }
                 }
                 catch (SocketException e)
                 {

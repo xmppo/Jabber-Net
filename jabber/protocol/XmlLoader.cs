@@ -74,6 +74,14 @@ namespace jabber.protocol
         }
 
         /// <summary>
+        /// Set the reader for this loader.  This should not be done after reading as started.
+        /// </summary>
+        public XmlReader Reader
+        {
+            set { reader = value; }
+        }
+
+        /// <summary>
         /// The packet factory for this loader.
         /// </summary>
         public ElementFactory Factory

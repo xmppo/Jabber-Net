@@ -49,6 +49,12 @@ namespace bedrock.net
 
 
         /// <summary>
+        /// Get a stream to read from this socket synchronously.
+        /// </summary>
+        /// <returns></returns>
+        public abstract System.IO.Stream GetStream();
+
+        /// <summary>
         /// Construct a BaseSocket.
         /// </summary>
         /// <param name="listener"></param>

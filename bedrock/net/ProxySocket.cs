@@ -115,6 +115,15 @@ namespace bedrock.net
 			set { m_password = value; }
 		}
 
+        /// <summary>
+        /// Get a stream to read from this socket synchronously.
+        /// </summary>
+        /// <returns></returns>
+        public override System.IO.Stream GetStream()
+        {
+            return m_sock.GetStream();
+        }
+
 		/// <summary>
 		/// Prepare to start accepting inbound requests.  Call RequestAccept() to start the async process.
 		/// </summary>

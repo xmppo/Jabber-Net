@@ -89,6 +89,11 @@
                     AssemblyName = "System.Windows.Forms"
                     HintPath = "..\..\..\WINNT\Microsoft.NET\Framework\v1.1.4322\System.Windows.Forms.dll"
                 />
+                <Reference
+                    Name = "System.Data"
+                    AssemblyName = "System.Data"
+                    HintPath = "..\..\..\WINNT\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -155,6 +160,11 @@
                 />
                 <File
                     RelPath = "bedrock\io\PipeStream.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "bedrock\io\ReadEventStream.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

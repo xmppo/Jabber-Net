@@ -102,6 +102,7 @@ namespace jabber.connection
         private string         m_ProxyUsername = null;
         private string         m_ProxyPassword = null;
         private bool           m_ssl           = false;
+        private bool           m_synch         = true;
 
         private XmlNamespaceManager m_ns;
 
@@ -120,6 +121,7 @@ namespace jabber.connection
         {
             container.Add(this);
             m_watcher = new SocketWatcher();
+            m_watcher.Synchronous = m_synch;
             m_ns = new XmlNamespaceManager(m_doc.NameTable);
             m_timer = new Timer(new TimerCallback(DoKeepAlive), null, Timeout.Infinite, Timeout.Infinite);
         }
@@ -130,6 +132,7 @@ namespace jabber.connection
         public SocketElementStream()
         {
             m_watcher = new SocketWatcher();
+            m_watcher.Synchronous = m_synch;
             m_ns = new XmlNamespaceManager(m_doc.NameTable);
             m_timer = new Timer(new TimerCallback(DoKeepAlive), null, Timeout.Infinite, Timeout.Infinite);
         }
@@ -142,7 +145,7 @@ namespace jabber.connection
 		{
 			m_accept = m_sock = null;
 			m_watcher = aso.SocketWatcher;
-			m_ns = new XmlNamespaceManager(m_doc.NameTable);
+            m_ns = new XmlNamespaceManager(m_doc.NameTable);
             m_timer = new Timer(new TimerCallback(DoKeepAlive), null, Timeout.Infinite, Timeout.Infinite);
             InitializeStream();
 			m_state = jabber.connection.AcceptingState.Instance;
@@ -165,7 +168,17 @@ namespace jabber.connection
         /// </summary>
         protected virtual void InitializeStream()
         {
-            m_stream = new ElementStream();
+            if (m_synch)
+            {
+                System.IO.Stream sockstream = m_sock.GetStream();
+                bedrock.io.ReadEventStream eventstream = new bedrock.io.ReadEventStream(sockstream);
+                eventstream.OnRead += new bedrock.ByteOffsetHandler(ReadComplete);
+                m_stream = new ElementStream(eventstream);
+            }
+            else
+            {
+                m_stream = new ElementStream();
+            }
             m_stream.OnDocumentStart += new ProtocolHandler(OnDocumentStart);
             m_stream.OnDocumentEnd += new bedrock.ObjectHandler(OnDocumentEnd);
             m_stream.OnElement += new ProtocolHandler(OnElement);
@@ -414,6 +427,21 @@ namespace jabber.connection
         }
 
         /// <summary>
+        /// Single-threaded reading?  If false, dispatch into a thread pool.
+        /// Only set this true if you are doing large numbers of sockets.
+        /// </summary>
+        [Browsable(false)]
+        public bool Synchronous
+        {
+            get { return m_synch; }
+            set 
+            {
+                m_synch = value;
+                m_watcher.Synchronous = value;
+            }
+        }
+
+        /// <summary>
         /// The current state of the connection.  
         /// Lock on StateLock before accessing.
         /// </summary>
@@ -538,7 +566,6 @@ namespace jabber.connection
 
 			lock (StateLock)
 			{
-				InitializeStream();
 				Address addr = new Address(m_server, m_port);
 				m_state = ConnectingState.Instance;
 
@@ -558,7 +585,7 @@ namespace jabber.connection
                         break;
                        
                     case ProxyType.None:
-                        m_sock = new AsyncSocket(m_watcher, this, m_ssl);
+                        m_sock = new AsyncSocket(m_watcher, this, m_ssl, m_synch);
                         break;
 
 					default:
@@ -782,7 +809,15 @@ namespace jabber.connection
                     OnConnect(this, (AsyncSocket) m_sock);
             }
 
-            m_sock.RequestRead();
+            if (m_synch)
+            {
+                m_stream.Start();
+            }
+            else
+            {
+                m_sock.RequestRead();
+            }
+
             if (m_accept != null)
             {
                 m_accept.Close();
@@ -791,18 +826,24 @@ namespace jabber.connection
             return false;           
         }
 
-        bool ISocketEventListener.OnRead(bedrock.net.AsyncSocket sock, byte[] buf, int offset, int count)
+        private void ReadComplete(object sender, byte[] buf, int offset, int count)
         {
-            m_timer.Change(m_keepAlive, m_keepAlive);
-            m_stream.Push(buf, offset, count);
-
             if (OnReadText != null)
             {
                 if (InvokeRequired)
-                    CheckedInvoke(OnReadText, new object[] {sock, ENC.GetString(buf, offset, count)});
+                    CheckedInvoke(OnReadText, new object[] {m_sock, ENC.GetString(buf, offset, count)});
                 else
-                    OnReadText(sock, ENC.GetString(buf, offset, count));
+                    OnReadText(m_sock, ENC.GetString(buf, offset, count));
             }
+        }
+
+        bool ISocketEventListener.OnRead(bedrock.net.AsyncSocket sock, byte[] buf, int offset, int count)
+        {
+            m_timer.Change(m_keepAlive, m_keepAlive);
+            ReadComplete(sock, buf, offset, count);
+
+            if (!m_synch)
+                m_stream.Push(buf, offset, count);
 
             return true;
         }
@@ -853,6 +894,8 @@ namespace jabber.connection
         {
             lock (m_stateLock)
             {
+                InitializeStream();
+
                 this.State = ConnectedState.Instance;
                 if (OnConnect != null)
                 {
@@ -865,7 +908,14 @@ namespace jabber.connection
                 jabber.protocol.stream.Stream str = new jabber.protocol.stream.Stream(m_doc, NS);
                 str.To = this.Host;
                 Write(str.StartTag());
-                sock.RequestRead();
+                if (m_synch)
+                {
+                    m_stream.Start();
+                }
+                else
+                {
+                    sock.RequestRead();
+                }
                 m_timer.Change(m_keepAlive, m_keepAlive);
             }
         }
