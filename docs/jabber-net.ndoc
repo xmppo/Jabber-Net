@@ -1,8 +1,8 @@
 <project SchemaVersion="1.3">
     <assemblies>
-        <assembly location="C:\src\jabber-net\bin\Debug\jabber-net.dll" documentation="C:\src\jabber-net\bin\Debug\jabber-net.xml" />
-        <assembly location="C:\src\jabber-net\muzzle\bin\Debug\muzzle.dll" documentation="C:\src\jabber-net\muzzle\bin\Debug\muzzle.xml" />
-        <assembly location="C:\src\jabber-net\stringprep\bin\Debug\stringprep.dll" documentation="C:\src\jabber-net\stringprep\bin\Debug\stringprep.xml" />
+        <assembly location="C:\src\jabber\jabber-net\bin\Debug\jabber-net.dll" documentation="C:\src\jabber\jabber-net\bin\Debug\jabber-net.xml" />
+        <assembly location="C:\src\jabber\jabber-net\muzzle\bin\Debug\muzzle.dll" documentation="C:\src\jabber\jabber-net\muzzle\bin\Debug\muzzle.xml" />
+        <assembly location="C:\src\jabber\jabber-net\stringprep\bin\Debug\stringprep.dll" documentation="C:\src\jabber\jabber-net\stringprep\bin\Debug\stringprep.xml" />
     </assemblies>
     <namespaces>
         <namespace name="bedrock">Low-level utility routines.</namespace>
