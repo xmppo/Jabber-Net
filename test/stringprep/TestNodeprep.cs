@@ -94,6 +94,12 @@ namespace test.stringprep
         {
             TryOne("@", null);
         }
+        [ExpectedException(typeof(ProhibitedCharacterException))]
+        public void Test_Prep_Less()
+        {
+            // U+FE68: small commercial at
+            TryOne("\xFE6b", null);
+        }
     }
 }
 #endif
