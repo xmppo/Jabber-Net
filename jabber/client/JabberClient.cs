@@ -332,10 +332,6 @@ namespace jabber.client
         /// </summary>
         public override void Connect()
         {
-            Debug.Assert(m_user != null);
-            Debug.Assert(m_password != null);
-            Debug.Assert(m_resource != null);
-
             base.Connect();
         }
 
@@ -358,6 +354,10 @@ namespace jabber.client
         /// </summary>
         public void Login()
         {
+            Debug.Assert(m_user != null);
+            Debug.Assert(m_password != null);
+            Debug.Assert(m_resource != null);
+
             AuthIQ aiq = new AuthIQ(Document);
             aiq.Type = IQType.get;
             Auth a = (Auth) aiq.Query;
