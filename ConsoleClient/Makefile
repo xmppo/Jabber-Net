@@ -33,6 +33,7 @@ all: console-client.exe
 console-client.exe: $(SOURCES)
 	-mkdir -p bin/debug
 	cp -f $(BASEDIR)/../bin/debug/jabber-net.dll bin/debug/
+	cp -f $(BASEDIR)/../lib/*.dll bin/debug/
 	cd bin/debug && mcs $(MCS_OPTIONS) -target:exe \
 	-out:"console-client.exe" $(RESOURCES) $(SYSTEM_REFERENCES) \
 	$(SOURCES) $(ASSEMBLIES) 

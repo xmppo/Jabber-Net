@@ -113,9 +113,11 @@ RESOURCES = \
 -resource:$(BASEDIR)/jabber/server/JabberService.bmp
 
 SYSTEM_REFERENCES = -r:System.dll -r:System.Data.dll -r:System.Xml.dll \
--r:System.Windows.Forms.dll -r:System.Drawing.dll
+-r:System.Windows.Forms.dll -r:System.Drawing.dll 
 
 MCS_OPTIONS = -lib:$(BASEDIR)/bin/debug -g -define:NO_STRINGPREP -define:NO_SSL
+
+ASSEMBLIES = -r:$(BASEDIR)/lib/AElfred.dll -r:$(BASEDIR)/lib/SAX.dll
 
 all: jabber-net.dll
 

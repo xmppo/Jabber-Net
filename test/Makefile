@@ -63,6 +63,7 @@ all: jabber-net-tests.dll
 jabber-net-tests.dll: $(SOURCES)
 	-mkdir -p bin/debug
 	-cp $(BASEDIR)/../bin/debug/jabber-net.dll bin/debug
+	-cp $(BASEDIR)/../lib/*.dll bin/debug
 	cd bin/debug && mcs $(MCS_OPTIONS) -target:library \
 	-out:"jabber-net-tests.dll" $(RESOURCES) $(SYSTEM_REFERENCES) \
 	$(SOURCES) $(ASSEMBLIES) 
