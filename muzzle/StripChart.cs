@@ -387,6 +387,17 @@ namespace muzzle
             m_list.Clear();
             ReDraw();
         }
+
+		/// <summary>
+		/// Save the current image to the specified filename.
+		/// </summary>
+		/// <param name="filename"></param>
+		public void SaveTo(string filename)
+		{
+			pictureBox1.Image = ReDrawNoInvoke();
+			pictureBox1.Image.Save(filename);
+		}
+
         private void DesignReDraw()
         {
             if (this.DesignMode)
@@ -405,92 +416,100 @@ namespace muzzle
         {
             pictureBox1.Image = bm;
         }
+		private Bitmap ReDrawNoInvoke()
+		{
+			Font font = this.Font;
+			int fh = font.Height + 2;
+
+			if ((this.Width == 0) || (this.Height == 0)) return null;
+
+			float    h  = this.Height - (2*fh);
+			float    w  = this.Width;
+			float    s  = m_max - m_min;
+			Bitmap   bm = new Bitmap(this.Width, this.Height);
+			Graphics g  = Graphics.FromImage(bm);
+			g.SmoothingMode     = SmoothingMode.AntiAlias;
+			g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+			g.Clear(BackColor);
+			if (m_list.Count > 0)
+			{
+				float stripw = w / ((float)m_hist - 1F);
+				Debug.Assert(s != 0);
+				float y   = 0F;
+				int count = 0;
+
+				// this is kinda ugly, because of the repeated code.  
+				// But it's better, perf-wise, than repeating the switch statement 
+				// every time through the loop.
+				switch (m_style)
+				{
+					case ChartStyle.Bar:
+						RectangleF[] rects = new RectangleF[m_list.Count];
+						foreach (float val in m_list)
+						{
+							y = h * (1 - (val - m_min) / s) + fh;
+							rects[count] = new RectangleF(count * stripw, y, stripw, h - y);
+							count++;
+						}
+						g.FillRectangles(new SolidBrush(ForeColor), rects);
+						break;
+					case ChartStyle.Point:
+						Brush brush = new SolidBrush(ForeColor);
+						float p2 = fh - (m_pointSize / 2F);
+						foreach (float val in m_list)
+						{
+							y = h * (1 - (val - m_min) / s) + p2;
+							g.FillEllipse(brush, count * stripw, y, m_pointSize, m_pointSize);
+							count++;
+						}
+						break;
+					case ChartStyle.Line:
+						if (m_list.Count > 1)
+						{
+							PointF[] points = new PointF[m_list.Count];
+							foreach (float val in m_list)
+							{
+								y = h * (1 - (val - m_min) / s) + fh;
+								points[count] = new PointF(count * stripw, y);
+								count++;
+							}
+							g.DrawLines(new Pen(ForeColor), points);
+						}
+						break;
+				}
+			}
+			Brush textBrush = new SolidBrush(m_textColor);
+
+			if (m_zero)
+			{
+				float y = h * (1 + m_min / s) + fh;
+				g.DrawLine(new Pen(m_zeroColor, 1F), 0, y, w, y);
+			}
+			if (m_label)
+			{
+				g.DrawString(m_min.ToString(), font, textBrush, 2, h + fh);
+				g.DrawString(m_max.ToString(), font, textBrush, 2, 2);
+			}
+			if (m_showLast) 
+			{
+				string last = m_last.ToString();
+				float fw = g.MeasureString(last, font).Width + 2;
+				g.DrawString(last, font, textBrush, (w - fw), 2);
+			}
+			if (m_title != null)
+			{
+				float fw = g.MeasureString(m_title, font).Width;
+				g.DrawString(m_title, font, textBrush, (w - fw)/2F, 2);
+			}		
+			return bm;
+		}
+
         private void ExecReDraw()
         {
-            Font font = this.Font;
-            int fh = font.Height + 2;
+			Bitmap bm = ReDrawNoInvoke();
+            if (bm == null)
+				return;
 
-            if ((this.Width == 0) || (this.Height == 0)) return;
-
-            float    h  = this.Height - (2*fh);
-            float    w  = this.Width;
-            float    s  = m_max - m_min;
-            Bitmap   bm = new Bitmap(this.Width, this.Height);
-            Graphics g  = Graphics.FromImage(bm);
-            g.SmoothingMode     = SmoothingMode.AntiAlias;
-            g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
-            g.Clear(BackColor);
-            if (m_list.Count > 0)
-            {
-                float stripw = w / ((float)m_hist - 1F);
-                Debug.Assert(s != 0);
-                float y   = 0F;
-                int count = 0;
-
-                // this is kinda ugly, because of the repeated code.  
-                // But it's better, perf-wise, than repeating the switch statement 
-                // every time through the loop.
-                switch (m_style)
-                {
-                    case ChartStyle.Bar:
-                        RectangleF[] rects = new RectangleF[m_list.Count];
-                        foreach (float val in m_list)
-                        {
-                            y = h * (1 - (val - m_min) / s) + fh;
-                            rects[count] = new RectangleF(count * stripw, y, stripw, h - y);
-                            count++;
-                        }
-                        g.FillRectangles(new SolidBrush(ForeColor), rects);
-                        break;
-                    case ChartStyle.Point:
-                        Brush brush = new SolidBrush(ForeColor);
-                        float p2 = fh - (m_pointSize / 2F);
-                        foreach (float val in m_list)
-                        {
-                            y = h * (1 - (val - m_min) / s) + p2;
-                            g.FillEllipse(brush, count * stripw, y, m_pointSize, m_pointSize);
-                            count++;
-                        }
-                        break;
-                    case ChartStyle.Line:
-                        if (m_list.Count > 1)
-                        {
-                            PointF[] points = new PointF[m_list.Count];
-                            foreach (float val in m_list)
-                            {
-                                y = h * (1 - (val - m_min) / s) + fh;
-                                points[count] = new PointF(count * stripw, y);
-                                count++;
-                            }
-                            g.DrawLines(new Pen(ForeColor), points);
-                        }
-                        break;
-                }
-            }
-            Brush textBrush = new SolidBrush(m_textColor);
-
-            if (m_zero)
-            {
-                float y = h * (1 + m_min / s) + fh;
-                g.DrawLine(new Pen(m_zeroColor, 1F), 0, y, w, y);
-            }
-            if (m_label)
-            {
-                g.DrawString(m_min.ToString(), font, textBrush, 2, h + fh);
-                g.DrawString(m_max.ToString(), font, textBrush, 2, 2);
-            }
-            if (m_showLast) 
-            {
-                string last = m_last.ToString();
-                float fw = g.MeasureString(last, font).Width + 2;
-                g.DrawString(last, font, textBrush, (w - fw), 2);
-            }
-            if (m_title != null)
-            {
-                float fw = g.MeasureString(m_title, font).Width;
-                g.DrawString(m_title, font, textBrush, (w - fw)/2F, 2);
-            }
-            
             if (this.IsHandleCreated)
                 Invoke(new BMCB(BitBlt), new object[] {bm});
         }
