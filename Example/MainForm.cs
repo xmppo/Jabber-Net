@@ -65,6 +65,8 @@ namespace Example
         private System.Windows.Forms.MenuItem mnuOffline;
         private System.Windows.Forms.MenuItem menuItem1;
         private System.ComponentModel.IContainer components;
+        private System.Windows.Forms.Splitter splitter1;
+        private System.Windows.Forms.TextBox txtDebugInput;
 
         private bool m_err = false;
 
@@ -121,6 +123,8 @@ namespace Example
             this.mnuAway = new System.Windows.Forms.MenuItem();
             this.menuItem1 = new System.Windows.Forms.MenuItem();
             this.mnuOffline = new System.Windows.Forms.MenuItem();
+            this.splitter1 = new System.Windows.Forms.Splitter();
+            this.txtDebugInput = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pnlCon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pnlPresence)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -130,7 +134,7 @@ namespace Example
             // 
             // sb
             // 
-            this.sb.Location = new System.Drawing.Point(0, 244);
+            this.sb.Location = new System.Drawing.Point(0, 416);
             this.sb.Name = "sb";
             this.sb.Panels.AddRange(new System.Windows.Forms.StatusBarPanel[] {
                                                                                   this.pnlCon,
@@ -186,19 +190,18 @@ namespace Example
             // 
             // tabControl1
             // 
-            this.tabControl1.Controls.AddRange(new System.Windows.Forms.Control[] {
-                                                                                      this.tpRoster,
-                                                                                      this.tpDebug});
+            this.tabControl1.Controls.Add(this.tpRoster);
+            this.tabControl1.Controls.Add(this.tpDebug);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(632, 244);
+            this.tabControl1.Size = new System.Drawing.Size(632, 416);
             this.tabControl1.TabIndex = 2;
             // 
             // tpRoster
             // 
-            this.tpRoster.Controls.AddRange(new System.Windows.Forms.Control[] {
-                                                                                   this.roster});
+            this.tpRoster.Controls.Add(this.roster);
             this.tpRoster.Location = new System.Drawing.Point(4, 22);
             this.tpRoster.Name = "tpRoster";
             this.tpRoster.Size = new System.Drawing.Size(624, 218);
@@ -210,6 +213,7 @@ namespace Example
             this.roster.Dock = System.Windows.Forms.DockStyle.Fill;
             this.roster.ImageIndex = 1;
             this.roster.ImageList = this.ilPresence;
+            this.roster.Location = new System.Drawing.Point(0, 0);
             this.roster.Name = "roster";
             this.roster.ShowRootLines = false;
             this.roster.Size = new System.Drawing.Size(624, 218);
@@ -218,27 +222,27 @@ namespace Example
             // 
             // ilPresence
             // 
-            this.ilPresence.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
             this.ilPresence.ImageSize = new System.Drawing.Size(20, 20);
             this.ilPresence.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("ilPresence.ImageStream")));
             this.ilPresence.TransparentColor = System.Drawing.Color.Transparent;
             // 
             // tpDebug
             // 
-            this.tpDebug.Controls.AddRange(new System.Windows.Forms.Control[] {
-                                                                                  this.debug});
+            this.tpDebug.Controls.Add(this.splitter1);
+            this.tpDebug.Controls.Add(this.debug);
+            this.tpDebug.Controls.Add(this.txtDebugInput);
             this.tpDebug.Location = new System.Drawing.Point(4, 22);
             this.tpDebug.Name = "tpDebug";
-            this.tpDebug.Size = new System.Drawing.Size(624, 218);
+            this.tpDebug.Size = new System.Drawing.Size(624, 390);
             this.tpDebug.TabIndex = 0;
             this.tpDebug.Text = "Debug";
             // 
             // debug
             // 
             this.debug.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.debug.Location = new System.Drawing.Point(0, 0);
             this.debug.Name = "debug";
-            this.debug.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.debug.Size = new System.Drawing.Size(624, 218);
+            this.debug.Size = new System.Drawing.Size(624, 342);
             this.debug.TabIndex = 2;
             this.debug.Text = "";
             this.debug.WordWrap = false;
@@ -276,14 +280,33 @@ namespace Example
             this.mnuOffline.Text = "Offline";
             this.mnuOffline.Click += new System.EventHandler(this.mnuOffline_Click);
             // 
+            // splitter1
+            // 
+            this.splitter1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.splitter1.Location = new System.Drawing.Point(0, 339);
+            this.splitter1.Name = "splitter1";
+            this.splitter1.Size = new System.Drawing.Size(624, 3);
+            this.splitter1.TabIndex = 3;
+            this.splitter1.TabStop = false;
+            // 
+            // txtDebugInput
+            // 
+            this.txtDebugInput.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.txtDebugInput.Location = new System.Drawing.Point(0, 342);
+            this.txtDebugInput.Multiline = true;
+            this.txtDebugInput.Name = "txtDebugInput";
+            this.txtDebugInput.Size = new System.Drawing.Size(624, 48);
+            this.txtDebugInput.TabIndex = 4;
+            this.txtDebugInput.Text = "";
+            this.txtDebugInput.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtDebugInput_KeyUp);
+            // 
             // MainForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-            this.ClientSize = new System.Drawing.Size(632, 266);
+            this.ClientSize = new System.Drawing.Size(632, 438);
             this.ContextMenu = this.mnuPresence;
-            this.Controls.AddRange(new System.Windows.Forms.Control[] {
-                                                                          this.tabControl1,
-                                                                          this.sb});
+            this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.sb);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
             this.Text = "MainForm";
@@ -525,6 +548,16 @@ namespace Example
         {
             m_err = true;
             pnlCon.Text = "Stream error: " + rp.InnerText;
+        }
+
+        private void txtDebugInput_KeyUp(object sender, System.Windows.Forms.KeyEventArgs e)
+        {
+            if ((e.KeyCode == Keys.Enter) && e.Control)
+            {
+                jc.Write(txtDebugInput.Text);
+                txtDebugInput.Clear();
+            }
+        
         }
     }
 
