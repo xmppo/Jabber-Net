@@ -37,6 +37,7 @@ namespace jabber.protocol.client
     /// <summary>
     /// Error codes for IQ and message
     /// </summary>
+    [RCS(@"$Header$")]
     public enum ErrorCode
     {
         /// <summary>

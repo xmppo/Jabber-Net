@@ -37,6 +37,7 @@ namespace jabber.protocol.x
     /// <summary>
     /// XData types.
     /// </summary>
+    [RCS(@"$Header$")]
     public enum XDataType
     {
         /// <summary>
@@ -156,6 +157,7 @@ namespace jabber.protocol.x
     /// Types of fields.  This enum doesn't exactly match the JEP, 
     /// since most of the field types aren't valid identifiers in C#.
     /// </summary>
+    [RCS(@"$Header$")]
     public enum FieldType
     {
         /// <summary>

@@ -31,11 +31,14 @@ using System;
 using System.Collections;
 using System.Diagnostics;
 
+using bedrock.util;
+
 namespace bedrock.collections
 {
     /// <summary>
     /// Summary description for SkipList.
     /// </summary>
+    [RCS(@"$Header$")]
     public class SkipList : IEnumerable, IDictionary
     {
         /// <summary>

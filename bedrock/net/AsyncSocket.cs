@@ -59,6 +59,7 @@ namespace bedrock.net
         /// <summary>
         /// Socket states.
         /// </summary>
+        [RCS(@"$Header$")]
         public enum State
         {
             /// <summary>

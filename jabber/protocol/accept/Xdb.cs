@@ -37,6 +37,7 @@ namespace jabber.protocol.accept
     /// <summary>
     /// The type attribute
     /// </summary>
+    [RCS(@"$Header$")]
     public enum XdbType
     {
         /// <summary>
@@ -64,6 +65,7 @@ namespace jabber.protocol.accept
     /// <summary>
     /// The action attribute.
     /// </summary>
+    [RCS(@"$Header$")]
     public enum XdbAction
     {
         /// <summary>

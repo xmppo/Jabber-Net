@@ -42,6 +42,7 @@ namespace jabber.connection
     /// <summary>
     /// Summary description for SocketElementStream.
     /// </summary>
+    [RCS(@"$Header$")]
     abstract public class SocketElementStream : 
         System.ComponentModel.Component, 
         ISocketEventListener

@@ -467,6 +467,7 @@ namespace bedrock.util
     /// </summary>
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Method,
                     AllowMultiple=false)]
+    [RCS(@"$Header$")]
     public class CommandLineAttribute : Attribute
     {
         private string m_commandFlag = null;

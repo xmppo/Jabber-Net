@@ -47,6 +47,7 @@ namespace jabber.server
     /// This list will grow over time to include
     /// queued connections, direct (in-proc) connections, etc.
     /// </summary>
+    [RCS(@"$Header$")]
     public enum ComponentType
     {
         /// <summary>
@@ -350,6 +351,7 @@ namespace jabber.server
     /// <summary>
     /// Waiting for handshake result.
     /// </summary>
+    [RCS(@"$Header$")]
     public class HandshakingState : jabber.connection.BaseState
     {
         /// <summary>
@@ -361,6 +363,7 @@ namespace jabber.server
     /// <summary>
     /// Waiting for socket connection.
     /// </summary>
+    [RCS(@"$Header$")]
     public class AcceptingState : jabber.connection.BaseState
     {
         /// <summary>

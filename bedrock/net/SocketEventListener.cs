@@ -36,6 +36,7 @@ namespace bedrock.net
     /// events.  This is an interface instead of events in order
     /// to preserve symmetry with libbedrock.
     /// </summary>
+    [RCS(@"$Header$")]
     public interface ISocketEventListener
     {
         /// <summary>

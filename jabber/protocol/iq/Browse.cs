@@ -55,6 +55,7 @@ namespace jabber.protocol.iq
     /// <summary>
 	/// Browse IQ query.
 	/// </summary>
+    [RCS(@"$Header$")]
     public class Browse : Element
     {
         /// <summary>

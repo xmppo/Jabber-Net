@@ -227,6 +227,7 @@ namespace test.bedrock.util
         FOO,
         BAR
     }
+    
     public class TestGetOpt : GetOpt
     {
         [CommandLine("f", Description = "Foo or not")]

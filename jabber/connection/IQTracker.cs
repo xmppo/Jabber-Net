@@ -33,6 +33,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Xml;
 
+using bedrock.util;
 using jabber.protocol.client;
 
 namespace jabber.connection
@@ -45,6 +46,7 @@ namespace jabber.connection
     /// <summary>
     /// Track outstanding IQ requests.
     /// </summary>
+    [RCS(@"$Header$")]
     public class IQTracker
     {
         private Hashtable           m_pending = new Hashtable();

@@ -37,6 +37,7 @@ namespace jabber.protocol.accept
     /// <summary>
     /// The type field in a log tag.
     /// </summary>
+    [RCS(@"$Header$")]
     public enum LogType
     {
         /// <summary>

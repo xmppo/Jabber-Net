@@ -73,6 +73,7 @@ namespace jabber.protocol
     /// <summary>
     /// Interface for packet factories to implement.
     /// </summary>
+    [RCS(@"$Header$")]
     public interface IPacketTypes
     {
         /// <summary>

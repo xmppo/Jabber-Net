@@ -559,6 +559,7 @@ namespace jabber.client
     /// <summary>
     /// Getting authorization information
     /// </summary>
+    [RCS(@"$Header$")]
     public class GetAuthState : jabber.connection.BaseState
     {
         /// <summary>
@@ -570,6 +571,7 @@ namespace jabber.client
     /// <summary>
     /// Setting authorization information
     /// </summary>
+    [RCS(@"$Header$")]
     public class SetAuthState : jabber.connection.BaseState
     {
         /// <summary>
@@ -581,6 +583,7 @@ namespace jabber.client
     /// <summary>
     /// Waiting for manual login.
     /// </summary>
+    [RCS(@"$Header$")]
     public class ManualLoginState : jabber.connection.BaseState
     {
         /// <summary>

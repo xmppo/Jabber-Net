@@ -38,7 +38,8 @@ namespace jabber.protocol.x
 	/// Types of events
 	/// </summary>
 	[Flags]
-	public enum EventType
+    [RCS(@"$Header$")]
+    public enum EventType
 	{
 		/// <summary>
 		/// No event type specified.

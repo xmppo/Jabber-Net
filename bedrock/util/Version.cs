@@ -43,7 +43,7 @@ namespace bedrock.util
     /// <see cref="SourceSafeAttribute"/>
     /// <see cref="RCSAttribute"/>
     [RCS(@"$Header$")]
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface,
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Enum | AttributeTargets.Struct,
                     AllowMultiple = false, 
                     Inherited     = false)]
     public abstract class SourceVersionAttribute : Attribute
@@ -316,7 +316,8 @@ namespace bedrock.util
     /// SourceVersionAttribute sta = SourceVersionAttribute.GetVersion(typeof(foo));
     /// </example>
     [RCS(@"$Header$")]
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple=false, Inherited=false)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Enum | AttributeTargets.Struct,
+                    AllowMultiple=false, Inherited=false)]
     public class StarTeamAttribute : SourceVersionAttribute
     {
         // Dammit gumby.  Don't mess up my regex.
@@ -374,7 +375,8 @@ namespace bedrock.util
     /// Version control attribute for RCS and CVS.
     /// </summary>
     [RCS(@"$Header$")]
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple=false, Inherited=false)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Enum | AttributeTargets.Struct,
+                    AllowMultiple=false, Inherited=false)]
     public class RCSAttribute : SourceVersionAttribute
     {
         // Header: /u1/html/cvsroot/www.cyclic.com/RCS-html/info-ref.html,v 1.1 1999/04/14 19:04:02 kingdon Exp
@@ -436,7 +438,8 @@ namespace bedrock.util
     /// some new release.
     /// </summary>
     [RCS(@"$Header$")]
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple=false, Inherited=false)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Enum | AttributeTargets.Struct, 
+                    AllowMultiple=false, Inherited=false)]
     public class SourceSafeAttribute : SourceVersionAttribute
     {
         // Header: /t.cs 1     2/14/01 3:57p Hildebzj 

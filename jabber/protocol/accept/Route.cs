@@ -37,6 +37,7 @@ namespace jabber.protocol.accept
     /// <summary>
     /// The type field in a route tag.
     /// </summary>
+    [RCS(@"$Header$")]
     public enum RouteType
     {
         /// <summary>

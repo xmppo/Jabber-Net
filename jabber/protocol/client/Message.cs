@@ -37,6 +37,7 @@ namespace jabber.protocol.client
     /// <summary>
     /// Message type attribute
     /// </summary>
+    [RCS(@"$Header$")]
     public enum MessageType
     {
         /// <summary>

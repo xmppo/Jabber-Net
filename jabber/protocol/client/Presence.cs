@@ -37,6 +37,7 @@ namespace jabber.protocol.client
     /// <summary>
     /// Presence type attribute
     /// </summary>
+    [RCS(@"$Header$")]
     public enum PresenceType
     {
         /// <summary>

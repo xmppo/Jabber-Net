@@ -28,12 +28,14 @@
  * 
  * --------------------------------------------------------------------------*/
 using System;
+using bedrock.util;
 
 namespace jabber.connection
 {
     /// <summary>
     /// Base class for all states.
     /// </summary>
+    [RCS(@"$Header$")]
     public abstract class BaseState
     {
     }
@@ -42,6 +44,7 @@ namespace jabber.connection
     /// Up and running.  If subclasses change the state transition
     /// approach, they should end at the RunningState state.
     /// </summary>
+    [RCS(@"$Header$")]
     public class RunningState : BaseState
     {
         /// <summary>
@@ -53,6 +56,7 @@ namespace jabber.connection
     /// <summary>
     /// Not connected.
     /// </summary>
+    [RCS(@"$Header$")]
     public class ClosedState : BaseState
     {
         /// <summary>
@@ -64,6 +68,7 @@ namespace jabber.connection
     /// <summary>
     /// In the process of connecting.  DNS lookup, socket setup, etc.
     /// </summary>
+    [RCS(@"$Header$")]
     public class ConnectingState : BaseState
     {
         /// <summary>
@@ -75,6 +80,7 @@ namespace jabber.connection
     /// <summary>
     /// Have a connected socket.
     /// </summary>
+    [RCS(@"$Header$")]
     public class ConnectedState : BaseState
     {
         /// <summary>
@@ -86,6 +92,7 @@ namespace jabber.connection
     /// <summary>
     /// Got the stream:stream.
     /// </summary>
+    [RCS(@"$Header$")]
     public class StreamState : BaseState
     {
         /// <summary>
@@ -97,6 +104,7 @@ namespace jabber.connection
     /// <summary>
     /// A close was requested, but hasn't yet finalized.
     /// </summary>
+    [RCS(@"$Header$")]
     public class ClosingState : BaseState
     {
         /// <summary>
@@ -108,6 +116,7 @@ namespace jabber.connection
     /// <summary>
     /// Paused, waiting for reconnect timeout.
     /// </summary>
+    [RCS(@"$Header$")]
     public class ReconnectingState : BaseState
     {
         /// <summary>
@@ -119,6 +128,7 @@ namespace jabber.connection
     /// <summary>
     /// Accepting incoming socket connections.
     /// </summary>
+    [RCS(@"$Header$")]
     public class AcceptingState : BaseState
     {
         /// <summary>

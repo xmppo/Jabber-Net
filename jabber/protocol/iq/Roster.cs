@@ -107,6 +107,7 @@ namespace jabber.protocol.iq
     /// <summary>
     /// The current status of the subscription related to this item.
     /// </summary>
+    [RCS(@"$Header$")]
     public enum Subscription
     {
         /// <summary>
@@ -134,6 +135,7 @@ namespace jabber.protocol.iq
     /// <summary>
     /// An optional attribute specifying the current status of a request to this contact.
     /// </summary>
+    [RCS(@"$Header$")]
     public enum Ask
     {
         /// <summary>

@@ -37,6 +37,7 @@ namespace jabber.protocol.client
     /// <summary>
     /// IQ type attribute
     /// </summary>
+    [RCS(@"$Header$")]
     public enum IQType
     {
         /// <summary>

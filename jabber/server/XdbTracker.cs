@@ -32,6 +32,7 @@ using System.Collections;
 using System.Diagnostics;
 using System.Xml;
 
+using bedrock.util;
 using jabber.protocol.accept;
 
 namespace jabber.server
@@ -44,6 +45,7 @@ namespace jabber.server
     /// <summary>
     /// Track outstanding XDB requests.
     /// </summary>
+    [RCS(@"$Header$")]
     public class XdbTracker
     {
         // this hash doesn't need concurrency control, i don't think,

@@ -28,13 +28,15 @@
  * 
  * --------------------------------------------------------------------------*/
 using System;
+using bedrock.util;
 
 namespace jabber.protocol.client
 {
 	/// <summary>
 	/// A jabber error, in an IQ.
 	/// </summary>
-	public class ProtocolException : Exception
+    [RCS(@"$Header$")]
+    public class ProtocolException : Exception
 	{
 		private ErrorCode m_code;
 		private string m_message;
