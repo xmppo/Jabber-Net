@@ -99,6 +99,7 @@ namespace jabber.connection
         private string         m_ProxyPassword  = null;
         private bool           m_ssl            = false;
         private bool           m_sslOn          = false;
+        private bool           m_autoStartTLS   = true;
         private bool           m_synch          = true;
         private Thread         m_thread         = null;
         private bool           m_plaintext      = false;
@@ -336,6 +337,16 @@ namespace jabber.connection
 #endif
                 m_ssl = value; 
             }
+        }
+
+        /// <summary>
+        /// Allow Start-TLS on connection, if the server supports it
+        /// </summary>
+        [Browsable(false)]
+        public bool AutoStartTLS
+        {
+            get { return m_autoStartTLS; }
+            set { m_autoStartTLS = value; }
         }
 
 #if !NO_SSL
@@ -955,7 +966,7 @@ namespace jabber.connection
                 // don't do starttls if we're already on an SSL socket.
                 // bad server setup, but no skin off our teeth, we're already
                 // SSL'd.  Also, start-tls won't work when polling.
-                if ((f.StartTLS != null) && (!m_sslOn) && (m_ProxyType != ProxyType.HTTP_Polling))
+                if (m_autoStartTLS && (f.StartTLS != null) && (!m_sslOn) && (m_ProxyType != ProxyType.HTTP_Polling))
                 {
                     // start-tls
                     lock (m_stateLock) 
