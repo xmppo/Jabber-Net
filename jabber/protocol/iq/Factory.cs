@@ -52,6 +52,7 @@ namespace jabber.protocol.iq
             new QnameType("query", URI.OOB,      typeof(jabber.protocol.iq.OOB)),
             new QnameType("query", URI.TIME,     typeof(jabber.protocol.iq.Time)),
             new QnameType("query", URI.VERSION,  typeof(jabber.protocol.iq.Version)),
+            new QnameType("query", URI.LAST,     typeof(jabber.protocol.iq.Last)),
             new QnameType("item",  URI.BROWSE,   typeof(jabber.protocol.iq.Browse)),
 
 			// VCard
@@ -61,7 +62,7 @@ namespace jabber.protocol.iq
 			new QnameType("TEL",   URI.VCARD, typeof(jabber.protocol.iq.VCard.VTelephone)),
             new QnameType("EMAIL", URI.VCARD, typeof(jabber.protocol.iq.VCard.VEmail)),
             new QnameType("GEO",   URI.VCARD, typeof(jabber.protocol.iq.VCard.VGeo)),
-            new QnameType("PHOTO",   URI.VCARD, typeof(jabber.protocol.iq.VCard.VPhoto))
+            new QnameType("PHOTO", URI.VCARD, typeof(jabber.protocol.iq.VCard.VPhoto))
     };
 
         QnameType[] IPacketTypes.Types { get { return s_qnt; } }

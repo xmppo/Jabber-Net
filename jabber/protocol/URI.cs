@@ -94,6 +94,10 @@ namespace jabber.protocol
         /// </summary>
         public const string TIME     = "jabber:iq:time";
         /// <summary>
+        /// Last activity
+        /// </summary>
+        public const string LAST     = "jabber:iq:last";
+        /// <summary>
         /// Client or server version
         /// </summary>
         public const string VERSION  = "jabber:iq:version";

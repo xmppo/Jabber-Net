@@ -41,67 +41,67 @@ namespace jabber.protocol.client
     public enum ErrorCode
     {
         /// <summary>
-        /// Bad request
+        /// Bad request (400)
         /// </summary>
         BAD_REQUEST             = 400,
         /// <summary>
-        /// Unauthorized
+        /// Unauthorized (401)
         /// </summary>
         UNAUTHORIZED            = 401,
         /// <summary>
-        /// Payment required
+        /// Payment required (402)
         /// </summary>
         PAYMENT_REQUIRED        = 402,
         /// <summary>
-        /// Forbidden
+        /// Forbidden (403)
         /// </summary>
         FORBIDDEN               = 403,
         /// <summary>
-        /// Not found
+        /// Not found (404)
         /// </summary>
         NOT_FOUND               = 404,
         /// <summary>
-        /// Not allowed
+        /// Not allowed (405)
         /// </summary>
         NOT_ALLOWED             = 405,
         /// <summary>
-        /// Not acceptable
+        /// Not acceptable (406)
         /// </summary>
         NOT_ACCEPTABLE          = 406,
         /// <summary>
-        /// Registration required
+        /// Registration required (407)
         /// </summary>
         REGISTRATION_REQUIRED   = 407,
         /// <summary>
-        /// Request timeout
+        /// Request timeout (408)
         /// </summary>
         REQUEST_TIMEOUT         = 408,
         /// <summary>
-        /// Conflict
+        /// Conflict (409)
         /// </summary>
         CONFLICT                = 409,
         /// <summary>
-        /// Internal server error
+        /// Internal server error (500)
         /// </summary>
         INTERNAL_SERVER_ERROR   = 500,
         /// <summary>
-        /// Not implemented
+        /// Not implemented (501)
         /// </summary>
         NOT_IMPLEMENTED         = 501,
         /// <summary>
-        /// Remote server error
+        /// Remote server error (502)
         /// </summary>
         REMOTE_SERVER_ERROR     = 502,
         /// <summary>
-        /// Service unavailable
+        /// Service unavailable (503)
         /// </summary>
         SERVICE_UNAVAILABLE     = 503,
         /// <summary>
-        /// Remote server timeout
+        /// Remote server timeout (504)
         /// </summary>
         REMOTE_SERVER_TIMEOUT   = 504,
         /// <summary>
-        /// Disconnected
+        /// Disconnected (510)
         /// </summary>
         DISCONNECTED            = 510
     }

@@ -79,6 +79,11 @@
                     AssemblyName = "Org.Mentalis.Security"
                     HintPath = "Org.Mentalis.Security.dll"
                 />
+                <Reference
+                    Name = "System.Data"
+                    AssemblyName = "System.Data"
+                    HintPath = "..\..\..\WINNT\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -372,6 +377,11 @@
                 />
                 <File
                     RelPath = "jabber\protocol\iq\Factory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "jabber\protocol\iq\Last.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
