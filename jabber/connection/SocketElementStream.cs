@@ -554,6 +554,13 @@ namespace jabber.connection
             get { return m_stateLock; }
         }
 
+        private string GetHost()
+        {
+            if ((m_server == null) || (m_server == ""))
+                return m_to;
+            return m_server;
+        }
+
         /// <summary>
         /// Have we authenticated?  Locks on StateLock
         /// </summary>
@@ -738,7 +745,7 @@ namespace jabber.connection
                 }
                 else
                 {
-                    Address addr = new Address((m_server == null) ? m_to : m_server, m_port);
+                    Address addr = new Address(GetHost(), m_port);
                     m_sock.Connect(addr);
                 }
             }
@@ -750,7 +757,7 @@ namespace jabber.connection
         private void SynchConnectThread()
         {
             Debug.Assert(m_synch, "Cannot call SynchConnectThread unless in synch mode");
-            Address addr = new Address((m_server == null) ? m_to : m_server, m_port);
+            Address addr = new Address(GetHost(), m_port);
             m_sock.Connect(addr);
         }
 
@@ -929,21 +936,18 @@ namespace jabber.connection
                     return;
                 }
 
-                if (f.StartTLS != null)
+                // don't do starttls if we're already on an SSL socket.
+                // bad server setup, but no skin off our teeth, we're already
+                // SSL'd.  Also, start-tls won't work when polling.
+                if ((f.StartTLS != null) && (!m_sslOn) && (m_ProxyType != ProxyType.HTTP_Polling))
                 {
-                    // don't do starttls if we're already on an SSL socket.
-                    // bad server setup, but no skin off our teeth, we're already
-                    // SSL'd.
-                    if (!m_sslOn)
+                    // start-tls
+                    lock (m_stateLock) 
                     {
-                        // start-tls
-                        lock (m_stateLock) 
-                        {
-                            m_state = StartTLSState.Instance;
-                        }
-                        this.Write(new StartTLS(m_doc));
-                        return;
+                        m_state = StartTLSState.Instance;
                     }
+                    this.Write(new StartTLS(m_doc));
+                    return;
                 }
 
                 // not authenticated yet.  Note: we'll get a stream:features

@@ -22,11 +22,11 @@ namespace bedrock.util
 {
     /// <summary>
     /// XML configuration file manager.
-    /// TODO: this still needs some work.
     /// </summary>
     [RCS(@"$Header$")]
     public class ConfigFile
     {
+        private string m_file;
         private XmlDocument m_doc;
         private static Hashtable s_instances = new Hashtable();
         /// <summary>
@@ -54,14 +54,15 @@ namespace bedrock.util
         {
             // Don't call Tracer from here!
             m_doc = new XmlDocument();
-                        string d = Path.GetDirectoryName(System.Environment.GetCommandLineArgs()[0]);
+            string d = Path.GetDirectoryName(System.Environment.GetCommandLineArgs()[0]);
             DirectoryInfo p;
             while (d != null)
             {
                 FileInfo fi = new FileInfo(Path.Combine(d, name));
                 if (fi.Exists)
                 {
-                    m_doc.Load(fi.FullName);
+                    m_file = fi.FullName;
+                    m_doc.Load(m_file);
                     return;
                 }
                 p = fi.Directory.Parent;
@@ -72,6 +73,15 @@ namespace bedrock.util
             
             throw new FileNotFoundException(name);
         }
+
+        /// <summary>
+        /// The full path of the filename being used.
+        /// </summary>
+        public string Filename
+        {
+            get { return m_file; }
+        }
+
         /// <summary>
         /// Get the configuration file XML node associated 
         /// with a given XPath query.

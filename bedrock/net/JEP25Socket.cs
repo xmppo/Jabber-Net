@@ -248,29 +248,27 @@ namespace bedrock.net
             m_curPoll = m_minPoll;
             m_id = null;
 
+            MemoryStream ms = new MemoryStream();
+            CookieContainer cookies = new CookieContainer(5);
+            byte[] readbuf = new byte[1024];
+
             Stream rs;
             byte[] buf;
-            byte[] readbuf = new byte[1024];
             int readlen;
             HttpWebResponse resp;
-            HttpWebRequest req  = (HttpWebRequest) WebRequest.Create(m_url);
-            MemoryStream ms     = new MemoryStream();
-            req.CookieContainer = new CookieContainer(5);
-            req.ContentType     = CONTENT_TYPE;
-            req.Method          = METHOD;
-            
-            if (m_proxy != null)
-                req.Proxy = m_proxy;
-            
+            HttpWebRequest req;
             Stream s;
             WriteBuf start;
+
             int count;
             while (m_running)
             {
                 lock (m_lock)
                 {
                     if (m_writeQ.Count == 0)
+                    {
                         Monitor.Wait(m_lock, (int)(m_curPoll * 1000.0));
+                    }
                 }
                 // did we get closed?
                 if (!m_running)
@@ -305,6 +303,14 @@ namespace bedrock.net
                     count += b.len;
                     ms.Write(b.buf, b.offset, b.len);
                 }
+
+                req = (HttpWebRequest) WebRequest.Create(m_url);
+                req.CookieContainer = cookies;
+                req.ContentType     = CONTENT_TYPE;
+                req.Method          = METHOD;
+            
+                if (m_proxy != null)
+                    req.Proxy = m_proxy;
                 req.ContentLength = count;
                 s = req.GetRequestStream();
                 s.Write(start.buf, start.offset, start.len);
@@ -329,7 +335,6 @@ namespace bedrock.net
                     return;
                 }
 
-                Debug.WriteLine(resp.Headers["Set-Cookie"]);
                 CookieCollection cc = resp.Cookies;
                 Debug.Assert(cc != null);
 
@@ -385,13 +390,14 @@ namespace bedrock.net
                 if (ms.Length > 0)
                 {
                     buf = ms.ToArray();
-                    if (!m_listener.OnRead(this, buf, 0, buf.Length))
+                    
+                    if (m_pipe != null)
+                        m_pipe.Write(buf);
+                    else if (!m_listener.OnRead(this, buf, 0, buf.Length))
                     {
                         Close();
                         return;
                     }
-                    if (m_pipe != null)
-                        m_pipe.Write(buf);
                     buf = null;
                     m_curPoll = m_minPoll;
                 }
