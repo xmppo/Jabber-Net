@@ -68,6 +68,8 @@ namespace jabber.connection
         private int            m_port       = 5222;
         private int            m_autoReconnect = 30;
 
+        private XmlNamespaceManager m_ns;
+
         private ISynchronizeInvoke m_invoker = null;
         
         /// <summary>
@@ -82,7 +84,8 @@ namespace jabber.connection
         public SocketElementStream(System.ComponentModel.IContainer container)
         {
             container.Add(this);
-			m_watcher = new SocketWatcher(5);
+			m_watcher = new SocketWatcher();
+            m_ns = new XmlNamespaceManager(m_doc.NameTable);
         }
 
         /// <summary>
@@ -90,8 +93,9 @@ namespace jabber.connection
         /// </summary>
         public SocketElementStream()
         {
-			m_watcher = new SocketWatcher(5);
-		}
+			m_watcher = new SocketWatcher();
+            m_ns = new XmlNamespaceManager(m_doc.NameTable);
+        }
 
 		/// <summary>
 		/// Create a SocketElementStream with an existing SocketWatcher, so that you can do
@@ -101,7 +105,8 @@ namespace jabber.connection
 		public SocketElementStream(SocketWatcher watcher)
 		{
 			m_watcher = watcher;
-		}
+            m_ns = new XmlNamespaceManager(m_doc.NameTable);
+        }
 
         /// <summary>
         /// Set up the element stream.  This is the place to add factories.
@@ -313,39 +318,6 @@ namespace jabber.connection
         public void AddType(string localName, string ns, Type t)
         {
             m_stream.AddType(localName, ns, t);
-        }
-
-        /// <summary>
-        /// Register a callback, so that if a packet arrives that matches the given xpath expression,
-        /// the callback fires.
-        /// </summary>
-        /// <param name="xpath">The xpath expression to search for</param>
-        /// <param name="cb">The callback to call when the xpath matches</param>
-        /// <returns>A guid that can be used to unregister the callback</returns>
-        public Guid AddCallback(string xpath, ProtocolHandler cb)
-        {
-            CallbackData cbd = new CallbackData(xpath, cb);
-            m_callbacks.Add(cbd);
-            return cbd.Guid;
-        }
-
-        /// <summary>
-        /// Remove the callbacks 
-        /// </summary>
-        /// <param name="guid"></param>
-        public void RemoveCallback(Guid guid)
-        {
-            int count = 0;
-            foreach (CallbackData cbd in m_callbacks)
-            {
-                if (cbd.Guid == guid)
-                {
-                    m_callbacks.RemoveAt(count);
-                    return;
-                }
-                count++;
-            }
-            throw new ArgumentException("Unknown Guid");
         }
 
         /// <summary>
@@ -583,6 +555,51 @@ namespace jabber.connection
         }
         #endregion
 
+
+        /// <summary>
+        /// Register a callback, so that if a packet arrives that matches the given xpath expression,
+        /// the callback fires.  Use <see cref="AddNamespace"/> to add namespace prefixes.
+        /// </summary>
+        /// <example>jc.AddCallback("self::iq[@type='result']/roster:query", new ProtocolHandler(GotRoster));</example>
+        /// <param name="xpath">The xpath expression to search for</param>
+        /// <param name="cb">The callback to call when the xpath matches</param>
+        /// <returns>A guid that can be used to unregister the callback</returns>
+        public Guid AddCallback(string xpath, ProtocolHandler cb)
+        {
+            CallbackData cbd = new CallbackData(xpath, cb);
+            m_callbacks.Add(cbd);
+            return cbd.Guid;
+        }
+
+        /// <summary>
+        /// Remove a callback added with <see cref="AddCallback"/>.
+        /// </summary>
+        /// <param name="guid"></param>
+        public void RemoveCallback(Guid guid)
+        {
+            int count = 0;
+            foreach (CallbackData cbd in m_callbacks)
+            {
+                if (cbd.Guid == guid)
+                {
+                    m_callbacks.RemoveAt(count);
+                    return;
+                }
+                count++;
+            }
+            throw new ArgumentException("Unknown Guid", "guid");
+        }
+
+        /// <summary>
+        /// Add a namespace prefix, for use with callback xpath expressions added with <see cref="AddCallback"/>.
+        /// </summary>
+        /// <param name="prefix">The prefix to use</param>
+        /// <param name="uri">The URI associated with the prefix</param>
+        public void AddNamespace(string prefix, string uri)
+        {
+            m_ns.AddNamespace(prefix, uri);
+        }
+
         private void CheckAll(XmlElement elem)
         {
             foreach (CallbackData cbd in m_callbacks)
@@ -616,9 +633,17 @@ namespace jabber.connection
 
             public void Check(SocketElementStream sender, XmlElement elem)
             {
-                if (elem.SelectSingleNode(m_xpath) != null)
+                try
                 {
-                    sender.CheckedInvoke(m_cb, new object[] {sender, elem} );
+                    XmlNode n = elem.SelectSingleNode(m_xpath, sender.m_ns);
+                    if (n != null)
+                    {
+                        sender.CheckedInvoke(m_cb, new object[] {sender, elem} );
+                    }
+                }
+                catch (Exception e)
+                {
+                    sender.FireOnError(e);
                 }
             }
         }
