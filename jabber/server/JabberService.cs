@@ -205,7 +205,7 @@ namespace jabber.server
         /// The stream namespace for this connection.
         /// </summary>
         [Browsable(false)]
-        protected override string Namespace
+        protected override string NS
         {
             get { return URI.ACCEPT; }
         }

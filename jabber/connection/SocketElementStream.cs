@@ -277,7 +277,7 @@ namespace jabber.connection
         /// The namespace for this connection.
         /// </summary>
         [Browsable(false)]
-        protected abstract string Namespace
+        protected abstract string NS
         {
             get;
         }
@@ -504,7 +504,7 @@ namespace jabber.connection
         void ISocketEventListener.OnConnect(bedrock.net.AsyncSocket sock)
         {
             this.State = ConnectedState.Instance;
-            jabber.protocol.stream.Stream str = new jabber.protocol.stream.Stream(m_doc, Namespace);
+            jabber.protocol.stream.Stream str = new jabber.protocol.stream.Stream(m_doc, NS);
             str.To = this.Host;
             Write(str.StartTag());
             sock.RequestRead();
