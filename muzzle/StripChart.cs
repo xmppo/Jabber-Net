@@ -444,9 +444,10 @@ namespace muzzle
                     break;
                 case ChartStyle.Point:
                     Brush brush = new SolidBrush(ForeColor);
+                    float p2 = fh - (m_pointSize / 2F);
                     foreach (float val in m_list)
                     {
-                        y = h * (1 - (val - m_min) / s) + fh;
+                        y = h * (1 - (val - m_min) / s) + p2;
                         g.FillEllipse(brush, count * stripw, y, m_pointSize, m_pointSize);
                         count++;
                     }
