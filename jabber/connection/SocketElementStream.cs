@@ -2,7 +2,7 @@
  * Copyrights
  * 
  * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2004 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
@@ -95,7 +95,7 @@ namespace jabber.connection
 
         private int            m_port           = 5222;
         private int            m_autoReconnect  = 30000;
-		private bool		   m_reconnect      = false;
+                private bool               m_reconnect      = false;
 
         private ProxyType      m_ProxyType      = ProxyType.None;
         private string         m_ProxyHost      = null;
@@ -690,7 +690,7 @@ namespace jabber.connection
             lock (StateLock)
             {
                 m_state = ConnectingState.Instance;
-				m_reconnect = (m_autoReconnect >= 0);
+                                m_reconnect = (m_autoReconnect >= 0);
 
                 ProxySocket proxy = null;
                 switch (m_ProxyType)
@@ -745,24 +745,24 @@ namespace jabber.connection
             }
         }
 
-		/// <summary>
-		/// If autoReconnect is on, start the timer for reconnect now.
-		/// </summary>
-		private void TryReconnect()
-		{
-			// close was not requested, or autoreconnect turned on.
-			if (m_reconnect)
-			{
-				if (m_reconnectTimer != null)
-					m_reconnectTimer.Dispose();
+                /// <summary>
+                /// If autoReconnect is on, start the timer for reconnect now.
+                /// </summary>
+                private void TryReconnect()
+                {
+                        // close was not requested, or autoreconnect turned on.
+                        if (m_reconnect)
+                        {
+                                if (m_reconnectTimer != null)
+                                        m_reconnectTimer.Dispose();
 
-				m_reconnectTimer = new System.Threading.Timer(
-					new System.Threading.TimerCallback(Reconnect), 
-					null, 
-					m_autoReconnect, 
-					System.Threading.Timeout.Infinite );
-			}
-		}
+                                m_reconnectTimer = new System.Threading.Timer(
+                                        new System.Threading.TimerCallback(Reconnect), 
+                                        null, 
+                                        m_autoReconnect, 
+                                        System.Threading.Timeout.Infinite );
+                        }
+                }
 
         /// <summary>
         /// Close down the connection, as gracefully as possible.
@@ -782,7 +782,7 @@ namespace jabber.connection
             {
                 if ((m_state == RunningState.Instance) && (clean))
                 {
-					m_reconnect = false;
+                                        m_reconnect = false;
                     Write("</stream:stream>");
                 }
                 if (m_state != ClosedState.Instance)
@@ -1226,14 +1226,14 @@ namespace jabber.connection
 
         void ISocketEventListener.OnError(bedrock.net.BaseSocket sock, System.Exception ex)
         {
-			lock (m_stateLock)
-			{
-				m_timer.Change(Timeout.Infinite, Timeout.Infinite);
+                        lock (m_stateLock)
+                        {
+                                m_timer.Change(Timeout.Infinite, Timeout.Infinite);
 
-				BaseState old = m_state;
-				m_state = ClosedState.Instance;
-				m_sock = null;
-			}
+                                BaseState old = m_state;
+                                m_state = ClosedState.Instance;
+                                m_sock = null;
+                        }
 
             if (OnError != null)
             {
@@ -1243,8 +1243,8 @@ namespace jabber.connection
                     OnError(sock, ex);
             }
 
-			TryReconnect();            
-		}
+                        TryReconnect();            
+                }
 
         void ISocketEventListener.OnConnect(bedrock.net.BaseSocket sock)
         {
@@ -1272,15 +1272,15 @@ namespace jabber.connection
 
         void ISocketEventListener.OnClose(bedrock.net.BaseSocket sock)
         {
-			lock (StateLock)
-			{
-				m_timer.Change(Timeout.Infinite, Timeout.Infinite);
+                        lock (StateLock)
+                        {
+                                m_timer.Change(Timeout.Infinite, Timeout.Infinite);
 
-				BaseState old = m_state;
-				m_state = ClosedState.Instance;
-				m_sock = null;
+                                BaseState old = m_state;
+                                m_state = ClosedState.Instance;
+                                m_sock = null;
 
-			}
+                        }
 
             if (OnDisconnect != null)
             {
@@ -1290,8 +1290,8 @@ namespace jabber.connection
                     OnDisconnect(this);
             }
 
-			TryReconnect();
-		}
+                        TryReconnect();
+                }
         #endregion
 
 
@@ -1405,7 +1405,7 @@ namespace jabber.connection
         private void m_stream_OnError(object sender, Exception ex)
         {
             FireOnError(ex);
-			TryReconnect();
+                        TryReconnect();
         }
     }
 }

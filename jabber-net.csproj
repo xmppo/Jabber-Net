@@ -149,6 +149,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "bedrock\io\BufferAggregate.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "bedrock\io\PipeStream.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -327,6 +332,11 @@
                 />
                 <File
                     RelPath = "jabber\protocol\ElementStream.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "jabber\protocol\NS.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -540,11 +550,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "xpnet\BufferAggregate.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "xpnet\ContentToken.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -556,11 +561,6 @@
                 />
                 <File
                     RelPath = "xpnet\Exceptions.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "xpnet\NS.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

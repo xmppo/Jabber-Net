@@ -2,7 +2,7 @@
  * Copyrights
  * 
  * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2004 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
@@ -45,14 +45,14 @@ namespace jabber.protocol
         {
         }
 
-		/// <summary>
-		/// Put bytes into parser.  Used by test routines, only, for convenience.
-		/// </summary>
-		/// <param name="buf"></param>
-		public void Push(byte[] buf)
-		{
-			Push(buf, 0, buf.Length);
-		}
+                /// <summary>
+                /// Put bytes into parser.  Used by test routines, only, for convenience.
+                /// </summary>
+                /// <param name="buf"></param>
+                public void Push(byte[] buf)
+                {
+                        Push(buf, 0, buf.Length);
+                }
 
         /// <summary>
         /// Put bytes into the parser.
@@ -172,7 +172,7 @@ namespace jabber.protocol
             
             m_ns.PushScope();
             
-			// if i have attributes
+                        // if i have attributes
             if ((tok == TOK.START_TAG_WITH_ATTS) ||
                 (tok == TOK.EMPTY_ELEMENT_WITH_ATTS))
             {
@@ -189,8 +189,8 @@ namespace jabber.protocol
                     end =  ct.getAttributeValueEnd(i);
                     val = utf.GetString(buf, start, end - start);
 
-					// <foo b='&amp;'/>
-					// <foo b='&amp;amp;'
+                                        // <foo b='&amp;'/>
+                                        // <foo b='&amp;amp;'
                     // TODO: if val includes &amp;, it gets double-escaped
                     if (name.StartsWith("xmlns:"))
                     {
@@ -200,7 +200,7 @@ namespace jabber.protocol
                     }
                     else if (name == "xmlns")
                     {
-						m_ns.AddNamespace(string.Empty, val);
+                                                m_ns.AddNamespace(string.Empty, val);
                     }
                     else
                     {
@@ -239,14 +239,14 @@ namespace jabber.protocol
                     XmlAttribute attr = m_doc.CreateAttribute(prefix,
                                                               name,
                                                               m_ns.LookupNamespace(prefix));
-					attr.InnerXml = (string)ht[attrname];
+                                        attr.InnerXml = (string)ht[attrname];
                     elem.SetAttributeNode(attr);
                 }
                 else
                 {
                     XmlAttribute attr = m_doc.CreateAttribute(attrname);
-					attr.InnerXml = (string)ht[attrname];
-					elem.SetAttributeNode(attr);
+                                        attr.InnerXml = (string)ht[attrname];
+                                        elem.SetAttributeNode(attr);
                 }
             }
             

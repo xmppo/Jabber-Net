@@ -13,7 +13,7 @@
  * --------------------------------------------------------------------------*/
 using System.Collections;
 
-namespace xpnet
+namespace jabber.protocol
 {
     /// <summary>
     /// Namespace stack.
@@ -67,7 +67,7 @@ namespace xpnet
         {
             foreach (Hashtable ht in m_stack)
             {
-				if ((ht.Count > 0) && (ht.ContainsKey(prefix)))
+                if ((ht.Count > 0) && (ht.ContainsKey(prefix)))
                     return (string)ht[prefix];
             }
             return "";

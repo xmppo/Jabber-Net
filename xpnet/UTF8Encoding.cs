@@ -13,9 +13,9 @@
  * --------------------------------------------------------------------------*/
 namespace xpnet
 {
-	/// <summary>
-	/// UTF-8 specific tokenizer.
-	/// </summary>
+    /// <summary>
+    /// UTF-8 specific tokenizer.
+    /// </summary>
     public class UTF8Encoding : Encoding
     {
         private static readonly int[] utf8HiTypeTable = new int[]
@@ -56,7 +56,8 @@ namespace xpnet
 
         private static int[] utf8TypeTable = new int[256];
 
-        static UTF8Encoding() {
+        static UTF8Encoding() 
+        {
             System.Array.Copy(asciiTypeTable,  0, utf8TypeTable,   0, 128);
             System.Array.Copy(utf8HiTypeTable, 0, utf8TypeTable, 128, 128);
         }
@@ -74,7 +75,8 @@ namespace xpnet
         /// <param name="buf"></param>
         /// <param name="off"></param>
         /// <returns></returns>
-        protected override int byteType(byte[] buf, int off) {
+        protected override int byteType(byte[] buf, int off) 
+        {
             return utf8TypeTable[buf[off] & 0xFF];
         }
 
@@ -84,7 +86,8 @@ namespace xpnet
         /// <param name="buf"></param>
         /// <param name="off"></param>
         /// <returns></returns>
-        protected override char byteToAscii(byte[] buf, int off) {
+        protected override char byteToAscii(byte[] buf, int off) 
+        {
             return (char)buf[off];
         }
 
@@ -95,7 +98,8 @@ namespace xpnet
         /// <param name="off"></param>
         /// <param name="c"></param>
         /// <returns></returns>
-        protected override bool charMatches(byte[] buf, int off, char c) {
+        protected override bool charMatches(byte[] buf, int off, char c) 
+        {
             return ((char)buf[off]) == c;
         }
 
@@ -117,9 +121,10 @@ namespace xpnet
 
         /* This will (incorrectly) return BT_LEAD4 for surrogates, but that
            doesn't matter. */
-        int byteType3(byte[] buf, int off) {
+        int byteType3(byte[] buf, int off) 
+        {
             int[] page = charTypeTable[((buf[off] & 0xF) << 4)
-                                      | ((buf[off + 1] >> 2) & 0xF)];
+                | ((buf[off + 1] >> 2) & 0xF)];
             return page[((buf[off + 1] & 3) << 6) | (buf[off + 2] & 0x3F)];
         }
 
@@ -127,33 +132,35 @@ namespace xpnet
         {
             switch (buf[off])
             {
-            case 0xEF:
-                /* 0xFFFF 0xFFFE */
-                if ((buf[off + 1] == 0xBF) &&
-                    ((buf[off + 2] == 0xBF) ||
-                     (buf[off + 2] == 0xBE)))
-                    throw new InvalidTokenException(off);
-                return;
-            case 0xED:
-                /* 0xD800..0xDFFF <=> top 5 bits are 11011 */
-                if ((buf[off + 1] & 0x20) != 0)
-                    throw new InvalidTokenException(off);
-                return;
-            default:
-                return;
+                case 0xEF:
+                    /* 0xFFFF 0xFFFE */
+                    if ((buf[off + 1] == 0xBF) &&
+                        ((buf[off + 2] == 0xBF) ||
+                        (buf[off + 2] == 0xBE)))
+                        throw new InvalidTokenException(off);
+                    return;
+                case 0xED:
+                    /* 0xD800..0xDFFF <=> top 5 bits are 11011 */
+                    if ((buf[off + 1] & 0x20) != 0)
+                        throw new InvalidTokenException(off);
+                    return;
+                default:
+                    return;
             }
         }
 
-        void check4(byte[] buf, int off) {
-            switch (buf[off] & 0x7) {
-            default:
-                return;
-            case 5: case 6: case 7:
-                break;
-            case 4:
-                if ((buf[off + 1] & 0x30) == 0)
+        void check4(byte[] buf, int off) 
+        {
+            switch (buf[off] & 0x7) 
+            {
+                default:
                     return;
-                break;
+                case 5: case 6: case 7:
+                    break;
+                case 4:
+                    if ((buf[off + 1] & 0x30) == 0)
+                        return;
+                    break;
             }
             throw new InvalidTokenException(off);
         }
@@ -168,39 +175,42 @@ namespace xpnet
         /// <param name="targetStart"></param>
         /// <returns></returns>
         protected override int convert(byte[] sourceBuf,
-					                   int sourceStart, int sourceEnd,
-						               char[] targetBuf, int targetStart)
+            int sourceStart, int sourceEnd,
+            char[] targetBuf, int targetStart)
         {
             int initTargetStart = targetStart;
             int c;
-            while (sourceStart != sourceEnd) {
+            while (sourceStart != sourceEnd) 
+            {
                 byte b = sourceBuf[sourceStart++];
                 if (b >= 0)
                     targetBuf[targetStart++] = (char)b;
-                else {
-                    switch (utf8TypeTable[b & 0xFF]) {
-                    case BT_LEAD2:
-                        /* 5, 6 */
-                        targetBuf[targetStart++]
-                            = (char)(((b & 0x1F) << 6) | (sourceBuf[sourceStart++] & 0x3F));
-                        break;
-                    case BT_LEAD3:
-                        /* 4, 6, 6 */
-                        c = (b & 0xF) << 12;
-                        c |= (sourceBuf[sourceStart++] & 0x3F) << 6;
-                        c |= (sourceBuf[sourceStart++] & 0x3F);
-                        targetBuf[targetStart++] = (char)c;
-                        break;
-                    case BT_LEAD4:
-                        /* 3, 6, 6, 6 */
-                        c = (b & 0x7) << 18;
-                        c |= (sourceBuf[sourceStart++] & 0x3F) << 12;
-                        c |= (sourceBuf[sourceStart++] & 0x3F) << 6;
-                        c |= (sourceBuf[sourceStart++] & 0x3F);
-                        c -= 0x10000;
-                        targetBuf[targetStart++] = (char)((c >> 10) | 0xD800);
-                        targetBuf[targetStart++] = (char)((c & ((1 << 10) - 1)) | 0xDC00);
-                        break;
+                else 
+                {
+                    switch (utf8TypeTable[b & 0xFF]) 
+                    {
+                        case BT_LEAD2:
+                            /* 5, 6 */
+                            targetBuf[targetStart++]
+                                = (char)(((b & 0x1F) << 6) | (sourceBuf[sourceStart++] & 0x3F));
+                            break;
+                        case BT_LEAD3:
+                            /* 4, 6, 6 */
+                            c = (b & 0xF) << 12;
+                            c |= (sourceBuf[sourceStart++] & 0x3F) << 6;
+                            c |= (sourceBuf[sourceStart++] & 0x3F);
+                            targetBuf[targetStart++] = (char)c;
+                            break;
+                        case BT_LEAD4:
+                            /* 3, 6, 6, 6 */
+                            c = (b & 0x7) << 18;
+                            c |= (sourceBuf[sourceStart++] & 0x3F) << 12;
+                            c |= (sourceBuf[sourceStart++] & 0x3F) << 6;
+                            c |= (sourceBuf[sourceStart++] & 0x3F);
+                            c -= 0x10000;
+                            targetBuf[targetStart++] = (char)((c >> 10) | 0xD800);
+                            targetBuf[targetStart++] = (char)((c & ((1 << 10) - 1)) | 0xDC00);
+                            break;
                     }
                 }
             }
@@ -214,44 +224,50 @@ namespace xpnet
         /// <param name="off"></param>
         /// <param name="end"></param>
         /// <param name="pos"></param>
-        protected override void movePosition(byte[] buf, int off, int end, Position pos) {
+        protected override void movePosition(byte[] buf, int off, int end, Position pos) 
+        {
             /* Maintain the invariant: off - colDiff == colNumber. */
             int colDiff = off - pos.ColumnNumber;
             int lineNumber = pos.LineNumber;
-            while (off != end) {
+            while (off != end) 
+            {
                 byte b = buf[off];
-                if (b >= 0) {
+                if (b >= 0) 
+                {
                     ++off;
-                    switch (b) {
-                    case (byte)'\n':
-                        lineNumber += 1;
-                        colDiff = off;
-                        break;
-                    case (byte)'\r':
-                        lineNumber += 1;
-                        if (off != end && buf[off] == '\n')
-                            off++;
-                        colDiff = off;
-                        break;
+                    switch (b) 
+                    {
+                        case (byte)'\n':
+                            lineNumber += 1;
+                            colDiff = off;
+                            break;
+                        case (byte)'\r':
+                            lineNumber += 1;
+                            if (off != end && buf[off] == '\n')
+                                off++;
+                            colDiff = off;
+                            break;
                     }
                 }
-                else {
-                    switch (utf8TypeTable[b & 0xFF]) {
-                    default:
-                        off += 1;
-                        break;
-                    case BT_LEAD2:
-                        off += 2;
-                        colDiff++;
-                        break;
-                    case BT_LEAD3:
-                        off += 3;
-                        colDiff += 2;
-                        break;
-                    case BT_LEAD4:
-                        off += 4;
-                        colDiff += 3;
-                        break;
+                else 
+                {
+                    switch (utf8TypeTable[b & 0xFF]) 
+                    {
+                        default:
+                            off += 1;
+                            break;
+                        case BT_LEAD2:
+                            off += 2;
+                            colDiff++;
+                            break;
+                        case BT_LEAD3:
+                            off += 3;
+                            colDiff += 2;
+                            break;
+                        case BT_LEAD4:
+                            off += 4;
+                            colDiff += 3;
+                            break;
                     }
                 }
             }
@@ -261,22 +277,25 @@ namespace xpnet
 
         int extendData(byte[] buf, int off, int end)
         {
-            while (off != end) {
+            while (off != end) 
+            {
                 int type = utf8TypeTable[buf[off] & 0xFF];
                 if (type >= 0)
                     off++;
                 else if (type < BT_LEAD4)
                     break;
-                else {
+                else 
+                {
                     if (end - off + type < 0)
                         break;
-                    switch (type) {
-                    case BT_LEAD3:
-                        check3(buf, off);
-                        break;
-                    case BT_LEAD4:
-                        check4(buf, off);
-                        break;
+                    switch (type) 
+                    {
+                        case BT_LEAD3:
+                            check3(buf, off);
+                            break;
+                        case BT_LEAD4:
+                            check4(buf, off);
+                            break;
                     }
 
                     off -= (int)type; // this is an ugly hack, James

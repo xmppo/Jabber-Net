@@ -2,7 +2,7 @@
  * Copyrights
  * 
  * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2004 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
@@ -39,13 +39,13 @@ namespace test.bedrock.collections
             Assert.AreEqual(b, (byte)'a');
             Assert.AreEqual(0, bs.Count);
         }
-		[Test] public void Test_Empty()
+        [Test] public void Test_Empty()
         {
             ByteStack bs = new ByteStack();
             byte[] buf = bs;
             Assert.AreEqual(0, buf.Length);
         }
-		[Test] public void Test_Init()
+        [Test] public void Test_Init()
         {
             ByteStack bs = new ByteStack(ENC.GetBytes("foo"));
             Assert.AreEqual("foo", bs.ToString());
@@ -55,7 +55,7 @@ namespace test.bedrock.collections
             bs.Push((byte) 't');
             Assert.AreEqual("ft", bs.ToString());
         }
-		[Test] public void Test_Growth()
+        [Test] public void Test_Growth()
         {
             ByteStack bs = new ByteStack(4);
             

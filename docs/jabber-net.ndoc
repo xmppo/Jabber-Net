@@ -24,46 +24,17 @@
         <namespace name="stringprep">Library for canonicalizing Unicode strings</namespace>
         <namespace name="stringprep.steps">Steps along the path to Unicode canonicalization.</namespace>
         <namespace name="stringprep.unicode">Unicode data.</namespace>
+        <namespace name="xpnet">Partial port of James Clark's XP XML parser to .Net.  See http://www.jclark.com/xml/ for more details.</namespace>
     </namespaces>
     <documenters>
         <documenter name="JavaDoc">
             <property name="Title" value="Jabber-Net Documentation" />
             <property name="OutputDirectory" value="JavaDoc\" />
-            <property name="ShowMissingSummaries" value="False" />
-            <property name="ShowMissingRemarks" value="False" />
-            <property name="ShowMissingParams" value="False" />
-            <property name="ShowMissingReturns" value="False" />
-            <property name="ShowMissingValues" value="False" />
-            <property name="DocumentExplicitInterfaceImplementations" value="False" />
-            <property name="DocumentInternals" value="False" />
-            <property name="DocumentProtected" value="True" />
-            <property name="DocumentSealedProtected" value="False" />
-            <property name="DocumentPrivates" value="False" />
-            <property name="DocumentProtectedInternalAsProtected" value="False" />
-            <property name="DocumentEmptyNamespaces" value="False" />
-            <property name="SkipNamespacesWithoutSummaries" value="False" />
-            <property name="EditorBrowsableFilter" value="Off" />
-            <property name="IncludeAssemblyVersion" value="True" />
+            <property name="AssemblyVersionInfo" value="AssemblyVersion" />
             <property name="CopyrightText" value="Copyright © 2002-2004 Cursive Systems" />
             <property name="CopyrightHref" value="http://www.cursive.net/" />
-            <property name="ReferencesPath" value="" />
             <property name="FeedbackEmailAddress" value="joe-jabber-net@cursive.net" />
-            <property name="UseNamespaceDocSummaries" value="False" />
-            <property name="AutoPropertyBackerSummaries" value="False" />
-            <property name="AutoDocumentConstructors" value="True" />
-            <property name="GetExternalSummaries" value="True" />
-            <property name="Preliminary" value="False" />
-            <property name="UseNDocXmlFile" value="" />
             <property name="CleanIntermediates" value="True" />
-            <property name="DocumentAttributes" value="False" />
-            <property name="ShowTypeIdInAttributes" value="False" />
-            <property name="DocumentedAttributes" value="" />
-            <property name="InheritPlatformSupport" value="True" />
-            <property name="DefaultOSSupport" value="all" />
-            <property name="SupportCompactFrameworkByDefault" value="False" />
-            <property name="SupportMONOFrameworkByDefault" value="False" />
-            <property name="AdditionalFrameworkList" value="" />
-            <property name="AdditionalOSList" value="" />
         </documenter>
         <documenter name="LaTeX">
             <property name="OutputDirectory" value="Tex" />
@@ -71,245 +42,48 @@
             <property name="TexFileBaseName" value="Documentation" />
             <property name="LatexCompiler" value="latex" />
             <property name="TexFileFullPath" value="Tex\Documentation.tex" />
-            <property name="ShowMissingSummaries" value="False" />
-            <property name="ShowMissingRemarks" value="False" />
-            <property name="ShowMissingParams" value="False" />
-            <property name="ShowMissingReturns" value="False" />
-            <property name="ShowMissingValues" value="False" />
-            <property name="DocumentExplicitInterfaceImplementations" value="False" />
-            <property name="DocumentInternals" value="False" />
-            <property name="DocumentProtected" value="True" />
-            <property name="DocumentSealedProtected" value="False" />
-            <property name="DocumentPrivates" value="False" />
-            <property name="DocumentProtectedInternalAsProtected" value="False" />
-            <property name="DocumentEmptyNamespaces" value="False" />
-            <property name="SkipNamespacesWithoutSummaries" value="False" />
-            <property name="EditorBrowsableFilter" value="Off" />
-            <property name="IncludeAssemblyVersion" value="False" />
-            <property name="CopyrightText" value="" />
-            <property name="CopyrightHref" value="" />
-            <property name="ReferencesPath" value="" />
-            <property name="FeedbackEmailAddress" value="" />
-            <property name="UseNamespaceDocSummaries" value="False" />
-            <property name="AutoPropertyBackerSummaries" value="False" />
-            <property name="AutoDocumentConstructors" value="True" />
-            <property name="GetExternalSummaries" value="True" />
-            <property name="Preliminary" value="False" />
-            <property name="UseNDocXmlFile" value="" />
-            <property name="CleanIntermediates" value="False" />
-            <property name="DocumentAttributes" value="False" />
-            <property name="ShowTypeIdInAttributes" value="False" />
-            <property name="DocumentedAttributes" value="" />
-            <property name="InheritPlatformSupport" value="True" />
-            <property name="DefaultOSSupport" value="all" />
-            <property name="SupportCompactFrameworkByDefault" value="False" />
-            <property name="SupportMONOFrameworkByDefault" value="False" />
-            <property name="AdditionalFrameworkList" value="" />
-            <property name="AdditionalOSList" value="" />
         </documenter>
         <documenter name="LinearHtml">
-            <property name="IncludeTypeMemberDetails" value="False" />
             <property name="OutputDirectory" value=".\doc\" />
-            <property name="MethodParametersInTable" value="False" />
-            <property name="TypeIncludeRegexp" value="" />
-            <property name="NamespaceExcludeRegexp" value="" />
             <property name="Title" value="An NDoc Documented Class Library" />
-            <property name="IncludeHierarchy" value="False" />
-            <property name="SortTOCByNamespace" value="True" />
-            <property name="HeaderHtml" value="" />
-            <property name="FooterHtml" value="" />
-            <property name="FilesToInclude" value="" />
-            <property name="ShowMissingSummaries" value="False" />
-            <property name="ShowMissingRemarks" value="False" />
-            <property name="ShowMissingParams" value="False" />
-            <property name="ShowMissingReturns" value="False" />
-            <property name="ShowMissingValues" value="False" />
-            <property name="DocumentExplicitInterfaceImplementations" value="False" />
-            <property name="DocumentInternals" value="False" />
-            <property name="DocumentProtected" value="True" />
-            <property name="DocumentSealedProtected" value="False" />
-            <property name="DocumentPrivates" value="False" />
-            <property name="DocumentProtectedInternalAsProtected" value="False" />
-            <property name="DocumentEmptyNamespaces" value="False" />
-            <property name="SkipNamespacesWithoutSummaries" value="False" />
-            <property name="EditorBrowsableFilter" value="Off" />
-            <property name="IncludeAssemblyVersion" value="False" />
-            <property name="CopyrightText" value="" />
-            <property name="CopyrightHref" value="" />
-            <property name="ReferencesPath" value="" />
-            <property name="FeedbackEmailAddress" value="" />
-            <property name="UseNamespaceDocSummaries" value="False" />
-            <property name="AutoPropertyBackerSummaries" value="False" />
-            <property name="AutoDocumentConstructors" value="True" />
-            <property name="GetExternalSummaries" value="True" />
-            <property name="Preliminary" value="False" />
-            <property name="UseNDocXmlFile" value="" />
-            <property name="CleanIntermediates" value="False" />
-            <property name="DocumentAttributes" value="False" />
-            <property name="ShowTypeIdInAttributes" value="False" />
-            <property name="DocumentedAttributes" value="" />
-            <property name="InheritPlatformSupport" value="True" />
-            <property name="DefaultOSSupport" value="all" />
-            <property name="SupportCompactFrameworkByDefault" value="False" />
-            <property name="SupportMONOFrameworkByDefault" value="False" />
-            <property name="AdditionalFrameworkList" value="" />
-            <property name="AdditionalOSList" value="" />
         </documenter>
         <documenter name="MSDN">
             <property name="OutputDirectory" value="Msdn\" />
             <property name="HtmlHelpName" value="jabber-net" />
-            <property name="IncludeFavorites" value="True" />
             <property name="Title" value="Jabber-Net Documentation" />
-            <property name="DefaultTOC" value="" />
-            <property name="IncludeHierarchy" value="True" />
-            <property name="ShowVisualBasic" value="False" />
+            <property name="IncludeFavorites" value="True" />
             <property name="RootPageTOCName" value="Getting Started" />
             <property name="RootPageFileName" value="howto.htm" />
-            <property name="RootPageContainsNamespaces" value="False" />
-            <property name="BinaryTOC" value="True" />
-            <property name="OutputTarget" value="HtmlHelpAndWeb" />
-            <property name="HeaderHtml" value="" />
-            <property name="FooterHtml" value="" />
-            <property name="FilesToInclude" value="" />
-            <property name="LinkToSdkDocVersion" value="SDK_v1_1" />
-            <property name="ExtensibilityStylesheet" value="" />
-            <property name="ShowMissingSummaries" value="False" />
-            <property name="ShowMissingRemarks" value="False" />
-            <property name="ShowMissingParams" value="False" />
-            <property name="ShowMissingReturns" value="False" />
-            <property name="ShowMissingValues" value="False" />
-            <property name="DocumentExplicitInterfaceImplementations" value="False" />
-            <property name="DocumentInternals" value="False" />
-            <property name="DocumentProtected" value="True" />
-            <property name="DocumentSealedProtected" value="False" />
-            <property name="DocumentPrivates" value="False" />
-            <property name="DocumentProtectedInternalAsProtected" value="False" />
-            <property name="DocumentEmptyNamespaces" value="False" />
-            <property name="SkipNamespacesWithoutSummaries" value="False" />
-            <property name="EditorBrowsableFilter" value="Off" />
-            <property name="IncludeAssemblyVersion" value="True" />
-            <property name="CopyrightText" value="Copyright © 2002-2004 Cursive Systems" />
+            <property name="AssemblyVersionInfo" value="AssemblyVersion" />
+            <property name="CopyrightText" value="Copyright © 2002-2005 Cursive Systems" />
             <property name="CopyrightHref" value="http://www.cursive.net/" />
-            <property name="ReferencesPath" value="" />
             <property name="FeedbackEmailAddress" value="joe-jabber-net@cursive.net" />
-            <property name="UseNamespaceDocSummaries" value="False" />
-            <property name="AutoPropertyBackerSummaries" value="False" />
-            <property name="AutoDocumentConstructors" value="True" />
-            <property name="GetExternalSummaries" value="True" />
-            <property name="Preliminary" value="False" />
-            <property name="UseNDocXmlFile" value="" />
-            <property name="CleanIntermediates" value="True" />
             <property name="DocumentAttributes" value="True" />
-            <property name="ShowTypeIdInAttributes" value="False" />
             <property name="DocumentedAttributes" value="RCS,Version" />
-            <property name="InheritPlatformSupport" value="True" />
-            <property name="DefaultOSSupport" value="all" />
-            <property name="SupportCompactFrameworkByDefault" value="False" />
-            <property name="SupportMONOFrameworkByDefault" value="False" />
-            <property name="AdditionalFrameworkList" value="" />
-            <property name="AdditionalOSList" value="" />
+            <property name="CleanIntermediates" value="True" />
+        </documenter>
+        <documenter name="MSDN 2003">
+            <property name="OutputDirectory" value=".\doc\" />
+            <property name="Title" value="An NDoc Documented Class Library" />
         </documenter>
         <documenter name="VS.NET 2003">
             <property name="OutputDirectory" value="VS.Net-2003\" />
             <property name="HtmlHelpName" value="jabber-net" />
             <property name="Title" value="Jabber-Net Documentation" />
-            <property name="IncludeHierarchy" value="True" />
             <property name="RegisterTitleWithNamespace" value="True" />
             <property name="CollectionNamespace" value="http://www.cursive.net/jabber-net" />
             <property name="RegisterTitleAsCollection" value="True" />
-            <property name="GenerateCollectionFiles" value="False" />
-            <property name="PlugInNamespace" value="ms.vscc" />
-            <property name="CollectionTOCStyle" value="Hierarchical" />
-            <property name="LinkToSdkDocVersion" value="SDK_v1_1" />
-            <property name="CharacterSet" value="UTF8" />
-            <property name="LangID" value="1033" />
-            <property name="BuildSeparateIndexFile" value="False" />
-            <property name="DocSetList" value="NETFramework" />
-            <property name="Version" value="1.0.0.0" />
-            <property name="CreateFullTextIndex" value="True" />
-            <property name="IncludeDefaultStopWordList" value="True" />
-            <property name="UseHelpNamespaceMappingFile" value="" />
-            <property name="OmitSyntaxSection" value="False" />
-            <property name="IntroductionPage" value="howto.htm" />
-            <property name="AboutPageInfo" value="" />
-            <property name="EmptyIndexTermPage" value="" />
-            <property name="NavFailPage" value="" />
-            <property name="AboutPageIconPage" value="" />
-            <property name="AdditionalContentResourceDirectory" value="" />
-            <property name="ExtensibilityStylesheet" value="" />
-            <property name="ShowMissingSummaries" value="False" />
-            <property name="ShowMissingRemarks" value="False" />
-            <property name="ShowMissingParams" value="False" />
-            <property name="ShowMissingReturns" value="False" />
-            <property name="ShowMissingValues" value="False" />
-            <property name="DocumentExplicitInterfaceImplementations" value="False" />
-            <property name="DocumentInternals" value="False" />
-            <property name="DocumentProtected" value="True" />
-            <property name="DocumentSealedProtected" value="False" />
-            <property name="DocumentPrivates" value="False" />
-            <property name="DocumentProtectedInternalAsProtected" value="False" />
-            <property name="DocumentEmptyNamespaces" value="False" />
-            <property name="SkipNamespacesWithoutSummaries" value="False" />
-            <property name="EditorBrowsableFilter" value="Off" />
-            <property name="IncludeAssemblyVersion" value="True" />
+            <property name="IntroductionPage" value=".\howto.htm" />
+            <property name="AssemblyVersionInfo" value="AssemblyVersion" />
             <property name="CopyrightText" value="Copyright © 2002-2004 Cursive Systems" />
             <property name="CopyrightHref" value="http://www.cursive.net/" />
-            <property name="ReferencesPath" value="" />
             <property name="FeedbackEmailAddress" value="joe-jabber-net@cursive.net" />
             <property name="UseNamespaceDocSummaries" value="True" />
-            <property name="AutoPropertyBackerSummaries" value="False" />
-            <property name="AutoDocumentConstructors" value="True" />
-            <property name="GetExternalSummaries" value="True" />
-            <property name="Preliminary" value="False" />
-            <property name="UseNDocXmlFile" value="" />
-            <property name="CleanIntermediates" value="False" />
             <property name="DocumentAttributes" value="True" />
-            <property name="ShowTypeIdInAttributes" value="False" />
             <property name="DocumentedAttributes" value="RCS,Version" />
-            <property name="InheritPlatformSupport" value="True" />
-            <property name="DefaultOSSupport" value="all" />
-            <property name="SupportCompactFrameworkByDefault" value="False" />
-            <property name="SupportMONOFrameworkByDefault" value="False" />
-            <property name="AdditionalFrameworkList" value="" />
-            <property name="AdditionalOSList" value="" />
         </documenter>
         <documenter name="XML">
             <property name="OutputFile" value=".\docs\doc.xml" />
-            <property name="ShowMissingSummaries" value="False" />
-            <property name="ShowMissingRemarks" value="False" />
-            <property name="ShowMissingParams" value="False" />
-            <property name="ShowMissingReturns" value="False" />
-            <property name="ShowMissingValues" value="False" />
-            <property name="DocumentExplicitInterfaceImplementations" value="False" />
-            <property name="DocumentInternals" value="False" />
-            <property name="DocumentProtected" value="True" />
-            <property name="DocumentSealedProtected" value="False" />
-            <property name="DocumentPrivates" value="False" />
-            <property name="DocumentProtectedInternalAsProtected" value="False" />
-            <property name="DocumentEmptyNamespaces" value="False" />
-            <property name="SkipNamespacesWithoutSummaries" value="False" />
-            <property name="EditorBrowsableFilter" value="Off" />
-            <property name="IncludeAssemblyVersion" value="False" />
-            <property name="CopyrightText" value="" />
-            <property name="CopyrightHref" value="" />
-            <property name="ReferencesPath" value="" />
-            <property name="FeedbackEmailAddress" value="" />
-            <property name="UseNamespaceDocSummaries" value="False" />
-            <property name="AutoPropertyBackerSummaries" value="False" />
-            <property name="AutoDocumentConstructors" value="True" />
-            <property name="GetExternalSummaries" value="True" />
-            <property name="Preliminary" value="False" />
-            <property name="UseNDocXmlFile" value="" />
-            <property name="CleanIntermediates" value="False" />
-            <property name="DocumentAttributes" value="False" />
-            <property name="ShowTypeIdInAttributes" value="False" />
-            <property name="DocumentedAttributes" value="" />
-            <property name="InheritPlatformSupport" value="True" />
-            <property name="DefaultOSSupport" value="all" />
-            <property name="SupportCompactFrameworkByDefault" value="False" />
-            <property name="SupportMONOFrameworkByDefault" value="False" />
-            <property name="AdditionalFrameworkList" value="" />
-            <property name="AdditionalOSList" value="" />
         </documenter>
     </documenters>
 </project>

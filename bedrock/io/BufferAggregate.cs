@@ -14,11 +14,11 @@
 using System.Collections;
 using System.IO;
 
-namespace xpnet
+namespace bedrock.io
 {
-	/// <summary>
-	/// Aggregate byte arrays together, so we can parse across IP packet boundaries
-	/// </summary>
+    /// <summary> Aggregate byte arrays together, so we can parse
+    /// across IP packet boundaries
+    /// </summary>
     public class BufferAggregate
     { // RingBuffer of the Nieblung
         private class BufNode
@@ -31,18 +31,18 @@ namespace xpnet
         private BufNode m_head = null;
         private BufNode m_tail = null;
         
-		/// <summary>
-		/// Create an empty buffer
-		/// </summary>
+        /// <summary>
+        /// Create an empty buffer
+        /// </summary>
         public BufferAggregate()
         {
         }
 
-		/// <summary>
-		/// Write to the buffer.  Please make sure that you won't use this memory any more after you hand it in.  
-		/// It will get mangled.
-		/// </summary>
-		/// <param name="buf"></param>
+        /// <summary>
+        /// Write to the buffer.  Please make sure that you won't use this memory any more after you hand it in.  
+        /// It will get mangled.
+        /// </summary>
+        /// <param name="buf"></param>
         public void Write(byte[] buf)
         {
             m_stream.Write(buf, 0, buf.Length);
@@ -60,19 +60,19 @@ namespace xpnet
             }
         }
 
-		/// <summary>
-		/// Get the current aggregate contents of the buffer.
-		/// </summary>
-		/// <returns></returns>
+        /// <summary>
+        /// Get the current aggregate contents of the buffer.
+        /// </summary>
+        /// <returns></returns>
         public byte[] GetBuffer()
         {
             return m_stream.ToArray();
         }
 
-		/// <summary>
-		/// Clear the first "offset" bytes of the buffer, so they won't be parsed again.
-		/// </summary>
-		/// <param name="offset"></param>
+        /// <summary>
+        /// Clear the first "offset" bytes of the buffer, so they won't be parsed again.
+        /// </summary>
+        /// <param name="offset"></param>
         public void Clear(int offset)
         {
             int s = 0;
@@ -105,8 +105,8 @@ namespace xpnet
             {
                 byte[] buf = new byte[save];
                 System.Buffer.BlockCopy(m_head.buf,
-                                        m_head.buf.Length - save,
-                                        buf, 0, save);
+                    m_head.buf.Length - save,
+                    buf, 0, save);
                 m_head.buf = buf;
             }
             
@@ -117,10 +117,10 @@ namespace xpnet
             }
         }
 
-		/// <summary>
-		/// UTF8 encode the current contents of the buffer.  Just for prettiness in the debugger.
-		/// </summary>
-		/// <returns></returns>
+        /// <summary>
+        /// UTF8 encode the current contents of the buffer.  Just for prettiness in the debugger.
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             byte[] b = GetBuffer();
