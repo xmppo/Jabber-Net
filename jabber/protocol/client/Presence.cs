@@ -45,19 +45,19 @@ namespace jabber.protocol.client
         /// </summary>
         available = -1,
         /// <summary>
-        /// 
+        /// May I subscribe to you?
         /// </summary>
         subscribe,
         /// <summary>
-        /// 
+        /// Yes, you may subscribe.
         /// </summary>
         subscribed,
         /// <summary>
-        /// 
+        /// Unsubscribe from this entity.
         /// </summary>
         unsubscribe,
         /// <summary>
-        /// 
+        /// No, you may not subscribe.
         /// </summary>
         unsubscribed,
         /// <summary>
@@ -75,6 +75,7 @@ namespace jabber.protocol.client
         /// <summary>
         /// Invisible presence: we're unavailable to them, but still see 
         /// theirs.
+        /// </summary>
         invisible
     }
 
