@@ -147,7 +147,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "jabber\client\PPDBTest.cs"
+                    RelPath = "jabber\client\PresenceManagerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

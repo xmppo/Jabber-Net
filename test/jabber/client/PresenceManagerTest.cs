@@ -43,18 +43,18 @@ namespace test.jabber.client1 // TODO: Client1 due to a bug in NUnit.
     /// </summary>
     [RCS(@"$Header$")]
     [TestFixture]
-    public class PPDBTest
+    public class PresenceManagerTest
     {
         XmlDocument doc = new XmlDocument();
 
         public void Test_Create()
         {
-            PPDB pp = new PPDB();
-            Assertion.AssertEquals("jabber.client.PPDB", pp.GetType().FullName);
+            PresenceManager pp = new PresenceManager();
+            Assertion.AssertEquals("jabber.client.PresenceManager", pp.GetType().FullName);
         }
         public void TestAdd()
         {
-            PPDB pp = new PPDB();
+            PresenceManager pp = new PresenceManager();
             Presence pres = new Presence(doc);
             JID f = new JID("foo", "bar", "baz");
             pres.From = f;
@@ -71,7 +71,7 @@ namespace test.jabber.client1 // TODO: Client1 due to a bug in NUnit.
         }
 		public void TestRetrieve()
 		{
-			PPDB pp = new PPDB();
+			PresenceManager pp = new PresenceManager();
 			Presence pres = new Presence(doc);
 			JID f = new JID("foo", "bar", "baz");
 			pres.From = f;

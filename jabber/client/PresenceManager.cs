@@ -43,7 +43,7 @@ namespace jabber.client
     /// Presence proxy database.
     /// </summary>
     [RCS(@"$Header$")]
-    public class PPDB : System.ComponentModel.Component, IEnumerable
+    public class PresenceManager : System.ComponentModel.Component, IEnumerable
     {
         /// <summary>
         /// Required designer variable.
@@ -53,19 +53,19 @@ namespace jabber.client
         private Tree m_items = new Tree();
 
         /// <summary>
-        /// Construct a PPDB object.
+        /// Construct a PresenceManager object.
         /// </summary>
         /// <param name="container"></param>
-        public PPDB(System.ComponentModel.IContainer container)
+        public PresenceManager(System.ComponentModel.IContainer container)
         {
             container.Add(this);
             InitializeComponent();
         }
 
         /// <summary>
-        /// Construct a PPDB object.
+        /// Construct a PresenceManager object.
         /// </summary>
-        public PPDB()
+        public PresenceManager()
         {
             InitializeComponent();
         }
