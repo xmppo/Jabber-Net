@@ -207,6 +207,11 @@ namespace test.jabber
             j = new JID("foo@bar");
             Assertion.AssertEquals(0, j.CompareTo(j));
             Assertion.AssertEquals(0, j.CompareTo(new JID("foo@bar")));
+            Assertion.Assert(j == new JID("foo@bar"));
+            Assertion.Assert(j == new JID("foo@BAR"));
+            Assertion.Assert(j == new JID("FOO@BAR"));
+            Assertion.Assert(j == new JID("FOO@bar"));
+            Assertion.AssertEquals(new JID("FOO@bar").GetHashCode(), j.GetHashCode());
             j = new JID("bar");
             Assertion.AssertEquals(0, j.CompareTo(j));
             Assertion.AssertEquals(0, j.CompareTo(new JID("bar")));

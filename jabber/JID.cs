@@ -126,57 +126,68 @@ namespace jabber
         private void parse()
         {
             if (m_server != null)
-                return;
+                return; // already parsed
+
+            string user = null;
+            string server = null;
+            string resource = null;
 
             int at = m_JID.IndexOf('@');
             int slash = m_JID.IndexOf('/');
 
             if (at == -1)
             {
-                m_user = null;
+                user = null;
                 if (slash == -1)
                 {
-                    m_server = m_JID;
-                    m_resource = null;
+                    server = m_JID;
+                    resource = null;
                 }
                 else
                 {
-                    m_server = m_JID.Substring(0, slash);
-                    m_resource = m_JID.Substring(slash+1);
+                    server = m_JID.Substring(0, slash);
+                    resource = m_JID.Substring(slash+1);
                 }
             }
             else
             {
                 if (slash == -1)
                 {
-                    m_user = m_JID.Substring(0, at);
-                    m_server = m_JID.Substring(at + 1);
+                    user = m_JID.Substring(0, at);
+                    server = m_JID.Substring(at + 1);
                 }
                 else
                 {
                     if (at < slash)
                     { // normal case
-                        m_user = m_JID.Substring(0, at);
-                        m_server = m_JID.Substring(at+1, slash-at-1);
-                        m_resource = m_JID.Substring(slash+1);
+                        user = m_JID.Substring(0, at);
+                        server = m_JID.Substring(at+1, slash-at-1);
+                        resource = m_JID.Substring(slash+1);
                     }
                     else
                     { // @ in a resource, with no user.  bastards.
-                        m_user = null;
-                        m_server = m_JID.Substring(0, slash);
-                        m_resource = m_JID.Substring(slash+1);
+                        user = null;
+                        server = m_JID.Substring(0, slash);
+                        resource = m_JID.Substring(slash+1);
                     }
                 }
             }
-            if (m_user != null)
+            if (user != null)
             {
-                if (m_user.IndexOf('@') != -1) throw new JIDFormatException(m_JID);
-                if (m_user.IndexOf('/') != -1) throw new JIDFormatException(m_JID);
+                if (user.IndexOf('@') != -1) throw new JIDFormatException(m_JID);
+                if (user.IndexOf('/') != -1) throw new JIDFormatException(m_JID);
             }
 
-            if ((m_server == null) || (m_server == "")) throw new JIDFormatException(m_JID);
-            if (m_server.IndexOf('@') != -1) throw new JIDFormatException(m_JID);
-            if (m_server.IndexOf('/') != -1) throw new JIDFormatException(m_JID);
+            if ((server == null) || (server == "")) throw new JIDFormatException(m_JID);
+            if (server.IndexOf('@') != -1) throw new JIDFormatException(m_JID);
+            if (server.IndexOf('/') != -1) throw new JIDFormatException(m_JID);
+
+            m_user = (user == null) ? null : user.ToLower();
+            m_server = (server == null) ? null : server.ToLower();
+            m_resource = resource;
+
+            // Make the case right, for fast equality comparisons
+            m_JID = build(m_user, m_server, m_resource);
         }
 
         /// <summary>
@@ -185,6 +196,7 @@ namespace jabber
         /// <returns></returns>
         public override int GetHashCode()
         {
+            parse();
             return m_JID.GetHashCode();
         }
 
@@ -204,25 +216,67 @@ namespace jabber
         /// <returns></returns>
         public override bool Equals(object other)
         {
+            if (other == null)
+                return false;
             if (other is string)
                 return m_JID.Equals(other);
             if (! (other is JID))
                 return false;
-            return this.Equals((JID)other);
+            this.parse();
+            ((JID)other).parse();
+            return m_JID.Equals(((JID)other).m_JID);
         }
 
         /// <summary>
-        /// Equality of string representations.
+        /// Two jids are equal?
         /// </summary>
-        /// <param name="other"></param>
+        /// <param name="one"></param>
+        /// <param name="two"></param>
         /// <returns></returns>
-        public bool Equals(JID other)
+        public static bool operator==(JID one, JID two)
         {
-            if (other == null)
-                return false;
-            if (this == other)
-                return true;
-            return (CompareTo(other) == 0);
+            if ((object)one == null)
+                return ((object)two == null);
+            return one.Equals(two);
+        }
+
+        /// <summary>
+        /// Is this string equal to that jid?
+        /// </summary>
+        /// <param name="one"></param>
+        /// <param name="two"></param>
+        /// <returns></returns>
+        public static bool operator==(string one, JID two)
+        {
+            if ((object)two == null)
+                return ((object)one == null);
+            return two.Equals(one);
+        }
+
+        /// <summary>
+        /// Is this string not equal to that jid?
+        /// </summary>
+        /// <param name="one"></param>
+        /// <param name="two"></param>
+        /// <returns></returns>
+        public static bool operator!=(string one, JID two)
+        {
+            if ((object)two == null)
+                return ((object)one != null);
+            return !two.Equals(one);
+        }
+
+        /// <summary>
+        /// Two jids are unequal?
+        /// </summary>
+        /// <param name="one"></param>
+        /// <param name="two"></param>
+        /// <returns></returns>
+        public static bool operator!=(JID one, JID two)
+        {
+            if ((object)one == null)
+                return ((object)two != null);
+            return !one.Equals(two);
         }
 
         /// <summary>
