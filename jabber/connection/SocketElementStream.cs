@@ -97,6 +97,18 @@ namespace jabber.connection
             m_ns = new XmlNamespaceManager(m_doc.NameTable);
         }
 
+		/// <summary>
+		/// Create a SocketElementStream out of an accepted socket.
+		/// </summary>
+		/// <param name="aso"></param>
+		public SocketElementStream(AsyncSocket aso)
+		{
+			m_watcher = aso.SocketWatcher;
+			m_ns = new XmlNamespaceManager(m_doc.NameTable);
+			InitializeStream();
+			m_state = jabber.connection.AcceptingState.Instance;
+		}
+
         /// <summary>
         /// Create a SocketElementStream with an existing SocketWatcher, so that you can do
         /// lots of concurrent connections.

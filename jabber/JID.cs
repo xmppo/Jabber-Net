@@ -190,7 +190,7 @@ namespace jabber
             if ((server == null) || (server.Length == 0)) throw new JIDFormatException(m_JID);
             if (server.IndexOf('@') != -1) throw new JIDFormatException(m_JID);
             if (server.IndexOf('/') != -1) throw new JIDFormatException(m_JID);
-            if (resource.Length == 0) // null is ok, but "" is not.
+            if ((resource != null) && (resource.Length == 0)) // null is ok, but "" is not.
                 throw new JIDFormatException(m_JID);
 
             m_user = (user == null) ? null : user.ToLower();
