@@ -428,7 +428,7 @@ namespace jabber
 
             JID oj = obj as JID;
             if (oj == null)
-                throw new ArgumentException("Comparison of JID to non-JID");
+                throw new ArgumentException("Comparison of JID to non-JID", "obj");
 
             // hm.  How tricky to get?  
             // It could be that sorting by domain first is correct...

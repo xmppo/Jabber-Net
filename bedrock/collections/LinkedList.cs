@@ -277,7 +277,7 @@ namespace bedrock.collections
                     }
                 }
             }
-            throw new ArgumentException("Object not found");
+            throw new ArgumentException("Object not found", "value");
         }
 
         /// <summary>

@@ -115,7 +115,7 @@ namespace bedrock.collections
         public void Add(object key, object val)
         {
             if (key == null)
-                throw new ArgumentNullException("Null keys not allowed");
+                throw new ArgumentNullException("key");
 
             SkipListNode update = new SkipListNode(m_max_level);
             SkipListNode n = m_header;
@@ -137,7 +137,7 @@ namespace bedrock.collections
                 (m_comparator.Compare(n[0].Key, key) == 0))
             { // already here
                 //n.Value = val;
-                throw new ArgumentException("Can't add the same key twice");
+                throw new ArgumentException("Can't add the same key twice", "key");
             }
             else
             { // need to insert
@@ -208,7 +208,7 @@ namespace bedrock.collections
         public void Remove(object key)
         {
             if (key == null)
-                throw new ArgumentException("Null keys not allowed");
+                throw new ArgumentNullException("key");
 
             SkipListNode update = new SkipListNode(m_max_level);
             SkipListNode n = m_header;
@@ -321,7 +321,7 @@ namespace bedrock.collections
         public void CopyTo(System.Array array, int arrayIndex)
         {
             if (array == null)
-                throw new ArgumentNullException("array", "Null array not allowed");
+                throw new ArgumentNullException("array");
             if (array.Rank != 1)
                 throw new ArgumentException("Array must be single dimensional", "array");
             if (arrayIndex < 0) 
@@ -361,7 +361,7 @@ namespace bedrock.collections
         private SkipListNode GetNode(object key)
         {
             if (key == null)
-                throw new ArgumentException("Null keys not allowed");
+                throw new ArgumentNullException("key");
 
             if (m_count == 0)
                 return null;

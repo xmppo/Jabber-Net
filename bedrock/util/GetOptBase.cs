@@ -234,7 +234,7 @@ namespace bedrock.util
                 pi.SetValue(m_obj, ConvertValue(val, pi.PropertyType), null);
                 break;
             default:
-                throw new ArgumentException("Invalid member type");
+                throw new ArgumentException("Invalid member type", "mi");
             }
         }
         /// <summary>
@@ -269,7 +269,7 @@ namespace bedrock.util
                 ret = pi.GetValue(m_obj, null);
                 break;
             default:
-                throw new ArgumentException("Invalid member type");
+                throw new ArgumentException("Invalid member type", "mi");
             }
             return ret;
         }
@@ -294,7 +294,7 @@ namespace bedrock.util
                 ret = null;
                 break;
             default:
-                throw new ArgumentException("Invalid member type");
+                throw new ArgumentException("Invalid member type", "mi");
             }
             return ret;            
         }

@@ -126,7 +126,7 @@ namespace bedrock.collections
         public void Add(object key,object value)
         {
             if (key == null)
-                throw new ArgumentNullException("Key must not be null");
+                throw new ArgumentNullException("key");
 
             Node n = root;
 
@@ -144,7 +144,7 @@ namespace bedrock.collections
                 {
                     //n.value = value;
                     //return;
-                    throw new ArgumentException("Can't add the same key twice");
+                    throw new ArgumentException("Can't add the same key twice", "key");
                 } 
                 else if (cmp < 0) 
                 {

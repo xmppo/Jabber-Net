@@ -693,7 +693,7 @@ namespace bedrock.net
 
             AsyncSocket sock = val as AsyncSocket;
             if (sock == null)
-                throw new ArgumentException("value compared to is not an AsyncSocket");
+                throw new ArgumentException("value compared to is not an AsyncSocket", "val");
     
             return this.m_id.CompareTo(sock.m_id);
         }
