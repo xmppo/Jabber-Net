@@ -233,7 +233,7 @@ namespace jabber.protocol
             StringBuilder sb = new StringBuilder();
             foreach (byte b in buf)
             {
-                sb.AppendFormat("{0:x2}", b);
+                sb.Append(b.ToString("x2"));
             }
             return sb.ToString();            
         }
