@@ -1,24 +1,24 @@
 <project>
     <assemblies>
-        <assembly location="C:\src\jabber-net-new\bin\Debug\jabber-net.dll" documentation="C:\src\jabber-net-new\jabber-net.xml" />
+        <assembly location="C:\src\jabber-net\bin\Debug\jabber-net.dll" documentation="C:\src\jabber-net\bin\Debug\jabber-net.xml" />
     </assemblies>
     <namespaces>
         <namespace name="bedrock.io">Input/output classes</namespace>
+        <namespace name="jabber.xml">Jabber-specific XML processing clases.  Packetization, etc.</namespace>
         <namespace name="jabber.protocol">Jabber protocol implementation</namespace>
         <namespace name="jabber.server">Service connections and utilties for extending the functionality of a Jabber server.</namespace>
         <namespace name="jabber.connection">Base classes for client and service connections</namespace>
-        <namespace name="bedrock">Low-level utility routines.</namespace>
+        <namespace name="jabber.protocol.iq">The jabber:iq:* namespaces.</namespace>
         <namespace name="jabber.protocol.client">jabber:client namespace.  The meat of the protocol.</namespace>
+        <namespace name="bedrock.util">General utilities</namespace>
         <namespace name="jabber.protocol.stream">etherx namespace.  stream:stream and friends.</namespace>
         <namespace name="bedrock.net">Async network access</namespace>
         <namespace name="jabber">Jabber-specific classes</namespace>
-        <namespace name="bedrock.collections">Collection classes not in the .Net framework</namespace>
-        <namespace name="jabber.protocol.x">The jabber:x:* namespaces.</namespace>
         <namespace name="jabber.client">Client connection oriented classes</namespace>
-        <namespace name="jabber.xml">Jabber-specific XML processing clases.  Packetization, etc.</namespace>
+        <namespace name="jabber.protocol.x">The jabber:x:* namespaces.</namespace>
         <namespace name="jabber.protocol.accept">jabber:component:accept namespace, for services.</namespace>
-        <namespace name="jabber.protocol.iq">The jabber:iq:* namespaces.</namespace>
-        <namespace name="bedrock.util">General utilities</namespace>
+        <namespace name="bedrock">Low-level utility routines.</namespace>
+        <namespace name="bedrock.collections">Collection classes not in the .Net framework</namespace>
     </namespaces>
     <documenters>
         <documenter name="JavaDoc">
