@@ -70,6 +70,7 @@ namespace muzzle
         private System.Windows.Forms.TextBox txtProxyUser;
         private System.Windows.Forms.TextBox txtProxyPassword;
         private System.Windows.Forms.TextBox txtProxyHost;
+        private System.Windows.Forms.CheckBox cbPlaintext;
         private System.ComponentModel.IContainer components;
 
 
@@ -112,6 +113,7 @@ namespace muzzle
             Password      = m_cli.Password;
             Port          = m_cli.Port;
             NetworkHost   = m_cli.NetworkHost;
+            PlaintextAuth = m_cli.PlaintextAuth;
             ProxyType     = m_cli.Proxy;
             ProxyHost     = m_cli.ProxyHost;
             ProxyPort     = m_cli.ProxyPort;
@@ -134,6 +136,7 @@ namespace muzzle
                 m_cli.Password      = Password;
                 m_cli.Port          = Port;                
                 m_cli.NetworkHost   = NetworkHost;
+                m_cli.PlaintextAuth = PlaintextAuth;
                 m_cli.Proxy         = ProxyType;
                 m_cli.ProxyHost     = ProxyHost;
                 m_cli.ProxyPort     = ProxyPort;
@@ -199,6 +202,9 @@ namespace muzzle
             t = Prop(root, "ssl");
             if ((t != null) && (t != ""))
                 SSL = bool.Parse(t);
+            t = Prop(root, "plaintext");
+            if ((t != null) && (t != ""))
+                PlaintextAuth = bool.Parse(t);
 
             WriteCli();
         }
@@ -225,6 +231,7 @@ namespace muzzle
             root.AppendChild(doc.CreateElement("proxyuser")).InnerText = ProxyUser;
             root.AppendChild(doc.CreateElement("proxypassword")).InnerText = ProxyPassword;
             root.AppendChild(doc.CreateElement("ssl")).InnerText = SSL.ToString();
+            root.AppendChild(doc.CreateElement("plaintext")).InnerText = PlaintextAuth.ToString();
 
             XmlTextWriter xw = new XmlTextWriter(file, System.Text.Encoding.UTF8);
             xw.Formatting = Formatting.Indented;
@@ -379,6 +386,15 @@ namespace muzzle
 #endif
 
         /// <summary>
+        /// Allow Plaintext authentication?
+        /// </summary>
+        public bool PlaintextAuth
+        {
+            get { return cbPlaintext.Checked; }
+            set { cbPlaintext.Checked = value; }
+        }
+
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         protected override void Dispose( bool disposing )
@@ -431,6 +447,7 @@ namespace muzzle
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.cmbProxy = new System.Windows.Forms.ComboBox();
+            this.cbPlaintext = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tpBasic.SuspendLayout();
@@ -531,6 +548,7 @@ namespace muzzle
             // 
             // tpBasic
             // 
+            this.tpBasic.Controls.Add(this.cbPlaintext);
             this.tpBasic.Controls.Add(this.txtPass);
             this.tpBasic.Controls.Add(this.txtServer);
             this.tpBasic.Controls.Add(this.txtUser);
@@ -733,8 +751,18 @@ namespace muzzle
             this.cmbProxy.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbProxy.Location = new System.Drawing.Point(72, 8);
             this.cmbProxy.Name = "cmbProxy";
-            this.cmbProxy.Size = new System.Drawing.Size(152, 21);
+            this.cmbProxy.Size = new System.Drawing.Size(152, 20);
             this.cmbProxy.TabIndex = 27;
+            // 
+            // cbPlaintext
+            // 
+            this.cbPlaintext.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+                | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbPlaintext.Location = new System.Drawing.Point(8, 104);
+            this.cbPlaintext.Name = "cbPlaintext";
+            this.cbPlaintext.Size = new System.Drawing.Size(216, 32);
+            this.cbPlaintext.TabIndex = 15;
+            this.cbPlaintext.Text = "Allow plaintext authentication";
             // 
             // ClientLogin
             // 
@@ -855,6 +883,5 @@ namespace muzzle
             ReadCli();
             txtUser.Focus();
         }
-
     }
 }
