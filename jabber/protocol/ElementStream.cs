@@ -37,7 +37,7 @@ using bedrock.io;
 using bedrock.util;
 using jabber.protocol;
 
-namespace jabber.xml
+namespace jabber.protocol
 {
     /// <summary>
     /// A packet was received.  The specified element will likely be a sub-class
@@ -53,7 +53,6 @@ namespace jabber.xml
     [RCS(@"$Header$")]
     public class ElementStream
     {
-        private bool               m_synch = false;
         private object             m_parseLock = new object();
         private PipeStream         m_stream;
         private XmlDocument        m_doc;
@@ -133,17 +132,10 @@ namespace jabber.xml
             {
                 m_stream.Write(buf);
                 
-                if (m_synch)
-                {
-                    Parse(null);
-                }
-                else
-                {
-                    // heh.  I was thinking about doing this for scale,
-                    // but it also has the nice side-effect of getting
-                    // around any potential dead-locks here.
-                    ThreadPool.QueueUserWorkItem(new WaitCallback(Parse));
-                }
+                // heh.  I was thinking about doing this for scale,
+                // but it also has the nice side-effect of getting
+                // around any potential dead-locks here.
+                ThreadPool.QueueUserWorkItem(new WaitCallback(Parse));
             }
         }
 
@@ -162,14 +154,7 @@ namespace jabber.xml
             if (length > 0)
             {
                 m_stream.Write(buf, offset, length);
-                if (m_synch)
-                {
-                    Parse(null);
-                }
-                else
-                {
-                    ThreadPool.QueueUserWorkItem(new WaitCallback(Parse));
-                }
+                ThreadPool.QueueUserWorkItem(new WaitCallback(Parse));
             }
         }
 

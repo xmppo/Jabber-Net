@@ -57,7 +57,7 @@ namespace jabber.connection
         public IQTracker(SocketElementStream stream)
         {
             m_cli = stream;
-            m_cli.OnProtocol += new jabber.xml.ProtocolHandler(OnIQ);
+            m_cli.OnProtocol += new jabber.protocol.ProtocolHandler(OnIQ);
         }
         
         private void OnIQ(object sender, XmlElement elem)
