@@ -35,7 +35,6 @@ namespace bedrock.net
 	public class Socks5Proxy : BaseSocket, ISocketEventListener
 	{
         private BaseSocket m_sock = null;
-        private ISocketEventListener m_chain = null;
 
         private string         m_host = null;
         private int            m_port = 1080;
@@ -160,42 +159,42 @@ namespace bedrock.net
         #region Implementation of ISocketEventListener
         void ISocketEventListener.OnInit(bedrock.net.AsyncSocket newSock)
         {
-            m_chain.OnInit(newSock);
+            m_listener.OnInit(newSock);
         }
 
         bedrock.net.ISocketEventListener ISocketEventListener.GetListener(bedrock.net.AsyncSocket newSock)
         {
-            return m_chain.GetListener(newSock);
+            return m_listener.GetListener(newSock);
         }
 
         bool ISocketEventListener.OnAccept(bedrock.net.AsyncSocket newsocket)
         {
-            return m_chain.OnAccept(newsocket);
+            return m_listener.OnAccept(newsocket);
         }
 
         void ISocketEventListener.OnConnect(bedrock.net.AsyncSocket sock)
         {
-            m_chain.OnConnect(sock);
+            m_listener.OnConnect(sock);
         }
 
         void ISocketEventListener.OnClose(bedrock.net.AsyncSocket sock)
         {
-            m_chain.OnClose(sock);
+            m_listener.OnClose(sock);
         }
 
         void ISocketEventListener.OnError(bedrock.net.AsyncSocket sock, System.Exception ex)
         {
-            m_chain.OnError(sock, ex);
+            m_listener.OnError(sock, ex);
         }
 
         bool ISocketEventListener.OnRead(bedrock.net.AsyncSocket sock, byte[] buf, int offset, int length)
         {
-            return m_chain.OnRead(sock, buf, offset, length);
+            return m_listener.OnRead(sock, buf, offset, length);
         }
 
         void ISocketEventListener.OnWrite(bedrock.net.AsyncSocket sock, byte[] buf, int offset, int length)
         {
-            m_chain.OnWrite(sock, buf, offset, length);
+            m_listener.OnWrite(sock, buf, offset, length);
         }
         #endregion
 	}

@@ -481,7 +481,7 @@ namespace jabber.connection
                 {
                     case ProxyType.Socks5:
                         Socks5Proxy proxy = new Socks5Proxy(this);
-                        proxy.Socket   = new AsyncSocket(m_watcher, m_sock.Listener);
+                        proxy.Socket   = new AsyncSocket(m_watcher, proxy);
                         proxy.Host     = m_ProxyHost;
                         proxy.Port     = m_ProxyPort;
                         proxy.Username = m_ProxyUsername;
