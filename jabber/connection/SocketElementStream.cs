@@ -50,12 +50,19 @@ namespace jabber.connection
         /// no proxy
         /// </summary>
         None,
-
-        /// <summary>
-        /// socks5 as in http://archive.socks.permeo.com/rfc/rfc1928.txt
-        /// </summary>
-        Socks5
-    }
+		/// <summary>
+		/// socks4 as in http://archive.socks.permeo.com/protocol/socks4.protocol
+		/// </summary>
+		Socks4,
+		/// <summary>
+		/// socks5 as in http://archive.socks.permeo.com/rfc/rfc1928.txt
+		/// </summary>
+		Socks5,
+		/// <summary>
+		/// shttp as in http://rfc-2660.rfc-list.com/rfc-2660.htm
+		/// </summary>
+		SHTTP
+}
 
 
     /// <summary>
@@ -472,27 +479,44 @@ namespace jabber.connection
             Debug.Assert(m_port > 0);
             Debug.Assert(m_server != null);
 
-            lock (StateLock)
-            {
-                InitializeStream();
-                Address addr = new Address(m_server, m_port);
-                m_state = ConnectingState.Instance;
-                switch (m_ProxyType)
-                {
-                    case ProxyType.Socks5:
-                        Socks5Proxy proxy = new Socks5Proxy(this);
-                        proxy.Socket   = new AsyncSocket(m_watcher, proxy);
-                        proxy.Host     = m_ProxyHost;
-                        proxy.Port     = m_ProxyPort;
-                        proxy.Username = m_ProxyUsername;
-                        proxy.Password = m_ProxyPassword;
-                        m_sock = proxy;
+			lock (StateLock)
+			{
+				InitializeStream();
+				Address addr = new Address(m_server, m_port);
+				m_state = ConnectingState.Instance;
+
+                ProxySocket proxy = null;
+				switch (m_ProxyType)
+				{
+					case ProxyType.Socks4: 
+						proxy = new Socks4Proxy(this);
+					    break;
+
+					case ProxyType.Socks5: 
+						proxy = new Socks5Proxy(this);
+					    break;
+                       
+                    case ProxyType.SHTTP: 
+                        proxy = new ShttpProxy(this);
                         break;
-                        
+                       
                     case ProxyType.None:
                         m_sock = new AsyncSocket(m_watcher, this);
                         break;
+
+					default:
+						throw new ArgumentException("no handler for proxy type: " + m_ProxyType, "ProxyType");
                 }
+
+                if (proxy != null)
+                {
+                    proxy.Socket   = new AsyncSocket(m_watcher, proxy);
+                    proxy.Host     = m_ProxyHost;
+                    proxy.Port     = m_ProxyPort;
+                    proxy.Username = m_ProxyUsername;
+                    m_sock = proxy;
+                }
+
                 m_sock.Connect(addr);
             }
         }
