@@ -293,21 +293,6 @@ namespace bedrock.net
         }
 
         /// <summary>
-        /// Return a stream that can be read from and written to, in non-async fashion.
-        /// You must still call close on the AsyncSocket, and not just on the stream.
-        /// </summary>
-        /// <returns>The stream, connected up to this socket</returns>
-        public override Stream GetStream()
-        {
-            Debug.Assert(m_synch);
-#if !NO_SSL
-            return new SecureNetworkStream(m_sock, FileAccess.ReadWrite, false);
-#else
-            return new NetworkStream(m_sock, FileAccess.ReadWrite, false);
-#endif
-        }
-
-        /// <summary>
         /// Prepare to start accepting inbound requests.  Call RequestAccept() to start the async process.
         /// </summary>
         /// <param name="addr">Address to listen on</param>

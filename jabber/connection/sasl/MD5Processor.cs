@@ -138,11 +138,9 @@ namespace jabber.connection.sasl
         {
             string key = "";
             string data = "";
-            string vDelimStr = "=";
             string pDelimStr = ",";
             
             char[] pDelimiter = pDelimStr.ToCharArray();
-            char[] vDelimiter = vDelimStr.ToCharArray();
 
             string[] split = null;
             split = decoded.Split(pDelimiter);
@@ -276,7 +274,6 @@ namespace jabber.connection.sasl
         private void generateResponseString()
         {
             // here is where we do the md5 foo
-            UTF8Encoding utf8 = new UTF8Encoding();
             ASCIIEncoding AE = new ASCIIEncoding();
             byte[] H1, H2, H3, temp;
             string A1, A2, A3, uri, p1, p2;

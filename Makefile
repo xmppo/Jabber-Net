@@ -30,7 +30,6 @@ $(BASEDIR)/bedrock/collections/Tree.cs \
 $(BASEDIR)/bedrock/collections/Trie.cs \
 $(BASEDIR)/bedrock/collections/TrieNode.cs \
 $(BASEDIR)/bedrock/io/BufferAggregate.cs \
-$(BASEDIR)/bedrock/io/PipeStream.cs \
 $(BASEDIR)/bedrock/io/ReadEventStream.cs \
 $(BASEDIR)/bedrock/net/Address.cs \
 $(BASEDIR)/bedrock/net/AsyncSocket.cs \

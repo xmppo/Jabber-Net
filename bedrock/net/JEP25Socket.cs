@@ -53,7 +53,6 @@ namespace bedrock.net
         RandomNumberGenerator s_rng = RNGCryptoServiceProvider.Create();
 
         private Queue      m_writeQ  = new Queue();
-        private PipeStream m_pipe    = null;
         private Object     m_lock    = new Object();
         private Thread     m_thread  = null;
         private int        m_maxPoll = 30;
@@ -208,21 +207,7 @@ namespace bedrock.net
                 Monitor.Pulse(m_lock);
             }
         }
-    
-        /// <summary>
-        /// Return the PipeStream used for buffering.
-        /// </summary>
-        /// <returns></returns>
-        public override System.IO.Stream GetStream()
-        {
-            lock (m_lock)
-            {
-                if (m_pipe == null)
-                    m_pipe = new PipeStream();
-                return m_pipe;
-            }
-        }
-
+        
         private void GenKeys()
         {
             byte[] seed = new byte[32];
@@ -395,9 +380,7 @@ namespace bedrock.net
                 {
                     buf = ms.ToArray();
                     
-                    if (m_pipe != null)
-                        m_pipe.Write(buf);
-                    else if (!m_listener.OnRead(this, buf, 0, buf.Length))
+                    if (!m_listener.OnRead(this, buf, 0, buf.Length))
                     {
                         Close();
                         return;

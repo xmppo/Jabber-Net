@@ -1230,7 +1230,6 @@ namespace jabber.connection
                         {
                                 m_timer.Change(Timeout.Infinite, Timeout.Infinite);
 
-                                BaseState old = m_state;
                                 m_state = ClosedState.Instance;
                                 m_sock = null;
                         }
@@ -1275,8 +1274,6 @@ namespace jabber.connection
                         lock (StateLock)
                         {
                                 m_timer.Change(Timeout.Infinite, Timeout.Infinite);
-
-                                BaseState old = m_state;
                                 m_state = ClosedState.Instance;
                                 m_sock = null;
 

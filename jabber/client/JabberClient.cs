@@ -302,7 +302,6 @@ namespace jabber.client
             get { return base.IsAuthenticated; }
             set
             {
-                BaseState oldState = this.State;
                 base.IsAuthenticated = value;
                 if (value)
                 {
