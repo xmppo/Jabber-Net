@@ -31,6 +31,7 @@ using System;
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Threading;
 using System.Xml;
 
 using bedrock.util;
@@ -40,6 +41,23 @@ using jabber.protocol;
 
 namespace jabber.connection
 {
+    /// <summary>
+    /// The types of proxies we support.
+    /// </summary>
+    public enum ProxyType
+    {
+        /// <summary>
+        /// no proxy
+        /// </summary>
+        None,
+
+        /// <summary>
+        /// socks5 as in http://archive.socks.permeo.com/rfc/rfc1928.txt
+        /// </summary>
+        Socks5
+    }
+
+
     /// <summary>
     /// Summary description for SocketElementStream.
     /// </summary>
@@ -54,19 +72,26 @@ namespace jabber.connection
         protected static readonly System.Text.Encoding ENC = System.Text.Encoding.UTF8;
 
         private SocketWatcher  m_watcher    = null;
-        private AsyncSocket    m_sock       = null;
-        private AsyncSocket    m_accept     = null;
+        private BaseSocket     m_sock       = null;
+        private BaseSocket     m_accept     = null;
         private XmlDocument    m_doc        = new XmlDocument();
         private ElementStream  m_stream     = null;
-        private int            m_keepAlive  = 20;
         private BaseState      m_state      = ClosedState.Instance;
         private string         m_server     = "jabber.com";
         private string         m_streamID   = null;
         private object         m_stateLock  = new object();
         private ArrayList      m_callbacks  = new ArrayList();
+        private int            m_keepAlive  = 20000;
+        private Timer          m_timer      = null;
 
         private int            m_port       = 5222;
-        private int            m_autoReconnect = 30;
+        private int            m_autoReconnect = 30000;
+
+        private ProxyType      m_ProxyType = ProxyType.None;
+        private string         m_ProxyHost = null;
+        private int            m_ProxyPort = 1080;
+        private string         m_ProxyUsername = null;
+        private string         m_ProxyPassword = null;
 
         private XmlNamespaceManager m_ns;
 
@@ -86,6 +111,7 @@ namespace jabber.connection
             container.Add(this);
             m_watcher = new SocketWatcher();
             m_ns = new XmlNamespaceManager(m_doc.NameTable);
+            m_timer = new Timer(new TimerCallback(DoKeepAlive), null, Timeout.Infinite, Timeout.Infinite);
         }
 
         /// <summary>
@@ -95,6 +121,7 @@ namespace jabber.connection
         {
             m_watcher = new SocketWatcher();
             m_ns = new XmlNamespaceManager(m_doc.NameTable);
+            m_timer = new Timer(new TimerCallback(DoKeepAlive), null, Timeout.Infinite, Timeout.Infinite);
         }
 
 		/// <summary>
@@ -105,7 +132,8 @@ namespace jabber.connection
 		{
 			m_watcher = aso.SocketWatcher;
 			m_ns = new XmlNamespaceManager(m_doc.NameTable);
-			InitializeStream();
+            m_timer = new Timer(new TimerCallback(DoKeepAlive), null, Timeout.Infinite, Timeout.Infinite);
+            InitializeStream();
 			m_state = jabber.connection.AcceptingState.Instance;
 		}
 
@@ -118,6 +146,7 @@ namespace jabber.connection
         {
             m_watcher = watcher;
             m_ns = new XmlNamespaceManager(m_doc.NameTable);
+            m_timer = new Timer(new TimerCallback(DoKeepAlive), null, Timeout.Infinite, Timeout.Infinite);
         }
 
         /// <summary>
@@ -210,11 +239,27 @@ namespace jabber.connection
         /// </summary>
         [Description("Time, in seconds, between keep-alive spaces.")]
         [Category("Jabber")]
-        [DefaultValue(20)]
-        public int KeepAlive
+        [DefaultValue(20f)]
+        public float KeepAlive
         {
-            get { return m_keepAlive; }
-            set { m_keepAlive = value; }
+            get { return m_keepAlive / 1000f; }
+            set 
+            { 
+                lock (m_stateLock)
+                {
+                    m_keepAlive = (int)(value * 1000f);
+                    if (value <= 0)
+                    {
+                        m_timer.Change(Timeout.Infinite, Timeout.Infinite);
+                        m_timer.Dispose();
+                        m_timer = null;
+                    }
+                    else
+                    {
+                        m_timer = new Timer(new TimerCallback(DoKeepAlive), null, m_keepAlive, m_keepAlive);
+                    }
+                }            
+            }
         }
 
         /// <summary>
@@ -223,10 +268,70 @@ namespace jabber.connection
         [Description("Automatically reconnect a connection.")]
         [DefaultValue(30)]
         [Category("Automation")]
-        public int AutoReconnect
+        public float AutoReconnect
         {
-            get { return m_autoReconnect; }
-            set { m_autoReconnect = value; }
+            get { return m_autoReconnect / 1000f; }
+            set { m_autoReconnect = (int)(value * 1000f); }
+        }
+
+        /// <summary>
+        /// the type of proxy... none, socks5
+        /// </summary>
+        [Description("The type of proxy... none, socks5, etc.")]
+        [DefaultValue(ProxyType.None)]
+        [Category("Proxy")]
+        public ProxyType Proxy
+        {
+            get { return m_ProxyType; }
+            set { m_ProxyType = value; }
+        }
+ 
+        /// <summary>
+        /// the host running the proxy
+        /// </summary>
+        [Description("the host running the proxy")]
+        [DefaultValue(null)]
+        [Category("Proxy")]
+        public string ProxyHost
+        {
+            get { return m_ProxyHost; }
+            set { m_ProxyHost = value; }
+        }
+
+        /// <summary>
+        /// the port to talk to the proxy host on
+        /// </summary>
+        [Description("the port to talk to the proxy host on")]
+        [DefaultValue(1080)]
+        [Category("Proxy")]
+        public int ProxyPort
+        {
+            get { return m_ProxyPort; }
+            set { m_ProxyPort = value; }
+        }
+
+        /// <summary>
+        /// the auth username for the socks5 proxy
+        /// </summary>
+        [Description("the auth username for the socks5 proxy")]
+        [DefaultValue(null)]
+        [Category("Proxy")]
+        public string ProxyUsername
+        {
+            get { return m_ProxyUsername; }
+            set { m_ProxyUsername = value; }
+        }
+
+        /// <summary>
+        /// the auth password for the socks5 proxy
+        /// </summary>
+        [Description("the auth password for the socks5 proxy")]
+        [DefaultValue(null)]
+        [Category("Proxy")]
+        public string ProxyPassword
+        {
+            get { return m_ProxyPassword; }
+            set { m_ProxyPassword = value; }
         }
 
         /// <summary>
@@ -372,7 +477,23 @@ namespace jabber.connection
                 InitializeStream();
                 Address addr = new Address(m_server, m_port);
                 m_state = ConnectingState.Instance;
-                m_sock = m_watcher.CreateConnectSocket(this, addr, m_keepAlive * 1000);
+                switch (m_ProxyType)
+                {
+                    case ProxyType.Socks5:
+                        Socks5Proxy proxy = new Socks5Proxy(this);
+                        proxy.Socket   = new AsyncSocket(m_watcher, m_sock.Listener);
+                        proxy.Host     = m_ProxyHost;
+                        proxy.Port     = m_ProxyPort;
+                        proxy.Username = m_ProxyUsername;
+                        proxy.Password = m_ProxyPassword;
+                        m_sock = proxy;
+                        break;
+                        
+                    case None:
+                        m_sock = new AsyncSocket(m_watcher, this);
+                        break;
+                }
+                m_sock.Connect(addr);
             }
         }
 
@@ -510,6 +631,7 @@ namespace jabber.connection
 
         bool ISocketEventListener.OnRead(bedrock.net.AsyncSocket sock, byte[] buf, int offset, int count)
         {
+            m_timer.Change(m_keepAlive, m_keepAlive);
             m_stream.Push(buf, offset, count);
 
             if (OnReadText != null)
@@ -520,23 +642,47 @@ namespace jabber.connection
 
         void ISocketEventListener.OnWrite(bedrock.net.AsyncSocket sock, byte[] buf, int offset, int count)
         {
+            m_timer.Change(m_keepAlive, m_keepAlive);
+
             if (OnWriteText != null)
                 CheckedInvoke(OnWriteText, new object[] {sock, ENC.GetString(buf, offset, count)});
         }
 
         void ISocketEventListener.OnError(bedrock.net.AsyncSocket sock, System.Exception ex)
         {
+            lock (m_stateLock)
+            {
+                m_timer.Change(Timeout.Infinite, Timeout.Infinite);
+
+                BaseState old = m_state;
+                m_state = ClosedState.Instance;
+                m_sock = null;
+
+                // close was requested, or autoreconnect turned off.
+                if ((old != ClosingState.Instance) && (m_autoReconnect >= 0))
+                {
+                    new System.Threading.Timer(new System.Threading.TimerCallback(Reconnect), 
+                        null, 
+                        m_autoReconnect, 
+                        System.Threading.Timeout.Infinite );
+                }
+            }
+
             if (OnError != null)
                 CheckedInvoke(OnError, new object[] {sock, ex});
         }
 
         void ISocketEventListener.OnConnect(bedrock.net.AsyncSocket sock)
         {
-            this.State = ConnectedState.Instance;
-            jabber.protocol.stream.Stream str = new jabber.protocol.stream.Stream(m_doc, NS);
-            str.To = this.Host;
-            Write(str.StartTag());
-            sock.RequestRead();
+            lock (m_stateLock)
+            {
+                this.State = ConnectedState.Instance;
+                jabber.protocol.stream.Stream str = new jabber.protocol.stream.Stream(m_doc, NS);
+                str.To = this.Host;
+                Write(str.StartTag());
+                sock.RequestRead();
+                m_timer.Change(m_keepAlive, m_keepAlive);
+            }
         }
 
         private void Reconnect(object state)
@@ -548,17 +694,18 @@ namespace jabber.connection
         {
             lock (StateLock)
             {
+                m_timer.Change(Timeout.Infinite, Timeout.Infinite);
+
                 BaseState old = m_state;
                 m_state = ClosedState.Instance;
                 m_sock = null;
 
-
                 // close was requested, or autoreconnect turned off.
-                if ((old == ClosingState.Instance) && (m_autoReconnect >= 0))
+                if ((old != ClosingState.Instance) && (m_autoReconnect >= 0))
                 {
                     new System.Threading.Timer(new System.Threading.TimerCallback(Reconnect), 
                         null, 
-                        m_autoReconnect * 1000, 
+                        m_autoReconnect, 
                         System.Threading.Timeout.Infinite );
                 }
             }
@@ -618,6 +765,18 @@ namespace jabber.connection
             {
                 cbd.Check(this, elem);
             }
+        }
+
+        private void DoKeepAlive(object state)
+        {
+            lock (m_stateLock)
+            {
+                if (m_state != RunningState.Instance)
+                {
+                    return;
+                }
+            }
+            Write(new byte[] {32});
         }
 
         private class CallbackData

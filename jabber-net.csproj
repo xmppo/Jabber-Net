@@ -162,12 +162,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "bedrock\net\BaseSocket.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "bedrock\net\SocketEventListener.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "bedrock\net\SocketWatcher.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "bedrock\net\Socks5Proxy.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
