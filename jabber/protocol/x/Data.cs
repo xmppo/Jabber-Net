@@ -34,6 +34,25 @@ using bedrock.util;
 
 namespace jabber.protocol.x
 {
+    /// <summary>
+    /// XData types.
+    /// </summary>
+    public enum XDataType
+    {
+        /// <summary>
+        /// This packet contains a form to fill out. Display it to the user (if your program can).
+        /// </summary>
+        form,
+        /// <summary>
+        /// The form is filled out, and this is the data that is being returned from the form.
+        /// </summary>
+        submit,
+        /// <summary>
+        /// Data results being returned from a search, or some other query.
+        /// </summary>
+        result
+    }
+
 	/// <summary>
 	/// jabber:x:data support, as in http://www.jabber.org/jeps/jep-0004.html.
 	/// </summary>
@@ -76,6 +95,15 @@ namespace jabber.protocol.x
         {
             get { return GetElem("title"); }
             set { SetElem("title", value); }
+        }
+
+        /// <summary>
+        /// Type of this XData.
+        /// </summary>
+        public XDataType Type
+        {
+            get { return (XDataType)GetEnumAttr("type", typeof(XDataType)); }
+            set { SetAttribute("type", value.ToString());}
         }
 
         /// <summary>
