@@ -95,6 +95,29 @@ namespace jabber.protocol
                 this.AppendChild(this.OwnerDocument.ImportNode(value, true));
             }
         }
+
+        /// <summary>
+        /// Returns an XmlNodeList containing a list of child elements that match the specified localname and namespace URI.
+        /// </summary>
+        /// <param name="localName"></param>
+        /// <param name="namespaceURI"></param>
+        /// <returns></returns>
+        public override XmlNodeList GetElementsByTagName(string localName, string namespaceURI)
+        {
+            return new ElementList(this, localName, namespaceURI);
+        }
+
+        /// <summary>
+        /// Returns an XmlNodeList containing a list of child elements that match the specified localname.
+        /// </summary>
+        /// <param name="localName"></param>
+        /// <returns></returns>
+        public override XmlNodeList GetElementsByTagName(string localName)
+        {
+            return new ElementList(this, localName);
+        }
+
+
         /// <summary>
         /// Get the text contents of a sub-element.
         /// </summary>
@@ -161,10 +184,13 @@ namespace jabber.protocol
         /// <param name="name">Element local name</param>
         protected void RemoveElems(string name)
         {
-            XmlNodeList nl = GetElementsByTagName(name);
-            foreach (XmlElement e in nl)
+            XmlNodeList nl = this.ChildNodes;
+            foreach (XmlNode n in nl)
             {
-                this.RemoveChild(e);
+                if (n.NodeType != XmlNodeType.Element)
+                    continue;
+                if (n.Name == name)
+                    this.RemoveChild(n);
             }
         }
         /// <summary>
@@ -174,10 +200,13 @@ namespace jabber.protocol
         /// <param name="namespaceURI">Element namespace URI.</param>
         protected void RemoveElems(string name, string namespaceURI)
         {
-            XmlNodeList nl = GetElementsByTagName(name, namespaceURI);
-            foreach (XmlElement e in nl)
+            XmlNodeList nl = this.ChildNodes;
+            foreach (XmlNode n in nl)
             {
-                this.RemoveChild(e);
+                if (n.NodeType != XmlNodeType.Element)
+                    continue;
+                if ((n.Name == name) && (n.NamespaceURI == namespaceURI))
+                    this.RemoveChild(n);
             }
         }
         /// <summary>
