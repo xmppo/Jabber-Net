@@ -124,6 +124,16 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "JidMulti.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "JidMulti.resx"
+                    DependentUpon = "JidMulti.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Litmus.bmp"
                     BuildAction = "EmbeddedResource"
                 />

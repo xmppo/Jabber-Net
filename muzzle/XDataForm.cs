@@ -324,13 +324,15 @@ namespace muzzle
                         jtxt.Lines = m_val;
                         jtxt.Validating += new CancelEventHandler(jid_Validating);
                         jtxt.Validated += new EventHandler(jid_Validated);
-
                         m_control = jtxt;
+                        m_form.error.SetIconAlignment(m_control, ErrorIconAlignment.MiddleLeft);
                         break;
 
-                   // case FieldType.jid_multi:
-                     //   throw new NotImplementedException();
-                        //break;
+                    case FieldType.jid_multi:
+                        JidMulti multi = new JidMulti();
+                        multi.AddRange(m_val);
+                        m_control = multi;                        
+                        break;
 
                     case FieldType.Fixed:
                         Label lbl = new Label();
@@ -512,6 +514,9 @@ namespace muzzle
             private void jid_Validating(object sender, CancelEventArgs e)
             {
                 TextBox jtxt = (TextBox) sender;
+                if (jtxt.Text == "")
+                    return;
+
                 try
                 {
                     jabber.JID j = new jabber.JID(jtxt.Text);
