@@ -114,6 +114,9 @@ namespace jabber.protocol
             }
         }
 
+        /*
+         * This breaks the Mono build, and shouldn't be necessary, since
+         * the base class implements exactly this.
         /// <summary>
         /// Retrieve a given child.
         /// </summary>
@@ -121,6 +124,7 @@ namespace jabber.protocol
         {
             get { return Item(i); }
         }
+        */
 
         /// <summary>
         /// Retrieve a given child.
