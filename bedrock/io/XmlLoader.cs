@@ -32,10 +32,10 @@ using System.Collections;
 using System.Xml;
 
 using bedrock.util;
-using jabber.xml;
+using bedrock.io;
 using jabber.protocol;
 
-namespace jabber.xml
+namespace bedrock.io
 {
     /// <summary>
     /// Reverse-engineered from the Beta1 System.Xml.XmlLoader, since that's private 
