@@ -689,7 +689,7 @@ EOF
 EOF
 
 	close OUT;
- ($outfile) = "DecomposeData.cs";
+ ($outfile) = "Decompose.cs";
 
     local ($bytes_out) = 0;
 
@@ -706,16 +706,63 @@ namespace stringprep.unicode
     /// <summary>
     /// Decomposition data for NFKC.
     /// </summary>
-    public class DecomposeData
+    public class Decompose
     {
+        private static OffsetComparer m_offset = new OffsetComparer();
+
+        /// <summary>
+        /// Look up the given character, and return the offset for it.
+        /// </summary>
+        /// <param name="ch">Character to loop up</param>
+        /// <returns>-1 if not found</returns>
+       /// <summary>
+        /// Look up the given character, and return the offset for it.
+        /// </summary>
+        /// <param name="ch">Character to loop up</param>
+        /// <returns>-1 if not found</returns>
+        public static char[] Find(char ch)
+        {
+            int start = 0;
+            int end = Offsets.Length;
+            int found = -1;
+
+            if ((ch < Offsets[0]) || (ch > Offsets[end - 2]))
+                return null;
+
+            int half;
+            while (true)
+            {
+                half = ((start + end) / 4) * 2;
+                if (ch == Offsets[half])
+                {
+                    found = half;
+                    break;
+                }
+                else if (half == start)
+                    break; // done
+                else if (ch > Offsets[half])
+                    start = half;
+                else
+                    end = half;
+            }
+
+            if (found == -1)
+                return null;
+
+            int first = Offsets[found+1];
+            int len = 0;
+            while (Expansion[first + len] != '\\x0000')
+                len++;
+            return Expansion.ToCharArray(first, len);
+        }
+
         /// <summary>
         /// Offset into the Expansion string for each decomposable character.
         /// One way to make this faster might be to have this not be sparse, so that the lookup
         /// could be direct rather than a binary search.  That would add several hundred K to the
         /// library size, though, or time at startup to initialize an array from this.
         /// </summary>
-        public static readonly Decompose[] Offsets = new Decompose[]
-        {
+        private const string Offsets = 
 EOF
     my ($iter);
     my ($first) = 1;
@@ -723,7 +770,7 @@ EOF
     my ($decomp_string_offset) = 0;
     for ($count = 0; $count <= $last; ++$count) {
       if (defined $decompositions[$count]) {
-        print OUT ",\n"
+        print OUT " +\n"
           if ! $first;
         $first = 0;
 
@@ -739,33 +786,30 @@ EOF
 		  undef $compat_decomp;
 	    }
 
-	    my $decomp = "";
-
 	    if (defined $compat_decomp) {
-		  $decomp .= $compat_decomp;
+		  $decomp = $compat_decomp;
 	    }
 	    elsif (defined $canon_decomp) {
-		  $decomp .= $canon_decomp;
+		  $decomp = $canon_decomp;
 	    }
 		
-		#$decomp = make_decomp($count, $decompose_compat[$count]);
-
         if (!defined($decomp_offsets{$decomp})) {
           $decomp_offsets{$decomp} = $decomp_string_offset;
 
-          $decomp_string .= "\n            new char[] { $decomp }, /* offset ".
-            $decomp_string_offset." */";
-          $decomp_string_offset++;
+          $decomp_string .= sprintf("\n            \"%s\\x0000\" + /* offset 0x%04X */",
+									$decomp, $decomp_string_offset);
+          $decomp_string_offset += (length $decomp) / 6 + 1;
           $bytes_out += (length $decomp) / 6 + 1;
         }
 
-        printf OUT qq(            new Decompose('\\x%04X', %d)), 
+        printf OUT qq(            "\\x%04X\\x%04X"), 
           $count, $decomp_offsets{$decomp};
+		
         $bytes_out += 6;
 
       }
     }
-    print OUT "\n        };\n\n";
+    print OUT "\n        ;\n\n";
 
     printf OUT <<"EOF";
         /// <summary>
@@ -774,9 +818,8 @@ EOF
         /// have one copy of each, and the Offsets table
         /// gives offsets into this for each input.
         /// </summary>
-        public static readonly char[][] Expansion = new char[][] 
-        {$decomp_string
-        };
+        private const string Expansion = $decomp_string
+            "";
     }
 }
 #endif
@@ -872,7 +915,7 @@ sub make_decomp
 
     my $result = "";
     foreach $iter (&expand_decomp ($code, $compat)) {
-      $result .= sprintf "'\\x%04X', ", $iter;
+      $result .= sprintf "\\x%04X", $iter;
     }
 
     $result;
