@@ -65,6 +65,7 @@ namespace Example
             //
             InitializeComponent();
 
+            //jc.AutoStartTLS = false;
             AppDomain.CurrentDomain.UnhandledException +=new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
         }
 
@@ -156,7 +157,6 @@ namespace Example
             this.jc.InvokeControl = this;
             this.jc.LocalCertificate = null;
             this.jc.Password = null;
-            this.jc.Synchronous = true;
             this.jc.User = null;
             this.jc.OnAuthError += new jabber.client.IQHandler(this.jc_OnAuthError);
             this.jc.OnReadText += new bedrock.TextHandler(this.jc_OnReadText);

@@ -33,7 +33,7 @@ namespace test.jabber.protocol
         private bool fail = false;
         private System.Text.Encoding ENC = System.Text.Encoding.UTF8;
 
-        public void Test_Partial()
+        [Test] public void Test_Partial()
         {
             fail = false;
             AsynchElementStream m_ElementStream = new AsynchElementStream();
@@ -43,10 +43,11 @@ namespace test.jabber.protocol
             m_ElementStream.Push(ENC.GetBytes("<te"));
 
             System.Threading.Thread.Sleep(500);
-            Assertion.Assert(! fail);
+            Assert.IsTrue(! fail);
         }
 
-        public void Test_NullBody()
+		/*
+        [Test] public void Test_NullBody()
         {
             fail = false;
             AsynchElementStream m_ElementStream = new AsynchElementStream();
@@ -56,12 +57,13 @@ namespace test.jabber.protocol
             m_ElementStream.Push(ENC.GetBytes("eam/>"));
 
             System.Threading.Thread.Sleep(500);
-            Assertion.Assert(! fail);
+            Assert.IsTrue(! fail);
         }
+*/
 
         /* The server should protect from these.  Good thing, since
          * it doesn't work.  :|
-        public void Test_Comment()
+        [Test] public void Test_Comment()
         {
             fail = false;
             ElementStream m_ElementStream = new ElementStream();
@@ -71,7 +73,7 @@ namespace test.jabber.protocol
             m_ElementStream.Push(ENC.GetBytes(" --></stream>"));
 
             System.Threading.Thread.Sleep(500);
-            Assertion.Assert(! fail);
+            Assert.IsTrue(! fail);
         }
 */
         void jabOnEnd(object s)

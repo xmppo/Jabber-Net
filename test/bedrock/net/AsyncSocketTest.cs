@@ -32,7 +32,7 @@ namespace test.bedrock.net
         private object done = new object();
         private string success = null;
 
-        public void Test_Write()
+        [Test] public void Test_Write()
         {
             SocketWatcher w = new SocketWatcher(20);
             Address a = new Address("127.0.0.1", 7001);
@@ -44,10 +44,10 @@ namespace test.bedrock.net
             {
                 Monitor.Wait(done);
             }
-            Assertion.AssertEquals("5678901234", success);
+            Assert.AreEqual("5678901234", success);
         }
 
-        public void Test_Ops()
+        [Test] public void Test_Ops()
         {
             SocketWatcher w = new SocketWatcher(20);
             Address a = new Address("127.0.0.1", 7001);
@@ -55,50 +55,50 @@ namespace test.bedrock.net
             AsyncSocket one = w.CreateListenSocket(this, a);
             AsyncSocket two = null;
 
-            Assertion.Assert(one == one);
-            Assertion.Assert(two == two);
-            Assertion.Assert(one >= one);
-            Assertion.Assert(two >= two);
-            Assertion.Assert(one <= one);
-            Assertion.Assert(two <= two);
-            Assertion.Assert(one != two);
-            Assertion.Assert(two != one);
-            Assertion.Assert(one > two);
-            Assertion.Assert(one >= two);
-            Assertion.Assert(two < one);
-            Assertion.Assert(two <= one);
+            Assert.IsTrue(one == one);
+            Assert.IsTrue(two == two);
+            Assert.IsTrue(one >= one);
+            Assert.IsTrue(two >= two);
+            Assert.IsTrue(one <= one);
+            Assert.IsTrue(two <= two);
+            Assert.IsTrue(one != two);
+            Assert.IsTrue(two != one);
+            Assert.IsTrue(one > two);
+            Assert.IsTrue(one >= two);
+            Assert.IsTrue(two < one);
+            Assert.IsTrue(two <= one);
 
             two = w.CreateListenSocket(this, a);
-            Assertion.Assert(one == one);
-            Assertion.Assert(two == two);
-            Assertion.Assert(one >= one);
-            Assertion.Assert(two >= two);
-            Assertion.Assert(one <= one);
-            Assertion.Assert(two <= two);
-            Assertion.Assert(one != two);
-            Assertion.Assert(two != one);
+            Assert.IsTrue(one == one);
+            Assert.IsTrue(two == two);
+            Assert.IsTrue(one >= one);
+            Assert.IsTrue(two >= two);
+            Assert.IsTrue(one <= one);
+            Assert.IsTrue(two <= two);
+            Assert.IsTrue(one != two);
+            Assert.IsTrue(two != one);
 
             int c = ((IComparable)one).CompareTo(two);
-            Assertion.Assert(c != 0);
+            Assert.IsTrue(c != 0);
             if (c == -1)
             {
                 // one less than two
-                Assertion.Assert(one < two);
-                Assertion.Assert(one <= two);
-                Assertion.Assert(two > one);
-                Assertion.Assert(two >= one);
+                Assert.IsTrue(one < two);
+                Assert.IsTrue(one <= two);
+                Assert.IsTrue(two > one);
+                Assert.IsTrue(two >= one);
             }
             else if (c == 1)
             {
                 // one greater than two
-                Assertion.Assert(one > two);
-                Assertion.Assert(one >= two);
-                Assertion.Assert(two < one);
-                Assertion.Assert(two <= one);
+                Assert.IsTrue(one > two);
+                Assert.IsTrue(one >= two);
+                Assert.IsTrue(two < one);
+                Assert.IsTrue(two <= one);
             }
             else
             {
-                Assertion.Assert(false);
+                Assert.IsTrue(false);
             }
         }
 

@@ -28,63 +28,63 @@ namespace test.bedrock.io
     {
         private PipeStream p = new PipeStream();
         private static System.Text.Encoding ENC = System.Text.Encoding.ASCII;
-        public void Test_GT()
+        [Test] public void Test_GT()
         {
             byte[] b = ENC.GetBytes("<foo/>");
             byte[] r = new byte[1024];
             int len;
             p.Write(b, 0, b.Length);
             len = p.Read(r, 0, r.Length);
-            Assertion.AssertEquals(b.Length, len);
-            Assertion.AssertEquals("<foo/>", ENC.GetString(r, 0, len));
+            Assert.AreEqual(b.Length, len);
+            Assert.AreEqual("<foo/>", ENC.GetString(r, 0, len));
             b = ENC.GetBytes("<foo/><foo/>");
             p.Write(b, 0, b.Length);
             len = p.Read(r, 0, r.Length);
-            Assertion.AssertEquals("<foo/>", ENC.GetString(r, 0, len));
+            Assert.AreEqual("<foo/>", ENC.GetString(r, 0, len));
             len = p.Read(r, 0, r.Length);
-            Assertion.AssertEquals("<foo/>", ENC.GetString(r, 0, len));
+            Assert.AreEqual("<foo/>", ENC.GetString(r, 0, len));
             b = ENC.GetBytes("<foo/><fo");
             p.Write(b, 0, b.Length);
             len = p.Read(r, 0, r.Length);
-            Assertion.AssertEquals("<foo/>", ENC.GetString(r, 0, len));
+            Assert.AreEqual("<foo/>", ENC.GetString(r, 0, len));
             b = ENC.GetBytes("><foo/>");
             p.Write(b, 0, b.Length);
             len = p.Read(r, 0, r.Length);
-            Assertion.AssertEquals("<fo", ENC.GetString(r, 0, len));
+            Assert.AreEqual("<fo", ENC.GetString(r, 0, len));
             len = p.Read(r, 0, r.Length);
-            Assertion.AssertEquals(">", ENC.GetString(r, 0, len));
+            Assert.AreEqual(">", ENC.GetString(r, 0, len));
             len = p.Read(r, 0, r.Length);
-            Assertion.AssertEquals("<foo/>", ENC.GetString(r, 0, len));
+            Assert.AreEqual("<foo/>", ENC.GetString(r, 0, len));
             b = ENC.GetBytes("<foo><bar/></foo>");
             p.Write(b, 0, b.Length);
             len = p.Read(r, 0, r.Length);
-            Assertion.AssertEquals("<foo>", ENC.GetString(r, 0, len));
+            Assert.AreEqual("<foo>", ENC.GetString(r, 0, len));
             len = p.Read(r, 0, r.Length);
-            Assertion.AssertEquals("<bar/>", ENC.GetString(r, 0, len));
+            Assert.AreEqual("<bar/>", ENC.GetString(r, 0, len));
             len = p.Read(r, 0, r.Length);
-            Assertion.AssertEquals("</foo>", ENC.GetString(r, 0, len));
+            Assert.AreEqual("</foo>", ENC.GetString(r, 0, len));
         }
-        public void Test_All()
+        [Test] public void Test_All()
         {
             byte[] b = ENC.GetBytes("Hello>");
             byte[] r = new byte[1024];
             int len;
             p.Write(b, 0, b.Length);
             len = p.Read(r, 0, r.Length);
-            Assertion.AssertEquals(b.Length, len);
-            Assertion.AssertEquals("Hello>", ENC.GetString(r, 0, len));
+            Assert.AreEqual(b.Length, len);
+            Assert.AreEqual("Hello>", ENC.GetString(r, 0, len));
             b = ENC.GetBytes("Hello>");
             p.Write(b);
             len = p.Read(r, 0, r.Length);
-            Assertion.AssertEquals(b.Length, len);
-            Assertion.AssertEquals("Hello>", ENC.GetString(r, 0, len));
+            Assert.AreEqual(b.Length, len);
+            Assert.AreEqual("Hello>", ENC.GetString(r, 0, len));
             // sync/blocking
             new Thread(new ThreadStart(delay)).Start();
             len = p.Read(r, 0, 2);
-            Assertion.AssertEquals("Do", ENC.GetString(r, 0, len));
+            Assert.AreEqual("Do", ENC.GetString(r, 0, len));
             
             len = p.Read(r, 0, r.Length);
-            Assertion.AssertEquals("ne!!!>", ENC.GetString(r, 0, len));
+            Assert.AreEqual("ne!!!>", ENC.GetString(r, 0, len));
         }
         private void delay()
         {

@@ -28,7 +28,7 @@ namespace test.jabber.protocol.stream
     [TestFixture]
     public class StreamFactoryTest
     {
-        public void Test_Create()
+        [Test] public void Test_Create()
         {
             ElementFactory pf = new ElementFactory();
             pf.AddType(new fact());

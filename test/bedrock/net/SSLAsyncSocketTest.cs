@@ -37,7 +37,7 @@ namespace test.bedrock.net
         private AsyncSocket m_cli;
         Address a = new Address("localhost", 7002);
 
-        public void Test_Write()
+        [Test] public void Test_Write()
         {
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
             bool old_ok = AsyncSocket.UntrustedRootOK;
@@ -58,7 +58,7 @@ namespace test.bedrock.net
             }
 
             m_listen.Close();
-            Assertion.AssertEquals("5678901234", success);
+            Assert.AreEqual("5678901234", success);
             AsyncSocket.UntrustedRootOK = old_ok;
         }
 

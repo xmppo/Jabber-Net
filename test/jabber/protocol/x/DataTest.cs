@@ -76,7 +76,7 @@ namespace test.jabber.protocol.x
       </field>
     </x>";
 
-        public void Test_Parse()
+        [Test] public void Test_Parse()
         {
             XmlDocument doc = new XmlDocument();
             XmlTextReader tr = new XmlTextReader(new StringReader(tstring));
@@ -86,26 +86,26 @@ namespace test.jabber.protocol.x
             l.Factory = ef;
             tr.Read();
             XmlNode n = l.ReadCurrentNode();
-            Assertion.AssertEquals("jabber.protocol.x.Data", n.GetType().ToString());
+            Assert.AreEqual("jabber.protocol.x.Data", n.GetType().ToString());
             Data d = (Data) n;
-            Assertion.AssertEquals(@"
+            Assert.AreEqual(@"
         Welcome to the BloodBank-Service!  We thank you for registering with
         us and helping to save lives.  Please fill out the following form.
       ", d.Instructions);
             Field[] fields = d.GetFields();
-            Assertion.AssertEquals(9, fields.Length);
-            Assertion.AssertEquals("2", fields[7].Val);
-            Assertion.AssertEquals(true, fields[7].IsRequired);
-            Assertion.AssertEquals(false, fields[4].IsRequired);
-            Assertion.AssertEquals("Pints to give", fields[7].Label);
-            Assertion.AssertEquals("pints", fields[7].Var);
-            Assertion.AssertEquals(FieldType.list_single, fields[7].Type);
-            Assertion.AssertEquals(d.GetField("pints").Label, "Pints to give");
+            Assert.AreEqual(9, fields.Length);
+            Assert.AreEqual("2", fields[7].Val);
+            Assert.AreEqual(true, fields[7].IsRequired);
+            Assert.AreEqual(false, fields[4].IsRequired);
+            Assert.AreEqual("Pints to give", fields[7].Label);
+            Assert.AreEqual("pints", fields[7].Var);
+            Assert.AreEqual(FieldType.list_single, fields[7].Type);
+            Assert.AreEqual(d.GetField("pints").Label, "Pints to give");
 
             Option[] options = fields[7].GetOptions();
-            Assertion.AssertEquals(4, options.Length);
-            Assertion.AssertEquals("Two", options[2].Label);
-            Assertion.AssertEquals("2", options[2].Val);
+            Assert.AreEqual(4, options.Length);
+            Assert.AreEqual("Two", options[2].Label);
+            Assert.AreEqual("2", options[2].Val);
         }
     }
 }

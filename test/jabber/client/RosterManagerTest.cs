@@ -33,10 +33,10 @@ namespace test.jabber.client1 // TODO: Client1 due to a bug in NUnit.
     {
         XmlDocument doc = new XmlDocument();
 
-        public void Test_Create()
+        [Test] public void Test_Create()
         {
             RosterManager rm = new RosterManager();
-            Assertion.AssertEquals("jabber.client.RosterManager", rm.GetType().FullName);
+            Assert.AreEqual("jabber.client.RosterManager", rm.GetType().FullName);
         }
         public void TestAdd()
         {
@@ -51,8 +51,8 @@ namespace test.jabber.client1 // TODO: Client1 due to a bug in NUnit.
             i.Subscription = Subscription.both;
 
             rm.AddRoster(riq);
-            Assertion.AssertEquals(Subscription.both, rm["foo@bar"].Subscription);
-            Assertion.AssertEquals("FOO", rm["foo@bar"].Nickname);
+            Assert.AreEqual(Subscription.both, rm["foo@bar"].Subscription);
+            Assert.AreEqual("FOO", rm["foo@bar"].Nickname);
 
             riq = new RosterIQ(doc);
             riq.Type = IQType.set;
@@ -62,8 +62,8 @@ namespace test.jabber.client1 // TODO: Client1 due to a bug in NUnit.
             i.Nickname = "BAR";
             i.Subscription = Subscription.to;
             rm.AddRoster(riq);
-            Assertion.AssertEquals(Subscription.to, rm["foo@bar"].Subscription);
-            Assertion.AssertEquals("BAR", rm["foo@bar"].Nickname);
+            Assert.AreEqual(Subscription.to, rm["foo@bar"].Subscription);
+            Assert.AreEqual("BAR", rm["foo@bar"].Nickname);
         }
         public void TestNumeric()
         {
@@ -78,8 +78,8 @@ namespace test.jabber.client1 // TODO: Client1 due to a bug in NUnit.
             i.Subscription = Subscription.both;
 
             rm.AddRoster(riq);
-            Assertion.AssertEquals(Subscription.both, rm["support@conference.192.168.32.109"].Subscription);
-            Assertion.AssertEquals("FOO", rm["support@conference.192.168.32.109"].Nickname);
+            Assert.AreEqual(Subscription.both, rm["support@conference.192.168.32.109"].Subscription);
+            Assert.AreEqual("FOO", rm["support@conference.192.168.32.109"].Nickname);
         }
     }
 }

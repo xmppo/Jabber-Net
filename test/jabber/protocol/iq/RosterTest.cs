@@ -32,27 +32,27 @@ namespace test.jabber.protocol.iq
     {
         XmlDocument doc = new XmlDocument();
         [SetUp]
-        private void SetUp()
+        public void SetUp()
         {
             Element.ResetID();
         }
-        public void Test_Create()
+        [Test] public void Test_Create()
         {
             Roster r = new Roster(doc);
-            Assertion.AssertEquals("<query xmlns=\"jabber:iq:roster\" />", r.ToString());
+            Assert.AreEqual("<query xmlns=\"jabber:iq:roster\" />", r.ToString());
         }
     
-        public void Test_Item()
+        [Test] public void Test_Item()
         {
             RosterIQ riq = new RosterIQ(doc);
             Roster r = (Roster) riq.Query;
             Item i = r.AddItem();
             i.JID = new JID("hildjj@jabber.com");
-            Assertion.AssertEquals("<iq id=\"JN_1\" type=\"get\"><query xmlns=\"jabber:iq:roster\">" +
+            Assert.AreEqual("<iq id=\"JN_1\" type=\"get\"><query xmlns=\"jabber:iq:roster\">" +
                 "<item jid=\"hildjj@jabber.com\" /></query></iq>",
                 riq.ToString());
         }
-        public void Test_GetItems()
+        [Test] public void Test_GetItems()
         {
             RosterIQ riq = new RosterIQ(doc);
             Roster r = (Roster) riq.Query;
@@ -63,48 +63,48 @@ namespace test.jabber.protocol.iq
             i.JID = new JID("hildjj@jabber.org");
             i.Subscription = Subscription.both;
             Item[] items = r.GetItems();
-            Assertion.AssertEquals(items.Length, 2);
-            Assertion.AssertEquals(items[0].JID, "hildjj@jabber.com");
-            Assertion.AssertEquals(items[1].JID, "hildjj@jabber.org");
+            Assert.AreEqual(items.Length, 2);
+            Assert.AreEqual(items[0].JID, "hildjj@jabber.com");
+            Assert.AreEqual(items[1].JID, "hildjj@jabber.org");
         }
-        public void Test_Groups()
+        [Test] public void Test_Groups()
         {
             RosterIQ riq = new RosterIQ(doc);
             Roster r = (Roster) riq.Query;
             Item i = r.AddItem();
             i.JID = new JID("hildjj@jabber.com");
             Group g = i.AddGroup("foo");
-            Assertion.AssertEquals("<iq id=\"JN_1\" type=\"get\"><query xmlns=\"jabber:iq:roster\">" +
+            Assert.AreEqual("<iq id=\"JN_1\" type=\"get\"><query xmlns=\"jabber:iq:roster\">" +
                 "<item jid=\"hildjj@jabber.com\"><group>foo</group></item></query></iq>",
                 riq.ToString());
             g = i.AddGroup("foo");
-            Assertion.AssertEquals("<iq id=\"JN_1\" type=\"get\"><query xmlns=\"jabber:iq:roster\">" +
+            Assert.AreEqual("<iq id=\"JN_1\" type=\"get\"><query xmlns=\"jabber:iq:roster\">" +
                 "<item jid=\"hildjj@jabber.com\"><group>foo</group></item></query></iq>",
                 riq.ToString());
             g = i.AddGroup("bar");
-            Assertion.AssertEquals("<iq id=\"JN_1\" type=\"get\"><query xmlns=\"jabber:iq:roster\">" +
+            Assert.AreEqual("<iq id=\"JN_1\" type=\"get\"><query xmlns=\"jabber:iq:roster\">" +
                 "<item jid=\"hildjj@jabber.com\"><group>foo</group><group>bar</group></item></query></iq>",
                 riq.ToString());
-            Assertion.AssertEquals(2, i.GetGroups().Length);
-            Assertion.AssertEquals("foo", i.GetGroup("foo").GroupName);
-            Assertion.AssertEquals("bar", i.GetGroup("bar").GroupName);
+            Assert.AreEqual(2, i.GetGroups().Length);
+            Assert.AreEqual("foo", i.GetGroup("foo").GroupName);
+            Assert.AreEqual("bar", i.GetGroup("bar").GroupName);
             i.RemoveGroup("foo");
-            Assertion.AssertEquals(1, i.GetGroups().Length);
-            Assertion.AssertEquals(null, i.GetGroup("foo"));
+            Assert.AreEqual(1, i.GetGroups().Length);
+            Assert.AreEqual(null, i.GetGroup("foo"));
         }
-        public void Test_Ask()
+        [Test] public void Test_Ask()
         {
             RosterIQ riq = new RosterIQ(doc);
             Roster r = (Roster) riq.Query;
             Item i = r.AddItem();
-            Assertion.AssertEquals("", i.GetAttribute("ask"));
-            Assertion.AssertEquals(Ask.NONE, i.Ask);
+            Assert.AreEqual("", i.GetAttribute("ask"));
+            Assert.AreEqual(Ask.NONE, i.Ask);
             i.Ask = Ask.subscribe;
-            Assertion.AssertEquals("subscribe", i.GetAttribute("ask"));
-            Assertion.AssertEquals(Ask.subscribe, i.Ask);
+            Assert.AreEqual("subscribe", i.GetAttribute("ask"));
+            Assert.AreEqual(Ask.subscribe, i.Ask);
             i.Ask = Ask.NONE;
-            Assertion.AssertEquals("", i.GetAttribute("ask"));
-            Assertion.AssertEquals(Ask.NONE, i.Ask);
+            Assert.AreEqual("", i.GetAttribute("ask"));
+            Assert.AreEqual(Ask.NONE, i.Ask);
         }
     }
 }

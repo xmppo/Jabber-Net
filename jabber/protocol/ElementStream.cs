@@ -40,11 +40,6 @@ namespace jabber.protocol
     public class ElementStream
     {
         /// <summary>
-        /// The stream to read from
-        /// </summary>
-        protected Stream      m_stream;
-
-        /// <summary>
         /// The document to create elements in
         /// </summary>
         protected XmlDocument m_doc;
@@ -79,10 +74,9 @@ namespace jabber.protocol
         /// <summary>
         /// Create a parser that will report events to the listener.  
         /// </summary>
-        protected ElementStream(Stream stream)
+        protected ElementStream()
         {
-            m_stream = stream;
-            m_doc    = new XmlDocument();
+            m_doc = new XmlDocument();
             m_factory.AddType(new jabber.protocol.stream.Factory());
         }
 

@@ -37,27 +37,27 @@ namespace test.bedrock.collections
             t["~a"] = "~a";
             t[' ']  = " ";
             t["  "] = "  ";
-            Assertion.AssertEquals(t.Count, 7);
-            Assertion.Assert(t.Contains("~"));
-            Assertion.Assert(!t.Contains("~~"));
+            Assert.AreEqual(t.Count, 7);
+            Assert.IsTrue(t.Contains("~"));
+            Assert.IsTrue(!t.Contains("~~"));
             return t;
         }
-        public void Test_Type()
+        [Test] public void Test_Type()
         {
             Trie t = new Trie();
-            Assertion.AssertEquals("bedrock.collections.Trie", t.GetType().FullName);
+            Assert.AreEqual("bedrock.collections.Trie", t.GetType().FullName);
         }
-        public void Test_Main() 
+        [Test] public void Test_Main() 
         {
             Trie t = new Trie();
             t["one"] = "two";
-            Assertion.AssertEquals("two", t["one"]);
-            Assertion.AssertEquals(t.Count, 1);
+            Assert.AreEqual("two", t["one"]);
+            Assert.AreEqual(t.Count, 1);
             t.Remove("one");
-            Assertion.AssertEquals(t.Count, 0);
-            Assertion.AssertEquals(null, t["one"]);
+            Assert.AreEqual(t.Count, 0);
+            Assert.AreEqual(null, t["one"]);
         }
-        public void Test_Enum()
+        [Test] public void Test_Enum()
         {
             Trie t = data();
             int i = 0;
@@ -69,32 +69,32 @@ namespace test.bedrock.collections
                 Console.WriteLine(s);
                 i++;
             }
-            Assertion.AssertEquals(7, i);
+            Assert.AreEqual(7, i);
         }
-        public void Test_Clear()
+        [Test] public void Test_Clear()
         {
             Trie t = new Trie();
-            Assertion.AssertEquals(t.Count, 0);
+            Assert.AreEqual(t.Count, 0);
             t.Clear();
-            Assertion.AssertEquals(t.Count, 0);
+            Assert.AreEqual(t.Count, 0);
             t.Add("one", "one");
-            Assertion.AssertEquals(t.Count, 1);
+            Assert.AreEqual(t.Count, 1);
             t.Clear();
-            Assertion.AssertEquals(t.Count, 0);
+            Assert.AreEqual(t.Count, 0);
         }
-        public void Test_Values()
+        [Test] public void Test_Values()
         {
             Trie t = data();
             ICollection ic = t.Values;
-            Assertion.AssertEquals(ic.Count, 7);
+            Assert.AreEqual(ic.Count, 7);
         }
-        public void Test_Keys()
+        [Test] public void Test_Keys()
         {
             Trie t = data();
             ICollection ic = t.Keys;
-            Assertion.AssertEquals(7, ic.Count);
+            Assert.AreEqual(7, ic.Count);
         }
-        public void Test_Dictionary()
+        [Test] public void Test_Dictionary()
         {
             Trie t = data();
             // TODO: test dictionary enumerator.

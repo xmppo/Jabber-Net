@@ -73,7 +73,6 @@ $(BASEDIR)/jabber/protocol/stream/Session.cs \
 $(BASEDIR)/jabber/protocol/stream/Stream.cs \
 $(BASEDIR)/jabber/protocol/stream/Error.cs \
 $(BASEDIR)/jabber/protocol/Element.cs \
-$(BASEDIR)/jabber/protocol/SynchElementStream.cs \
 $(BASEDIR)/bedrock/io/ReadEventStream.cs \
 $(BASEDIR)/bedrock/io/PipeStream.cs \
 $(BASEDIR)/bedrock/net/AsyncSocket.cs \
@@ -100,7 +99,15 @@ $(BASEDIR)/bedrock/collections/LinkedList.cs \
 $(BASEDIR)/bedrock/collections/GraphNode.cs \
 $(BASEDIR)/bedrock/collections/ISet.cs \
 $(BASEDIR)/bedrock/collections/Tree.cs \
-$(BASEDIR)/bedrock/collections/Trie.cs 
+$(BASEDIR)/bedrock/collections/Trie.cs \
+$(BASEDIR)/xpnet/BufferAggregate.cs \
+$(BASEDIR)/xpnet/ContentToken.cs \
+$(BASEDIR)/xpnet/Encoding.cs \
+$(BASEDIR)/xpnet/Exceptions.cs \
+$(BASEDIR)/xpnet/NS.cs \
+$(BASEDIR)/xpnet/Position.cs \
+$(BASEDIR)/xpnet/Token.cs \
+$(BASEDIR)/xpnet/UTF8Encoding.cs
 
 RESOURCES = \
 -resource:$(BASEDIR)/jabber/client/JabberClient.resx \

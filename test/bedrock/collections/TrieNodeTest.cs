@@ -25,7 +25,7 @@ namespace test.bedrock.collections
     [TestFixture]
     public class TrieNodeTest
     {
-        public void Test_Main() 
+        [Test] public void Test_Main() 
         {
             System.Text.Encoding ENC = System.Text.Encoding.Default;
             TrieNode n = new TrieNode(null, 0);
@@ -37,7 +37,7 @@ namespace test.bedrock.collections
                 current = current[b, true];
             }
             current.Value = "foo";
-            Assertion.AssertEquals(ENC.GetString(key), ENC.GetString(current.Key));
+            Assert.AreEqual(ENC.GetString(key), ENC.GetString(current.Key));
         }
     }
 }

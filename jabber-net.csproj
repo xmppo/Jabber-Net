@@ -84,16 +84,6 @@
                     AssemblyName = "Org.Mentalis.Security"
                     HintPath = "lib\Org.Mentalis.Security.dll"
                 />
-                <Reference
-                    Name = "SAX"
-                    AssemblyName = "SAX"
-                    HintPath = "lib\SAX.dll"
-                />
-                <Reference
-                    Name = "AElfred"
-                    AssemblyName = "AElfred"
-                    HintPath = "lib\AElfred.dll"
-                />
             </References>
         </Build>
         <Files>
@@ -346,11 +336,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "jabber\protocol\SynchElementStream.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "jabber\protocol\URI.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -551,6 +536,46 @@
                 />
                 <File
                     RelPath = "jabber\server\XdbTracker.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "xpnet\BufferAggregate.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "xpnet\ContentToken.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "xpnet\Encoding.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "xpnet\Exceptions.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "xpnet\NS.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "xpnet\Position.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "xpnet\Token.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "xpnet\UTF8Encoding.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -27,279 +27,279 @@ namespace test.jabber
     [TestFixture]
     public class JIDTest
     {
-        public void Test_Create()
+        [Test] public void Test_Create()
         {
             JID j = new JID("foo", "jabber.com", "there");
-            Assertion.AssertEquals("foo@jabber.com/there", j.ToString());
+            Assert.AreEqual("foo@jabber.com/there", j.ToString());
             j = new JID(null, "jabber.com", null);
-            Assertion.AssertEquals("jabber.com", j.ToString());
+            Assert.AreEqual("jabber.com", j.ToString());
             j = new JID("foo", "jabber.com", null);
-            Assertion.AssertEquals("foo@jabber.com", j.ToString());
+            Assert.AreEqual("foo@jabber.com", j.ToString());
             j = new JID(null, "jabber.com", "there");
-            Assertion.AssertEquals("jabber.com/there", j.ToString());
+            Assert.AreEqual("jabber.com/there", j.ToString());
         }
-        public void Test_Parse_1()
+        [Test] public void Test_Parse_1()
         {
             JID j = new JID("foo");
-            Assertion.AssertEquals(null, j.User);
-            Assertion.AssertEquals("foo", j.Server);
-            Assertion.AssertEquals(null, j.Resource);
+            Assert.AreEqual(null, j.User);
+            Assert.AreEqual("foo", j.Server);
+            Assert.AreEqual(null, j.Resource);
         }
-        public void Test_Parse_2()
+        [Test] public void Test_Parse_2()
         {
             JID j = new JID("foo/bar");
-            Assertion.AssertEquals(null, j.User);
-            Assertion.AssertEquals("foo", j.Server);
-            Assertion.AssertEquals("bar", j.Resource);
+            Assert.AreEqual(null, j.User);
+            Assert.AreEqual("foo", j.Server);
+            Assert.AreEqual("bar", j.Resource);
         }
-        public void Test_Parse_3()
+        [Test] public void Test_Parse_3()
         {
             JID j = new JID("boo@foo");
-            Assertion.AssertEquals("boo", j.User);
-            Assertion.AssertEquals("foo", j.Server);
-            Assertion.AssertEquals(null, j.Resource);
+            Assert.AreEqual("boo", j.User);
+            Assert.AreEqual("foo", j.Server);
+            Assert.AreEqual(null, j.Resource);
         }
-        public void Test_Parse_4()
+        [Test] public void Test_Parse_4()
         {
             JID j = new JID("boo@foo/bar");
-            Assertion.AssertEquals("boo", j.User);
-            Assertion.AssertEquals("foo", j.Server);
-            Assertion.AssertEquals("bar", j.Resource);
+            Assert.AreEqual("boo", j.User);
+            Assert.AreEqual("foo", j.Server);
+            Assert.AreEqual("bar", j.Resource);
         }
-        public void Test_Parse_5()
+        [Test] public void Test_Parse_5()
         {
             JID j = new JID("foo/bar@baz");
-            Assertion.AssertEquals(null, j.User);
-            Assertion.AssertEquals("foo", j.Server);
-            Assertion.AssertEquals("bar@baz", j.Resource);
+            Assert.AreEqual(null, j.User);
+            Assert.AreEqual("foo", j.Server);
+            Assert.AreEqual("bar@baz", j.Resource);
         }
-        public void Test_Parse_6()
+        [Test] public void Test_Parse_6()
         {
             JID j = new JID("boo@foo/bar@baz");
-            Assertion.AssertEquals("boo", j.User);
-            Assertion.AssertEquals("foo", j.Server);
-            Assertion.AssertEquals("bar@baz", j.Resource);
+            Assert.AreEqual("boo", j.User);
+            Assert.AreEqual("foo", j.Server);
+            Assert.AreEqual("bar@baz", j.Resource);
         }
-        public void Test_Parse_7()
+        [Test] public void Test_Parse_7()
         {
             JID j = new JID("boo@foo/bar/baz");
-            Assertion.AssertEquals("boo", j.User);
-            Assertion.AssertEquals("foo", j.Server);
-            Assertion.AssertEquals("bar/baz", j.Resource);
+            Assert.AreEqual("boo", j.User);
+            Assert.AreEqual("foo", j.Server);
+            Assert.AreEqual("bar/baz", j.Resource);
         }
-        public void Test_Parse_8()
+        [Test] public void Test_Parse_8()
         {
             JID j = new JID("boo/foo@bar@baz");
-            Assertion.AssertEquals(null, j.User);
-            Assertion.AssertEquals("boo", j.Server);
-            Assertion.AssertEquals("foo@bar@baz", j.Resource);
+            Assert.AreEqual(null, j.User);
+            Assert.AreEqual("boo", j.Server);
+            Assert.AreEqual("foo@bar@baz", j.Resource);
         }
-        public void Test_Parse_9()
+        [Test] public void Test_Parse_9()
         {
             JID j = new JID("boo/foo@bar");
-            Assertion.AssertEquals(null, j.User);
-            Assertion.AssertEquals("boo", j.Server);
-            Assertion.AssertEquals("foo@bar", j.Resource);
+            Assert.AreEqual(null, j.User);
+            Assert.AreEqual("boo", j.Server);
+            Assert.AreEqual("foo@bar", j.Resource);
         }
-        public void Test_Parse_10()
+        [Test] public void Test_Parse_10()
         {
             JID j = new JID("boo/foo/bar");
-            Assertion.AssertEquals(null, j.User);
-            Assertion.AssertEquals("boo", j.Server);
-            Assertion.AssertEquals("foo/bar", j.Resource);
+            Assert.AreEqual(null, j.User);
+            Assert.AreEqual("boo", j.Server);
+            Assert.AreEqual("foo/bar", j.Resource);
         }
-        public void Test_Parse_11()
+        [Test] public void Test_Parse_11()
         {
             JID j = new JID("boo//foo");
-            Assertion.AssertEquals(null, j.User);
-            Assertion.AssertEquals("boo", j.Server);
-            Assertion.AssertEquals("/foo", j.Resource);
+            Assert.AreEqual(null, j.User);
+            Assert.AreEqual("boo", j.Server);
+            Assert.AreEqual("/foo", j.Resource);
         }
-        public void Test_EmptyResource()
+        [Test] public void Test_EmptyResource()
         {
             try
             {
                 JID j = new JID("boo/");
                 string u = j.User;
-                Assertion.Assert(false);
+                Assert.IsTrue(false);
             }
             catch (JIDFormatException)
             {
-                Assertion.Assert(true);
+                Assert.IsTrue(true);
             }
             catch (Exception)
             {
-                Assertion.Assert(false);
+                Assert.IsTrue(false);
             }
         }
-        public void Test_EmptyResourceUser()
+        [Test] public void Test_EmptyResourceUser()
         {
             try
             {
                 JID j = new JID("boo@foo/");
                 string u = j.User;
-                Assertion.Assert(false);
+                Assert.IsTrue(false);
             }
             catch (JIDFormatException)
             {
-                Assertion.Assert(true);
+                Assert.IsTrue(true);
             }
             catch (Exception)
             {
-                Assertion.Assert(false);
+                Assert.IsTrue(false);
             }
         }
 
-        public void Test_NoHost()
+        [Test] public void Test_NoHost()
         {
             try
             {
                 JID j = new JID("foo@");
                 string u = j.User;
-                Assertion.Assert(false);
+                Assert.IsTrue(false);
             }
             catch (JIDFormatException)
             {
-                Assertion.Assert(true);
+                Assert.IsTrue(true);
             }
             catch (Exception)
             {
-                Assertion.Assert(false);
+                Assert.IsTrue(false);
             }
         }
-        public void Test_AtAt()
+        [Test] public void Test_AtAt()
         {
             try
             {
                 JID j = new JID("boo@@foo");
                 string u = j.User;
-                Assertion.Assert(false);
+                Assert.IsTrue(false);
             }
             catch (JIDFormatException)
             {
-                Assertion.Assert(true);
+                Assert.IsTrue(true);
             }
             catch (Exception)
             {
-                Assertion.Assert(false);
+                Assert.IsTrue(false);
             }
         }
-        public void Test_TwoAt()
+        [Test] public void Test_TwoAt()
         {
             try
             {
                 JID j = new JID("boo@foo@bar");
                 string u = j.User;
-                Assertion.Assert(false);
+                Assert.IsTrue(false);
             }
             catch (JIDFormatException)
             {
-                Assertion.Assert(true);
+                Assert.IsTrue(true);
             }
             catch (Exception)
             {
-                Assertion.Assert(false);
+                Assert.IsTrue(false);
             }
         }
-        public void Test_Compare_Equal()
+        [Test] public void Test_Compare_Equal()
         {
             JID j = new JID("foo@bar/baz");
-            Assertion.AssertEquals(0, j.CompareTo(j));
-            Assertion.AssertEquals(0, j.CompareTo(new JID("foo@bar/baz")));
+            Assert.AreEqual(0, j.CompareTo(j));
+            Assert.AreEqual(0, j.CompareTo(new JID("foo@bar/baz")));
             j = new JID("foo@bar");
-            Assertion.AssertEquals(0, j.CompareTo(j));
-            Assertion.AssertEquals(0, j.CompareTo(new JID("foo@bar")));
-            Assertion.Assert(j == new JID("foo@bar"));
-            Assertion.Assert(j == new JID("foo@BAR"));
-            Assertion.Assert(j == new JID("FOO@BAR"));
-            Assertion.Assert(j == new JID("FOO@bar"));
-            Assertion.AssertEquals(new JID("FOO@bar").GetHashCode(), j.GetHashCode());
+            Assert.AreEqual(0, j.CompareTo(j));
+            Assert.AreEqual(0, j.CompareTo(new JID("foo@bar")));
+            Assert.IsTrue(j == new JID("foo@bar"));
+            Assert.IsTrue(j == new JID("foo@BAR"));
+            Assert.IsTrue(j == new JID("FOO@BAR"));
+            Assert.IsTrue(j == new JID("FOO@bar"));
+            Assert.AreEqual(new JID("FOO@bar").GetHashCode(), j.GetHashCode());
             j = new JID("bar");
-            Assertion.AssertEquals(0, j.CompareTo(j));
-            Assertion.AssertEquals(0, j.CompareTo(new JID("bar")));
+            Assert.AreEqual(0, j.CompareTo(j));
+            Assert.AreEqual(0, j.CompareTo(new JID("bar")));
             j = new JID("foo/bar");
-            Assertion.AssertEquals(0, j.CompareTo(j));
-            Assertion.AssertEquals(0, j.CompareTo(new JID("foo/bar")));
-            Assertion.AssertEquals(true, j >= new JID("foo/bar"));
-            Assertion.AssertEquals(true, j <= new JID("foo/bar"));
+            Assert.AreEqual(0, j.CompareTo(j));
+            Assert.AreEqual(0, j.CompareTo(new JID("foo/bar")));
+            Assert.AreEqual(true, j >= new JID("foo/bar"));
+            Assert.AreEqual(true, j <= new JID("foo/bar"));
         }
-        public void Test_Compare_Less()
+        [Test] public void Test_Compare_Less()
         {
             JID j = new JID("foo@bar/baz");
-            Assertion.AssertEquals(-1, j.CompareTo(new JID("foo@bas/baz")));
-            Assertion.AssertEquals(-1, j.CompareTo(new JID("fop@bar/baz")));
-            Assertion.AssertEquals(-1, j.CompareTo(new JID("foo@bar/bazz")));
+            Assert.AreEqual(-1, j.CompareTo(new JID("foo@bas/baz")));
+            Assert.AreEqual(-1, j.CompareTo(new JID("fop@bar/baz")));
+            Assert.AreEqual(-1, j.CompareTo(new JID("foo@bar/bazz")));
             j = new JID("foo@bar");
-            Assertion.AssertEquals(-1, j.CompareTo(new JID("foo@bas/baz")));
-            Assertion.AssertEquals(-1, j.CompareTo(new JID("foo@bas")));
-            Assertion.AssertEquals(-1, j.CompareTo(new JID("fop@bar/baz")));
-            Assertion.AssertEquals(-1, j.CompareTo(new JID("fop@bar")));
-            Assertion.AssertEquals(-1, j.CompareTo(new JID("foo@bar/baz")));
+            Assert.AreEqual(-1, j.CompareTo(new JID("foo@bas/baz")));
+            Assert.AreEqual(-1, j.CompareTo(new JID("foo@bas")));
+            Assert.AreEqual(-1, j.CompareTo(new JID("fop@bar/baz")));
+            Assert.AreEqual(-1, j.CompareTo(new JID("fop@bar")));
+            Assert.AreEqual(-1, j.CompareTo(new JID("foo@bar/baz")));
             j = new JID("bar");
-            Assertion.AssertEquals(-1, j.CompareTo(new JID("foo@bar/baz")));
-            Assertion.AssertEquals(-1, j.CompareTo(new JID("foo@bar")));
-            Assertion.AssertEquals(-1, j.CompareTo(new JID("bas")));
-            Assertion.AssertEquals(-1, j.CompareTo(new JID("bas/baz")));
-            Assertion.AssertEquals(-1, j.CompareTo(new JID("bar/baz")));
-            Assertion.AssertEquals(true, j < new JID("foo@bar/baz"));
-            Assertion.AssertEquals(true, j <= new JID("foo@bar/baz"));
+            Assert.AreEqual(-1, j.CompareTo(new JID("foo@bar/baz")));
+            Assert.AreEqual(-1, j.CompareTo(new JID("foo@bar")));
+            Assert.AreEqual(-1, j.CompareTo(new JID("bas")));
+            Assert.AreEqual(-1, j.CompareTo(new JID("bas/baz")));
+            Assert.AreEqual(-1, j.CompareTo(new JID("bar/baz")));
+            Assert.AreEqual(true, j < new JID("foo@bar/baz"));
+            Assert.AreEqual(true, j <= new JID("foo@bar/baz"));
         }
-        public void Test_Compare_Greater()
+        [Test] public void Test_Compare_Greater()
         {
             JID j = new JID("foo@bar/baz");
-            Assertion.AssertEquals(1, j.CompareTo(new JID("foo@bap/baz")));
-            Assertion.AssertEquals(1, j.CompareTo(new JID("fon@bar/baz")));
-            Assertion.AssertEquals(1, j.CompareTo(new JID("foo@bar/bay")));
-            Assertion.AssertEquals(1, j.CompareTo(new JID("foo@bar")));
-            Assertion.AssertEquals(1, j.CompareTo(new JID("bar")));
-            Assertion.AssertEquals(1, j.CompareTo(new JID("bar/baz")));
+            Assert.AreEqual(1, j.CompareTo(new JID("foo@bap/baz")));
+            Assert.AreEqual(1, j.CompareTo(new JID("fon@bar/baz")));
+            Assert.AreEqual(1, j.CompareTo(new JID("foo@bar/bay")));
+            Assert.AreEqual(1, j.CompareTo(new JID("foo@bar")));
+            Assert.AreEqual(1, j.CompareTo(new JID("bar")));
+            Assert.AreEqual(1, j.CompareTo(new JID("bar/baz")));
             j = new JID("foo@bar");
-            Assertion.AssertEquals(1, j.CompareTo(new JID("foo@bap/baz")));
-            Assertion.AssertEquals(1, j.CompareTo(new JID("fon@bar/baz")));
-            Assertion.AssertEquals(1, j.CompareTo(new JID("bar")));
-            Assertion.AssertEquals(1, j.CompareTo(new JID("bar/baz")));
-            Assertion.AssertEquals(true, j > new JID("foo@bap/baz"));
-            Assertion.AssertEquals(true, j >= new JID("foo@bap/baz"));
+            Assert.AreEqual(1, j.CompareTo(new JID("foo@bap/baz")));
+            Assert.AreEqual(1, j.CompareTo(new JID("fon@bar/baz")));
+            Assert.AreEqual(1, j.CompareTo(new JID("bar")));
+            Assert.AreEqual(1, j.CompareTo(new JID("bar/baz")));
+            Assert.AreEqual(true, j > new JID("foo@bap/baz"));
+            Assert.AreEqual(true, j >= new JID("foo@bap/baz"));
             // /me runs out of interest.
         }
-        public void Test_BadCompare()
+        [Test] public void Test_BadCompare()
         {
             try
             {
                 JID j = new JID("foo@boo/bar");
                 j.CompareTo("foo@boo/bar");
-                Assertion.Assert(false);
+                Assert.IsTrue(false);
             }
             catch (ArgumentException)
             {
-                Assertion.Assert(true);
+                Assert.IsTrue(true);
             }
             catch (Exception)
             {
-                Assertion.Assert(false);
+                Assert.IsTrue(false);
             }
         }
-        public void Test_Insensitive()
+        [Test] public void Test_Insensitive()
         {
             JID j = new JID("foo@boo/bar");
-            Assertion.AssertEquals(0, j.CompareTo(new JID("foo@BOO/bar")));
-            Assertion.AssertEquals(0, j.CompareTo(new JID("FOO@boo/bar")));
-            Assertion.AssertEquals(0, j.CompareTo(new JID("FOO@BOO/bar")));
-            Assertion.AssertEquals(-1, j.CompareTo(new JID("FOO@BOO/BAR")));
+            Assert.AreEqual(0, j.CompareTo(new JID("foo@BOO/bar")));
+            Assert.AreEqual(0, j.CompareTo(new JID("FOO@boo/bar")));
+            Assert.AreEqual(0, j.CompareTo(new JID("FOO@BOO/bar")));
+            Assert.AreEqual(-1, j.CompareTo(new JID("FOO@BOO/BAR")));
         }
 
-        public void Test_Config()
+        [Test] public void Test_Config()
         {
             JID j = new JID("config@-internal");
-            Assertion.AssertEquals("config", j.User);
-            Assertion.AssertEquals("-internal", j.Server);
-            Assertion.AssertEquals(null, j.Resource);
+            Assert.AreEqual("config", j.User);
+            Assert.AreEqual("-internal", j.Server);
+            Assert.AreEqual(null, j.Resource);
         }
 
-        public void Test_Numeric()
+        [Test] public void Test_Numeric()
         {
             JID j = new JID("support", "conference.192.168.32.109", "bob");
-            Assertion.AssertEquals("conference.192.168.32.109", j.Server);
+            Assert.AreEqual("conference.192.168.32.109", j.Server);
         }
     }
 }

@@ -27,86 +27,86 @@ namespace test.bedrock.collections
     public class SetTest
     {
         //[ExpectedException(typeof(ArgumentException))]
-        public void Test_Hashtable_Double_Add()
+        [Test] public void Test_Hashtable_Double_Add()
         {
             Set s = new Set(SetImplementation.Hashtable);
-            Assertion.AssertEquals(0, s.Count);
+            Assert.AreEqual(0, s.Count);
             s.Add("one");
-            Assertion.AssertEquals(1, s.Count);
+            Assert.AreEqual(1, s.Count);
             s.Add("one");
         }
         //[ExpectedException(typeof(ArgumentException))]
-        public void Test_SkipList_Double_Add()
+        [Test] public void Test_SkipList_Double_Add()
         {
             Set s = new Set(SetImplementation.SkipList);
-            Assertion.AssertEquals(0, s.Count);
+            Assert.AreEqual(0, s.Count);
             s.Add("one");
-            Assertion.AssertEquals(1, s.Count);
+            Assert.AreEqual(1, s.Count);
             s.Add("one");
         }
         //[ExpectedException(typeof(ArgumentException))]
-        public void Test_Tree_Double_Add()
+        [Test] public void Test_Tree_Double_Add()
         {
             Set s = new Set(SetImplementation.Tree);
-            Assertion.AssertEquals(0, s.Count);
+            Assert.AreEqual(0, s.Count);
             s.Add("one");
-            Assertion.AssertEquals(1, s.Count);
+            Assert.AreEqual(1, s.Count);
             s.Add("one");
         }
 
         private void all(SetImplementation i)
         {
             Set s = new Set(i);
-            Assertion.AssertEquals(0, s.Count);
+            Assert.AreEqual(0, s.Count);
 
             s.Add("one");
-            Assertion.AssertEquals(1, s.Count);
-            Assertion.Assert(s.Contains("one"));
-            Assertion.Assert(!s.Contains("two"));
-            Assertion.Assert(!s.Contains("three"));
+            Assert.AreEqual(1, s.Count);
+            Assert.IsTrue(s.Contains("one"));
+            Assert.IsTrue(!s.Contains("two"));
+            Assert.IsTrue(!s.Contains("three"));
 
             s.Add("two");
-            Assertion.AssertEquals(2, s.Count);
-            Assertion.Assert(s.Contains("one"));
-            Assertion.Assert(s.Contains("two"));
-            Assertion.Assert(!s.Contains("three"));
+            Assert.AreEqual(2, s.Count);
+            Assert.IsTrue(s.Contains("one"));
+            Assert.IsTrue(s.Contains("two"));
+            Assert.IsTrue(!s.Contains("three"));
 
             s.Remove("one");
-            Assertion.AssertEquals(1, s.Count);
-            Assertion.Assert(!s.Contains("one"));
-            Assertion.Assert(s.Contains("two"));
-            Assertion.Assert(!s.Contains("three"));
+            Assert.AreEqual(1, s.Count);
+            Assert.IsTrue(!s.Contains("one"));
+            Assert.IsTrue(s.Contains("two"));
+            Assert.IsTrue(!s.Contains("three"));
 
             s.Add("one");
-            Assertion.AssertEquals(2, s.Count);
-            Assertion.Assert(s.Contains("one"));
-            Assertion.Assert(s.Contains("two"));
-            Assertion.Assert(!s.Contains("three"));
+            Assert.AreEqual(2, s.Count);
+            Assert.IsTrue(s.Contains("one"));
+            Assert.IsTrue(s.Contains("two"));
+            Assert.IsTrue(!s.Contains("three"));
 
             s.Add("one");
-            Assertion.AssertEquals(2, s.Count);
-            Assertion.Assert(s.Contains("one"));
-            Assertion.Assert(s.Contains("two"));
-            Assertion.Assert(!s.Contains("three"));
+            Assert.AreEqual(2, s.Count);
+            Assert.IsTrue(s.Contains("one"));
+            Assert.IsTrue(s.Contains("two"));
+            Assert.IsTrue(!s.Contains("three"));
 
             int count = 0;
             foreach (string str in s)
             {
                 count++;
-                Assertion.AssertEquals(3, str.Length);
+                Assert.AreEqual(3, str.Length);
             }
-            Assertion.AssertEquals(2, count);
+            Assert.AreEqual(2, count);
         }
 
-        public void Test_Hashtable()
+        [Test] public void Test_Hashtable()
         {
             all(SetImplementation.Hashtable);
         }
-        public void Test_Skiplist()
+        [Test] public void Test_Skiplist()
         {
             all(SetImplementation.SkipList);
         }
-        public void Test_Tree()
+        [Test] public void Test_Tree()
         {
             all(SetImplementation.Tree);
         }

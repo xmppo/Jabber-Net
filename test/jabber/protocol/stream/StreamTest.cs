@@ -32,33 +32,33 @@ namespace test.jabber.protocol.stream
     public class StreamTest
     {
         XmlDocument doc = new XmlDocument();
-        public void Test_Create()
+        [Test] public void Test_Create()
         {
             Stream s = new Stream(doc, "jabber:client");
-            Assertion.Assert(s.ToString(), 
+            Assert.IsTrue(
                 Regex.IsMatch(s.ToString(), 
                 "<stream:stream id=\"[a-z0-9]+\" xmlns=\"jabber:client\" xmlns:stream=\"http://etherx\\.jabber\\.org/streams\" />",
-                RegexOptions.IgnoreCase));
+                RegexOptions.IgnoreCase), s.ToString());
         }
-        public void Test_Error()
+        [Test] public void Test_Error()
         {
             Error err = new Error(doc);
             err.Message = "foo";
-            Assertion.AssertEquals("<stream:error " + 
+            Assert.AreEqual("<stream:error " + 
                 "xmlns:stream=\"http://etherx.jabber.org/streams\">foo</stream:error>", err.ToString());
             ElementFactory sf = new ElementFactory();
             sf.AddType(new fact());
             XmlQualifiedName qname = new XmlQualifiedName(err.LocalName, err.NamespaceURI);
             Element p = (Element) sf.GetElement(err.Prefix, qname, doc);
-            Assertion.AssertEquals(typeof(Error), p.GetType());
+            Assert.AreEqual(typeof(Error), p.GetType());
         }
-        public void Test_StartTag()
+        [Test] public void Test_StartTag()
         {
             Stream s = new Stream(doc, "jabber:client");
-            Assertion.Assert(s.StartTag(), 
+            Assert.IsTrue(
                 Regex.IsMatch(s.StartTag(), 
                 "<stream:stream xmlns:stream=\"http://etherx\\.jabber\\.org/streams\" id=\"[a-z0-9]+\" xmlns=\"jabber:client\">",
-                RegexOptions.IgnoreCase));
+                RegexOptions.IgnoreCase), s.StartTag());
         }
     }
 }

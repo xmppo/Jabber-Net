@@ -32,21 +32,21 @@ namespace test.jabber.protocol.iq
     {
         XmlDocument doc = new XmlDocument();
         [SetUp]
-        private void SetUp()
+        public void SetUp()
         {
             Element.ResetID();
         }
-        public void Test_Create()
+        [Test] public void Test_Create()
         {
             Register r = new Register(doc);
-            Assertion.AssertEquals("<query xmlns=\"jabber:iq:register\" />", r.ToString());
+            Assert.AreEqual("<query xmlns=\"jabber:iq:register\" />", r.ToString());
         }
-        public void Test_Registered()
+        [Test] public void Test_Registered()
         {
             Register r = new Register(doc);
             r.Registered = true;
-            Assertion.AssertEquals("<query xmlns=\"jabber:iq:register\"><registered /></query>", r.ToString());
-            Assertion.Assert(r.Registered);
+            Assert.AreEqual("<query xmlns=\"jabber:iq:register\"><registered /></query>", r.ToString());
+            Assert.IsTrue(r.Registered);
         }
     }
 }

@@ -30,29 +30,29 @@ namespace test.jabber.protocol
     {
         XmlDocument doc = new XmlDocument();
         
-        public void Test_Create()
+        [Test] public void Test_Create()
         {
             Packet p = new Packet("foo", doc);
-            Assertion.AssertEquals("<foo />", p.ToString());
+            Assert.AreEqual("<foo />", p.ToString());
             p.To = "one";
-            Assertion.AssertEquals("<foo to=\"one\" />", p.ToString());
+            Assert.AreEqual("<foo to=\"one\" />", p.ToString());
             p.From = "two";
-            Assertion.AssertEquals("<foo to=\"one\" from=\"two\" />", p.ToString());
+            Assert.AreEqual("<foo to=\"one\" from=\"two\" />", p.ToString());
             p.Swap();
-            Assertion.AssertEquals("<foo to=\"two\" from=\"one\" />", p.ToString());
+            Assert.AreEqual("<foo to=\"two\" from=\"one\" />", p.ToString());
         }
 
-        public void Test_JabberDate()
+        [Test] public void Test_JabberDate()
         {
             string sdt = "20020504T20:39:42";
             DateTime dt = Element.JabberDate(sdt);
-            Assertion.AssertEquals(2002, dt.Year);
-            Assertion.AssertEquals(5, dt.Month);
-            Assertion.AssertEquals(4, dt.Day);
-            Assertion.AssertEquals(20, dt.Hour);
-            Assertion.AssertEquals(39, dt.Minute);
-            Assertion.AssertEquals(42, dt.Second);
-            Assertion.AssertEquals(sdt, Element.JabberDate(dt));
+            Assert.AreEqual(2002, dt.Year);
+            Assert.AreEqual(5, dt.Month);
+            Assert.AreEqual(4, dt.Day);
+            Assert.AreEqual(20, dt.Hour);
+            Assert.AreEqual(39, dt.Minute);
+            Assert.AreEqual(42, dt.Second);
+            Assert.AreEqual(sdt, Element.JabberDate(dt));
         }
     }
 }

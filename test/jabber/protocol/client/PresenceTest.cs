@@ -29,25 +29,25 @@ namespace test.jabber.protocol.client
     public class PresenceTest
     {
         XmlDocument doc = new XmlDocument();
-        public void Test_Create()
+        [Test] public void Test_Create()
         {
             Presence p = new Presence(doc);
             p.Type   = PresenceType.available;
             p.Status = "foo";
-            Assertion.AssertEquals("<presence><status>foo</status></presence>", p.ToString());
+            Assert.AreEqual("<presence><status>foo</status></presence>", p.ToString());
         }
 
-        public void Test_Available()
+        [Test] public void Test_Available()
         {
             Presence p = new Presence(doc);
-            Assertion.AssertEquals(PresenceType.available, p.Type);
-            Assertion.AssertEquals("", p.GetAttribute("type"));
+            Assert.AreEqual(PresenceType.available, p.Type);
+            Assert.AreEqual("", p.GetAttribute("type"));
             p.Type = PresenceType.unavailable;
-            Assertion.AssertEquals(PresenceType.unavailable, p.Type);
-            Assertion.AssertEquals("unavailable", p.GetAttribute("type"));
+            Assert.AreEqual(PresenceType.unavailable, p.Type);
+            Assert.AreEqual("unavailable", p.GetAttribute("type"));
             p.Type = PresenceType.available;
-            Assertion.AssertEquals(PresenceType.available, p.Type);
-            Assertion.AssertEquals("", p.GetAttribute("type"));
+            Assert.AreEqual(PresenceType.available, p.Type);
+            Assert.AreEqual("", p.GetAttribute("type"));
         }    
     }
 }

@@ -42,6 +42,7 @@ namespace bedrock.net
 
     /// <summary>
     /// Make a JEP-25 (http://www.jabber.org/jeps/jep-0025.html) polling "connection" look like a socket.
+    /// TODO: get rid of the PipeStream, if possible.
     /// </summary>
     [RCS(@"$Header$")]
     public class JEP25Socket : BaseSocket 

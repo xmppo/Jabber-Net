@@ -48,28 +48,28 @@ namespace test.jabber.protocol
             return parent;
         }
 
-        public void Test_Count()
+        [Test] public void Test_Count()
         {
             Element parent = Parent();
-            Assertion.AssertEquals(10,  parent.GetElementsByTagName("foo").Count);
-            Assertion.AssertEquals(10,  parent.GetElementsByTagName("bar").Count);
-            Assertion.AssertEquals(10,  parent.GetElementsByTagName("foo", "f").Count);
-            Assertion.AssertEquals(10,  parent.GetElementsByTagName("bar", "f").Count);
-            Assertion.AssertEquals(0,  parent.GetElementsByTagName("bar", "g").Count);
+            Assert.AreEqual(10,  parent.GetElementsByTagName("foo").Count);
+            Assert.AreEqual(10,  parent.GetElementsByTagName("bar").Count);
+            Assert.AreEqual(10,  parent.GetElementsByTagName("foo", "f").Count);
+            Assert.AreEqual(10,  parent.GetElementsByTagName("bar", "f").Count);
+            Assert.AreEqual(0,  parent.GetElementsByTagName("bar", "g").Count);
         }
-        public void Test_Enum()
+        [Test] public void Test_Enum()
         {
             Element parent = Parent();
             int c = 0;
             foreach (XmlElement e in parent.GetElementsByTagName("foo"))
             {
-                Assertion.AssertEquals(c.ToString(), e.InnerText);
+                Assert.AreEqual(c.ToString(), e.InnerText);
                 c++;
             }
-            Assertion.AssertEquals(10, c);
+            Assert.AreEqual(10, c);
         }
 
-        public void Test_Grandkids()
+        [Test] public void Test_Grandkids()
         {
             Element parent = Parent();
             Element g = new Element("foo", "f", doc);
@@ -77,7 +77,7 @@ namespace test.jabber.protocol
             parent.FirstChild.AppendChild(g);
             foreach (XmlElement e in parent.GetElementsByTagName("foo"))
             {
-                Assertion.Assert(e.InnerText != "one");
+                Assert.IsTrue(e.InnerText != "one");
             }           
         }
     }

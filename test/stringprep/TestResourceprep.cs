@@ -32,17 +32,17 @@ namespace test.stringprep
         private void TryOne(string input, string expected)
         {
             string output = resourceprep.Prepare(input);
-            Assertion.AssertEquals(expected, output);
+            Assert.AreEqual(expected, output);
         }
 
-        public void Test_Good()
+        [Test] public void Test_Good()
         {
             TryOne("Test", "Test");
             TryOne("test", "test");
         }
 
         [ExpectedException(typeof(ProhibitedCharacterException))]
-        public void Test_Bad()
+        [Test] public void Test_Bad()
         {
             TryOne("Test\x180E", null);
         }

@@ -31,56 +31,56 @@ namespace test.jabber.protocol.client
     {
         XmlDocument doc = new XmlDocument();
         [SetUp]
-        private void SetUp()
+        public void SetUp()
         {
             Element.ResetID();
         }
-        public void Test_Create()
+        [Test] public void Test_Create()
         {
             Message msg = new Message(doc);
             msg.Html = "foo";
-            Assertion.AssertEquals("<message id=\"JN_1\"><html xmlns=\"http://jabber.org/protocol/xhtml-im\"><body xmlns=\"http://www.w3.org/1999/xhtml\">foo</body></html><body>foo</body></message>", msg.ToString());
+            Assert.AreEqual("<message id=\"JN_1\"><html xmlns=\"http://jabber.org/protocol/xhtml-im\"><body xmlns=\"http://www.w3.org/1999/xhtml\">foo</body></html><body>foo</body></message>", msg.ToString());
             // TODO: deal with the namespace problem here
             msg.Html = "f<a href=\"http://www.jabber.org\">o</a>o";
-            Assertion.AssertEquals("<message id=\"JN_1\"><html xmlns=\"http://jabber.org/protocol/xhtml-im\"><body xmlns=\"http://www.w3.org/1999/xhtml\">f<a href=\"http://www.jabber.org\">o</a>o</body></html><body>foo</body></message>", msg.ToString());
-            Assertion.AssertEquals("f<a href=\"http://www.jabber.org\">o</a>o", msg.Html);
+            Assert.AreEqual("<message id=\"JN_1\"><html xmlns=\"http://jabber.org/protocol/xhtml-im\"><body xmlns=\"http://www.w3.org/1999/xhtml\">f<a href=\"http://www.jabber.org\">o</a>o</body></html><body>foo</body></message>", msg.ToString());
+            Assert.AreEqual("f<a href=\"http://www.jabber.org\">o</a>o", msg.Html);
         }
-        public void Test_NullBody()
+        [Test] public void Test_NullBody()
         {
             Message msg = new Message(doc);
-            Assertion.AssertEquals(null, msg.Body);
+            Assert.AreEqual(null, msg.Body);
             msg.Body = "foo";
-            Assertion.AssertEquals("foo", msg.Body);
+            Assert.AreEqual("foo", msg.Body);
             msg.Body = null;
-            Assertion.AssertEquals(null, msg.Body);
+            Assert.AreEqual(null, msg.Body);
         }
-        public void Test_Normal()
+        [Test] public void Test_Normal()
         {
             Message msg = new Message(doc);
-            Assertion.AssertEquals(MessageType.normal, msg.Type);
-            Assertion.AssertEquals("", msg.GetAttribute("type"));
+            Assert.AreEqual(MessageType.normal, msg.Type);
+            Assert.AreEqual("", msg.GetAttribute("type"));
             msg.Type = MessageType.chat;
-            Assertion.AssertEquals(MessageType.chat, msg.Type);
-            Assertion.AssertEquals("chat", msg.GetAttribute("type"));
+            Assert.AreEqual(MessageType.chat, msg.Type);
+            Assert.AreEqual("chat", msg.GetAttribute("type"));
             msg.Type = MessageType.normal;
-            Assertion.AssertEquals(MessageType.normal, msg.Type);
-            Assertion.AssertEquals("", msg.GetAttribute("type"));
+            Assert.AreEqual(MessageType.normal, msg.Type);
+            Assert.AreEqual("", msg.GetAttribute("type"));
         }
-        public void Test_Escape()
+        [Test] public void Test_Escape()
         {
             Message msg = new Message(doc);
             msg.Body = "&";
-            Assertion.AssertEquals("<message id=\"JN_1\"><body>&amp;</body></message>", msg.ToString());            
+            Assert.AreEqual("<message id=\"JN_1\"><body>&amp;</body></message>", msg.ToString());            
             msg.RemoveChild(msg["body"]);                   
-            Assertion.AssertEquals("<message id=\"JN_1\"></message>", msg.ToString());
+            Assert.AreEqual("<message id=\"JN_1\"></message>", msg.ToString());
             try
             {
                 msg.Html = "&";
-                Assertion.Assert("should have thrown an exception", false);
+                Assert.Fail("should have thrown an exception");
             }
             catch
             {
-                Assertion.Assert("Threw exception, as expected", true);
+                Assert.IsTrue(true, "Threw exception, as expected");
             }
         }
     }

@@ -37,27 +37,27 @@ namespace test.bedrock.collections
             t["~a"] = "4~a";
             t[" "]  = "5 ";
             t["  "] = "6  ";
-            Assertion.AssertEquals(t.Count, 7);
-            Assertion.Assert(t.Contains("~"));
-            Assertion.Assert(!t.Contains("~~"));
+            Assert.AreEqual(t.Count, 7);
+            Assert.IsTrue(t.Contains("~"));
+            Assert.IsTrue(!t.Contains("~~"));
             return t;
         }
-        public void Test_Type()
+        [Test] public void Test_Type()
         {
             Tree t = new Tree();
-            Assertion.AssertEquals("bedrock.collections.Tree", t.GetType().FullName);
+            Assert.AreEqual("bedrock.collections.Tree", t.GetType().FullName);
         }
-        public void Test_Main() 
+        [Test] public void Test_Main() 
         {
             Tree t = new Tree();
             t["one"] = "two";
-            Assertion.AssertEquals("two", t["one"]);
-            Assertion.AssertEquals(t.Count, 1);
+            Assert.AreEqual("two", t["one"]);
+            Assert.AreEqual(t.Count, 1);
             t.Remove("one");
-            Assertion.AssertEquals(t.Count, 0);
-            Assertion.AssertEquals(null, t["one"]);
+            Assert.AreEqual(t.Count, 0);
+            Assert.AreEqual(null, t["one"]);
         }
-        public void Test_Enum()
+        [Test] public void Test_Enum()
         {
             Tree t = data();
             int i = 0;
@@ -68,50 +68,50 @@ namespace test.bedrock.collections
                 Console.WriteLine(s);
                 i++;
             }
-            Assertion.AssertEquals(7, i);
+            Assert.AreEqual(7, i);
         }
-        public void Test_Clear()
+        [Test] public void Test_Clear()
         {
             Tree t = new Tree();
-            Assertion.AssertEquals(t.Count, 0);
+            Assert.AreEqual(t.Count, 0);
             t.Clear();
-            Assertion.AssertEquals(t.Count, 0);
+            Assert.AreEqual(t.Count, 0);
             t.Add("one", "one");
-            Assertion.AssertEquals(t.Count, 1);
+            Assert.AreEqual(t.Count, 1);
             t.Clear();
-            Assertion.AssertEquals(t.Count, 0);
+            Assert.AreEqual(t.Count, 0);
         }
-        public void Test_Values()
+        [Test] public void Test_Values()
         {
             Tree t = data();
             ICollection ic = t.Values;
-            Assertion.AssertEquals(ic.Count, 7);
+            Assert.AreEqual(ic.Count, 7);
             object[] o = (object[]) ic;
-            Assertion.AssertEquals("5 ", o[0]);
+            Assert.AreEqual("5 ", o[0]);
         }
-        public void Test_Keys()
+        [Test] public void Test_Keys()
         {
             Tree t = data();
             ICollection ic = t.Keys;
-            Assertion.AssertEquals(7, ic.Count);
+            Assert.AreEqual(7, ic.Count);
             object[] o = (object[]) ic;
-            Assertion.AssertEquals(" ", o[0]);
+            Assert.AreEqual(" ", o[0]);
         }   
 
-        public void Test_Lots_InOrder()
+        [Test] public void Test_Lots_InOrder()
         {
             Tree sl = new Tree();
             for (int i=0; i<4096; i++)
             {
                 sl[i] = i.ToString();
             }
-            Assertion.AssertEquals(4096, sl.Count);
+            Assert.AreEqual(4096, sl.Count);
             for (int i=0; i<4096; i++)
             {
-                Assertion.AssertEquals(i.ToString(), sl[i]);
+                Assert.AreEqual(i.ToString(), sl[i]);
             }
         }
-        public void Test_Lots_Random()
+        [Test] public void Test_Lots_Random()
         {
             Tree sl = new Tree();
             Random r = new Random();
@@ -126,51 +126,51 @@ namespace test.bedrock.collections
                 }
                 sl[nums[i]] = i.ToString();
             }
-            Assertion.AssertEquals(4096, sl.Count);
+            Assert.AreEqual(4096, sl.Count);
             for (int i=0; i<4096; i++)
             {
-                Assertion.AssertEquals(i.ToString(), sl[nums[i]]);
+                Assert.AreEqual(i.ToString(), sl[nums[i]]);
             }
         }
-        public void Test_Iteration()
+        [Test] public void Test_Iteration()
         {
             Tree sl = new Tree();
             for (int i=0; i<4096; i++)
             {
                 sl[i] = i.ToString();
             }
-            Assertion.AssertEquals(4096, sl.Count);
+            Assert.AreEqual(4096, sl.Count);
             int count = 0;
             foreach (DictionaryEntry de in sl)
             {
-                Assertion.AssertEquals(count, de.Key);
-                Assertion.AssertEquals(count.ToString(), de.Value);
+                Assert.AreEqual(count, de.Key);
+                Assert.AreEqual(count.ToString(), de.Value);
                 count++;
             }
-            Assertion.AssertEquals(4096, count);
+            Assert.AreEqual(4096, count);
         }
 
-        public void Test_DictIteration()
+        [Test] public void Test_DictIteration()
         {
             Tree sl = new Tree();
             for (int i=0; i<4096; i++)
             {
                 sl[i] = i.ToString();
             }
-            Assertion.AssertEquals(4096, sl.Count);
+            Assert.AreEqual(4096, sl.Count);
             int count = 0;
             IDictionaryEnumerator e = sl.GetEnumerator();
             while (e.MoveNext())
             {
-                Assertion.AssertEquals(count, e.Key);
-                Assertion.AssertEquals(count.ToString(), e.Value);
+                Assert.AreEqual(count, e.Key);
+                Assert.AreEqual(count.ToString(), e.Value);
                 count++;
             }
-            Assertion.AssertEquals(4096, count);
+            Assert.AreEqual(4096, count);
         }
 
         [ExpectedException(typeof(ArgumentNullException))]
-        public void Test_Null()
+        [Test] public void Test_Null()
         {
             Tree sl = new Tree();
             sl[null] = "n";

@@ -71,11 +71,17 @@ namespace jabber.server
         private ComponentType m_type   = ComponentType.Accept;
         private XmlDocument   m_doc    = new XmlDocument();
 
+        private void init()
+        {
+            this.OnStreamInit += new jabber.connection.StreamHandler(JabberService_OnStreamInit);
+        }
+
         /// <summary>
         /// Create a a connect component.
         /// </summary>
         public JabberService() : base()
         {
+            init();
         }
 
         /// <summary>
@@ -96,6 +102,7 @@ namespace jabber.server
 
             m_secret = secret;
             m_type = ComponentType.Accept;
+            init();
         }
 
         /// <summary>
@@ -111,16 +118,7 @@ namespace jabber.server
             
             m_secret = secret;
             m_type   = ComponentType.Connect;
-        }
-
-        /// <summary>
-        /// Initialize the element stream.
-        /// </summary>
-        protected override void InitializeStream()
-        {
-            base.InitializeStream();
-
-            AddFactory(new jabber.protocol.accept.Factory());
+            init();
         }
 
         /// <summary>
@@ -352,6 +350,11 @@ namespace jabber.server
                         OnLog(this, log);
                 }
             }
+        }
+
+        private void JabberService_OnStreamInit(Object sender, ElementStream stream)
+        {
+            stream.AddFactory(new jabber.protocol.accept.Factory());
         }
     }
 

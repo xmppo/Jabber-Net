@@ -32,10 +32,10 @@ namespace test.stringprep
         private void TryOne(string input, string expected)
         {
             string output = nodeprep.Prepare(input);
-            Assertion.AssertEquals(expected, output);
+            Assert.AreEqual(expected, output);
         }
 
-        public void Test_Good()
+        [Test] public void Test_Good()
         {
             TryOne("HILDJJ", "hildjj");
             TryOne("hildjj", "hildjj");
@@ -43,54 +43,54 @@ namespace test.stringprep
         }
 
         [ExpectedException(typeof(ProhibitedCharacterException))]
-        public void Test_Dquote()
+        [Test] public void Test_Dquote()
         {
             TryOne("\"", null);
         }
         [ExpectedException(typeof(ProhibitedCharacterException))]
-        public void Test_Amp()
+        [Test] public void Test_Amp()
         {
             TryOne("&", null);
         }
         [ExpectedException(typeof(ProhibitedCharacterException))]
-        public void Test_Squote()
+        [Test] public void Test_Squote()
         {
             TryOne("'", null);
         }
         [ExpectedException(typeof(ProhibitedCharacterException))]
-        public void Test_Slash()
+        [Test] public void Test_Slash()
         {
             TryOne("/", null);
         }
         [ExpectedException(typeof(ProhibitedCharacterException))]
-        public void Test_Colon()
+        [Test] public void Test_Colon()
         {
             TryOne(":", null);
         }
         [ExpectedException(typeof(ProhibitedCharacterException))]
-        public void Test_Less()
+        [Test] public void Test_Less()
         {
             TryOne("<", null);
         }
         [ExpectedException(typeof(ProhibitedCharacterException))]
-        public void Test_Greater()
+        [Test] public void Test_Greater()
         {
             TryOne(">", null);
         }
 #if !NO_STRINGPREP
         [ExpectedException(typeof(ProhibitedCharacterException))]
-        public void Test_SmallGreater()
+        [Test] public void Test_SmallGreater()
         {
             TryOne("\xfe65", null); // small greater than
         }
 #endif
         [ExpectedException(typeof(ProhibitedCharacterException))]
-        public void Test_At()
+        [Test] public void Test_At()
         {
             TryOne("@", null);
         }
         [ExpectedException(typeof(ProhibitedCharacterException))]
-        public void Test_Prep_Less()
+        [Test] public void Test_Prep_Less()
         {
             // U+FE68: small commercial at
             TryOne("\xFE6b", null);

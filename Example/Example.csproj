@@ -90,14 +90,14 @@
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "Org.Mentalis.Security"
-                    AssemblyName = "Org.Mentalis.Security"
-                    HintPath = "..\lib\Org.Mentalis.Security.dll"
-                />
-                <Reference
                     Name = "System.Drawing"
                     AssemblyName = "System.Drawing"
                     HintPath = "..\..\..\Windows\Microsoft.NET\Framework\v1.1.4322\System.Drawing.dll"
+                />
+                <Reference
+                    Name = "Org.Mentalis.Security"
+                    AssemblyName = "Org.Mentalis.Security"
+                    HintPath = "..\lib\Org.Mentalis.Security.dll"
                 />
             </References>
         </Build>

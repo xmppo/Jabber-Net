@@ -61,6 +61,11 @@ namespace jabber.connection
     }
 
     /// <summary>
+    /// A handler for events that happen on an ElementStream.
+    /// </summary>
+    public delegate void StreamHandler(Object sender, ElementStream stream);
+
+    /// <summary>
     /// Summary description for SocketElementStream.
     /// </summary>
     [RCS(@"$Header$")]
@@ -83,7 +88,6 @@ namespace jabber.connection
         private string         m_to             = "jabber.com";
         private string         m_streamID       = null;
         private object         m_stateLock      = new object();
-        private ManualResetEvent m_conEvent     = new ManualResetEvent(false);
         private ArrayList      m_callbacks      = new ArrayList();
         private int            m_keepAlive      = 20000;
         private Timer          m_timer          = null;
@@ -101,8 +105,6 @@ namespace jabber.connection
         private bool           m_ssl            = false;
         private bool           m_sslOn          = false;
         private bool           m_autoStartTLS   = true;
-        private bool           m_synch          = true;
-        private Thread         m_thread         = null;
         private bool           m_plaintext      = false;
 
         // XMPP v1 stuff
@@ -128,7 +130,7 @@ namespace jabber.connection
         {
             container.Add(this);
             m_watcher = new SocketWatcher();
-            m_watcher.Synchronous = m_synch;
+            m_watcher.Synchronous = false;
             m_ns = new XmlNamespaceManager(m_doc.NameTable);
             m_timer = new Timer(new TimerCallback(DoKeepAlive), null, Timeout.Infinite, Timeout.Infinite);
         }
@@ -139,7 +141,7 @@ namespace jabber.connection
         public SocketElementStream()
         {
             m_watcher = new SocketWatcher();
-            m_watcher.Synchronous = m_synch;
+            m_watcher.Synchronous = false;
             m_ns = new XmlNamespaceManager(m_doc.NameTable);
             m_timer = new Timer(new TimerCallback(DoKeepAlive), null, Timeout.Infinite, Timeout.Infinite);
         }
@@ -178,25 +180,14 @@ namespace jabber.connection
         /// </summary>
         protected virtual void InitializeStream()
         {
-            if (m_synch)
-            {
-                Debug.Assert(m_sock != null);
-                System.IO.Stream sockstream = m_sock.GetStream();
-                bedrock.io.ReadEventStream eventstream = new bedrock.io.ReadEventStream(sockstream);
-                eventstream.OnRead += new bedrock.ByteOffsetHandler(ReadComplete);
-                m_stream = new SynchElementStream(eventstream);
-            }
-            else
-            {
-                m_stream = new AsynchElementStream();
-            }
+            m_stream = new AsynchElementStream();
             m_stream.OnDocumentStart += new ProtocolHandler(OnDocumentStart);
             m_stream.OnDocumentEnd += new bedrock.ObjectHandler(OnDocumentEnd);
             m_stream.OnElement += new ProtocolHandler(OnElement);
             m_stream.OnError += new bedrock.ExceptionHandler(m_stream_OnError);
 
-            // notify that we're done
-            m_conEvent.Set();
+            if (OnStreamInit != null)
+                OnStreamInit(this, m_stream);
         }
 
         /// <summary>
@@ -211,6 +202,11 @@ namespace jabber.connection
         /// </summary>
         [Category("Debug")]
         public event bedrock.TextHandler OnReadText;
+        /// <summary>
+        /// A new stream was initialized.  Add your packet factories to it.
+        /// </summary>
+        [Category("Stream")]
+        public event StreamHandler OnStreamInit;
         /// <summary>
         /// Some error occurred when processing.  
         /// The connection has been closed.
@@ -539,26 +535,6 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Single-threaded reading?  If false, dispatch into a thread pool.
-        /// Only set this true if you are doing large numbers of sockets.
-        /// </summary>
-        [Browsable(false)]
-        public bool Synchronous
-        {
-            get { return m_synch; }
-            set 
-            {
-                lock (m_stateLock)
-                {
-                    Debug.Assert(m_state == ClosedState.Instance, "Must not reset Synchronous after connecting");
-                    m_synch = value;
-                    if (m_watcher != null)
-                        m_watcher.Synchronous = value;
-                }
-            }
-        }
-
-        /// <summary>
         /// The current state of the connection.  
         /// Lock on StateLock before accessing.
         /// </summary>
@@ -649,7 +625,8 @@ namespace jabber.connection
         {
             get {return m_serverVersion;}
         }
-        
+
+#if false
         /// <summary>
         /// Add new packet types that the incoming stream knows how to create.  
         /// If you create your own packet types, create a packet factory as well. 
@@ -670,6 +647,7 @@ namespace jabber.connection
         {
             m_stream.AddType(localName, ns, t);
         }
+#endif
 
         /// <summary>
         /// Write these bytes to the socket.
@@ -707,7 +685,6 @@ namespace jabber.connection
         {
             Debug.Assert(m_port > 0);
             Debug.Assert(m_to != null);
-            m_conEvent.Reset();
             m_sslOn = m_ssl;
 
             lock (StateLock)
@@ -747,7 +724,7 @@ namespace jabber.connection
                         break;
                        
                     case ProxyType.None:
-                        m_sock = new AsyncSocket(m_watcher, this, m_sslOn, m_synch);
+                        m_sock = new AsyncSocket(m_watcher, this, m_sslOn, false);
                         break;
 
                     default:
@@ -762,34 +739,9 @@ namespace jabber.connection
                     proxy.Username = m_ProxyUsername;
                     m_sock = proxy;
                 }
-                if (m_synch)
-                {
-                    m_thread = new Thread(new ThreadStart(SynchConnectThread));
-                    m_thread.IsBackground = true;
-                    m_thread.Start();
-                }
-                else
-                {
-                    Address addr = new Address(GetHost(), m_port);
-                    m_sock.Connect(addr);
-                }
-            }
 
-            if (m_synch)
-                m_conEvent.WaitOne(); 
-        }
-
-        private void SynchConnectThread()
-        {
-            Debug.Assert(m_synch, "Cannot call SynchConnectThread unless in synch mode");
-            Address addr = new Address(GetHost(), m_port);
-            try
-            {
+                Address addr = new Address(GetHost(), m_port);
                 m_sock.Connect(addr);
-            }
-            catch (Exception e)
-            {
-                FireOnError(e);
             }
         }
 
@@ -1147,17 +1099,10 @@ namespace jabber.connection
 
             InitializeStream();
 
-            if (m_synch)
-            {
-                // Blocks!!!
-                Debug.Assert(m_stream != null);
-                ((SynchElementStream)m_stream).Start();
-            }
-            else
-            {
+            if (m_state == ConnectedState.Instance)
                 m_sock.RequestRead();
-            }
         }
+
         /// <summary>
         /// Fire the OnError event.
         /// </summary>
@@ -1168,9 +1113,6 @@ namespace jabber.connection
             if (((State == ClosingState.Instance) || (State == ClosedState.Instance)) &&
                 ((e is System.IO.IOException) || (e.InnerException is System.IO.IOException)))
                 return;
-
-			if (m_synch && (m_state == ConnectingState.Instance))
-				m_conEvent.Set();
 
             if (OnError != null)
             {
@@ -1194,30 +1136,8 @@ namespace jabber.connection
                 this.State = AcceptingState.Instance;
                 m_accept = m_watcher.CreateListenSocket(this, new Address(this.Port));
             }
-            if (m_synch)
-            {
-                m_thread = new Thread(new ThreadStart(SynchAcceptThread));
-                m_thread.IsBackground = true;
-                m_thread.Start();
-            }
-            else
-            {
-                m_accept.RequestAccept();
-            }
-        }
 
-        private void SynchAcceptThread()
-        {
-            try
-            {
-                Debug.Assert(m_synch, "Cannot call SynchAcceptThread unless in synch mode");
-                m_accept.RequestAccept();
-                Debug.WriteLine("done");
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.ToString());
-            }
+            m_accept.RequestAccept();
         }
 
         #region Implementation of ISocketEventListener
@@ -1251,6 +1171,7 @@ namespace jabber.connection
             }
 
             m_sock = newsocket;
+            InitializeStream();
 
             if (OnConnect != null)
             {
@@ -1265,19 +1186,6 @@ namespace jabber.connection
                     OnConnect(this, (AsyncSocket) m_sock);
                 }
             }
-
-            InitializeStream();
-            if (m_synch)
-            {
-                // Blocks!
-                ((SynchElementStream)m_stream).Start();
-                return true;
-            }
-            else
-            {
-                m_sock.RequestRead();
-            }
-
 
             return false;           
         }
@@ -1297,7 +1205,6 @@ namespace jabber.connection
 
         bool ISocketEventListener.OnRead(bedrock.net.BaseSocket sock, byte[] buf, int offset, int count)
         {
-            Debug.Assert(!m_synch);
             ReadComplete(sock, buf, offset, count);
             ((AsynchElementStream)m_stream).Push(buf, offset, count);
 
@@ -1321,17 +1228,11 @@ namespace jabber.connection
         {
 			lock (m_stateLock)
 			{
-				// if we were still trying to connect, free the connect thread to keep going.
-				if (m_synch && (m_state == ConnectingState.Instance))
-					m_conEvent.Set();
-
 				m_timer.Change(Timeout.Infinite, Timeout.Infinite);
 
 				BaseState old = m_state;
 				m_state = ClosedState.Instance;
 				m_sock = null;
-
-
 			}
 
             if (OnError != null)

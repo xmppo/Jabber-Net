@@ -29,13 +29,13 @@ namespace test.jabber.protocol.accept
     public class RouteTest
     {
         XmlDocument doc = new XmlDocument();
-        public void Test_Create()
+        [Test] public void Test_Create()
         {
             Route r = new Route(doc);
             r.Contents = doc.CreateElement("foo");
-            Assertion.AssertEquals("<route><foo /></route>", r.OuterXml);
+            Assert.AreEqual("<route><foo /></route>", r.OuterXml);
             XmlElement foo = r.Contents;
-            Assertion.AssertEquals("<foo />", foo.OuterXml);
+            Assert.AreEqual("<foo />", foo.OuterXml);
         }
     }
 }

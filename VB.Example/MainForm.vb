@@ -80,11 +80,12 @@ Public Class MainForm
     Friend WithEvents TabControl1 As System.Windows.Forms.TabControl
     Friend WithEvents tpRoster As System.Windows.Forms.TabPage
     Friend WithEvents tpDebug As System.Windows.Forms.TabPage
-    Friend WithEvents debug As System.Windows.Forms.RichTextBox
+
     Friend WithEvents mnuAvailable As System.Windows.Forms.MenuItem
     Friend WithEvents mnuAway As System.Windows.Forms.MenuItem
     Friend WithEvents mnuOffline As System.Windows.Forms.MenuItem
     Friend WithEvents roster As muzzle.RosterTree
+    Friend WithEvents debug As muzzle.BottomScrollRichText
 
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
@@ -103,9 +104,9 @@ Public Class MainForm
         Me.mnuOffline = New System.Windows.Forms.MenuItem
         Me.TabControl1 = New System.Windows.Forms.TabControl
         Me.tpRoster = New System.Windows.Forms.TabPage
-        Me.tpDebug = New System.Windows.Forms.TabPage
-        Me.debug = New System.Windows.Forms.RichTextBox
         Me.roster = New muzzle.RosterTree
+        Me.tpDebug = New System.Windows.Forms.TabPage
+        Me.debug = New muzzle.BottomScrollRichText
         CType(Me.pnlCon, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pnlPresence, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabControl1.SuspendLayout()
@@ -138,10 +139,10 @@ Public Class MainForm
         'jc
         '
         Me.jc.AutoReconnect = 3.0!
+        Me.jc.AutoStartTLS = True
         Me.jc.InvokeControl = Me
         Me.jc.LocalCertificate = Nothing
         Me.jc.Password = Nothing
-        Me.jc.Synchronous = True
         Me.jc.User = Nothing
         '
         'rm
@@ -165,11 +166,13 @@ Public Class MainForm
         'mnuAvailable
         '
         Me.mnuAvailable.Index = 0
+        Me.mnuAvailable.Shortcut = System.Windows.Forms.Shortcut.CtrlO
         Me.mnuAvailable.Text = "Available"
         '
         'mnuAway
         '
         Me.mnuAway.Index = 1
+        Me.mnuAway.Shortcut = System.Windows.Forms.Shortcut.CtrlA
         Me.mnuAway.Text = "Away"
         '
         'MenuItem3
@@ -180,6 +183,7 @@ Public Class MainForm
         'mnuOffline
         '
         Me.mnuOffline.Index = 3
+        Me.mnuOffline.Shortcut = System.Windows.Forms.Shortcut.F9
         Me.mnuOffline.Text = "Offline"
         '
         'TabControl1
@@ -202,6 +206,21 @@ Public Class MainForm
         Me.tpRoster.TabIndex = 0
         Me.tpRoster.Text = "Roster"
         '
+        'roster
+        '
+        Me.roster.Client = Me.jc
+        Me.roster.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.roster.ImageIndex = 1
+        Me.roster.Location = New System.Drawing.Point(0, 0)
+        Me.roster.Name = "roster"
+        Me.roster.PresenceManager = Me.pm
+        Me.roster.RosterManager = Me.rm
+        Me.roster.ShowLines = False
+        Me.roster.ShowRootLines = False
+        Me.roster.Size = New System.Drawing.Size(624, 218)
+        Me.roster.Sorted = True
+        Me.roster.TabIndex = 0
+        '
         'tpDebug
         '
         Me.tpDebug.Controls.Add(Me.debug)
@@ -219,21 +238,6 @@ Public Class MainForm
         Me.debug.Size = New System.Drawing.Size(624, 218)
         Me.debug.TabIndex = 0
         Me.debug.Text = ""
-        '
-        'roster
-        '
-        Me.roster.Client = Me.jc
-        Me.roster.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.roster.ImageIndex = 1
-        Me.roster.Location = New System.Drawing.Point(0, 0)
-        Me.roster.Name = "roster"
-        Me.roster.PresenceManager = Me.pm
-        Me.roster.RosterManager = Me.rm
-        Me.roster.ShowLines = False
-        Me.roster.ShowRootLines = False
-        Me.roster.Size = New System.Drawing.Size(624, 218)
-        Me.roster.Sorted = True
-        Me.roster.TabIndex = 0
         '
         'MainForm
         '
@@ -256,22 +260,12 @@ Public Class MainForm
 #End Region
 
     Private Sub Connect()
-        Dim log As New muzzle.ClientLogin()
-        With log
-            .User = jc.User
-            .Password = jc.Password
-            .Server = jc.Server
-            .Port = jc.Port
-        End With
+        Dim log As New muzzle.ClientLogin(jc)
+        log.ReadFromFile("login.xml")
 
         If log.ShowDialog() = DialogResult.OK Then
-            With jc
-                .User = log.User
-                .Password = log.Password
-                .Server = log.Server
-                .Port = log.Port
-                .Connect()
-            End With
+            log.WriteToFile("login.xml")
+            jc.Connect()
         End If
     End Sub
 
@@ -307,8 +301,7 @@ Public Class MainForm
 
     Private Sub jc_OnConnect(ByVal sender As Object, ByVal sock As bedrock.net.BaseSocket) Handles jc.OnConnect
         m_err = False
-        debug.AppendText("Connected to: " & sock.ToString() & vbCrLf)
-        jc.AddFactory(New Factory)
+        debug.AppendMaybeScroll("Connected to: " & sock.ToString() & vbCrLf)
     End Sub
 
     Private Sub jc_OnReadText(ByVal sender As Object, ByVal txt As String) Handles jc.OnReadText
@@ -316,7 +309,7 @@ Public Class MainForm
         debug.AppendText("RECV: ")
         debug.SelectionColor = Color.Black
         debug.AppendText(txt)
-        debug.AppendText(vbCrLf)
+        debug.AppendMaybeScroll(vbCrLf)
     End Sub
 
     Private Sub jc_OnWriteText(ByVal sender As Object, ByVal txt As String) Handles jc.OnWriteText
@@ -329,7 +322,7 @@ Public Class MainForm
         debug.AppendText("SEND: ")
         debug.SelectionColor = Color.Black
         debug.AppendText(txt)
-        debug.AppendText(vbCrLf)
+        debug.AppendMaybeScroll(vbCrLf)
     End Sub
 
     Private Sub jc_OnAuthenticate(ByVal sender As Object) Handles jc.OnAuthenticate
@@ -351,7 +344,7 @@ Public Class MainForm
         debug.AppendText("ERROR: ")
         debug.SelectionColor = Color.Black
         debug.AppendText(ex.ToString())
-        debug.AppendText(vbCrLf)
+        debug.AppendMaybeScroll(vbCrLf)
     End Sub
 
     Private Sub jc_OnAuthError(ByVal sender As Object, ByVal iq As jabber.protocol.client.IQ) Handles jc.OnAuthError
@@ -401,7 +394,6 @@ Public Class MainForm
         End If
     End Sub
 
-
     Private Sub rm_OnRosterEnd(ByVal sender As Object) Handles rm.OnRosterEnd
         roster.ExpandAll()
     End Sub
@@ -416,10 +408,22 @@ Public Class MainForm
         m_err = True
         pnlCon.Text = "Stream error: " + rp.InnerText
     End Sub
+
+    Private Sub jc_OnStreamInit(ByVal sender As Object, ByVal stream As jabber.protocol.ElementStream) Handles jc.OnStreamInit
+        stream.AddFactory(New FooFactory)
+    End Sub
+
+    Private Sub MainForm_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        bedrock.net.AsyncSocket.UntrustedRootOK = True
+    End Sub
+
+    Private Sub mnuPresence_Popup(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnuPresence.Popup
+
+    End Sub
 End Class
 
 '-------------------------- Add packet type -----------------------
-' don't forget to call AddFactory() in OnConnect!
+' don't forget to call AddFactory() in OnStreamInit!
 
 ' Convenience class, used for creating outbound IQ's with this type
 Public Class FooIQ
@@ -467,7 +471,7 @@ End Class
 ' The factory class.  This ends up adding a mapping from urn:foo|foo to the constructor for the Foo class,
 ' under the covers.  The namespace|elementname of an inbound element will be looked up in the map to
 ' figure out how to create the correct type.
-Public Class Factory
+Public Class FooFactory
     Implements jabber.protocol.IPacketTypes
 
     Private Shared ReadOnly s_qnames As jabber.protocol.QnameType() = _

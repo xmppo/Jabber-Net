@@ -170,13 +170,13 @@ yes"><br>
                 &lt;/</span><span style="FONT-SIZE:10pt;COLOR:maroon;FONT-FAMILY:'Courier New'">iq</span><span style="FONT-SIZE:10pt;COLOR:blue;FONT-FAMILY:'Courier New'">&gt;</span></p>
         <p>In order to get the inbound connection to create objects of your class, rather 
             than just plain XmlElements, you need to create a Factory class, and register 
-            it with your connection object in the OnAuthenticate event.</p>
+            it with your connection object in the OnStreamInit event.</p>
         <p class="MsoNormal" style="mso-layout-grid-align:none"><span style="FONT-SIZE:
 10pt;FONT-FAMILY:
-'Courier New'"><span style="COLOR:blue">private</span> <span style="COLOR:blue">void</span> jabberClient_OnAuthenticate(<span style="COLOR:blue">object</span>
-                sender)<span style="mso-tab-count:1"><br>
+'Courier New'"><span style="COLOR:blue">private</span> <span style="COLOR:blue">void</span> jabberClient_OnStreamInit(<span style="COLOR:blue">object</span>
+                sender, <span style="COLOR:blue">ElementStream</span> stream)<span style="mso-tab-count:1"><br>
                 </span>{<span style="mso-tab-count:1"><br>
-                    &nbsp;&nbsp;&nbsp; </span>jabberClient.AddFactory(<span style="COLOR:blue">new</span>
+                    &nbsp;&nbsp;&nbsp; </span>stream.AddFactory(<span style="COLOR:blue">new</span>
                 your.protocol.Factory());</span><span style="FONT-SIZE:10pt;FONT-FAMILY:'Courier New'"><span style="mso-tab-count:1"><br>
                 </span>}</span></p>
         <p>For an example of a factory class, see <a href="mk:@MSITStore:C:/src/jabber-net/docs/jabber-net.chm::/jabber.protocol.iq.Factory.html">
@@ -327,10 +327,6 @@ blue;FONT-FAMILY:
                 .chm</a> file, generated with <a href="http://ndoc.sourceforge.net/">NDoc</a>, 
             which fully documents the API.&nbsp; If you prefer javadoc-style, you should be 
             able to generate it pretty easily.</p>
-        <p><b>WHERE DID ALL OF THE LAYERS GO?</b></p>
-        <p>People complained about the namespace names, and how hard it was to find 
-            stuff.&nbsp; The new hierarchy should be a lot easier to use, at the expense of 
-            a slightly larger .dll for some people than they might otherwise have.</p>
         <p><b>WHERE DO I FIND JABBER-NET?</b></p>
         <p><A href="http://sourceforge.net"><IMG src="http://sourceforge.net/sflogo.php?group_id=30092" border="0" alt="SourceForge Logo" align="left"></A>
             The project <font color="#ff0000">HAS BEEN MOVED</font> to <a href="http://jabber-net.jabberstudio.org">

@@ -65,6 +65,14 @@ namespace jabber.client
         private IQTracker m_tracker = null;
 
 
+        private void init()
+        {
+            m_tracker = new IQTracker(this);
+            this.OnSASLStart += new jabber.connection.sasl.SASLProcessorHandler(JabberClient_OnSASLStart);
+            this.OnSASLEnd += new jabber.protocol.stream.FeaturesHandler(JabberClient_OnSASLEnd);
+            this.OnStreamInit += new StreamHandler(JabberClient_OnStreamInit);
+        }
+
         /// <summary>
         /// Required for Windows.Forms Class Composition Designer support
         /// </summary>
@@ -72,9 +80,7 @@ namespace jabber.client
         public JabberClient(System.ComponentModel.IContainer container) :
             base(container)
         {
-            m_tracker = new IQTracker(this);
-            this.OnSASLStart += new jabber.connection.sasl.SASLProcessorHandler(JabberClient_OnSASLStart);
-            this.OnSASLEnd += new jabber.protocol.stream.FeaturesHandler(JabberClient_OnSASLEnd);
+            init();
         }
 
         /// <summary>
@@ -82,9 +88,7 @@ namespace jabber.client
         /// </summary>
         public JabberClient() : base()
         {
-            m_tracker = new IQTracker(this);
-            this.OnSASLStart += new jabber.connection.sasl.SASLProcessorHandler(JabberClient_OnSASLStart);
-            this.OnSASLEnd += new jabber.protocol.stream.FeaturesHandler(JabberClient_OnSASLEnd);
+            init();
         }
 
         /// <summary>
@@ -93,9 +97,7 @@ namespace jabber.client
         /// <param name="watcher">SocketWatcher to use.</param>
         public JabberClient(SocketWatcher watcher) : base(watcher)
         {
-            m_tracker = new IQTracker(this);
-            this.OnSASLStart += new jabber.connection.sasl.SASLProcessorHandler(JabberClient_OnSASLStart);
-            this.OnSASLEnd += new jabber.protocol.stream.FeaturesHandler(JabberClient_OnSASLEnd);
+            init();
         }
 
         /// <summary>
@@ -313,17 +315,6 @@ namespace jabber.client
                             "online", null, m_priority);
                 }
             }
-        }
-
-        /// <summary>
-        /// A new stream was created.  Let's initialize it.
-        /// </summary>
-        protected override void InitializeStream()
-        {
-            base.InitializeStream();
-            AddFactory(new jabber.protocol.client.Factory());
-            AddFactory(new jabber.protocol.iq.Factory());
-            AddFactory(new jabber.protocol.x.Factory());
         }
 
         /// <summary>
@@ -790,6 +781,13 @@ namespace jabber.client
                 IsAuthenticated = true;
             else
                 FireOnError(new AuthenticationFailedException());
+        }
+
+        private void JabberClient_OnStreamInit(Object sender, ElementStream stream)
+        {
+            stream.AddFactory(new jabber.protocol.client.Factory());
+            stream.AddFactory(new jabber.protocol.iq.Factory());
+            stream.AddFactory(new jabber.protocol.x.Factory());
         }
     }
 

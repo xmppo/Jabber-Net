@@ -32,20 +32,17 @@ namespace test.jabber.protocol.client
     {
         XmlDocument doc = new XmlDocument();
 
-        [SetUp]
-        private void SetUp()
-        {
-            Element.ResetID();
-        }
         [Test]
         public void Create()
         {
-            IQ iq = new IQ(doc);
-            Assertion.AssertEquals("<iq id=\"JN_1\" type=\"get\" />", iq.ToString());
+			Element.ResetID();
+
+			IQ iq = new IQ(doc);
+            Assert.AreEqual("<iq id=\"JN_1\" type=\"get\" />", iq.ToString());
             iq = new IQ(doc);
-            Assertion.AssertEquals("<iq id=\"JN_2\" type=\"get\" />", iq.ToString());
+            Assert.AreEqual("<iq id=\"JN_2\" type=\"get\" />", iq.ToString());
             iq.Query = new Auth(doc);
-            Assertion.AssertEquals("<iq id=\"JN_2\" type=\"get\"><query xmlns=\"jabber:iq:auth\" /></iq>", iq.ToString());
+            Assert.AreEqual("<iq id=\"JN_2\" type=\"get\"><query xmlns=\"jabber:iq:auth\" /></iq>", iq.ToString());
         }
     }
 }

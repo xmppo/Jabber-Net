@@ -62,10 +62,6 @@
                     AssemblyName = "System"
                 />
                 <Reference
-                    Name = "System.Data"
-                    AssemblyName = "System.Data"
-                />
-                <Reference
                     Name = "System.Drawing"
                     AssemblyName = "System.Drawing"
                 />
@@ -90,14 +86,13 @@
                 <Reference
                     Name = "Org.Mentalis.Security"
                     AssemblyName = "Org.Mentalis.Security"
-                    HintPath = "..\Org.Mentalis.Security.dll"
+                    HintPath = "..\lib\Org.Mentalis.Security.dll"
                 />
             </References>
             <Imports>
                 <Import Namespace = "Microsoft.VisualBasic" />
                 <Import Namespace = "System" />
                 <Import Namespace = "System.Collections" />
-                <Import Namespace = "System.Data" />
                 <Import Namespace = "System.Drawing" />
                 <Import Namespace = "System.Diagnostics" />
                 <Import Namespace = "System.Windows.Forms" />
