@@ -432,14 +432,12 @@ namespace Example
 
         private void jc_OnMessage(object sender, jabber.protocol.client.Message msg)
         {
-            /*
             jabber.protocol.x.Data x = msg["x", URI.XDATA] as jabber.protocol.x.Data;
             if (x != null)
             {
                 new muzzle.XDataForm(x).ShowDialog(this);
             }
             else
-            */
                 MessageBox.Show(this, msg.Body, msg.From, MessageBoxButtons.OK);
         }
 
