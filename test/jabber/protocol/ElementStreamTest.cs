@@ -46,35 +46,51 @@ namespace test.jabber.protocol
     public class ElementStreamTest
 	{
         private bool fail = false;
-        
+        private System.Text.Encoding ENC = System.Text.Encoding.UTF8;
+
         public void Test_Partial()
         {
+            fail = false;
             ElementStream m_ElementStream = new ElementStream();
-            m_ElementStream.OnElement += new ProtocolHandler(jabOnElement);
-            m_ElementStream.OnDocumentStart += new ProtocolHandler(jabOnStart);
             m_ElementStream.OnDocumentEnd += new ObjectHandler(jabOnEnd);
-            Console.WriteLine("Pushing <test>");
-            byte[] m_buf = Encoding.ASCII.GetBytes("<stream>");
-            m_ElementStream.Push(m_buf);
-            Console.WriteLine("Pushing incomplete packet");
-            m_buf = Encoding.ASCII.GetBytes("<te");
-            m_ElementStream.Push(m_buf);
-            Console.WriteLine("End of test");
 
+            m_ElementStream.Push(ENC.GetBytes("<stream>"));
+            m_ElementStream.Push(ENC.GetBytes("<te"));
+
+            System.Threading.Thread.Sleep(500);
             Assertion.Assert(! fail);
         }
 
-        void jabOnElement(object s, XmlElement e)
+        public void Test_NullBody()
         {
+            fail = false;
+            ElementStream m_ElementStream = new ElementStream();
+            m_ElementStream.OnDocumentEnd += new ObjectHandler(jabOnEnd);
+
+            m_ElementStream.Push(ENC.GetBytes("<str"));
+            m_ElementStream.Push(ENC.GetBytes("eam/>"));
+
+            System.Threading.Thread.Sleep(500);
+            Assertion.Assert(! fail);
         }
 
-        void jabOnStart(object s, XmlElement e)
+        /* The server should protect from these.  Good thing, since
+         * it doesn't work.  :|
+        public void Test_Comment()
         {
-        }
+            fail = false;
+            ElementStream m_ElementStream = new ElementStream();
+            m_ElementStream.OnDocumentEnd += new ObjectHandler(jabOnEnd);
 
+            m_ElementStream.Push(ENC.GetBytes("<stream><!-- <foo/>"));
+            m_ElementStream.Push(ENC.GetBytes(" --></stream>"));
+
+            System.Threading.Thread.Sleep(500);
+            Assertion.Assert(! fail);
+        }
+*/
         void jabOnEnd(object s)
         {
-            Console.WriteLine("OnEnd");
             fail = true;
         }
 
