@@ -140,6 +140,32 @@ namespace jabber.protocol.x
         }
 
         /// <summary>
+        /// Add a form field
+        /// </summary>
+        /// <param name="var">Variable name</param>
+        /// <param name="typ">Field Type</param>
+        /// <param name="label">Field label</param>
+        /// <param name="val">Field value</param>
+        /// <param name="desc">Description</param>
+        /// <returns></returns>
+        public Field AddField(string var, FieldType typ, string label, string val, string desc)
+        {
+            Field f = new Field(this.OwnerDocument);
+            if (var != null)
+                f.Var = var;
+            if (label != null)
+                f.Label = label;
+            f.Type = typ;
+            if (val != null)
+                f.Val = val;
+            if (desc != null)
+                f.Desc = desc;
+
+            AddChild(f);
+            return f;
+        }
+
+        /// <summary>
         /// Get a field with the specified variable name.
         /// </summary>
         /// <param name="var"></param>
@@ -397,6 +423,22 @@ namespace jabber.protocol.x
         }
 
         /// <summary>
+        /// Is the given value in Vals?
+        /// </summary>
+        /// <param name="val"></param>
+        /// <returns></returns>
+        public bool IsValSet(string val)
+        {
+            XmlNodeList nl = GetElementsByTagName("value", URI.XDATA);
+            foreach (XmlElement el in nl)
+            {
+                if (el.InnerText == val)
+                    return true;
+            }
+            return false;
+        }
+
+        /// <summary>
         /// Add a value to a multi-value field.
         /// </summary>
         /// <param name="newvalue"></param>
@@ -487,5 +529,18 @@ namespace jabber.protocol.x
             get { return GetElem("value"); }
             set { SetElem("value", value); }
         }    
+
+        /// <summary>
+        /// Return the label for this option, so that a ComboBox.ObjectCollection can manage these directly.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            string l = Label;
+            if (l != "")
+                return l;
+            return Val;
+        }
+
     }
 }
