@@ -1,6 +1,7 @@
 <project>
     <assemblies>
-        <assembly location="D:\src\jabber-net\bin\Debug\jabber-net.dll" documentation="D:\src\jabber-net\bin\Debug\jabber-net.xml" />
+        <assembly location="..\bin\Debug\jabber-net.dll" documentation="..\bin\Debug\jabber-net.xml" />
+        <assembly location="..\muzzle\bin\Debug\muzzle.dll" documentation="..\muzzle\bin\Debug\muzzle.xml" />
     </assemblies>
     <namespaces>
         <namespace name="bedrock">Low-level utility routines.</namespace>
@@ -18,7 +19,7 @@
         <namespace name="jabber.protocol.stream">etherx namespace.  stream:stream and friends.</namespace>
         <namespace name="jabber.protocol.x">The jabber:x:* namespaces.</namespace>
         <namespace name="jabber.server">Service connections and utilties for extending the functionality of a Jabber server.</namespace>
-        <namespace name="muzzle">User interface elements that are at best peripherally related to Jabber.</namespace>
+        <namespace name="muzzle">User interface elements that might be useful if doing Jabber programming.</namespace>
     </namespaces>
     <documenters>
         <documenter name="JavaDoc">
@@ -37,6 +38,7 @@
             <property name="IncludeAssemblyVersion" value="True" />
             <property name="CopyrightText" value="Copyright © 2002 Cursive Systems" />
             <property name="CopyrightHref" value="http://www.cursive.net/" />
+            <property name="ReferencesPath" value="" />
             <property name="SkipNamespacesWithoutSummaries" value="False" />
             <property name="UseNamespaceDocSummaries" value="False" />
             <property name="AutoPropertyBackerSummaries" value="False" />
@@ -45,7 +47,7 @@
             <property name="DocumentedAttributes" value="" />
             <property name="GetExternalSummaries" value="True" />
         </documenter>
-        <documenter name="Latex">
+        <documenter name="LaTeX">
             <property name="OutputDirectory" value="Tex" />
             <property name="TextFileFullName" value="Documentation.tex" />
             <property name="TexFileBaseName" value="Documentation" />
@@ -64,6 +66,40 @@
             <property name="IncludeAssemblyVersion" value="False" />
             <property name="CopyrightText" value="" />
             <property name="CopyrightHref" value="" />
+            <property name="ReferencesPath" value="" />
+            <property name="SkipNamespacesWithoutSummaries" value="False" />
+            <property name="UseNamespaceDocSummaries" value="False" />
+            <property name="AutoPropertyBackerSummaries" value="False" />
+            <property name="AutoDocumentConstructors" value="True" />
+            <property name="DocumentAttributes" value="False" />
+            <property name="DocumentedAttributes" value="" />
+            <property name="GetExternalSummaries" value="True" />
+        </documenter>
+        <documenter name="LinearHtml">
+            <property name="IncludeTypeMemberDetails" value="False" />
+            <property name="OutputDirectory" value=".\doc\" />
+            <property name="MethodParametersInTable" value="False" />
+            <property name="NamespaceExcludeRegexp" value="" />
+            <property name="Title" value="An NDoc Documented Class Library" />
+            <property name="IncludeHierarchy" value="False" />
+            <property name="SortTOCByNamespace" value="True" />
+            <property name="HeaderHtml" value="" />
+            <property name="FooterHtml" value="" />
+            <property name="FilesToInclude" value="" />
+            <property name="ShowMissingSummaries" value="False" />
+            <property name="ShowMissingRemarks" value="False" />
+            <property name="ShowMissingParams" value="False" />
+            <property name="ShowMissingReturns" value="False" />
+            <property name="ShowMissingValues" value="False" />
+            <property name="DocumentInternals" value="False" />
+            <property name="DocumentProtected" value="True" />
+            <property name="DocumentPrivates" value="False" />
+            <property name="DocumentProtectedInternalAsProtected" value="False" />
+            <property name="DocumentEmptyNamespaces" value="False" />
+            <property name="IncludeAssemblyVersion" value="False" />
+            <property name="CopyrightText" value="" />
+            <property name="CopyrightHref" value="" />
+            <property name="ReferencesPath" value="" />
             <property name="SkipNamespacesWithoutSummaries" value="False" />
             <property name="UseNamespaceDocSummaries" value="False" />
             <property name="AutoPropertyBackerSummaries" value="False" />
@@ -102,6 +138,7 @@
             <property name="IncludeAssemblyVersion" value="True" />
             <property name="CopyrightText" value="Copyright © 2002 Cursive Systems" />
             <property name="CopyrightHref" value="http://www.cursive.net/" />
+            <property name="ReferencesPath" value="" />
             <property name="SkipNamespacesWithoutSummaries" value="False" />
             <property name="UseNamespaceDocSummaries" value="False" />
             <property name="AutoPropertyBackerSummaries" value="False" />
@@ -125,6 +162,7 @@
             <property name="IncludeAssemblyVersion" value="False" />
             <property name="CopyrightText" value="" />
             <property name="CopyrightHref" value="" />
+            <property name="ReferencesPath" value="" />
             <property name="SkipNamespacesWithoutSummaries" value="False" />
             <property name="UseNamespaceDocSummaries" value="False" />
             <property name="AutoPropertyBackerSummaries" value="False" />
