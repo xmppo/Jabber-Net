@@ -98,6 +98,23 @@ namespace bedrock.net
         /// </summary>
         /// <param name="listener">Where to send notifications</param>
         /// <param name="addr">Address to connect to</param>
+        /// <param name="backlog">The Maximum length of the queue of pending connections</param>
+        /// <returns>A socket that is ready for calling RequestAccept()</returns>
+        public AsyncSocket CreateListenSocket(ISocketEventListener listener,
+                                              Address              addr,
+                                              int                  backlog)
+        {
+            //Debug.Assert(m_maxSocks > 1);
+            AsyncSocket result = new AsyncSocket(this, listener);
+            result.Accept(addr, backlog);
+            return result;
+        }
+
+        /// <summary>
+        /// Create a socket that is listening for inbound connections.
+        /// </summary>
+        /// <param name="listener">Where to send notifications</param>
+        /// <param name="addr">Address to connect to</param>
         /// <returns>A socket that is ready for calling RequestAccept()</returns>
         public AsyncSocket CreateListenSocket(ISocketEventListener listener,
                                               Address              addr)
