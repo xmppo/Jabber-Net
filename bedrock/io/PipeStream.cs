@@ -140,7 +140,8 @@ namespace bedrock.io
                     Buffer.BlockCopy(buffer, mark, buf, 0, end - mark);
                     m_partial.Enqueue(buf);
                 }
-                Monitor.Pulse(m_readLock);
+                if (m_queue.Count > 0)
+                    Monitor.Pulse(m_readLock);
             }
         }
         /// <summary>
