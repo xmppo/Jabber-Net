@@ -310,6 +310,50 @@ namespace jabber.protocol.x
         }
 
         /// <summary>
+        /// Value for type='boolean' fields
+        /// </summary>
+        public bool BoolVal
+        {
+            get 
+            {
+                string sval = Val;
+                return !((sval == null) || (sval == "0"));
+            }
+            set
+            {
+                Val = value ? "1" : "0";
+            }
+        }
+
+        /// <summary>
+        /// Values for type='list-multi' fields
+        /// </summary>
+        public string[] Vals
+        {
+            get
+            {
+                XmlNodeList nl = GetElementsByTagName("value", URI.XDATA);
+                string[] results = new string[nl.Count];
+                int i=0;
+                foreach (XmlElement el in nl)
+                {
+                    results[i++] = el.InnerText;
+                }
+                return results;
+            }
+            set
+            {
+                RemoveElems("value", URI.XDATA);
+                foreach (string s in value)
+                {
+                    XmlElement val = this.OwnerDocument.CreateElement("value", URI.XDATA);
+                    val.InnerText = s;
+                    this.AppendChild(val);
+                }
+            }
+        }
+
+        /// <summary>
         /// The field description
         /// </summary>
         public string Desc
