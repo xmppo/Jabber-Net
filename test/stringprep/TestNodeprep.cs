@@ -52,6 +52,7 @@ namespace test.stringprep
         {
             TryOne("HILDJJ", "hildjj");
             TryOne("hildjj", "hildjj");
+			TryOne("\x226f", "\x226f"); // not greater than
         }
 
         [ExpectedException(typeof(ProhibitedCharacterException))]
@@ -89,6 +90,13 @@ namespace test.stringprep
         {
             TryOne(">", null);
         }
+#if !NO_STRINGPREP
+		[ExpectedException(typeof(ProhibitedCharacterException))]
+		public void Test_SmallGreater()
+		{
+			TryOne("\xfe65", null); // small greater than
+		}
+#endif
         [ExpectedException(typeof(ProhibitedCharacterException))]
         public void Test_At()
         {
