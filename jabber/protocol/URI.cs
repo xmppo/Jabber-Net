@@ -55,7 +55,18 @@ namespace jabber.protocol
         /// Jabber component connections
         /// </summary>
         public const string ACCEPT = "jabber:component:accept";
-
+        /// <summary>
+        /// S2S connection
+        /// </summary>
+        public const string SERVER = "jabber:server"; 
+        /// <summary>
+        /// S2S dialback
+        /// </summary>
+        public const string DIALBACK = "jabber:server:dialback";
+        /// <summary>
+        /// SASL support
+        /// </summary>
+        public const string SASL = "http://www.iana.org/assignments/sasl-mechanisms";
 
         // IQ
         /// <summary>
