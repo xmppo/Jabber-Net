@@ -12,11 +12,11 @@
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
-using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace muzzle
 {
@@ -65,18 +65,9 @@ namespace muzzle
         /// Create a Client Login dialog box that manages a component
         /// </summary>
         /// <param name="service">The component to manage</param>
-        public ComponentLogin(jabber.server.JabberService service)
+        public ComponentLogin(jabber.server.JabberService service) : this()
         {
-            SetAll(service);
-        }
-
-        private void SetAll(jabber.server.JabberService service)
-        {
-            m_service   = service;
-            ComponentID = m_service.ComponentID;
-            Host        = m_service.Server;
-            Secret      = m_service.Secret;
-            Port        = m_service.Port;
+            m_service = service;
         }
 
         /// <summary>
@@ -108,7 +99,11 @@ namespace muzzle
                 }
                 return m_service; 
             }
-            set { SetAll(value); }
+            set 
+            { 
+                m_service = value; 
+                ReadService(); 
+            }
         }
 
         /// <summary>
@@ -337,24 +332,108 @@ namespace muzzle
             this.Controls.Add(this.label1);
             this.Name = "ComponentLogin";
             this.Text = "Connection";
+            this.Load += new System.EventHandler(this.ComponentLogin_Load);
             this.ResumeLayout(false);
 
         }
 #endregion
+
+        /// <summary>
+        /// Set the connection properties from an XML config file.
+        /// TODO: Replace this with a better ConfigFile implementation that can write.
+        /// </summary>
+        /// <param name="file"></param>
+        public void ReadFromFile(string file)
+        {
+            XmlDocument doc = new XmlDocument();
+            try
+            {
+                doc.Load(file);
+            }
+            catch (XmlException)
+            {
+                return;
+            }
+            catch (System.IO.FileNotFoundException)
+            {
+                return;
+            }
+
+            XmlElement root = doc.DocumentElement;
+            if (root == null)
+                return;
+
+            string t;
+            ComponentID = Prop(root, "ComponentID");
+            Host = Prop(root, "Host");
+            Secret = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(Prop(root, "Secret")));
+            t = Prop(root, "Port");
+            if ((t != null) && (t != ""))
+                Port = int.Parse(t);
+
+            WriteService();
+        }
+
+        private string Prop(XmlElement root, string elem)
+        {
+            XmlElement e = root[elem] as XmlElement;
+            if (e == null)
+                return null;
+            return e.InnerText;
+        }
+
+        /// <summary>
+        /// Write the current connection properties to an XML config file.
+        /// TODO: Replace this with a better ConfigFile implementation that can write.
+        /// </summary>
+        /// <param name="file"></param>
+        public void WriteToFile(string file)
+        {
+            XmlDocument doc = new XmlDocument();
+            XmlElement root = (XmlElement) doc.CreateElement("login");
+            doc.AppendChild(root);
+
+            root.AppendChild(doc.CreateElement("ComponentID")).InnerText = ComponentID;
+            root.AppendChild(doc.CreateElement("Host")).InnerText = Host;
+            root.AppendChild(doc.CreateElement("Secret")).InnerText = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(Secret));
+            root.AppendChild(doc.CreateElement("Port")).InnerText = Port.ToString();
+
+            XmlTextWriter xw = new XmlTextWriter(file, System.Text.Encoding.UTF8);
+            xw.Formatting = Formatting.Indented;
+            doc.WriteContentTo(xw);
+            xw.Close();
+        }
+
+        private void ReadService()
+        {
+            if (m_service == null)
+                return;
+
+            ComponentID = m_service.ComponentID;
+            Host        = m_service.NetworkHost;
+            Secret      = m_service.Secret;
+            Port        = m_service.Port;
+        }
+
+        private void WriteService()
+        {
+            if (m_service == null)
+                return;
+
+            m_service.ComponentID = ComponentID;
+            m_service.NetworkHost = Host;
+            m_service.Secret      = Secret;
+            m_service.Port        = Port;
+            m_service.Type        = Listen ? 
+                jabber.server.ComponentType.Connect : jabber.server.ComponentType.Accept;
+        }
 
         private void button1_Click(object sender, System.EventArgs e)
         {
             if (!this.Validate())
                 return;
 
-            if (m_service != null)
-            {
-                m_service.ComponentID = ComponentID;
-                m_service.Server      = Host;
-                m_service.Secret      = Secret;
-                m_service.Port        = Port;
-                m_service.Type = Listen ? jabber.server.ComponentType.Connect : jabber.server.ComponentType.Accept;
-            }
+            WriteService();
 
             this.DialogResult = DialogResult.OK;
             this.Close();
@@ -425,6 +504,12 @@ namespace muzzle
                 e.Cancel = true;
                 error.SetError(txtPort, "Unknown error");
             }
+        }
+
+        private void ComponentLogin_Load(object sender, System.EventArgs e)
+        {
+            ReadService();
+            txtServer.Focus();
         }
     }
 }
