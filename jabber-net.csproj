@@ -311,6 +311,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "jabber\connection\sasl\PlainProcessor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "jabber\connection\sasl\SASLProcessor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -125,7 +125,7 @@ namespace jabber.connection.sasl
             }
             else if (plaintextOK && ((mt & MechanismType.PLAIN) == MechanismType.PLAIN))
             {
-                throw new NotImplementedException("PLAIN not implemented yet");
+                return new PlainProcessor();
             }
             return null;
         }
