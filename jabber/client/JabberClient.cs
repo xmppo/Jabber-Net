@@ -405,17 +405,24 @@ namespace jabber.client
                              string show,
                              int priority)
         {
-            Presence p = new Presence(Document);
-            if (status != null)
-                p.Status = status;
-            if (t != PresenceType.available)
-            {
-                p.Type = t;
-            }
-            if (show != null)
-                p.Show = show;
-            p.Priority = priority.ToString();
-            Write(p);
+ 			if (IsAuthenticated) 
+ 			{
+ 				Presence p = new Presence(Document);
+ 				if (status != null)
+ 					p.Status = status;
+ 				if (t != PresenceType.available)
+ 				{
+ 					p.Type = t;
+ 				}
+ 				if (show != null)
+ 					p.Show = show;
+ 				p.Priority = priority.ToString();
+ 				Write(p);
+ 			}
+ 			else
+ 			{
+ 				throw new InvalidOperationException("Client must be authenticated before sending presence.");
+ 			}
         }
 
         /// <summary>
@@ -423,9 +430,16 @@ namespace jabber.client
         /// </summary>
         public void GetRoster()
         {
-            RosterIQ riq = new RosterIQ(Document);
-            riq.Type = IQType.get;
-            Write(riq);
+ 			if (IsAuthenticated) 
+ 			{
+ 				RosterIQ riq = new RosterIQ(Document);
+ 				riq.Type = IQType.get;
+ 				Write(riq);
+ 			}
+ 			else
+ 			{
+ 				throw new InvalidOperationException("Client must be authenticated before getting roster.");
+ 			}
         }
         
         /// <summary>
