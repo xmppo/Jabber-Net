@@ -206,8 +206,6 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <Folder RelPath = "jabber\server\" />
-                <Folder RelPath = "jabber\xml\" />
             </Include>
         </Files>
     </CSHARP>
