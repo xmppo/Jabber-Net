@@ -121,11 +121,16 @@ namespace jabber.connection
             lock (m_pending)
             {
                 m_pending[id] = td;
-                m_cli.Write(iqp);
-                if (!are.WaitOne(millisecondsTimeout, true))
-                {
-                    throw new Exception("Timeout waiting for IQ response");
-                }
+            }
+            m_cli.Write(iqp);
+
+            if (!are.WaitOne(millisecondsTimeout, true))
+            {
+                throw new Exception("Timeout waiting for IQ response");
+            }
+
+            lock (m_pending)
+            {
                 IQ resp = (IQ) m_pending[id];
                 m_pending.Remove(id);
                 return resp;
@@ -134,11 +139,8 @@ namespace jabber.connection
 
         private void SignalEvent(object sender, IQ iq, object data)
         {
-            lock (m_pending)
-            {
-                m_pending[iq.ID] = iq;
-                ((AutoResetEvent)data).Set();
-            }
+            m_pending[iq.ID] = iq;
+            ((AutoResetEvent)data).Set();
         }
 
         private class TrackerData
