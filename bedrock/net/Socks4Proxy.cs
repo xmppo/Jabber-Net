@@ -16,13 +16,15 @@ using System;
 using System.Diagnostics;
 using System.Text;
 using System.Net;
+using bedrock.util;
 
 namespace bedrock.net
 {
 	/// <summary>
 	/// Proxy object for sockets that want to do SOCKS4 proxying.
 	/// </summary>
-	public class Socks4Proxy : ProxySocket
+    [RCS(@"$Header$")]
+    public class Socks4Proxy : ProxySocket
 	{
 		private enum States { None, Connecting, RequestingProxy, Running, Closed }
 		private States m_state = States.None;

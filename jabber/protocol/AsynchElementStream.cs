@@ -18,13 +18,15 @@ using System.Threading;
 using System.Xml;
 
 using bedrock.io;
+using bedrock.util;
 
 namespace jabber.protocol
 {
 	/// <summary>
 	/// Summary description for AsynchElementStream.
 	/// </summary>
-	public class AsynchElementStream : ElementStream
+    [RCS(@"$Header$")]
+    public class AsynchElementStream : ElementStream
 	{
         private object m_parseLock = new object();
 

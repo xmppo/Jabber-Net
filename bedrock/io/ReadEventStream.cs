@@ -14,13 +14,15 @@
 using System;
 
 using System.IO;
+using bedrock.util;
 
 namespace bedrock.io
 {
 	/// <summary>
 	/// Wrap a stream, so that OnRead events can be fired.
 	/// </summary>
-	public class ReadEventStream : Stream
+    [RCS(@"$Header$")]
+    public class ReadEventStream : Stream
 	{
         private Stream m_stream;
 

@@ -17,9 +17,11 @@ using System;
 using NUnit.Framework;
 using stringprep;
 using stringprep.steps;
+using bedrock.util;
 
 namespace test.stringprep
 {
+    [RCS(@"$Header$")]
     [TestFixture]
     public class TestResourceprep
     {

@@ -15,13 +15,15 @@ using System;
 
 using System.Diagnostics;
 using System.Text;
+using bedrock.util;
 
 namespace bedrock.net
 {
 	/// <summary>
 	/// Proxy object for sockets.
 	/// </summary>
-	public class ProxySocket : BaseSocket, ISocketEventListener
+    [RCS(@"$Header$")]
+    public class ProxySocket : BaseSocket, ISocketEventListener
 	{
 		private BaseSocket     m_sock = null;
 		private string         m_host = null;

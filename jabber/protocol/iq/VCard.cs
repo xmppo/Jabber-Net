@@ -417,6 +417,7 @@ namespace jabber.protocol.iq
         /// <summary>
         /// 
         /// </summary>
+        [RCS(@"$Header$")]
         public class VName : Element
         {
             /// <summary>
@@ -469,6 +470,7 @@ namespace jabber.protocol.iq
         /// <summary>
         /// vCard Org Element
         /// </summary>
+        [RCS(@"$Header$")]
         public class VOrganization : Element
         {
             /// <summary>
@@ -512,6 +514,7 @@ namespace jabber.protocol.iq
         /// <summary>
         /// vCard Telephone Element
         /// </summary>
+        [RCS(@"$Header$")]
         public class VTelephone : Element
         {
             /// <summary>
@@ -609,6 +612,7 @@ namespace jabber.protocol.iq
         /// <summary>
         /// vCard Address Element
         /// </summary>
+        [RCS(@"$Header$")]
         public class VAddress : Element
         {
             /// <summary>
@@ -716,6 +720,7 @@ namespace jabber.protocol.iq
         /// <summary>
         /// vCard Email Element
         /// </summary>
+        [RCS(@"$Header$")]
         public class VEmail : Element
         {
             /// <summary>
@@ -803,6 +808,7 @@ namespace jabber.protocol.iq
         /// <summary>
         /// Geographic location
         /// </summary>
+        [RCS(@"$Header$")]
         public class VGeo : Element
         {
             /// <summary>
@@ -846,6 +852,7 @@ namespace jabber.protocol.iq
         /// <summary>
         /// 
         /// </summary>
+        [RCS(@"$Header$")]
         public class VPhoto : Element
         {
             /// <summary>

@@ -18,13 +18,15 @@ using System.IO;
 using System.Xml;
 
 using jabber.protocol;
+using bedrock.util;
 
 namespace jabber.protocol
 {
 	/// <summary>
 	/// Summary description for SynchElementStream.
 	/// </summary>
-	public class SynchElementStream : ElementStream
+    [RCS(@"$Header$")]
+    public class SynchElementStream : ElementStream
 	{
         /// <summary>
         /// Create a parser that reads from the input stream synchronously, in a single thread.

@@ -17,10 +17,12 @@ using System;
 using NUnit.Framework;
 using stringprep;
 using stringprep.steps;
+using bedrock.util;
 
 namespace test.stringprep
 {
-	[TestFixture]
+    [RCS(@"$Header$")]
+    [TestFixture]
 	public class TestNodeprep
 	{
         private static System.Text.Encoding ENC = System.Text.Encoding.UTF8;

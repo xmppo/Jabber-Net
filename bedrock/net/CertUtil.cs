@@ -14,13 +14,15 @@
 using System;
 
 using Org.Mentalis.Security.Certificates;
+using bedrock.util;
 
 namespace bedrock.net
 {
 	/// <summary>
 	/// Utilities for creating certificates
 	/// </summary>
-	public class CertUtil
+    [RCS(@"$Header$")]
+    public class CertUtil
 	{
         /// <summary>
         /// Can this cert be used for server authentication?
