@@ -7,7 +7,7 @@
     >
         <Build>
             <Settings
-                ApplicationIcon = ""
+                ApplicationIcon = "HAMMER.ICO"
                 AssemblyKeyContainerName = ""
                 AssemblyName = "Example"
                 AssemblyOriginatorKeyFile = ""

@@ -306,11 +306,6 @@ namespace Example
             Application.Run(new MainForm());
         }
 
-        private void mnuExit_Click(object sender, System.EventArgs e)
-        {
-            Application.Exit();
-        }
-
         private void Connect()
         {
             muzzle.ClientLogin log = new muzzle.ClientLogin();
@@ -412,11 +407,6 @@ namespace Example
             MessageBox.Show(this, msg.Body, msg.From, MessageBoxButtons.OK);
         }
 
-        private void mnuMessage_Click(object sender, System.EventArgs e)
-        {
-            new SendMessage(jc).Show();
-        }
-
         private void jc_OnIQ(object sender, jabber.protocol.client.IQ iq)
         {
             if (iq.Type != IQType.get)
@@ -431,6 +421,13 @@ namespace Example
                 ver.OS = Environment.OSVersion.ToString();
                 ver.EntityName = Application.ProductName;
                 ver.Ver = Application.ProductVersion;
+                jc.Write(iq);
+            }
+            else
+            {
+                iq.Swap();
+                iq.Type = IQType.error;
+                iq.Error.Code = ErrorCode.NOT_IMPLEMENTED;
                 jc.Write(iq);
             }
         }
