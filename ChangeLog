@@ -1,0 +1,282 @@
+2002-08-25 14:26  hildjj
+
+	* docs/jabber-net.chm: Docs for 0.06
+
+2002-08-25 14:22  hildjj
+
+	* docs/: build.bat, jabber-net.ndoc: Latest/greatest NDoc
+
+2002-08-25 13:47  hildjj
+
+	* jabber/protocol/client/: Error.cs, ProtocolException.cs: Use the
+	errorcode enumeration for errors
+
+2002-08-25 13:45  hildjj
+
+	* jabber/protocol/Element.cs: Added GetFirstChild()
+
+2002-08-25 13:43  hildjj
+
+	* jabber-net.csproj, jabber/protocol/iq/Browse.cs,
+	jabber/protocol/iq/Factory.cs, jabber/protocol/URI.cs: Added
+	iq:browse and x:data
+
+2002-08-25 13:40  hildjj
+
+	* jabber/JID.cs, test/jabber/JIDTest.cs: Change equality routines. 
+	Hopefully they work better with respect to JID==string and
+	string==JID now
+
+2002-08-24 08:56  hildjj
+
+	* jabber-net.csproj, jabber-net.sln, Setup/Setup.vdproj,
+	test/test.csproj, test/jabber/protocol/x/DataTest.cs,
+	jabber/protocol/x/Data.cs, jabber/protocol/x/Factory.cs,
+	jabber/protocol/URI.cs, jabber/protocol/XmlLoader.cs,
+	bedrock/io/XmlLoader.cs: Moved XmlLoader back, added XData, made
+	setup not build by default
+
+2002-08-16 22:03  hildjj
+
+	* bedrock/io/PipeStream.cs, test/bedrock/io/PipeStreamTest.cs:
+	Don't error on partial packets
+
+2002-08-14 23:33  hildjj
+
+	* test/jabber/protocol/ElementStreamTest.cs: Added ElementStream
+	test
+
+2002-08-14 23:33  hildjj
+
+	* test/: test.csproj, test.csproj.user,
+	bedrock/collections/ByteStackTest.cs,
+	bedrock/collections/SkipListTest.cs,
+	bedrock/collections/TreeTest.cs,
+	bedrock/collections/TrieNodeTest.cs,
+	bedrock/collections/TrieTest.cs, bedrock/io/PipeStreamTest.cs,
+	bedrock/util/ComplexTest.cs, bedrock/util/GetOptBaseTest.cs,
+	bedrock/util/VersionTest.cs, jabber/JIDTest.cs,
+	jabber/client/PPDBTest.cs, jabber/protocol/PacketTest.cs,
+	jabber/protocol/accept/RouteTest.cs,
+	jabber/protocol/client/IQTest.cs,
+	jabber/protocol/client/MessageTest.cs,
+	jabber/protocol/client/PresenceTest.cs,
+	jabber/protocol/iq/AgentTest.cs, jabber/protocol/iq/AuthTest.cs,
+	jabber/protocol/iq/RosterTest.cs,
+	jabber/protocol/stream/FactoryTest.cs,
+	jabber/protocol/stream/StreamTest.cs,
+	jabber/protocol/x/EventTest.cs: Move to NUnit 2
+
+2002-08-14 23:27  hildjj
+
+	* test/nunit/: NUnitConsole.exe, NUnitCore.dll, NUnitGUI.exe,
+	NUnitTests.dll, nunit-console.exe, nunit-gui.exe,
+	nunit-gui.exe.config, nunit.extensions.dll, nunit.framework.dll,
+	nunit.util.dll: Move to NUnit 2
+
+2002-08-14 23:20  hildjj
+
+	* jabber/protocol/URI.cs: Add S2S and SASL namespaces
+
+2002-08-14 23:18  hildjj
+
+	* jabber/: protocol/ElementStream.cs, connection/IQTracker.cs:
+	ElementStream moved to jabber.protocol
+
+2002-08-14 23:15  hildjj
+
+	* bedrock/io/XmlLoader.cs: moved to bedrock
+
+2002-08-14 23:11  hildjj
+
+	* bedrock/util/GetOptBase.cs: accept '=' as the option/value
+	separator, in addition to ':'
+
+2002-08-14 23:07  hildjj
+
+	* jabber/client/RosterManager.cs: Add OnRosterBegin and OnRosterEnd
+	events
+
+2002-08-05 15:59  hildjj
+
+	* jabber/client/JabberClient.cs: Send agents request first, so that
+	roster items have agent info available.
+
+2002-07-30 16:52  hildjj
+
+	* .cvslog: Add Tom Waters
+
+2002-07-30 15:19  hildjj
+
+	* jabber/: client/JabberClient.cs,
+	connection/SocketElementStream.cs, server/JabberService.cs: Add
+	state locking, change OnConnect/IsConnected to
+	OnAuthenticate/IsAuthenticated
+
+2002-07-30 15:14  hildjj
+
+	* jabber/client/IQTracker.cs, jabber/connection/IQTracker.cs,
+	jabber-net.csproj: Move IQTracker to jabber/connection, since I
+	wanted to use it from a JabberService instance
+
+2002-07-29 14:18  hildjj
+
+	* jabber/client/JabberClient.cs: Make sure IsConnected is
+	read/write instead of read-only
+
+2002-07-29 14:16  hildjj
+
+	* .cvslog: removed space
+
+2002-07-29 08:10  hildjj
+
+	* jabber/client/JabberClient.cs: Add agents property
+
+2002-07-18 14:32  hildjj
+
+	* jabber/: connection/SocketElementStream.cs,
+	server/JabberService.cs: Add Host protected property, to allow 'to'
+	attrib on stream to be different from server.  Needed for component
+	connections.
+
+2002-07-18 14:25  hildjj
+
+	* .cvsignore: add jabber-net.suo
+
+2002-07-18 12:48  hildjj
+
+	* .cvslog: Added
+
+2002-07-18 12:47  hildjj
+
+	* jabber-net.sln, Setup/.cvsignore, Setup/Setup.vdproj: Add setup
+	project
+
+2002-07-12 01:45  hildjj
+
+	* jabber-net.suo, test/test.suo: Locally created
+
+2002-07-12 01:43  hildjj
+
+	* muzzle/StripChart.cs: move points so that the vertical center is
+	on the value, rather than the top edge
+
+2002-07-12 00:38  hildjj
+
+	* docs/jabber-net.chm: Add muzzle
+
+2002-07-12 00:35  hildjj
+
+	* jabber/server/: JabberService.cs, XdbTracker.cs: Change
+	ServerComponent to JabberService
+
+2002-07-12 00:34  hildjj
+
+	* docs/jabber-net.ndoc: Add muzzle, configure for JavaDocs, too
+
+2002-07-12 00:33  hildjj
+
+	* docs/.cvsignore: Ignore javadocs, too
+
+2002-07-12 00:33  hildjj
+
+	* update.bat: added
+
+2002-07-12 00:32  hildjj
+
+	* test/test.csproj, jabber-net.csproj, jabber-net.suo: No
+	incremental build
+
+2002-07-12 00:31  hildjj
+
+	* AssemblyInfo.cs: CLSCompliant
+
+2002-07-11 16:27  hildjj
+
+	* jabbernet.key: Made it binary
+
+2002-07-11 16:25  hildjj
+
+	* docs/: jabber-net.chm, jabber-net.ndoc: Initial import
+
+2002-07-11 16:16  hildjj
+
+	* .cvsignore, jabber-net.suo, test/test.csproj,
+	test/test.csproj.user: tweakage
+
+2002-07-11 16:09  hildjj
+
+	* jabber/server/JabberService.resx, docs/.cvsignore: Initial import
+
+2002-07-11 16:06  hildjj
+
+	* muzzle/AssemblyInfo.cs, muzzle/ClientLogin.cs,
+	muzzle/ClientLogin.resx, muzzle/ComponentLogin.cs,
+	muzzle/ComponentLogin.resx, muzzle/Litmus.bmp, muzzle/Litmus.cs,
+	muzzle/Litmus.resx, muzzle/StripChart.bmp, muzzle/StripChart.cs,
+	muzzle/StripChart.resx, muzzle/muzzle.csproj,
+	muzzle/muzzle.csproj.user, muzzle/.cvsignore, bedrock/Delegates.cs,
+	bedrock/collections/ByteStack.cs, bedrock/collections/GraphNode.cs,
+	bedrock/collections/IndexedTrie.cs,
+	bedrock/collections/LinkedList.cs, bedrock/collections/SkipList.cs,
+	bedrock/collections/Tree.cs, bedrock/collections/Trie.cs,
+	bedrock/collections/TrieNode.cs, bedrock/io/PipeStream.cs,
+	bedrock/net/Address.cs, bedrock/net/AsyncSocket.cs,
+	bedrock/net/SocketEventListener.cs, bedrock/net/SocketWatcher.cs,
+	bedrock/util/CRC32.cs, bedrock/util/Complex.cs,
+	bedrock/util/ConfigFile.cs, bedrock/util/GetOptBase.cs,
+	bedrock/util/Tracer.cs, bedrock/util/Version.cs,
+	jabber-net.csproj.user, jabber-net.suo, docs/howto.htm,
+	docs/jabber-net.ndoc, docs/philosophies.html,
+	jabber/client/JabberClient.resx: Initial import
+
+2002-07-11 16:03  hildjj
+
+	* test/: AllTests.cs, AssemblyInfo.cs, test.csproj,
+	bedrock/collections/ByteStackTest.cs,
+	bedrock/collections/SkipListTest.cs,
+	bedrock/collections/TreeTest.cs,
+	bedrock/collections/TrieNodeTest.cs,
+	bedrock/collections/TrieTest.cs, bedrock/io/PipeStreamTest.cs,
+	bedrock/util/ComplexTest.cs, bedrock/util/GetOptBaseTest.cs,
+	bedrock/util/VersionTest.cs, jabber/JIDTest.cs,
+	jabber/client/PPDBTest.cs, jabber/protocol/PacketTest.cs,
+	jabber/protocol/accept/RouteTest.cs,
+	jabber/protocol/client/IQTest.cs,
+	jabber/protocol/client/MessageTest.cs,
+	jabber/protocol/client/PresenceTest.cs,
+	jabber/protocol/iq/AgentTest.cs, jabber/protocol/iq/AuthTest.cs,
+	jabber/protocol/iq/RosterTest.cs,
+	jabber/protocol/stream/FactoryTest.cs,
+	jabber/protocol/stream/StreamTest.cs,
+	jabber/protocol/x/EventTest.cs, .cvsignore, nunit/NUnitConsole.exe,
+	nunit/NUnitCore.dll, nunit/NUnitGUI.exe, nunit/NUnitTests.dll,
+	test.csproj.user, test.suo: Initial import
+
+2002-07-11 15:59  hildjj
+
+	* AssemblyInfo.cs, jabber-net.csproj, jabber-net.sln,
+	jabbernet.key, jabber/JID.cs, jabber/client/IQTracker.cs,
+	jabber/client/JabberClient.bmp, jabber/client/JabberClient.cs,
+	jabber/client/PPDB.bmp, jabber/client/PPDB.cs,
+	jabber/client/RosterManager.bmp, jabber/client/RosterManager.cs,
+	jabber/connection/SocketElementStream.cs,
+	jabber/connection/States.cs, jabber/protocol/Element.cs,
+	jabber/protocol/ElementFactory.cs, jabber/protocol/Packet.cs,
+	jabber/protocol/URI.cs, jabber/protocol/accept/Factory.cs,
+	jabber/protocol/accept/Handshake.cs, jabber/protocol/accept/Log.cs,
+	jabber/protocol/accept/Route.cs, jabber/protocol/accept/Xdb.cs,
+	jabber/protocol/client/Error.cs, jabber/protocol/client/Factory.cs,
+	jabber/protocol/client/IQ.cs, jabber/protocol/client/Message.cs,
+	jabber/protocol/client/Presence.cs,
+	jabber/protocol/client/ProtocolException.cs,
+	jabber/protocol/iq/Agents.cs, jabber/protocol/iq/Auth.cs,
+	jabber/protocol/iq/Factory.cs, jabber/protocol/iq/OOB.cs,
+	jabber/protocol/iq/Register.cs, jabber/protocol/iq/Roster.cs,
+	jabber/protocol/iq/Time.cs, jabber/protocol/iq/Version.cs,
+	jabber/protocol/stream/Error.cs, jabber/protocol/stream/Factory.cs,
+	jabber/protocol/stream/Stream.cs, jabber/protocol/x/Delay.cs,
+	jabber/protocol/x/Event.cs, jabber/protocol/x/Factory.cs,
+	jabber/server/JabberService.bmp, jabber/server/JabberService.cs,
+	jabber/server/XdbTracker.cs: Initial import
+
