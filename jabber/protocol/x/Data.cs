@@ -51,7 +51,11 @@ namespace jabber.protocol.x
         /// <summary>
         /// Data results being returned from a search, or some other query.
         /// </summary>
-        result
+        result,
+        /// <summary>
+        /// A form was cancelled.
+        /// </summary>
+        cancel
     }
 
 	/// <summary>
@@ -195,7 +199,11 @@ namespace jabber.protocol.x
         /// <summary>
         /// Jabber ID.
         /// </summary>
-        jid
+        jid_single,
+        /// <summary>
+        /// A list of jabber ID's.
+        /// </summary>
+        jid_multi
     }
 
     /// <summary>
@@ -248,8 +256,10 @@ namespace jabber.protocol.x
                         return FieldType.Fixed;
                     case "hidden":
                         return FieldType.hidden;
-                    case "jid": 
-                        return FieldType.jid;
+                    case "jid-single": 
+                        return FieldType.jid_single;
+                    case "jid-multi":
+                        return FieldType.jid_multi;
                     default:
                         throw new ArgumentException("Unknown x:data field type: " + GetAttribute("type"));
                 }
@@ -282,8 +292,11 @@ namespace jabber.protocol.x
                     case FieldType.hidden:
                         SetAttribute("type", "hidden");
                         break;
-                    case FieldType.jid:
-                        SetAttribute("type", "jid");
+                    case FieldType.jid_single:
+                        SetAttribute("type", "jid-single");
+                        break;
+                    case FieldType.jid_multi:
+                        SetAttribute("type", "jid-multi");
                         break;
                     default:
                         throw new ArgumentException("Unknown x:data field type: " + value);
