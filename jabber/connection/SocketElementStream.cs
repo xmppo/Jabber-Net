@@ -30,7 +30,7 @@
 using System;
 using System.Collections;
 using System.ComponentModel;
-using System.ComponentModel.Design.IDesignerHost;
+using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Threading;
 using System.Xml;
