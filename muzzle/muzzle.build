@@ -42,19 +42,11 @@
 	<csc target="${target.type}" output="${dir.output}\${project.output}" debug="${debug}" define="${define}" doc="${doc}" optioncompare="${vbc.optionCompare}" optionexplicit="${vbc.optionExplicit}" optionstrict="${vbc.optionStrict}" removeintchecks="${removeIntChecks}" rootnamespace="${rootNamespace}">
 	  <arg value="${unsafe}"/>
 	  <sources>
-		<includes name="AssemblyInfo.cs"/>
-		<includes name="ClientLogin.cs"/>
-		<includes name="ComponentLogin.cs"/>
-		<includes name="Litmus.cs"/>
-		<includes name="StripChart.cs"/>
+		<includes name="**.cs"/>
 	  </sources>
 	  <resources>
-		<includes name="ClientLogin.resx"/>
-		<includes name="ComponentLogin.resx"/>
-		<includes name="Litmus.bmp"/>
-		<includes name="Litmus.resx"/>
-		<includes name="StripChart.bmp"/>
-		<includes name="StripChart.resx"/>
+		<includes name="**.resx"/>
+		<includes name="**.bmp"/>
 	  </resources>
 	  <references>
 		<includes name="System.dll"/>

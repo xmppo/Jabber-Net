@@ -51,34 +51,7 @@
 	  rootnamespace="${rootNamespace}">
 	  <arg value="${unsafe}"/>
 	  <sources>
-		<includes name="AssemblyInfo.cs"/>
-		<includes name="bedrock\collections\ByteStackTest.cs"/>
-		<includes name="bedrock\collections\SetTest.cs"/>
-		<includes name="bedrock\collections\SkipListTest.cs"/>
-		<includes name="bedrock\collections\TreeTest.cs"/>
-		<includes name="bedrock\collections\TrieNodeTest.cs"/>
-		<includes name="bedrock\collections\TrieTest.cs"/>
-		<includes name="bedrock\io\PipeStreamTest.cs"/>
-		<includes name="bedrock\util\ComplexTest.cs"/>
-		<includes name="bedrock\util\GetOptBaseTest.cs"/>
-		<includes name="bedrock\util\VersionTest.cs"/>
-		<includes name="jabber\JIDTest.cs"/>
-		<includes name="jabber\client\PresenceManagerTest.cs"/>
-		<includes name="jabber\client\RosterManagerTest.cs"/>
-		<includes name="jabber\protocol\ElementStreamTest.cs"/>
-		<includes name="jabber\protocol\PacketTest.cs"/>
-		<includes name="jabber\protocol\accept\RouteTest.cs"/>
-		<includes name="jabber\protocol\client\IQTest.cs"/>
-		<includes name="jabber\protocol\client\MessageTest.cs"/>
-		<includes name="jabber\protocol\client\PresenceTest.cs"/>
-		<includes name="jabber\protocol\iq\AgentTest.cs"/>
-		<includes name="jabber\protocol\iq\AuthTest.cs"/>
-		<includes name="jabber\protocol\iq\RegisterTest.cs"/>
-		<includes name="jabber\protocol\iq\RosterTest.cs"/>
-		<includes name="jabber\protocol\stream\FactoryTest.cs"/>
-		<includes name="jabber\protocol\stream\StreamTest.cs"/>
-		<includes name="jabber\protocol\x\DataTest.cs"/>
-		<includes name="jabber\protocol\x\EventTest.cs"/>
+		<includes name="**.cs"/>
 	  </sources>
 	  <references>
 		<includes name="System.dll"/>
@@ -91,8 +64,10 @@
   </target>
   <target name="test" depends="init,compile"/>
   <target name="clean" depends="init" description="Delete output of a build">
-	<delete file="${dir.output}\${project.output}" verbose="true" failonerror="false"/>
-	<delete file="${dir.output}\${project.FormalName}.pdb" verbose="true" failonerror="false"/>
+	<delete file="${dir.output}\${project.output}" verbose="true" 
+		failonerror="false"/>
+	<delete file="${dir.output}\${project.FormalName}.pdb" 
+		verbose="true" failonerror="false"/>
 	<delete file="${doc}" verbose="true" failonerror="false"/>
   </target>
 </project>
