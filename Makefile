@@ -14,7 +14,8 @@
 
 # The purpose of this Makefile is to facilitate mono builds.
 
-BASEDIR:=$(shell pwd)
+#BASEDIR:=$(shell pwd)
+BASEDIR = $(CURDIR)
 
 SOURCES = \
 $(BASEDIR)/AssemblyInfo.cs \
@@ -48,6 +49,7 @@ $(BASEDIR)/bedrock/util/Version.cs \
 $(BASEDIR)/jabber/JID.cs \
 $(BASEDIR)/jabber/client/JabberClient.cs \
 $(BASEDIR)/jabber/client/PresenceManager.cs \
+$(BASEDIR)/jabber/client/ServiceManager.cs \
 $(BASEDIR)/jabber/client/RosterManager.cs \
 $(BASEDIR)/jabber/connection/IQTracker.cs \
 $(BASEDIR)/jabber/connection/SocketElementStream.cs \
@@ -118,23 +120,30 @@ RESOURCES = \
 -resource:$(BASEDIR)/jabber/client/RosterManager.bmp \
 -resource:$(BASEDIR)/jabber/server/JabberService.bmp
 
-SYSTEM_REFERENCES = -r:System.dll -r:System.Data.dll -r:System.Xml.dll \
--r:System.Windows.Forms.dll -r:System.Drawing.dll 
+SYSTEM_REFERENCES = -r:System.dll -r:System.Xml.dll
 
 MCS_OPTIONS =   -lib:$(BASEDIR)/bin/debug -g \
-		-define:NO_STRINGPREP \
 		-define:NO_SSL \
-		-define:DEBUG
+		-define:DEBUG \
+		-define:NO_STRINGPREP
 
-ASSEMBLIES =
+ASSEMBLIES = #-r:stringprep.dll
 
-all: jabber-net.dll
+all:  subdirs
 
-jabber-net.dll: $(SOURCES)
+bin/debug/jabber-net.dll: $(SOURCES) #$(BASEDIR)/stringprep/bin/debug/stringprep.dll
 	-mkdir -p bin/debug
+#	cp -f $(BASEDIR)/stringprep/bin/debug/stringprep.dll bin/debug/
 	cd bin/debug && mcs $(MCS_OPTIONS) -target:library \
 	-out:"jabber-net.dll" $(RESOURCES) $(SYSTEM_REFERENCES) \
 	$(SOURCES) $(ASSEMBLIES) 
 
+$(BASEDIR)/stringprep/bin/debug/stringprep.dll:
+	$(MAKE) -C stringprep
+
+subdirs: bin/debug/jabber-net.dll
+	$(MAKE) -C ConsoleClient
+
 clean:
 	rm -rf bin
+	$(MAKE) -C ConsoleClient clean

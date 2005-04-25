@@ -20,22 +20,23 @@ SOURCES = \
 $(BASEDIR)/AssemblyInfo.cs \
 $(BASEDIR)/Main.cs 
 
-ASSEMBLIES = -r:jabber-net.dll
+ASSEMBLIES = -r:jabber-net.dll # -r:stringprep.dll
 
 RESOURCES = 
 
-SYSTEM_REFERENCES = -r:System.dll -r:System.Xml.dll 
+SYSTEM_REFERENCES = -r:System.dll -r:System.Xml.dll
 
 MCS_OPTIONS =   -lib:$(BASEDIR)/bin/debug -g \
 		-define:NO_SSL \
-		-define:NO_STRINGPREP \
-		-define:DEBUG
+		-define:DEBUG \
+		-define:NO_STRINGPREP
 
-all: console-client.exe
+all: bin/debug/console-client.exe
 
-console-client.exe: $(SOURCES)
+bin/debug/console-client.exe: $(SOURCES) $(BASEDIR)/../bin/debug/jabber-net.dll #$(BASEDIR)/../bin/debug/stringprep.dll
 	-mkdir -p bin/debug
 	cp -f $(BASEDIR)/../bin/debug/jabber-net.dll bin/debug/
+#	cp -f $(BASEDIR)/../bin/debug/stringprep.dll bin/debug/
 	cd bin/debug && mcs $(MCS_OPTIONS) -target:exe \
 	-out:"console-client.exe" $(RESOURCES) $(SYSTEM_REFERENCES) \
 	$(SOURCES) $(ASSEMBLIES) 
