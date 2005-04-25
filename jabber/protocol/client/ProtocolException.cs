@@ -29,13 +29,23 @@ namespace jabber.protocol.client
         /// <summary>
         /// An authorization exception from an IQ.
         /// TODO: Add constructor for code/message
+        /// TODO: understand v1 errors
         /// </summary>
         /// <param name="iq"></param>
         public ProtocolException(IQ iq)
         {
-            Error e = iq.Error;
-            m_code = e.Code;
-            m_message = e.InnerText;
+            if (iq == null)
+            {
+                //timeout
+                m_code = ErrorCode.REQUEST_TIMEOUT;
+                m_message = "Request timed out";
+            }
+            else
+            {
+                Error e = iq.Error;
+                m_code = e.Code;
+                m_message = e.InnerText;
+            }
         }
 
         /// <summary>
