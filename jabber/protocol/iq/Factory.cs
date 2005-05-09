@@ -39,6 +39,7 @@ namespace jabber.protocol.iq
             new QnameType("query", URI.VERSION,  typeof(jabber.protocol.iq.Version)),
             new QnameType("query", URI.LAST,     typeof(jabber.protocol.iq.Last)),
             new QnameType("item",  URI.BROWSE,   typeof(jabber.protocol.iq.Browse)),
+            new QnameType("geoloc",URI.GEOLOC,   typeof(jabber.protocol.iq.GeoLoc)),
 
             // VCard
             new QnameType("vCard", URI.VCARD, typeof(jabber.protocol.iq.VCard)),

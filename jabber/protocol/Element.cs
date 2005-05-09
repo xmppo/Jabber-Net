@@ -314,6 +314,41 @@ namespace jabber.protocol
         }
 
         /// <summary>
+        /// JEP-82 Date/Time profile: http://www.jabber.org/jeps/jep-0082.html#sect-id2601974
+        /// CCYY-MM-DDThh:mm:ss[.sss]TZD
+        /// 1969-07-21T02:56:15Z
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        public static DateTime DateTimeProfile(string dt)
+        {
+            string[] fmts = 
+            { 
+                "yyyy-MM-dd", 
+                "yyyy-MM-ddTHH:mm:sszzz",
+                "yyyy-MM-ddTHH:mm:ss.fffzzz",
+                "HH:mm:ss",
+                "HH:mm:ss.fff",
+                "HH:mm:sszzz",
+                "HH:mm:ss.fffzzz",
+            };
+            string arg = dt.Replace("Z", "+00:00");
+            return DateTime.ParseExact(arg, fmts, null, System.Globalization.DateTimeStyles.AdjustToUniversal);
+        }
+
+        /// <summary>
+        /// JEP-82 Date/Time profile: http://www.jabber.org/jeps/jep-0082.html#sect-id2601974
+        /// CCYY-MM-DDThh:mm:ss[.sss]TZD
+        /// 1969-07-21T02:56:15Z
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        public static string DateTimeProfile(DateTime dt)
+        {
+            return dt.ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
+        }
+
+        /// <summary>
         /// The XML for the packet.
         /// </summary>
         /// <returns></returns>

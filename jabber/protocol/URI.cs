@@ -109,6 +109,11 @@ namespace jabber.protocol
         /// Profile information
         /// </summary>
         public const string VCARD    = "vcard-temp";
+        /// <summary>
+        /// Geographic locaiotn (lat/long).  
+        /// See JEP-80 (http://www.jabber.org/jeps/jep-0080.html)
+        /// </summary>
+        public const string GEOLOC   = "http://jabber.org/protocol/geoloc";
 
         /// <summary>
         /// Discover items from an entity.

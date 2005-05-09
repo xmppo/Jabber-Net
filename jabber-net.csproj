@@ -84,6 +84,11 @@
                     AssemblyName = "Org.Mentalis.Security"
                     HintPath = "lib\Org.Mentalis.Security.dll"
                 />
+                <Reference
+                    Name = "System.Data"
+                    AssemblyName = "System.Data"
+                    HintPath = "..\..\Windows\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -427,6 +432,11 @@
                 />
                 <File
                     RelPath = "jabber\protocol\iq\Factory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "jabber\protocol\iq\GeoLoc.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
