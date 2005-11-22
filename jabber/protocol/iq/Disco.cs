@@ -277,7 +277,7 @@ namespace jabber.protocol.iq
         /// 
         /// </summary>
         /// <param name="doc"></param>
-        public DiscoInfo(XmlDocument doc) : base("info", URI.DISCO_ITEMS, doc)
+        public DiscoInfo(XmlDocument doc) : base("query", URI.DISCO_INFO, doc)
         {
         }
 
@@ -317,7 +317,7 @@ namespace jabber.protocol.iq
         /// <returns></returns>
         public DiscoIdentity[] GetIdentities()
         {
-            XmlNodeList nl = GetElementsByTagName("identity", URI.DISCO_ITEMS);
+            XmlNodeList nl = GetElementsByTagName("identity", URI.DISCO_INFO);
             DiscoIdentity[] items = new DiscoIdentity[nl.Count];
             int i=0;
             foreach (XmlNode n in nl)
@@ -345,7 +345,7 @@ namespace jabber.protocol.iq
         /// <returns></returns>
         public DiscoFeature[] GetFeatures()
         {
-            XmlNodeList nl = GetElementsByTagName("feature", URI.DISCO_ITEMS);
+            XmlNodeList nl = GetElementsByTagName("feature", URI.DISCO_INFO);
             DiscoFeature[] items = new DiscoFeature[nl.Count];
             int i=0;
             foreach (XmlNode n in nl)
