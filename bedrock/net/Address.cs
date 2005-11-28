@@ -162,12 +162,15 @@ namespace bedrock.net
             }
             else
             {
-#if MONO
-                Resolve();
-                callback(this);
-#else
+// hm. this seems to work now, but I'm leaving the comments here for now,
+// just in case.
+                
+// #if MONO
+//                 Resolve();
+//                 callback(this);
+// #else
                 Dns.BeginResolve(m_hostname, new AsyncCallback(OnResolved), callback);
-#endif
+//#endif
             }
         }
         /// <summary>

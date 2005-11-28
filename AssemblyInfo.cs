@@ -69,5 +69,5 @@ using System.Runtime.CompilerServices;
 //       documentation for more information on this.
 //
 [assembly: AssemblyDelaySign(false)]
-[assembly: AssemblyKeyFile(@"..\..\jabbernet.key")]
+[assembly: AssemblyKeyFile(@"../../jabbernet.key")]
 [assembly: AssemblyKeyName("")]

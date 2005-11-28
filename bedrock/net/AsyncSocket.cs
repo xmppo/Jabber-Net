@@ -345,7 +345,7 @@ namespace bedrock.net
 #if !NO_SSL
                 SecureSocket cli = (SecureSocket) m_sock.Accept();
 #else
-                    Socket cli = m_sock.Accept();
+                Socket cli = m_sock.Accept();
 #endif
                 AsyncSocket cliCon = new AsyncSocket(m_watcher);
                 cliCon.m_sock = cli;
@@ -428,7 +428,7 @@ namespace bedrock.net
         /// <param name="addr"></param>
         public override void Connect(Address addr)
         {
-            Debug.WriteLine("starting connect to " + addr.ToString());
+            Console.WriteLine("starting connect to " + addr.ToString());
             State = SocketState.Resolving;
             if (m_synch)
             {
@@ -447,7 +447,7 @@ namespace bedrock.net
         /// <param name="addr"></param>
         private void OnConnectResolved(Address addr)
         {
-            Debug.WriteLine("connectresolved");
+            Console.WriteLine("connectresolved: " + addr.ToString());
             lock (this)
             {
                 if (State != SocketState.Resolving)
@@ -467,9 +467,20 @@ namespace bedrock.net
                 State = SocketState.Connecting;
 
 #if !NO_SSL
-                SecurityOptions options = new SecurityOptions(m_secureProtocol, m_cert, m_credUse, CredentialVerification.Manual, new CertVerifyEventHandler(OnVerify), addr.Hostname, SecurityFlags.Default, SslAlgorithms.ALL, null);
+                SecurityOptions options =
+                    new SecurityOptions(m_secureProtocol,
+                                        m_cert,
+                                        m_credUse,
+                                        CredentialVerification.Manual,
+                                        new CertVerifyEventHandler(OnVerify),
+                                        addr.Hostname,
+                                        SecurityFlags.Default,
+                                        SslAlgorithms.ALL,
+                                        null);
 
-                if (Socket.SupportsIPv6 && (m_addr.Endpoint.AddressFamily == AddressFamily.InterNetworkV6))
+                if (Socket.SupportsIPv6 &&
+                    (m_addr.Endpoint.AddressFamily ==
+                     AddressFamily.InterNetworkV6))
                 {
                     Debug.WriteLine("ipv6");
                     m_sock = new SecureSocket(AddressFamily.InterNetworkV6, 
@@ -489,7 +500,7 @@ namespace bedrock.net
 #if !OLD_CLR
                 if (Socket.SupportsIPv6 && (m_addr.Endpoint.AddressFamily == AddressFamily.InterNetworkV6))
                 {
-                    Debug.WriteLine("ipv6");
+                    Console.WriteLine("ipv6");
                     m_sock = new Socket(AddressFamily.InterNetworkV6, 
                         SocketType.Stream, 
                         ProtocolType.Tcp);
@@ -497,7 +508,7 @@ namespace bedrock.net
                 else
 #endif
                 {
-                    Debug.WriteLine("ipv4");
+                    Console.WriteLine("ipv4");
                     m_sock = new Socket(AddressFamily.InterNetwork, 
                         SocketType.Stream, 
                         ProtocolType.Tcp);
@@ -540,7 +551,10 @@ namespace bedrock.net
             }
             else
             {
-                Debug.WriteLine("begin connect");
+#if MONO
+                m_sock.Blocking = false;
+#endif
+                Console.WriteLine("begin connect: " + m_addr.Endpoint.ToString());
                 m_sock.BeginConnect(m_addr.Endpoint, new AsyncCallback(ExecuteConnect), null);
             }
         }
@@ -563,7 +577,7 @@ namespace bedrock.net
             if (!((status == CertificateStatus.ValidCertificate)  ||
                  (UntrustedRootOK && (status == CertificateStatus.UntrustedRoot))))
             {
-                FireError(new CertificateException("Invalid certificate: " + status.ToString()));
+                FireError(new CertificateException("Invalid certificate: " + status.ToString() + "\r\nTo avoid this error, set AsyncSocket.UntrustedRootOK to true, but you will be vulnerable to man-in-the-middle attacks."));
                 e.Valid = false;
             }
         }
@@ -585,7 +599,7 @@ namespace bedrock.net
         /// <param name="ar"></param>
         private void ExecuteConnect(IAsyncResult ar)
         {
-            Debug.WriteLine("ExecuteConnect");
+            Console.WriteLine("ExecuteConnect");
             lock (this)
             {
                 try

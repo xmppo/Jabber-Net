@@ -20,13 +20,13 @@ SOURCES = \
 $(BASEDIR)/AssemblyInfo.cs \
 $(BASEDIR)/Main.cs 
 
-ASSEMBLIES = -r:jabber-net.dll # -r:stringprep.dll
+ASSEMBLIES = -r:jabber-net.dll #-r:stringprep.dll
 
 RESOURCES = 
 
 SYSTEM_REFERENCES = -r:System.dll -r:System.Xml.dll
 
-MCS_OPTIONS =   -lib:$(BASEDIR)/bin/debug -g \
+MCS_OPTIONS =   -lib:$(BASEDIR)/bin/debug -debug \
 		-define:NO_SSL \
 		-define:DEBUG \
 		-define:NO_STRINGPREP

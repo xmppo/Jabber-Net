@@ -27,7 +27,7 @@ namespace bedrock.util
     /// <see cref="StarTeamAttribute"/>
     /// <see cref="SourceSafeAttribute"/>
     /// <see cref="RCSAttribute"/>
-    [RCS(@"$Header$")]
+    //    [RCS(@"$Header$")]
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Enum | AttributeTargets.Struct,
                     AllowMultiple = false, 
                     Inherited     = false)]

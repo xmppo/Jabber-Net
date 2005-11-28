@@ -14,6 +14,8 @@
 
 # The purpose of this Makefile is to facilitate mono builds.
 
+DEBUG = -debug
+
 #BASEDIR:=$(shell pwd)
 BASEDIR = $(CURDIR)
 
@@ -82,6 +84,7 @@ $(BASEDIR)/jabber/protocol/iq/Auth.cs \
 $(BASEDIR)/jabber/protocol/iq/Browse.cs \
 $(BASEDIR)/jabber/protocol/iq/Disco.cs \
 $(BASEDIR)/jabber/protocol/iq/Factory.cs \
+$(BASEDIR)/jabber/protocol/iq/GeoLoc.cs \
 $(BASEDIR)/jabber/protocol/iq/Last.cs \
 $(BASEDIR)/jabber/protocol/iq/OOB.cs \
 $(BASEDIR)/jabber/protocol/iq/Register.cs \
@@ -122,7 +125,7 @@ RESOURCES = \
 
 SYSTEM_REFERENCES = -r:System.dll -r:System.Xml.dll
 
-MCS_OPTIONS =   -lib:$(BASEDIR)/bin/debug -g \
+MCS_OPTIONS =   -lib:$(BASEDIR)/bin/debug $(DEBUG) \
 		-define:NO_SSL \
 		-define:DEBUG \
 		-define:NO_STRINGPREP
@@ -131,7 +134,7 @@ ASSEMBLIES = #-r:stringprep.dll
 
 all:  subdirs
 
-bin/debug/jabber-net.dll: $(SOURCES) #$(BASEDIR)/stringprep/bin/debug/stringprep.dll
+bin/debug/jabber-net.dll: $(SOURCES) # $(BASEDIR)/stringprep/bin/debug/stringprep.dll
 	-mkdir -p bin/debug
 #	cp -f $(BASEDIR)/stringprep/bin/debug/stringprep.dll bin/debug/
 	cd bin/debug && mcs $(MCS_OPTIONS) -target:library \
