@@ -130,7 +130,7 @@ namespace jabber.protocol.stream
         /// </summary>
         /// <param name="doc"></param>
         public Mechanisms(XmlDocument doc) :
-            base(null, new XmlQualifiedName("mechanisms", jabber.protocol.URI.SASL), doc)
+            base("", new XmlQualifiedName("mechanisms", jabber.protocol.URI.SASL), doc)
         {
         }
 
@@ -190,7 +190,7 @@ namespace jabber.protocol.stream
         /// </summary>
         /// <param name="doc"></param>
         public Mechanism(XmlDocument doc) :
-            base(null, new XmlQualifiedName("mechanism", jabber.protocol.URI.SASL), doc)
+            base("", new XmlQualifiedName("mechanism", jabber.protocol.URI.SASL), doc)
         {
         }
 
@@ -390,7 +390,7 @@ namespace jabber.protocol.stream
         /// </summary>
         /// <param name="doc"></param>
         public Auth(XmlDocument doc) :
-            base(null, new XmlQualifiedName("auth", jabber.protocol.URI.SASL), doc)
+            base("", new XmlQualifiedName("auth", jabber.protocol.URI.SASL), doc)
         {
         }
 
@@ -433,7 +433,7 @@ namespace jabber.protocol.stream
         /// </summary>
         /// <param name="doc"></param>
         public Challenge(XmlDocument doc) :
-            base(null, new XmlQualifiedName("challenge", jabber.protocol.URI.SASL), doc)
+            base("", new XmlQualifiedName("challenge", jabber.protocol.URI.SASL), doc)
         {
         }
 
@@ -460,7 +460,7 @@ namespace jabber.protocol.stream
         /// </summary>
         /// <param name="doc"></param>
         public Response(XmlDocument doc) :
-            base(null, new XmlQualifiedName("response", jabber.protocol.URI.SASL), doc)
+            base("", new XmlQualifiedName("response", jabber.protocol.URI.SASL), doc)
         {
         }
 
@@ -487,7 +487,7 @@ namespace jabber.protocol.stream
         /// </summary>
         /// <param name="doc"></param>
         public SASLFailure(XmlDocument doc) :
-            base(null, new XmlQualifiedName("failure", jabber.protocol.URI.SASL), doc)
+            base("", new XmlQualifiedName("failure", jabber.protocol.URI.SASL), doc)
         {
         }
 
@@ -514,7 +514,7 @@ namespace jabber.protocol.stream
         /// </summary>
         /// <param name="doc"></param>
         public Abort(XmlDocument doc) :
-            base(null, new XmlQualifiedName("abort", jabber.protocol.URI.SASL), doc)
+            base("", new XmlQualifiedName("abort", jabber.protocol.URI.SASL), doc)
         {
         }
 
@@ -541,7 +541,7 @@ namespace jabber.protocol.stream
         /// </summary>
         /// <param name="doc"></param>
         public Success(XmlDocument doc) :
-            base(null, new XmlQualifiedName("success", jabber.protocol.URI.SASL), doc)
+            base("", new XmlQualifiedName("success", jabber.protocol.URI.SASL), doc)
         {
         }
 

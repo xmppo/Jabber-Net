@@ -29,7 +29,7 @@ namespace jabber.protocol.stream
         /// </summary>
         /// <param name="doc"></param>
         public Session(XmlDocument doc) :
-            base(null, new XmlQualifiedName("session", jabber.protocol.URI.SESSION), doc)
+            base("", new XmlQualifiedName("session", jabber.protocol.URI.SESSION), doc)
         {
         }
 

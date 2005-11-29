@@ -29,7 +29,7 @@ namespace jabber.protocol.stream
         /// </summary>
         /// <param name="doc"></param>
         public Bind(XmlDocument doc) :
-            base(null, new XmlQualifiedName("bind", jabber.protocol.URI.BIND), doc)
+            base("", new XmlQualifiedName("bind", jabber.protocol.URI.BIND), doc)
         {
         }
 

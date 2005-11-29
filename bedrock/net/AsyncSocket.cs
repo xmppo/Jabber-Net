@@ -551,7 +551,7 @@ namespace bedrock.net
             }
             else
             {
-#if MONO
+#if __MonoCS__
                 m_sock.Blocking = false;
 #endif
                 Console.WriteLine("begin connect: " + m_addr.Endpoint.ToString());

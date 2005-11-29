@@ -29,7 +29,7 @@ namespace jabber.protocol.stream
         /// </summary>
         /// <param name="doc"></param>
         public StartTLS(XmlDocument doc) :
-            base(null, new XmlQualifiedName("starttls", jabber.protocol.URI.START_TLS), doc)
+            base("", new XmlQualifiedName("starttls", jabber.protocol.URI.START_TLS), doc)
         {
         }
 
@@ -82,7 +82,7 @@ namespace jabber.protocol.stream
         /// <param name="doc"></param>
         /// <param name="xmlns"></param>
         public Proceed(XmlDocument doc, string xmlns) :
-            base(null, new XmlQualifiedName("proceed", jabber.protocol.URI.START_TLS), doc)
+            base("", new XmlQualifiedName("proceed", jabber.protocol.URI.START_TLS), doc)
         {
         }
 
@@ -110,7 +110,7 @@ namespace jabber.protocol.stream
         /// <param name="doc"></param>
         /// <param name="xmlns"></param>
         public TLSFailure(XmlDocument doc, string xmlns) :
-            base(null, new XmlQualifiedName("failure", jabber.protocol.URI.START_TLS), doc)
+            base("", new XmlQualifiedName("failure", jabber.protocol.URI.START_TLS), doc)
         {
         }
 
