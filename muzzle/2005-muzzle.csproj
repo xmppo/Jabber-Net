@@ -3,21 +3,22 @@
     <ProjectType>Local</ProjectType>
     <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{75FEEF46-F378-4364-B19F-E2D4A2D5DC68}</ProjectGuid>
+    <ProjectGuid>{071A79A9-E23F-418F-A6B7-63D3A3E59EEB}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ApplicationIcon>App.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
-    <AssemblyName>ResTool</AssemblyName>
+    <AssemblyName>muzzle</AssemblyName>
     <AssemblyOriginatorKeyFile>
     </AssemblyOriginatorKeyFile>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>false</DelaySign>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>ResTool</RootNamespace>
+    <OutputType>Library</OutputType>
+    <RootNamespace>muzzle</RootNamespace>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <StartupObject>
     </StartupObject>
@@ -34,8 +35,7 @@
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DocumentationFile>
-    </DocumentationFile>
+    <DocumentationFile>muzzle.xml</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
     <NoStdLib>false</NoStdLib>
@@ -76,22 +76,77 @@
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
-    <Reference Include="System.Data">
-      <Name>System.Data</Name>
+    <Reference Include="System.Drawing">
+      <Name>System.Drawing</Name>
     </Reference>
-    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Forms">
+      <Name>System.Windows.Forms</Name>
+    </Reference>
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
+    <ProjectReference Include="..\2005-jabber-net.csproj">
+      <Name>2005-jabber-net</Name>
+      <Project>{6CAE854A-F202-4D2B-B10E-E8D8E81E5EF5}</Project>
+      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App.ico" />
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Main.cs">
-      <SubType>Code</SubType>
+    <Compile Include="BottomScrollRichText.cs">
+      <SubType>Component</SubType>
     </Compile>
+    <Compile Include="ClientLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ComponentLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="JidMulti.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Litmus.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="RosterTree.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="StripChart.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="XDataForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <EmbeddedResource Include="BottomScrollRichText.bmp" />
+    <EmbeddedResource Include="BottomScrollRichText.resx">
+      <DependentUpon>BottomScrollRichText.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ClientLogin.resx">
+      <DependentUpon>ClientLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ComponentLogin.resx">
+      <DependentUpon>ComponentLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="JidMulti.resx">
+      <DependentUpon>JidMulti.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Litmus.bmp" />
+    <EmbeddedResource Include="Litmus.resx">
+      <DependentUpon>Litmus.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RosterTree.bmp" />
+    <EmbeddedResource Include="RosterTree.resx">
+      <DependentUpon>RosterTree.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StripChart.bmp" />
+    <EmbeddedResource Include="StripChart.resx">
+      <DependentUpon>StripChart.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="XDataForm.resx">
+      <DependentUpon>XDataForm.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

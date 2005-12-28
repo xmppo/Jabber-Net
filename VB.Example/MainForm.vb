@@ -263,7 +263,7 @@ Public Class MainForm
         Dim log As New muzzle.ClientLogin(jc)
         log.ReadFromFile("login.xml")
 
-        If log.ShowDialog() = DialogResult.OK Then
+        If log.ShowDialog() = Windows.Forms.DialogResult.OK Then
             log.WriteToFile("login.xml")
             jc.Connect()
         End If
@@ -349,7 +349,7 @@ Public Class MainForm
 
     Private Sub jc_OnAuthError(ByVal sender As Object, ByVal iq As jabber.protocol.client.IQ) Handles jc.OnAuthError
         If (MessageBox.Show(Me, "Create new account?", _
-            "Authentication error", MessageBoxButtons.OKCancel) = DialogResult.OK) Then
+            "Authentication error", MessageBoxButtons.OKCancel) = Windows.Forms.DialogResult.OK) Then
             jc.Register(New JID(jc.User, jc.Server, Nothing))
         Else
             jc.Close()
@@ -367,7 +367,7 @@ Public Class MainForm
     End Sub
 
     Private Sub jc_OnRegisterInfo(ByVal sender As Object, ByVal iq As jabber.protocol.client.IQ) Handles jc.OnRegisterInfo
-        Dim r As Register = DirectCast(iq, Register)
+        Dim r As Register = DirectCast(iq.Query, Register)
         r.Password = jc.Password
     End Sub
 

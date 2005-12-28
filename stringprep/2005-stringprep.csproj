@@ -3,21 +3,22 @@
     <ProjectType>Local</ProjectType>
     <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{75FEEF46-F378-4364-B19F-E2D4A2D5DC68}</ProjectGuid>
+    <ProjectGuid>{060A98C7-BF17-4685-A528-F84C0D8D89AE}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ApplicationIcon>App.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
-    <AssemblyName>ResTool</AssemblyName>
+    <AssemblyName>stringprep</AssemblyName>
     <AssemblyOriginatorKeyFile>
     </AssemblyOriginatorKeyFile>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>false</DelaySign>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>ResTool</RootNamespace>
+    <OutputType>Library</OutputType>
+    <RootNamespace>stringprep</RootNamespace>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <StartupObject>
     </StartupObject>
@@ -33,9 +34,9 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DocumentationFile>
-    </DocumentationFile>
+    <DefineConstants>
+    </DefineConstants>
+    <DocumentationFile>stringprep.xml</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
     <NoStdLib>false</NoStdLib>
@@ -45,7 +46,7 @@
     <RegisterForComInterop>false</RegisterForComInterop>
     <RemoveIntegerChecks>false</RemoveIntegerChecks>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <WarningLevel>4</WarningLevel>
+    <WarningLevel>1</WarningLevel>
     <DebugType>full</DebugType>
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
@@ -56,7 +57,8 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
     <DebugSymbols>false</DebugSymbols>
@@ -64,11 +66,11 @@
     <NoStdLib>false</NoStdLib>
     <NoWarn>
     </NoWarn>
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
     <RegisterForComInterop>false</RegisterForComInterop>
     <RemoveIntegerChecks>false</RemoveIntegerChecks>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <WarningLevel>4</WarningLevel>
+    <WarningLevel>1</WarningLevel>
     <DebugType>none</DebugType>
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
@@ -76,20 +78,52 @@
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
-    <Reference Include="System.Data">
-      <Name>System.Data</Name>
-    </Reference>
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml">
-      <Name>System.XML</Name>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App.ico" />
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Main.cs">
+    <Compile Include="Nameprep.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Plain.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Profile.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="steps\BidiStep.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="steps\MapStep.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="steps\NFKCStep.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="steps\ProfileStep.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="steps\ProhibitStep.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="steps\RFC3454.cs" />
+    <Compile Include="unicode\Combining.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="unicode\CombiningData.cs" />
+    <Compile Include="unicode\Compose.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="unicode\ComposeData.cs" />
+    <Compile Include="unicode\Decompose.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="unicode\DecomposeData.cs" />
+    <Compile Include="XmppNode.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="XmppResource.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

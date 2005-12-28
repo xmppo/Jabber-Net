@@ -147,4 +147,4 @@ unlink "$profile.resx";
 system "csc /out:temp.dll /t:library $filename" and die;
 system "../ResTool/bin/Debug/ResTool.exe temp.dll $profile.resx";
 unlink "temp.dll";
-unlink $filename;
+#unlink $filename;

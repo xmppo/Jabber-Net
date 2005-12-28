@@ -243,7 +243,9 @@ namespace test.stringprep
         [Test] public void Test_Surrogate()
         {
             // Surrogate code U+DF42",
-            TryOne("\xED\xBD\x82", null);
+            //TryOne("\xED\xBD\x82", null);
+            string input = "\uDF42";
+            string output = nameprep.Prepare(input);
         }
         [ExpectedException(typeof(ProhibitedCharacterException))]
         [Test] public void Test_NonPlaintext()

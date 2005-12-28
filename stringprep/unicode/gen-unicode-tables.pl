@@ -426,11 +426,11 @@ if ($do_decomp) {
 # create a temp .dll, and generate resources from it.
 unlink "Unicode.resx";
 system "csc /out:temp.dll /t:library CombiningData.cs DecomposeData.cs ComposeData.cs" and exit(1);
-system "../ResTool/bin/Debug/ResTool.exe temp.dll Unicode.resx";
-unlink "temp.dll";
-unlink "CombiningData.cs";
-unlink "DecomposeData.cs";
-unlink "ComposeData.cs";
+#system "../ResTool/bin/Debug/ResTool.exe temp.dll Unicode.resx";
+#unlink "temp.dll";
+#unlink "CombiningData.cs";
+#unlink "DecomposeData.cs";
+#unlink "ComposeData.cs";
 
 exit 0;
 
