@@ -22,9 +22,6 @@ namespace stringprep.unicode
     /// </summary>
     public class Decompose
     {
-        private static bool s_init = false;
-        private static char[][] s_offsets = null;
-        private static string[] s_expansion = null;
         private static IComparer s_comparer = new CharArrayComparer();
 
         /// <summary>
@@ -34,24 +31,11 @@ namespace stringprep.unicode
         /// <returns>the expansion, or null if none found.</returns>
         public static string Find(char ch)
         {
-            if (!s_init)
-            {
-                lock(s_comparer)
-                {
-                    if (!s_init)
-                    {
-                        s_offsets = (char[][]) ResourceLoader.LoadRes("Decompose.Offsets");
-                        s_expansion = (string[]) ResourceLoader.LoadRes("Decompose.Expansion");
-                        s_init = true;
-                    }
-                }
-            }
-
-            int offset = Array.BinarySearch(s_offsets, ch, s_comparer);
+            int offset = Array.BinarySearch(DecomposeData.Offsets, ch, s_comparer);
             if (offset < 0)
                 return null;
 
-            return s_expansion[s_offsets[offset][1]];
+            return DecomposeData.Expansion[DecomposeData.Offsets[offset][1]];
         }
 
         private class CharArrayComparer : IComparer

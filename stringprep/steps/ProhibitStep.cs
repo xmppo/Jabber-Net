@@ -48,6 +48,7 @@ namespace stringprep.steps
         private char[][] m_table = null;
         private ProhibitComparer m_comp = new ProhibitComparer();
 
+        /*
         /// <summary>
         /// Create an instance.
         /// </summary>
@@ -56,24 +57,11 @@ namespace stringprep.steps
         public ProhibitStep(string name) : base(name)
         {
         }
+        */
 
         public ProhibitStep(char[][] table, string name): base(name)
         {
             m_table = table;
-        }
-
-        private void Load()
-        {
-            if (m_table == null)
-            {
-                lock (this)
-                {
-                    if (m_table == null)
-                    {
-                        m_table = (char[][]) ResourceLoader.LoadRes(Name);
-                    }
-                }
-            }
         }
 
         /// <summary>
@@ -83,8 +71,6 @@ namespace stringprep.steps
         /// <returns>True if the character is prohibited</returns>
         protected bool Contains(char c)
         {
-            Load();
-
             return (Array.BinarySearch(m_table, c, m_comp) >= 0);
         }
 
@@ -113,7 +99,6 @@ namespace stringprep.steps
         /// <exception cref="ProhibitedCharacterException">Invalid character detected.</exception>
         public override void Prepare(System.Text.StringBuilder result)
         {
-            Load();
             int j = FindStringInTable(result);
             if (j >= 0)
                 throw new ProhibitedCharacterException(this, result[j]);

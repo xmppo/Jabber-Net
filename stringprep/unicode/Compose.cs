@@ -22,27 +22,15 @@ namespace stringprep.unicode
     /// </summary>
     public class Compose
     {
-        private static bool s_init = false;
-        private static int  s_firstStart = -1;
-        private static int  s_firstSingleStart = -1;
-        private static int  s_secondStart = -1;
-        private static int  s_secondSingleStart = -1;
-        private static short[,] s_data = null;
-        private static char[,] s_array = null;
-        private static byte[] s_table = null;
-        private static char[,] s_firstSingle = null;
-        private static char[,] s_secondSingle = null;
-        private static object s_lock = new object();
-
         private static int Index(char c)
         {
             int p = c >> 8;
-            if (p >= s_table.Length)
+            if (p >= ComposeData.Table.Length)
                 return 0;
-            if (s_table[p] == 255)
+            if (ComposeData.Table[p] == 255)
                 return 0;
             else
-                return s_data[s_table[p], c & 0xff];
+                return ComposeData.Data[ComposeData.Table[p], c & 0xff];
         }
 
         private static bool Between(int x, int start, int end)
@@ -59,25 +47,6 @@ namespace stringprep.unicode
         /// <returns>True if combination occurred</returns>
         public static bool Combine(char a, char b, out char result)
         {
-            if (! s_init)
-            {
-                lock (s_lock)
-                {
-                    if (! s_init)
-                    {
-                        s_firstStart = (short) ResourceLoader.LoadRes("Compose.FIRST_START");
-                        s_firstSingleStart = (short) ResourceLoader.LoadRes("Compose.FIRST_SINGLE_START");
-                        s_secondStart = (short) ResourceLoader.LoadRes("Compose.SECOND_START");
-                        s_secondSingleStart = (short) ResourceLoader.LoadRes("Compose.SECOND_SINGLE_START");
-                        s_data = (short[,]) ResourceLoader.LoadRes("Compose.Data");
-                        s_array = (char[,]) ResourceLoader.LoadRes("Compose.Array");
-                        s_table = (byte[]) ResourceLoader.LoadRes("Compose.Table");
-                        s_firstSingle = (char[,]) ResourceLoader.LoadRes("Compose.FirstSingle");
-                        s_secondSingle = (char[,]) ResourceLoader.LoadRes("Compose.SecondSingle");
-                        s_init = true;
-                    }
-                }
-            }
 
             // FIRST_START..FIRST_SINGLE_START: 
             // FIRST_SINGLE_START..SECOND_START: look up a to see if b matches
@@ -87,12 +56,12 @@ namespace stringprep.unicode
             int index_a = Index(a);
             // for stuff in this range, there is only one possible combination for the character
             // on the left
-            if (Between(index_a, s_firstSingleStart, s_secondStart))
+            if (Between(index_a, ComposeData.FIRST_SINGLE_START, ComposeData.SECOND_START))
             {
-                int offset = index_a - s_firstSingleStart;
-                if (b == s_firstSingle[offset,0])
+                int offset = index_a - ComposeData.FIRST_SINGLE_START;
+                if (b == ComposeData.FirstSingle[offset, 0])
                 {
-                    result = s_firstSingle[offset,1];
+                    result = ComposeData.FirstSingle[offset, 1];
                     return true;
                 }
                 else
@@ -104,12 +73,12 @@ namespace stringprep.unicode
 
             int index_b = Index(b);
             // for this range, only one possible combination to the right.
-            if (index_b >= s_secondSingleStart)
+            if (index_b >= ComposeData.SECOND_SINGLE_START)
             {
-                int offset = index_b - s_secondSingleStart;
-                if (a == s_secondSingle[offset,0])
+                int offset = index_b - ComposeData.SECOND_SINGLE_START;
+                if (a == ComposeData.SecondSingle[offset,0])
                 {
-                    result =  s_secondSingle[offset,1];
+                    result = ComposeData.SecondSingle[offset, 1];
                     return true;
                 }
                 else
@@ -119,10 +88,10 @@ namespace stringprep.unicode
                 }
             }
 
-            if (Between(index_a, s_firstStart, s_firstSingleStart) &&
-                Between(index_b, s_secondStart, s_secondSingleStart))
+            if (Between(index_a, ComposeData.FIRST_START, ComposeData.FIRST_SINGLE_START) &&
+                Between(index_b, ComposeData.SECOND_START, ComposeData.SECOND_SINGLE_START))
             {
-                char res = s_array[index_a - s_firstStart, index_b - s_secondStart];
+                char res = ComposeData.Array[index_a - ComposeData.FIRST_START, index_b - ComposeData.SECOND_START];
 
                 if (res != '\x0')
                 {

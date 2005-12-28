@@ -26,13 +26,9 @@ namespace stringprep.steps
         private string[] m_table = null;
         private static IComparer m_comp = new CharMapComparer();
 
-        /// <summary>
-        /// Create a MapStep that doesn't look at flags.
-        /// </summary>
-        /// <param name="tab">Mapping table</param>
-        /// <param name="name">Name of the step</param>
-        public MapStep(string name) : base(name)
+        public MapStep(string[] table, string name): base(name)
         {
+            m_table = table;
         }
 
         /// <summary>
@@ -41,17 +37,6 @@ namespace stringprep.steps
         /// <param name="result">Result is modified in place.</param>
         public override void Prepare(System.Text.StringBuilder result)
         {
-            if (m_table == null)
-            {
-                lock (this)
-                {
-                    if (m_table == null)
-                    {
-                        m_table = (string[]) ResourceLoader.LoadRes(Name);
-                    }
-                }
-            }
-
             // From RFC3454, section 3: 
             // Mapped characters are not re-scanned during the mapping step.  That
             // is, if character A at position X is mapped to character B, character

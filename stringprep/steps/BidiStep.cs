@@ -36,9 +36,9 @@ namespace stringprep.steps
     /// </summary>
     public class BidiStep : ProfileStep
     {
-        private static ProhibitStep m_prohibit = new ProhibitStep("RFC3454.C_8");
+        private static ProhibitStep m_prohibit = new ProhibitStep(RFC3454.C_8, "RFC3454.C_8");
         private static BidiRALStep  m_ral      = new BidiRALStep();
-        private static ProhibitStep m_lcat     = new ProhibitStep("RFC3454.D_2");
+        private static ProhibitStep m_lcat     = new ProhibitStep(RFC3454.D_2, "RFC3454.D_2");
 
         /// <summary>
         /// Create a new BidiStep.
@@ -85,7 +85,7 @@ namespace stringprep.steps
 
         private class BidiRALStep : ProhibitStep
         {
-            public BidiRALStep() : base("RFC3454.D_1")
+            public BidiRALStep() : base(RFC3454.D_1, "RFC3454.D_1")
             {
             }
 

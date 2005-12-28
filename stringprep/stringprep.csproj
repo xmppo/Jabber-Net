@@ -134,11 +134,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "steps\RFC3454.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "steps\RFC3454.resx"
+                    DependentUpon = "RFC3454.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "unicode\Combining.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "unicode\CombiningData.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -148,18 +159,19 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "unicode\ComposeData.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "unicode\Decompose.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "unicode\ResourceLoader.cs"
+                    RelPath = "unicode\DecomposeData.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "unicode\Unicode.resx"
-                    BuildAction = "EmbeddedResource"
                 />
             </Include>
         </Files>
