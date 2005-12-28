@@ -201,7 +201,7 @@ namespace muzzle
              "This must be set before adding any points.")]
         [DefaultValue(true)]
         [Category("Chart")]
-        public bool AutoSize
+        public bool AutoScale
         {
             get
             {

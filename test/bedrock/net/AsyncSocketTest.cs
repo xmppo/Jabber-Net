@@ -49,14 +49,15 @@ namespace test.bedrock.net
             listen.Close();
         }
 
-        [Test] public void Test_Ops()
+#pragma warning disable 1718
+        [Test]
+        public void Test_Ops()
         {
             SocketWatcher w = new SocketWatcher(20);
             Address a = new Address("127.0.0.1", 7002);
             a.Resolve();
             AsyncSocket one = w.CreateListenSocket(this, a);
             AsyncSocket two = null;
-
             Assert.IsTrue(one == one);
             Assert.IsTrue(two == two);
             Assert.IsTrue(one >= one);
@@ -105,6 +106,7 @@ namespace test.bedrock.net
             one.Close();
             two.Close();
         }
+#pragma warning restore
 
         #region Implementation of ISocketEventListener
         public bool OnAccept(BaseSocket newsocket)

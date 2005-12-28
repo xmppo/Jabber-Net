@@ -95,8 +95,13 @@ namespace bedrock.net
         {
             if (m_state == States.Connecting)
             {
+#if NET20
+                IPHostEntry server = Dns.GetHostEntry(RemoteAddress.Hostname);
+#else
                 IPHostEntry server = Dns.Resolve(RemoteAddress.Hostname);
+#endif
                 IPAddress ip_addr = server.AddressList[0];
+
 #if !OLD_CLR
                 byte[] addr = ip_addr.GetAddressBytes();
 #else

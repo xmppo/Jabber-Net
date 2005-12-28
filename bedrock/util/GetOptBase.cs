@@ -35,9 +35,14 @@ namespace bedrock.util
     {
         private object    m_obj   = null;
         private string[]  m_args  = null;
-        private Hashtable m_flags = 
+        private Hashtable m_flags =
+#if NET20
+            new Hashtable(StringComparer.InvariantCultureIgnoreCase);
+#else
             new Hashtable(CaseInsensitiveHashCodeProvider.Default, 
                           CaseInsensitiveComparer.Default);
+#endif
+
         // Regular expression to parse these:
         // /a
         // /a:foo

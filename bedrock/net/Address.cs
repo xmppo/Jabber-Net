@@ -169,8 +169,11 @@ namespace bedrock.net
 //                 Resolve();
 //                 callback(this);
 // #else
+#if NET20
+                Dns.BeginGetHostEntry(m_hostname, new AsyncCallback(OnResolved), callback);
+#else
                 Dns.BeginResolve(m_hostname, new AsyncCallback(OnResolved), callback);
-//#endif
+#endif
             }
         }
         /// <summary>
@@ -187,7 +190,11 @@ namespace bedrock.net
                 return;
             }
             Debug.Assert(m_hostname != null, "Must set hostname first");
+#if NET20
+            IPHostEntry iph = Dns.GetHostEntry(m_hostname);
+#else
             IPHostEntry iph = Dns.Resolve(m_hostname);
+#endif
             // TODO: what happens here on error?
             m_ip = iph.AddressList[0];
         }
@@ -199,7 +206,7 @@ namespace bedrock.net
         {
             try
             {
-                IPHostEntry ent = Dns.EndResolve(ar);
+                IPHostEntry ent = Dns.EndGetHostEntry(ar);
                 if (ent.AddressList.Length <= 0)
                 {
                     m_ip = null;

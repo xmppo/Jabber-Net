@@ -477,8 +477,11 @@ namespace bedrock.net
                                         SecurityFlags.Default,
                                         SslAlgorithms.ALL,
                                         null);
-
+#if NET20
+                if (Socket.OSSupportsIPv6 &&
+#else
                 if (Socket.SupportsIPv6 &&
+#endif
                     (m_addr.Endpoint.AddressFamily ==
                      AddressFamily.InterNetworkV6))
                 {
