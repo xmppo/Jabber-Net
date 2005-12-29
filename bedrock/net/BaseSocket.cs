@@ -23,6 +23,11 @@ namespace bedrock.net
     public abstract class BaseSocket
     {
         /// <summary>
+        /// Identity of the host we're connecting to.  Used for SSL validation, this is the name of the SRV we looked up, for example.
+        /// </summary>
+        protected string m_hostid = null;
+
+        /// <summary>
         /// Call through this interface when events happen.  WARNING: AsyncSocket assumes this is not NULL.
         /// </summary>
         protected ISocketEventListener m_listener = null;
@@ -88,6 +93,19 @@ namespace bedrock.net
         /// to continue.
         /// </summary>
         public abstract void RequestAccept();
+
+        /// <summary>
+        /// Outbound connection.  Eventually calls Listener.OnConnect() when 
+        /// the connection comes up.  Don't forget to call RequestRead() in
+        /// OnConnect()!
+        /// </summary>
+        /// <param name="addr">Address/hostname to connect to</param>
+        /// <param name="hostIdentity">Identity of the host we're connecting to.  Used for SSL validation, this is the name of the SRV we looked up, for example.</param>
+        public void Connect(Address addr, string hostIdentity)
+        {
+            m_hostid = hostIdentity;
+            Connect(addr);
+        }
 
         /// <summary>
         /// Outbound connection.  Eventually calls Listener.OnConnect() when 

@@ -30,7 +30,9 @@
     </UpgradeBackupLocation>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <OutputPath>bin\</OutputPath>
+    <OutputPath>bin5\</OutputPath>
+    <BaseIntermediateOutputPath>obj5\</BaseIntermediateOutputPath>
+    <IntermediateOutputPath>obj5\Debug\</IntermediateOutputPath>
     <DocumentationFile>VB.Example.xml</DocumentationFile>
     <BaseAddress>285212672</BaseAddress>
     <ConfigurationOverrideFile>
@@ -49,7 +51,9 @@
     <DebugType>full</DebugType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <OutputPath>bin\</OutputPath>
+    <OutputPath>bin5\</OutputPath>
+    <BaseIntermediateOutputPath>obj5\</BaseIntermediateOutputPath>
+    <IntermediateOutputPath>obj5\Debug\</IntermediateOutputPath>
     <DocumentationFile>VB.Example.xml</DocumentationFile>
     <BaseAddress>285212672</BaseAddress>
     <ConfigurationOverrideFile>
@@ -68,10 +72,6 @@
     <DebugType>none</DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Org.Mentalis.Security">
-      <Name>Org.Mentalis.Security</Name>
-      <HintPath>..\lib\Org.Mentalis.Security.dll</HintPath>
-    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -121,6 +121,9 @@
     <EmbeddedResource Include="SendMessage.resx">
       <DependentUpon>SendMessage.vb</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="My Project\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>

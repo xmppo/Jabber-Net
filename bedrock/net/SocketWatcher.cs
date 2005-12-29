@@ -20,7 +20,9 @@ using System.IO;
 using bedrock.util;
 using bedrock.collections;
 
-#if !NO_SSL
+#if NET20
+using System.Security.Cryptography.X509Certificates;
+#elif !NO_SSL
 using Org.Mentalis.Security.Certificates;
 #endif
 
@@ -47,7 +49,9 @@ namespace bedrock.net
         private int         m_maxSocks;
         private bool        m_synch = false;
 
-#if !NO_SSL
+#if NET20
+        private X509Certificate m_cert = null;
+#elif !NO_SSL
         private Certificate m_cert = null;
 #endif
 
@@ -98,7 +102,49 @@ namespace bedrock.net
             }
         }
 
-#if !NO_SSL
+#if NET20
+        /// <summary>
+        /// The certificate to be used for the local side of sockets, with SSL on.
+        /// </summary>
+        public X509Certificate LocalCertificate
+        {
+            get { return m_cert; }
+            set { m_cert = value; }
+        }
+
+        /// <summary>
+        /// Set the certificate to be used for accept sockets.  To generate a test .pfx file using openssl,
+        /// add this to openssl.conf:
+        ///   <blockquote>
+        ///   [ serverex ]
+        ///   extendedKeyUsage=1.3.6.1.5.5.7.3.1
+        ///   </blockquote>
+        /// and run the following commands:
+        ///   <blockquote>
+        ///   openssl req -new -x509 -newkey rsa:1024 -keyout privkey.pem -out key.pem -extensions serverex
+        ///   openssl pkcs12 -export -in key.pem -inkey privkey.pem -name localhost -out localhost.pfx
+        ///   </blockquote>
+        /// If you leave the certificate null, and you are doing Accept, the SSL class will try to find a
+        /// default server cert on your box.  If you have IIS installed with a cert, this might just go...
+        /// </summary>
+        /// <param name="filename">A .pfx or .cer file</param>
+        /// <param name="password">The password, if this is a .pfx file, null if .cer file.</param>
+        public void SetCertificateFile(string filename, System.Security.SecureString password)
+        {
+            m_cert = new X509Certificate2(filename, password);
+            // TODO: check cert for validity
+        }
+
+        /// <summary>
+        /// Set the certificate from a system store.  Try "MY" for the ones listed in IE.
+        /// </summary>
+        /// <param name="storeName"></param>
+        public void SetCertificateStore(StoreName storeName)
+        {
+            throw new NotImplementedException("Not implemented yet.  Need to figure out how to search for 'server' certs.");
+        }
+
+#elif !NO_SSL
         /// <summary>
         /// The certificate to be used for the local side of sockets, with SSL on.
         /// </summary>
@@ -235,7 +281,7 @@ namespace bedrock.net
         public AsyncSocket CreateConnectSocket(ISocketEventListener listener,
                                                Address              addr)
         {
-            return CreateConnectSocket(listener, addr, false);
+            return CreateConnectSocket(listener, addr, false, null);
         }
 
         /// <summary>
@@ -244,10 +290,12 @@ namespace bedrock.net
         /// <param name="listener">Where to send notifications</param>
         /// <param name="addr">Address to connect to</param>
         /// <param name="SSL">Do SSL3/TLS1 on startup</param>
+        /// <param name="hostId">The logical name of the host to connect to, for SSL/TLS purposes.</param>
         /// <returns>Socket that is in the process of connecting</returns>
         public AsyncSocket CreateConnectSocket(ISocketEventListener listener,
                                                Address              addr,
-                                               bool                 SSL)
+                                               bool                 SSL,
+                                               string               hostId)
         {
             AsyncSocket result;
    
@@ -262,7 +310,7 @@ namespace bedrock.net
 #endif
             }
             // Start the connect process:
-            result.Connect(addr);
+            result.Connect(addr, hostId);
             return result;
         }
 

@@ -13,7 +13,7 @@
  * --------------------------------------------------------------------------*/
 using System;
 
-#if !NO_SSL
+#if !NO_SSL && !NET20
 using Org.Mentalis.Security.Certificates;
 using bedrock.util;
 

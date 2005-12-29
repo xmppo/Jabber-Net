@@ -49,7 +49,8 @@ namespace test.bedrock.net
             listen.Close();
         }
 
-#pragma warning disable 1718
+// %$@! can't use #pragma in VS.Net 2003.  Just live with these warnings.
+// #pragma warning disable 1718
         [Test]
         public void Test_Ops()
         {
@@ -106,8 +107,7 @@ namespace test.bedrock.net
             one.Close();
             two.Close();
         }
-#pragma warning restore
-
+// #pragma warning restore
         #region Implementation of ISocketEventListener
         public bool OnAccept(BaseSocket newsocket)
         {

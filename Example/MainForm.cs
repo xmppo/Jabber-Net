@@ -334,6 +334,10 @@ namespace Example
 
         private void jc_OnReadText(object sender, string txt)
         {
+            // keepalive
+            if (txt == " ")
+                return;
+
             Debug.WriteLine("RECV: " + txt);
             debug.SelectionColor = Color.Red;
             debug.AppendText("RECV: ");
@@ -386,7 +390,7 @@ namespace Example
 
         private void jc_OnError(object sender, System.Exception ex)
         {
-#if !NO_SSL
+#if !NO_SSL && !NET20
             if (ex is Org.Mentalis.Security.Certificates.CertificateException)
                 m_err = true;
 #endif

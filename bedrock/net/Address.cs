@@ -206,7 +206,11 @@ namespace bedrock.net
         {
             try
             {
+#if NET20
                 IPHostEntry ent = Dns.EndGetHostEntry(ar);
+#else
+				IPHostEntry ent = Dns.EndResolve(ar);
+#endif
                 if (ent.AddressList.Length <= 0)
                 {
                     m_ip = null;

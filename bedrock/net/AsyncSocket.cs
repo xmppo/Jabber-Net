@@ -20,7 +20,11 @@ using System.Net.Sockets;
 using System.Threading;
 using bedrock.util;
 
-#if !NO_SSL
+#if NET20
+using System.Security.Authentication;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
+#elif !NO_SSL
 using Org.Mentalis.Security.Ssl;
 using Org.Mentalis.Security.Certificates;
 #endif
@@ -128,12 +132,24 @@ namespace bedrock.net
         /// </summary>
         public static bool UntrustedRootOK = false;
 
-#if !NO_SSL
+#if NET20
+        /// <summary>
+        /// The types of SSL to support.  SSL3 and TLS1 by default.  That should be good enough for 
+        /// most apps, and was hard-coded to start with.  Note: when doing start-tls, this is overridden
+        /// to just be TLS.
+        /// </summary>
+        public static SslProtocols   SSLProtocols     = SslProtocols.Ssl3 | SslProtocols.Tls;
+        private SslProtocols         m_secureProtocol = SslProtocols.None;
+        private Socket               m_sock           = null;
+        private X509Certificate      m_cert           = null;
+        private bool                 m_server         = false;
+		private Stream               m_stream         = null;
+#elif !NO_SSL
         /// <summary>
         /// The types of SSL to support.  SSL3 and TLS1 by default.  That should be good enough for 
         /// most apps, and was hard-coded to start with.
         /// </summary>
-        public static SecureProtocol SSLProtocols = SecureProtocol.Ssl3 | SecureProtocol.Tls1;
+        public static SecureProtocol SSLProtocols     = SecureProtocol.Ssl3 | SecureProtocol.Tls1;
         private SecureProtocol       m_secureProtocol = SecureProtocol.None;
         private ConnectionEnd        m_credUse        = ConnectionEnd.Client;
         private Certificate          m_cert           = null;
@@ -142,7 +158,7 @@ namespace bedrock.net
         private Socket               m_sock           = null;
 #endif
 
-        private byte[]               m_buf            = new byte[BUFSIZE];
+		private byte[]               m_buf            = new byte[BUFSIZE];
         private SocketState          m_state          = SocketState.Created;
         private SocketWatcher        m_watcher        = null;
         private Address              m_addr;
@@ -175,7 +191,9 @@ namespace bedrock.net
 
             if (SSL)
             {
-#if !NO_SSL
+#if NET20
+                m_secureProtocol = SSLProtocols;
+#elif !NO_SSL
                 m_secureProtocol = SSLProtocols;
 #else
                 throw new NotImplementedException("SSL not compiled in");
@@ -222,7 +240,60 @@ namespace bedrock.net
             }
         }
 
-#if !NO_SSL
+#if NET20
+        /// <summary>
+        /// Get the certificate of the remote endpoint of the socket.
+        /// </summary>
+        public X509Certificate RemoteCertificate
+        {
+            get 
+            {
+                SslStream str = m_stream as SslStream;
+                if (str == null)
+                    return null;
+                return str.RemoteCertificate;
+            }
+        }
+
+        /// <summary>
+        /// Choose a certificate from the local store.  If there are none available, returns right away.
+        /// If there is exactly one, uses it.
+        /// Otherwise, prompts.
+        /// TODO: figure out something for server certs, too.
+        /// </summary>
+        public void ChooseClientCertificate()
+        {
+            X509Store store = new X509Store(StoreName.My, StoreLocation.CurrentUser);
+            store.Open(OpenFlags.ReadOnly);
+
+            m_cert = null;
+            switch (store.Certificates.Count)
+            {
+                case 0:
+                    break;
+                case 1:
+                    m_cert = store.Certificates[0];
+                    break;
+                default:
+                    X509Certificate2Collection certs = X509Certificate2UI.SelectFromCollection(store.Certificates, 
+                        "Select certificate", 
+                        "Use this certificate to log in", 
+                        X509SelectionFlag.SingleSelection);
+                    if (certs.Count > 0)
+                        m_cert = certs[0];
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// The local certificate of the socket.
+        /// </summary>
+        public X509Certificate LocalCertificate
+        {
+            get { return m_cert; }
+            set { m_cert = value; }
+        }
+#elif !NO_SSL
         /// <summary>
         /// Get the certificate of the remote endpoint of the socket.
         /// </summary>
@@ -246,7 +317,15 @@ namespace bedrock.net
         /// </summary>
         public bool SSL
         {
-#if !NO_SSL
+#if NET20
+            get
+            {
+                SslStream str = m_stream as SslStream;
+                if (str == null)
+                    return false;
+                return str.IsEncrypted;
+            }
+#elif !NO_SSL
             get { return (m_secureProtocol != SecureProtocol.None); }
 #else
             get { return false; }
@@ -302,7 +381,8 @@ namespace bedrock.net
             lock (this)
             {
                 m_addr = addr;
-#if !NO_SSL
+
+#if !NO_SSL && !NET20
                 m_credUse = ConnectionEnd.Server;
                 SecurityOptions options = new SecurityOptions(m_secureProtocol, m_cert, m_credUse, CredentialVerification.Auto, null, addr.Hostname, SecurityFlags.Default, SslAlgorithms.ALL, null);
 
@@ -311,6 +391,7 @@ namespace bedrock.net
                     ProtocolType.Tcp,
                     options);
 #else
+                m_server = true;
                 m_sock = new Socket(AddressFamily.InterNetwork, 
                                     SocketType.Stream, 
                                     ProtocolType.Tcp);
@@ -342,7 +423,7 @@ namespace bedrock.net
             }
             if (m_synch)
             {                    
-#if !NO_SSL
+#if !NO_SSL && !NET20
                 SecureSocket cli = (SecureSocket) m_sock.Accept();
 #else
                 Socket cli = m_sock.Accept();
@@ -364,7 +445,7 @@ namespace bedrock.net
         /// <param name="ar"></param>
         private void ExecuteAccept(IAsyncResult ar)
         {
-#if !NO_SSL
+#if !NO_SSL && !NET20
             SecureSocket cli = (SecureSocket) m_sock.EndAccept(ar);
 #else
             Socket cli = (Socket) m_sock.EndAccept(ar);
@@ -379,7 +460,12 @@ namespace bedrock.net
             cliCon.m_addr = m_addr;
             cliCon.Address.IP = ((IPEndPoint) cliCon.m_sock.RemoteEndPoint).Address;
             cliCon.State = SocketState.Connected;
-#if !NO_SSL
+
+#if NET20
+            cliCon.m_stream = new NetworkStream(cliCon.m_sock);
+            cliCon.m_server = true;
+            cliCon.LocalCertificate = m_cert;
+#elif !NO_SSL
             cliCon.m_credUse = ConnectionEnd.Server;
 #endif
 
@@ -413,7 +499,10 @@ namespace bedrock.net
                 m_watcher.PendingAccept(this);
                 return;
             }
-
+#if NET20
+            if (m_secureProtocol != SslProtocols.None)
+                cliCon.StartTLS();
+#endif
             if (l.OnAccept(cliCon))
             {
                 RequestAccept();
@@ -466,7 +555,23 @@ namespace bedrock.net
                 m_addr = addr;
                 State = SocketState.Connecting;
 
-#if !NO_SSL
+#if NET20
+                if (Socket.OSSupportsIPv6 && (m_addr.Endpoint.AddressFamily == AddressFamily.InterNetworkV6))
+                {
+                    Console.WriteLine("ipv6");
+                    m_sock = new Socket(AddressFamily.InterNetworkV6, 
+                        SocketType.Stream, 
+                        ProtocolType.Tcp);
+                }
+                else
+                {
+                    Console.WriteLine("ipv4");
+                    m_sock = new Socket(AddressFamily.InterNetwork, 
+                        SocketType.Stream, 
+                        ProtocolType.Tcp);
+                }
+
+#elif !NO_SSL
                 SecurityOptions options =
                     new SecurityOptions(m_secureProtocol,
                                         m_cert,
@@ -477,11 +582,7 @@ namespace bedrock.net
                                         SecurityFlags.Default,
                                         SslAlgorithms.ALL,
                                         null);
-#if NET20
-                if (Socket.OSSupportsIPv6 &&
-#else
                 if (Socket.SupportsIPv6 &&
-#endif
                     (m_addr.Endpoint.AddressFamily ==
                      AddressFamily.InterNetworkV6))
                 {
@@ -499,8 +600,7 @@ namespace bedrock.net
                         ProtocolType.Tcp,
                         options);
                 }
-#else
-#if !OLD_CLR
+#elif !OLD_CLR
                 if (Socket.SupportsIPv6 && (m_addr.Endpoint.AddressFamily == AddressFamily.InterNetworkV6))
                 {
                     Console.WriteLine("ipv6");
@@ -509,7 +609,7 @@ namespace bedrock.net
                         ProtocolType.Tcp);
                 }
                 else
-#endif
+#else
                 {
                     Console.WriteLine("ipv4");
                     m_sock = new Socket(AddressFamily.InterNetwork, 
@@ -540,6 +640,11 @@ namespace bedrock.net
 
                 if (m_sock.Connected)
                 {
+#if NET20
+                    m_stream = new NetworkStream(m_sock);
+                    if (m_secureProtocol != SslProtocols.None)
+                        StartTLS();
+#endif
                     lock(this)
                     {
                         State = SocketState.Connected;
@@ -562,7 +667,76 @@ namespace bedrock.net
             }
         }
 
-#if !NO_SSL
+#if NET20
+        /// <summary>
+        /// Validate the server cert.  SSLPolicyErrors will be pre-filled with the errors you got.
+        /// Chances are, you want to set UntrustedRootOK in the real world still.
+        /// TODO: add a listener method to override this behavior, that only gets called if there is an error.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="certificate"></param>
+        /// <param name="chain"></param>
+        /// <param name="sslPolicyErrors"></param>
+        /// <returns></returns>
+        protected bool ValidateServerCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+        {
+            // huh.  Well, I'm not sure what to do with client certs.
+            if (m_server)
+            {
+                return true;
+            }
+
+            if (sslPolicyErrors == SslPolicyErrors.None)
+                return true;
+
+            if ((sslPolicyErrors == SslPolicyErrors.RemoteCertificateChainErrors) && UntrustedRootOK)
+            {
+                // Huh.  Maybe there should be a listener method for this.
+
+                //X509Certificate2UI.DisplayCertificate(new X509Certificate2(certificate));
+                return true;
+            }
+
+            Debug.WriteLine("Certificate error: {0}", sslPolicyErrors.ToString());
+
+            // Do not allow this client to communicate with unauthenticated servers.
+            return false;
+        }
+
+        /// <summary>
+        /// Start TLS processing on an open socket.
+        /// </summary>
+        public override void StartTLS()
+        {
+            // we're really doing start-tls.
+            if (m_secureProtocol == SslProtocols.None)
+                m_secureProtocol = SslProtocols.Tls;
+
+            m_stream = new SslStream(m_stream, false, new RemoteCertificateValidationCallback(ValidateServerCertificate), null);
+            if (m_server)
+            {
+                if (m_cert == null)
+                {
+                    FireError(new InvalidOperationException("Must set Certificate for server SSL"));
+                    Close();
+                    return;
+                }
+                // TODO: surface these as params
+                ((SslStream)m_stream).AuthenticateAsServer(m_cert, false, m_secureProtocol, false);
+            }
+            else
+            {
+                X509CertificateCollection certs = null;
+                if (m_cert != null)
+                {
+                    certs = new X509CertificateCollection();
+                    certs.Add(m_cert);
+                }
+                ((SslStream)m_stream).AuthenticateAsClient(m_hostid, certs, m_secureProtocol, false);
+            }
+        }
+
+#elif !NO_SSL
         /// <summary>
         /// Verifies a certificate received from the remote host.
         /// </summary>
@@ -621,6 +795,11 @@ namespace bedrock.net
                 }
                 if (m_sock.Connected)
                 {
+#if NET20
+                    m_stream = new NetworkStream(m_sock);
+                    if (m_secureProtocol != SslProtocols.None)
+                        StartTLS();
+#endif
                     State = SocketState.Connected;
                     m_listener.OnConnect(this);
                 }
@@ -634,7 +813,11 @@ namespace bedrock.net
 
         private bool SyncRead()
         {
+#if NET20
+            int count = m_stream.Read(m_buf, 0, m_buf.Length);
+#else
             int count = m_sock.Receive(m_buf, 0, m_buf.Length, SocketFlags.None);
+#endif
             if (count > 0)
             {
                 return m_listener.OnRead(this, m_buf, 0, count);
@@ -681,9 +864,12 @@ namespace bedrock.net
 
                     m_reading = true;
                 }
-
+#if NET20
+                m_stream.BeginRead(m_buf, 0, m_buf.Length, new AsyncCallback(GotData), null);
+#else
                 m_sock.BeginReceive(m_buf, 0, m_buf.Length, 
                     SocketFlags.None, new AsyncCallback(GotData), null);
+#endif
             }
             catch (SocketException e)
             {
@@ -723,7 +909,11 @@ namespace bedrock.net
             int count;
             try
             {
+#if NET20
+                count = m_stream.EndRead(ar);
+#else
                 count = m_sock.EndReceive(ar);
+#endif
             }
             catch (SocketException e)
             {
@@ -779,27 +969,37 @@ namespace bedrock.net
                     throw new InvalidOperationException("Socket must be connected before writing.  Current state: " + State.ToString());
                 }
 
-                // make copy, since we might be a while in async-land
-                byte[] ret = new byte[len];
-                Buffer.BlockCopy(buf, offset, ret, 0, len);
                 try
                 {
                     if (m_synch)
                     {
-                        int count = m_sock.Send(ret, 0, ret.Length, SocketFlags.None);
-                        if (count == ret.Length)
-                        {
-                            m_listener.OnWrite(this, ret, 0, ret.Length);
-                        }
-                        else
-                        {
-                            Close();
-                        }
+#if NET20
+                        m_stream.Write(buf, offset, len);
+						m_listener.OnWrite(this, buf, offset, len);
+#else
+						int count = m_sock.Send(buf, offset, len, SocketFlags.None);
+						if (count == len)
+						{
+							m_listener.OnWrite(this, buf, offset, len);
+						}
+						else
+						{
+							Close();
+						}
+#endif
                     }
                     else
                     {
+                        // make copy, since we might be a while in async-land
+                        byte[] ret = new byte[len];
+                        Buffer.BlockCopy(buf, offset, ret, 0, len);
+
+#if NET20
+                        m_stream.BeginWrite(ret, 0, ret.Length, new AsyncCallback(WroteData), ret);
+#else
                         m_sock.BeginSend(ret, 0, ret.Length, 
                             SocketFlags.None, new AsyncCallback(WroteData), ret);
+#endif
                     }
                 }
                 catch (SocketException e)
@@ -828,10 +1028,17 @@ namespace bedrock.net
         /// <param name="ar"></param>
         private void WroteData(IAsyncResult ar)
         {
+#if !NET20
             int count;
+#endif
+
             try
             {
+#if NET20
+                m_stream.EndWrite(ar);
+#else
                 count = m_sock.EndSend(ar);
+#endif
             }
             catch (SocketException)
             {
@@ -849,6 +1056,11 @@ namespace bedrock.net
                 FireError(e);
                 return;
             }
+
+#if NET20
+            byte[] buf = (byte[])ar.AsyncState;
+            m_listener.OnWrite(this, buf, 0, buf.Length);
+#else
             if (count > 0)
             {
                 byte[] buf = (byte[]) ar.AsyncState;
@@ -858,6 +1070,7 @@ namespace bedrock.net
             {
                 AsyncClose();
             }
+#endif
         }
 
         /// <summary>
@@ -885,16 +1098,23 @@ namespace bedrock.net
                 if (m_sock.Connected)
                 {
                     State = SocketState.Closing;
-                    try
+#if NET20
+                    if (m_stream != null)
+                        m_stream.Close();
+                    else
+#endif
                     {
-                        m_sock.Shutdown(SocketShutdown.Both);
+                        try
+                        {
+                            m_sock.Shutdown(SocketShutdown.Both);
+                        }
+                        catch { }
+                        try
+                        {
+                            m_sock.Close();
+                        }
+                        catch { }
                     }
-                    catch {}
-                    try
-                    {
-                        m_sock.Close();
-                    }
-                    catch {}
                 }
 
                 if (oldState <= SocketState.Connected)

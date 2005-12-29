@@ -66,13 +66,22 @@ namespace test.bedrock.net
         {
             SocketWatcher c_w = new SocketWatcher(20);
             c_w.Synchronous = true;
-            m_cli = c_w.CreateConnectSocket(this, a, true);
+            m_cli = c_w.CreateConnectSocket(this, a, true, "localhost");
         }
     
         private void Server()
         {
             SocketWatcher s_w = new SocketWatcher(20);
-            s_w.SetCertificateFile("../../localhost.pfx", "test");
+#if NET20
+            System.Security.SecureString s = new System.Security.SecureString();
+            s.AppendChar('t');
+            s.AppendChar('e');
+            s.AppendChar('s');
+            s.AppendChar('t');
+#else
+            string s = "test";
+#endif
+            s_w.SetCertificateFile("../../localhost.pfx", s);
             s_w.Synchronous = true;
             m_listen = s_w.CreateListenSocket(this, a, true);
             lock(start)

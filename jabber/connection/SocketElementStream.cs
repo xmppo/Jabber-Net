@@ -27,7 +27,9 @@ using jabber.protocol;
 using jabber.protocol.stream;
 using jabber.connection.sasl;
 
-#if !NO_SSL
+#if NET20
+using System.Security.Cryptography.X509Certificates;
+#elif !NO_SSL
 using Org.Mentalis.Security.Certificates;
 #endif
 
@@ -69,8 +71,8 @@ namespace jabber.connection
     /// Summary description for SocketElementStream.
     /// </summary>
     [RCS(@"$Header$")]
-    abstract public class SocketElementStream : 
-        System.ComponentModel.Component, 
+    abstract public class SocketElementStream :
+        System.ComponentModel.Component,
         ISocketEventListener
     {
         /// <summary>
@@ -78,45 +80,45 @@ namespace jabber.connection
         /// </summary>
         protected static readonly System.Text.Encoding ENC = System.Text.Encoding.UTF8;
 
-        private SocketWatcher  m_watcher        = null;
-        private BaseSocket     m_sock           = null;
-        private BaseSocket     m_accept         = null;
-        private XmlDocument    m_doc            = new XmlDocument();
-        private ElementStream  m_stream         = null;
-        private BaseState      m_state          = ClosedState.Instance;
-        private string         m_server         = null;
-        private string         m_to             = "jabber.com";
-        private string         m_streamID       = null;
-        private object         m_stateLock      = new object();
-        private ArrayList      m_callbacks      = new ArrayList();
-        private int            m_keepAlive      = 20000;
-        private Timer          m_timer          = null;
-        private Timer          m_reconnectTimer = null;
+        private SocketWatcher m_watcher = null;
+        private BaseSocket m_sock = null;
+        private BaseSocket m_accept = null;
+        private XmlDocument m_doc = new XmlDocument();
+        private ElementStream m_stream = null;
+        private BaseState m_state = ClosedState.Instance;
+        private string m_server = null;
+        private string m_to = "jabber.com";
+        private string m_streamID = null;
+        private object m_stateLock = new object();
+        private ArrayList m_callbacks = new ArrayList();
+        private int m_keepAlive = 20000;
+        private Timer m_timer = null;
+        private Timer m_reconnectTimer = null;
 
-        private int            m_port           = 5222;
-        private int            m_autoReconnect  = 30000;
-                private bool               m_reconnect      = false;
+        private int m_port = 5222;
+        private int m_autoReconnect = 30000;
+        private bool m_reconnect = false;
 
-        private ProxyType      m_ProxyType      = ProxyType.None;
-        private string         m_ProxyHost      = null;
-        private int            m_ProxyPort      = 1080;
-        private string         m_ProxyUsername  = null;
-        private string         m_ProxyPassword  = null;
-        private bool           m_ssl            = false;
-        private bool           m_sslOn          = false;
-        private bool           m_autoStartTLS   = true;
-        private bool           m_plaintext      = false;
+        private ProxyType m_ProxyType = ProxyType.None;
+        private string m_ProxyHost = null;
+        private int m_ProxyPort = 1080;
+        private string m_ProxyUsername = null;
+        private string m_ProxyPassword = null;
+        private bool m_ssl = false;
+        private bool m_sslOn = false;
+        private bool m_autoStartTLS = true;
+        private bool m_plaintext = false;
 
         // XMPP v1 stuff
-        private string          m_serverVersion = null;
-        private bool            m_requireSASL   = false;
-        private SASLProcessor   m_saslProc      = null;
+        private string m_serverVersion = null;
+        private bool m_requireSASL = false;
+        private SASLProcessor m_saslProc = null;
 
         private XmlNamespaceManager m_ns;
 
         private ISynchronizeInvoke m_invoker = null;
         //private XmlTextWriter m_writer = new XmlTextWriter(Console.Out);
-        
+
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -155,7 +157,7 @@ namespace jabber.connection
             m_accept = m_sock = null;
             if (aso is AsyncSocket)
             {
-                m_watcher = ((AsyncSocket) aso).SocketWatcher;
+                m_watcher = ((AsyncSocket)aso).SocketWatcher;
             }
             m_ns = new XmlNamespaceManager(m_doc.NameTable);
             m_timer = new Timer(new TimerCallback(DoKeepAlive), null, Timeout.Infinite, Timeout.Infinite);
@@ -196,23 +198,27 @@ namespace jabber.connection
         /// </summary>
         [Category("Debug")]
         public event bedrock.TextHandler OnWriteText;
+
         /// <summary>
         /// Text was read from the server.  Use for debugging only.  
         /// Will NOT be complete nodes at a time.
         /// </summary>
         [Category("Debug")]
         public event bedrock.TextHandler OnReadText;
+
         /// <summary>
         /// A new stream was initialized.  Add your packet factories to it.
         /// </summary>
         [Category("Stream")]
         public event StreamHandler OnStreamInit;
+
         /// <summary>
         /// Some error occurred when processing.  
         /// The connection has been closed.
         /// </summary>
         [Category("Stream")]
         public event bedrock.ExceptionHandler OnError;
+
         /// <summary>
         /// Get notified for every jabber packet.  
         /// This is a union of OnPresence, OnMessage, and OnIQ.
@@ -220,20 +226,24 @@ namespace jabber.connection
         /// </summary>
         [Category("Stream")]
         public event ProtocolHandler OnProtocol;
+
         /// <summary>
         /// Get notified of the stream header, as a packet.  Can be called multiple
         /// times for a single session, with XMPP.
         /// </summary>
         [Category("Stream")]
         public event ProtocolHandler OnStreamHeader;
+
         /// <summary>
         /// Get notified of the start of a SASL handshake.
         /// </summary>
         protected event SASLProcessorHandler OnSASLStart;
+
         /// <summary>
         /// Get notified of the end of a SASL handshake.
         /// </summary>
         protected event FeaturesHandler OnSASLEnd;
+
         /// <summary>
         /// We received a stream:error packet.
         /// </summary>
@@ -246,17 +256,19 @@ namespace jabber.connection
         /// </summary>
         [Category("Stream")]
         public event bedrock.ObjectHandler OnAuthenticate;
+
         /// <summary>
         /// The connection is connected, but no stream:stream has been sent, yet.
         /// </summary>
         [Category("Stream")]
         public event bedrock.net.AsyncSocketHandler OnConnect;
+
         /// <summary>
         /// The connection is disconnected
         /// </summary>
         [Category("Stream")]
         public event bedrock.ObjectHandler OnDisconnect;
-        
+
         /// <summary>
         /// The name of the server to connect to.  
         /// </summary>
@@ -328,12 +340,12 @@ namespace jabber.connection
         public bool SSL
         {
             get { return m_ssl; }
-            set 
-            { 
+            set
+            {
 #if NO_SSL
                 Debug.Assert(!value, "SSL support not compiled in");
 #endif
-                m_ssl = value; 
+                m_ssl = value;
             }
         }
 
@@ -347,7 +359,41 @@ namespace jabber.connection
             set { m_autoStartTLS = value; }
         }
 
-#if !NO_SSL
+#if NET20
+        /// <summary>
+        /// The certificate to be used for the local side of sockets, with SSL on.
+        /// </summary>
+        [Browsable(false)]
+        public X509Certificate LocalCertificate
+        {
+            get { return (m_watcher == null) ? null : m_watcher.LocalCertificate; }
+            set { if (m_watcher != null) m_watcher.LocalCertificate = value; }
+        }
+
+
+        /// <summary>
+        /// Set the certificate to be used for accept sockets.  To generate a test .pfx file using openssl,
+        /// add this to openssl.conf:
+        ///   <blockquote>
+        ///   [ serverex ]
+        ///   extendedKeyUsage=1.3.6.1.5.5.7.3.1
+        ///   </blockquote>
+        /// and run the following commands:
+        ///   <blockquote>
+        ///   openssl req -new -x509 -newkey rsa:1024 -keyout privkey.pem -out key.pem -extensions serverex
+        ///   openssl pkcs12 -export -in key.pem -inkey privkey.pem -name localhost -out localhost.pfx
+        ///   </blockquote>
+        /// If you leave the certificate null, and you are doing Accept, the SSL class will try to find a
+        /// default server cert on your box.  If you have IIS installed with a cert, this might just go...
+        /// </summary>
+        /// <param name="filename">A .pfx or .cer file</param>
+        /// <param name="password">The password, if this is a .pfx file, null if .cer file.</param>
+        public void SetCertificateFile(string filename, System.Security.SecureString password)
+        {
+            if (m_watcher != null)
+                m_watcher.SetCertificateFile(filename, password);
+        }
+#elif !NO_SSL
         /// <summary>
         /// The certificate to be used for the local side of sockets, with SSL on.
         /// </summary>
@@ -391,25 +437,25 @@ namespace jabber.connection
         [Category("Jabber")]
         public ISynchronizeInvoke InvokeControl
         {
-            get 
-            { 
+            get
+            {
                 // If we are running in the designer, let's try to get an invoke control
                 // from the environment.  VB programmers can't seem to follow directions.
                 if ((this.m_invoker == null) && DesignMode)
                 {
-                    IDesignerHost host = (IDesignerHost) base.GetService(typeof(IDesignerHost));
+                    IDesignerHost host = (IDesignerHost)base.GetService(typeof(IDesignerHost));
                     if (host != null)
                     {
                         object root = host.RootComponent;
                         if ((root != null) && (root is ISynchronizeInvoke))
                         {
-                            m_invoker = (ISynchronizeInvoke) root;
+                            m_invoker = (ISynchronizeInvoke)root;
                             // TODO: fire some sort of propertyChanged event, 
                             // so that old code gets cleaned up correctly.
-                        } 
+                        }
                     }
                 }
-                return m_invoker; 
+                return m_invoker;
             }
             set { m_invoker = value; }
         }
@@ -423,8 +469,8 @@ namespace jabber.connection
         public float KeepAlive
         {
             get { return m_keepAlive / 1000f; }
-            set 
-            { 
+            set
+            {
                 lock (m_stateLock)
                 {
                     m_keepAlive = (int)(value * 1000f);
@@ -438,7 +484,7 @@ namespace jabber.connection
                     {
                         m_timer = new Timer(new TimerCallback(DoKeepAlive), null, m_keepAlive, m_keepAlive);
                     }
-                }            
+                }
             }
         }
 
@@ -465,7 +511,7 @@ namespace jabber.connection
             get { return m_ProxyType; }
             set { m_ProxyType = value; }
         }
- 
+
         /// <summary>
         /// the host running the proxy
         /// </summary>
@@ -568,11 +614,11 @@ namespace jabber.connection
         [DefaultValue(false)]
         public virtual bool IsAuthenticated
         {
-            get 
-            { 
+            get
+            {
                 lock (StateLock)
                 {
-                    return (m_state == RunningState.Instance); 
+                    return (m_state == RunningState.Instance);
                 }
             }
             set
@@ -589,10 +635,10 @@ namespace jabber.connection
                 if (value && (OnAuthenticate != null))
                 {
                     if (InvokeRequired)
-                        CheckedInvoke(OnAuthenticate, new object[] {this});
+                        CheckedInvoke(OnAuthenticate, new object[] { this });
                     else
                         OnAuthenticate(this);
-                }            
+                }
             }
         }
 
@@ -613,7 +659,7 @@ namespace jabber.connection
         public bool RequiresSASL
         {
             get { return m_requireSASL; }
-            set {m_requireSASL = value; }
+            set { m_requireSASL = value; }
         }
 
         /// <summary>
@@ -623,7 +669,7 @@ namespace jabber.connection
         [DefaultValue(null)]
         public string ServerVersion
         {
-            get {return m_serverVersion;}
+            get { return m_serverVersion; }
         }
 
 #if false
@@ -690,79 +736,79 @@ namespace jabber.connection
             lock (StateLock)
             {
                 m_state = ConnectingState.Instance;
-                                m_reconnect = (m_autoReconnect >= 0);
+                m_reconnect = (m_autoReconnect >= 0);
 
                 ProxySocket proxy = null;
                 switch (m_ProxyType)
                 {
-                    case ProxyType.Socks4: 
-                        proxy = new Socks4Proxy(this);
-                        break;
+                case ProxyType.Socks4:
+                    proxy = new Socks4Proxy(this);
+                    break;
 
-                    case ProxyType.Socks5: 
-                        proxy = new Socks5Proxy(this);
-                        break;
-                       
-                    case ProxyType.SHTTP: 
-                        proxy = new ShttpProxy(this);
-                        break;
+                case ProxyType.Socks5:
+                    proxy = new Socks5Proxy(this);
+                    break;
 
-                    case ProxyType.HTTP_Polling:
-                        JEP25Socket j25s = new JEP25Socket(this);
-                        if (m_ProxyHost != null)
+                case ProxyType.SHTTP:
+                    proxy = new ShttpProxy(this);
+                    break;
+
+                case ProxyType.HTTP_Polling:
+                    JEP25Socket j25s = new JEP25Socket(this);
+                    if (m_ProxyHost != null)
+                    {
+                        System.Net.WebProxy wp = new System.Net.WebProxy();
+                        wp.Address = new Uri("http://" + m_ProxyHost + ":" + m_ProxyPort);
+                        if (m_ProxyUsername != null)
                         {
-                            System.Net.WebProxy wp = new System.Net.WebProxy();
-                            wp.Address = new Uri("http://" + m_ProxyHost + ":" + m_ProxyPort);
-                            if (m_ProxyUsername != null)
-                            {
-                                wp.Credentials = new System.Net.NetworkCredential(m_ProxyUsername, m_ProxyPassword);
-                            }
-                            j25s.Proxy = wp;
+                            wp.Credentials = new System.Net.NetworkCredential(m_ProxyUsername, m_ProxyPassword);
                         }
-                        j25s.URL = m_server;
-                        m_sock = j25s;
-                        break;
-                       
-                    case ProxyType.None:
-                        m_sock = new AsyncSocket(m_watcher, this, m_sslOn, false);
-                        break;
+                        j25s.Proxy = wp;
+                    }
+                    j25s.URL = m_server;
+                    m_sock = j25s;
+                    break;
 
-                    default:
-                        throw new ArgumentException("no handler for proxy type: " + m_ProxyType, "ProxyType");
+                case ProxyType.None:
+                    m_sock = new AsyncSocket(m_watcher, this, m_sslOn, false);
+                    break;
+
+                default:
+                    throw new ArgumentException("no handler for proxy type: " + m_ProxyType, "ProxyType");
                 }
 
                 if (proxy != null)
                 {
-                    proxy.Socket   = new AsyncSocket(m_watcher, proxy);
-                    proxy.Host     = m_ProxyHost;
-                    proxy.Port     = m_ProxyPort;
+                    proxy.Socket = new AsyncSocket(m_watcher, proxy);
+                    proxy.Host = m_ProxyHost;
+                    proxy.Port = m_ProxyPort;
                     proxy.Username = m_ProxyUsername;
                     m_sock = proxy;
                 }
 
                 Address addr = new Address(GetHost(), m_port);
-                m_sock.Connect(addr);
+                m_sock.Connect(addr, m_to);
             }
         }
 
-                /// <summary>
-                /// If autoReconnect is on, start the timer for reconnect now.
-                /// </summary>
-                private void TryReconnect()
-                {
-                        // close was not requested, or autoreconnect turned on.
-                        if (m_reconnect)
-                        {
-                                if (m_reconnectTimer != null)
-                                        m_reconnectTimer.Dispose();
+        /// <summary>
+        /// If autoReconnect is on, start the timer for reconnect now.
+        /// </summary>
+        private void TryReconnect()
+        {
+            // close was not requested, or autoreconnect turned on.
+            if (m_reconnect)
+            {
+                if (m_reconnectTimer != null)
+                    m_reconnectTimer.Dispose();
 
-                                m_reconnectTimer = new System.Threading.Timer(
-                                        new System.Threading.TimerCallback(Reconnect), 
-                                        null, 
-                                        m_autoReconnect, 
-                                        System.Threading.Timeout.Infinite );
-                        }
-                }
+                m_reconnectTimer = new System.Threading.Timer(
+                        new System.Threading.TimerCallback(Reconnect),
+                        null,
+                        m_autoReconnect,
+                        System.Threading.Timeout.Infinite);
+            }
+        }
 
         /// <summary>
         /// Close down the connection, as gracefully as possible.
@@ -782,7 +828,7 @@ namespace jabber.connection
             {
                 if ((m_state == RunningState.Instance) && (clean))
                 {
-                                        m_reconnect = false;
+                    m_reconnect = false;
                     Write("</stream:stream>");
                 }
                 if (m_state != ClosedState.Instance)
@@ -826,7 +872,7 @@ namespace jabber.connection
         /// <returns></returns>
         protected bool InvokeRequired
         {
-            get 
+            get
             {
                 if (m_invoker == null)
                     return false;
@@ -853,7 +899,7 @@ namespace jabber.connection
             // See XMPP-core section 4.4.1.  We'll accept 1.x
             if (m_serverVersion.StartsWith("1."))
             {
-                lock (m_stateLock) 
+                lock (m_stateLock)
                 {
                     if (m_state == SASLState.Instance)
                         // already authed.  last stream restart.
@@ -874,7 +920,7 @@ namespace jabber.connection
             if (OnStreamHeader != null)
             {
                 if (InvokeRequired)
-                    CheckedInvoke(OnStreamHeader, new object[] {this, tag});
+                    CheckedInvoke(OnStreamHeader, new object[] { this, tag });
                 else
                     OnStreamHeader(this, tag);
             }
@@ -885,7 +931,7 @@ namespace jabber.connection
                 OnSASLStart(this, null); // Hack.  Old-style auth for jabberclient.
             }
         }
-        
+
         /// <summary>
         /// The end tag was received.
         /// </summary>
@@ -898,7 +944,7 @@ namespace jabber.connection
                 // No need to close stream any more.  AElfred does this for us, even though
                 // the docs say it doesn't.
                 //if (m_sock != null)
-                    //m_sock.Close();
+                //m_sock.Close();
             }
         }
 
@@ -909,7 +955,7 @@ namespace jabber.connection
         /// <param name="tag"></param>
         protected virtual void OnElement(object sender, System.Xml.XmlElement tag)
         {
-            if (tag is jabber.protocol.stream.Error) 
+            if (tag is jabber.protocol.stream.Error)
             {
                 // Stream error.  Race condition!  Two cases:
                 // 1) OnClose has already fired, in which case we are in ClosedState, and the reconnect timer is pending.
@@ -930,7 +976,7 @@ namespace jabber.connection
                 if (OnStreamError != null)
                 {
                     if (InvokeRequired)
-                        CheckedInvoke(OnStreamError, new object[] {this, tag});
+                        CheckedInvoke(OnStreamError, new object[] { this, tag });
                     else
                         OnStreamError(this, tag);
                 }
@@ -940,20 +986,20 @@ namespace jabber.connection
             if (m_state == ServerFeaturesState.Instance)
             {
                 Features f = tag as Features;
-                if (f == null) 
+                if (f == null)
                 {
                     FireOnError(new InvalidOperationException("Expecting stream:features from a version='1.0' server"));
                     return;
                 }
 
-#if !NO_SSL
+#if !NO_SSL || NET20
                 // don't do starttls if we're already on an SSL socket.
                 // bad server setup, but no skin off our teeth, we're already
                 // SSL'd.  Also, start-tls won't work when polling.
                 if (m_autoStartTLS && (f.StartTLS != null) && (!m_sslOn) && (m_ProxyType != ProxyType.HTTP_Polling))
                 {
                     // start-tls
-                    lock (m_stateLock) 
+                    lock (m_stateLock)
                     {
                         m_state = StartTLSState.Instance;
                     }
@@ -1013,7 +1059,7 @@ namespace jabber.connection
                     SASLFailure sf = tag as SASLFailure;
                     // TODO: I18N
                     FireOnError(new SASLException("SASL failure: " + sf.InnerXml));
-                    return;                    
+                    return;
                 }
                 else if (tag is Step)
                 {
@@ -1028,26 +1074,26 @@ namespace jabber.connection
                     return;
                 }
             }
-#if !NO_SSL
+#if !NO_SSL || NET20
             else if (m_state == StartTLSState.Instance)
             {
                 switch (tag.Name)
                 {
-                    case "proceed":
-                        m_sock.StartTLS();
-                        m_sslOn = true;
-                        SendNewStreamHeader();
-                        break;
-                    case "failure":
-                        FireOnError(new AuthenticationFailedException());
-                        return;
+                case "proceed":
+                    m_sock.StartTLS();
+                    m_sslOn = true;
+                    SendNewStreamHeader();
+                    break;
+                case "failure":
+                    FireOnError(new AuthenticationFailedException());
+                    return;
                 }
             }
 #endif
             else if (m_state == SASLAuthedState.Instance)
             {
                 Features f = tag as Features;
-                if (f == null) 
+                if (f == null)
                 {
                     FireOnError(new InvalidOperationException("Expecting stream:features from a version='1.0' server"));
                     return;
@@ -1061,14 +1107,14 @@ namespace jabber.connection
                 if (OnProtocol != null)
                 {
                     if (InvokeRequired)
-                        CheckedInvoke(OnProtocol, new object[] {this, tag});
+                        CheckedInvoke(OnProtocol, new object[] { this, tag });
                     else
                         OnProtocol(this, tag);
                 }
             }
             CheckAll(tag);
         }
-        
+
         /// <summary>
         /// The SASLClient is reporting an exception
         /// </summary>
@@ -1078,7 +1124,7 @@ namespace jabber.connection
             // lets throw the exception
             FireOnError(e);
         }
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -1117,7 +1163,7 @@ namespace jabber.connection
             if (OnError != null)
             {
                 if (InvokeRequired)
-                    CheckedInvoke(OnError, new object[] {this, e});
+                    CheckedInvoke(OnError, new object[] { this, e });
                 else
                     OnError(this, e);
             }
@@ -1178,16 +1224,16 @@ namespace jabber.connection
                 Debug.Assert(m_sock is AsyncSocket);
 
                 if (InvokeRequired)
-                    CheckedInvoke(OnConnect, new object[] {this, m_sock});
+                    CheckedInvoke(OnConnect, new object[] { this, m_sock });
                 else
                 {
                     // Um.  This cast might not be right, but I don't want to break backward compatibility 
                     // if I don't have to by changing the delegate interface.
-                    OnConnect(this, (AsyncSocket) m_sock);
+                    OnConnect(this, (AsyncSocket)m_sock);
                 }
             }
 
-            return false;           
+            return false;
         }
 
         private void ReadComplete(object sender, byte[] buf, int offset, int count)
@@ -1197,7 +1243,7 @@ namespace jabber.connection
             if (OnReadText != null)
             {
                 if (InvokeRequired)
-                    CheckedInvoke(OnReadText, new object[] {m_sock, ENC.GetString(buf, offset, count)});
+                    CheckedInvoke(OnReadText, new object[] { m_sock, ENC.GetString(buf, offset, count) });
                 else
                     OnReadText(m_sock, ENC.GetString(buf, offset, count));
             }
@@ -1218,7 +1264,7 @@ namespace jabber.connection
             if (OnWriteText != null)
             {
                 if (InvokeRequired)
-                    CheckedInvoke(OnWriteText, new object[] {sock, ENC.GetString(buf, offset, count)});
+                    CheckedInvoke(OnWriteText, new object[] { sock, ENC.GetString(buf, offset, count) });
                 else
                     OnWriteText(sock, ENC.GetString(buf, offset, count));
             }
@@ -1226,24 +1272,24 @@ namespace jabber.connection
 
         void ISocketEventListener.OnError(bedrock.net.BaseSocket sock, System.Exception ex)
         {
-                        lock (m_stateLock)
-                        {
-                                m_timer.Change(Timeout.Infinite, Timeout.Infinite);
+            lock (m_stateLock)
+            {
+                m_timer.Change(Timeout.Infinite, Timeout.Infinite);
 
-                                m_state = ClosedState.Instance;
-                                m_sock = null;
-                        }
+                m_state = ClosedState.Instance;
+                m_sock = null;
+            }
 
             if (OnError != null)
             {
                 if (InvokeRequired)
-                    CheckedInvoke(OnError, new object[] {sock, ex});
+                    CheckedInvoke(OnError, new object[] { sock, ex });
                 else
                     OnError(sock, ex);
             }
 
-                        TryReconnect();            
-                }
+            TryReconnect();
+        }
 
         void ISocketEventListener.OnConnect(bedrock.net.BaseSocket sock)
         {
@@ -1257,7 +1303,7 @@ namespace jabber.connection
             if (OnConnect != null)
             {
                 if (InvokeRequired)
-                    CheckedInvoke(OnConnect, new Object[] {this, sock});
+                    CheckedInvoke(OnConnect, new Object[] { this, sock });
                 else
                     OnConnect(this, sock);
             }
@@ -1271,24 +1317,24 @@ namespace jabber.connection
 
         void ISocketEventListener.OnClose(bedrock.net.BaseSocket sock)
         {
-                        lock (StateLock)
-                        {
-                                m_timer.Change(Timeout.Infinite, Timeout.Infinite);
-                                m_state = ClosedState.Instance;
-                                m_sock = null;
+            lock (StateLock)
+            {
+                m_timer.Change(Timeout.Infinite, Timeout.Infinite);
+                m_state = ClosedState.Instance;
+                m_sock = null;
 
-                        }
+            }
 
             if (OnDisconnect != null)
             {
                 if (InvokeRequired)
-                    CheckedInvoke(OnDisconnect, new object[]{this});
+                    CheckedInvoke(OnDisconnect, new object[] { this });
                 else
                     OnDisconnect(this);
             }
 
-                        TryReconnect();
-                }
+            TryReconnect();
+        }
         #endregion
 
 
@@ -1353,14 +1399,14 @@ namespace jabber.connection
                     return;
                 }
             }
-            Write(new byte[] {32});
+            Write(new byte[] { 32 });
         }
 
         private class CallbackData
         {
-            private Guid            m_guid = Guid.NewGuid();
+            private Guid m_guid = Guid.NewGuid();
             private ProtocolHandler m_cb;
-            private string          m_xpath;
+            private string m_xpath;
 
             public CallbackData(string xpath, ProtocolHandler cb)
             {
@@ -1387,7 +1433,7 @@ namespace jabber.connection
                     if (n != null)
                     {
                         if (sender.InvokeRequired)
-                            sender.CheckedInvoke(m_cb, new object[] {sender, elem} );
+                            sender.CheckedInvoke(m_cb, new object[] { sender, elem });
                         else
                             m_cb(sender, elem);
                     }
@@ -1402,7 +1448,7 @@ namespace jabber.connection
         private void m_stream_OnError(object sender, Exception ex)
         {
             FireOnError(ex);
-                        TryReconnect();
+            TryReconnect();
         }
     }
 }

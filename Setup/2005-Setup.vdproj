@@ -27,18 +27,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_055F5BCD78D89C5DCAFA464CFF66B37E"
-        "OwnerKey" = "8:_299447DFEC74425E83EA5448D5CC547C"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_055F5BCD78D89C5DCAFA464CFF66B37E"
-        "OwnerKey" = "8:_052CD8359767BFA99B05AEF71F2173C2"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_11D9ADECD380AE990CBB296F4C743EFE"
         "OwnerKey" = "8:_299447DFEC74425E83EA5448D5CC547C"
         "MsmSig" = "8:_UNDEFINED"
@@ -57,14 +45,14 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_808F4CA8B165588434AE298D67E5BA9B"
-        "OwnerKey" = "8:_299447DFEC74425E83EA5448D5CC547C"
+        "MsmKey" = "8:_FA3EF3BF18C1EFC5C7F06220A48BE06E"
+        "OwnerKey" = "8:_052CD8359767BFA99B05AEF71F2173C2"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_808F4CA8B165588434AE298D67E5BA9B"
-        "OwnerKey" = "8:_052CD8359767BFA99B05AEF71F2173C2"
+        "MsmKey" = "8:_FA3EF3BF18C1EFC5C7F06220A48BE06E"
+        "OwnerKey" = "8:_299447DFEC74425E83EA5448D5CC547C"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -88,13 +76,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_055F5BCD78D89C5DCAFA464CFF66B37E"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_808F4CA8B165588434AE298D67E5BA9B"
+        "OwnerKey" = "8:_FA3EF3BF18C1EFC5C7F06220A48BE06E"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -105,7 +87,7 @@
         "DisplayName" = "8:Debug"
         "IsDebugOnly" = "11:TRUE"
         "IsReleaseOnly" = "11:FALSE"
-        "OutputFilename" = "8:Debug\\Setup.msi"
+        "OutputFilename" = "8:Debug5\\Setup.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -197,7 +179,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:jabber-net, Version=1.0.2188.16979, Culture=neutral, PublicKeyToken=924c5b18328d6f09, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:jabber-net, Version=1.0.2189.21559, Culture=neutral, PublicKeyToken=924c5b18328d6f09, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_052CD8359767BFA99B05AEF71F2173C2"
@@ -224,42 +206,11 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_055F5BCD78D89C5DCAFA464CFF66B37E"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:stringprep, Version=1.0.2188.16979, Culture=neutral, PublicKeyToken=924c5b18328d6f09, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_055F5BCD78D89C5DCAFA464CFF66B37E"
-                    {
-                    "Name" = "8:stringprep.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:stringprep.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_BE6198C000D6491DA28459E62520961A"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_11D9ADECD380AE990CBB296F4C743EFE"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:muzzle, Version=1.0.2188.17074, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:muzzle, Version=1.0.2189.21560, Culture=neutral, PublicKeyToken=924c5b18328d6f09, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_11D9ADECD380AE990CBB296F4C743EFE"
@@ -306,20 +257,20 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_808F4CA8B165588434AE298D67E5BA9B"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_FA3EF3BF18C1EFC5C7F06220A48BE06E"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Org.Mentalis.Security, Version=1.0.13.711, Culture=neutral, PublicKeyToken=085a8f6006888436"
+            "AssemblyAsmDisplayName" = "8:stringprep, Version=1.0.2188.19227, Culture=neutral, PublicKeyToken=924c5b18328d6f09, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_808F4CA8B165588434AE298D67E5BA9B"
+                    "_FA3EF3BF18C1EFC5C7F06220A48BE06E"
                     {
-                    "Name" = "8:Org.Mentalis.Security.dll"
+                    "Name" = "8:stringprep.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:Org.Mentalis.Security.dll"
+            "SourcePath" = "8:stringprep.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_BE6198C000D6491DA28459E62520961A"
@@ -415,7 +366,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Jabber-Net"
         "ProductCode" = "8:{311A8241-0714-47E5-AACF-711A7461C9D5}"
-        "PackageCode" = "8:{0B0DD39E-755E-443D-82D4-2847CEDA6586}"
+        "PackageCode" = "8:{C320506E-7D92-42EA-976B-B5263A6F70FB}"
         "UpgradeCode" = "8:{5E24CBFF-C2D9-4E37-9B20-CE0550E106A0}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
