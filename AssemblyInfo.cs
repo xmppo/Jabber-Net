@@ -24,8 +24,8 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyDescription("Connect to Jabber (http://www.jabber.org/) from .Net")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Cursive Systems, Inc.")]
-[assembly: AssemblyProduct("")]
-[assembly: AssemblyCopyright("Copyright (c) Cursive, Inc. 2000-2004")]
+[assembly: AssemblyProduct("jabber-net")]
+[assembly: AssemblyCopyright("Copyright (c) Cursive, Inc. 2000-2006")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]         
 [assembly: System.CLSCompliant(true)]
@@ -41,7 +41,7 @@ using System.Runtime.CompilerServices;
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersion("1.0.*")]
+[assembly: AssemblyVersion("1.1.*")]
 
 //
 // In order to sign your assembly you must specify a key to use. Refer to the 

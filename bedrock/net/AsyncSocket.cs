@@ -144,6 +144,8 @@ namespace bedrock.net
         private X509Certificate      m_cert           = null;
         private bool                 m_server         = false;
 		private Stream               m_stream         = null;
+        private MemoryStream         m_pending        = new MemoryStream();
+        private bool                 m_writing        = false;
 #elif !NO_SSL
         /// <summary>
         /// The types of SSL to support.  SSL3 and TLS1 by default.  That should be good enough for 
@@ -990,13 +992,27 @@ namespace bedrock.net
                     }
                     else
                     {
+
+#if NET20
+                        if (m_writing)
+                        {
+                            // already writing.  save this for later.
+                            m_pending.Write(buf, offset, len);
+                        }
+                        else
+                        {
+                            m_writing = true;
+                            // make copy, since we might be a while in async-land
+                            byte[] ret = new byte[len];
+                            Buffer.BlockCopy(buf, offset, ret, 0, len);
+
+                            m_stream.BeginWrite(ret, 0, ret.Length, new AsyncCallback(WroteData), ret);
+                        }
+#else
                         // make copy, since we might be a while in async-land
                         byte[] ret = new byte[len];
                         Buffer.BlockCopy(buf, offset, ret, 0, len);
 
-#if NET20
-                        m_stream.BeginWrite(ret, 0, ret.Length, new AsyncCallback(WroteData), ret);
-#else
                         m_sock.BeginSend(ret, 0, ret.Length, 
                             SocketFlags.None, new AsyncCallback(WroteData), ret);
 #endif
@@ -1058,8 +1074,19 @@ namespace bedrock.net
             }
 
 #if NET20
+            lock (this)
+            {
+                m_writing = false;
+            }
             byte[] buf = (byte[])ar.AsyncState;
             m_listener.OnWrite(this, buf, 0, buf.Length);
+
+            if (m_pending.Length > 0)
+            {
+                buf = m_pending.ToArray();
+                m_pending.SetLength(0L);
+                Write(buf);
+            }
 #else
             if (count > 0)
             {

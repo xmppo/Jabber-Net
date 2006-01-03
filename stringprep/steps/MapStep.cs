@@ -26,6 +26,11 @@ namespace stringprep.steps
         private string[] m_table = null;
         private static IComparer m_comp = new CharMapComparer();
 
+        /// <summary>
+        /// Map from one character to 0+
+        /// </summary>
+        /// <param name="table"></param>
+        /// <param name="name"></param>
         public MapStep(string[] table, string name): base(name)
         {
             m_table = table;

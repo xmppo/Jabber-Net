@@ -88,11 +88,6 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
-    <ProjectReference Include="stringprep\2005-stringprep.csproj">
-      <Name>2005-stringprep</Name>
-      <Project>{060A98C7-BF17-4685-A528-F84C0D8D89AE}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs">
@@ -178,6 +173,9 @@
     </Compile>
     <Compile Include="bedrock\util\Version.cs">
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="jabber\client\DiscoManager.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="jabber\client\JabberClient.cs">
       <SubType>Component</SubType>
@@ -350,6 +348,23 @@
     <Compile Include="jabber\server\XdbTracker.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="stringprep\Nameprep.cs" />
+    <Compile Include="stringprep\Plain.cs" />
+    <Compile Include="stringprep\Profile.cs" />
+    <Compile Include="stringprep\steps\BidiStep.cs" />
+    <Compile Include="stringprep\steps\MapStep.cs" />
+    <Compile Include="stringprep\steps\NFKCStep.cs" />
+    <Compile Include="stringprep\steps\ProfileStep.cs" />
+    <Compile Include="stringprep\steps\ProhibitStep.cs" />
+    <Compile Include="stringprep\steps\RFC3454.cs" />
+    <Compile Include="stringprep\unicode\Combining.cs" />
+    <Compile Include="stringprep\unicode\CombiningData.cs" />
+    <Compile Include="stringprep\unicode\Compose.cs" />
+    <Compile Include="stringprep\unicode\ComposeData.cs" />
+    <Compile Include="stringprep\unicode\Decompose.cs" />
+    <Compile Include="stringprep\unicode\DecomposeData.cs" />
+    <Compile Include="stringprep\XmppNode.cs" />
+    <Compile Include="stringprep\XmppResource.cs" />
     <Compile Include="xpnet\ContentToken.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -387,6 +402,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="jabbernet.key" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="jabber\client\DiscoManager.bmp" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

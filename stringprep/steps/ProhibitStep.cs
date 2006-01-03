@@ -59,6 +59,11 @@ namespace stringprep.steps
         }
         */
 
+        /// <summary>
+        /// These characters are prohibited
+        /// </summary>
+        /// <param name="table"></param>
+        /// <param name="name"></param>
         public ProhibitStep(char[][] table, string name): base(name)
         {
             m_table = table;

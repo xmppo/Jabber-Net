@@ -356,6 +356,21 @@ namespace jabber.protocol.iq
             return items;
         }
 
+        /// <summary>
+        /// Is the given feature URI supported by this entity?
+        /// </summary>
+        /// <param name="featureURI">The URI to check</param>
+        /// <returns></returns>
+        public bool HasFeature(string featureURI)
+        {
+            XmlNodeList nl = GetElementsByTagName("feature", URI.DISCO_INFO);
+            foreach (DiscoFeature feat in nl)
+            {
+                if (feat.Var == featureURI)
+                    return true;
+            }
+            return false;
+        }
     }
 
     /// <summary>

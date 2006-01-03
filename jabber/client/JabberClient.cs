@@ -453,10 +453,41 @@ namespace jabber.client
         /// </summary>
         public void GetAgents()
         {
-            AgentsIQ aiq = new AgentsIQ(Document);
-            aiq.Type = IQType.get;
-            aiq.To = this.Server;
-            Tracker.BeginIQ(aiq, new IqCB(GotAgents), null);
+            DiscoInfoIQ diq = new DiscoInfoIQ(Document);
+            diq.Type = IQType.get;
+            diq.To = this.Server;
+            Tracker.BeginIQ(diq, new IqCB(GotDiscoInfo), null);
+        }
+
+        private void GotDiscoInfo(object sender, IQ iq, object state)
+        {
+            bool error = false;
+            if (iq.Type == IQType.error)
+                error = true;
+            else
+            {
+                DiscoInfo info = iq.Query as DiscoInfo;
+                if (info == null)
+                    error = true;
+                else
+                {
+                    if (!info.HasFeature(URI.DISCO_ITEMS))
+                        error = true;  // wow.  weird server.
+
+                    // TODO: stash away features for this node in discomanager?
+                }
+            }
+
+            if (error)
+            {
+                // TODO: check the error type that jabberd1.4 or XCP 2.x returns
+                // don't bother with browse.
+                AgentsIQ aiq = new AgentsIQ(Document);
+                aiq.Type = IQType.get;
+                aiq.To = this.Server;
+                Tracker.BeginIQ(aiq, new IqCB(GotAgents), null);
+                return;
+            }
         }
 
         private void GotAgents(object sender, IQ iq, object state)
