@@ -305,8 +305,6 @@ namespace jabber.client
                 base.IsAuthenticated = value;
                 if (value)
                 {
-                    if (m_autoAgents)
-                        GetAgents();
                     if (m_autoRoster)
                         GetRoster();
                     if (m_autoPres)

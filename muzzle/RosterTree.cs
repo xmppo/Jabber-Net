@@ -94,15 +94,25 @@ namespace muzzle
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(RosterTree));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RosterTree));
             this.il = new System.Windows.Forms.ImageList(this.components);
             this.tt = new System.Windows.Forms.ToolTip(this.components);
+            this.SuspendLayout();
             // 
             // il
             // 
-            this.il.ImageSize = new System.Drawing.Size(16, 16);
             this.il.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("il.ImageStream")));
             this.il.TransparentColor = System.Drawing.Color.Magenta;
+            this.il.Images.SetKeyName(0, "");
+            this.il.Images.SetKeyName(1, "");
+            this.il.Images.SetKeyName(2, "");
+            this.il.Images.SetKeyName(3, "");
+            this.il.Images.SetKeyName(4, "");
+            this.il.Images.SetKeyName(5, "");
+            this.il.Images.SetKeyName(6, "");
+            this.il.Images.SetKeyName(7, "");
+            this.il.Images.SetKeyName(8, "blank");
+            this.ResumeLayout(false);
 
         }
         #endregion

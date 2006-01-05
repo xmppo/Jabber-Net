@@ -332,7 +332,7 @@ namespace jabber.protocol.iq
         /// Add a feature
         /// </summary>
         /// <returns></returns>
-        public DiscoFeature AddItem()
+        public DiscoFeature AddFeature()
         {
             DiscoFeature i = new DiscoFeature(this.OwnerDocument);
             AddChild(i);

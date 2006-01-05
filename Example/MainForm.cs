@@ -39,7 +39,7 @@ namespace Example
         private jabber.client.PresenceManager pm;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tpDebug;
-        private System.Windows.Forms.RichTextBox debug;
+        private muzzle.BottomScrollRichText debug;
         private System.Windows.Forms.TabPage tpRoster;
         private System.Windows.Forms.StatusBarPanel pnlCon;
         private System.Windows.Forms.StatusBarPanel pnlPresence;
@@ -53,6 +53,9 @@ namespace Example
         private System.Windows.Forms.TextBox txtDebugInput;
         private muzzle.RosterTree roster;
         private System.Windows.Forms.StatusBarPanel pnlSSL;
+        private jabber.client.DiscoManager dm;
+        private TabPage tpServices;
+        private TreeView tvServices;
 
         private bool m_err = false;
 
@@ -65,7 +68,7 @@ namespace Example
             //
             InitializeComponent();
 
-            //jc.AutoStartTLS = false;
+            tvServices.ImageList = roster.ImageList;
             AppDomain.CurrentDomain.UnhandledException +=new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
         }
 
@@ -84,7 +87,7 @@ namespace Example
             base.Dispose( disposing );
         }
 
-                #region Windows Form Designer generated code
+#region Windows Form Designer generated code
         /// <summary>
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
@@ -92,32 +95,36 @@ namespace Example
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(MainForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.sb = new System.Windows.Forms.StatusBar();
             this.pnlCon = new System.Windows.Forms.StatusBarPanel();
             this.pnlSSL = new System.Windows.Forms.StatusBarPanel();
             this.pnlPresence = new System.Windows.Forms.StatusBarPanel();
-            this.jc = new jabber.client.JabberClient(this.components);
-            this.rm = new jabber.client.RosterManager(this.components);
-            this.pm = new jabber.client.PresenceManager(this.components);
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tpRoster = new System.Windows.Forms.TabPage();
-            this.roster = new muzzle.RosterTree();
             this.tpDebug = new System.Windows.Forms.TabPage();
             this.splitter1 = new System.Windows.Forms.Splitter();
-            this.debug = new System.Windows.Forms.RichTextBox();
             this.txtDebugInput = new System.Windows.Forms.TextBox();
             this.mnuPresence = new System.Windows.Forms.ContextMenu();
             this.mnuAvailable = new System.Windows.Forms.MenuItem();
             this.mnuAway = new System.Windows.Forms.MenuItem();
             this.menuItem1 = new System.Windows.Forms.MenuItem();
             this.mnuOffline = new System.Windows.Forms.MenuItem();
+            this.tpServices = new System.Windows.Forms.TabPage();
+            this.tvServices = new System.Windows.Forms.TreeView();
+            this.roster = new muzzle.RosterTree();
+            this.jc = new jabber.client.JabberClient(this.components);
+            this.pm = new jabber.client.PresenceManager(this.components);
+            this.rm = new jabber.client.RosterManager(this.components);
+            this.debug = new muzzle.BottomScrollRichText();
+            this.dm = new jabber.client.DiscoManager(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pnlCon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pnlSSL)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pnlPresence)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tpRoster.SuspendLayout();
             this.tpDebug.SuspendLayout();
+            this.tpServices.SuspendLayout();
             this.SuspendLayout();
             // 
             // sb
@@ -125,9 +132,9 @@ namespace Example
             this.sb.Location = new System.Drawing.Point(0, 416);
             this.sb.Name = "sb";
             this.sb.Panels.AddRange(new System.Windows.Forms.StatusBarPanel[] {
-                                                                                  this.pnlCon,
-                                                                                  this.pnlSSL,
-                                                                                  this.pnlPresence});
+            this.pnlCon,
+            this.pnlSSL,
+            this.pnlPresence});
             this.sb.ShowPanels = true;
             this.sb.Size = new System.Drawing.Size(632, 22);
             this.sb.TabIndex = 0;
@@ -136,53 +143,28 @@ namespace Example
             // pnlCon
             // 
             this.pnlCon.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Spring;
+            this.pnlCon.Name = "pnlCon";
             this.pnlCon.Text = "Click on \"Offline\", and select a presence to log in.";
-            this.pnlCon.Width = 539;
+            this.pnlCon.Width = 538;
             // 
             // pnlSSL
             // 
             this.pnlSSL.Alignment = System.Windows.Forms.HorizontalAlignment.Center;
+            this.pnlSSL.Name = "pnlSSL";
             this.pnlSSL.Width = 30;
             // 
             // pnlPresence
             // 
             this.pnlPresence.Alignment = System.Windows.Forms.HorizontalAlignment.Right;
             this.pnlPresence.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Contents;
+            this.pnlPresence.Name = "pnlPresence";
             this.pnlPresence.Text = "Offline";
             this.pnlPresence.Width = 47;
-            // 
-            // jc
-            // 
-            this.jc.AutoReconnect = 3F;
-            this.jc.InvokeControl = this;
-            this.jc.LocalCertificate = null;
-            this.jc.Password = null;
-            this.jc.User = null;
-            this.jc.OnAuthError += new jabber.client.IQHandler(this.jc_OnAuthError);
-            this.jc.OnReadText += new bedrock.TextHandler(this.jc_OnReadText);
-            this.jc.OnRegisterInfo += new jabber.client.IQHandler(this.jc_OnRegisterInfo);
-            this.jc.OnWriteText += new bedrock.TextHandler(this.jc_OnWriteText);
-            this.jc.OnAuthenticate += new bedrock.ObjectHandler(this.jc_OnAuthenticate);
-            this.jc.OnMessage += new jabber.client.MessageHandler(this.jc_OnMessage);
-            this.jc.OnIQ += new jabber.client.IQHandler(this.jc_OnIQ);
-            this.jc.OnDisconnect += new bedrock.ObjectHandler(this.jc_OnDisconnect);
-            this.jc.OnRegistered += new jabber.client.IQHandler(this.jc_OnRegistered);
-            this.jc.OnStreamError += new jabber.protocol.ProtocolHandler(this.jc_OnStreamError);
-            this.jc.OnError += new bedrock.ExceptionHandler(this.jc_OnError);
-            this.jc.OnConnect += new bedrock.net.AsyncSocketHandler(this.jc_OnConnect);
-            // 
-            // rm
-            // 
-            this.rm.Client = this.jc;
-            this.rm.OnRosterEnd += new bedrock.ObjectHandler(this.rm_OnRosterEnd);
-            // 
-            // pm
-            // 
-            this.pm.Client = this.jc;
             // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tpRoster);
+            this.tabControl1.Controls.Add(this.tpServices);
             this.tabControl1.Controls.Add(this.tpDebug);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
@@ -199,33 +181,19 @@ namespace Example
             this.tpRoster.Size = new System.Drawing.Size(624, 390);
             this.tpRoster.TabIndex = 1;
             this.tpRoster.Text = "Roster";
-            // 
-            // roster
-            // 
-            this.roster.Client = this.jc;
-            this.roster.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.roster.ImageIndex = 1;
-            this.roster.Location = new System.Drawing.Point(0, 0);
-            this.roster.Name = "roster";
-            this.roster.PresenceManager = this.pm;
-            this.roster.RosterManager = this.rm;
-            this.roster.ShowLines = false;
-            this.roster.ShowRootLines = false;
-            this.roster.Size = new System.Drawing.Size(624, 390);
-            this.roster.Sorted = true;
-            this.roster.TabIndex = 0;
-            this.roster.DoubleClick += new System.EventHandler(this.roster_DoubleClick);
+            this.tpRoster.UseVisualStyleBackColor = true;
             // 
             // tpDebug
             // 
-            this.tpDebug.Controls.Add(this.splitter1);
             this.tpDebug.Controls.Add(this.debug);
+            this.tpDebug.Controls.Add(this.splitter1);
             this.tpDebug.Controls.Add(this.txtDebugInput);
             this.tpDebug.Location = new System.Drawing.Point(4, 22);
             this.tpDebug.Name = "tpDebug";
             this.tpDebug.Size = new System.Drawing.Size(624, 390);
             this.tpDebug.TabIndex = 0;
             this.tpDebug.Text = "Debug";
+            this.tpDebug.UseVisualStyleBackColor = true;
             // 
             // splitter1
             // 
@@ -236,16 +204,6 @@ namespace Example
             this.splitter1.TabIndex = 3;
             this.splitter1.TabStop = false;
             // 
-            // debug
-            // 
-            this.debug.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.debug.Location = new System.Drawing.Point(0, 0);
-            this.debug.Name = "debug";
-            this.debug.Size = new System.Drawing.Size(624, 342);
-            this.debug.TabIndex = 2;
-            this.debug.Text = "";
-            this.debug.WordWrap = false;
-            // 
             // txtDebugInput
             // 
             this.txtDebugInput.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -254,16 +212,15 @@ namespace Example
             this.txtDebugInput.Name = "txtDebugInput";
             this.txtDebugInput.Size = new System.Drawing.Size(624, 48);
             this.txtDebugInput.TabIndex = 4;
-            this.txtDebugInput.Text = "";
             this.txtDebugInput.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtDebugInput_KeyUp);
             // 
             // mnuPresence
             // 
             this.mnuPresence.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-                                                                                        this.mnuAvailable,
-                                                                                        this.mnuAway,
-                                                                                        this.menuItem1,
-                                                                                        this.mnuOffline});
+            this.mnuAvailable,
+            this.mnuAway,
+            this.menuItem1,
+            this.mnuOffline});
             // 
             // mnuAvailable
             // 
@@ -290,6 +247,91 @@ namespace Example
             this.mnuOffline.Text = "Offline";
             this.mnuOffline.Click += new System.EventHandler(this.mnuOffline_Click);
             // 
+            // tpServices
+            // 
+            this.tpServices.Controls.Add(this.tvServices);
+            this.tpServices.Location = new System.Drawing.Point(4, 22);
+            this.tpServices.Name = "tpServices";
+            this.tpServices.Size = new System.Drawing.Size(624, 390);
+            this.tpServices.TabIndex = 2;
+            this.tpServices.Text = "Services";
+            this.tpServices.UseVisualStyleBackColor = true;
+            // 
+            // tvServices
+            // 
+            this.tvServices.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tvServices.Location = new System.Drawing.Point(0, 0);
+            this.tvServices.Name = "tvServices";
+            this.tvServices.ShowLines = false;
+            this.tvServices.ShowPlusMinus = false;
+            this.tvServices.ShowRootLines = false;
+            this.tvServices.Size = new System.Drawing.Size(624, 390);
+            this.tvServices.TabIndex = 0;
+            this.tvServices.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.tvServices_NodeMouseDoubleClick);
+            this.tvServices.AfterCollapse += new System.Windows.Forms.TreeViewEventHandler(this.tvServices_AfterCollapse);
+            this.tvServices.AfterExpand += new System.Windows.Forms.TreeViewEventHandler(this.tvServices_AfterExpand);
+            // 
+            // roster
+            // 
+            this.roster.Client = this.jc;
+            this.roster.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.roster.ImageIndex = 1;
+            this.roster.Location = new System.Drawing.Point(0, 0);
+            this.roster.Name = "roster";
+            this.roster.PresenceManager = this.pm;
+            this.roster.RosterManager = this.rm;
+            this.roster.SelectedImageIndex = 0;
+            this.roster.ShowLines = false;
+            this.roster.ShowRootLines = false;
+            this.roster.Size = new System.Drawing.Size(624, 390);
+            this.roster.Sorted = true;
+            this.roster.TabIndex = 0;
+            this.roster.DoubleClick += new System.EventHandler(this.roster_DoubleClick);
+            // 
+            // jc
+            // 
+            this.jc.AutoReconnect = 3F;
+            this.jc.AutoStartTLS = true;
+            this.jc.InvokeControl = this;
+            this.jc.LocalCertificate = null;
+            this.jc.Password = null;
+            this.jc.User = null;
+            this.jc.OnReadText += new bedrock.TextHandler(this.jc_OnReadText);
+            this.jc.OnMessage += new jabber.client.MessageHandler(this.jc_OnMessage);
+            this.jc.OnConnect += new bedrock.net.AsyncSocketHandler(this.jc_OnConnect);
+            this.jc.OnAuthenticate += new bedrock.ObjectHandler(this.jc_OnAuthenticate);
+            this.jc.OnAuthError += new jabber.client.IQHandler(this.jc_OnAuthError);
+            this.jc.OnDisconnect += new bedrock.ObjectHandler(this.jc_OnDisconnect);
+            this.jc.OnStreamError += new jabber.protocol.ProtocolHandler(this.jc_OnStreamError);
+            this.jc.OnError += new bedrock.ExceptionHandler(this.jc_OnError);
+            this.jc.OnRegisterInfo += new jabber.client.IQHandler(this.jc_OnRegisterInfo);
+            this.jc.OnRegistered += new jabber.client.IQHandler(this.jc_OnRegistered);
+            this.jc.OnIQ += new jabber.client.IQHandler(this.jc_OnIQ);
+            this.jc.OnWriteText += new bedrock.TextHandler(this.jc_OnWriteText);
+            // 
+            // pm
+            // 
+            this.pm.Client = this.jc;
+            // 
+            // rm
+            // 
+            this.rm.Client = this.jc;
+            this.rm.OnRosterEnd += new bedrock.ObjectHandler(this.rm_OnRosterEnd);
+            // 
+            // debug
+            // 
+            this.debug.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.debug.Location = new System.Drawing.Point(0, 0);
+            this.debug.Name = "debug";
+            this.debug.Size = new System.Drawing.Size(624, 339);
+            this.debug.TabIndex = 2;
+            this.debug.Text = "";
+            this.debug.WordWrap = false;
+            // 
+            // dm
+            // 
+            this.dm.Client = this.jc;
+            // 
             // MainForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
@@ -307,10 +349,12 @@ namespace Example
             this.tabControl1.ResumeLayout(false);
             this.tpRoster.ResumeLayout(false);
             this.tpDebug.ResumeLayout(false);
+            this.tpDebug.PerformLayout();
+            this.tpServices.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
-                #endregion
+#endregion
 
         /// <summary>
         /// The MainForm entry point for the application.
@@ -343,7 +387,7 @@ namespace Example
             debug.AppendText("RECV: ");
             debug.SelectionColor = Color.Black;
             debug.AppendText(txt);
-            debug.AppendText("\r\n");        
+            debug.AppendMaybeScroll("\r\n");        
         }
 
         private void jc_OnWriteText(object sender, string txt)
@@ -357,7 +401,7 @@ namespace Example
             debug.AppendText("SEND: ");
             debug.SelectionColor = Color.Black;
             debug.AppendText(txt);
-            debug.AppendText("\r\n");
+            debug.AppendMaybeScroll("\r\n");
         }
 
 
@@ -376,6 +420,31 @@ namespace Example
                 pnlSSL.ToolTipText = cert;
             }
 #endif
+            jabber.client.DiscoNode dn = jabber.client.DiscoNode.GetNode(jc.Server, null);
+            TreeNode tn = tvServices.Nodes.Add(dn.Key, dn.Name);
+            tn.ToolTipText = dn.Key.Replace('\u0000', '\n');
+            tn.Tag = dn;
+            tn.ImageIndex = 8;
+            tn.SelectedImageIndex = 8;
+            dm.BeginGetItems(dn.JID, dn.Node, new jabber.client.DiscoNodeHandler(GotItems));
+        }
+
+        private void GotItems(jabber.client.DiscoNode node)
+        {
+            TreeNode[] nodes = tvServices.Nodes.Find(node.Key, true);
+            foreach (TreeNode n in nodes)
+            {
+                n.ImageIndex = 7;
+                n.SelectedImageIndex = 7;
+                foreach (jabber.client.DiscoNode dn in node.Children)
+                {
+                    TreeNode tn = n.Nodes.Add(dn.Key, dn.Name);
+                    tn.ToolTipText = dn.Key.Replace('\u0000', '\n');
+                    tn.Tag = dn;
+                    tn.ImageIndex = 8;
+                    tn.SelectedImageIndex = 8;
+                }
+            }
         }
 
         private void jc_OnDisconnect(object sender)
@@ -384,6 +453,7 @@ namespace Example
             pnlSSL.Text = "";
             pnlSSL.ToolTipText = "";
 
+            tvServices.Nodes.Clear();
             if (!m_err)
                 pnlCon.Text = "Disconnected";
         }
@@ -555,6 +625,27 @@ namespace Example
         {
             if (jc.IsAuthenticated)
                 jc.Close();
+        }
+
+        private void tvServices_AfterExpand(object sender, TreeViewEventArgs e)
+        {
+            e.Node.ImageIndex = 6;
+            e.Node.SelectedImageIndex = 6;
+        }
+
+        private void tvServices_AfterCollapse(object sender, TreeViewEventArgs e)
+        {
+            e.Node.ImageIndex = 7;
+            e.Node.SelectedImageIndex = 7;
+        }
+
+        private void tvServices_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            jabber.client.DiscoNode dn = (jabber.client.DiscoNode)e.Node.Tag;
+            if (dn.Children == null)
+            {
+                dm.BeginGetItems(dn.JID, dn.Node, new jabber.client.DiscoNodeHandler(GotItems));
+            }
         }
     }
 }

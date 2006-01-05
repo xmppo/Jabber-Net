@@ -16,6 +16,9 @@ using System;
 
 namespace stringprep.unicode
 {
+    /// <summary>
+    /// Combining classes for Unicode characters.
+    /// </summary>
     public class Combining
     {
         /// <summary>
