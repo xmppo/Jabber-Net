@@ -944,7 +944,8 @@ namespace bedrock.net
                 //byte[] ret = new byte[count];
                 //Buffer.BlockCopy(m_buf, 0, ret, 0, count);
 
-                if (m_listener.OnRead(this, m_buf, 0, count))
+                if (m_listener.OnRead(this, m_buf, 0, count) && 
+                    (m_state == SocketState.Connected))
                 {
                     RequestRead();
                 }
