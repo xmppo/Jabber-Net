@@ -549,6 +549,7 @@ namespace bedrock.net
                 if ((addr == null) || (addr.IP == null) || (addr.Endpoint == null))
                 {
                     FireError(new AsyncSocketConnectionException("Bad host: " + addr.Hostname));
+                    return;
                 }
 
 
