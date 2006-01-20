@@ -304,10 +304,13 @@ namespace jabber.protocol.iq
         /// Add an identity
         /// </summary>
         /// <returns></returns>
-        public DiscoIdentity AddIdentity()
+        public DiscoIdentity AddIdentity(string category, string discoType, string name)
         {
             DiscoIdentity i = new DiscoIdentity(this.OwnerDocument);
             AddChild(i);
+            i.Category = category;
+            i.Type = discoType;
+            i.Named = name;
             return i;
         }
 
@@ -332,10 +335,11 @@ namespace jabber.protocol.iq
         /// Add a feature
         /// </summary>
         /// <returns></returns>
-        public DiscoFeature AddFeature()
+        public DiscoFeature AddFeature(string featureURI)
         {
             DiscoFeature i = new DiscoFeature(this.OwnerDocument);
             AddChild(i);
+            i.Var = featureURI;
             return i;
         }
 

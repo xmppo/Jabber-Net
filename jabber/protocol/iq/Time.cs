@@ -72,13 +72,24 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
+        /// Set the current UTC, TZ, and Display based on the machine's current settings/locale.
+        /// </summary>
+        public void SetCurrentTime()
+        {
+            DateTime dt = DateTime.Now;
+            UTC = dt.ToUniversalTime();
+            TZ = TimeZone.CurrentTimeZone.IsDaylightSavingTime(dt) ?
+                TimeZone.CurrentTimeZone.DaylightName : TimeZone.CurrentTimeZone.StandardName;
+            Display = dt.ToLongDateString() + " " + dt.ToLongTimeString();
+        }
+
+        /// <summary>
         /// Universal coordinated time.  (More or less GMT).
         /// </summary>
-        //TODO: return System.DateTime?
-        public string UTC 
+        public DateTime UTC 
         {
-            get { return GetElem("utc"); }
-            set { SetElem("utc", value); }
+            get { return JabberDate(GetElem("utc")); }
+            set { SetElem("utc", JabberDate(value)); }
         }
 
         /// <summary>

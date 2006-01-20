@@ -87,6 +87,9 @@ namespace jabber.client
             return jid + '\u0000' + node;
         }
 
+        /// <summary>
+        /// A JID/Node key for Hash lookup.
+        /// </summary>
         public string Key
         {
             get { return GetKey(m_jid, m_node); }
@@ -134,6 +137,7 @@ namespace jabber.client
     public class DiscoNode : JIDNode, IEnumerable
     {
         private static Tree m_items = new Tree();
+
 
         public Set Children = null;
         public Set Features = null;
