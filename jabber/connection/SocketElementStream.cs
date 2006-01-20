@@ -824,6 +824,7 @@ namespace jabber.connection
         /// <param name="clean">true for graceful shutdown</param>
         public virtual void Close(bool clean)
         {
+            bool doClose = false;
             lock (StateLock)
             {
                 if ((m_state == RunningState.Instance) && (clean))
@@ -834,9 +835,11 @@ namespace jabber.connection
                 if (m_state != ClosedState.Instance)
                 {
                     m_state = ClosingState.Instance;
-                    m_sock.Close();
+                    doClose = true;
                 }
             }
+            if (doClose && (m_sock != null))
+                m_sock.Close();
         }
 
         /// <summary>
