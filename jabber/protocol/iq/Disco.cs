@@ -12,7 +12,6 @@
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
-
 using System.Xml;
 
 using bedrock.util;
@@ -48,6 +47,18 @@ namespace jabber.protocol.iq
         {
             this.Query = new DiscoItems(doc);
         }
+        
+        public string Node
+        {
+            get
+            {
+                return ((DiscoItems)this.Query).Node;
+            }
+            set
+            {
+                ((DiscoItems)this.Query).Node = value;
+            }
+        }
     }
 
     /// <summary>
@@ -63,6 +74,18 @@ namespace jabber.protocol.iq
         public DiscoInfoIQ(XmlDocument doc) : base(doc)
         {
             this.Query = new DiscoInfo(doc);
+        }
+
+        public string Node
+        {
+            get
+            {
+                return ((DiscoInfo)this.Query).Node;
+            }
+            set
+            {
+                ((DiscoInfo)this.Query).Node = value;
+            }
         }
     }
 
