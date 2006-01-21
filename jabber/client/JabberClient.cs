@@ -59,9 +59,7 @@ namespace jabber.client
         private bool m_autoLogin  = true;
         private bool m_autoRoster = true;
         private bool m_autoPres   = true;
-        private bool m_autoAgents = true;
 
-        private Agent[] m_agents = null;
         private IQTracker m_tracker = null;
 
 
@@ -129,13 +127,6 @@ namespace jabber.client
         [Category("Protocol")]
         [Description("Authentication failed.")]
         public event IQHandler OnAuthError;
-
-        /// <summary>
-        /// Agents query returned.  JabberClient.Agents is now valid.
-        /// </summary>
-        [Category("Protocol")]
-        [Description("We received the answer to our agents query.")]
-        public event IQHandler OnAgents;
 
         /// <summary>
         /// AutoLogin is false, and it's time to log in.
@@ -237,18 +228,6 @@ namespace jabber.client
             get { return m_autoPres; }
             set { m_autoPres = value; }
         }
-
-        /// <summary>
-        /// Automatically send agents request on connection.
-        /// </summary>
-        [Description("Automatically send agents request on connection.")]
-        [DefaultValue(true)]
-        [Category("Automation")]
-        public bool AutoAgents
-        {
-            get { return m_autoAgents; }
-            set { m_autoAgents = value; }
-        }
         
         /// <summary>
         /// The connecting resource.  
@@ -262,16 +241,6 @@ namespace jabber.client
         {
             get { return m_resource; }
             set { m_resource = value; }
-        }
-
-
-        /// <summary>
-        /// The list of agents available at the server
-        /// </summary>
-        [Browsable(false)]
-        public Agent[] Agents
-        {
-            get { return m_agents; }
         }
 
         /// <summary>
@@ -526,6 +495,12 @@ namespace jabber.client
 
         private void OnGetRegister(object sender, IQ iq, object data)
         {
+            if (iq == null)
+            {
+                FireOnError(new TimeoutException(data));
+                return;
+            }
+            
             if (iq.Type == IQType.error)
             {
                 if (OnRegistered != null)
@@ -584,7 +559,7 @@ namespace jabber.client
 
         private void OnGetAuth(object sender, IQ i, object data)
         {
-            if (i.Type != IQType.result)
+            if ((i == null) || (i.Type != IQType.result))
             {
                 FireAuthError(i);
                 return;
@@ -636,7 +611,7 @@ namespace jabber.client
 
         private void OnSetAuth(object sender, IQ i, object data)
         {
-            if (i.Type != IQType.result)
+            if ((i == null) || (i.Type != IQType.result))
                 FireAuthError(i);
             else
                 IsAuthenticated = true;
@@ -784,8 +759,10 @@ namespace jabber.client
 
         private void GotResource(object sender, IQ iq, object state)
         {
-            jabber.protocol.stream.Features feat = state as jabber.protocol.stream.Features;
-            if (iq.Type != IQType.result)
+            jabber.protocol.stream.Features feat =
+                state as jabber.protocol.stream.Features;
+
+            if ((iq == null) || (iq.Type != IQType.result))
             {
                 FireOnError(new AuthenticationFailedException());
                 return;
@@ -805,7 +782,7 @@ namespace jabber.client
 
         private void GotSession(object sender, IQ iq, object state)
         {
-            if (iq.Type == IQType.result)
+            if ((iq != null) && (iq.Type == IQType.result))
                 IsAuthenticated = true;
             else
                 FireOnError(new AuthenticationFailedException());
