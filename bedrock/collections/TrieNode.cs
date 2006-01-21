@@ -29,7 +29,7 @@ namespace bedrock.collections
         //public const byte MIN_CHAR  = (byte) ' ';
         //public const byte MAX_CHAR  = (byte) '~';
         //public const byte NUM_CHARS = MAX_CHAR - MIN_CHAR + 1;
-        private static readonly System.Text.Encoding ENCODING = System.Text.Encoding.Default;
+
         //private TrieNode[] m_children = new TrieNode[NUM_CHARS];
         private Tree       m_children = new Tree();
         private TrieNode   m_parent   = null;
