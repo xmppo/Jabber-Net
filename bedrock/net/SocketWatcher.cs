@@ -22,6 +22,8 @@ using bedrock.collections;
 
 #if NET20
 using System.Security.Cryptography.X509Certificates;
+#elif __MonoCS__
+
 #elif !NO_SSL
 using Org.Mentalis.Security.Certificates;
 #endif
@@ -51,6 +53,8 @@ namespace bedrock.net
 
 #if NET20
         private X509Certificate m_cert = null;
+#elif __MonoCS__
+
 #elif !NO_SSL
         private Certificate m_cert = null;
 #endif
@@ -143,6 +147,7 @@ namespace bedrock.net
         {
             throw new NotImplementedException("Not implemented yet.  Need to figure out how to search for 'server' certs.");
         }
+#elif __MonoCS__
 
 #elif !NO_SSL
         /// <summary>
@@ -222,7 +227,7 @@ namespace bedrock.net
             AsyncSocket result = new AsyncSocket(this, listener, SSL, m_synch);
             if (SSL)
             {
-#if !NO_SSL
+#if !NO_SSL && !__MonoCS__
                 result.LocalCertificate = m_cert;
 #else
                 throw new NotImplementedException("SSL not compiled in");
@@ -303,7 +308,7 @@ namespace bedrock.net
             result = new AsyncSocket(this, listener, SSL, m_synch);
             if (SSL)
             {
-#if !NO_SSL
+#if !NO_SSL && !__MonoCS__
                 result.LocalCertificate = m_cert;
 #else
                 throw new NotImplementedException("SSL not compiled in");

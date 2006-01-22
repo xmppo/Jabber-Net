@@ -51,7 +51,6 @@ $(BASEDIR)/bedrock/util/Version.cs \
 $(BASEDIR)/jabber/JID.cs \
 $(BASEDIR)/jabber/client/JabberClient.cs \
 $(BASEDIR)/jabber/client/PresenceManager.cs \
-$(BASEDIR)/jabber/client/ServiceManager.cs \
 $(BASEDIR)/jabber/client/RosterManager.cs \
 $(BASEDIR)/jabber/connection/IQTracker.cs \
 $(BASEDIR)/jabber/connection/SocketElementStream.cs \
@@ -111,7 +110,25 @@ $(BASEDIR)/xpnet/Encoding.cs \
 $(BASEDIR)/xpnet/Exceptions.cs \
 $(BASEDIR)/xpnet/Position.cs \
 $(BASEDIR)/xpnet/Token.cs \
-$(BASEDIR)/xpnet/UTF8Encoding.cs
+$(BASEDIR)/xpnet/UTF8Encoding.cs \
+$(BASEDIR)/stringprep/Nameprep.cs \
+$(BASEDIR)/stringprep/Plain.cs \
+$(BASEDIR)/stringprep/Profile.cs \
+$(BASEDIR)/stringprep/steps/BidiStep.cs \
+$(BASEDIR)/stringprep/steps/MapStep.cs \
+$(BASEDIR)/stringprep/steps/NFKCStep.cs \
+$(BASEDIR)/stringprep/steps/ProfileStep.cs \
+$(BASEDIR)/stringprep/steps/ProhibitStep.cs \
+$(BASEDIR)/stringprep/steps/RFC3454.cs \
+$(BASEDIR)/stringprep/unicode/Combining.cs \
+$(BASEDIR)/stringprep/unicode/CombiningData.cs \
+$(BASEDIR)/stringprep/unicode/Compose.cs \
+$(BASEDIR)/stringprep/unicode/ComposeData.cs \
+$(BASEDIR)/stringprep/unicode/Decompose.cs \
+$(BASEDIR)/stringprep/unicode/DecomposeData.cs \
+$(BASEDIR)/stringprep/XmppNode.cs \
+$(BASEDIR)/stringprep/XmppResource.cs
+
 
 RESOURCES = \
 -resource:$(BASEDIR)/jabber/client/JabberClient.resx \
@@ -123,20 +140,17 @@ RESOURCES = \
 -resource:$(BASEDIR)/jabber/client/RosterManager.bmp \
 -resource:$(BASEDIR)/jabber/server/JabberService.bmp
 
-SYSTEM_REFERENCES = -r:System.dll -r:System.Xml.dll
+SYSTEM_REFERENCES = -r:System.dll -r:System.Xml.dll -r:Mono.Security.dll
 
 MCS_OPTIONS =   -lib:$(BASEDIR)/bin/debug $(DEBUG) \
-		-define:NO_SSL \
-		-define:DEBUG \
-		-define:NO_STRINGPREP
+		-define:DEBUG
 
-ASSEMBLIES = #-r:stringprep.dll
+ASSEMBLIES =
 
 all:  subdirs
 
-bin/debug/jabber-net.dll: $(SOURCES) # $(BASEDIR)/stringprep/bin/debug/stringprep.dll
+bin/debug/jabber-net.dll: $(SOURCES)
 	-mkdir -p bin/debug
-#	cp -f $(BASEDIR)/stringprep/bin/debug/stringprep.dll bin/debug/
 	cd bin/debug && mcs $(MCS_OPTIONS) -target:library \
 	-out:"jabber-net.dll" $(RESOURCES) $(SYSTEM_REFERENCES) \
 	$(SOURCES) $(ASSEMBLIES) 

@@ -29,6 +29,8 @@ using jabber.connection.sasl;
 
 #if NET20
 using System.Security.Cryptography.X509Certificates;
+#elif __MonoCS__
+
 #elif !NO_SSL
 using Org.Mentalis.Security.Certificates;
 #endif
@@ -388,11 +390,14 @@ namespace jabber.connection
         /// </summary>
         /// <param name="filename">A .pfx or .cer file</param>
         /// <param name="password">The password, if this is a .pfx file, null if .cer file.</param>
-        public void SetCertificateFile(string filename, System.Security.SecureString password)
+        public void SetCertificateFile(string filename,
+	                               System.Security.SecureString password)
         {
             if (m_watcher != null)
                 m_watcher.SetCertificateFile(filename, password);
         }
+#elif __MonoCS__
+
 #elif !NO_SSL
         /// <summary>
         /// The certificate to be used for the local side of sockets, with SSL on.

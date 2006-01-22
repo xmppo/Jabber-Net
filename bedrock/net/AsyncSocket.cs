@@ -24,6 +24,8 @@ using bedrock.util;
 using System.Security.Authentication;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
+#elif __MonoCS__
+
 #elif !NO_SSL
 using Org.Mentalis.Security.Ssl;
 using Org.Mentalis.Security.Certificates;
@@ -142,10 +144,11 @@ namespace bedrock.net
         private SslProtocols         m_secureProtocol = SslProtocols.None;
         private Socket               m_sock           = null;
         private X509Certificate      m_cert           = null;
-        private bool                 m_server         = false;
-		private Stream               m_stream         = null;
-        private MemoryStream         m_pending        = new MemoryStream();
+	private Stream               m_stream         = null;
+	private MemoryStream         m_pending        = new MemoryStream();
         private bool                 m_writing        = false;
+#elif __MonoCS__
+        private Socket               m_sock           = null;
 #elif !NO_SSL
         /// <summary>
         /// The types of SSL to support.  SSL3 and TLS1 by default.  That should be good enough for 
@@ -160,7 +163,8 @@ namespace bedrock.net
         private Socket               m_sock           = null;
 #endif
 
-		private byte[]               m_buf            = new byte[BUFSIZE];
+        private bool                 m_server         = false;
+	private byte[]               m_buf            = new byte[BUFSIZE];
         private SocketState          m_state          = SocketState.Created;
         private SocketWatcher        m_watcher        = null;
         private Address              m_addr;
@@ -195,6 +199,8 @@ namespace bedrock.net
             {
 #if NET20
                 m_secureProtocol = SSLProtocols;
+#elif __MonoCS__
+                throw new NotImplementedException("SSL not compiled in");
 #elif !NO_SSL
                 m_secureProtocol = SSLProtocols;
 #else
@@ -295,6 +301,8 @@ namespace bedrock.net
             get { return m_cert; }
             set { m_cert = value; }
         }
+#elif __MonoCS__
+
 #elif !NO_SSL
         /// <summary>
         /// Get the certificate of the remote endpoint of the socket.
@@ -327,6 +335,8 @@ namespace bedrock.net
                     return false;
                 return str.IsEncrypted;
             }
+#elif __MonoCS__
+            get { return false; }
 #elif !NO_SSL
             get { return (m_secureProtocol != SecureProtocol.None); }
 #else
@@ -384,7 +394,7 @@ namespace bedrock.net
             {
                 m_addr = addr;
 
-#if !NO_SSL && !NET20
+#if !NO_SSL && !NET20 && !__MonoCS__
                 m_credUse = ConnectionEnd.Server;
                 SecurityOptions options = new SecurityOptions(m_secureProtocol, m_cert, m_credUse, CredentialVerification.Auto, null, addr.Hostname, SecurityFlags.Default, SslAlgorithms.ALL, null);
 
@@ -425,7 +435,7 @@ namespace bedrock.net
             }
             if (m_synch)
             {                    
-#if !NO_SSL && !NET20
+#if !NO_SSL && !NET20 && !__MonoCS__
                 SecureSocket cli = (SecureSocket) m_sock.Accept();
 #else
                 Socket cli = m_sock.Accept();
@@ -447,7 +457,7 @@ namespace bedrock.net
         /// <param name="ar"></param>
         private void ExecuteAccept(IAsyncResult ar)
         {
-#if !NO_SSL && !NET20
+#if !NO_SSL && !NET20 && !__MonoCS__
             SecureSocket cli = (SecureSocket) m_sock.EndAccept(ar);
 #else
             Socket cli = (Socket) m_sock.EndAccept(ar);
@@ -467,6 +477,8 @@ namespace bedrock.net
             cliCon.m_stream = new NetworkStream(cliCon.m_sock);
             cliCon.m_server = true;
             cliCon.LocalCertificate = m_cert;
+#elif __MonoCS__
+
 #elif !NO_SSL
             cliCon.m_credUse = ConnectionEnd.Server;
 #endif
@@ -560,6 +572,21 @@ namespace bedrock.net
 
 #if NET20
                 if (Socket.OSSupportsIPv6 && (m_addr.Endpoint.AddressFamily == AddressFamily.InterNetworkV6))
+                {
+                    Console.WriteLine("ipv6");
+                    m_sock = new Socket(AddressFamily.InterNetworkV6, 
+                        SocketType.Stream, 
+                        ProtocolType.Tcp);
+                }
+                else
+                {
+                    Console.WriteLine("ipv4");
+                    m_sock = new Socket(AddressFamily.InterNetwork, 
+                        SocketType.Stream, 
+                        ProtocolType.Tcp);
+                }
+#elif __MonoCS__
+                if (Socket.SupportsIPv6 && (m_addr.Endpoint.AddressFamily == AddressFamily.InterNetworkV6))
                 {
                     Console.WriteLine("ipv6");
                     m_sock = new Socket(AddressFamily.InterNetworkV6, 
@@ -738,6 +765,11 @@ namespace bedrock.net
                 ((SslStream)m_stream).AuthenticateAsClient(m_hostid, certs, m_secureProtocol, false);
             }
         }
+#elif __MonoCS__
+        public override void StartTLS()
+        {
+	    throw new NotImplementedException("SSL not on in Mono yet");
+	}
 
 #elif !NO_SSL
         /// <summary>

@@ -447,35 +447,10 @@ namespace jabber.client
 
             if (error)
             {
-                // TODO: check the error type that jabberd1.4 or XCP 2.x returns
-                // don't bother with browse.
-                AgentsIQ aiq = new AgentsIQ(Document);
-                aiq.Type = IQType.get;
-                aiq.To = this.Server;
-                Tracker.BeginIQ(aiq, new IqCB(GotAgents), null);
-                return;
+                // TODO: check the error type that jabberd1.4 or XCP 2.x return
             }
         }
 
-        private void GotAgents(object sender, IQ iq, object state)
-        {
-            AgentsQuery aq = (AgentsQuery) iq["query", URI.AGENTS];
-            if (iq.Type != IQType.error)
-            {
-                m_agents = aq.GetAgents();
-                if (OnAgents != null)
-                {
-                    if (InvokeRequired)
-                        CheckedInvoke(OnAgents, new object[] {this, iq});
-                    else
-                        OnAgents(this, iq);
-                }
-            }
-            else
-            {
-                FireOnError(new ProtocolException(iq));
-            }
-        }
 
         /// <summary>
         /// Attempt to register a new user.  This will fire OnRegisterInfo to retrieve 
@@ -762,7 +737,12 @@ namespace jabber.client
             jabber.protocol.stream.Features feat =
                 state as jabber.protocol.stream.Features;
 
-            if ((iq == null) || (iq.Type != IQType.result))
+	    if (iq == null)
+	    {
+                FireOnError(new AuthenticationFailedException("Timeout authenticating"));
+		return;
+	    }
+            if (iq.Type != IQType.result)
             {
                 FireOnError(new AuthenticationFailedException());
                 return;
