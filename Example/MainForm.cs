@@ -59,6 +59,7 @@ namespace Example
         private TabPage tpServices;
         private TreeView tvServices;
         private MenuItem menuItem2;
+        private bedrock.util.IdleTime m_idle;
 
         private bool m_err = false;
 
@@ -71,8 +72,25 @@ namespace Example
             //
             InitializeComponent();
 
+            m_idle = new bedrock.util.IdleTime(10, 5 * 60); // check every 10 secs to see if we've been away 5 mins.
+//            m_idle = new bedrock.util.IdleTime(1, 5);
+            m_idle.InvokeControl = jc.InvokeControl;
+            m_idle.OnIdle += new bedrock.util.SpanEventHandler(m_idle_OnIdle);
+            m_idle.OnUnIdle += new bedrock.util.SpanEventHandler(m_idle_OnUnIdle);
             tvServices.ImageList = roster.ImageList;
             AppDomain.CurrentDomain.UnhandledException +=new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
+        }
+
+        void m_idle_OnUnIdle(object sender, TimeSpan span)
+        {
+            jc.Presence(PresenceType.available, "Available", null, 0);
+            pnlPresence.Text = "Available";            
+        }
+
+        private void m_idle_OnIdle(object sender, TimeSpan span)
+        {
+            jc.Presence(PresenceType.available, "Auto-away", "away", 0);
+            pnlPresence.Text = "Away";
         }
 
         /// <summary>
@@ -80,6 +98,8 @@ namespace Example
         /// </summary>
         protected override void Dispose( bool disposing )
         {
+            m_idle.Enabled = false;
+
             if( disposing )
             {
                 if (components != null) 
@@ -440,6 +460,7 @@ namespace Example
             tn.ImageIndex = 8;
             tn.SelectedImageIndex = 8;
             dm.BeginGetItems(dn.JID, dn.Node, new jabber.client.DiscoNodeHandler(GotItems));
+            m_idle.Enabled = true;
         }
 
         private void GotItems(jabber.client.DiscoNode node)
@@ -462,6 +483,7 @@ namespace Example
 
         private void jc_OnDisconnect(object sender)
         {
+            m_idle.Enabled = false;
             pnlPresence.Text = "Offline";
             pnlSSL.Text = "";
             pnlSSL.ToolTipText = "";
@@ -473,6 +495,8 @@ namespace Example
 
         private void jc_OnError(object sender, System.Exception ex)
         {
+            m_idle.Enabled = false;
+
 #if !NO_SSL && !NET20
             if (ex is Org.Mentalis.Security.Certificates.CertificateException)
                 m_err = true;

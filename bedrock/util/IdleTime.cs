@@ -18,8 +18,10 @@ using System.Runtime.InteropServices;
 
 namespace bedrock.util
 {
+    public delegate void SpanEventHandler(object sender, TimeSpan span);
+
     /// <summary>
-    /// Idle time calculations.
+    /// Idle time calculations and notifications.
     /// </summary>
 	public class IdleTime
 	{
@@ -46,20 +48,97 @@ namespace bedrock.util
             return (Environment.TickCount - lii.dwTime) / 1000.0;
         }
 
+        /// <summary>
+        /// Fired when user has been idle (mouse, keyboard) for the configured number of seconds.
+        /// </summary>
+        public event SpanEventHandler OnIdle;
+
+        /// <summary>
+        /// Fired when the user comes back.
+        /// </summary>
+        public event SpanEventHandler OnUnIdle;
+
         private System.Timers.Timer m_timer = null;
         private int m_notifySecs;
+        private int m_pollSecs;
+        private bool m_idle = false;
+        private DateTime m_idleStart = DateTime.MinValue;
+        private System.ComponentModel.ISynchronizeInvoke m_invoker = null;
 
+        /// <summary>
+        /// Create an idle timer.  Make sure to set Enabled = true to start.
+        /// </summary>
+        /// <param name="pollSecs">Every pollSecs seconds, poll to see how long we've been away.</param>
+        /// <param name="notifySecs">If we've been away notifySecs seconds, fire notification.</param>
         public IdleTime(int pollSecs, int notifySecs)
         {
+            m_pollSecs = pollSecs;
             m_notifySecs = notifySecs;
-            m_timer = new System.Timers.Timer(pollSecs);
+            if (m_pollSecs > m_notifySecs)
+                throw new ArgumentException("Poll more often than you notify.");
+            m_timer = new System.Timers.Timer(m_pollSecs);
             m_timer.Elapsed += new System.Timers.ElapsedEventHandler(m_timer_Elapsed);
         }
 
-        void m_timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        /// <summary>
+        /// Is the timer running?
+        /// </summary>
+        public bool Enabled
+        {
+            get { return m_timer.Enabled; }
+            set { m_timer.Enabled = value; }
+        }
+
+        /// <summary>
+        /// Fire events in the GUI thread for this control.
+        /// </summary>
+        public System.ComponentModel.ISynchronizeInvoke InvokeControl
+        {
+            get { return m_invoker;  }
+            set { m_invoker = value; }
+        }
+
+        private void m_timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             double idle = GetIdleTime();
-            if 
+            if (m_idle)
+            {
+                if (idle < m_pollSecs)
+                {
+                    m_idle = false;
+                    if (OnUnIdle != null)
+                    {
+                        TimeSpan span = DateTime.Now - m_idleStart;
+                        if ((m_invoker != null) &&
+                            (m_invoker.InvokeRequired))
+                        {
+                            m_invoker.Invoke(OnUnIdle, new object[] { this, span });
+                        }
+                        else
+                            OnUnIdle(this, span);
+                    }
+                    m_idleStart = DateTime.MinValue;
+                }
+            }
+            else
+            {
+                if (idle > m_notifySecs)
+                {
+                    m_idle = true;
+                    m_idleStart = DateTime.Now;
+                    if (OnIdle != null)
+                    {
+                        TimeSpan span = new TimeSpan((long)(idle * 1000L));
+                        if ((m_invoker != null) &&
+                            (m_invoker.InvokeRequired))
+                        {
+                            m_invoker.Invoke(OnIdle, new object[] { this, span });
+                        }
+                        else
+                            OnIdle(this, span);
+                    }
+                }
+            }
         }
 	}
 }
