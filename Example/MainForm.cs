@@ -18,7 +18,6 @@ using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
-using System.Runtime.InteropServices;
 
 using jabber;
 using jabber.protocol;
@@ -62,26 +61,6 @@ namespace Example
         private MenuItem menuItem2;
 
         private bool m_err = false;
-
-
-        [StructLayout(LayoutKind.Sequential)]
-        struct LASTINPUTINFO
-        {
-            public int cbSize;
-            public int dwTime;
-        }
-
-        [DllImport("User32.dll")]
-        private static extern bool GetLastInputInfo(ref LASTINPUTINFO plii);
-        private static double GetIdleTime()
-        {
-            LASTINPUTINFO lii = new LASTINPUTINFO();
-            lii.cbSize = Marshal.SizeOf(lii.GetType());
-            if (!GetLastInputInfo(ref lii))
-                throw new ApplicationException("Error executing GetLastInputInfo");
-            return (Environment.TickCount - lii.dwTime) / 1000.0;
-        }
-
 
         public MainForm()
         {
@@ -584,7 +563,7 @@ namespace Example
             {
                 iq.Swap();
                 iq.Type = IQType.result;
-                last.Seconds = (int)GetIdleTime();
+                last.Seconds = (int)bedrock.util.IdleTime.GetIdleTime();
                 jc.Write(iq);
                 return;
             }

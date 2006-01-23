@@ -171,6 +171,7 @@
     <Compile Include="bedrock\util\GetOptBase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="bedrock\util\IdleTime.cs" />
     <Compile Include="bedrock\util\Version.cs">
       <SubType>Code</SubType>
     </Compile>
