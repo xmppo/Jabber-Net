@@ -39,13 +39,12 @@
     <RemoteDebugEnabled>false</RemoteDebugEnabled>
     <RemoteDebugMachine>
     </RemoteDebugMachine>
-    <StartAction>Project</StartAction>
+    <StartAction>Program</StartAction>
     <StartArguments>
     </StartArguments>
     <StartPage>
     </StartPage>
-    <StartProgram>
-    </StartProgram>
+    <StartProgram>C:\src\jabber-net\test\nunit\nunit-gui.exe</StartProgram>
     <StartURL>
     </StartURL>
     <StartWorkingDirectory>
