@@ -119,54 +119,6 @@ namespace xpnet
             return page[((buf[off] & 3) << 6) | (buf[off + 1] & 0x3F)];
         }
 
-        /* A 3 byte UTF-8 representation splits the characters 16 bits
-           between the bottom 4, 6 and 6 bits of the bytes. */
-
-        /* This will (incorrectly) return BT_LEAD4 for surrogates, but that
-           doesn't matter. */
-        int byteType3(byte[] buf, int off) 
-        {
-            int[] page = charTypeTable[((buf[off] & 0xF) << 4)
-                | ((buf[off + 1] >> 2) & 0xF)];
-            return page[((buf[off + 1] & 3) << 6) | (buf[off + 2] & 0x3F)];
-        }
-
-        void check3(byte[] buf, int off)
-        {
-            switch (buf[off])
-            {
-                case 0xEF:
-                    /* 0xFFFF 0xFFFE */
-                    if ((buf[off + 1] == 0xBF) &&
-                        ((buf[off + 2] == 0xBF) ||
-                        (buf[off + 2] == 0xBE)))
-                        throw new InvalidTokenException(off);
-                    return;
-                case 0xED:
-                    /* 0xD800..0xDFFF <=> top 5 bits are 11011 */
-                    if ((buf[off + 1] & 0x20) != 0)
-                        throw new InvalidTokenException(off);
-                    return;
-                default:
-                    return;
-            }
-        }
-
-        void check4(byte[] buf, int off) 
-        {
-            switch (buf[off] & 0x7) 
-            {
-                default:
-                    return;
-                case 5: case 6: case 7:
-                    break;
-                case 4:
-                    if ((buf[off + 1] & 0x30) == 0)
-                        return;
-                    break;
-            }
-            throw new InvalidTokenException(off);
-        }
 
         /// <summary>
         /// 
@@ -278,6 +230,7 @@ namespace xpnet
             pos.LineNumber = lineNumber;
         }
 
+        /*
         int extendData(byte[] buf, int off, int end)
         {
             while (off != end) 
@@ -306,5 +259,6 @@ namespace xpnet
             }
             return off;
         }
+        */
     }
 }

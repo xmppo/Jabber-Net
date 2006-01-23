@@ -27,10 +27,8 @@ using jabber.protocol;
 using jabber.protocol.stream;
 using jabber.connection.sasl;
 
-#if NET20
+#if NET20 || __MonoCS__
 using System.Security.Cryptography.X509Certificates;
-#elif __MonoCS__
-
 #elif !NO_SSL
 using Org.Mentalis.Security.Certificates;
 #endif
@@ -361,7 +359,7 @@ namespace jabber.connection
             set { m_autoStartTLS = value; }
         }
 
-#if NET20
+#if NET20 || __MonoCS__
         /// <summary>
         /// The certificate to be used for the local side of sockets, with SSL on.
         /// </summary>
@@ -372,40 +370,49 @@ namespace jabber.connection
             set { if (m_watcher != null) m_watcher.LocalCertificate = value; }
         }
 
-
         /// <summary>
-        /// Set the certificate to be used for accept sockets.  To generate a test .pfx file using openssl,
-        /// add this to openssl.conf:
+        /// Set the certificate to be used for accept sockets.  To
+        /// generate a test .pfx file using openssl, add this to
+        /// openssl.conf: 
         ///   <blockquote>
         ///   [ serverex ]
         ///   extendedKeyUsage=1.3.6.1.5.5.7.3.1
         ///   </blockquote>
         /// and run the following commands:
         ///   <blockquote>
-        ///   openssl req -new -x509 -newkey rsa:1024 -keyout privkey.pem -out key.pem -extensions serverex
-        ///   openssl pkcs12 -export -in key.pem -inkey privkey.pem -name localhost -out localhost.pfx
+        ///   openssl req -new -x509 -newkey rsa:1024 -keyout
+        ///     privkey.pem -out key.pem -extensions serverex 
+        ///   openssl pkcs12 -export -in key.pem -inkey privkey.pem
+        ///     -name localhost -out localhost.pfx 
         ///   </blockquote>
-        /// If you leave the certificate null, and you are doing Accept, the SSL class will try to find a
-        /// default server cert on your box.  If you have IIS installed with a cert, this might just go...
+        /// If you leave the certificate null, and you are doing
+        /// Accept, the SSL class will try to find a default server
+        /// cert on your box.  If you have IIS installed with a cert,
+        /// this might just go... 
         /// </summary>
         /// <param name="filename">A .pfx or .cer file</param>
-        /// <param name="password">The password, if this is a .pfx file, null if .cer file.</param>
+        /// <param name="password">The password, if this is a .pfx
+        /// file, null if .cer file.</param> 
         public void SetCertificateFile(string filename,
-	                               System.Security.SecureString password)
+#if NET20                                      
+                                       System.Security.SecureString password)
+#else
+                                       string password)
+#endif
         {
             if (m_watcher != null)
                 m_watcher.SetCertificateFile(filename, password);
         }
-#elif __MonoCS__
-
 #elif !NO_SSL
         /// <summary>
-        /// The certificate to be used for the local side of sockets, with SSL on.
+        /// The certificate to be used for the local side of sockets,
+        /// with SSL on. 
         /// </summary>
         [Browsable(false)]
         public Certificate LocalCertificate
         {
-            get { return (m_watcher == null) ? null : m_watcher.LocalCertificate; }
+            get { return (m_watcher == null) ?
+                    null : m_watcher.LocalCertificate; }
             set { if (m_watcher != null) m_watcher.LocalCertificate = value; }
         }
 
@@ -422,11 +429,14 @@ namespace jabber.connection
         ///   openssl req -new -x509 -newkey rsa:1024 -keyout privkey.pem -out key.pem -extensions serverex
         ///   openssl pkcs12 -export -in key.pem -inkey privkey.pem -name localhost -out localhost.pfx
         ///   </blockquote>
-        /// If you leave the certificate null, and you are doing Accept, the SSL class will try to find a
-        /// default server cert on your box.  If you have IIS installed with a cert, this might just go...
+        /// If you leave the certificate null, and you are doing
+        /// Accept, the SSL class will try to find a default server
+        /// cert on your box.  If you have IIS installed with a cert,
+        /// this might just go...
         /// </summary>
         /// <param name="filename">A .pfx or .cer file</param>
-        /// <param name="password">The password, if this is a .pfx file, null if .cer file.</param>
+        /// <param name="password">The password, if this is a .pfx
+        /// file, null if .cer file.</param>
         public void SetCertificateFile(string filename, string password)
         {
             if (m_watcher != null)
@@ -444,8 +454,9 @@ namespace jabber.connection
         {
             get
             {
-                // If we are running in the designer, let's try to get an invoke control
-                // from the environment.  VB programmers can't seem to follow directions.
+                // If we are running in the designer, let's try to get
+                // an invoke control from the environment.  VB
+                // programmers can't seem to follow directions. 
                 if ((this.m_invoker == null) && DesignMode)
                 {
                     IDesignerHost host = (IDesignerHost)base.GetService(typeof(IDesignerHost));
@@ -1000,7 +1011,7 @@ namespace jabber.connection
                     return;
                 }
 
-#if !NO_SSL || NET20
+#if !NO_SSL || NET20 || __MonoCS__
                 // don't do starttls if we're already on an SSL socket.
                 // bad server setup, but no skin off our teeth, we're already
                 // SSL'd.  Also, start-tls won't work when polling.
@@ -1082,7 +1093,7 @@ namespace jabber.connection
                     return;
                 }
             }
-#if !NO_SSL || NET20
+#if !NO_SSL || NET20 || __MonoCS__
             else if (m_state == StartTLSState.Instance)
             {
                 switch (tag.Name)

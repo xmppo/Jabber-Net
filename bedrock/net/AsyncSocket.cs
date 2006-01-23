@@ -25,7 +25,8 @@ using System.Security.Authentication;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 #elif __MonoCS__
-
+using Mono.Security.Protocol.Tls;
+using System.Security.Cryptography.X509Certificates;
 #elif !NO_SSL
 using Org.Mentalis.Security.Ssl;
 using Org.Mentalis.Security.Certificates;
@@ -70,10 +71,14 @@ namespace bedrock.net
         }
 
         /// <summary>
-        /// Initializes a new instance of the AsyncSocketConnectionException class with serialized data.
+        /// Initializes a new instance of the
+        /// AsyncSocketConnectionException class with serialized
+        /// data.
         /// </summary>
-        /// <param name="info">The object that holds the serialized object data.</param>
-        /// <param name="ctx">The contextual information about the source or destination.</param>
+        /// <param name="info">The object that holds the serialized
+        /// object data.</param>
+        /// <param name="ctx">The contextual information about the
+        /// source or destination.</param>
         protected AsyncSocketConnectionException(System.Runtime.Serialization.SerializationInfo info, 
             System.Runtime.Serialization.StreamingContext ctx) : 
             base(info, ctx)
@@ -81,7 +86,8 @@ namespace bedrock.net
         }
     }
     /// <summary>
-    /// An asynchronous socket, which calls a listener class when interesting things happen.
+    /// An asynchronous socket, which calls a listener class when
+    /// interesting things happen.
     /// </summary>
     [RCS(@"$Header$")]
     public class AsyncSocket : BaseSocket, IComparable
@@ -128,31 +134,58 @@ namespace bedrock.net
 
         private const int BUFSIZE = 4096;
 
+#if __MonoCS__
+        // gr.  Thanks Mono, these should be constants in your
+        // interface so that I don't have to surface them.  EVEN
+        // BETTER, this should be an enum.  If that was too hard, the
+        // interface should take unsigned ints, so that the hex
+        // constants could be used.
+    
+        public const int CERT_E_CHAINING              = -2146762486;
+        public const int CERT_E_CN_NO_MATCH           = -2146762481;
+        public const int CERT_E_EXPIRED               = -2146762495;
+        public const int CERT_E_PURPOSE               = -2146762490;
+        public const int CERT_E_UNTRUSTEDROOT         = -2146762487;
+        public const int CERT_E_VALIDITYPERIODNESTING = -2146762494;
+        public const int TRUST_E_BAD_DIGEST           = -2146869232;
+        public const int TRUST_E_BASIC_CONSTRAINTS    = -2146869223;
+#endif
+        
         /// <summary>
-        /// Are untrusted root certificates OK when connecting using SSL?  Setting this to true is insecure, 
-        /// but it's unlikely that you trust jabbber.org or jabber.com's relatively bogus certificate roots.
+        /// Are untrusted root certificates OK when connecting using
+        /// SSL?  Setting this to true is insecure, but it's unlikely
+        /// that you trust jabbber.org or jabber.com's relatively
+        /// bogus certificate roots. 
         /// </summary>
         public static bool UntrustedRootOK = false;
 
 #if NET20
         /// <summary>
-        /// The types of SSL to support.  SSL3 and TLS1 by default.  That should be good enough for 
-        /// most apps, and was hard-coded to start with.  Note: when doing start-tls, this is overridden
-        /// to just be TLS.
+        /// The types of SSL to support.  SSL3 and TLS1 by default.
+        /// That should be good enough for most apps, and was
+        /// hard-coded to start with.  Note: when doing start-tls,
+        /// this is overridden to just be TLS.
         /// </summary>
         public static SslProtocols   SSLProtocols     = SslProtocols.Ssl3 | SslProtocols.Tls;
         private SslProtocols         m_secureProtocol = SslProtocols.None;
         private Socket               m_sock           = null;
         private X509Certificate      m_cert           = null;
-	private Stream               m_stream         = null;
-	private MemoryStream         m_pending        = new MemoryStream();
+        private Stream               m_stream         = null;
+        private MemoryStream         m_pending        = new MemoryStream();
         private bool                 m_writing        = false;
 #elif __MonoCS__
+        public static Mono.Security.Protocol.Tls.SecurityProtocolType SSLProtocols     = Mono.Security.Protocol.Tls.SecurityProtocolType.Ssl3 | Mono.Security.Protocol.Tls.SecurityProtocolType.Tls;
+        private Mono.Security.Protocol.Tls.SecurityProtocolType m_secureProtocol = 0;
         private Socket               m_sock           = null;
+        private X509Certificate      m_cert           = null;
+        private Stream               m_stream         = null;
+        private MemoryStream         m_pending        = new MemoryStream();
+        private bool                 m_writing        = false;
 #elif !NO_SSL
         /// <summary>
-        /// The types of SSL to support.  SSL3 and TLS1 by default.  That should be good enough for 
-        /// most apps, and was hard-coded to start with.
+        /// The types of SSL to support.  SSL3 and TLS1 by default.
+        /// That should be good enough for most apps, and was
+        /// hard-coded to start with.
         /// </summary>
         public static SecureProtocol SSLProtocols     = SecureProtocol.Ssl3 | SecureProtocol.Tls1;
         private SecureProtocol       m_secureProtocol = SecureProtocol.None;
@@ -164,7 +197,7 @@ namespace bedrock.net
 #endif
 
         private bool                 m_server         = false;
-	private byte[]               m_buf            = new byte[BUFSIZE];
+        private byte[]               m_buf            = new byte[BUFSIZE];
         private SocketState          m_state          = SocketState.Created;
         private SocketWatcher        m_watcher        = null;
         private Address              m_addr;
@@ -187,8 +220,9 @@ namespace bedrock.net
         /// </summary>
         /// <param name="w"></param>
         /// <param name="listener">The listener for this socket</param>
-        /// <param name="SSL">Do SSL3 and TLS1 on startup 
-        /// (call StartTLS later if this is false, and TLS only is needed later)</param>
+        /// <param name="SSL">Do SSL3 and TLS1 on startup (call
+        /// StartTLS later if this is false, and TLS only is needed
+        /// later)</param>
         /// <param name="synch">Synchronous operation</param>
         public AsyncSocket(SocketWatcher w, ISocketEventListener listener, bool SSL, bool synch) : base(listener)
         {
@@ -197,10 +231,8 @@ namespace bedrock.net
 
             if (SSL)
             {
-#if NET20
+#if NET20 || __MonoCS__
                 m_secureProtocol = SSLProtocols;
-#elif __MonoCS__
-                throw new NotImplementedException("SSL not compiled in");
 #elif !NO_SSL
                 m_secureProtocol = SSLProtocols;
 #else
@@ -264,7 +296,8 @@ namespace bedrock.net
         }
 
         /// <summary>
-        /// Choose a certificate from the local store.  If there are none available, returns right away.
+        /// Choose a certificate from the local store.  If there are
+        /// none available, returns right away.
         /// If there is exactly one, uses it.
         /// Otherwise, prompts.
         /// TODO: figure out something for server certs, too.
@@ -302,6 +335,28 @@ namespace bedrock.net
             set { m_cert = value; }
         }
 #elif __MonoCS__
+        /// <summary>
+        /// Get the certificate of the remote endpoint of the socket.
+        /// </summary>
+        public X509Certificate RemoteCertificate
+        {
+            get 
+            {
+                SslClientStream str = m_stream as SslClientStream;
+                if (str == null)
+                    return null;
+                return str.ServerCertificate;
+            }
+        }
+
+        /// <summary>
+        /// The local certificate of the socket.
+        /// </summary>
+        public X509Certificate LocalCertificate
+        {
+            get { return m_cert; }
+            set { m_cert = value; }
+        }
 
 #elif !NO_SSL
         /// <summary>
@@ -336,7 +391,13 @@ namespace bedrock.net
                 return str.IsEncrypted;
             }
 #elif __MonoCS__
-            get { return false; }
+            get
+            {
+                SslClientStream str = m_stream as SslClientStream;
+                if (str == null)
+                    return false;
+                return (str.SecurityProtocol != 0);
+            }
 #elif !NO_SSL
             get { return (m_secureProtocol != SecureProtocol.None); }
 #else
@@ -384,10 +445,12 @@ namespace bedrock.net
         }
 
         /// <summary>
-        /// Prepare to start accepting inbound requests.  Call RequestAccept() to start the async process.
+        /// Prepare to start accepting inbound requests.  Call
+        /// RequestAccept() to start the async process.
         /// </summary>
         /// <param name="addr">Address to listen on</param>
-        /// <param name="backlog">The Maximum length of the queue of pending connections</param>
+        /// <param name="backlog">The Maximum length of the queue of
+        /// pending connections</param>
         public override void Accept(Address addr, int backlog)
         {
             lock (this)
@@ -421,8 +484,8 @@ namespace bedrock.net
 
         /// <summary>
         /// Start the flow of async accepts.  Flow will continue while 
-        /// Listener.OnAccept() returns true.  Otherwise, call RequestAccept() again
-        /// to continue.
+        /// Listener.OnAccept() returns true.  Otherwise, call
+        /// RequestAccept() again to continue.
         /// </summary>
         public override void RequestAccept()
         {
@@ -478,7 +541,11 @@ namespace bedrock.net
             cliCon.m_server = true;
             cliCon.LocalCertificate = m_cert;
 #elif __MonoCS__
-
+            cliCon.m_sock.Blocking = true;
+            cliCon.m_stream = new NetworkStream(cliCon.m_sock);
+            cliCon.m_sock.Blocking = false;
+            cliCon.m_server = true;
+            cliCon.LocalCertificate = m_cert;
 #elif !NO_SSL
             cliCon.m_credUse = ConnectionEnd.Server;
 #endif
@@ -486,8 +553,8 @@ namespace bedrock.net
             ISocketEventListener l = m_listener.GetListener(cliCon);
             if (l == null)
             {
-                // if the listener returns null, close the socket and quit, instead of
-                // asserting.
+                // if the listener returns null, close the socket and
+                // quit, instead of asserting. 
                 cliCon.m_sock.Close();
                 RequestAccept();
                 return;
@@ -516,6 +583,9 @@ namespace bedrock.net
 #if NET20
             if (m_secureProtocol != SslProtocols.None)
                 cliCon.StartTLS();
+#elif __MonoCS__
+            if (m_secureProtocol != 0)
+                cliCon.StartTLS();
 #endif
             if (l.OnAccept(cliCon))
             {
@@ -531,7 +601,7 @@ namespace bedrock.net
         /// <param name="addr"></param>
         public override void Connect(Address addr)
         {
-            Console.WriteLine("starting connect to " + addr.ToString());
+            Debug.WriteLine("starting connect to " + addr.ToString());
             State = SocketState.Resolving;
             if (m_synch)
             {
@@ -550,7 +620,7 @@ namespace bedrock.net
         /// <param name="addr"></param>
         private void OnConnectResolved(Address addr)
         {
-            Console.WriteLine("connectresolved: " + addr.ToString());
+            Debug.WriteLine("connectresolved: " + addr.ToString());
             lock (this)
             {
                 if (State != SocketState.Resolving)
@@ -573,14 +643,14 @@ namespace bedrock.net
 #if NET20
                 if (Socket.OSSupportsIPv6 && (m_addr.Endpoint.AddressFamily == AddressFamily.InterNetworkV6))
                 {
-                    Console.WriteLine("ipv6");
+                    Debug.WriteLine("ipv6");
                     m_sock = new Socket(AddressFamily.InterNetworkV6, 
                         SocketType.Stream, 
                         ProtocolType.Tcp);
                 }
                 else
                 {
-                    Console.WriteLine("ipv4");
+                    Debug.WriteLine("ipv4");
                     m_sock = new Socket(AddressFamily.InterNetwork, 
                         SocketType.Stream, 
                         ProtocolType.Tcp);
@@ -588,14 +658,14 @@ namespace bedrock.net
 #elif __MonoCS__
                 if (Socket.SupportsIPv6 && (m_addr.Endpoint.AddressFamily == AddressFamily.InterNetworkV6))
                 {
-                    Console.WriteLine("ipv6");
+                    Debug.WriteLine("ipv6");
                     m_sock = new Socket(AddressFamily.InterNetworkV6, 
                         SocketType.Stream, 
                         ProtocolType.Tcp);
                 }
                 else
                 {
-                    Console.WriteLine("ipv4");
+                    Debug.WriteLine("ipv4");
                     m_sock = new Socket(AddressFamily.InterNetwork, 
                         SocketType.Stream, 
                         ProtocolType.Tcp);
@@ -633,7 +703,7 @@ namespace bedrock.net
 #elif !OLD_CLR
                 if (Socket.SupportsIPv6 && (m_addr.Endpoint.AddressFamily == AddressFamily.InterNetworkV6))
                 {
-                    Console.WriteLine("ipv6");
+                    Debug.WriteLine("ipv6");
                     m_sock = new Socket(AddressFamily.InterNetworkV6, 
                         SocketType.Stream, 
                         ProtocolType.Tcp);
@@ -641,7 +711,7 @@ namespace bedrock.net
                 else
 #else
                 {
-                    Console.WriteLine("ipv4");
+                    Debug.WriteLine("ipv4");
                     m_sock = new Socket(AddressFamily.InterNetwork, 
                         SocketType.Stream, 
                         ProtocolType.Tcp);
@@ -674,6 +744,12 @@ namespace bedrock.net
                     m_stream = new NetworkStream(m_sock);
                     if (m_secureProtocol != SslProtocols.None)
                         StartTLS();
+#elif __MonoCS__
+                    m_sock.Blocking = true;
+                    m_stream = new NetworkStream(m_sock);
+                    m_sock.Blocking = false;
+                    if (m_secureProtocol != 0)
+                        StartTLS(); 
 #endif
                     lock(this)
                     {
@@ -692,16 +768,19 @@ namespace bedrock.net
 #if __MonoCS__
                 m_sock.Blocking = false;
 #endif
-                Console.WriteLine("begin connect: " + m_addr.Endpoint.ToString());
+                Debug.WriteLine("begin connect: " +
+                                m_addr.Endpoint.ToString());
                 m_sock.BeginConnect(m_addr.Endpoint, new AsyncCallback(ExecuteConnect), null);
             }
         }
 
 #if NET20
         /// <summary>
-        /// Validate the server cert.  SSLPolicyErrors will be pre-filled with the errors you got.
-        /// Chances are, you want to set UntrustedRootOK in the real world still.
-        /// TODO: add a listener method to override this behavior, that only gets called if there is an error.
+        /// Validate the server cert.  SSLPolicyErrors will be
+        /// pre-filled with the errors you got.  Chances are, you want
+        /// to set UntrustedRootOK in the real world still.
+        /// TODO: add a listener method to override this behavior,
+        /// that only gets called if there is an error.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="certificate"></param>
@@ -738,48 +817,178 @@ namespace bedrock.net
         /// </summary>
         public override void StartTLS()
         {
+            Debug.WriteLine("StartTLS");
             // we're really doing start-tls.
             if (m_secureProtocol == SslProtocols.None)
                 m_secureProtocol = SslProtocols.Tls;
 
-            m_stream = new SslStream(m_stream, false, new RemoteCertificateValidationCallback(ValidateServerCertificate), null);
-            if (m_server)
+            try
             {
-                if (m_cert == null)
+                m_stream = new SslStream(m_stream, false, new RemoteCertificateValidationCallback(ValidateServerCertificate), null);
+                if (m_server)
                 {
-                    FireError(new InvalidOperationException("Must set Certificate for server SSL"));
-                    Close();
-                    return;
+                    if (m_cert == null)
+                    {
+                        FireError(new InvalidOperationException("Must set Certificate for server SSL"));
+                        Close();
+                        return;
+                    }
+                    // TODO: surface these as params
+                    ((SslStream)m_stream).AuthenticateAsServer(m_cert, false, m_secureProtocol, false);
                 }
-                // TODO: surface these as params
-                ((SslStream)m_stream).AuthenticateAsServer(m_cert, false, m_secureProtocol, false);
+                else
+                {
+                    X509CertificateCollection certs = null;
+                    if (m_cert != null)
+                    {
+                        certs = new X509CertificateCollection();
+                        certs.Add(m_cert);
+                    }
+                    ((SslStream)m_stream).AuthenticateAsClient(m_hostid, certs, m_secureProtocol, false);
+                }
             }
-            else
+            catch (Exception e)
             {
-                X509CertificateCollection certs = null;
-                if (m_cert != null)
-                {
-                    certs = new X509CertificateCollection();
-                    certs.Add(m_cert);
-                }
-                ((SslStream)m_stream).AuthenticateAsClient(m_hostid, certs, m_secureProtocol, false);
+                FireError(e);
             }
         }
+
 #elif __MonoCS__
+        private bool ValidateServerCertificate(X509Certificate certificate,
+                                               int[] certificateErrors)
+        {
+            // huh.  Well, I'm not sure what to do with client certs.
+            if (m_server)
+                return true;
+
+            if (certificateErrors.Length == 0)
+                return true;
+
+            Console.WriteLine("UntrustedRoot: " + UntrustedRootOK +
+                              " (" + certificateErrors.Length + ")");
+            bool ok = true;
+            foreach (int i in certificateErrors)
+            {
+                Console.WriteLine("Error: " + i);
+                // if untrustedRoot is ok, then ignore untrustedRoot
+                // and chaining errors.
+                if (!
+                    (UntrustedRootOK &&
+                     ((i == CERT_E_UNTRUSTEDROOT) ||
+                      (i == CERT_E_CHAINING))))
+                {
+                    string err = null;
+                    switch (i)
+                    {
+                    case CERT_E_CHAINING:
+                        err = "CERT_E_CHAINING";
+                        break;
+                    case CERT_E_CN_NO_MATCH:
+                        err = "CERT_E_CN_NO_MATCH";
+                        break;
+                    case CERT_E_EXPIRED:
+                        err = "CERT_E_EXPIRED";
+                        break;
+                    case CERT_E_PURPOSE:
+                        err = "CERT_E_PURPOSE";
+                        break;
+                    case CERT_E_UNTRUSTEDROOT:
+                        err = "CERT_E_UNTRUSTEDROOT";
+                        break;
+                    case CERT_E_VALIDITYPERIODNESTING:
+                        err = "CERT_E_VALIDITYPERIODNESTING";
+                        break;
+                    case TRUST_E_BAD_DIGEST:
+                        err = "TRUST_E_BAD_DIGEST";
+                        break;
+                    case TRUST_E_BASIC_CONSTRAINTS:
+                        err = "TRUST_E_BASIC_CONSTRAINTS";
+                        break;
+                    default:
+                        err = "Unknown error: " + i.ToString();
+                        break;
+                    }
+                
+                    Console.WriteLine("Error: " + err);
+                    ok = false;
+                }
+            }
+
+            if (!ok)
+            {
+                Console.WriteLine(certificate.ToString(true));            
+            }
+            
+            return ok;
+        }
+    
+        /// <summary>
+        /// Start TLS processing on an open socket.
+        /// </summary>
         public override void StartTLS()
         {
-	    throw new NotImplementedException("SSL not on in Mono yet");
-	}
+            Debug.WriteLine("StartTLS");
+            
+            // we're really doing start-tls.
+            if (m_secureProtocol == 0)
+                m_secureProtocol = Mono.Security.Protocol.Tls.SecurityProtocolType.Ssl3;
+
+            try
+            {
+                if (m_server)
+                {
+                    if (m_cert == null)
+                    {
+                        FireError(new InvalidOperationException("Must set Certificate for server SSL"));
+                        Close();
+                        return;
+                    }
+                    SslServerStream s = new SslServerStream(m_stream,
+                                                            m_cert,
+                                                            false,  
+                                                            true,
+                                                            m_secureProtocol);
+                    m_stream = s;
+                }
+                else
+                {
+                    X509CertificateCollection certs = null;
+                    if (m_cert != null)
+                    {
+                        certs = new X509CertificateCollection();
+                        certs.Add(m_cert);
+                    }
+                    SslClientStream s = new SslClientStream(m_stream,
+                                                            m_hostid,
+                                                            true,
+                                                            m_secureProtocol,
+                                                            certs);
+                    s.ServerCertValidationDelegate =
+                        new CertificateValidationCallback(ValidateServerCertificate);
+                    m_stream = s;
+                }
+            }
+            catch (Exception e)
+            {
+                FireError(e);
+            }
+        }
 
 #elif !NO_SSL
         /// <summary>
         /// Verifies a certificate received from the remote host.
         /// </summary>
-        /// <param name="socket">The <see cref="SecureSocket"/> that received the certificate to verify.</param>
-        /// <param name="remote">The <see cref="Certificate"/> of the remote party to verify.</param>
-        /// <param name="chain">The <see cref="CertificateChain"/> associated with the remote certificate.</param>
-        /// <param name="e">A <see cref="VerifyEventArgs"/> instance used to (in)validate the certificate.</param>
-        /// <remarks>If an error is thrown by the code in the delegate, the SecureSocket will close the connection.</remarks>
+        /// <param name="socket">The <see cref="SecureSocket"/> that
+        /// received the certificate to verify.</param>
+        /// <param name="remote">The <see cref="Certificate"/> of the
+        /// remote party to verify.</param> 
+        /// <param name="chain">The <see cref="CertificateChain"/>
+        /// associated with the remote certificate.</param> 
+        /// <param name="e">A <see cref="VerifyEventArgs"/> instance
+        /// used to (in)validate the certificate.</param> 
+        /// <remarks>If an error is thrown by the code in the
+        /// delegate, the SecureSocket will close the
+        /// connection.</remarks> 
         protected void OnVerify(SecureSocket socket, Certificate remote, CertificateChain chain, VerifyEventArgs e) 
         {
             CertificateChain cc = new CertificateChain(remote);
@@ -811,7 +1020,7 @@ namespace bedrock.net
         /// <param name="ar"></param>
         private void ExecuteConnect(IAsyncResult ar)
         {
-            Console.WriteLine("ExecuteConnect");
+            Debug.WriteLine("ExecuteConnect");
             lock (this)
             {
                 try
@@ -830,9 +1039,15 @@ namespace bedrock.net
                 }
                 if (m_sock.Connected)
                 {
-#if NET20
+#if NET20 
                     m_stream = new NetworkStream(m_sock);
                     if (m_secureProtocol != SslProtocols.None)
+                        StartTLS();
+#elif __MonoCS__
+                    m_sock.Blocking = true;
+                    m_stream = new NetworkStream(m_sock);
+                    m_sock.Blocking = false;
+                    if (m_secureProtocol != 0)
                         StartTLS();
 #endif
                     State = SocketState.Connected;
@@ -848,7 +1063,7 @@ namespace bedrock.net
 
         private bool SyncRead()
         {
-#if NET20
+#if NET20 || __MonoCS__
             int count = m_stream.Read(m_buf, 0, m_buf.Length);
 #else
             int count = m_sock.Receive(m_buf, 0, m_buf.Length, SocketFlags.None);
@@ -862,8 +1077,8 @@ namespace bedrock.net
         }
 
         /// <summary>
-        /// Start an async read from the socket.  Listener.OnRead() is eventually called
-        /// when data arrives.
+        /// Start an async read from the socket.  Listener.OnRead() is
+        /// eventually called when data arrives.
         /// </summary>
         public override void RequestRead()
         {
@@ -899,7 +1114,7 @@ namespace bedrock.net
 
                     m_reading = true;
                 }
-#if NET20
+#if NET20 || __MonoCS__
                 m_stream.BeginRead(m_buf, 0, m_buf.Length, new AsyncCallback(GotData), null);
 #else
                 m_sock.BeginReceive(m_buf, 0, m_buf.Length, 
@@ -944,7 +1159,7 @@ namespace bedrock.net
             int count;
             try
             {
-#if NET20
+#if NET20 || __MonoCS__
                 count = m_stream.EndRead(ar);
 #else
                 count = m_sock.EndReceive(ar);
@@ -990,8 +1205,9 @@ namespace bedrock.net
         }
 
         /// <summary>
-        /// Async write to the socket.  Listener.OnWrite will be called eventually
-        /// when the data has been written.  A trimmed copy is made of the data, internally.
+        /// Async write to the socket.  Listener.OnWrite will be
+        /// called eventually when the data has been written.  A
+        /// trimmed copy is made of the data, internally. 
         /// </summary>
         /// <param name="buf">Buffer to output</param>
         /// <param name="offset">Offset into buffer</param>
@@ -1009,25 +1225,25 @@ namespace bedrock.net
                 {
                     if (m_synch)
                     {
-#if NET20
+#if NET20 || __MonoCS__
                         m_stream.Write(buf, offset, len);
-						m_listener.OnWrite(this, buf, offset, len);
+                        m_listener.OnWrite(this, buf, offset, len);
 #else
-						int count = m_sock.Send(buf, offset, len, SocketFlags.None);
-						if (count == len)
-						{
-							m_listener.OnWrite(this, buf, offset, len);
-						}
-						else
-						{
-							Close();
-						}
+                        int count = m_sock.Send(buf, offset, len, SocketFlags.None);
+                        if (count == len)
+                        {
+                            m_listener.OnWrite(this, buf, offset, len);
+                        }
+                        else
+                        {
+                            Close();
+                        }
 #endif
                     }
                     else
                     {
 
-#if NET20
+#if NET20 || __MonoCS__
                         if (m_writing)
                         {
                             // already writing.  save this for later.
@@ -1040,7 +1256,9 @@ namespace bedrock.net
                             byte[] ret = new byte[len];
                             Buffer.BlockCopy(buf, offset, ret, 0, len);
 
-                            m_stream.BeginWrite(ret, 0, ret.Length, new AsyncCallback(WroteData), ret);
+                            m_stream.BeginWrite(ret, 0, ret.Length,
+                                                new AsyncCallback(WroteData),
+                                                ret);
                         }
 #else
                         // make copy, since we might be a while in async-land
@@ -1048,7 +1266,9 @@ namespace bedrock.net
                         Buffer.BlockCopy(buf, offset, ret, 0, len);
 
                         m_sock.BeginSend(ret, 0, ret.Length, 
-                            SocketFlags.None, new AsyncCallback(WroteData), ret);
+                                         SocketFlags.None,
+                                         new AsyncCallback(WroteData),
+                                         ret);
 #endif
                     }
                 }
@@ -1078,13 +1298,13 @@ namespace bedrock.net
         /// <param name="ar"></param>
         private void WroteData(IAsyncResult ar)
         {
-#if !NET20
+#if !NET20 && !__MonoCS__
             int count;
 #endif
 
             try
             {
-#if NET20
+#if NET20 || __MonoCS__
                 m_stream.EndWrite(ar);
 #else
                 count = m_sock.EndSend(ar);
@@ -1107,7 +1327,7 @@ namespace bedrock.net
                 return;
             }
 
-#if NET20
+#if NET20 || __MonoCS__
             lock (this)
             {
                 m_writing = false;
@@ -1135,9 +1355,9 @@ namespace bedrock.net
         }
 
         /// <summary>
-        /// Close the socket.  This is NOT async.  .Net doesn't have async closes.  
-        /// But, it can be *called* async, particularly from GotData.
-        /// Attempts to do a shutdown() first.
+        /// Close the socket.  This is NOT async.  .Net doesn't have
+        /// async closes.  But, it can be *called* async, particularly
+        /// from GotData.  Attempts to do a shutdown() first.
         /// </summary>
         public override void Close()
         {
@@ -1159,7 +1379,7 @@ namespace bedrock.net
                 if (m_sock.Connected)
                 {
                     State = SocketState.Closing;
-#if NET20
+#if NET20 || __MonoCS__
                     if (m_stream != null)
                         m_stream.Close();
                     else
@@ -1188,7 +1408,8 @@ namespace bedrock.net
 
 
         /// <summary>
-        /// Close, called from async places, so that Errors get fired, appropriately.
+        /// Close, called from async places, so that Errors get fired,
+        /// appropriately.
         /// </summary>
         protected void AsyncClose()
         {
@@ -1227,7 +1448,8 @@ namespace bedrock.net
         /// <returns></returns>
         public override string ToString()
         {
-            return "AsyncSocket " + m_sock.LocalEndPoint + "->" + m_sock.RemoteEndPoint;
+            return "AsyncSocket " + m_sock.LocalEndPoint + "->" +
+                m_sock.RemoteEndPoint;
         }
 
         /// <summary>
@@ -1253,8 +1475,8 @@ namespace bedrock.net
         }
 
         /// <summary>
-        /// IComparable's need to implement Equals().  This checks the guid's for each socket to see 
-        /// if they are the same.
+        /// IComparable's need to implement Equals().  This checks the
+        /// guid's for each socket to see if they are the same.
         /// </summary>
         /// <param name="val">The AsyncSocket to check against.</param>
         /// <returns></returns>
@@ -1283,7 +1505,8 @@ namespace bedrock.net
         }
 
         /// <summary>
-        /// IComparable's need to implement comparison operators.  Checks compares guids.
+        /// IComparable's need to implement comparison operators.
+        /// Checks compares guids.
         /// </summary>
         /// <param name="one">First socket to compare</param>
         /// <param name="two">Second socket to compare</param>
@@ -1313,7 +1536,8 @@ namespace bedrock.net
             return (((IComparable)one).CompareTo(two) < 0);
         }
         /// <summary>
-        /// IComparable's need to implement comparison operators.  Checks compares guids.
+        /// IComparable's need to implement comparison operators.
+        /// Checks compares guids.
         /// </summary>
         /// <param name="one">First socket to compare</param>
         /// <param name="two">Second socket to compare</param>
@@ -1326,7 +1550,8 @@ namespace bedrock.net
             return (((IComparable)one).CompareTo(two) <= 0);
         }
         /// <summary>
-        /// IComparable's need to implement comparison operators.  Checks compares guids.
+        /// IComparable's need to implement comparison operators.
+        /// Checks compares guids.
         /// </summary>
         /// <param name="one">First socket to compare</param>
         /// <param name="two">Second socket to compare</param>

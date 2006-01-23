@@ -33,11 +33,12 @@ namespace ConsoleClient
 
         public Class1(string[] args)
         {
+            bedrock.net.AsyncSocket.UntrustedRootOK = true;
             JabberClient jc = new JabberClient();
             jc.OnReadText += new bedrock.TextHandler(jc_OnReadText);
             jc.OnWriteText += new bedrock.TextHandler(jc_OnWriteText);
             jc.OnError +=new bedrock.ExceptionHandler(jc_OnError);
-            jc.AutoStartTLS = false;
+            //            jc.AutoStartTLS = false;
             jc.AutoReconnect = 3f;
 
             GetOpt go = new GetOpt(this);
@@ -68,7 +69,7 @@ namespace ConsoleClient
         [STAThread]
         static void Main(string[] args)
         {
-            Class1 c = new Class1(args);
+            new Class1(args);
         }
 
         private void jc_OnReadText(object sender, string txt)

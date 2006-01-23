@@ -23,12 +23,15 @@ namespace bedrock.net
     public abstract class BaseSocket
     {
         /// <summary>
-        /// Identity of the host we're connecting to.  Used for SSL validation, this is the name of the SRV we looked up, for example.
+        /// Identity of the host we're connecting to.  Used for SSL
+        /// validation, this is the name of the SRV we looked up, for
+        /// example.
         /// </summary>
         protected string m_hostid = null;
 
         /// <summary>
-        /// Call through this interface when events happen.  WARNING: AsyncSocket assumes this is not NULL.
+        /// Call through this interface when events happen.  WARNING:
+        /// AsyncSocket assumes this is not NULL. 
         /// </summary>
         protected ISocketEventListener m_listener = null;
 
@@ -71,7 +74,8 @@ namespace bedrock.net
         }
 
         /// <summary>
-        /// Prepare to start accepting inbound requests.  Call RequestAccept() to start the async process.
+        /// Prepare to start accepting inbound requests.  Call
+        /// RequestAccept() to start the async process.
         /// Default the listen queue size to 5.
         /// </summary>
         /// <param name="addr">Address to listen on</param>
@@ -81,10 +85,12 @@ namespace bedrock.net
         }
 
         /// <summary>
-        /// Prepare to start accepting inbound requests.  Call RequestAccept() to start the async process.
+        /// Prepare to start accepting inbound requests.  Call
+        /// RequestAccept() to start the async process.
         /// </summary>
         /// <param name="addr">Address to listen on</param>
-        /// <param name="backlog">The Maximum length of the queue of pending connections</param>
+        /// <param name="backlog">The Maximum length of the queue of
+        /// pending connections</param>
         public abstract void Accept(Address addr, int backlog);
 
         /// <summary>
@@ -100,7 +106,9 @@ namespace bedrock.net
         /// OnConnect()!
         /// </summary>
         /// <param name="addr">Address/hostname to connect to</param>
-        /// <param name="hostIdentity">Identity of the host we're connecting to.  Used for SSL validation, this is the name of the SRV we looked up, for example.</param>
+        /// <param name="hostIdentity">Identity of the host we're
+        /// connecting to.  Used for SSL validation, this is the name
+        /// of the SRV we looked up, for example.</param>
         public void Connect(Address addr, string hostIdentity)
         {
             m_hostid = hostIdentity;
@@ -123,14 +131,15 @@ namespace bedrock.net
 #endif
 
         /// <summary>
-        /// Start an async read from the socket.  Listener.OnRead() is eventually called
-        /// when data arrives.
+        /// Start an async read from the socket.  Listener.OnRead() is
+        /// eventually called when data arrives.
         /// </summary>
         public abstract void RequestRead();
 
         /// <summary>
-        /// Async write to the socket.  Listener.OnWrite will be called eventually
-        /// when the data has been written.  A copy is made of the data, internally.
+        /// Async write to the socket.  Listener.OnWrite will be
+        /// called eventually when the data has been written.  A copy
+        /// is made of the data, internally.
         /// </summary>
         /// <param name="buf">Data to write</param>
         public void Write(byte[] buf)
@@ -139,8 +148,9 @@ namespace bedrock.net
         }
 
         /// <summary>
-        /// Async write to the socket.  Listener.OnWrite will be called eventually
-        /// when the data has been written.  A trimmed copy is made of the data, internally.
+        /// Async write to the socket.  Listener.OnWrite will be
+        /// called eventually when the data has been written.  A
+        /// trimmed copy is made of the data, internally.
         /// </summary>
         /// <param name="buf">Buffer to output</param>
         /// <param name="offset">Offset into buffer</param>
@@ -148,9 +158,9 @@ namespace bedrock.net
         public abstract void Write(byte[] buf, int offset, int len);
 
         /// <summary>
-        /// Close the socket.  This is NOT async.  .Net doesn't have async closes.  
-        /// But, it can be *called* async, particularly from GotData.
-        /// Attempts to do a shutdown() first.
+        /// Close the socket.  This is NOT async.  .Net doesn't have
+        /// async closes.  But, it can be *called* async, particularly
+        /// from GotData.  Attempts to do a shutdown() first.
         /// </summary>
         public abstract void Close();
     }

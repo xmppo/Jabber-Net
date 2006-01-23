@@ -20,10 +20,8 @@ using System.IO;
 using bedrock.util;
 using bedrock.collections;
 
-#if NET20
+#if NET20 || __MonoCS__
 using System.Security.Cryptography.X509Certificates;
-#elif __MonoCS__
-
 #elif !NO_SSL
 using Org.Mentalis.Security.Certificates;
 #endif
@@ -51,10 +49,8 @@ namespace bedrock.net
         private int         m_maxSocks;
         private bool        m_synch = false;
 
-#if NET20
+#if NET20 || __MonoCS__
         private X509Certificate m_cert = null;
-#elif __MonoCS__
-
 #elif !NO_SSL
         private Certificate m_cert = null;
 #endif
@@ -106,7 +102,7 @@ namespace bedrock.net
             }
         }
 
-#if NET20
+#if NET20 || __MonoCS__
         /// <summary>
         /// The certificate to be used for the local side of sockets, with SSL on.
         /// </summary>
@@ -133,12 +129,33 @@ namespace bedrock.net
         /// </summary>
         /// <param name="filename">A .pfx or .cer file</param>
         /// <param name="password">The password, if this is a .pfx file, null if .cer file.</param>
-        public void SetCertificateFile(string filename, System.Security.SecureString password)
+#if NET20                                      
+        public void SetCertificateFile(string filename,
+                                       System.Security.SecureString password)
         {
-            m_cert = new X509Certificate2(filename, password);
+            m_cert = new X509Certificate(filename, password);
             // TODO: check cert for validity
         }
+#else
+        public void SetCertificateFile(string filename,
+                                       string password)
+        {
+            byte[] data = null;
+            using (FileStream fs = new FileStream(filename, FileMode.Open)) {
+                data = new byte[fs.Length];
+                fs.Read(data, 0, data.Length);
+                fs.Close ();
+            }
 
+            Mono.Security.X509.PKCS12 pfx =
+                new Mono.Security.X509.PKCS12(data, password);
+            if (pfx.Certificates.Count > 0) 
+                m_cert = new X509Certificate(pfx.Certificates[0].RawData);
+            // TODO: check cert for validity
+        }
+#endif
+
+ #if NET20
         /// <summary>
         /// Set the certificate from a system store.  Try "MY" for the ones listed in IE.
         /// </summary>
@@ -147,8 +164,8 @@ namespace bedrock.net
         {
             throw new NotImplementedException("Not implemented yet.  Need to figure out how to search for 'server' certs.");
         }
-#elif __MonoCS__
-
+#endif
+    
 #elif !NO_SSL
         /// <summary>
         /// The certificate to be used for the local side of sockets, with SSL on.
@@ -227,7 +244,7 @@ namespace bedrock.net
             AsyncSocket result = new AsyncSocket(this, listener, SSL, m_synch);
             if (SSL)
             {
-#if !NO_SSL && !__MonoCS__
+#if !NO_SSL
                 result.LocalCertificate = m_cert;
 #else
                 throw new NotImplementedException("SSL not compiled in");
