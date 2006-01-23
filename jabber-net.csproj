@@ -229,6 +229,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "bedrock\util\IdleTime.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "bedrock\util\Version.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -236,6 +241,15 @@
                 <File
                     RelPath = "jabber\JID.cs"
                     SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "jabber\client\DiscoManager.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "jabber\client\DiscoManager.cs"
+                    SubType = "Component"
                     BuildAction = "Compile"
                 />
                 <File

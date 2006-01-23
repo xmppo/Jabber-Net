@@ -103,6 +103,7 @@ namespace muzzle
             // 
             this.il.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("il.ImageStream")));
             this.il.TransparentColor = System.Drawing.Color.Magenta;
+#if NET20
             this.il.Images.SetKeyName(0, "");
             this.il.Images.SetKeyName(1, "");
             this.il.Images.SetKeyName(2, "");
@@ -112,6 +113,7 @@ namespace muzzle
             this.il.Images.SetKeyName(6, "");
             this.il.Images.SetKeyName(7, "");
             this.il.Images.SetKeyName(8, "blank");
+#endif
             this.ResumeLayout(false);
 
         }

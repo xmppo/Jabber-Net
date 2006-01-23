@@ -29,6 +29,17 @@ namespace jabber.connection
     public delegate void IqCB(object sender, IQ iq, object data);
 
     /// <summary>
+    /// An IQ has timed out.
+    /// </summary>
+    public class IQTimeoutException : Exception
+    {
+        public IQTimeoutException(string message)
+            : base(message)
+        {
+        }
+    }
+
+    /// <summary>
     /// Track outstanding IQ requests.
     /// </summary>
     [RCS(@"$Header$")]

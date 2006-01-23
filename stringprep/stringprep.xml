@@ -72,6 +72,13 @@
             A stringprep profile step that checks for prohibited characters
             </summary>
         </member>
+        <member name="M:stringprep.steps.ProhibitStep.#ctor(System.Char[][],System.String)">
+            <summary>
+            These characters are prohibited
+            </summary>
+            <param name="table"></param>
+            <param name="name"></param>
+        </member>
         <member name="M:stringprep.steps.ProhibitStep.Contains(System.Char)">
             <summary>
             Does this step prohibit the given character?
@@ -98,6 +105,13 @@
             <summary>
             A stringprep profile step to map one input character into 0 or more output characters.
             </summary>
+        </member>
+        <member name="M:stringprep.steps.MapStep.#ctor(System.String[],System.String)">
+            <summary>
+            Map from one character to 0+
+            </summary>
+            <param name="table"></param>
+            <param name="name"></param>
         </member>
         <member name="M:stringprep.steps.MapStep.Prepare(System.Text.StringBuilder)">
             <summary>
@@ -249,6 +263,11 @@
             <summary>
             D.2 Characters with bidirectional property "L"
             
+            </summary>
+        </member>
+        <member name="T:stringprep.unicode.Combining">
+            <summary>
+            Combining classes for Unicode characters.
             </summary>
         </member>
         <member name="M:stringprep.unicode.Combining.Class(System.Char)">

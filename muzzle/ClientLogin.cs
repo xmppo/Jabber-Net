@@ -108,6 +108,9 @@ namespace muzzle
             if (m_cli == null)
                 return;
 
+#if !NO_SSL
+            SSL = m_cli.SSL;
+#endif
             User          = m_cli.User;
             Server        = m_cli.Server;
             Password      = m_cli.Password;
@@ -119,9 +122,6 @@ namespace muzzle
             ProxyPort     = m_cli.ProxyPort;
             ProxyUser     = m_cli.ProxyUsername;
             ProxyPassword = m_cli.ProxyPassword;
-#if !NO_SSL
-            SSL           = m_cli.SSL;
-#endif
         }
 
         private void WriteCli()
@@ -179,6 +179,11 @@ namespace muzzle
                 return;
 
             string t;
+#if !NO_SSL
+            t = Prop(root, "ssl");
+            if ((t != null) && (t != ""))
+                SSL = bool.Parse(t);
+#endif
             User = Prop(root, "user");
             Password = Prop(root, "password");
             Server = Prop(root, "server");
@@ -196,9 +201,6 @@ namespace muzzle
             t = Prop(root, "proxy");
             if ((t != null) && (t != ""))
                 ProxyType = (ProxyType) ProxyType.Parse(typeof(ProxyType), t);
-            t = Prop(root, "ssl");
-            if ((t != null) && (t != ""))
-                SSL = bool.Parse(t);
             t = Prop(root, "plaintext");
             if ((t != null) && (t != ""))
                 PlaintextAuth = bool.Parse(t);

@@ -1291,6 +1291,8 @@ namespace jabber.connection
 
         void ISocketEventListener.OnError(bedrock.net.BaseSocket sock, System.Exception ex)
         {
+            m_reconnect = false;
+
             lock (m_stateLock)
             {
                 m_timer.Change(Timeout.Infinite, Timeout.Infinite);
@@ -1307,7 +1309,9 @@ namespace jabber.connection
                     OnError(sock, ex);
             }
 
-            TryReconnect();
+            // TODO: Figure out what the "good" errors are, and try to 
+            // reconnect.  There are too many "bad" errors to just let this fly.
+            //TryReconnect();
         }
 
         void ISocketEventListener.OnConnect(bedrock.net.BaseSocket sock)

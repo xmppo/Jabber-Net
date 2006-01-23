@@ -822,34 +822,27 @@ namespace bedrock.net
             if (m_secureProtocol == SslProtocols.None)
                 m_secureProtocol = SslProtocols.Tls;
 
-            try
+            m_stream = new SslStream(m_stream, false, new RemoteCertificateValidationCallback(ValidateServerCertificate), null);
+            if (m_server)
             {
-                m_stream = new SslStream(m_stream, false, new RemoteCertificateValidationCallback(ValidateServerCertificate), null);
-                if (m_server)
+                if (m_cert == null)
                 {
-                    if (m_cert == null)
-                    {
-                        FireError(new InvalidOperationException("Must set Certificate for server SSL"));
-                        Close();
-                        return;
-                    }
-                    // TODO: surface these as params
-                    ((SslStream)m_stream).AuthenticateAsServer(m_cert, false, m_secureProtocol, false);
+                    FireError(new InvalidOperationException("Must set Certificate for server SSL"));
+                    Close();
+                    return;
                 }
-                else
-                {
-                    X509CertificateCollection certs = null;
-                    if (m_cert != null)
-                    {
-                        certs = new X509CertificateCollection();
-                        certs.Add(m_cert);
-                    }
-                    ((SslStream)m_stream).AuthenticateAsClient(m_hostid, certs, m_secureProtocol, false);
-                }
+                // TODO: surface these as params
+                ((SslStream)m_stream).AuthenticateAsServer(m_cert, false, m_secureProtocol, false);
             }
-            catch (Exception e)
+            else
             {
-                FireError(e);
+                X509CertificateCollection certs = null;
+                if (m_cert != null)
+                {
+                    certs = new X509CertificateCollection();
+                    certs.Add(m_cert);
+                }
+                ((SslStream)m_stream).AuthenticateAsClient(m_hostid, certs, m_secureProtocol, false);
             }
         }
 
@@ -1042,7 +1035,18 @@ namespace bedrock.net
 #if NET20 
                     m_stream = new NetworkStream(m_sock);
                     if (m_secureProtocol != SslProtocols.None)
-                        StartTLS();
+                    {
+                        try
+                        {
+                            StartTLS();
+                        }
+                        catch (Exception e)
+                        {
+                            FireError(e);
+                            AsyncClose();
+                            return;
+                        }
+                    }
 #elif __MonoCS__
                     m_sock.Blocking = true;
                     m_stream = new NetworkStream(m_sock);
@@ -1055,8 +1059,8 @@ namespace bedrock.net
                 }
                 else
                 {
-                    AsyncClose();
                     FireError(new AsyncSocketConnectionException("could not connect"));
+                    AsyncClose();
                 }
             }
         }

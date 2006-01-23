@@ -78,8 +78,12 @@ namespace Example
             m_idle.OnIdle += new bedrock.util.SpanEventHandler(m_idle_OnIdle);
             m_idle.OnUnIdle += new bedrock.util.SpanEventHandler(m_idle_OnUnIdle);
             tvServices.ImageList = roster.ImageList;
+#if NET20
+            tvServices.NodeMouseDoubleClick += new TreeNodeMouseClickEventHandler(tvServices_NodeMouseDoubleClick);
+#endif
             AppDomain.CurrentDomain.UnhandledException +=new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
         }
+
 
         void m_idle_OnUnIdle(object sender, TimeSpan span)
         {
@@ -167,21 +171,18 @@ namespace Example
             // pnlCon
             // 
             this.pnlCon.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Spring;
-            this.pnlCon.Name = "pnlCon";
             this.pnlCon.Text = "Click on \"Offline\", and select a presence to log in.";
             this.pnlCon.Width = 538;
             // 
             // pnlSSL
             // 
             this.pnlSSL.Alignment = System.Windows.Forms.HorizontalAlignment.Center;
-            this.pnlSSL.Name = "pnlSSL";
             this.pnlSSL.Width = 30;
             // 
             // pnlPresence
             // 
             this.pnlPresence.Alignment = System.Windows.Forms.HorizontalAlignment.Right;
             this.pnlPresence.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Contents;
-            this.pnlPresence.Name = "pnlPresence";
             this.pnlPresence.Text = "Offline";
             this.pnlPresence.Width = 47;
             // 
@@ -205,7 +206,6 @@ namespace Example
             this.tpRoster.Size = new System.Drawing.Size(624, 390);
             this.tpRoster.TabIndex = 1;
             this.tpRoster.Text = "Roster";
-            this.tpRoster.UseVisualStyleBackColor = true;
             // 
             // roster
             // 
@@ -262,7 +262,6 @@ namespace Example
             this.tpServices.Size = new System.Drawing.Size(624, 390);
             this.tpServices.TabIndex = 2;
             this.tpServices.Text = "Services";
-            this.tpServices.UseVisualStyleBackColor = true;
             // 
             // tvServices
             // 
@@ -274,7 +273,6 @@ namespace Example
             this.tvServices.ShowRootLines = false;
             this.tvServices.Size = new System.Drawing.Size(624, 390);
             this.tvServices.TabIndex = 0;
-            this.tvServices.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.tvServices_NodeMouseDoubleClick);
             this.tvServices.AfterCollapse += new System.Windows.Forms.TreeViewEventHandler(this.tvServices_AfterCollapse);
             this.tvServices.AfterExpand += new System.Windows.Forms.TreeViewEventHandler(this.tvServices_AfterExpand);
             // 
@@ -288,7 +286,6 @@ namespace Example
             this.tpDebug.Size = new System.Drawing.Size(624, 390);
             this.tpDebug.TabIndex = 0;
             this.tpDebug.Text = "Debug";
-            this.tpDebug.UseVisualStyleBackColor = true;
             // 
             // debug
             // 
@@ -453,6 +450,7 @@ namespace Example
                 pnlSSL.ToolTipText = cert;
             }
 #endif
+#if NET20
             jabber.client.DiscoNode dn = jabber.client.DiscoNode.GetNode(jc.Server, null);
             TreeNode tn = tvServices.Nodes.Add(dn.Key, dn.Name);
             tn.ToolTipText = dn.Key.Replace('\u0000', '\n');
@@ -460,11 +458,13 @@ namespace Example
             tn.ImageIndex = 8;
             tn.SelectedImageIndex = 8;
             dm.BeginGetItems(dn.JID, dn.Node, new jabber.client.DiscoNodeHandler(GotItems));
+#endif
             m_idle.Enabled = true;
         }
 
         private void GotItems(jabber.client.DiscoNode node)
         {
+#if NET20
             TreeNode[] nodes = tvServices.Nodes.Find(node.Key, true);
             foreach (TreeNode n in nodes)
             {
@@ -479,6 +479,7 @@ namespace Example
                     tn.SelectedImageIndex = 8;
                 }
             }
+#endif
         }
 
         private void jc_OnDisconnect(object sender)
@@ -710,19 +711,21 @@ namespace Example
             e.Node.SelectedImageIndex = 7;
         }
 
-        private void tvServices_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
-        {
-            jabber.client.DiscoNode dn = (jabber.client.DiscoNode)e.Node.Tag;
-            if (dn.Children == null)
-            {
-                dm.BeginGetItems(dn.JID, dn.Node, new jabber.client.DiscoNodeHandler(GotItems));
-            }
-        }
-
         private void menuItem2_Click(object sender, EventArgs e)
         {
             jc.Close();
             this.Close();
+		}
+
+#if NET20
+        void tvServices_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+			jabber.client.DiscoNode dn = (jabber.client.DiscoNode)e.Node.Tag;
+			if (dn.Children == null)
+			{
+				dm.BeginGetItems(dn.JID, dn.Node, new jabber.client.DiscoNodeHandler(GotItems));
+			}
         }
-    }
+#endif
+	}
 }

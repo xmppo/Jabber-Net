@@ -472,7 +472,7 @@ namespace jabber.client
         {
             if (iq == null)
             {
-                FireOnError(new TimeoutException((JID) data));
+                FireOnError(new IQTimeoutException((JID) data));
                 return;
             }
             
