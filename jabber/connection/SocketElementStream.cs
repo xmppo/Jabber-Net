@@ -639,6 +639,7 @@ namespace jabber.connection
             }
             set
             {
+                bool close = false;
                 lock (StateLock)
                 {
                     if (value)
@@ -646,8 +647,10 @@ namespace jabber.connection
                         m_state = RunningState.Instance;
                     }
                     else
-                        Close();
+                        close = true;
                 }
+                if (close)
+                    Close();
                 if (value && (OnAuthenticate != null))
                 {
                     if (InvokeRequired)
@@ -841,12 +844,13 @@ namespace jabber.connection
         public virtual void Close(bool clean)
         {
             bool doClose = false;
+            bool doStream = false;
             lock (StateLock)
             {
                 if ((m_state == RunningState.Instance) && (clean))
                 {
                     m_reconnect = false;
-                    Write("</stream:stream>");
+                    doStream = true;
                 }
                 if (m_state != ClosedState.Instance)
                 {
@@ -854,6 +858,8 @@ namespace jabber.connection
                     doClose = true;
                 }
             }
+            if (doStream && (m_sock != null))
+                Write("</stream:stream>");
             if (doClose && (m_sock != null))
                 m_sock.Close();
         }
