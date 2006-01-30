@@ -144,8 +144,8 @@ namespace Example
             this.mnuAway = new System.Windows.Forms.MenuItem();
             this.menuItem1 = new System.Windows.Forms.MenuItem();
             this.mnuOffline = new System.Windows.Forms.MenuItem();
-            this.dm = new jabber.client.DiscoManager(this.components);
             this.menuItem2 = new System.Windows.Forms.MenuItem();
+            this.dm = new jabber.client.DiscoManager(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pnlCon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pnlSSL)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pnlPresence)).BeginInit();
@@ -171,18 +171,21 @@ namespace Example
             // pnlCon
             // 
             this.pnlCon.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Spring;
+            this.pnlCon.Name = "pnlCon";
             this.pnlCon.Text = "Click on \"Offline\", and select a presence to log in.";
             this.pnlCon.Width = 538;
             // 
             // pnlSSL
             // 
             this.pnlSSL.Alignment = System.Windows.Forms.HorizontalAlignment.Center;
+            this.pnlSSL.Name = "pnlSSL";
             this.pnlSSL.Width = 30;
             // 
             // pnlPresence
             // 
             this.pnlPresence.Alignment = System.Windows.Forms.HorizontalAlignment.Right;
             this.pnlPresence.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Contents;
+            this.pnlPresence.Name = "pnlPresence";
             this.pnlPresence.Text = "Offline";
             this.pnlPresence.Width = 47;
             // 
@@ -231,6 +234,7 @@ namespace Example
             this.jc.InvokeControl = this;
             this.jc.LocalCertificate = null;
             this.jc.Password = null;
+            this.jc.Priority = -1;
             this.jc.User = null;
             this.jc.OnReadText += new bedrock.TextHandler(this.jc_OnReadText);
             this.jc.OnMessage += new jabber.client.MessageHandler(this.jc_OnMessage);
@@ -351,16 +355,16 @@ namespace Example
             this.mnuOffline.Text = "&Offline";
             this.mnuOffline.Click += new System.EventHandler(this.mnuOffline_Click);
             // 
-            // dm
-            // 
-            this.dm.Client = this.jc;
-            // 
             // menuItem2
             // 
             this.menuItem2.Index = 4;
             this.menuItem2.Shortcut = System.Windows.Forms.Shortcut.CtrlQ;
             this.menuItem2.Text = "E&xit";
             this.menuItem2.Click += new System.EventHandler(this.menuItem2_Click);
+            // 
+            // dm
+            // 
+            this.dm.Client = this.jc;
             // 
             // MainForm
             // 
