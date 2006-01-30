@@ -293,7 +293,8 @@ namespace bedrock.net
                     ms.Write(b.buf, b.offset, b.len);
                 }
 
-                req = (HttpWebRequest) WebRequest.Create(m_url);
+            POLL:
+                req = (HttpWebRequest)WebRequest.Create(m_url);
                 req.CookieContainer = cookies;
                 req.ContentType     = CONTENT_TYPE;
                 req.Method          = METHOD;
@@ -307,15 +308,19 @@ namespace bedrock.net
                 s.Write(buf, 0, buf.Length);
                 s.Close();
 
+                resp = null;
                 try
                 {
                     resp = (HttpWebResponse) req.GetResponse();
                 }
                 catch (WebException ex)
                 {
-                    throw ex;
-                    //m_listener.OnError(this, ex);
-                    //return;
+                    if (ex.Status != WebExceptionStatus.KeepAliveFailure)
+                    {
+                        m_listener.OnError(this, ex);
+                        return;
+                    }
+                    goto POLL;
                 }
 
                 if (resp.StatusCode != HttpStatusCode.OK)
