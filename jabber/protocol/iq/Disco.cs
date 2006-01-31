@@ -48,6 +48,9 @@ namespace jabber.protocol.iq
             this.Query = new DiscoItems(doc);
         }
         
+        /// <summary>
+        /// The node on the query.
+        /// </summary>
         public string Node
         {
             get
@@ -76,6 +79,9 @@ namespace jabber.protocol.iq
             this.Query = new DiscoInfo(doc);
         }
 
+        /// <summary>
+        /// The node on the query.
+        /// </summary>
         public string Node
         {
             get

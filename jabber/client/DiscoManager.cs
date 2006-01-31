@@ -80,6 +80,12 @@ namespace jabber.client
             get { return m_node; }
         }
 
+        /// <summary>
+        /// Get a hash key that combines the jid and the node.
+        /// </summary>
+        /// <param name="jid"></param>
+        /// <param name="node"></param>
+        /// <returns></returns>
         protected static string GetKey(string jid, string node)
         {
             if ((node == null) || (node == ""))
@@ -138,19 +144,42 @@ namespace jabber.client
     {
         private static Tree m_items = new Tree();
 
-
+        /// <summary>
+        /// Children of this node.
+        /// </summary>
         public Set Children = null;
+        /// <summary>
+        /// Features of this node.
+        /// </summary>
         public Set Features = null;
+        /// <summary>
+        /// Identities of this node.
+        /// </summary>
         public Set Identity = null;
         private string m_name = null;
 
+        /// <summary>
+        /// Create a disco node.
+        /// </summary>
+        /// <param name="jid"></param>
+        /// <param name="node"></param>
         public DiscoNode(JID jid, string node)
             : base(jid, node)
         {
         }
 
+        /// <summary>
+        /// Features are now available
+        /// </summary>
         public event DiscoNodeHandler OnFeatures;
+        /// <summary>
+        /// New children are now available.
+        /// </summary>
         public event DiscoNodeHandler OnItems;
+        /// <summary>
+        /// New identities are available.
+        /// </summary>
+        public event DiscoNodeHandler OnIdentities;
 
         /// <summary>
         /// The human-readable string from the first identity.
@@ -196,6 +225,11 @@ namespace jabber.client
             return n;
         }
 
+        /// <summary>
+        /// Factory to create nodes, where the node is null, and only the JID is specified.
+        /// </summary>
+        /// <param name="jid"></param>
+        /// <returns></returns>
         public static DiscoNode GetNode(JID jid)
         {
             return GetNode(jid, null);
@@ -209,7 +243,11 @@ namespace jabber.client
             m_items.Clear();
         }
 
-
+        /// <summary>
+        /// Does this node have the specified feature?
+        /// </summary>
+        /// <param name="URI"></param>
+        /// <returns></returns>
         public bool HasFeature(string URI)
         {
             if (Features == null)
@@ -217,6 +255,10 @@ namespace jabber.client
             return Features.Contains(URI);
         }
 
+        /// <summary>
+        /// Add these features to the node. Fires OnFeatures.
+        /// </summary>
+        /// <param name="features"></param>
         public void AddFeatures(DiscoFeature[] features)
         {
             if (Features == null)
@@ -230,6 +272,10 @@ namespace jabber.client
             }
         }
 
+        /// <summary>
+        /// Add these identities to the node.
+        /// </summary>
+        /// <param name="ids"></param>
         public void AddIdentities(DiscoIdentity[] ids)
         {
             if (Identity == null)

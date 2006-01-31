@@ -17,6 +17,11 @@ using System.Runtime.InteropServices;
 
 namespace bedrock.util
 {
+    /// <summary>
+    /// TimeSpan event.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="span"></param>
     public delegate void SpanEventHandler(object sender, TimeSpan span);
 
     /// <summary>
