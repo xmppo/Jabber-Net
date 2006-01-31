@@ -298,6 +298,10 @@ namespace bedrock.net
                 req.CookieContainer = cookies;
                 req.ContentType     = CONTENT_TYPE;
                 req.Method          = METHOD;
+                req.KeepAlive       = false;
+#if NET20
+                req.CachePolicy = new System.Net.Cache.HttpRequestCachePolicy(System.Net.Cache.HttpRequestCacheLevel.NoCacheNoStore);
+#endif
             
                 if (m_proxy != null)
                     req.Proxy = m_proxy;
@@ -401,6 +405,15 @@ namespace bedrock.net
                         m_curPoll = m_maxPoll;
                 }
             }
+        }
+
+        /// <summary>
+        /// Descripton, including poll URL.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return "JEP-0025 Polling socket: " + m_url;
         }
 
         private class WriteBuf
