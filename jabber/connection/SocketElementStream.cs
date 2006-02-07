@@ -1341,7 +1341,9 @@ namespace jabber.connection
 
         private void Reconnect(object state)
         {
-            Connect();
+            // prevent double-connects
+            if (this.State == ClosedState.Instance)
+                Connect();
         }
 
         void ISocketEventListener.OnClose(bedrock.net.BaseSocket sock)
