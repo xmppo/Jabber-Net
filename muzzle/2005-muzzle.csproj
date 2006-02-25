@@ -144,6 +144,7 @@
     <EmbeddedResource Include="RosterTree.bmp" />
     <EmbeddedResource Include="RosterTree.resx">
       <DependentUpon>RosterTree.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="StripChart.bmp" />
     <EmbeddedResource Include="StripChart.resx">

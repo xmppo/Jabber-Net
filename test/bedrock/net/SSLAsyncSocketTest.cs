@@ -17,6 +17,10 @@ using System.Threading;
 using NUnit.Framework;
 using bedrock.net;
 using bedrock.util;
+#if NET20
+using System.Security.Cryptography.X509Certificates;
+#endif
+
 namespace test.bedrock.net
 {
 #if !NO_SSL
@@ -66,22 +70,20 @@ namespace test.bedrock.net
         {
             SocketWatcher c_w = new SocketWatcher(20);
             c_w.Synchronous = true;
+#if NET20
+            // Note: must have a client cert in your IE cert store.
+            X509Store store = new X509Store(StoreName.My, StoreLocation.CurrentUser);
+            store.Open(OpenFlags.ReadOnly);
+            c_w.LocalCertificate = store.Certificates[0];
+#endif
             m_cli = c_w.CreateConnectSocket(this, a, true, "localhost");
         }
     
         private void Server()
         {
             SocketWatcher s_w = new SocketWatcher(20);
-#if NET20
-            System.Security.SecureString s = new System.Security.SecureString();
-            s.AppendChar('t');
-            s.AppendChar('e');
-            s.AppendChar('s');
-            s.AppendChar('t');
-#else
-            string s = "test";
-#endif
-            s_w.SetCertificateFile("../../localhost.pfx", s);
+            s_w.SetCertificateFile("../../localhost.pfx", "test");
+            s_w.RequireClientCert = true;
             s_w.Synchronous = true;
             m_listen = s_w.CreateListenSocket(this, a, true);
             lock(start)
@@ -95,6 +97,7 @@ namespace test.bedrock.net
         #region Implementation of ISocketEventListener
         public bool OnAccept(BaseSocket newsocket)
         {
+            Assert.IsTrue(((AsyncSocket)newsocket).IsMutuallyAuthenticated);
             newsocket.RequestRead();
             return false;
         }

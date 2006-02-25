@@ -51,6 +51,7 @@ namespace bedrock.net
 
 #if NET20 || __MonoCS__
         private X509Certificate m_cert = null;
+        private bool m_requireClientCert = false;
 #elif !NO_SSL
         private Certificate m_cert = null;
 #endif
@@ -113,6 +114,15 @@ namespace bedrock.net
         }
 
         /// <summary>
+        /// Does the server require a client cert?  If not, the client cert won't be sent.
+        /// </summary>
+        public bool RequireClientCert
+        {
+            get { return m_requireClientCert; }
+            set { m_requireClientCert = value; }
+        }
+
+        /// <summary>
         /// Set the certificate to be used for accept sockets.  To generate a test .pfx file using openssl,
         /// add this to openssl.conf:
         ///   <blockquote>
@@ -131,9 +141,9 @@ namespace bedrock.net
         /// <param name="password">The password, if this is a .pfx file, null if .cer file.</param>
 #if NET20                                      
         public void SetCertificateFile(string filename,
-                                       System.Security.SecureString password)
+                                       string password)
         {
-            m_cert = new X509Certificate(filename, password);
+            m_cert = new X509Certificate2(filename, password);
             // TODO: check cert for validity
         }
 #else
@@ -246,6 +256,7 @@ namespace bedrock.net
             {
 #if !NO_SSL
                 result.LocalCertificate = m_cert;
+                result.RequireClientCert = m_requireClientCert;
 #else
                 throw new NotImplementedException("SSL not compiled in");
 #endif

@@ -245,6 +245,11 @@ namespace jabber.connection
         protected event FeaturesHandler OnSASLEnd;
 
         /// <summary>
+        /// Get notified of a SASL error.
+        /// </summary>
+        protected event SASLProcessorHandler OnSASLFailure;
+
+        /// <summary>
         /// We received a stream:error packet.
         /// </summary>
         [Category("Stream")]
@@ -394,11 +399,7 @@ namespace jabber.connection
         /// <param name="password">The password, if this is a .pfx
         /// file, null if .cer file.</param> 
         public void SetCertificateFile(string filename,
-#if NET20                                      
-                                       System.Security.SecureString password)
-#else
                                        string password)
-#endif
         {
             if (m_watcher != null)
                 m_watcher.SetCertificateFile(filename, password);
@@ -1047,6 +1048,12 @@ namespace jabber.connection
                             m_state = SASLState.Instance;
                         }
                         m_saslProc = SASLProcessor.createProcessor(ms.Types, m_sslOn || m_plaintext);
+                        if (m_saslProc == null)
+                        {
+
+                            FireOnError(new NotImplementedException("No implemented mechanisms in: " + ms.Types.ToString()));
+                            return;
+                        }
                         if (OnSASLStart != null)
                             OnSASLStart(this, m_saslProc);
                         Step s = m_saslProc.step(null, this.Document);
@@ -1105,7 +1112,16 @@ namespace jabber.connection
                 switch (tag.Name)
                 {
                 case "proceed":
-                    m_sock.StartTLS();
+                    try
+                    {
+                        m_sock.StartTLS();
+                    }
+                    catch (Exception e)
+                    {
+                        m_reconnect = false;
+                        FireOnError(e);
+                        return;
+                    }
                     m_sslOn = true;
                     SendNewStreamHeader();
                     break;

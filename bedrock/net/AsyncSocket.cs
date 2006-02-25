@@ -166,13 +166,14 @@ namespace bedrock.net
         /// hard-coded to start with.  Note: when doing start-tls,
         /// this is overridden to just be TLS.
         /// </summary>
-        public static SslProtocols   SSLProtocols     = SslProtocols.Ssl3 | SslProtocols.Tls;
-        private SslProtocols         m_secureProtocol = SslProtocols.None;
-        private Socket               m_sock           = null;
-        private X509Certificate      m_cert           = null;
-        private Stream               m_stream         = null;
-        private MemoryStream         m_pending        = new MemoryStream();
-        private bool                 m_writing        = false;
+        public static SslProtocols   SSLProtocols        = SslProtocols.Ssl3 | SslProtocols.Tls;
+        private SslProtocols         m_secureProtocol    = SslProtocols.None;
+        private Socket               m_sock              = null;
+        private X509Certificate      m_cert              = null;
+        private Stream               m_stream            = null;
+        private MemoryStream         m_pending           = new MemoryStream();
+        private bool                 m_writing           = false;
+        private bool                 m_requireClientCert = false;
 #elif __MonoCS__
         public static Mono.Security.Protocol.Tls.SecurityProtocolType SSLProtocols     = Mono.Security.Protocol.Tls.SecurityProtocolType.Ssl3 | Mono.Security.Protocol.Tls.SecurityProtocolType.Tls;
         private Mono.Security.Protocol.Tls.SecurityProtocolType m_secureProtocol = 0;
@@ -324,6 +325,23 @@ namespace bedrock.net
                         m_cert = certs[0];
                     break;
             }
+        }
+
+        /// <summary>
+        /// Callback to choose client cert.
+        /// TODO: this should surface an event of some kind.
+        /// </summary>
+        public X509Certificate ChooseClientCertificate(Object sender, 
+            string targetHost, 
+            X509CertificateCollection localCertificates,
+            X509Certificate remoteCertificate,
+            string[] acceptableIssuers)
+        {
+            if (m_cert != null)
+                return m_cert;
+
+            ChooseClientCertificate();
+            return m_cert;
         }
 
         /// <summary>
@@ -540,6 +558,7 @@ namespace bedrock.net
             cliCon.m_stream = new NetworkStream(cliCon.m_sock);
             cliCon.m_server = true;
             cliCon.LocalCertificate = m_cert;
+            cliCon.RequireClientCert = m_requireClientCert;
 #elif __MonoCS__
             cliCon.m_sock.Blocking = true;
             cliCon.m_stream = new NetworkStream(cliCon.m_sock);
@@ -789,7 +808,8 @@ namespace bedrock.net
         /// <returns></returns>
         protected bool ValidateServerCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
         {
-            // huh.  Well, I'm not sure what to do with client certs.
+            // TODO: add a new ISocketEventListener to validate cert.
+            // Note: Don't write servers with Jabber-Net, please.  :)
             if (m_server)
             {
                 return true;
@@ -801,8 +821,6 @@ namespace bedrock.net
             if ((sslPolicyErrors == SslPolicyErrors.RemoteCertificateChainErrors) && UntrustedRootOK)
             {
                 // Huh.  Maybe there should be a listener method for this.
-
-                //X509Certificate2UI.DisplayCertificate(new X509Certificate2(certificate));
                 return true;
             }
 
@@ -822,7 +840,7 @@ namespace bedrock.net
             if (m_secureProtocol == SslProtocols.None)
                 m_secureProtocol = SslProtocols.Tls;
 
-            m_stream = new SslStream(m_stream, false, new RemoteCertificateValidationCallback(ValidateServerCertificate), null);
+            m_stream = new SslStream(m_stream, false, new RemoteCertificateValidationCallback(ValidateServerCertificate), new LocalCertificateSelectionCallback(ChooseClientCertificate));
             if (m_server)
             {
                 if (m_cert == null)
@@ -832,18 +850,38 @@ namespace bedrock.net
                     return;
                 }
                 // TODO: surface these as params
-                ((SslStream)m_stream).AuthenticateAsServer(m_cert, false, m_secureProtocol, false);
+                ((SslStream)m_stream).AuthenticateAsServer(m_cert, m_requireClientCert, m_secureProtocol, false);
             }
             else
             {
                 X509CertificateCollection certs = null;
                 if (m_cert != null)
                 {
-                    certs = new X509CertificateCollection();
+                    certs = new X509Certificate2Collection();
                     certs.Add(m_cert);
                 }
                 ((SslStream)m_stream).AuthenticateAsClient(m_hostid, certs, m_secureProtocol, false);
             }
+        }
+
+        /// <summary>
+        /// Is the connection mutually authenticated?  (was there a good client cert, etc.)
+        /// </summary>
+        public bool IsMutuallyAuthenticated
+        {
+            get
+            {
+                return ((SslStream)m_stream).IsMutuallyAuthenticated;
+            }
+        }
+
+        /// <summary>
+        /// Does the server require a client cert?  If not, the client cert won't be sent.
+        /// </summary>
+        public bool RequireClientCert
+        {
+            get { return m_requireClientCert; }
+            set { m_requireClientCert = value; }
         }
 
 #elif __MonoCS__
@@ -1125,6 +1163,13 @@ namespace bedrock.net
                     SocketFlags.None, new AsyncCallback(GotData), null);
 #endif
             }
+#if NET20 
+            catch (AuthenticationException)
+            {
+                Close();
+                // don't throw.  this gets caught elsewhere.
+            }
+#endif
             catch (SocketException e)
             {
                 Close();
