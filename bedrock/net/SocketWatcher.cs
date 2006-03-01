@@ -256,7 +256,9 @@ namespace bedrock.net
             {
 #if !NO_SSL
                 result.LocalCertificate = m_cert;
+#if NET20
                 result.RequireClientCert = m_requireClientCert;
+#endif
 #else
                 throw new NotImplementedException("SSL not compiled in");
 #endif
