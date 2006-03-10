@@ -305,6 +305,7 @@ namespace bedrock.net
         /// </summary>
         public void ChooseClientCertificate()
         {
+            /*
             X509Store store = new X509Store(StoreName.My, StoreLocation.CurrentUser);
             store.Open(OpenFlags.ReadOnly);
 
@@ -325,6 +326,7 @@ namespace bedrock.net
                         m_cert = certs[0];
                     break;
             }
+             */
         }
 
         /// <summary>
