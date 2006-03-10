@@ -33,6 +33,10 @@ namespace jabber.connection
     /// </summary>
     public class IQTimeoutException : Exception
     {
+        /// <summary>
+        /// Create a timeout exception
+        /// </summary>
+        /// <param name="message"></param>
         public IQTimeoutException(string message)
             : base(message)
         {
