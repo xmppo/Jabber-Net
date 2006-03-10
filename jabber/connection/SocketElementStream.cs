@@ -625,6 +625,15 @@ namespace jabber.connection
         }
 
         /// <summary>
+        /// The expected X.509 CN for the server.
+        /// </summary>
+        /// <returns></returns>
+        protected virtual string ServerIdentity
+        {
+            get { return m_to; }
+        }
+
+        /// <summary>
         /// Have we authenticated?  Locks on StateLock
         /// </summary>
         [Browsable(false)]
@@ -807,7 +816,7 @@ namespace jabber.connection
                 }
 
                 Address addr = new Address(GetHost(), m_port);
-                m_sock.Connect(addr, m_to);
+                m_sock.Connect(addr, this.ServerIdentity);
             }
         }
 
@@ -1176,7 +1185,10 @@ namespace jabber.connection
             FireOnError(new ApplicationException(message));
         }
 
-        private void SendNewStreamHeader()
+        /// <summary>
+        /// Send a stream:stream
+        /// </summary>
+        protected void SendNewStreamHeader()
         {
             jabber.protocol.stream.Stream str = new jabber.protocol.stream.Stream(m_doc, NS);
             str.To = m_to;
@@ -1273,6 +1285,8 @@ namespace jabber.connection
                     OnConnect(this, (AsyncSocket)m_sock);
                 }
             }
+
+            m_sock.RequestRead();
 
             return false;
         }

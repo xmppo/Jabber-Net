@@ -61,6 +61,10 @@ namespace jabber.protocol
         /// </summary>
         public const string ACCEPT = "jabber:component:accept";
         /// <summary>
+        /// Jabber component connections, from the router
+        /// </summary>
+        public const string CONNECT = "jabber:component:connect";
+        /// <summary>
         /// S2S connection
         /// </summary>
         public const string SERVER = "jabber:server"; 

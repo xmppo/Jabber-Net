@@ -370,7 +370,11 @@ namespace muzzle
             t = Prop(root, "Port");
             if ((t != null) && (t != ""))
                 Port = int.Parse(t);
-
+            t = Prop(root, "Listen");
+            if ((t != null) && (t != ""))
+                Listen = bool.Parse(t);
+            else
+                Listen = false;
             WriteService();
         }
 
@@ -397,6 +401,7 @@ namespace muzzle
             root.AppendChild(doc.CreateElement("Host")).InnerText = Host;
             root.AppendChild(doc.CreateElement("Secret")).InnerText = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(Secret));
             root.AppendChild(doc.CreateElement("Port")).InnerText = Port.ToString();
+            root.AppendChild(doc.CreateElement("Listen")).InnerText = Listen.ToString();
 
             XmlTextWriter xw = new XmlTextWriter(file, System.Text.Encoding.UTF8);
             xw.Formatting = Formatting.Indented;
@@ -413,6 +418,7 @@ namespace muzzle
             Host        = m_service.NetworkHost;
             Secret      = m_service.Secret;
             Port        = m_service.Port;
+            Listen      = (m_service.Type == jabber.server.ComponentType.Connect);
         }
 
         private void WriteService()

@@ -74,6 +74,31 @@ namespace jabber.server
         private void init()
         {
             this.OnStreamInit += new jabber.connection.StreamHandler(JabberService_OnStreamInit);
+            this.OnSASLStart += new jabber.connection.sasl.SASLProcessorHandler(JabberService_OnSASLStart);
+        }
+
+        private void JabberService_OnSASLStart(object sender, jabber.connection.sasl.SASLProcessor proc)
+        {
+            jabber.connection.BaseState s = null;
+            lock (StateLock)
+            {
+                s = State;
+            }
+
+            if (s == jabber.connection.NonSASLAuthState.Instance)
+            {
+                lock (StateLock)
+                {
+                    State = HandshakingState.Instance;
+                }
+
+                if (m_type == ComponentType.Accept)
+                {
+                    Handshake hand = new Handshake(m_doc);
+                    hand.SetAuth(m_secret, StreamID);
+                    Write(hand);
+                }
+            }            
         }
 
         /// <summary>
@@ -208,7 +233,16 @@ namespace jabber.server
         [Browsable(false)]
         protected override string NS
         {
-            get { return URI.ACCEPT; }
+            get
+            {
+                return (this.Type == ComponentType.Accept) ? URI.ACCEPT : URI.CONNECT;
+            }
+        }
+
+        [Browsable(false)]
+        protected override string ServerIdentity
+        {
+            get { return NetworkHost; }
         }
 
         /// <summary>
@@ -246,25 +280,28 @@ namespace jabber.server
         protected override void OnDocumentStart(object sender, System.Xml.XmlElement tag)
         {
             base.OnDocumentStart(sender, tag);
+            if (m_type == ComponentType.Connect)
+            {
+                lock (StateLock)
+                {
+                    State = HandshakingState.Instance;
+                }
 
-            lock (StateLock)
-            {
-                State = HandshakingState.Instance;
-            }
+                jabber.protocol.stream.Stream str = new jabber.protocol.stream.Stream(m_doc, NS);
+                str.To = this.Server;
+                this.StreamID = str.ID;
+                if (ServerVersion.StartsWith("1."))
+                    str.Version = "1.0";
 
-            if (m_type == ComponentType.Accept)
-            {
-                Stream str = tag as Stream;
-                Handshake hand = new Handshake(m_doc);
-                hand.SetAuth(m_secret, str.ID);
-                Write(hand);
-            }
-            else
-            {
-                Stream s = new Stream(m_doc, URI.ACCEPT);
-                s.From = Server;
-                StreamID = s.ID;
-                Write(s.StartTag());
+                Write(str.StartTag());
+
+                if (ServerVersion.StartsWith("1."))
+                {
+                    Features f = new Features(m_doc);
+                    if (AutoStartTLS && !SSLon)
+                        f.StartTLS = new StartTLS(m_doc);
+                    Write(f);
+                }
             }
         }
 
