@@ -49,14 +49,14 @@ namespace jabber.connection
     [RCS(@"$Header$")]
     public class IQTracker
     {
-        private Hashtable           m_pending = new Hashtable();
-        private SocketElementStream m_cli     = null;
+        private Hashtable  m_pending = new Hashtable();
+        private XmppStream m_cli     = null;
 
         /// <summary>
         /// Create a new IQ tracker
         /// </summary>
         /// <param name="stream">The client to send/receive on</param>
-        public IQTracker(SocketElementStream stream)
+        public IQTracker(XmppStream stream)
         {
             m_cli = stream;
             m_cli.OnProtocol += new jabber.protocol.ProtocolHandler(OnIQ);

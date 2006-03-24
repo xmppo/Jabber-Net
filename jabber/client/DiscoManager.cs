@@ -290,6 +290,10 @@ namespace jabber.client
             }
         }
 
+        /// <summary>
+        /// Add the given items to the cache.
+        /// </summary>
+        /// <param name="items"></param>
         public void AddItems(DiscoItem[] items)
         {
             if (Children == null)
@@ -308,6 +312,11 @@ namespace jabber.client
             }
         }
 
+        /// <summary>
+        /// Create a disco#info IQ.
+        /// </summary>
+        /// <param name="doc"></param>
+        /// <returns></returns>
         public IQ InfoIQ(System.Xml.XmlDocument doc)
         {
             DiscoInfoIQ iiq = new DiscoInfoIQ(doc);
@@ -321,6 +330,11 @@ namespace jabber.client
             return iiq;
         }
 
+        /// <summary>
+        /// Create a disco#items IQ.
+        /// </summary>
+        /// <param name="doc"></param>
+        /// <returns></returns>
         public IQ ItemsIQ(System.Xml.XmlDocument doc)
         {
             DiscoItemsIQ iiq = new DiscoItemsIQ(doc);
@@ -334,6 +348,10 @@ namespace jabber.client
             return iiq;
         }
 
+        /// <summary>
+        /// Get all items.
+        /// </summary>
+        /// <returns></returns>
         public static IEnumerator EnumerateAll()
         {
             return m_items.GetEnumerator();
@@ -341,6 +359,10 @@ namespace jabber.client
 
         #region IEnumerable Members
 
+        /// <summary>
+        /// Get an enumerator across all items.
+        /// </summary>
+        /// <returns></returns>
         public IEnumerator GetEnumerator()
         {
             return Children.GetEnumerator();
@@ -349,6 +371,10 @@ namespace jabber.client
         #endregion
     }
 
+    /// <summary>
+    /// Callback with a new disco node.
+    /// </summary>
+    /// <param name="node"></param>
     public delegate void DiscoNodeHandler(DiscoNode node);
 
     /// <summary>
@@ -479,6 +505,12 @@ namespace jabber.client
             }
         }
 
+        /// <summary>
+        /// Make a call to get the feaures to this node, and call back on handler.  
+        /// If the information is in the cache, handler gets called right now.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="handler"></param>
         public void BeginGetFeatures(DiscoNode node, DiscoNodeHandler handler)
         {
             if (handler == null)
@@ -493,11 +525,24 @@ namespace jabber.client
             }
         }
 
+        /// <summary>
+        /// Make a call to get the feaures to this node, and call back on handler.  
+        /// If the information is in the cache, handler gets called right now.
+        /// </summary>
+        /// <param name="jid"></param>
+        /// <param name="node"></param>
+        /// <param name="handler"></param>
         public void BeginGetFeatures(JID jid, string node, DiscoNodeHandler handler)
         {
             BeginGetFeatures(DiscoNode.GetNode(jid, node), handler);
         }
 
+        /// <summary>
+        /// Make a call to get the child items of this node, and call back on handler.  
+        /// If the information is in the cache, handler gets called right now.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="handler"></param>
         public void BeginGetItems(DiscoNode node, DiscoNodeHandler handler)
         {
             if (handler == null)
@@ -512,6 +557,13 @@ namespace jabber.client
             }
         }
 
+        /// <summary>
+        /// Make a call to get the child items of this node, and call back on handler.  
+        /// If the information is in the cache, handler gets called right now.
+        /// </summary>
+        /// <param name="jid"></param>
+        /// <param name="node"></param>
+        /// <param name="handler"></param>
         public void BeginGetItems(JID jid, string node, DiscoNodeHandler handler)
         {
             BeginGetItems(DiscoNode.GetNode(jid, node), handler);

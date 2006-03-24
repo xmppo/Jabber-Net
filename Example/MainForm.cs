@@ -18,6 +18,7 @@ using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
+using System.Xml;
 
 using jabber;
 using jabber.protocol;
@@ -33,8 +34,6 @@ namespace Example
     /// </summary>
     public class MainForm : System.Windows.Forms.Form
     {
-        private bedrock.net.BaseSocket m_sock;
-
         private System.Windows.Forms.StatusBar sb;
         private jabber.client.JabberClient jc;
         private jabber.client.RosterManager rm;
@@ -171,21 +170,18 @@ namespace Example
             // pnlCon
             // 
             this.pnlCon.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Spring;
-            this.pnlCon.Name = "pnlCon";
             this.pnlCon.Text = "Click on \"Offline\", and select a presence to log in.";
             this.pnlCon.Width = 538;
             // 
             // pnlSSL
             // 
             this.pnlSSL.Alignment = System.Windows.Forms.HorizontalAlignment.Center;
-            this.pnlSSL.Name = "pnlSSL";
             this.pnlSSL.Width = 30;
             // 
             // pnlPresence
             // 
             this.pnlPresence.Alignment = System.Windows.Forms.HorizontalAlignment.Right;
             this.pnlPresence.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Contents;
-            this.pnlPresence.Name = "pnlPresence";
             this.pnlPresence.Text = "Offline";
             this.pnlPresence.Width = 47;
             // 
@@ -238,7 +234,7 @@ namespace Example
             this.jc.User = null;
             this.jc.OnReadText += new bedrock.TextHandler(this.jc_OnReadText);
             this.jc.OnMessage += new jabber.client.MessageHandler(this.jc_OnMessage);
-            this.jc.OnConnect += new bedrock.net.AsyncSocketHandler(this.jc_OnConnect);
+            this.jc.OnConnect += new jabber.connection.StanzaStreamHandler(jc_OnConnect);
             this.jc.OnAuthenticate += new bedrock.ObjectHandler(this.jc_OnAuthenticate);
             this.jc.OnAuthError += new jabber.client.IQHandler(this.jc_OnAuthError);
             this.jc.OnDisconnect += new bedrock.ObjectHandler(this.jc_OnDisconnect);
@@ -388,6 +384,7 @@ namespace Example
             this.ResumeLayout(false);
 
         }
+
 #endregion
 
         /// <summary>
@@ -448,10 +445,16 @@ namespace Example
             {
 
                 pnlSSL.Text = "SSL";
-                string cert = ((bedrock.net.AsyncSocket)m_sock).RemoteCertificate.ToString(true);
+#if NET20
+                System.Security.Cryptography.X509Certificates.X509Certificate cert2 = 
+                    (System.Security.Cryptography.X509Certificates.X509Certificate)
+                    jc[jabber.connection.Options.REMOTE_CERTIFICATE];
+
+                string cert_str = cert2.ToString(true);
                 debug.AppendText("\r\nServer Certificate:\r\n-------------------\r\n");
-                debug.AppendText(cert + "\r\n");
-                pnlSSL.ToolTipText = cert;
+                debug.AppendText(cert_str + "\r\n");
+                pnlSSL.ToolTipText = cert_str;
+#endif
             }
 #endif
 #if NET20
@@ -661,14 +664,9 @@ namespace Example
                 jc.Close();
         }
 
-        private void jc_OnConnect(object sender, bedrock.net.BaseSocket sock)
+        void jc_OnConnect(object sender, jabber.connection.StanzaStream stream)
         {
-            if (sock == null)
-                return;
-
-            m_sock = sock;
             m_err = false;
-            debug.AppendText("Connected to: " + sock.ToString() + "\r\n");
         }
 
         private void jc_OnStreamError(object sender, System.Xml.XmlElement rp)
@@ -681,8 +679,19 @@ namespace Example
         {
             if ((e.KeyCode == Keys.Enter) && e.Control)
             {
-                jc.Write(txtDebugInput.Text);
-                txtDebugInput.Clear();
+                try
+                {
+                    XmlDocument doc = new XmlDocument();
+                    doc.LoadXml(txtDebugInput.Text);
+                    XmlElement elem = doc.DocumentElement;
+                    if (elem != null)
+                        jc.Write(elem);
+                    txtDebugInput.Clear();
+                }
+                catch (XmlException ex)
+                {
+                    MessageBox.Show("Invalid XML: " + ex.Message);
+                }
             }
         
         }
@@ -719,17 +728,18 @@ namespace Example
         {
             jc.Close();
             this.Close();
-		}
+                }
 
 #if NET20
-        void tvServices_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        void tvServices_NodeMouseDoubleClick(object sender,
+                                             TreeNodeMouseClickEventArgs e)
         {
-			jabber.client.DiscoNode dn = (jabber.client.DiscoNode)e.Node.Tag;
-			if (dn.Children == null)
-			{
-				dm.BeginGetItems(dn.JID, dn.Node, new jabber.client.DiscoNodeHandler(GotItems));
-			}
+            jabber.client.DiscoNode dn = (jabber.client.DiscoNode)e.Node.Tag;
+            if (dn.Children == null)
+            {
+                dm.BeginGetItems(dn.JID, dn.Node, new jabber.client.DiscoNodeHandler(GotItems));
+            }
         }
 #endif
-	}
+    }
 }

@@ -25,6 +25,7 @@ namespace jabber.protocol
 {
     /// <summary>
     /// Summary description for AsynchElementStream.
+    /// TODO: combine with ElementStream, since there's only one impl now.
     /// </summary>
     [RCS(@"$Header$")]
     public class AsynchElementStream : ElementStream
@@ -45,14 +46,14 @@ namespace jabber.protocol
         {
         }
 
-                /// <summary>
-                /// Put bytes into parser.  Used by test routines, only, for convenience.
-                /// </summary>
-                /// <param name="buf"></param>
-                public void Push(byte[] buf)
-                {
-                        Push(buf, 0, buf.Length);
-                }
+        /// <summary>
+        /// Put bytes into parser.  Used by test routines, only, for convenience.
+        /// </summary>
+        /// <param name="buf"></param>
+        public void Push(byte[] buf)
+        {
+            Push(buf, 0, buf.Length);
+        }
 
         /// <summary>
         /// Put bytes into the parser.

@@ -13,6 +13,7 @@
  * --------------------------------------------------------------------------*/
 using System;
 using System.Threading;
+using System.Xml;
 
 using bedrock.util;
 using jabber;
@@ -59,8 +60,22 @@ namespace ConsoleClient
             jc.Connect();
 
             string line;
-            while((line = Console.ReadLine()) != "")
-                jc.Write(line);
+            while ((line = Console.ReadLine()) != "")
+            {
+                try
+                {
+                    // TODO: deal with stanzas that span lines... keep parsing until we have a full "doc".
+                    XmlDocument doc = new XmlDocument();
+                    doc.LoadXml(line);
+                    XmlElement elem = doc.DocumentElement;
+                    if (elem != null)
+                        jc.Write(elem);
+                }
+                catch (XmlException ex)
+                {
+                    Console.WriteLine("Invalid XML: " + ex.Message);
+                }
+            }
         }
 
         /// <summary>

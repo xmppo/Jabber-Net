@@ -48,23 +48,23 @@ namespace jabber.client
     /// etc.  Hook into the OnProtocol event.  Call Connect().
     /// </summary>
     [RCS(@"$Header$")]
-    public class JabberClient : 
-        SocketElementStream
+    public class JabberClient : XmppStream
     {
-        private string m_user       = null;
-        private string m_password   = null;
-        private string m_resource   = "Jabber.Net";
-        private int    m_priority   = 0;
-
-        private bool m_autoLogin  = true;
-        private bool m_autoRoster = true;
-        private bool m_autoPres   = true;
-
         private IQTracker m_tracker = null;
 
+        private static readonly object[][] DEFAULTS = new object[][] {
+            new object[] {Options.RESOURCE, "Jabber.Net"},
+            new object[] {Options.PRIORITY, 0},
+            new object[] {Options.AUTO_LOGIN, true},
+            new object[] {Options.AUTO_ROSTER, true},
+            new object[] {Options.AUTO_PRESENCE, true},
+            new object[] {Options.PROXY_PORT, 1080},
+        };
 
         private void init()
         {
+            SetDefaults(DEFAULTS);
+
             m_tracker = new IQTracker(this);
             this.OnSASLStart += new jabber.connection.sasl.SASLProcessorHandler(JabberClient_OnSASLStart);
             this.OnSASLEnd += new jabber.protocol.stream.FeaturesHandler(JabberClient_OnSASLEnd);
@@ -89,6 +89,7 @@ namespace jabber.client
             init();
         }
 
+        /*
         /// <summary>
         /// Create a new JabberClient, reusing an existing SocketWatcher.
         /// </summary>
@@ -97,6 +98,7 @@ namespace jabber.client
         {
             init();
         }
+        */
 
         /// <summary>
         /// We received a presence packet.
@@ -161,8 +163,8 @@ namespace jabber.client
         [Category("Jabber")]
         public string User
         {
-            get { return m_user; }
-            set { m_user = value; }
+            get { return this[Options.USER] as string; }
+            set { this[Options.USER] = value; }
         }
 
         /// <summary>
@@ -173,8 +175,8 @@ namespace jabber.client
         [DefaultValue(0)]
         public int Priority
         {
-            get { return m_priority; }
-            set { m_priority = value; }
+            get { return (int)this[Options.PRIORITY]; }
+            set { this[Options.PRIORITY] = value; }
         }
 
         /// <summary>
@@ -189,8 +191,8 @@ namespace jabber.client
         [Category("Jabber")]
         public string Password
         {
-            get { return m_password; }
-            set { m_password = value; }
+            get { return this[Options.PASSWORD] as string; }
+            set { this[Options.PASSWORD] = value; }
         }
         
         /// <summary>
@@ -201,8 +203,8 @@ namespace jabber.client
         [Category("Automation")]
         public bool AutoLogin
         {
-            get { return m_autoLogin; }
-            set { m_autoLogin = value; }
+            get { return (bool)this[Options.AUTO_LOGIN]; }
+            set { this[Options.AUTO_LOGIN] = value; }
         }
         
         /// <summary>
@@ -213,8 +215,8 @@ namespace jabber.client
         [Category("Automation")]
         public bool AutoRoster
         {
-            get { return m_autoRoster; }
-            set { m_autoRoster = value; }
+            get { return (bool)this[Options.AUTO_ROSTER]; }
+            set { this[Options.AUTO_ROSTER] = value; }
         }
 
         /// <summary>
@@ -225,8 +227,8 @@ namespace jabber.client
         [Category("Automation")]
         public bool AutoPresence
         {
-            get { return m_autoPres; }
-            set { m_autoPres = value; }
+            get { return (bool)this[Options.AUTO_PRESENCE]; }
+            set { this[Options.AUTO_PRESENCE] = value; }
         }
         
         /// <summary>
@@ -239,8 +241,8 @@ namespace jabber.client
         [Category("Jabber")]
         public string Resource
         {
-            get { return m_resource; }
-            set { m_resource = value; }
+            get { return this[Options.RESOURCE] as string; }
+            set { this[Options.RESOURCE] = value; }
         }
 
         /// <summary>
@@ -274,11 +276,11 @@ namespace jabber.client
                 base.IsAuthenticated = value;
                 if (value)
                 {
-                    if (m_autoRoster)
+                    if (AutoRoster)
                         GetRoster();
-                    if (m_autoPres)
+                    if (AutoPresence)
                         Presence(PresenceType.available,
-                            "online", null, m_priority);
+                            "online", null, Priority);
                 }
             }
         }
@@ -291,6 +293,7 @@ namespace jabber.client
         /// </summary>
         public override void Connect()
         {
+            this[Options.SERVER_ID] = this[Options.TO];
             base.Connect();
         }
 
@@ -313,14 +316,14 @@ namespace jabber.client
         /// </summary>
         public void Login()
         {
-            Debug.Assert(m_user != null);
-            Debug.Assert(m_password != null);
-            Debug.Assert(m_resource != null);
+            Debug.Assert(User != null);
+            Debug.Assert(Password != null);
+            Debug.Assert(Resource != null);
 
             AuthIQ aiq = new AuthIQ(Document);
             aiq.Type = IQType.get;
             Auth a = (Auth) aiq.Query;
-            a.Username = m_user;
+            a.Username = User;
 
             lock (StateLock)
             {
@@ -520,18 +523,6 @@ namespace jabber.client
                 OnRegistered(this, iq);
         }
 
-        /// <summary>
-        /// Receieved the stream:stream.  Start the login process.
-        /// TODO: allow for registration.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="tag"></param>
-        protected override void OnDocumentStart(object sender,
-            System.Xml.XmlElement tag)
-        {
-            base.OnDocumentStart(sender, tag);
-        }
-
         private void OnGetAuth(object sender, IQ i, object data)
         {
             if ((i == null) || (i.Type != IQType.result))
@@ -553,11 +544,11 @@ namespace jabber.client
                 
             if ((res["sequence"] != null) && (res["token"] != null))
             {
-                a.SetZeroK(m_user, m_password, res.Token, res.Sequence);
+                a.SetZeroK(User, Password, res.Token, res.Sequence);
             }
             else if (res["digest"] != null)
             {
-                a.SetDigest(m_user, m_password, StreamID);
+                a.SetDigest(User, Password, StreamID);
             }
             else if (res["password"] != null)
             {
@@ -566,7 +557,7 @@ namespace jabber.client
                     FireOnError(new AuthenticationFailedException("Plaintext authentication forbidden."));
                     return;
                 }
-                a.SetAuth(m_user, m_password);
+                a.SetAuth(User, Password);
             }
             else
             {
@@ -574,8 +565,8 @@ namespace jabber.client
                 return;
             }
             if (res["resource"] != null)
-                a.Resource = m_resource;
-            a.Username = m_user;
+                a.Resource = Resource;
+            a.Username = User;
 
             lock (StateLock)
             {
@@ -671,7 +662,7 @@ namespace jabber.client
             // HACK: fire OnSASLStart with state of NonSASLAuthState to initiate old-style auth.
             if (s == NonSASLAuthState.Instance)
             {
-                if (m_autoLogin)
+                if (AutoLogin)
                     Login();
                 else
                 {
@@ -695,8 +686,9 @@ namespace jabber.client
             }
             else
             {
-                proc[SASLProcessor.USERNAME] = m_user;
-                proc[SASLProcessor.PASSWORD] = m_password;
+                // TODO: integrate SASL params into XmppStream params
+                proc[SASLProcessor.USERNAME] = User;
+                proc[SASLProcessor.PASSWORD] = Password;
                 proc[MD5Processor.REALM] = this.Server;
             }
         }
@@ -714,8 +706,8 @@ namespace jabber.client
                 iq.Type = IQType.set;
 
                 jabber.protocol.stream.Bind bind = new jabber.protocol.stream.Bind(this.Document);
-                if ((m_resource != null) && (m_resource != ""))
-                    bind.Resource = m_resource;
+                if ((Resource != null) && (Resource != ""))
+                    bind.Resource = Resource;
                                             
                 iq.AddChild(bind);
                 this.Tracker.BeginIQ(iq, new IqCB(GotResource), feat);
@@ -737,11 +729,11 @@ namespace jabber.client
             jabber.protocol.stream.Features feat =
                 state as jabber.protocol.stream.Features;
 
-	    if (iq == null)
-	    {
+            if (iq == null)
+            {
                 FireOnError(new AuthenticationFailedException("Timeout authenticating"));
-		return;
-	    }
+                return;
+            }
             if (iq.Type != IQType.result)
             {
                 FireOnError(new AuthenticationFailedException());

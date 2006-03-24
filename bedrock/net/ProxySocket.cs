@@ -135,7 +135,7 @@ namespace bedrock.net
             Debug.Assert(m_port != 0);
             // connect to the proxy.
             Address proxy_addr = new Address(m_host, m_port);
-            m_sock.Connect(proxy_addr);
+            m_sock.Connect(proxy_addr, m_hostid);
             // we'll end up in OnConnected below.
         }
 

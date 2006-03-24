@@ -166,7 +166,8 @@ namespace xpnet
         {
             int[] tem = v;
             v = new int[tem.Length << 1];
-            System.Buffer.BlockCopy(tem, 0, v, 0, tem.Length);
+            System.Buffer.BlockCopy(tem, 0, v, 0, 
+                                tem.Length * System.Runtime.InteropServices.Marshal.SizeOf(typeof(int)));
             return v;
         }
 
@@ -174,7 +175,8 @@ namespace xpnet
         {
             bool[] tem = v;
             v = new bool[tem.Length << 1];
-            System.Buffer.BlockCopy(tem, 0, v, 0, tem.Length);
+            System.Buffer.BlockCopy(tem, 0, v, 0, 
+                                tem.Length * System.Runtime.InteropServices.Marshal.SizeOf(typeof(bool)));
             return v;
         }
 

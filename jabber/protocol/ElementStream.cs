@@ -35,6 +35,8 @@ namespace jabber.protocol
     /// Async XML parsing, according to jabber protocol rules of "interesting". 
     /// The root node fires IElementStreamListener.OnDocumentStart(), and each
     /// direct child of the root fires IElementStreamListener.OnTag().
+    /// 
+    /// TODO: Combine with AsyncElementStream, since there's only one impl.
     /// </summary>
     [RCS(@"$Header$")]
     public class ElementStream

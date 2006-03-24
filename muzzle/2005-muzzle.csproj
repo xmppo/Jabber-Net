@@ -81,6 +81,7 @@
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing">
       <Name>System.Drawing</Name>
     </Reference>
@@ -115,6 +116,9 @@
     <Compile Include="Litmus.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="OptionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="RosterTree.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -130,9 +134,11 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ClientLogin.resx">
       <DependentUpon>ClientLogin.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ComponentLogin.resx">
       <DependentUpon>ComponentLogin.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="JidMulti.resx">
       <DependentUpon>JidMulti.cs</DependentUpon>
@@ -140,6 +146,10 @@
     <EmbeddedResource Include="Litmus.bmp" />
     <EmbeddedResource Include="Litmus.resx">
       <DependentUpon>Litmus.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OptionForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>OptionForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="RosterTree.bmp" />
     <EmbeddedResource Include="RosterTree.resx">

@@ -9,7 +9,7 @@
             <Settings
                 ApplicationIcon = ""
                 AssemblyKeyContainerName = ""
-                AssemblyName = "jabber-net"
+                AssemblyName = "jabber-net-2003"
                 AssemblyOriginatorKeyFile = ""
                 DefaultClientScript = "JScript"
                 DefaultHTMLPageLayout = "Grid"
@@ -258,7 +258,7 @@
                 />
                 <File
                     RelPath = "jabber\client\JabberClient.cs"
-                    SubType = "Component"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
@@ -295,19 +295,29 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "jabber\connection\SocketElementStream.cs"
-                    SubType = "Component"
+                    RelPath = "jabber\connection\SocketStanzaStream.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "jabber\connection\SocketElementStream.resx"
-                    DependentUpon = "SocketElementStream.cs"
-                    BuildAction = "EmbeddedResource"
+                    RelPath = "jabber\connection\StanzaStream.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "jabber\connection\States.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "jabber\connection\XmppStream.cs"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "jabber\connection\XmppStream.resx"
+                    DependentUpon = "XmppStream.cs"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "jabber\connection\sasl\MD5Processor.cs"
@@ -555,7 +565,7 @@
                 />
                 <File
                     RelPath = "jabber\server\JabberService.cs"
-                    SubType = "Component"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File

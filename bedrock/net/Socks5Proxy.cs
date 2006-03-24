@@ -76,14 +76,15 @@ namespace bedrock.net
         {
             m_state = States.RequestingProxy;
 
-            int n = RemoteAddress.Hostname.Length;
+            byte[] host = Encoding.ASCII.GetBytes(RemoteAddress.Hostname);
+            int n = host.Length;
             byte [] buffer = new Byte[7 + n];
             buffer[0] = 5; // protocol version.
             buffer[1] = 1; // connect
             buffer[2] = 0; // reserved.
             buffer[3] = 3; // DOMAINNAME
             buffer[4] = (byte)n;
-            Encoding.ASCII.GetBytes(RemoteAddress.Hostname, 0, n, buffer, 5);
+            host.CopyTo(buffer, 5);
             buffer[5+n] = (byte)(RemoteAddress.Port >> 8);
             buffer[6+n] = (byte)RemoteAddress.Port;
             Debug.WriteLine("sending request to proxy to " + RemoteAddress);

@@ -21,6 +21,7 @@ using System.Xml;
 using bedrock.net;
 using bedrock.util;
 
+using jabber.connection;
 using jabber.protocol;
 using jabber.protocol.accept;
 using jabber.protocol.stream;
@@ -64,41 +65,18 @@ namespace jabber.server
     /// Summary description for ServerComponent.
     /// </summary>
     [RCS(@"$Header$")]
-    public class JabberService : 
-        jabber.connection.SocketElementStream
+    public class JabberService : jabber.connection.XmppStream
     {
-        private string        m_secret = null;
-        private ComponentType m_type   = ComponentType.Accept;
-        private XmlDocument   m_doc    = new XmlDocument();
+        private static readonly object[][] DEFAULTS = new object[][] {
+            new object[] {Options.COMPONENT_DIRECTION, ComponentType.Accept},
+            new object[] {Options.PORT, 7400},
+        };
 
         private void init()
         {
+            SetDefaults(DEFAULTS);
             this.OnStreamInit += new jabber.connection.StreamHandler(JabberService_OnStreamInit);
             this.OnSASLStart += new jabber.connection.sasl.SASLProcessorHandler(JabberService_OnSASLStart);
-        }
-
-        private void JabberService_OnSASLStart(object sender, jabber.connection.sasl.SASLProcessor proc)
-        {
-            jabber.connection.BaseState s = null;
-            lock (StateLock)
-            {
-                s = State;
-            }
-
-            if (s == jabber.connection.NonSASLAuthState.Instance)
-            {
-                lock (StateLock)
-                {
-                    State = HandshakingState.Instance;
-                }
-
-                if (m_type == ComponentType.Accept)
-                {
-                    Handshake hand = new Handshake(m_doc);
-                    hand.SetAuth(m_secret, StreamID);
-                    Write(hand);
-                }
-            }            
         }
 
         /// <summary>
@@ -121,13 +99,13 @@ namespace jabber.server
             string name,
             string secret) : base()
         {
+            init();
             this.Server = name;
             this.NetworkHost = host;
             this.Port = port;
 
-            m_secret = secret;
-            m_type = ComponentType.Accept;
-            init();
+            this[Options.PASSWORD] = secret;
+            this[Options.COMPONENT_DIRECTION] = ComponentType.Accept;
         }
 
         /// <summary>
@@ -138,12 +116,12 @@ namespace jabber.server
         /// <param name="secret">Component secret</param>
         public JabberService(int port, string name, string secret) : base()
         {
+            init();
             this.Server = name;
             this.Port = port;
-            
-            m_secret = secret;
-            m_type   = ComponentType.Connect;
-            init();
+
+            this[Options.PASSWORD] = secret;
+            this[Options.COMPONENT_DIRECTION] = ComponentType.Accept;
         }
 
         /// <summary>
@@ -200,8 +178,8 @@ namespace jabber.server
         [Category("Component")]
         public string Secret
         {
-            get { return m_secret; }
-            set { m_secret = value; }
+            get { return (string)this[Options.PASSWORD]; }
+            set { this[Options.PASSWORD] = value; }
         }
 
         /// <summary>
@@ -213,19 +191,21 @@ namespace jabber.server
         [Category("Component")]
         public ComponentType Type
         {
-            get { return m_type; }
+            get { return (ComponentType)this[Options.COMPONENT_DIRECTION]; }
             set 
-            { 
-                if (m_type != value)
+            {
+                if ((ComponentType)this[Options.COMPONENT_DIRECTION] != value)
                 {
-                    m_type = value; 
-                    if (m_type == ComponentType.Connect)
+                    this[Options.COMPONENT_DIRECTION] = value;
+                    if ((ComponentType)this[Options.COMPONENT_DIRECTION] == ComponentType.Connect)
                     {
                         this.AutoReconnect = 0;
                     }
                 }
             }
         }
+
+
 
         /// <summary>
         /// The stream namespace for this connection.
@@ -237,12 +217,6 @@ namespace jabber.server
             {
                 return (this.Type == ComponentType.Accept) ? URI.ACCEPT : URI.CONNECT;
             }
-        }
-
-        [Browsable(false)]
-        protected override string ServerIdentity
-        {
-            get { return NetworkHost; }
         }
 
         /// <summary>
@@ -264,11 +238,12 @@ namespace jabber.server
         /// </summary>
         public override void Connect()
         {
-            if (m_type == ComponentType.Accept)
+            this[Options.SERVER_ID] = this[Options.NETWORK_HOST];
+            if (this.Type == ComponentType.Accept)
                 base.Connect();
             else
             {
-                BeginAccept();
+                Accept();
             }
         }
 
@@ -280,26 +255,27 @@ namespace jabber.server
         protected override void OnDocumentStart(object sender, System.Xml.XmlElement tag)
         {
             base.OnDocumentStart(sender, tag);
-            if (m_type == ComponentType.Connect)
+            if (this.Type == ComponentType.Connect)
             {
                 lock (StateLock)
                 {
                     State = HandshakingState.Instance;
                 }
 
-                jabber.protocol.stream.Stream str = new jabber.protocol.stream.Stream(m_doc, NS);
+                jabber.protocol.stream.Stream str = new jabber.protocol.stream.Stream(this.Document, NS);
                 str.To = this.Server;
                 this.StreamID = str.ID;
                 if (ServerVersion.StartsWith("1."))
                     str.Version = "1.0";
 
-                Write(str.StartTag());
+                
+                WriteStartTag(str);
 
                 if (ServerVersion.StartsWith("1."))
                 {
-                    Features f = new Features(m_doc);
+                    Features f = new Features(this.Document);
                     if (AutoStartTLS && !SSLon)
-                        f.StartTLS = new StartTLS(m_doc);
+                        f.StartTLS = new StartTLS(this.Document);
                     Write(f);
                 }
             }
@@ -315,12 +291,12 @@ namespace jabber.server
                 return;
             }
 
-            if (m_type == ComponentType.Accept)
+            if (this.Type == ComponentType.Accept)
                 IsAuthenticated = true;
             else
             {       
                 string test = hs.Digest;
-                string good = Element.ShaHash(StreamID, m_secret);
+                string good = Element.ShaHash(StreamID, this.Secret);
                 if (test == good)
                 {
                     IsAuthenticated = true;
@@ -385,6 +361,30 @@ namespace jabber.server
                         CheckedInvoke(OnLog, new object[] {this, log});
                     else
                         OnLog(this, log);
+                }
+            }
+        }
+
+        private void JabberService_OnSASLStart(object sender, jabber.connection.sasl.SASLProcessor proc)
+        {
+            jabber.connection.BaseState s = null;
+            lock (StateLock)
+            {
+                s = State;
+            }
+
+            if (s == jabber.connection.NonSASLAuthState.Instance)
+            {
+                lock (StateLock)
+                {
+                    State = HandshakingState.Instance;
+                }
+
+                if (this.Type == ComponentType.Accept)
+                {
+                    Handshake hand = new Handshake(this.Document);
+                    hand.SetAuth(this.Secret, StreamID);
+                    Write(hand);
                 }
             }
         }

@@ -21,7 +21,7 @@ using System.Threading;
 using System.Security.Cryptography;
 using System.Xml;
 using bedrock.util;
-using bedrock.net;
+//using bedrock.net;
 
 using jabber.protocol;
 using jabber.protocol.stream;
@@ -30,94 +30,185 @@ using jabber.connection.sasl;
 #if NET20 || __MonoCS__
 using System.Security.Cryptography.X509Certificates;
 #elif !NO_SSL
+using System.IO;
 using Org.Mentalis.Security.Certificates;
 #endif
 
 namespace jabber.connection
 {
     /// <summary>
-    /// The types of proxies we support.
-    /// </summary>
-    public enum ProxyType
-    {
-        /// <summary>
-        /// no proxy
-        /// </summary>
-        None,
-        /// <summary>
-        /// socks4 as in http://archive.socks.permeo.com/protocol/socks4.protocol
-        /// </summary>
-        Socks4,
-        /// <summary>
-        /// socks5 as in http://archive.socks.permeo.com/rfc/rfc1928.txt
-        /// </summary>
-        Socks5,
-        /// <summary>
-        /// shttp as in http://rfc-2660.rfc-list.com/rfc-2660.htm
-        /// </summary>
-        SHTTP,
-        /// <summary>
-        /// HTTP Polling, as in http://www.jabber.org/jeps/jep-0025.html
-        /// </summary>
-        HTTP_Polling
-    }
-
-    /// <summary>
     /// A handler for events that happen on an ElementStream.
     /// </summary>
     public delegate void StreamHandler(Object sender, ElementStream stream);
 
     /// <summary>
+    /// Option names.  These must be well-formed XML element names.
+    /// </summary>
+    [RCS(@"$Header$")]
+    public abstract class Options
+    {
+        /// <summary>
+        /// The IP or hostname of the machine to connect to.
+        /// </summary>
+        public const string NETWORK_HOST = "network_host";
+        /// <summary>
+        /// The identity of the thing we're connecting to.  For components, the component ID.
+        /// </summary>
+        public const string TO           = "to";
+        /// <summary>
+        /// The identity that we expect on the X.509 certificate on the other side.
+        /// </summary>
+        public const string SERVER_ID    = "tls.cn";
+        /// <summary>
+        /// How often to do keep-alive spaces (seconds).
+        /// </summary>
+        public const string KEEP_ALIVE   = "keep_alive";
+        /// <summary>
+        /// Port number to connect to or listen on.
+        /// </summary>
+        public const string PORT         = "port";
+        /// <summary>
+        /// Do SSL on connection?
+        /// </summary>
+        public const string SSL          = "ssl";
+        /// <summary>
+        /// Automatically negotiate TLS.
+        /// </summary>
+        public const string AUTO_TLS     = "tls.auto";
+        /// <summary>
+        /// Allow plaintext logins.
+        /// </summary>
+        public const string PLAINTEXT    = "plaintext";
+        /// <summary>
+        /// Only allow SASL authentication, but not old-style IQ/auth.
+        /// </summary>
+        public const string REQUIRE_SASL = "sasl.require";
+
+        /// <summary>
+        /// The user to log in as.
+        /// </summary>
+        public const string USER     = "user";
+        /// <summary>
+        /// The password for the user, or secret for the component.
+        /// </summary>
+        public const string PASSWORD = "password";
+        /// <summary>
+        /// The resource to bind to.
+        /// </summary>
+        public const string RESOURCE = "resource";
+        /// <summary>
+        /// Default priority for presence.
+        /// </summary>
+        public const string PRIORITY = "priority";
+
+        /// <summary>
+        /// Automatically login.
+        /// </summary>
+        public const string AUTO_LOGIN    = "auto.login";
+        /// <summary>
+        /// Automatically retrieve the roster.
+        /// </summary>
+        public const string AUTO_ROSTER   = "auto.roster";
+        /// <summary>
+        /// Automatically send presence.
+        /// </summary>
+        public const string AUTO_PRESENCE = "auto.presence";
+
+        /// <summary>
+        /// The certificate for our side of the SSL/TLS negotiation.
+        /// </summary>
+        public const string LOCAL_CERTIFICATE   = "certificate.local";
+        /// <summary>
+        /// The certificate that the other side sent us.
+        /// </summary>
+        public const string REMOTE_CERTIFICATE  = "certificate.remote";
+        /// <summary>
+        /// How long to wait before reconnecting.
+        /// </summary>
+        public const string RECONNECT_TIMEOUT   = "reconnect_timeout";
+        /// <summary>
+        /// Do we use sockets, HTTP polling, or HTTP binding?
+        /// </summary>
+        public const string CONNECTION_TYPE     = "connection";
+        /// <summary>
+        /// URL to poll on, or bind to.
+        /// </summary>
+        public const string POLL_URL            = "poll.url";
+        /// <summary>
+        /// Connect to the server or listen for connections.
+        /// </summary>
+        public const string COMPONENT_DIRECTION = "component.dir";
+
+        /// <summary>
+        /// Type of proxy
+        /// </summary>
+        public const string PROXY_TYPE = "proxy.type";
+        /// <summary>
+        /// Hostname or IP address of the proxy
+        /// </summary>
+        public const string PROXY_HOST = "proxy.host";
+        /// <summary>
+        /// Port number for the proxy
+        /// </summary>
+        public const string PROXY_PORT = "proxy.port";
+        /// <summary>
+        /// User name for the proxy
+        /// </summary>
+        public const string PROXY_USER = "proxy.user";
+        /// <summary>
+        /// Password for the proxy
+        /// </summary>
+        public const string PROXY_PW   = "proxy.password";
+    }
+
+    /// <summary>
     /// Summary description for SocketElementStream.
     /// </summary>
     [RCS(@"$Header$")]
-    abstract public class SocketElementStream :
-        System.ComponentModel.Component,
-        ISocketEventListener
+    abstract public class XmppStream :
+        System.ComponentModel.Component, 
+        IStanzaEventListener
     {
+        private static readonly object[][] DEFAULTS = new object[][] {
+            new object[] {Options.TO, "jabber.com"},
+            new object[] {Options.KEEP_ALIVE, 20000},
+            new object[] {Options.PORT, 5222},
+            new object[] {Options.RECONNECT_TIMEOUT, 30000},
+            new object[] {Options.PROXY_PORT, 1080},
+            new object[] {Options.SSL, false},
+            new object[] {Options.REQUIRE_SASL, false},
+            new object[] {Options.PLAINTEXT, false},
+            new object[] {Options.AUTO_TLS, true},
+            new object[] {Options.PROXY_TYPE, ProxyType.None},
+            new object[] {Options.CONNECTION_TYPE, ConnectionType.Socket},
+        };
+
         /// <summary>
         /// Character encoding.  UTF-8.
         /// </summary>
         protected static readonly System.Text.Encoding ENC = System.Text.Encoding.UTF8;
 
-        private SocketWatcher m_watcher = null;
-        private BaseSocket m_sock = null;
-        private BaseSocket m_accept = null;
-        private XmlDocument m_doc = new XmlDocument();
-        private ElementStream m_stream = null;
-        private BaseState m_state = ClosedState.Instance;
-        private string m_server = null;
-        private string m_to = "jabber.com";
+        private StanzaStream m_stanzas = null;
+
+        private XmlDocument m_doc        = new XmlDocument();
+        private BaseState   m_state      = ClosedState.Instance;
+        private IDictionary m_properties = new Hashtable();
+
         private string m_streamID = null;
         private object m_stateLock = new object();
         private ArrayList m_callbacks = new ArrayList();
-        private int m_keepAlive = 20000;
-        private Timer m_timer = null;
+
         private Timer m_reconnectTimer = null;
-
-        private int m_port = 5222;
-        private int m_autoReconnect = 30000;
         private bool m_reconnect = false;
-
-        private ProxyType m_ProxyType = ProxyType.None;
-        private string m_ProxyHost = null;
-        private int m_ProxyPort = 1080;
-        private string m_ProxyUsername = null;
-        private string m_ProxyPassword = null;
-        private bool m_ssl = false;
         private bool m_sslOn = false;
-        private bool m_autoStartTLS = true;
-        private bool m_plaintext = false;
+
+        private XmlNamespaceManager m_ns;
+        private ISynchronizeInvoke m_invoker = null;
 
         // XMPP v1 stuff
         private string m_serverVersion = null;
-        private bool m_requireSASL = false;
         private SASLProcessor m_saslProc = null;
 
-        private XmlNamespaceManager m_ns;
-
-        private ISynchronizeInvoke m_invoker = null;
-        //private XmlTextWriter m_writer = new XmlTextWriter(Console.Out);
 
         /// <summary>
         /// Required designer variable.
@@ -128,31 +219,68 @@ namespace jabber.connection
         /// Required for Windows.Forms Class Composition Designer support
         /// </summary>
         /// <param name="container"></param>
-        public SocketElementStream(System.ComponentModel.IContainer container)
+        public XmppStream(System.ComponentModel.IContainer container) : this()
         {
             container.Add(this);
-            m_watcher = new SocketWatcher();
-            m_watcher.Synchronous = false;
-            m_ns = new XmlNamespaceManager(m_doc.NameTable);
-            m_timer = new Timer(new TimerCallback(DoKeepAlive), null, Timeout.Infinite, Timeout.Infinite);
+        }
+
+        /// <summary>
+        /// Bulk set defaults.
+        /// </summary>
+        /// <param name="defaults"></param>
+        protected void SetDefaults(object[][] defaults)
+        {
+            foreach (object[] def in defaults)
+            {
+                this[(string)def[0]] = def[1];
+            }
         }
 
         /// <summary>
         /// Create a SocketElementStream
         /// </summary>
-        public SocketElementStream()
+        public XmppStream()
         {
-            m_watcher = new SocketWatcher();
-            m_watcher.Synchronous = false;
             m_ns = new XmlNamespaceManager(m_doc.NameTable);
-            m_timer = new Timer(new TimerCallback(DoKeepAlive), null, Timeout.Infinite, Timeout.Infinite);
+            SetDefaults(DEFAULTS);
         }
 
+        /// <summary>
+        /// Set or retrieve a connection property.
+        /// You have to know the type of the property based on the name.
+        /// For example, PORT is an integer.
+        /// </summary>
+        /// <param name="prop"></param>
+        /// <returns></returns>
+        public object this[string prop]
+        {
+            get 
+            {
+                if (!m_properties.Contains(prop))
+                    return null;
+                return m_properties[prop]; 
+            }
+            set 
+            { 
+                m_properties[prop] = value;
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(prop));
+                }
+            }
+        }
+
+        /// <summary>
+        /// A property changed on the instance.
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        /*
         /// <summary>
         /// Create a SocketElementStream out of an accepted socket.
         /// </summary>
         /// <param name="aso"></param>
-        public SocketElementStream(BaseSocket aso)
+        public XmppStream(BaseSocket aso)
         {
             m_accept = m_sock = null;
             if (aso is AsyncSocket)
@@ -170,27 +298,13 @@ namespace jabber.connection
         /// lots of concurrent connections.
         /// </summary>
         /// <param name="watcher"></param>
-        public SocketElementStream(SocketWatcher watcher)
+        public XmppStream(SocketWatcher watcher)
         {
             m_watcher = watcher;
             m_ns = new XmlNamespaceManager(m_doc.NameTable);
             m_timer = new Timer(new TimerCallback(DoKeepAlive), null, Timeout.Infinite, Timeout.Infinite);
         }
-
-        /// <summary>
-        /// Set up the element stream.  This is the place to add factories.
-        /// </summary>
-        protected virtual void InitializeStream()
-        {
-            m_stream = new AsynchElementStream();
-            m_stream.OnDocumentStart += new ProtocolHandler(OnDocumentStart);
-            m_stream.OnDocumentEnd += new bedrock.ObjectHandler(OnDocumentEnd);
-            m_stream.OnElement += new ProtocolHandler(OnElement);
-            m_stream.OnError += new bedrock.ExceptionHandler(m_stream_OnError);
-
-            if (OnStreamInit != null)
-                OnStreamInit(this, m_stream);
-        }
+        */
 
         /// <summary>
         /// Text was written to the server.  Use for debugging only.  
@@ -266,7 +380,7 @@ namespace jabber.connection
         /// The connection is connected, but no stream:stream has been sent, yet.
         /// </summary>
         [Category("Stream")]
-        public event bedrock.net.AsyncSocketHandler OnConnect;
+        public event StanzaStreamHandler OnConnect;
 
         /// <summary>
         /// The connection is disconnected
@@ -282,23 +396,23 @@ namespace jabber.connection
         [Category("Jabber")]
         public virtual string Server
         {
-            get { return m_to; }
-            set { m_to = value; }
+            get { return this[Options.TO] as string; }
+            set { this[Options.TO] = value; }
         }
 
         /// <summary>
         /// The address to use on the "to" attribute of the stream:stream.  
-        /// If using HTTP polling, put the URL here.  If not, you can put
-        /// the network hostname or IP address of the server to connect to.
+        /// You can put the network hostname or IP address of the server to connect to.
         /// If none is specified, the Server will be used.
+        /// Eventually, when SRV is supported, this will be deprecated.
         /// </summary>
         [Description("")]
         [DefaultValue(null)]
         [Category("Jabber")]
         public string NetworkHost
         {
-            get { return m_server; }
-            set { m_server = value; }
+            get { return this[Options.NETWORK_HOST] as string; }
+            set { this[Options.NETWORK_HOST] = value; }
         }
 
         /// <summary>
@@ -309,8 +423,8 @@ namespace jabber.connection
         [Category("Jabber")]
         public int Port
         {
-            get { return m_port; }
-            set { m_port = value; }
+            get { return (int)this[Options.PORT]; }
+            set { this[Options.PORT] = value; }
         }
 
         /// <summary>
@@ -321,8 +435,8 @@ namespace jabber.connection
         [Category("Jabber")]
         public bool PlaintextAuth
         {
-            get { return m_plaintext; }
-            set { m_plaintext = value; }
+            get { return (bool)this[Options.PLAINTEXT]; }
+            set { this[Options.PLAINTEXT] = value; }
         }
 
         /// <summary>
@@ -344,13 +458,13 @@ namespace jabber.connection
         [Category("Jabber")]
         public bool SSL
         {
-            get { return m_ssl; }
+            get { return (bool)this[Options.SSL]; }
             set
             {
 #if NO_SSL
                 Debug.Assert(!value, "SSL support not compiled in");
 #endif
-                m_ssl = value;
+                this[Options.SSL] = value;
             }
         }
 
@@ -360,8 +474,8 @@ namespace jabber.connection
         [Browsable(false)]
         public bool AutoStartTLS
         {
-            get { return m_autoStartTLS; }
-            set { m_autoStartTLS = value; }
+            get { return (bool)this[Options.AUTO_TLS]; }
+            set { this[Options.AUTO_TLS] = value; }
         }
 
 #if NET20 || __MonoCS__
@@ -371,8 +485,8 @@ namespace jabber.connection
         [Browsable(false)]
         public X509Certificate LocalCertificate
         {
-            get { return (m_watcher == null) ? null : m_watcher.LocalCertificate; }
-            set { if (m_watcher != null) m_watcher.LocalCertificate = value; }
+            get { return this[Options.LOCAL_CERTIFICATE] as X509Certificate; }
+            set { this[Options.LOCAL_CERTIFICATE] = value; }
         }
 
         /// <summary>
@@ -401,9 +515,15 @@ namespace jabber.connection
         public void SetCertificateFile(string filename,
                                        string password)
         {
-            if (m_watcher != null)
-                m_watcher.SetCertificateFile(filename, password);
+            this[Options.LOCAL_CERTIFICATE] = new X509Certificate2(filename, password);
+
+                /*
+            Mono.Security.X509.PKCS12 pfx = new Mono.Security.X509.PKCS12(data, password);
+            if (pfx.Certificates.Count > 0) 
+                this[Options.LOCAL_CERTIFICATE] = new X509Certificate(pfx.Certificates[0].RawData);
+*/
         }
+
 #elif !NO_SSL
         /// <summary>
         /// The certificate to be used for the local side of sockets,
@@ -412,9 +532,9 @@ namespace jabber.connection
         [Browsable(false)]
         public Certificate LocalCertificate
         {
-            get { return (m_watcher == null) ?
-                    null : m_watcher.LocalCertificate; }
-            set { if (m_watcher != null) m_watcher.LocalCertificate = value; }
+            
+            get { return this[Options.LOCAL_CERTIFICATE] as Certificate; }
+            set { this[Options.LOCAL_CERTIFICATE] = value; }
         }
 
 
@@ -440,9 +560,23 @@ namespace jabber.connection
         /// file, null if .cer file.</param>
         public void SetCertificateFile(string filename, string password)
         {
-            if (m_watcher != null)
-                m_watcher.SetCertificateFile(filename, password);
-        }
+                        if (!File.Exists(filename)) 
+                        {
+                                throw new CertificateException("File does not exist: " + filename);
+                        }
+                        CertificateStore store;
+                        if (password != null) 
+                        {
+                                store = CertificateStore.CreateFromPfxFile(filename, password);
+                        } 
+                        else 
+                        {
+                                store = CertificateStore.CreateFromCerFile(filename);
+                        }
+                        this[Options.LOCAL_CERTIFICATE] = bedrock.net.CertUtil.FindServerCert(store);
+                        if (this[Options.LOCAL_CERTIFICATE] == null)
+                                throw new CertificateException("The certificate file does not contain a server authentication certificate.");
+                }
 #endif
 
         /// <summary>
@@ -485,24 +619,8 @@ namespace jabber.connection
         [DefaultValue(20f)]
         public float KeepAlive
         {
-            get { return m_keepAlive / 1000f; }
-            set
-            {
-                lock (m_stateLock)
-                {
-                    m_keepAlive = (int)(value * 1000f);
-                    if (value <= 0)
-                    {
-                        m_timer.Change(Timeout.Infinite, Timeout.Infinite);
-                        m_timer.Dispose();
-                        m_timer = null;
-                    }
-                    else
-                    {
-                        m_timer = new Timer(new TimerCallback(DoKeepAlive), null, m_keepAlive, m_keepAlive);
-                    }
-                }
-            }
+            get { return ((int)this[Options.KEEP_ALIVE]) / 1000f; }
+            set { this[Options.KEEP_ALIVE] = (int)(value * 1000f); }
         }
 
         /// <summary>
@@ -513,8 +631,8 @@ namespace jabber.connection
         [Category("Automation")]
         public float AutoReconnect
         {
-            get { return m_autoReconnect / 1000f; }
-            set { m_autoReconnect = (int)(value * 1000f); }
+            get { return ((int)this[Options.RECONNECT_TIMEOUT]) / 1000f; }
+            set { this[Options.RECONNECT_TIMEOUT] = (int)(value * 1000f); }
         }
 
         /// <summary>
@@ -525,8 +643,20 @@ namespace jabber.connection
         [Category("Proxy")]
         public ProxyType Proxy
         {
-            get { return m_ProxyType; }
-            set { m_ProxyType = value; }
+            get { return (ProxyType)this[Options.PROXY_TYPE]; }
+            set { this[Options.PROXY_TYPE] = value; }
+        }
+
+        /// <summary>
+        /// Connection type.  Socket, HTTP polling, etc.
+        /// </summary>
+        [Description("The type of connection... Socket, HTTP polling, etc.")]
+        [DefaultValue(ConnectionType.Socket)]
+        [Category("Proxy")]
+        public ConnectionType Connection
+        {
+            get { return (ConnectionType)this[Options.CONNECTION_TYPE]; }
+            set { this[Options.CONNECTION_TYPE] = value; }
         }
 
         /// <summary>
@@ -537,8 +667,8 @@ namespace jabber.connection
         [Category("Proxy")]
         public string ProxyHost
         {
-            get { return m_ProxyHost; }
-            set { m_ProxyHost = value; }
+            get { return this[Options.PROXY_HOST] as string; }
+            set { this[Options.PROXY_HOST] = value; }
         }
 
         /// <summary>
@@ -549,8 +679,8 @@ namespace jabber.connection
         [Category("Proxy")]
         public int ProxyPort
         {
-            get { return m_ProxyPort; }
-            set { m_ProxyPort = value; }
+            get { return (int)this[Options.PROXY_PORT]; }
+            set { this[Options.PROXY_PORT] = value; }
         }
 
         /// <summary>
@@ -561,8 +691,8 @@ namespace jabber.connection
         [Category("Proxy")]
         public string ProxyUsername
         {
-            get { return m_ProxyUsername; }
-            set { m_ProxyUsername = value; }
+            get { return this[Options.PROXY_USER] as string; }
+            set { this[Options.PROXY_USER] = value; }
         }
 
         /// <summary>
@@ -573,8 +703,8 @@ namespace jabber.connection
         [Category("Proxy")]
         public string ProxyPassword
         {
-            get { return m_ProxyPassword; }
-            set { m_ProxyPassword = value; }
+            get { return this[Options.PROXY_PW] as string; }
+            set { this[Options.PROXY_PW] = value; }
         }
 
         /// <summary>
@@ -615,22 +745,6 @@ namespace jabber.connection
         protected object StateLock
         {
             get { return m_stateLock; }
-        }
-
-        private string GetHost()
-        {
-            if ((m_server == null) || (m_server == ""))
-                return m_to;
-            return m_server;
-        }
-
-        /// <summary>
-        /// The expected X.509 CN for the server.
-        /// </summary>
-        /// <returns></returns>
-        protected virtual string ServerIdentity
-        {
-            get { return m_to; }
         }
 
         /// <summary>
@@ -687,8 +801,8 @@ namespace jabber.connection
         [DefaultValue(false)]
         public bool RequiresSASL
         {
-            get { return m_requireSASL; }
-            set { m_requireSASL = value; }
+            get { return (bool)this[Options.REQUIRE_SASL]; }
+            set { this[Options.REQUIRE_SASL] = value; }
         }
 
         /// <summary>
@@ -701,56 +815,23 @@ namespace jabber.connection
             get { return m_serverVersion; }
         }
 
-#if false
         /// <summary>
-        /// Add new packet types that the incoming stream knows how to create.  
-        /// If you create your own packet types, create a packet factory as well. 
+        /// Write just the start tag of the given element.
+        /// Typically only used for &lt;stream:stream&gt;.
         /// </summary>
-        /// <param name="factory"></param>
-        public void AddFactory(IPacketTypes factory)
+        /// <param name="elem"></param>
+        public void WriteStartTag(jabber.protocol.stream.Stream elem)
         {
-            m_stream.AddFactory(factory);
-        }
-
-        /// <summary>
-        /// Add a type to the packet factory.
-        /// </summary>
-        /// <param name="localName">Local Name (e.g. query)</param>
-        /// <param name="ns">Namespace URI (e.g. jabber:iq:roster)</param>
-        /// <param name="t">Type to create</param>
-        public void AddType(string localName, string ns, Type t)
-        {
-            m_stream.AddType(localName, ns, t);
-        }
-#endif
-
-        /// <summary>
-        /// Write these bytes to the socket.
-        /// </summary>
-        /// <param name="buf"></param>
-        public virtual void Write(byte[] buf)
-        {
-            Debug.Assert(m_sock != null);
-            m_sock.Write(buf);
-        }
-
-        /// <summary>
-        /// Write this string to the socket, encoded as UTF-8.
-        /// </summary>
-        /// <param name="buf"></param>
-        public virtual void Write(string buf)
-        {
-            Debug.Assert(m_sock != null);
-            m_sock.Write(ENC.GetBytes(buf));
+            m_stanzas.WriteStartTag(elem);
         }
 
         /// <summary>
         /// Send the given packet to the server.
         /// </summary>
         /// <param name="elem"></param>
-        public virtual void Write(XmlElement elem)
+        public void Write(XmlElement elem)
         {
-            Write(elem.OuterXml);
+            m_stanzas.Write(elem);
         }
 
         /// <summary>
@@ -758,66 +839,26 @@ namespace jabber.connection
         /// </summary>
         public virtual void Connect()
         {
-            Debug.Assert(m_port > 0);
-            Debug.Assert(m_to != null);
-            m_sslOn = m_ssl;
-
+            m_stanzas = StanzaStream.Create(this.Connection, this);
             lock (StateLock)
             {
                 m_state = ConnectingState.Instance;
-                m_reconnect = (m_autoReconnect >= 0);
-
-                ProxySocket proxy = null;
-                switch (m_ProxyType)
-                {
-                case ProxyType.Socks4:
-                    proxy = new Socks4Proxy(this);
-                    break;
-
-                case ProxyType.Socks5:
-                    proxy = new Socks5Proxy(this);
-                    break;
-
-                case ProxyType.SHTTP:
-                    proxy = new ShttpProxy(this);
-                    break;
-
-                case ProxyType.HTTP_Polling:
-                    JEP25Socket j25s = new JEP25Socket(this);
-                    if (m_ProxyHost != null)
-                    {
-                        System.Net.WebProxy wp = new System.Net.WebProxy();
-                        wp.Address = new Uri("http://" + m_ProxyHost + ":" + m_ProxyPort);
-                        if (m_ProxyUsername != null)
-                        {
-                            wp.Credentials = new System.Net.NetworkCredential(m_ProxyUsername, m_ProxyPassword);
-                        }
-                        j25s.Proxy = wp;
-                    }
-                    j25s.URL = m_server;
-                    m_sock = j25s;
-                    break;
-
-                case ProxyType.None:
-                    m_sock = new AsyncSocket(m_watcher, this, m_sslOn, false);
-                    break;
-
-                default:
-                    throw new ArgumentException("no handler for proxy type: " + m_ProxyType, "ProxyType");
-                }
-
-                if (proxy != null)
-                {
-                    proxy.Socket = new AsyncSocket(m_watcher, proxy);
-                    proxy.Host = m_ProxyHost;
-                    proxy.Port = m_ProxyPort;
-                    proxy.Username = m_ProxyUsername;
-                    m_sock = proxy;
-                }
-
-                Address addr = new Address(GetHost(), m_port);
-                m_sock.Connect(addr, this.ServerIdentity);
+                m_reconnect = ((int)this[Options.RECONNECT_TIMEOUT] >= 0);
             }
+            m_stanzas.Connect();
+        }
+
+        /// <summary>
+        /// This is only for components, to listen for connections from the server.
+        /// </summary>
+        protected virtual void Accept()
+        {
+            m_stanzas = StanzaStream.Create(this.Connection, this);
+            lock (StateLock)
+            {
+                this.State = AcceptingState.Instance;
+            }
+            m_stanzas.Accept();
         }
 
         /// <summary>
@@ -834,7 +875,7 @@ namespace jabber.connection
                 m_reconnectTimer = new System.Threading.Timer(
                         new System.Threading.TimerCallback(Reconnect),
                         null,
-                        m_autoReconnect,
+                        (int)this[Options.RECONNECT_TIMEOUT],
                         System.Threading.Timeout.Infinite);
             }
         }
@@ -855,6 +896,7 @@ namespace jabber.connection
         {
             bool doClose = false;
             bool doStream = false;
+
             lock (StateLock)
             {
                 if ((m_state == RunningState.Instance) && (clean))
@@ -868,10 +910,11 @@ namespace jabber.connection
                     doClose = true;
                 }
             }
-            if (doStream && (m_sock != null))
-                Write("</stream:stream>");
-            if (doClose && (m_sock != null))
-                m_sock.Close();
+
+            if ((m_stanzas != null) && m_stanzas.Connected && doClose)
+            {
+                m_stanzas.Close(doStream);
+            }
         }
 
         /// <summary>
@@ -916,16 +959,14 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Got the initial start tag.
+        /// Document start received.
         /// </summary>
         /// <param name="sender"></param>
-        /// <param name="tag">The start tag as if it had been a full element, 
-        /// with no child elements.  This can now be called multiple times for a single
-        /// session.</param>
-        protected virtual void OnDocumentStart(object sender, System.Xml.XmlElement tag)
+        /// <param name="elem"></param>
+        protected virtual void OnDocumentStart(object sender, System.Xml.XmlElement elem)
         {
             bool hack = false;
-            jabber.protocol.stream.Stream str = tag as jabber.protocol.stream.Stream;
+            jabber.protocol.stream.Stream str = elem as jabber.protocol.stream.Stream;
             if (str == null)
                 return;
             m_streamID = str.ID;
@@ -955,31 +996,15 @@ namespace jabber.connection
             if (OnStreamHeader != null)
             {
                 if (InvokeRequired)
-                    CheckedInvoke(OnStreamHeader, new object[] { this, tag });
+                    CheckedInvoke(OnStreamHeader, new object[] { this, elem });
                 else
-                    OnStreamHeader(this, tag);
+                    OnStreamHeader(this, elem);
             }
-            CheckAll(tag);
+            CheckAll(elem);
 
             if (hack && (OnSASLStart != null))
             {
                 OnSASLStart(this, null); // Hack.  Old-style auth for jabberclient.
-            }
-        }
-
-        /// <summary>
-        /// The end tag was received.
-        /// </summary>
-        /// <param name="sender"></param>
-        protected virtual void OnDocumentEnd(object sender)
-        {
-            lock (StateLock)
-            {
-                m_state = ClosingState.Instance;
-                // No need to close stream any more.  AElfred does this for us, even though
-                // the docs say it doesn't.
-                //if (m_sock != null)
-                //m_sock.Close();
             }
         }
 
@@ -1031,7 +1056,10 @@ namespace jabber.connection
                 // don't do starttls if we're already on an SSL socket.
                 // bad server setup, but no skin off our teeth, we're already
                 // SSL'd.  Also, start-tls won't work when polling.
-                if (m_autoStartTLS && (f.StartTLS != null) && (!m_sslOn) && (m_ProxyType != ProxyType.HTTP_Polling))
+                if ((bool)this[Options.AUTO_TLS] && 
+                    (f.StartTLS != null) && 
+                    (!m_sslOn) && 
+                    m_stanzas.SupportsTLS)
                 {
                     // start-tls
                     lock (m_stateLock)
@@ -1056,7 +1084,7 @@ namespace jabber.connection
                         {
                             m_state = SASLState.Instance;
                         }
-                        m_saslProc = SASLProcessor.createProcessor(ms.Types, m_sslOn || m_plaintext);
+                        m_saslProc = SASLProcessor.createProcessor(ms.Types, m_sslOn || (bool)this[Options.PLAINTEXT]);
                         if (m_saslProc == null)
                         {
 
@@ -1072,7 +1100,7 @@ namespace jabber.connection
 
                     if (m_saslProc == null)
                     { // no SASL mechanisms.  Try iq:auth.
-                        if (m_requireSASL)
+                        if ((bool)this[Options.REQUIRE_SASL])
                         {
                             FireOnError(new SASLException("No SASL mechanisms available"));
                             return;
@@ -1123,7 +1151,7 @@ namespace jabber.connection
                 case "proceed":
                     try
                     {
-                        m_sock.StartTLS();
+                        m_stanzas.StartTLS();
                     }
                     catch (Exception e)
                     {
@@ -1191,15 +1219,10 @@ namespace jabber.connection
         protected void SendNewStreamHeader()
         {
             jabber.protocol.stream.Stream str = new jabber.protocol.stream.Stream(m_doc, NS);
-            str.To = m_to;
+            str.To = new JID((string)this[Options.TO]);
             str.Version = "1.0";
-            Write(str.StartTag());
-            m_timer.Change(m_keepAlive, m_keepAlive);
-
-            InitializeStream();
-
-            if (m_state == ConnectedState.Instance)
-                m_sock.RequestRead();
+            m_stanzas.WriteStartTag(str);
+            m_stanzas.InitializeStream();
         }
 
         /// <summary>
@@ -1208,6 +1231,8 @@ namespace jabber.connection
         /// <param name="e"></param>
         protected void FireOnError(Exception e)
         {
+            m_reconnect = false;
+
             // ignore spurious IO errors on shutdown.
             if (((State == ClosingState.Instance) || (State == ClosedState.Instance)) &&
                 ((e is System.IO.IOException) || (e.InnerException is System.IO.IOException)))
@@ -1225,179 +1250,12 @@ namespace jabber.connection
                 Close(false);
         }
 
-        /// <summary>
-        /// Start accepting connections.
-        /// </summary>
-        protected virtual void BeginAccept()
-        {
-            lock (StateLock)
-            {
-                this.State = AcceptingState.Instance;
-                m_accept = m_watcher.CreateListenSocket(this, new Address(this.Port));
-            }
-
-            m_accept.RequestAccept();
-        }
-
-        #region Implementation of ISocketEventListener
-        /// <summary>
-        /// An accept socket is about to be bound, or a connect socket is about to connect, 
-        /// or an incoming socket just came in.  Use this as an opportunity to 
-        /// </summary>
-        /// <param name="new_sock">The new socket that is about to be connected.</param>
-        void ISocketEventListener.OnInit(BaseSocket new_sock)
-        {
-        }
-
-        ISocketEventListener ISocketEventListener.GetListener(BaseSocket listen_sock)
-        {
-            return this;
-        }
-
-        bool ISocketEventListener.OnAccept(bedrock.net.BaseSocket newsocket)
-        {
-            lock (StateLock)
-            {
-                Debug.Assert(this.State == AcceptingState.Instance, this.State.GetType().ToString());
-
-                this.State = ConnectedState.Instance;
-            }
-
-            // Don't accept any more connections until this one closes
-            if (m_accept != null)
-            {
-                m_accept.Close();
-            }
-
-            m_sock = newsocket;
-            InitializeStream();
-
-            if (OnConnect != null)
-            {
-                Debug.Assert(m_sock is AsyncSocket);
-
-                if (InvokeRequired)
-                    CheckedInvoke(OnConnect, new object[] { this, m_sock });
-                else
-                {
-                    // Um.  This cast might not be right, but I don't want to break backward compatibility 
-                    // if I don't have to by changing the delegate interface.
-                    OnConnect(this, (AsyncSocket)m_sock);
-                }
-            }
-
-            m_sock.RequestRead();
-
-            return false;
-        }
-
-        private void ReadComplete(object sender, byte[] buf, int offset, int count)
-        {
-            m_timer.Change(m_keepAlive, m_keepAlive);
-
-            if (OnReadText != null)
-            {
-                if (InvokeRequired)
-                    CheckedInvoke(OnReadText, new object[] { m_sock, ENC.GetString(buf, offset, count) });
-                else
-                    OnReadText(m_sock, ENC.GetString(buf, offset, count));
-            }
-        }
-
-        bool ISocketEventListener.OnRead(bedrock.net.BaseSocket sock, byte[] buf, int offset, int count)
-        {
-            ReadComplete(sock, buf, offset, count);
-            ((AsynchElementStream)m_stream).Push(buf, offset, count);
-
-            return true;
-        }
-
-        void ISocketEventListener.OnWrite(bedrock.net.BaseSocket sock, byte[] buf, int offset, int count)
-        {
-            m_timer.Change(m_keepAlive, m_keepAlive);
-
-            if (OnWriteText != null)
-            {
-                if (InvokeRequired)
-                    CheckedInvoke(OnWriteText, new object[] { sock, ENC.GetString(buf, offset, count) });
-                else
-                    OnWriteText(sock, ENC.GetString(buf, offset, count));
-            }
-        }
-
-        void ISocketEventListener.OnError(bedrock.net.BaseSocket sock, System.Exception ex)
-        {
-            m_reconnect = false;
-
-            lock (m_stateLock)
-            {
-                m_timer.Change(Timeout.Infinite, Timeout.Infinite);
-
-                m_state = ClosedState.Instance;
-                m_sock = null;
-            }
-
-            if (OnError != null)
-            {
-                if (InvokeRequired)
-                    CheckedInvoke(OnError, new object[] { sock, ex });
-                else
-                    OnError(sock, ex);
-            }
-
-            // TODO: Figure out what the "good" errors are, and try to 
-            // reconnect.  There are too many "bad" errors to just let this fly.
-            //TryReconnect();
-        }
-
-        void ISocketEventListener.OnConnect(bedrock.net.BaseSocket sock)
-        {
-            Debug.Assert(sock != null);
-
-            lock (m_stateLock)
-            {
-                this.State = ConnectedState.Instance;
-            }
-
-            if (OnConnect != null)
-            {
-                if (InvokeRequired)
-                    CheckedInvoke(OnConnect, new Object[] { this, sock });
-                else
-                    OnConnect(this, sock);
-            }
-            SendNewStreamHeader();
-        }
-
         private void Reconnect(object state)
         {
             // prevent double-connects
             if (this.State == ClosedState.Instance)
                 Connect();
         }
-
-        void ISocketEventListener.OnClose(bedrock.net.BaseSocket sock)
-        {
-            lock (StateLock)
-            {
-                m_timer.Change(Timeout.Infinite, Timeout.Infinite);
-                m_state = ClosedState.Instance;
-                m_sock = null;
-
-            }
-
-            if (OnDisconnect != null)
-            {
-                if (InvokeRequired)
-                    CheckedInvoke(OnDisconnect, new object[] { this });
-                else
-                    OnDisconnect(this);
-            }
-
-            TryReconnect();
-        }
-        #endregion
-
 
         /// <summary>
         /// Register a callback, so that if a packet arrives that matches the given xpath expression,
@@ -1451,18 +1309,6 @@ namespace jabber.connection
             }
         }
 
-        private void DoKeepAlive(object state)
-        {
-            lock (m_stateLock)
-            {
-                if (m_state != RunningState.Instance)
-                {
-                    return;
-                }
-            }
-            Write(new byte[] { 32 });
-        }
-
         private class CallbackData
         {
             private Guid m_guid = Guid.NewGuid();
@@ -1486,7 +1332,7 @@ namespace jabber.connection
                 get { return m_xpath; }
             }
 
-            public void Check(SocketElementStream sender, XmlElement elem)
+            public void Check(XmppStream sender, XmlElement elem)
             {
                 try
                 {
@@ -1506,10 +1352,154 @@ namespace jabber.connection
             }
         }
 
-        private void m_stream_OnError(object sender, Exception ex)
+        #region IStanzaEventListener Members
+
+        void IStanzaEventListener.Connected()
         {
-            FireOnError(ex);
+            lock (m_stateLock)
+            {
+                this.State = ConnectedState.Instance;
+                if ((bool)this[Options.SSL])
+                    m_sslOn = true;
+            }
+
+            if (OnConnect != null)
+            {
+                if (InvokeRequired)
+                    CheckedInvoke(OnConnect, new Object[] { this, m_stanzas });
+                else
+                    OnConnect(this, m_stanzas);
+            }
+            SendNewStreamHeader();
+        }
+
+        void IStanzaEventListener.Accepted()
+        {
+            lock (StateLock)
+            {
+                Debug.Assert(this.State == AcceptingState.Instance, this.State.GetType().ToString());
+
+                this.State = ConnectedState.Instance;
+            }
+
+            if (OnConnect != null)
+            {
+                if (InvokeRequired)
+                    CheckedInvoke(OnConnect, new object[] { this, m_stanzas });
+                else
+                {
+                    // Um.  This cast might not be right, but I don't want to break backward compatibility 
+                    // if I don't have to by changing the delegate interface.
+                    OnConnect(this, m_stanzas);
+                }
+            }
+        }
+
+        void IStanzaEventListener.BytesRead(byte[] buf, int offset, int count)
+        {
+            if (OnReadText != null)
+            {
+                if (InvokeRequired)
+                    CheckedInvoke(OnReadText, new object[] { this, ENC.GetString(buf, offset, count) });
+                else
+                    OnReadText(this, ENC.GetString(buf, offset, count));
+            }
+        }
+
+        void IStanzaEventListener.BytesWritten(byte[] buf, int offset, int count)
+        {
+            if (OnWriteText != null)
+            {
+                if (InvokeRequired)
+                    CheckedInvoke(OnWriteText, new object[] { this, ENC.GetString(buf, offset, count) });
+                else
+                    OnWriteText(this, ENC.GetString(buf, offset, count));
+            }
+        }
+
+        void IStanzaEventListener.StreamInit(ElementStream stream)
+        {
+            if (OnStreamInit != null)
+            {
+                if (InvokeRequired)
+                    CheckedInvoke(OnStreamInit, new object[] { this, stream });
+                else
+                    OnStreamInit(this, stream);
+            }
+        }
+
+        void IStanzaEventListener.Errored(Exception ex)
+        {
+            m_reconnect = false;
+
+            lock (m_stateLock)
+            {
+                m_state = ClosedState.Instance;
+                m_stanzas = null;
+            }
+
+            if (OnError != null)
+            {
+                if (InvokeRequired)
+                    CheckedInvoke(OnError, new object[] { this, ex });
+                else
+                    OnError(this, ex);
+            }
+
+            // TODO: Figure out what the "good" errors are, and try to 
+            // reconnect.  There are too many "bad" errors to just let this fly.
+            //TryReconnect();
+        }
+
+        void IStanzaEventListener.Closed()
+        {
+            lock (StateLock)
+            {
+                m_state = ClosedState.Instance;
+                m_stanzas = null;
+                m_sslOn = false;
+            }
+
+            if (OnDisconnect != null)
+            {
+                if (InvokeRequired)
+                    CheckedInvoke(OnDisconnect, new object[] { this });
+                else
+                    OnDisconnect(this);
+            }
+
             TryReconnect();
         }
+
+        void IStanzaEventListener.DocumentStarted(XmlElement elem)
+        {
+            // The OnDocumentStart logic stays outside the listener, so that it can be 
+            // more easily overriden by subclasses.
+            OnDocumentStart(m_stanzas, elem);
+        }
+
+        void IStanzaEventListener.DocumentEnded()
+        {
+            lock (StateLock)
+            {
+                m_state = ClosingState.Instance;
+                // TODO: Validate this, with current parser:
+
+                // No need to close stream any more.  AElfred does this for us, even though
+                // the docs say it doesn't.
+
+                //if (m_sock != null)
+                //m_sock.Close();
+            }
+        }
+
+        void IStanzaEventListener.StanzaReceived(XmlElement elem)
+        {
+            // The OnElement logic stays outside the listener, so that it can be 
+            // more easily overriden by subclasses.
+                OnElement(m_stanzas, elem);
+        }
+
+        #endregion
     }
 }

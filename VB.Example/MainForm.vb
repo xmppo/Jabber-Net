@@ -299,9 +299,9 @@ Public Class MainForm
         End If
     End Sub
 
-    Private Sub jc_OnConnect(ByVal sender As Object, ByVal sock As bedrock.net.BaseSocket) Handles jc.OnConnect
+    Private Sub jc_OnConnect(ByVal sender As Object, ByVal stream As jabber.connection.StanzaStream) Handles jc.OnConnect
         m_err = False
-        debug.AppendMaybeScroll("Connected to: " & sock.ToString() & vbCrLf)
+        debug.AppendMaybeScroll("Connected to: " & stream.ToString() & vbCrLf)
     End Sub
 
     Private Sub jc_OnReadText(ByVal sender As Object, ByVal txt As String) Handles jc.OnReadText

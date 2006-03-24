@@ -196,7 +196,6 @@ namespace bedrock.net
 #else
         private Socket               m_sock           = null;
 #endif
-
         private bool                 m_server         = false;
         private byte[]               m_buf            = new byte[BUFSIZE];
         private SocketState          m_state          = SocketState.Created;
@@ -206,6 +205,7 @@ namespace bedrock.net
         private bool                 m_reading        = false;
         private bool                 m_synch          = false;
 
+        
         /// <summary>
         /// Called from SocketWatcher.
         /// </summary>
@@ -426,6 +426,19 @@ namespace bedrock.net
         }
 
         /// <summary>
+        /// Is the socket connected?
+        /// </summary>
+        public bool Connected
+        {
+            get
+            {
+                if (m_sock == null)
+                    return false;
+                return m_sock.Connected;
+            }
+        }
+
+        /// <summary>
         /// Sets the specified option to the specified value.
         /// </summary>
         /// <param name="optionLevel"></param>
@@ -498,7 +511,8 @@ namespace bedrock.net
                 m_sock.Listen(backlog);
                 State = SocketState.Listening;
             
-                m_watcher.RegisterSocket(this);
+                if (m_watcher != null)
+                    m_watcher.RegisterSocket(this);
             }
         }
 
@@ -585,7 +599,8 @@ namespace bedrock.net
 
             try
             {
-                m_watcher.RegisterSocket(cliCon);
+                if (m_watcher != null)
+                    m_watcher.RegisterSocket(cliCon);
             }
             catch (InvalidOperationException)
             {
@@ -656,7 +671,8 @@ namespace bedrock.net
                 }
 
 
-                m_watcher.RegisterSocket(this);
+                if (m_watcher != null)
+                    m_watcher.RegisterSocket(this);
 
                 m_addr = addr;
                 State = SocketState.Connecting;
@@ -1452,7 +1468,8 @@ namespace bedrock.net
                 if (oldState <= SocketState.Connected)
                     m_listener.OnClose(this);
 
-                m_watcher.CleanupSocket(this);
+                if (m_watcher != null)
+                    m_watcher.CleanupSocket(this);
                 State = SocketState.Closed;
             }
         }
@@ -1488,7 +1505,8 @@ namespace bedrock.net
             {
                 Debug.WriteLine("Sock errno: " + ((SocketException) e).ErrorCode);
             }
-            m_watcher.CleanupSocket(this);
+            if (m_watcher != null)
+                m_watcher.CleanupSocket(this);
             m_listener.OnError(this, e);
         }
 

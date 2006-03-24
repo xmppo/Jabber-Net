@@ -83,7 +83,9 @@ namespace test.bedrock.net
         {
             SocketWatcher s_w = new SocketWatcher(20);
             s_w.SetCertificateFile("../../localhost.pfx", "test");
+#if NET20
             s_w.RequireClientCert = true;
+#endif
             s_w.Synchronous = true;
             m_listen = s_w.CreateListenSocket(this, a, true);
             lock(start)
@@ -97,7 +99,9 @@ namespace test.bedrock.net
         #region Implementation of ISocketEventListener
         public bool OnAccept(BaseSocket newsocket)
         {
+#if NET20
             Assert.IsTrue(((AsyncSocket)newsocket).IsMutuallyAuthenticated);
+#endif
             newsocket.RequestRead();
             return false;
         }

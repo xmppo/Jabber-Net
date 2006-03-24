@@ -114,7 +114,7 @@
                 />
                 <File
                     RelPath = "ClientLogin.cs"
-                    SubType = "Form"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
@@ -124,7 +124,7 @@
                 />
                 <File
                     RelPath = "ComponentLogin.cs"
-                    SubType = "Form"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
@@ -154,6 +154,16 @@
                 <File
                     RelPath = "Litmus.resx"
                     DependentUpon = "Litmus.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "OptionForm.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "OptionForm.resx"
+                    DependentUpon = "OptionForm.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File

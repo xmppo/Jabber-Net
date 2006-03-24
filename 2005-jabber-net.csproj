@@ -196,9 +196,11 @@
     <Compile Include="jabber\connection\sasl\SASLProcessor.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="jabber\connection\SocketElementStream.cs">
+    <Compile Include="jabber\connection\XmppStream.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="jabber\connection\SocketStanzaStream.cs" />
+    <Compile Include="jabber\connection\StanzaStream.cs" />
     <Compile Include="jabber\connection\States.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -390,8 +392,9 @@
     <EmbeddedResource Include="jabber\client\RosterManager.resx">
       <DependentUpon>RosterManager.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="jabber\connection\SocketElementStream.resx">
-      <DependentUpon>SocketElementStream.cs</DependentUpon>
+    <EmbeddedResource Include="jabber\connection\XmppStream.resx">
+      <DependentUpon>XmppStream.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="jabber\server\JabberService.bmp" />
     <EmbeddedResource Include="jabber\server\JabberService.resx">
