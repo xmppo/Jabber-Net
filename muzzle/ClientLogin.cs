@@ -144,7 +144,6 @@ namespace muzzle
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.txtServer = new System.Windows.Forms.TextBox();
             this.txtUser = new System.Windows.Forms.TextBox();
             this.cbSSL = new System.Windows.Forms.CheckBox();
@@ -176,7 +175,10 @@ namespace muzzle
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.cmbProxy = new System.Windows.Forms.ComboBox();
+#if NET20
+            ((System.ComponentModel.ISupportInitialize)(this.error)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numPort)).BeginInit();
+#endif
             this.tabControl1.SuspendLayout();
             this.tpBasic.SuspendLayout();
             this.tpNetwork.SuspendLayout();
@@ -191,9 +193,11 @@ namespace muzzle
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtServer.Location = new System.Drawing.Point(72, 72);
             this.txtServer.Name = "txtServer";
-            this.txtServer.Size = new System.Drawing.Size(204, 20);
+            this.txtServer.Size = new System.Drawing.Size(191, 20);
             this.txtServer.TabIndex = 5;
             this.tip.SetToolTip(this.txtServer, "The name of the Jabber server");
+            this.txtServer.Validated += new System.EventHandler(this.onValidated);
+            this.txtServer.Validating += new System.ComponentModel.CancelEventHandler(this.Required_Validating);
             // 
             // txtUser
             // 
@@ -201,10 +205,12 @@ namespace muzzle
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtUser.Location = new System.Drawing.Point(72, 8);
             this.txtUser.Name = "txtUser";
-            this.txtUser.Size = new System.Drawing.Size(204, 20);
+            this.txtUser.Size = new System.Drawing.Size(191, 20);
             this.txtUser.TabIndex = 1;
             this.txtUser.Tag = "";
             this.tip.SetToolTip(this.txtUser, "The user portion of the JID only.");
+            this.txtUser.Validated += new System.EventHandler(this.onValidated);
+            this.txtUser.Validating += new System.ComponentModel.CancelEventHandler(this.Required_Validating);
             // 
             // cbSSL
             // 
@@ -285,8 +291,10 @@ namespace muzzle
             this.txtPass.Location = new System.Drawing.Point(72, 40);
             this.txtPass.Name = "txtPass";
             this.txtPass.PasswordChar = '*';
-            this.txtPass.Size = new System.Drawing.Size(204, 20);
+            this.txtPass.Size = new System.Drawing.Size(191, 20);
             this.txtPass.TabIndex = 3;
+            this.txtPass.Validated += new System.EventHandler(this.onValidated);
+            this.txtPass.Validating += new System.ComponentModel.CancelEventHandler(this.Required_Validating);
             // 
             // label4
             // 
@@ -538,12 +546,16 @@ namespace muzzle
             // 
             // ClientLogin
             // 
+            this.ClientSize = new System.Drawing.Size(292, 266);
             this.Controls.Add(this.tabControl1);
             this.MinimizeBox = false;
             this.Name = "ClientLogin";
             this.Text = "Login";
             this.Controls.SetChildIndex(this.tabControl1, 0);
+#if NET20
+            ((System.ComponentModel.ISupportInitialize)(this.error)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numPort)).EndInit();
+#endif
             this.tabControl1.ResumeLayout(false);
             this.tpBasic.ResumeLayout(false);
             this.tpBasic.PerformLayout();
@@ -593,6 +605,16 @@ namespace muzzle
             numProxyPort.Enabled = prox;
             txtProxyUser.Enabled = prox;
             txtProxyPassword.Enabled = prox;
+        }
+
+        private void Required_Validating(object sender, CancelEventArgs e)
+        {
+            this.Required(sender, e);
+        }
+
+        private void onValidated(object sender, EventArgs e)
+        {
+            this.ClearError(sender, e);
         }
     }
 }

@@ -82,6 +82,9 @@ namespace jabber.protocol
             if (curNode.NodeType != XmlNodeType.Element)
                 return false;
 
+            if (m_name == null)
+                return true;
+
             if (m_uri == null) 
                 return (curNode.LocalName == m_name);
         

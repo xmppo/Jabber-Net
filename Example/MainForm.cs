@@ -54,11 +54,13 @@ namespace Example
         private System.Windows.Forms.TextBox txtDebugInput;
         private muzzle.RosterTree roster;
         private System.Windows.Forms.StatusBarPanel pnlSSL;
-        private jabber.client.DiscoManager dm;
+        private jabber.connection.DiscoManager dm;
         private TabPage tpServices;
         private TreeView tvServices;
         private MenuItem menuItem2;
         private bedrock.util.IdleTime m_idle;
+        private PropertyGrid pgServices;
+        private Splitter splitter2;
 
         private bool m_err = false;
 
@@ -79,6 +81,9 @@ namespace Example
             tvServices.ImageList = roster.ImageList;
 #if NET20
             tvServices.NodeMouseDoubleClick += new TreeNodeMouseClickEventHandler(tvServices_NodeMouseDoubleClick);
+            tvServices.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvServices_AfterSelect);
+#else
+			jc.AutoStartTLS = false;  // Mentalis stopped working with XCP 5
 #endif
             AppDomain.CurrentDomain.UnhandledException +=new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
         }
@@ -144,7 +149,9 @@ namespace Example
             this.menuItem1 = new System.Windows.Forms.MenuItem();
             this.mnuOffline = new System.Windows.Forms.MenuItem();
             this.menuItem2 = new System.Windows.Forms.MenuItem();
-            this.dm = new jabber.client.DiscoManager(this.components);
+            this.dm = new jabber.connection.DiscoManager(this.components);
+            this.splitter2 = new System.Windows.Forms.Splitter();
+            this.pgServices = new System.Windows.Forms.PropertyGrid();
             ((System.ComponentModel.ISupportInitialize)(this.pnlCon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pnlSSL)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pnlPresence)).BeginInit();
@@ -234,7 +241,7 @@ namespace Example
             this.jc.User = null;
             this.jc.OnReadText += new bedrock.TextHandler(this.jc_OnReadText);
             this.jc.OnMessage += new jabber.client.MessageHandler(this.jc_OnMessage);
-            this.jc.OnConnect += new jabber.connection.StanzaStreamHandler(jc_OnConnect);
+            this.jc.OnConnect += new jabber.connection.StanzaStreamHandler(this.jc_OnConnect);
             this.jc.OnAuthenticate += new bedrock.ObjectHandler(this.jc_OnAuthenticate);
             this.jc.OnAuthError += new jabber.client.IQHandler(this.jc_OnAuthError);
             this.jc.OnDisconnect += new bedrock.ObjectHandler(this.jc_OnDisconnect);
@@ -256,6 +263,8 @@ namespace Example
             // 
             // tpServices
             // 
+            this.tpServices.Controls.Add(this.pgServices);
+            this.tpServices.Controls.Add(this.splitter2);
             this.tpServices.Controls.Add(this.tvServices);
             this.tpServices.Location = new System.Drawing.Point(4, 22);
             this.tpServices.Name = "tpServices";
@@ -265,13 +274,13 @@ namespace Example
             // 
             // tvServices
             // 
-            this.tvServices.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tvServices.Dock = System.Windows.Forms.DockStyle.Left;
             this.tvServices.Location = new System.Drawing.Point(0, 0);
             this.tvServices.Name = "tvServices";
             this.tvServices.ShowLines = false;
             this.tvServices.ShowPlusMinus = false;
             this.tvServices.ShowRootLines = false;
-            this.tvServices.Size = new System.Drawing.Size(624, 390);
+            this.tvServices.Size = new System.Drawing.Size(347, 390);
             this.tvServices.TabIndex = 0;
             this.tvServices.AfterCollapse += new System.Windows.Forms.TreeViewEventHandler(this.tvServices_AfterCollapse);
             this.tvServices.AfterExpand += new System.Windows.Forms.TreeViewEventHandler(this.tvServices_AfterExpand);
@@ -360,7 +369,23 @@ namespace Example
             // 
             // dm
             // 
-            this.dm.Client = this.jc;
+            this.dm.Stream = this.jc;
+            // 
+            // splitter2
+            // 
+            this.splitter2.Location = new System.Drawing.Point(347, 0);
+            this.splitter2.Name = "splitter2";
+            this.splitter2.Size = new System.Drawing.Size(3, 390);
+            this.splitter2.TabIndex = 1;
+            this.splitter2.TabStop = false;
+            // 
+            // pgServices
+            // 
+            this.pgServices.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pgServices.Location = new System.Drawing.Point(350, 0);
+            this.pgServices.Name = "pgServices";
+            this.pgServices.Size = new System.Drawing.Size(274, 390);
+            this.pgServices.TabIndex = 2;
             // 
             // MainForm
             // 
@@ -458,18 +483,19 @@ namespace Example
             }
 #endif
 #if NET20
-            jabber.client.DiscoNode dn = jabber.client.DiscoNode.GetNode(jc.Server, null);
+            jabber.connection.DiscoNode dn = jabber.connection.DiscoNode.GetNode(jc.Server, null);
+            tvServices.ShowNodeToolTips = true;
             TreeNode tn = tvServices.Nodes.Add(dn.Key, dn.Name);
             tn.ToolTipText = dn.Key.Replace('\u0000', '\n');
             tn.Tag = dn;
             tn.ImageIndex = 8;
             tn.SelectedImageIndex = 8;
-            dm.BeginGetItems(dn.JID, dn.Node, new jabber.client.DiscoNodeHandler(GotItems));
+            dm.BeginGetFeatures(dn, new jabber.connection.DiscoNodeHandler(GotInitialFeatures));
 #endif
             m_idle.Enabled = true;
         }
 
-        private void GotItems(jabber.client.DiscoNode node)
+        private void GotItems(jabber.connection.DiscoNode node)
         {
 #if NET20
             TreeNode[] nodes = tvServices.Nodes.Find(node.Key, true);
@@ -477,7 +503,7 @@ namespace Example
             {
                 n.ImageIndex = 7;
                 n.SelectedImageIndex = 7;
-                foreach (jabber.client.DiscoNode dn in node.Children)
+                foreach (jabber.connection.DiscoNode dn in node.Children)
                 {
                     TreeNode tn = n.Nodes.Add(dn.Key, dn.Name);
                     tn.ToolTipText = dn.Key.Replace('\u0000', '\n');
@@ -486,9 +512,21 @@ namespace Example
                     tn.SelectedImageIndex = 8;
                 }
             }
+            pgServices.Refresh();
 #endif
         }
 
+        private void GotInitialFeatures(jabber.connection.DiscoNode node)
+        {
+            dm.BeginGetItems(node, new jabber.connection.DiscoNodeHandler(GotItems));
+        }
+
+        private void GotInfo(jabber.connection.DiscoNode node)
+        {
+#if NET20
+            pgServices.SelectedObject = node;
+#endif
+        }
         private void jc_OnDisconnect(object sender)
         {
             m_idle.Enabled = false;
@@ -499,6 +537,7 @@ namespace Example
             tvServices.Nodes.Clear();
             if (!m_err)
                 pnlCon.Text = "Disconnected";
+            pgServices.SelectedObject = null;
         }
 
         private void jc_OnError(object sender, System.Exception ex)
@@ -728,17 +767,21 @@ namespace Example
         {
             jc.Close();
             this.Close();
-                }
+        }
 
 #if NET20
         void tvServices_NodeMouseDoubleClick(object sender,
                                              TreeNodeMouseClickEventArgs e)
         {
-            jabber.client.DiscoNode dn = (jabber.client.DiscoNode)e.Node.Tag;
+            jabber.connection.DiscoNode dn = (jabber.connection.DiscoNode)e.Node.Tag;
             if (dn.Children == null)
-            {
-                dm.BeginGetItems(dn.JID, dn.Node, new jabber.client.DiscoNodeHandler(GotItems));
-            }
+                dm.BeginGetItems(dn.JID, dn.Node, new jabber.connection.DiscoNodeHandler(GotItems));
+        }
+
+        private void tvServices_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            jabber.connection.DiscoNode dn = (jabber.connection.DiscoNode)e.Node.Tag;
+            dm.BeginGetFeatures(dn, new jabber.connection.DiscoNodeHandler(GotInfo));
         }
 #endif
     }

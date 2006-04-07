@@ -17,14 +17,16 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Collections;
 using System.Diagnostics;
+using System.Xml;
 
 using bedrock.util;
 using bedrock.collections;
 
+using jabber.protocol;
 using jabber.protocol.client;
 using jabber.protocol.iq;
 
-namespace jabber.client
+namespace jabber.connection
 {
     internal class Ident
     {
@@ -45,6 +47,7 @@ namespace jabber.client
     /// <summary>
     /// A JID/Node combination.
     /// </summary>
+    [RCS(@"$Header$")]
     public class JIDNode
     {
         private JID m_jid = null;
@@ -67,6 +70,7 @@ namespace jabber.client
         /// <summary>
         /// The JID.
         /// </summary>
+        [Category("Identity")]
         public JID JID
         {
             get { return m_jid; }
@@ -75,6 +79,7 @@ namespace jabber.client
         /// <summary>
         /// The Node.
         /// </summary>
+        [Category("Identity")]
         public string Node
         {
             get { return m_node; }
@@ -96,6 +101,7 @@ namespace jabber.client
         /// <summary>
         /// A JID/Node key for Hash lookup.
         /// </summary>
+        [Browsable(false)]
         public string Key
         {
             get { return GetKey(m_jid, m_node); }
@@ -157,6 +163,8 @@ namespace jabber.client
         /// </summary>
         public Set Identity = null;
         private string m_name = null;
+        private bool m_pendingItems = false;
+        private bool m_pendingInfo = false;
 
         /// <summary>
         /// Create a disco node.
@@ -184,6 +192,7 @@ namespace jabber.client
         /// <summary>
         /// The human-readable string from the first identity.
         /// </summary>
+        [Category("Info")]
         public string Name
         {
             set { m_name = value; }
@@ -204,6 +213,51 @@ namespace jabber.client
                 if (Node != null)
                     n += "/" + Node;
                 return n;
+            }
+        }
+
+        [Category("Status")]
+        public bool PendingInfo
+        {
+            get { return m_pendingInfo; }
+        }
+
+        [Category("Status")]
+        public bool PendingItems
+        {
+            get { return m_pendingItems; }
+        }
+
+        [Category("Info")]
+        public string[] FeatureNames
+        {
+            get
+            {
+                if (Features == null)
+                    return new string[0];
+                string[] names = new string[Features.Count];
+                int count = 0;
+                foreach (string s in Features)
+                {
+                    names[count++] = s;
+                }
+                return names;
+            }
+        }
+        [Category("Info")]
+        public string[] Identities
+        {
+            get
+            {
+                if (Identity == null)
+                    return new string[0];
+                string[] names = new string[Identity.Count];
+                int count = 0;
+                foreach (Ident i in Identity)
+                {
+                    names[count++] = i.GetKey();
+                }
+                return names;
             }
         }
 
@@ -263,8 +317,11 @@ namespace jabber.client
         {
             if (Features == null)
                 Features = new Set();
-            foreach (DiscoFeature f in features)
-                Features.Add(f.Var);
+            if (features != null)
+            {
+                foreach (DiscoFeature f in features)
+                    Features.Add(f.Var);
+            }
             if (OnFeatures != null)
             {
                 OnFeatures(this);
@@ -280,14 +337,26 @@ namespace jabber.client
         {
             if (Identity == null)
                 Identity = new Set();
-            foreach (DiscoIdentity id in ids)
+            if (ids != null)
             {
-                Ident i = new Ident();
-                i.name = id.Named;
-                i.category = id.Category;
-                i.type = id.Type;
-                Identity.Add(i);
+                foreach (DiscoIdentity id in ids)
+                {
+                    Ident i = new Ident();
+                    i.name = id.Named;
+                    i.category = id.Category;
+                    i.type = id.Type;
+                    Identity.Add(i);
+                }
             }
+        }
+
+        internal DiscoNode AddItem(DiscoItem di)
+        {
+            DiscoNode dn = GetNode(di.Jid, di.Node);
+            if ((di.Named != null) && (di.Named != ""))
+                dn.Name = di.Named;
+            Children.Add(dn);
+            return dn;
         }
 
         /// <summary>
@@ -298,12 +367,10 @@ namespace jabber.client
         {
             if (Children == null)
                 Children = new Set();
-            foreach (DiscoItem di in items)
+            if (items != null)
             {
-                DiscoNode dn = GetNode(di.Jid, di.Node);
-                if ((di.Named != null) && (di.Named != ""))
-                    dn.Name = di.Named;
-                Children.Add(dn);
+                foreach (DiscoItem di in items)
+                    AddItem(di);
             }
             if (OnItems != null)
             {
@@ -319,6 +386,7 @@ namespace jabber.client
         /// <returns></returns>
         public IQ InfoIQ(System.Xml.XmlDocument doc)
         {
+            m_pendingInfo = true;
             DiscoInfoIQ iiq = new DiscoInfoIQ(doc);
             iiq.To = JID;
             iiq.Type = IQType.get;
@@ -327,6 +395,11 @@ namespace jabber.client
                 DiscoInfo info = (DiscoInfo)iiq.Query;
                 info.Node = Node;
             }
+             /*
+            IQ iiq = new BrowseIQ(doc);
+            iiq.Type = IQType.get;
+            iiq.To = JID;
+            */
             return iiq;
         }
 
@@ -337,6 +410,8 @@ namespace jabber.client
         /// <returns></returns>
         public IQ ItemsIQ(System.Xml.XmlDocument doc)
         {
+            m_pendingItems = true;
+ 
             DiscoItemsIQ iiq = new DiscoItemsIQ(doc);
             iiq.To = JID;
             iiq.Type = IQType.get;
@@ -390,7 +465,8 @@ namespace jabber.client
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.Container components = null;
-        private JabberClient m_client = null;
+        private XmppStream m_stream = null;
+        private DiscoNode m_root = null;
 
         /// <summary>
         /// Construct a PresenceManager object.
@@ -413,15 +489,15 @@ namespace jabber.client
         /// <summary>
         /// The JabberClient to hook up to.
         /// </summary>
-        [Description("The JabberClient to hook up to.")]
+        [Description("The JabberClient or JabberService to hook up to.")]
         [Category("Jabber")]
-        public JabberClient Client
+        public XmppStream Stream
         {
             get
             {
                 // If we are running in the designer, let's try to get an invoke control
                 // from the environment.  VB programmers can't seem to follow directions.
-                if ((this.m_client == null) && DesignMode)
+                if ((this.m_stream == null) && DesignMode)
                 {
                     IDesignerHost host = (IDesignerHost)base.GetService(typeof(IDesignerHost));
                     if (host != null)
@@ -431,68 +507,131 @@ namespace jabber.client
                         {
                             foreach (Component c in root.Container.Components)
                             {
-                                if (c is JabberClient)
+                                if (c is XmppStream)
                                 {
-                                    m_client = (JabberClient)c;
+                                    m_stream = (XmppStream)c;
                                     break;
                                 }
                             }
                         }
                     }
                 }
-                return m_client;
+                return m_stream;
             }
             set
             {
-                m_client = value;
-                m_client.OnIQ += new IQHandler(GotIQ);
-                m_client.OnDisconnect += new bedrock.ObjectHandler(GotDisconnect);
-                m_client.OnAuthenticate += new bedrock.ObjectHandler(m_client_OnAuthenticate);
+                m_stream = value;
+                m_stream.OnDisconnect += new bedrock.ObjectHandler(GotDisconnect);
+                if (m_stream is jabber.client.JabberClient)
+                {
+                    m_stream.OnAuthenticate += new bedrock.ObjectHandler(m_client_OnAuthenticate);
+                }
             }
         }
 
-        void m_client_OnAuthenticate(object sender)
+        /// <summary>
+        /// The root node.  This is probably the server that you connected to.
+        /// If the Children property of this is null, we haven't received an answer to 
+        /// our disco#items request; register on this node's OnFeatures callback.
+        /// </summary>
+        public DiscoNode Root
         {
-            DiscoNode root = DiscoNode.GetNode(m_client.Server);
-            m_client.Write(root.InfoIQ(m_client.Document));
-            m_client.Write(root.ItemsIQ(m_client.Document));
+            get { return m_root; }
+        }
+
+        private void m_client_OnAuthenticate(object sender)
+        {
+            m_root = DiscoNode.GetNode(m_stream.Server);
+            RequestInfo(m_root);
         }
 
         private void GotDisconnect(object sender)
         {
+            m_root = null;
             DiscoNode.Clear();
         }
 
-        private void GotIQ(object sender, IQ iq)
+        private void RequestInfo(DiscoNode node)
         {
-            if (iq.Type != IQType.result)
-                return;
+            if (!node.PendingInfo)
+                m_stream.Tracker.BeginIQ(node.InfoIQ(m_stream.Document),
+                                         new jabber.connection.IqCB(GotInfo),
+                                         node);
+        }
 
-            if (iq.Query == null)
-                return; // broken impl on the other side shouldn't crash us.
+        private void RequestItems(DiscoNode node)
+        {
+            if (!node.PendingItems)
+                m_stream.Tracker.BeginIQ(node.ItemsIQ(m_stream.Document),
+                                         new jabber.connection.IqCB(GotItems),
+                                         node);
+        }
+
+
+        private void GotInfo(object sender, IQ iq, object onode)
+        {
+            DiscoNode dn = onode as DiscoNode;
+            Debug.Assert(dn != null);
+
+            if (iq.Type == IQType.error)
+            {
+                if (dn == m_root)
+                {
+                    // root node. 
+                    // Try agents.
+                    if ((iq.Error.Code == ErrorCode.NOT_IMPLEMENTED) ||
+                        (iq.Error.Code == ErrorCode.SERVICE_UNAVAILABLE))
+                    {
+                        IQ aiq = new AgentsIQ(m_stream.Document);
+                        m_stream.Tracker.BeginIQ(aiq, new jabber.connection.IqCB(GotAgents), m_root);
+                        return;
+                    }
+                }
+            }
+            if (iq.Type != IQType.result)
+            {
+                // protocol error
+                dn.AddIdentities(null);
+                dn.AddFeatures(null);
+                return;
+            }
 
             DiscoInfo info = iq.Query as DiscoInfo;
-            if (info != null)
+            if (info == null)
             {
-                DiscoNode dn = DiscoNode.GetNode(iq.From, info.Node);
-                GotInfo(dn, iq, info);
+                // protocol error
+                dn.AddIdentities(null);
+                dn.AddFeatures(null);
+                return;
             }
-            DiscoItems items = iq.Query as DiscoItems;
-            if (items != null)
-            {
-                DiscoNode dn = DiscoNode.GetNode(iq.From, items.Node);
-                GotItems(dn, iq, items);
-            }
-        }
 
-        private void GotInfo(DiscoNode dn, IQ iq, DiscoInfo info)
-        {
             dn.AddIdentities(info.GetIdentities());
             dn.AddFeatures(info.GetFeatures());
+
+            if (dn == m_root)
+                RequestItems(m_root);
         }
 
-        private void GotItems(DiscoNode dn, IQ iq, DiscoItems items)
+        private void GotItems(object sender, IQ iq, object onode)
         {
+            DiscoNode dn = onode as DiscoNode;
+            Debug.Assert(dn != null);
+
+            if (iq.Type != IQType.result)
+            {
+                // protocol error
+                dn.AddItems(null);
+                return;
+            }
+
+            DiscoItems items = iq.Query as DiscoItems;
+            if (items == null)
+            {
+                // protocol error
+                dn.AddItems(null);
+                return;
+            }
+
             dn.AddItems(items.GetItems());
 
             // automatically info everything we get an item for.
@@ -500,9 +639,97 @@ namespace jabber.client
             {
                 if (n.Features == null)
                 {
-                    m_client.Write(n.InfoIQ(m_client.Document));
+                    RequestInfo(n);
                 }
             }
+        }
+
+        private void GotAgents(object sender, IQ iq, object onode)
+        {
+            DiscoNode dn = onode as DiscoNode;
+            Debug.Assert(dn != null);
+
+            if (iq.Type != IQType.result)
+            {
+                dn.AddItems(null);
+                return;
+            }
+
+            AgentsQuery aq = iq.Query as AgentsQuery;
+            if (aq == null)
+            {
+                dn.AddItems(null);
+                return;
+            }
+
+            if (dn.Children == null)
+                dn.Children = new Set();
+
+            foreach (Agent agent in aq.GetAgents())
+            {
+                DiscoItem di = new DiscoItem(m_stream.Document);
+                di.Jid = agent.JID;
+                di.Named = agent.AgentName;
+
+                DiscoNode child = dn.AddItem(di);
+                if (child.Features == null)
+                    child.Features = new Set();
+                if (child.Identity == null)
+                    child.Identity = new Set();
+
+                Ident id = new Ident();
+                id.name = agent.Description;
+                switch (agent.Service)
+                {
+                case "groupchat":
+                    id.category = "conference";
+                    id.type = "text";
+                    child.Identity.Add(id);
+                    break;
+                case "jud":
+                    id.category = "directory";
+                    id.type = "user";
+                    child.Identity.Add(id);
+                    break;
+                case null:
+                case "":
+                    break;
+                default:
+                    // guess this is a transport
+                    id.category = "gateway";
+                    id.type = agent.Service;
+                    child.Identity.Add(id);
+                    break;
+                }
+
+                if (agent.Register)
+                    child.Features.Add(URI.REGISTER);
+                if (agent.Search)
+                    child.Features.Add(URI.SEARCH);
+                if (agent.Groupchat)
+                    child.Features.Add(URI.MUC);
+                if (agent.Transport)
+                {
+                    if (id.category != "gateway")
+                    {
+                        Ident tid = new Ident();
+                        tid.name = id.name;
+                        tid.category = "gateway";
+                        child.Identity.Add(tid);
+                    }
+                }
+
+                foreach (XmlElement ns in agent.GetElementsByTagName("ns"))
+                {
+                    child.Features.Add(ns.InnerText);
+                }
+                child.AddItems(null);
+                child.AddIdentities(null);
+                child.AddFeatures(null);
+            }
+            dn.AddItems(null);
+            dn.AddIdentities(null);
+            dn.AddFeatures(null);
         }
 
         /// <summary>
@@ -521,7 +748,7 @@ namespace jabber.client
             else
             {
                 node.OnFeatures += handler;
-                m_client.Write(node.InfoIQ(m_client.Document));
+                RequestInfo(node);
             }
         }
 
@@ -545,15 +772,16 @@ namespace jabber.client
         /// <param name="handler"></param>
         public void BeginGetItems(DiscoNode node, DiscoNodeHandler handler)
         {
-            if (handler == null)
-                throw new ArgumentException("Handler must not be null", "handler");
-
             if (node.Children != null)
-                handler(node);
+            {
+                if (handler != null)
+                    handler(node);
+            }
             else
             {
-                node.OnItems += handler;
-                m_client.Write(node.ItemsIQ(m_client.Document));
+                if (handler != null)
+                    node.OnItems += handler;
+                RequestItems(node);
             }
         }
 

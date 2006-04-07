@@ -416,7 +416,7 @@ namespace jabber.protocol.iq
         /// 
         /// </summary>
         /// <param name="doc"></param>
-        public DiscoIdentity(XmlDocument doc) : base("identity", URI.DISCO_ITEMS, doc)
+        public DiscoIdentity(XmlDocument doc) : base("identity", URI.DISCO_INFO, doc)
         {
         }
 

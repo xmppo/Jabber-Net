@@ -350,7 +350,9 @@ namespace muzzle
             this.tip = new System.Windows.Forms.ToolTip(this.components);
             this.error = new System.Windows.Forms.ErrorProvider();
             this.panel1.SuspendLayout();
+#if NET20
             ((System.ComponentModel.ISupportInitialize)(this.error)).BeginInit();
+#endif
             this.SuspendLayout();
             // 
             // btnCancel
@@ -400,7 +402,9 @@ namespace muzzle
             this.Text = "OptionForm";
             this.Load += new System.EventHandler(this.OptionForm_Load);
             this.panel1.ResumeLayout(false);
+#if NET20
             ((System.ComponentModel.ISupportInitialize)(this.error)).EndInit();
+#endif
             this.ResumeLayout(false);
 
         }

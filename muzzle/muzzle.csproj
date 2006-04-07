@@ -114,7 +114,7 @@
                 />
                 <File
                     RelPath = "ClientLogin.cs"
-                    SubType = "Code"
+                    SubType = "Form"
                     BuildAction = "Compile"
                 />
                 <File
@@ -124,7 +124,7 @@
                 />
                 <File
                     RelPath = "ComponentLogin.cs"
-                    SubType = "Code"
+                    SubType = "Form"
                     BuildAction = "Compile"
                 />
                 <File

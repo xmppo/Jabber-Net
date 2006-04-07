@@ -244,21 +244,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "jabber\client\DiscoManager.bmp"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "jabber\client\DiscoManager.cs"
-                    SubType = "Component"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "jabber\client\JabberClient.bmp"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "jabber\client\JabberClient.cs"
-                    SubType = "Code"
+                    SubType = "Component"
                     BuildAction = "Compile"
                 />
                 <File
@@ -288,6 +279,15 @@
                     RelPath = "jabber\client\RosterManager.resx"
                     DependentUpon = "RosterManager.cs"
                     BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "jabber\connection\DiscoManager.bmp"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "jabber\connection\DiscoManager.cs"
+                    SubType = "Component"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "jabber\connection\IQTracker.cs"
@@ -565,7 +565,7 @@
                 />
                 <File
                     RelPath = "jabber\server\JabberService.cs"
-                    SubType = "Code"
+                    SubType = "Component"
                     BuildAction = "Compile"
                 />
                 <File

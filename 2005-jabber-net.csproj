@@ -172,7 +172,7 @@
     <Compile Include="bedrock\util\Version.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="jabber\client\DiscoManager.cs">
+    <Compile Include="jabber\connection\DiscoManager.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="jabber\client\JabberClient.cs">
@@ -405,7 +405,7 @@
     <None Include="jabbernet.key" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="jabber\client\DiscoManager.bmp" />
+    <EmbeddedResource Include="jabber\connection\DiscoManager.bmp" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

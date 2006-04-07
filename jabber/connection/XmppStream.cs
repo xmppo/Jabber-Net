@@ -189,6 +189,7 @@ namespace jabber.connection
         protected static readonly System.Text.Encoding ENC = System.Text.Encoding.UTF8;
 
         private StanzaStream m_stanzas = null;
+        private IQTracker m_tracker = null;
 
         private XmlDocument m_doc        = new XmlDocument();
         private BaseState   m_state      = ClosedState.Instance;
@@ -242,6 +243,8 @@ namespace jabber.connection
         public XmppStream()
         {
             m_ns = new XmlNamespaceManager(m_doc.NameTable);
+            m_tracker = new IQTracker(this);
+
             SetDefaults(DEFAULTS);
         }
 
@@ -387,6 +390,15 @@ namespace jabber.connection
         /// </summary>
         [Category("Stream")]
         public event bedrock.ObjectHandler OnDisconnect;
+
+        /// <summary>
+        /// Let's track IQ packets.
+        /// </summary>
+        [Browsable(false)]
+        public IQTracker Tracker
+        {
+            get { return m_tracker; }
+        }
 
         /// <summary>
         /// The name of the server to connect to.  

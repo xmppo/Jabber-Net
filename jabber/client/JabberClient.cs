@@ -50,8 +50,6 @@ namespace jabber.client
     [RCS(@"$Header$")]
     public class JabberClient : XmppStream
     {
-        private IQTracker m_tracker = null;
-
         private static readonly object[][] DEFAULTS = new object[][] {
             new object[] {Options.RESOURCE, "Jabber.Net"},
             new object[] {Options.PRIORITY, 0},
@@ -65,7 +63,6 @@ namespace jabber.client
         {
             SetDefaults(DEFAULTS);
 
-            m_tracker = new IQTracker(this);
             this.OnSASLStart += new jabber.connection.sasl.SASLProcessorHandler(JabberClient_OnSASLStart);
             this.OnSASLEnd += new jabber.protocol.stream.FeaturesHandler(JabberClient_OnSASLEnd);
             this.OnStreamInit += new StreamHandler(JabberClient_OnStreamInit);
@@ -243,15 +240,6 @@ namespace jabber.client
         {
             get { return this[Options.RESOURCE] as string; }
             set { this[Options.RESOURCE] = value; }
-        }
-
-        /// <summary>
-        /// Let's track IQ packets.
-        /// </summary>
-        [Browsable(false)]
-        public IQTracker Tracker
-        {
-            get { return m_tracker; }
         }
 
         /// <summary>

@@ -90,16 +90,6 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
-    <ProjectReference Include="..\2005-jabber-net.csproj">
-      <Name>2005-jabber-net</Name>
-      <Project>{6CAE854A-F202-4D2B-B10E-E8D8E81E5EF5}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
-    </ProjectReference>
-    <ProjectReference Include="..\muzzle\2005-muzzle.csproj">
-      <Name>2005-muzzle</Name>
-      <Project>{071A79A9-E23F-418F-A6B7-63D3A3E59EEB}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs">
@@ -118,6 +108,16 @@
     <EmbeddedResource Include="SendMessage.resx">
       <DependentUpon>SendMessage.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\2005-jabber-net.csproj">
+      <Project>{6CAE854A-F202-4D2B-B10E-E8D8E81E5EF5}</Project>
+      <Name>2005-jabber-net</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\muzzle\2005-muzzle.csproj">
+      <Project>{071A79A9-E23F-418F-A6B7-63D3A3E59EEB}</Project>
+      <Name>2005-muzzle</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
