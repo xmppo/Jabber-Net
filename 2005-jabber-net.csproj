@@ -81,6 +81,7 @@
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
+    <Reference Include="System.Data" />
     <Reference Include="System.Security" />
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
@@ -141,6 +142,7 @@
     <Compile Include="bedrock\net\CertUtil.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="bedrock\net\JEP124Socket.cs" />
     <Compile Include="bedrock\net\JEP25Socket.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -184,9 +186,12 @@
     <Compile Include="jabber\client\RosterManager.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="jabber\connection\HttpUploader.cs" />
     <Compile Include="jabber\connection\IQTracker.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="jabber\connection\PollingStanzaStream.cs" />
+    <Compile Include="jabber\connection\sasl\ExternalProcessor.cs" />
     <Compile Include="jabber\connection\sasl\MD5Processor.cs">
       <SubType>Code</SubType>
     </Compile>

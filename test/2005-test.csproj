@@ -86,6 +86,7 @@
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
+    <Reference Include="System.Data" />
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
@@ -120,6 +121,7 @@
     <Compile Include="bedrock\net\AsyncSocketTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="bedrock\net\HttpUploadTest.cs" />
     <Compile Include="bedrock\net\SSLAsyncSocketTest.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -174,6 +174,8 @@ namespace bedrock.net
         private MemoryStream         m_pending           = new MemoryStream();
         private bool                 m_writing           = false;
         private bool                 m_requireClientCert = false;
+        private bool                 m_cert_gui          = true;
+
 #elif __MonoCS__
         public static Mono.Security.Protocol.Tls.SecurityProtocolType SSLProtocols     = Mono.Security.Protocol.Tls.SecurityProtocolType.Ssl3 | Mono.Security.Protocol.Tls.SecurityProtocolType.Tls;
         private Mono.Security.Protocol.Tls.SecurityProtocolType m_secureProtocol = 0;
@@ -304,12 +306,12 @@ namespace bedrock.net
         /// TODO: figure out something for server certs, too.
         /// </summary>
         public void ChooseClientCertificate()
-        {
-            /*
+        {            
+
             X509Store store = new X509Store(StoreName.My, StoreLocation.CurrentUser);
             store.Open(OpenFlags.ReadOnly);
 
-            m_cert = null;
+            //m_cert = null;
             switch (store.Certificates.Count)
             {
                 case 0:
@@ -326,7 +328,6 @@ namespace bedrock.net
                         m_cert = certs[0];
                     break;
             }
-             */
         }
 
         /// <summary>
@@ -339,11 +340,23 @@ namespace bedrock.net
             X509Certificate remoteCertificate,
             string[] acceptableIssuers)
         {
-            if (m_cert != null)
-                return m_cert;
+            if (CertificateGui)
+            {
+                if (m_cert != null)
+                    return m_cert;
 
-            ChooseClientCertificate();
+                ChooseClientCertificate();
+            }
             return m_cert;
+        }
+
+        /// <summary>
+        /// If true the certificate selection dialog is called.
+        /// </summary>
+        public bool CertificateGui
+        {
+            get { return m_cert_gui; }
+            set { m_cert_gui = value; }
         }
 
         /// <summary>
@@ -859,6 +872,7 @@ namespace bedrock.net
                 m_secureProtocol = SslProtocols.Tls;
 
             m_stream = new SslStream(m_stream, false, new RemoteCertificateValidationCallback(ValidateServerCertificate), new LocalCertificateSelectionCallback(ChooseClientCertificate));
+
             if (m_server)
             {
                 if (m_cert == null)
@@ -872,6 +886,9 @@ namespace bedrock.net
             }
             else
             {
+                if ((m_watcher != null) && (m_watcher.LocalCertificate != null))
+                    m_cert = m_watcher.LocalCertificate;
+
                 X509CertificateCollection certs = null;
                 if (m_cert != null)
                 {
@@ -879,6 +896,7 @@ namespace bedrock.net
                     certs.Add(m_cert);
                 }
                 ((SslStream)m_stream).AuthenticateAsClient(m_hostid, certs, m_secureProtocol, false);
+
             }
         }
 
@@ -1205,7 +1223,7 @@ namespace bedrock.net
                     throw;
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 Close();
                 throw;
@@ -1446,17 +1464,19 @@ namespace bedrock.net
                 if (m_sock.Connected)
                 {
                     State = SocketState.Closing;
+
+                    try
+                    {
+                        m_sock.Shutdown(SocketShutdown.Both);
+                    }
+                    catch { }
+
 #if NET20 || __MonoCS__
                     if (m_stream != null)
                         m_stream.Close();
                     else
 #endif
-                    {
-                        try
-                        {
-                            m_sock.Shutdown(SocketShutdown.Both);
-                        }
-                        catch { }
+                    {                        
                         try
                         {
                             m_sock.Close();
@@ -1470,6 +1490,7 @@ namespace bedrock.net
 
                 if (m_watcher != null)
                     m_watcher.CleanupSocket(this);
+
                 State = SocketState.Closed;
             }
         }

@@ -700,7 +700,7 @@ namespace Example
         private void mnuOffline_Click(object sender, System.EventArgs e)
         {
             if (jc.IsAuthenticated)
-                jc.Close();
+                jc.Close();            
         }
 
         void jc_OnConnect(object sender, jabber.connection.StanzaStream stream)

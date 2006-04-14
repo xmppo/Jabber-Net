@@ -40,7 +40,7 @@ namespace jabber.protocol.accept
         /// <param name="qname"></param>
         /// <param name="doc"></param>
         public Handshake(string prefix, XmlQualifiedName qname, XmlDocument doc) : 
-            base(qname.Name, doc)
+            base(prefix, qname, doc)
         {
         }
 

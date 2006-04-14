@@ -19,6 +19,7 @@ using System.Xml;
 using bedrock.net;
 using bedrock.util;
 using jabber.protocol;
+using System.Security.Cryptography;
 
 namespace jabber.connection
 {
@@ -26,44 +27,23 @@ namespace jabber.connection
     /// The types of proxies we support.  This is only for socket connections.
     /// </summary>
     [RCS(@"$Header$")]
-    public enum ProxyType
-    {
-        /// <summary>
-        /// no proxy
-        /// </summary>
-        None,
-        /// <summary>
-        /// socks4 as in http://archive.socks.permeo.com/protocol/socks4.protocol
-        /// </summary>
-        Socks4,
-        /// <summary>
-        /// socks5 as in http://archive.socks.permeo.com/rfc/rfc1928.txt
-        /// </summary>
-        Socks5,
-        /// <summary>
-        /// HTTP CONNECT
-        /// </summary>
-        CONNECT,
-    }
 
 
     /// <summary>
-    /// "Standard" XMPP socket, connecting outward.
+    /// Http Polling XMPP .
     /// </summary>
-    [RCS(@"$Header$")]
-    public class SocketStanzaStream : StanzaStream, ISocketEventListener
+    public class PollingStanzaStream : StanzaStream, ISocketEventListener
     {
         private AsynchElementStream m_elements = null;
-        private BaseSocket          m_sock = null;
-        private Timer               m_timer = null;
-        
+        private BaseSocket m_sock = null;
+
         /// <summary>
         /// Create a new one.
         /// </summary>
         /// <param name="listener"></param>
-        internal SocketStanzaStream(IStanzaEventListener listener) : base(listener)
+        internal PollingStanzaStream(IStanzaEventListener listener)
+            : base(listener)
         {
-            m_timer = new Timer(new TimerCallback(DoKeepAlive), null, Timeout.Infinite, Timeout.Infinite);
         }
 
         /// <summary>
@@ -71,7 +51,7 @@ namespace jabber.connection
         /// </summary>
         public override bool Connected
         {
-            get { return ASock.Connected;  }
+            get { return Sock.Connected; }
         }
 
         /// <summary>
@@ -79,25 +59,12 @@ namespace jabber.connection
         /// </summary>
         public override bool SupportsTLS
         {
-            get 
-            { 
-#if NO_SSL
-                return false;
-#else
-                return true;
-#endif
-            }
+            get { return false; }
         }
 
-        private AsyncSocket ASock
+        private JEP25Socket Sock
         {
-            get
-            {
-                if (m_sock is ProxySocket)
-                    return ((ProxySocket)m_sock).Socket as AsyncSocket;
-                else
-                    return m_sock as AsyncSocket;
-            }
+            get { return m_sock as JEP25Socket; }
         }
 
         /// <summary>
@@ -126,70 +93,22 @@ namespace jabber.connection
         {
             int port = (int)m_listener[Options.PORT];
             Debug.Assert(port > 0);
-            //m_sslOn = m_ssl;
 
-            ProxySocket proxy = null;
-            ProxyType pt = (ProxyType)m_listener[Options.PROXY_TYPE];
-            switch (pt)
-            {
-            case ProxyType.Socks4:
-                proxy = new Socks4Proxy(this);
-                break;
+            JEP25Socket j25s = new JEP25Socket(this);
+            //if (m_ProxyHost != null)
+            //{
+            //    System.Net.WebProxy wp = new System.Net.WebProxy();
+            //    wp.Address = new Uri("http://" + m_ProxyHost + ":" + m_ProxyPort);
+            //    if (m_ProxyUsername != null)
+            //    {
+            //        wp.Credentials = new System.Net.NetworkCredential(m_ProxyUsername, m_ProxyPassword);
+            //    }
+            //    j25s.Proxy = wp;
+            //}
+            
+            m_sock = j25s;
 
-            case ProxyType.Socks5:
-                proxy = new Socks5Proxy(this);
-                break;
-
-            case ProxyType.CONNECT:
-                proxy = new ShttpProxy(this);
-                break;
-
-                /*
-            case ProxyType.HTTP_Polling:
-                JEP25Socket j25s = new JEP25Socket(this);
-                if (m_ProxyHost != null)
-                {
-                    System.Net.WebProxy wp = new System.Net.WebProxy();
-                    wp.Address = new Uri("http://" + m_ProxyHost + ":" + m_ProxyPort);
-                    if (m_ProxyUsername != null)
-                    {
-                        wp.Credentials = new System.Net.NetworkCredential(m_ProxyUsername, m_ProxyPassword);
-                    }
-                    j25s.Proxy = wp;
-                }
-                j25s.URL = m_server;
-                m_sock = j25s;
-                break;
-                */
-            case ProxyType.None:
-                m_sock = new AsyncSocket(null, this, (bool)m_listener[Options.SSL], false);
-                ((AsyncSocket)m_sock).CertificateGui = (bool)m_listener[Options.CERTIFICATE_GUI];
-#if NET20
-                ((AsyncSocket)m_sock).LocalCertificate = m_listener[Options.LOCAL_CERTIFICATE] as 
-                    System.Security.Cryptography.X509Certificates.X509Certificate;
-#endif
-                break;
-
-            default:
-                throw new ArgumentException("no handler for proxy type: " + pt, "ProxyType");
-            }
-
-            if (proxy != null)
-            {
-                proxy.Socket = new AsyncSocket(null, proxy, (bool)m_listener[Options.SSL], false);
-#if NET20
-                ((AsyncSocket)proxy.Socket).LocalCertificate = m_listener[Options.LOCAL_CERTIFICATE] as
-                    System.Security.Cryptography.X509Certificates.X509Certificate;
-#endif
-
-                proxy.Host = m_listener[Options.PROXY_HOST] as string;
-                proxy.Port = (int)m_listener[Options.PROXY_PORT];
-                proxy.Username = m_listener[Options.PROXY_USER] as string;
-                proxy.Password = m_listener[Options.PROXY_PW] as string;
-                m_sock = proxy;
-            }
-
-            // TODO: SRV lookup
+            
             string to = (string)m_listener[Options.TO];
             Debug.Assert(to != null);
 
@@ -197,7 +116,13 @@ namespace jabber.connection
             if ((host == null) || (host == ""))
                 host = to;
 
-            Address addr = new Address(host, port);
+            bool ssl = (bool)m_listener[Options.SSL];
+            string url = (string)m_listener[Options.POLL_URL];
+
+            j25s.URL = ((ssl)?"https://":"http://") + host + ":" + port.ToString() + "/" + url;
+
+
+            Address addr = new Address(host, port);            
             m_sock.Connect(addr, (string)m_listener[Options.SERVER_ID]);
         }
 
@@ -217,8 +142,8 @@ namespace jabber.connection
 
         public override void Write(string str)
         {
-            int keep = (int)m_listener[Options.KEEP_ALIVE];
-            m_timer.Change(keep, keep);
+            //int keep = (int)m_listener[Options.KEEP_ALIVE];
+            //m_timer.Change(keep, keep);
             m_sock.Write(ENC.GetBytes(str));
         }
 
@@ -263,11 +188,11 @@ namespace jabber.connection
         /// </summary>
         public override void StartTLS()
         {
-            m_sock.StartTLS();
-            AsyncSocket s = ASock;
+            //m_sock.StartTLS();
+            //JEP25Socket s = Sock;
 
-            Debug.Assert(s != null);
-            m_listener[Options.REMOTE_CERTIFICATE] = s.RemoteCertificate;
+            //Debug.Assert(s != null);
+            //m_listener[Options.REMOTE_CERTIFICATE] = s.RemoteCertificate;
         }
 #endif
 
@@ -290,7 +215,7 @@ namespace jabber.connection
         private void m_elements_OnError(object sender, Exception ex)
         {
             // XML parse error.
-            m_timer.Change(Timeout.Infinite, Timeout.Infinite);
+            //m_timer.Change(Timeout.Infinite, Timeout.Infinite);
             m_listener.Errored(ex);
         }
         #endregion
@@ -323,7 +248,8 @@ namespace jabber.connection
 #if !NO_SSL
             if ((bool)m_listener[Options.SSL])
             {
-                AsyncSocket s = sock as AsyncSocket;
+                JEP25Socket s = sock as JEP25Socket;
+                
                 m_listener[Options.REMOTE_CERTIFICATE] = s.RemoteCertificate;
             }
 #endif
@@ -336,7 +262,7 @@ namespace jabber.connection
             //System.Threading.Thread.Sleep(1000);
             m_listener[Options.REMOTE_CERTIFICATE] = null;
             m_elements = null;
-            m_timer.Change(Timeout.Infinite, Timeout.Infinite);
+            //m_timer.Change(Timeout.Infinite, Timeout.Infinite);
             m_listener.Closed();
         }
 
@@ -344,15 +270,12 @@ namespace jabber.connection
         {
             m_listener[Options.REMOTE_CERTIFICATE] = null;
             m_elements = null;
-            m_timer.Change(Timeout.Infinite, Timeout.Infinite);
+            //m_timer.Change(Timeout.Infinite, Timeout.Infinite);
             m_listener.Errored(ex);
         }
 
         bool ISocketEventListener.OnRead(BaseSocket sock, byte[] buf, int offset, int length)
         {
-            int tim = (int)m_listener[Options.KEEP_ALIVE];
-            m_timer.Change(tim, tim);
-
             m_listener.BytesRead(buf, offset, length);
             m_elements.Push(buf, 0, length);
             return true;
@@ -360,12 +283,10 @@ namespace jabber.connection
 
         void ISocketEventListener.OnWrite(BaseSocket sock, byte[] buf, int offset, int length)
         {
-            int tim = (int)m_listener[Options.KEEP_ALIVE];
-            m_timer.Change(tim, tim);
-
             m_listener.BytesWritten(buf, offset, length);
         }
 
         #endregion
     }
 }
+

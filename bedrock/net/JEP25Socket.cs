@@ -16,7 +16,9 @@ using System.Collections;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
+using System.Net.Security;
 using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 
@@ -25,6 +27,9 @@ using bedrock.util;
 
 namespace bedrock.net
 {
+
+
+
     /// <summary>
     /// JEP25 Error conditions
     /// </summary>
@@ -65,6 +70,9 @@ namespace bedrock.net
         private bool       m_running = false;
         private string     m_id      = null;
         private WebProxy   m_proxy   = null;
+        private X509Certificate m_cert = null;
+        private X509Certificate m_remote_cert = null;
+
 
         /// <summary>
         /// Create an instance
@@ -103,6 +111,7 @@ namespace bedrock.net
             set { m_url = value; }
         }
 
+
         /// <summary>
         /// The number of keys to generate at a time.  Higher numbers use more memory, 
         /// and more CPU to generate keys, less often.  Defaults to 512.
@@ -121,6 +130,21 @@ namespace bedrock.net
         {
             get { return m_proxy; }
             set { m_proxy = value; }
+        }
+
+        /// <summary>
+        /// The local certificate of the socket.
+        /// </summary>
+        public X509Certificate LocalCertificate
+        {
+            get { return m_cert; }
+            set { m_cert = value; }
+        }
+
+        public X509Certificate RemoteCertificate
+        {
+            get { return m_remote_cert; }
+            set { m_remote_cert = value; }
         }
 
         /// <summary>
@@ -145,6 +169,8 @@ namespace bedrock.net
             }
             m_listener.OnClose(this);
         }
+
+
     
         /// <summary>
         /// Start polling
@@ -155,6 +181,14 @@ namespace bedrock.net
             Debug.Assert(m_url != null);
             m_running = true;
             m_curKey = -1;
+
+            if (m_thread == null)
+            {                
+                m_thread = new Thread(new ThreadStart(PollThread));
+                m_thread.IsBackground = true;
+                m_thread.Start();
+            }
+
             m_listener.OnConnect(this);
         }
     
@@ -194,15 +228,18 @@ namespace bedrock.net
         /// <param name="len"></param>
         public override void Write(byte[] buf, int offset, int len)
         {
+            if (!m_running)
+                throw new InvalidOperationException("Call Connect() first");
+
             lock (m_lock)
             {
-                if (m_thread == null)
-                {
-                    // first write
-                    m_thread = new Thread(new ThreadStart(PollThread));
-                    m_thread.IsBackground = true;
-                    m_thread.Start();
-                }
+                //if (m_thread == null)
+                //{
+                //    // first write
+                //    m_thread = new Thread(new ThreadStart(PollThread));
+                //    m_thread.IsBackground = true;
+                //    m_thread.Start();
+                //}
                 m_writeQ.Enqueue(new WriteBuf(buf, offset, len));
                 Monitor.Pulse(m_lock);
             }
@@ -228,6 +265,13 @@ namespace bedrock.net
             }
             m_curKey = m_numKeys - 1;
         }
+
+
+        private bool ValidateRemoteCertificate(Object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+        {                        
+            return true;
+        }
+
 
         /// <summary>
         /// Keep polling until 
@@ -298,23 +342,37 @@ namespace bedrock.net
                 req.CookieContainer = cookies;
                 req.ContentType     = CONTENT_TYPE;
                 req.Method          = METHOD;
+                
+                if (m_cert != null)
+                    req.ClientCertificates.Add(m_cert);
+
                 req.KeepAlive       = false;
+                
 #if NET20
                 req.CachePolicy = new System.Net.Cache.HttpRequestCachePolicy(System.Net.Cache.HttpRequestCacheLevel.NoCacheNoStore);
+                
 #endif
+
             
                 if (m_proxy != null)
                     req.Proxy = m_proxy;
                 req.ContentLength = count;
-                s = req.GetRequestStream();
-                s.Write(start.buf, start.offset, start.len);
-                buf = ms.ToArray();
-                s.Write(buf, 0, buf.Length);
-                s.Close();
+                
+              
 
                 resp = null;
                 try
                 {
+                    ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(ValidateRemoteCertificate);
+                    s = req.GetRequestStream();
+                    s.Write(start.buf, start.offset, start.len);
+
+                    m_remote_cert = req.ServicePoint.Certificate;
+
+                    buf = ms.ToArray();
+                    s.Write(buf, 0, buf.Length);
+                    s.Close();
+
                     resp = (HttpWebResponse) req.GetResponse();
                 }
                 catch (WebException ex)
@@ -326,6 +384,8 @@ namespace bedrock.net
                     }
                     goto POLL;
                 }
+
+                
 
                 if (resp.StatusCode != HttpStatusCode.OK)
                 {
@@ -380,6 +440,9 @@ namespace bedrock.net
                 ms.SetLength(0);
                 rs = resp.GetResponseStream();
                 
+                
+                
+
                 while ((readlen = rs.Read(readbuf, 0, readbuf.Length)) > 0)
                 {
                     ms.Write(readbuf, 0, readlen);
@@ -388,12 +451,16 @@ namespace bedrock.net
                 if (ms.Length > 0)
                 {
                     buf = ms.ToArray();
-                    
-                    if (!m_listener.OnRead(this, buf, 0, buf.Length))
+
+                    try
                     {
-                        Close();
-                        return;
-                    }
+                        if (!m_listener.OnRead(this, buf, 0, buf.Length))
+                        {
+                            Close();
+                            return;
+                        }
+                    } catch (NullReferenceException)
+                    {}
                     buf = null;
                     m_curPoll = m_minPoll;
                 }
@@ -405,6 +472,12 @@ namespace bedrock.net
                         m_curPoll = m_maxPoll;
                 }
             }
+        }
+
+        public bool Connected
+        {
+            get
+            { return m_running; }
         }
 
         /// <summary>
@@ -436,5 +509,4 @@ namespace bedrock.net
                 this.len = buf.Length;
             }
         }
-    }
-}
+    }}

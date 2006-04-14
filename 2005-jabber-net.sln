@@ -1,7 +1,5 @@
 Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "2005-jabber-net", "2005-jabber-net.csproj", "{6CAE854A-F202-4D2B-B10E-E8D8E81E5EF5}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "2005-test", "test\2005-test.csproj", "{76F923A3-5D99-45B9-9327-FBE56648A39F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "2005-muzzle", "muzzle\2005-muzzle.csproj", "{071A79A9-E23F-418F-A6B7-63D3A3E59EEB}"
@@ -15,11 +13,12 @@ EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "2005-Setup", "Setup\2005-Setup.vdproj", "{B2D5AF58-AD5D-46B2-8E54-F3E652B8A675}"
 	ProjectSection(ProjectDependencies) = postProject
 		{B5086B0D-C448-450F-945D-5DBE681F2EE7} = {B5086B0D-C448-450F-945D-5DBE681F2EE7}
-		{6CAE854A-F202-4D2B-B10E-E8D8E81E5EF5} = {6CAE854A-F202-4D2B-B10E-E8D8E81E5EF5}
 		{049FB855-89C4-4539-9E5E-0996834D6A0E} = {049FB855-89C4-4539-9E5E-0996834D6A0E}
 		{76F923A3-5D99-45B9-9327-FBE56648A39F} = {76F923A3-5D99-45B9-9327-FBE56648A39F}
 		{071A79A9-E23F-418F-A6B7-63D3A3E59EEB} = {071A79A9-E23F-418F-A6B7-63D3A3E59EEB}
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "2005-jabber-net", "2005-jabber-net.csproj", "{6CAE854A-F202-4D2B-B10E-E8D8E81E5EF5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,10 +26,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{6CAE854A-F202-4D2B-B10E-E8D8E81E5EF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6CAE854A-F202-4D2B-B10E-E8D8E81E5EF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6CAE854A-F202-4D2B-B10E-E8D8E81E5EF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6CAE854A-F202-4D2B-B10E-E8D8E81E5EF5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{76F923A3-5D99-45B9-9327-FBE56648A39F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{76F923A3-5D99-45B9-9327-FBE56648A39F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{76F923A3-5D99-45B9-9327-FBE56648A39F}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -54,6 +49,10 @@ Global
 		{B2D5AF58-AD5D-46B2-8E54-F3E652B8A675}.Debug|Any CPU.ActiveCfg = Debug
 		{B2D5AF58-AD5D-46B2-8E54-F3E652B8A675}.Release|Any CPU.ActiveCfg = Release
 		{B2D5AF58-AD5D-46B2-8E54-F3E652B8A675}.Release|Any CPU.Build.0 = Release
+		{6CAE854A-F202-4D2B-B10E-E8D8E81E5EF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CAE854A-F202-4D2B-B10E-E8D8E81E5EF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CAE854A-F202-4D2B-B10E-E8D8E81E5EF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CAE854A-F202-4D2B-B10E-E8D8E81E5EF5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

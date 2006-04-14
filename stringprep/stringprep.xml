@@ -67,56 +67,22 @@
             <param name="result">Result is modified in place.</param>
             <exception cref="T:stringprep.steps.BidiException">A BiDi problem exists</exception>
         </member>
-        <member name="T:stringprep.steps.ProhibitStep">
-            <summary>
-            A stringprep profile step that checks for prohibited characters
-            </summary>
-        </member>
+        <!-- Badly formed XML comment ignored for member "T:stringprep.steps.ProhibitStep" -->
         <member name="M:stringprep.steps.ProhibitStep.#ctor(System.Char[][],System.String)">
-            <summary>
-            These characters are prohibited
-            </summary>
-            <param name="table"></param>
             <param name="name"></param>
         </member>
         <member name="M:stringprep.steps.ProhibitStep.Contains(System.Char)">
-            <summary>
-            Does this step prohibit the given character?
-            </summary>
-            <param name="c">The character to check</param>
             <returns>True if the character is prohibited</returns>
         </member>
-        <member name="M:stringprep.steps.ProhibitStep.FindStringInTable(System.Text.StringBuilder)">
-            <summary>
-            Check all of the characters for prohbition.
-            </summary>
-            <param name="s">String to check</param>
-            <returns>If one of the characters is prohibited, returns the index of that character.  
-            If all are allowed, returns -1.</returns>
-        </member>
+        <!-- Badly formed XML comment ignored for member "M:stringprep.steps.ProhibitStep.FindStringInTable(System.Text.StringBuilder)" -->
         <member name="M:stringprep.steps.ProhibitStep.Prepare(System.Text.StringBuilder)">
-            <summary>
-            Check for prohibited characters
-            </summary>
-            <param name="result">No modifications</param>
             <exception cref="T:stringprep.steps.ProhibitedCharacterException">Invalid character detected.</exception>
         </member>
-        <member name="T:stringprep.steps.MapStep">
-            <summary>
-            A stringprep profile step to map one input character into 0 or more output characters.
-            </summary>
-        </member>
+        <!-- Badly formed XML comment ignored for member "T:stringprep.steps.MapStep" -->
         <member name="M:stringprep.steps.MapStep.#ctor(System.String[],System.String)">
-            <summary>
-            Map from one character to 0+
-            </summary>
-            <param name="table"></param>
             <param name="name"></param>
         </member>
         <member name="M:stringprep.steps.MapStep.Prepare(System.Text.StringBuilder)">
-            <summary>
-            Perform mapping for each character of input.
-            </summary>
             <param name="result">Result is modified in place.</param>
         </member>
         <member name="T:stringprep.steps.NFKCStep">
@@ -142,21 +108,9 @@
             </summary>
             <param name="buf">Buffer to reorder</param>
         </member>
-        <member name="T:stringprep.steps.ProhibitedCharacterException">
-            <summary>
-            A character that is forbidden by the current stringprep profile exists in the input.
-            </summary>
-        </member>
-        <member name="F:stringprep.steps.ProhibitedCharacterException.InvalidChar">
-            <summary>
-            The character that was invalid.
-            </summary>
-        </member>
+        <!-- Badly formed XML comment ignored for member "T:stringprep.steps.ProhibitedCharacterException" -->
+        <!-- Badly formed XML comment ignored for member "F:stringprep.steps.ProhibitedCharacterException.InvalidChar" -->
         <member name="M:stringprep.steps.ProhibitedCharacterException.#ctor(stringprep.steps.ProfileStep,System.Char)">
-            <summary>
-            Create an instance.
-            </summary>
-            <param name="step">In which step did this occur?</param>
             <param name="c">The offending character</param>
         </member>
         <member name="T:stringprep.RFC3454">

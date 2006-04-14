@@ -48,13 +48,18 @@ namespace jabber.connection
     public abstract class Options
     {
         /// <summary>
+        /// Default namespace.
+        /// </summary>
+        public const string NAMESPACE = "namespace";
+
+        /// <summary>
         /// The IP or hostname of the machine to connect to.
         /// </summary>
         public const string NETWORK_HOST = "network_host";
         /// <summary>
         /// The identity of the thing we're connecting to.  For components, the component ID.
         /// </summary>
-        public const string TO           = "to";
+        public const string TO = "to";
         /// <summary>
         /// The identity that we expect on the X.509 certificate on the other side.
         /// </summary>
@@ -80,9 +85,17 @@ namespace jabber.connection
         /// </summary>
         public const string PLAINTEXT    = "plaintext";
         /// <summary>
+        /// Do SASL connection?
+        /// </summary>
+        public const string SASL = "sasl";
+        /// <summary>
         /// Only allow SASL authentication, but not old-style IQ/auth.
         /// </summary>
         public const string REQUIRE_SASL = "sasl.require";
+        /// <summary>
+        /// SASL Mechanisms.
+        /// </summary>
+        public const string SASL_MECHANISMS = "sasl.mechanisms";
 
         /// <summary>
         /// The user to log in as.
@@ -122,6 +135,10 @@ namespace jabber.connection
         /// The certificate that the other side sent us.
         /// </summary>
         public const string REMOTE_CERTIFICATE  = "certificate.remote";
+        /// <summary>
+        /// Enable x509 selection from dialog.
+        /// </summary>
+        public const string CERTIFICATE_GUI = "certificate.gui";
         /// <summary>
         /// How long to wait before reconnecting.
         /// </summary>
@@ -176,9 +193,11 @@ namespace jabber.connection
             new object[] {Options.RECONNECT_TIMEOUT, 30000},
             new object[] {Options.PROXY_PORT, 1080},
             new object[] {Options.SSL, false},
+            new object[] {Options.SASL, true},
             new object[] {Options.REQUIRE_SASL, false},
             new object[] {Options.PLAINTEXT, false},
             new object[] {Options.AUTO_TLS, true},
+            new object[] {Options.CERTIFICATE_GUI, true},
             new object[] {Options.PROXY_TYPE, ProxyType.None},
             new object[] {Options.CONNECTION_TYPE, ConnectionType.Socket},
         };
@@ -846,6 +865,11 @@ namespace jabber.connection
             m_stanzas.Write(elem);
         }
 
+        public void Write(string str)
+        {
+            m_stanzas.Write(str);
+        }
+
         /// <summary>
         /// Start connecting to the server.  This is async.
         /// </summary>
@@ -908,7 +932,7 @@ namespace jabber.connection
         {
             bool doClose = false;
             bool doStream = false;
-
+            
             lock (StateLock)
             {
                 if ((m_state == RunningState.Instance) && (clean))
@@ -945,12 +969,12 @@ namespace jabber.connection
             }
             catch (System.Reflection.TargetInvocationException e)
             {
-                Debug.WriteLine("Exception passed along by SocketElementStream: " + e.ToString());
+                Debug.WriteLine("Exception passed along by XmppStream: " + e.ToString());
                 throw e.InnerException;
             }
             catch (Exception e)
             {
-                Debug.WriteLine("Exception in SocketElementStream: " + e.ToString());
+                Debug.WriteLine("Exception in XmppStream: " + e.ToString());
                 throw e;
             }
         }
@@ -1027,6 +1051,8 @@ namespace jabber.connection
         /// <param name="tag"></param>
         protected virtual void OnElement(object sender, System.Xml.XmlElement tag)
         {
+            //Debug.WriteLine(tag.OuterXml);
+
             if (tag is jabber.protocol.stream.Error)
             {
                 // Stream error.  Race condition!  Two cases:
@@ -1090,7 +1116,7 @@ namespace jabber.connection
                 {
                     Mechanisms ms = f.Mechanisms;
                     m_saslProc = null;
-                    if (ms != null)
+                    if ((ms != null) && ((bool)this[Options.SASL]))
                     {
                         lock (m_stateLock)
                         {
@@ -1105,9 +1131,18 @@ namespace jabber.connection
                         }
                         if (OnSASLStart != null)
                             OnSASLStart(this, m_saslProc);
-                        Step s = m_saslProc.step(null, this.Document);
-                        if (s != null)
-                            this.Write(s);
+
+                        try
+                        {
+                            Step s = m_saslProc.step(null, this.Document);
+                            if (s != null)
+                                this.Write(s);
+                        }
+                        catch (Exception e)
+                        {
+                            FireOnError(new SASLException(e.Message));
+                            return;
+                        }
                     }
 
                     if (m_saslProc == null)
@@ -1144,9 +1179,17 @@ namespace jabber.connection
                 }
                 else if (tag is Step)
                 {
-                    Step s = m_saslProc.step(tag as Step, this.Document);
-                    if (s != null)
-                        Write(s);
+                    try
+                    {
+                        Step s = m_saslProc.step(tag as Step, this.Document);
+                        if (s != null)
+                            Write(s);
+                    }
+                    catch (Exception e)
+                    {
+                        FireOnError(new SASLException(e.Message));
+                        return;
+                    }
                 }
                 else
                 {

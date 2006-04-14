@@ -65,7 +65,7 @@ namespace jabber.client
 
             this.OnSASLStart += new jabber.connection.sasl.SASLProcessorHandler(JabberClient_OnSASLStart);
             this.OnSASLEnd += new jabber.protocol.stream.FeaturesHandler(JabberClient_OnSASLEnd);
-            this.OnStreamInit += new StreamHandler(JabberClient_OnStreamInit);
+            this.OnStreamInit += new StreamHandler(JabberClient_OnStreamInit);            
         }
 
         /// <summary>
@@ -152,6 +152,7 @@ namespace jabber.client
         [Category("Protocol")]
         [Description("After calling Register, information about the user is required.")]
         public event IQHandler OnRegisterInfo;
+
 
         /// <summary>
         /// The username to connect as.
@@ -713,7 +714,8 @@ namespace jabber.client
         }
 
         private void GotResource(object sender, IQ iq, object state)
-        {
+        {            
+
             jabber.protocol.stream.Features feat =
                 state as jabber.protocol.stream.Features;
 
@@ -753,7 +755,11 @@ namespace jabber.client
             stream.AddFactory(new jabber.protocol.client.Factory());
             stream.AddFactory(new jabber.protocol.iq.Factory());
             stream.AddFactory(new jabber.protocol.x.Factory());
+
         }
+
+
+
     }
 
     /// <summary>

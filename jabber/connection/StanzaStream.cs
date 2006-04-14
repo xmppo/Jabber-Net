@@ -150,6 +150,8 @@ namespace jabber.connection
             {
             case ConnectionType.Socket:
                 return new SocketStanzaStream(listener);
+            case ConnectionType.HTTP_Polling:
+                return new PollingStanzaStream(listener);
             default:
                 throw new NotImplementedException("Proxy type not implemented yet: " + kind.ToString());
             }
@@ -205,6 +207,8 @@ namespace jabber.connection
         /// </summary>
         /// <param name="elem"></param>
         abstract public void Write(XmlElement elem);
+
+        abstract public void Write(string str);
 
         /// <summary>
         /// Close the stream.

@@ -142,7 +142,7 @@ namespace jabber.protocol
         /// <param name="doc">The document to create the element in.</param>
         /// <returns></returns>
         public Element GetElement(string prefix, XmlQualifiedName qname, XmlDocument doc)
-        {
+        {            
             ConstructorInfo ci = (ConstructorInfo) m_types[qname];
             if (ci == null)
             {

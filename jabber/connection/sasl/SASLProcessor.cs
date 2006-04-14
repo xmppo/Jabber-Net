@@ -106,6 +106,7 @@ namespace jabber.connection.sasl
         /// </summary>
         public const string PASSWORD = "password";
 
+
         /// <summary>
         /// 
         /// </summary>
@@ -126,6 +127,10 @@ namespace jabber.connection.sasl
         /// <returns></returns>
         public static SASLProcessor createProcessor(MechanismType mt, bool plaintextOK)
         {
+            if ((mt & MechanismType.EXTERNAL) == MechanismType.EXTERNAL)
+            {
+                return new ExternalProcessor();
+            }
             if ((mt & MechanismType.DIGEST_MD5) == MechanismType.DIGEST_MD5)
             {
                 return new MD5Processor();

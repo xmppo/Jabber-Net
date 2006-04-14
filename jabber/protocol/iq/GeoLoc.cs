@@ -64,17 +64,23 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
+
         /// Altitude above/below sea level, in meters.
+
         /// </summary>
         public double Altitude
+
         {
             get { return double.Parse(GetElem("alt")); }
             set { SetElem("alt", value.ToString()); }
         }
 
         /// <summary>
+
         /// Assuming decimal degrees to true north.
+
         /// Note: this is being further specified in the JEP.  
+
         /// </summary>
         public double Bearing
         {
@@ -83,7 +89,9 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
+
         /// GPS datum, defaults to WGS84.
+
         /// </summary>
         public string Datum
         {
@@ -98,7 +106,9 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
+
         /// A natural-language description of the location.
+
         /// </summary>
         public string Description
         {
@@ -107,7 +117,9 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
+
         /// Horizontal GPS error in arc minutes.
+
         /// </summary>
         public double Error
         {
@@ -116,7 +128,9 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
+
         /// Latitude in decimal degrees North.
+
         /// </summary>
         public double Latitude
         {
@@ -125,7 +139,9 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
+
         /// Longitude in decimal degrees East.
+
         /// </summary>
         public double Longitude
         {
@@ -134,7 +150,9 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
+
         /// UTC timestamp specifying the moment when the reading was taken.
+
         /// </summary>
         public DateTime Timestamp
         {

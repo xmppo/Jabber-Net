@@ -181,7 +181,7 @@ namespace jabber.connection.sasl
             }
             else
             {
-                throw new MissingDirectiveException("Missing username directive");
+                throw new MissingDirectiveException("Missing SASL username directive");
             }
             if ( (n = this[PASSWORD]) != null)
             {
@@ -190,7 +190,7 @@ namespace jabber.connection.sasl
             }
             else
             {
-                throw new MissingDirectiveException("Missing password directive");
+                throw new MissingDirectiveException("Missing SASL password directive");
             }
             
             if ( (n = this[REALM]) != null)
@@ -199,7 +199,7 @@ namespace jabber.connection.sasl
             }
             else
             {
-                throw new InvalidServerChallengeException("Missing realm");
+                throw new InvalidServerChallengeException("Missing SASL realm");
             }
             if ( (n = this[NONCE]) != null)
             {

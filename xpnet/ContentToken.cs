@@ -23,6 +23,7 @@ namespace xpnet
     public class ContentToken : Token
     {
         private const int INIT_ATT_COUNT = 8;
+        
         private int attCount = 0;
         private int[] attNameStart = new int[INIT_ATT_COUNT];
         private int[] attNameEnd = new int[INIT_ATT_COUNT];
@@ -119,6 +120,7 @@ namespace xpnet
             int valueStart, int valueEnd,
             bool normalized) 
         {
+
             if (attCount == attNameStart.Length) 
             {
                 attNameStart = grow(attNameStart);
@@ -143,7 +145,8 @@ namespace xpnet
         {
             for (int i = 1; i < attCount; i++) 
             {
-                int len = attNameEnd[i] - attNameStart[i];
+                int len = attNameEnd[i] - attNameStart[i];                
+
                 for (int j = 0; j < i; j++) 
                 {
                     if (attNameEnd[j] - attNameStart[j] == len) 
@@ -166,8 +169,10 @@ namespace xpnet
         {
             int[] tem = v;
             v = new int[tem.Length << 1];
+
             System.Buffer.BlockCopy(tem, 0, v, 0, 
                                 tem.Length * System.Runtime.InteropServices.Marshal.SizeOf(typeof(int)));
+
             return v;
         }
 
@@ -175,8 +180,10 @@ namespace xpnet
         {
             bool[] tem = v;
             v = new bool[tem.Length << 1];
+
             System.Buffer.BlockCopy(tem, 0, v, 0, 
                                 tem.Length * System.Runtime.InteropServices.Marshal.SizeOf(typeof(bool)));
+
             return v;
         }
 

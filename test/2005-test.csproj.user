@@ -3,7 +3,8 @@
     <LastOpenVersion>7.10.3077</LastOpenVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ReferencePath>C:\src\jabber-net\test\nunit\</ReferencePath>
+    <ReferencePath>
+    </ReferencePath>
     <CopyProjectDestinationFolder>
     </CopyProjectDestinationFolder>
     <CopyProjectUncPath>
@@ -24,7 +25,7 @@
     <StartArguments>test.dll</StartArguments>
     <StartPage>
     </StartPage>
-    <StartProgram>C:\src\jabber-net\test\nunit\nunit-gui.exe</StartProgram>
+    <StartProgram>D:\Development\jabber-net\jabber-net\test\nunit\nunit-gui.exe</StartProgram>
     <StartURL>
     </StartURL>
     <StartWorkingDirectory>

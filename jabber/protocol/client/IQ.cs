@@ -67,7 +67,8 @@ namespace jabber.protocol.client
         /// <param name="qname"></param>
         /// <param name="doc"></param>
         public IQ(string prefix, XmlQualifiedName qname, XmlDocument doc) : 
-            base(qname.Name, doc)
+            //base(qname.Name, doc)
+            base(prefix, qname, doc)
         {
         }
 

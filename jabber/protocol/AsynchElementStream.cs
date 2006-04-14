@@ -82,10 +82,13 @@ namespace jabber.protocol
             int off = 0;
             TOK tok = TOK.END_TAG;
             ContentToken ct = new ContentToken();
+
             try
             {
                 while (off < b.Length)
                 {
+                    
+
                     if (m_cdata)
                         tok = m_enc.tokenizeCdataSection(b, off, b.Length, ct);
                     else
@@ -147,6 +150,7 @@ namespace jabber.protocol
                             throw new System.NotImplementedException("Token type not implemented: " + tok);
                     }
                     off = ct.TokenEnd;
+                    ct.clearAttributes();
                 }
             }
             catch (PartialTokenException)
@@ -160,6 +164,7 @@ namespace jabber.protocol
             finally
             {
                 m_buf.Clear(off);
+                ct.clearAttributes();
             }       
         }
 
@@ -229,6 +234,8 @@ namespace jabber.protocol
 
             XmlQualifiedName q = new XmlQualifiedName(name, ns);
             XmlElement elem = m_factory.GetElement(prefix, q, m_doc);
+            
+
             foreach (string attrname in ht.Keys)
             {
                 colon = attrname.IndexOf(':');
@@ -251,6 +258,7 @@ namespace jabber.protocol
                 }
             }
             
+
             if (m_root == null)
             {
                 m_root = elem;

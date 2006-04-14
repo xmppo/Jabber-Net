@@ -86,7 +86,7 @@ namespace jabber.protocol.client
         /// <param name="qname"></param>
         /// <param name="doc"></param>
         public Presence(string prefix, XmlQualifiedName qname, XmlDocument doc) : 
-            base(qname.Name, doc)
+            base(prefix, qname, doc)
         {
         }
 

@@ -187,15 +187,5 @@ namespace jabber.connection
         /// </summary>
         public static readonly BaseState Instance = new BindState();
     }
-    /// <summary>
-    /// 
-    /// </summary>
-    [RCS(@"$Header$")]
-    public class X509AuthenticationState : BaseState
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        public static readonly BaseState Instance = new X509AuthenticationState();
-    }
+
 }

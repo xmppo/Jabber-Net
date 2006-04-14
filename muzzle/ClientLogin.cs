@@ -82,6 +82,7 @@ namespace muzzle
 #if NO_SSL
             cbSSL.Visible = false;
 #endif
+
             for (ProxyType pt=ProxyType.None; pt <= ProxyType.CONNECT; pt++)
             {
                 cmbProxy.Items.Add(pt);
