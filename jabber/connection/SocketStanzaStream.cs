@@ -117,6 +117,7 @@ namespace jabber.connection
             Debug.Assert(this.Connected);
             if (first)
                 m_sock.RequestRead();
+
         }
 
         /// <summary>
@@ -163,10 +164,12 @@ namespace jabber.connection
                 */
             case ProxyType.None:
                 m_sock = new AsyncSocket(null, this, (bool)m_listener[Options.SSL], false);
-                ((AsyncSocket)m_sock).CertificateGui = (bool)m_listener[Options.CERTIFICATE_GUI];
+                
 #if NET20
                 ((AsyncSocket)m_sock).LocalCertificate = m_listener[Options.LOCAL_CERTIFICATE] as 
                     System.Security.Cryptography.X509Certificates.X509Certificate;
+
+				((AsyncSocket)m_sock).CertificateGui = (bool)m_listener[Options.CERTIFICATE_GUI];
 #endif
                 break;
 
@@ -216,10 +219,11 @@ namespace jabber.connection
         }
 
         public override void Write(string str)
-        {
+        {            
             int keep = (int)m_listener[Options.KEEP_ALIVE];
             m_timer.Change(keep, keep);
             m_sock.Write(ENC.GetBytes(str));
+ 
         }
 
         /// <summary>

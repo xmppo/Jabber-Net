@@ -80,6 +80,7 @@ namespace jabber.protocol
         {
             m_doc = new XmlDocument();
             m_factory.AddType(new jabber.protocol.stream.Factory());
+            m_factory.AddType(new jabber.protocol.httpbind.Factory());
         }
 
         /// <summary>

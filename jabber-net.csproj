@@ -84,11 +84,6 @@
                     AssemblyName = "System.Data"
                     HintPath = "..\..\Windows\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
                 />
-                <Reference
-                    Name = "stringprep"
-                    Project = "{060A98C7-BF17-4685-A528-F84C0D8D89AE}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
             </References>
         </Build>
         <Files>
@@ -180,6 +175,11 @@
                 />
                 <File
                     RelPath = "bedrock\net\CertUtil.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "bedrock\net\JEP124Socket.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -281,6 +281,11 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "jabber\connection\BindingStanzaStream.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "jabber\connection\DiscoManager.bmp"
                     BuildAction = "EmbeddedResource"
                 />
@@ -291,6 +296,11 @@
                 />
                 <File
                     RelPath = "jabber\connection\IQTracker.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "jabber\connection\PollingStanzaStream.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -318,6 +328,11 @@
                     RelPath = "jabber\connection\XmppStream.resx"
                     DependentUpon = "XmppStream.cs"
                     BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "jabber\connection\sasl\ExternalProcessor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "jabber\connection\sasl\MD5Processor.cs"
@@ -431,6 +446,16 @@
                 />
                 <File
                     RelPath = "jabber\protocol\client\ProtocolException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "jabber\protocol\httpbind\Body.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "jabber\protocol\httpbind\Factory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -575,6 +600,106 @@
                 />
                 <File
                     RelPath = "jabber\server\XdbTracker.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "stringprep\Nameprep.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "stringprep\Plain.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "stringprep\Profile.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "stringprep\XmppNode.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "stringprep\XmppResource.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "stringprep\steps\BidiStep.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "stringprep\steps\MapStep.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "stringprep\steps\NFKCStep.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "stringprep\steps\ProfileStep.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "stringprep\steps\ProhibitStep.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "stringprep\steps\ResourceLoader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "stringprep\steps\RFC3454.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "stringprep\steps\RFC3454.resx"
+                    DependentUpon = "RFC3454.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "stringprep\unicode\Combining.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "stringprep\unicode\CombiningData.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "stringprep\unicode\Compose.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "stringprep\unicode\ComposeData.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "stringprep\unicode\Decompose.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "stringprep\unicode\DecomposeData.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "stringprep\unicode\ResourceLoader.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

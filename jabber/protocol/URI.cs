@@ -57,6 +57,10 @@ namespace jabber.protocol
         /// </summary>
         public const string CLIENT = "jabber:client";
         /// <summary>
+        /// Jabber HTTP Binding connections
+        /// </summary>
+        public const string HTTP_BIND = "http://jabber.org/protocol/httpbind";
+        /// <summary>
         /// Jabber component connections
         /// </summary>
         public const string ACCEPT = "jabber:component:accept";

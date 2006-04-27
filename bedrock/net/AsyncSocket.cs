@@ -1223,7 +1223,7 @@ namespace bedrock.net
                     throw;
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 Close();
                 throw;

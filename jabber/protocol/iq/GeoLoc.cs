@@ -64,9 +64,7 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
-
-        /// Altitude above/below sea level, in meters.
-
+        ///  Altitude above/below sea level, in meters.
         /// </summary>
         public double Altitude
 

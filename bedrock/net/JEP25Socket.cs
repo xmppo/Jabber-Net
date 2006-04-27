@@ -16,7 +16,7 @@ using System.Collections;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
-using System.Net.Security;
+using System.Security;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -28,6 +28,32 @@ using bedrock.util;
 namespace bedrock.net
 {
 
+
+#if !NET20
+
+	/// <summary>
+	/// Certificate policy that trusts all
+	/// </summary>
+	[RCS(@"$Header$")]
+	public class TrustAllCertificatePolicy : System.Net.ICertificatePolicy
+	{
+		/// <summary>
+		/// Construction
+		/// </summary>
+		public TrustAllCertificatePolicy()
+		{}
+ 
+		/// <summary>
+		/// Check validation callback
+		/// </summary>
+		public bool CheckValidationResult(System.Net.ServicePoint sp,
+			System.Security.Cryptography.X509Certificates.X509Certificate cert,System.Net.WebRequest req, int problem)
+		{
+			return true;
+		}
+	}
+
+#endif
 
 
     /// <summary>
@@ -73,6 +99,10 @@ namespace bedrock.net
         private X509Certificate m_cert = null;
         private X509Certificate m_remote_cert = null;
 
+		/// <summary>
+		/// Do trust all server sertificates?
+		/// </summary>
+		public static bool UntrustedRootOK = false;
 
         /// <summary>
         /// Create an instance
@@ -141,6 +171,9 @@ namespace bedrock.net
             set { m_cert = value; }
         }
 
+		/// <summary>
+		/// The remote certificate.
+		/// </summary>
         public X509Certificate RemoteCertificate
         {
             get { return m_remote_cert; }
@@ -266,11 +299,14 @@ namespace bedrock.net
             m_curKey = m_numKeys - 1;
         }
 
+#if NET20
 
         private bool ValidateRemoteCertificate(Object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
         {                        
-            return true;
+            return UntrustedRootOK;
         }
+
+#endif
 
 
         /// <summary>
@@ -363,7 +399,15 @@ namespace bedrock.net
                 resp = null;
                 try
                 {
+#if NET20
                     ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(ValidateRemoteCertificate);
+#else
+					if (UntrustedRootOK)
+						ServicePointManager.CertificatePolicy = new TrustAllCertificatePolicy();
+					else
+						ServicePointManager.CertificatePolicy = null;
+						
+#endif
                     s = req.GetRequestStream();
                     s.Write(start.buf, start.offset, start.len);
 
@@ -474,6 +518,9 @@ namespace bedrock.net
             }
         }
 
+		/// <summary>
+		/// Is socket connected.
+		/// </summary>
         public bool Connected
         {
             get

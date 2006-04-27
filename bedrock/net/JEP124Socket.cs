@@ -17,6 +17,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using System.Xml;
@@ -80,6 +81,7 @@ namespace bedrock.net
         private string     m_sid     = null;
         private string     m_authid  = null;
         private WebProxy   m_proxy   = null;
+        private X509Certificate m_remote_cert = null;
 
         /// <summary>
         /// Create an instance
@@ -385,6 +387,7 @@ namespace bedrock.net
 
                 string xml = reader.ReadToEnd();
                 reader.Close();
+                /*
                 string[] tok = {"</body>"};
                 string[] tokens = xml.Split(tok, StringSplitOptions.None);
                 string body;
@@ -427,8 +430,17 @@ namespace bedrock.net
                         Close();
                         return;
                     }
-                }
+                }*/
+                if (xml != null)
+                {
+                    WriteBuf buf = new WriteBuf(xml);
 
+                    if (!m_listener.OnRead(this, buf.buf, 0, buf.len))
+                    {
+                        Close();
+                        return;
+                    }
+                }
                     
                 
             }
@@ -441,9 +453,17 @@ namespace bedrock.net
 
         }
 
+        public bool Connected
+        {
+            get
+            { return m_running; }
+        }
 
-
-
+        public X509Certificate RemoteCertificate
+        {
+            get { return m_remote_cert; }
+            set { m_remote_cert = value; }
+        }
 
         private class WriteBuf
         {

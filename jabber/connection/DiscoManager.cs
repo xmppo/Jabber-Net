@@ -216,18 +216,27 @@ namespace jabber.connection
             }
         }
 
+		/// <summary>
+		/// Pending info.
+		/// </summary>
         [Category("Status")]
         public bool PendingInfo
         {
             get { return m_pendingInfo; }
         }
 
+		/// <summary>
+		/// Pending items.
+		/// </summary>
         [Category("Status")]
         public bool PendingItems
         {
             get { return m_pendingItems; }
         }
 
+		/// <summary>
+		/// Feature names.
+		/// </summary>
         [Category("Info")]
         public string[] FeatureNames
         {
@@ -244,6 +253,10 @@ namespace jabber.connection
                 return names;
             }
         }
+
+		/// <summary>
+		/// Identities.
+		/// </summary>
         [Category("Info")]
         public string[] Identities
         {

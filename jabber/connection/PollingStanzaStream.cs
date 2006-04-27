@@ -30,7 +30,7 @@ namespace jabber.connection
 
 
     /// <summary>
-    /// Http Polling XMPP .
+    /// Http Polling XMPP stream.
     /// </summary>
     public class PollingStanzaStream : StanzaStream, ISocketEventListener
     {

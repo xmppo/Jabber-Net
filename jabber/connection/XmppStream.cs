@@ -865,6 +865,9 @@ namespace jabber.connection
             m_stanzas.Write(elem);
         }
 
+		/// <summary>
+		/// Send raw string.
+		/// </summary>
         public void Write(string str)
         {
             m_stanzas.Write(str);
@@ -1002,45 +1005,53 @@ namespace jabber.connection
         protected virtual void OnDocumentStart(object sender, System.Xml.XmlElement elem)
         {
             bool hack = false;
-            jabber.protocol.stream.Stream str = elem as jabber.protocol.stream.Stream;
-            if (str == null)
-                return;
-            m_streamID = str.ID;
-            m_serverVersion = str.Version;
+                                   
+            if (elem is jabber.protocol.stream.Stream)
+            {
+                jabber.protocol.stream.Stream str = elem as jabber.protocol.stream.Stream;
 
-            // See XMPP-core section 4.4.1.  We'll accept 1.x
-            if (m_serverVersion.StartsWith("1."))
-            {
-                lock (m_stateLock)
-                {
-                    if (m_state == SASLState.Instance)
-                        // already authed.  last stream restart.
-                        m_state = SASLAuthedState.Instance;
-                    else
-                        m_state = jabber.connection.ServerFeaturesState.Instance;
-                }
-            }
-            else
-            {
-                lock (m_stateLock)
-                {
-                    m_state = NonSASLAuthState.Instance;
-                }
-                hack = true;
-            }
+                m_streamID = str.ID;
+                m_serverVersion = str.Version;
 
-            if (OnStreamHeader != null)
-            {
-                if (InvokeRequired)
-                    CheckedInvoke(OnStreamHeader, new object[] { this, elem });
+                // See XMPP-core section 4.4.1.  We'll accept 1.x
+                if (m_serverVersion.StartsWith("1."))
+                {
+                    lock (m_stateLock)
+                    {
+                        if (m_state == SASLState.Instance)
+                            // already authed.  last stream restart.
+                            m_state = SASLAuthedState.Instance;
+                        else
+                            m_state = jabber.connection.ServerFeaturesState.Instance;
+                    }
+                }
                 else
-                    OnStreamHeader(this, elem);
-            }
-            CheckAll(elem);
+                {
+                    lock (m_stateLock)
+                    {
+                        m_state = NonSASLAuthState.Instance;
+                    }
+                    hack = true;
+                }
+                if (OnStreamHeader != null)
+                {
+                    if (InvokeRequired)
+                        CheckedInvoke(OnStreamHeader, new object[] { this, elem });
+                    else
+                        OnStreamHeader(this, elem);
+                }
+                CheckAll(elem);
 
-            if (hack && (OnSASLStart != null))
+                if (hack && (OnSASLStart != null))
+                {
+                    OnSASLStart(this, null); // Hack.  Old-style auth for jabberclient.
+                }
+            }
+            else if (elem is jabber.protocol.httpbind.Body)
             {
-                OnSASLStart(this, null); // Hack.  Old-style auth for jabberclient.
+                jabber.protocol.httpbind.Body body = elem as jabber.protocol.httpbind.Body;
+
+                m_streamID = body.AuthID;
             }
         }
 
@@ -1116,17 +1127,32 @@ namespace jabber.connection
                 {
                     Mechanisms ms = f.Mechanisms;
                     m_saslProc = null;
-                    if ((ms != null) && ((bool)this[Options.SASL]))
+
+                    MechanismType types = MechanismType.NONE;
+                    try
+                    {
+                        types = (MechanismType)this[Options.SASL_MECHANISMS];
+                        types &= ms.Types;
+                    }
+                    catch
+                    {
+                        if (ms != null)
+                            types = ms.Types;
+                    }
+
+                    
+
+                    if ((types != MechanismType.NONE) && ((bool)this[Options.SASL]))
                     {
                         lock (m_stateLock)
                         {
                             m_state = SASLState.Instance;
                         }
-                        m_saslProc = SASLProcessor.createProcessor(ms.Types, m_sslOn || (bool)this[Options.PLAINTEXT]);
+                        m_saslProc = SASLProcessor.createProcessor(types, m_sslOn || (bool)this[Options.PLAINTEXT]);
                         if (m_saslProc == null)
                         {
 
-                            FireOnError(new NotImplementedException("No implemented mechanisms in: " + ms.Types.ToString()));
+                            FireOnError(new NotImplementedException("No implemented mechanisms in: " + types.ToString()));
                             return;
                         }
                         if (OnSASLStart != null)
@@ -1277,7 +1303,14 @@ namespace jabber.connection
             str.To = new JID((string)this[Options.TO]);
             str.Version = "1.0";
             m_stanzas.WriteStartTag(str);
-            m_stanzas.InitializeStream();
+            try
+            {
+                m_stanzas.InitializeStream();
+            }
+            catch (Exception e)
+            {
+                FireOnError(e);
+            }
         }
 
         /// <summary>
@@ -1425,6 +1458,7 @@ namespace jabber.connection
                 else
                     OnConnect(this, m_stanzas);
             }
+
             SendNewStreamHeader();
         }
 

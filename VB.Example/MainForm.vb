@@ -359,7 +359,7 @@ Public Class MainForm
 
 
     Private Sub jc_OnRegistered(ByVal sender As Object, ByVal iq As jabber.protocol.client.IQ) Handles jc.OnRegistered
-        If (iq.Type = IQType.result) Then
+        If (iq.Type = jabber.protocol.client.IQType.result) Then
             jc.Login()
         Else
             pnlCon.Text = "Registration error"
@@ -376,20 +376,20 @@ Public Class MainForm
     End Sub
 
     Private Sub jc_OnIQ(ByVal sender As Object, ByVal iq As jabber.protocol.client.IQ) Handles jc.OnIQ
-        If iq.Type <> IQType.get Then Return
+        If iq.Type <> jabber.protocol.client.IQType.get Then Return
 
         If TypeOf iq.Query Is Version Then
-            Dim ver As Version = DirectCast(iq.Query, Version)
+            Dim ver As jabber.protocol.iq.Version = DirectCast(iq.Query, jabber.protocol.iq.Version)
             iq.Swap()
-            iq.Type = IQType.result
+            iq.Type = jabber.protocol.client.IQType.result
             ver.OS = Environment.OSVersion.ToString()
             ver.EntityName = Application.ProductName
             ver.Ver = Application.ProductVersion
             jc.Write(iq)
         Else
             iq.Swap()
-            iq.Type = IQType.error
-            iq.Error.Code = ErrorCode.NOT_IMPLEMENTED
+            iq.Type = jabber.protocol.client.IQType.error
+            iq.Error.Code = jabber.protocol.client.ErrorCode.NOT_IMPLEMENTED
             jc.Write(iq)
         End If
     End Sub
@@ -431,7 +431,7 @@ Public Class FooIQ
 
     Public Sub New(ByVal doc As XmlDocument)
         MyBase.New(doc)
-        AppendChild(New Foo(doc))
+        doc.AppendChild(New Foo(doc))
     End Sub
 End Class
 
@@ -459,10 +459,10 @@ Public Class Foo
     ' this property gets and sets a child element called "bar".
     Public Property Bar() As String
         Get
-            Return GetElem("bar")
+            Return MyBase.GetElem("bar")
         End Get
         Set(ByVal Value As String)
-            SetElem("bar", Value)
+            MyBase.SetElem("bar", Value)
         End Set
     End Property
 End Class
