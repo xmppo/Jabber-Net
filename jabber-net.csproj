@@ -281,11 +281,6 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "jabber\connection\BindingStanzaStream.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "jabber\connection\DiscoManager.bmp"
                     BuildAction = "EmbeddedResource"
                 />
@@ -449,16 +444,7 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <File
-                    RelPath = "jabber\protocol\httpbind\Body.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "jabber\protocol\httpbind\Factory.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
+                <Folder RelPath = "jabber\protocol\httpbind\" />
                 <File
                     RelPath = "jabber\protocol\iq\Agents.cs"
                     SubType = "Code"

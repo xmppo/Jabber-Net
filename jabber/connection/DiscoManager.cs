@@ -165,6 +165,7 @@ namespace jabber.connection
         private string m_name = null;
         private bool m_pendingItems = false;
         private bool m_pendingInfo = false;
+        private jabber.protocol.x.Data m_extensions;
 
         /// <summary>
         /// Create a disco node.
@@ -216,27 +217,18 @@ namespace jabber.connection
             }
         }
 
-		/// <summary>
-		/// Pending info.
-		/// </summary>
         [Category("Status")]
         public bool PendingInfo
         {
             get { return m_pendingInfo; }
         }
 
-		/// <summary>
-		/// Pending items.
-		/// </summary>
         [Category("Status")]
         public bool PendingItems
         {
             get { return m_pendingItems; }
         }
 
-		/// <summary>
-		/// Feature names.
-		/// </summary>
         [Category("Info")]
         public string[] FeatureNames
         {
@@ -253,10 +245,6 @@ namespace jabber.connection
                 return names;
             }
         }
-
-		/// <summary>
-		/// Identities.
-		/// </summary>
         [Category("Info")]
         public string[] Identities
         {
@@ -271,6 +259,18 @@ namespace jabber.connection
                     names[count++] = i.GetKey();
                 }
                 return names;
+            }
+        }
+
+        public jabber.protocol.x.Data Extensions
+        {
+            get
+            {
+                return m_extensions;
+            }
+            set
+            {
+                m_extensions = value;
             }
         }
 
@@ -408,11 +408,7 @@ namespace jabber.connection
                 DiscoInfo info = (DiscoInfo)iiq.Query;
                 info.Node = Node;
             }
-             /*
-            IQ iiq = new BrowseIQ(doc);
-            iiq.Type = IQType.get;
-            iiq.To = JID;
-            */
+
             return iiq;
         }
 
@@ -504,7 +500,7 @@ namespace jabber.connection
         /// </summary>
         [Description("The JabberClient or JabberService to hook up to.")]
         [Category("Jabber")]
-        public XmppStream Stream
+        public virtual XmppStream Stream
         {
             get
             {
@@ -567,17 +563,29 @@ namespace jabber.connection
         private void RequestInfo(DiscoNode node)
         {
             if (!node.PendingInfo)
-                m_stream.Tracker.BeginIQ(node.InfoIQ(m_stream.Document),
+            {
+                IQ iq = node.InfoIQ(m_stream.Document);
+                jabber.server.JabberService js = m_stream as jabber.server.JabberService;
+                if (js != null)
+                    iq.From = js.ComponentID;
+                m_stream.Tracker.BeginIQ(iq,
                                          new jabber.connection.IqCB(GotInfo),
                                          node);
+            }
         }
 
         private void RequestItems(DiscoNode node)
         {
             if (!node.PendingItems)
-                m_stream.Tracker.BeginIQ(node.ItemsIQ(m_stream.Document),
+            {
+                IQ iq = node.ItemsIQ(m_stream.Document);
+                jabber.server.JabberService js = m_stream as jabber.server.JabberService;
+                if (js != null)
+                    iq.From = js.ComponentID;
+                m_stream.Tracker.BeginIQ(iq,
                                          new jabber.connection.IqCB(GotItems),
                                          node);
+            }
         }
 
 
@@ -617,6 +625,10 @@ namespace jabber.connection
                 dn.AddFeatures(null);
                 return;
             }
+
+            jabber.protocol.x.Data ext = info["x", URI.XDATA] as jabber.protocol.x.Data;
+            if (ext != null)
+                dn.Extensions = ext;
 
             dn.AddIdentities(info.GetIdentities());
             dn.AddFeatures(info.GetFeatures());
@@ -753,14 +765,15 @@ namespace jabber.connection
         /// <param name="handler"></param>
         public void BeginGetFeatures(DiscoNode node, DiscoNodeHandler handler)
         {
-            if (handler == null)
-                throw new ArgumentException("Handler must not be null", "handler");
-
             if (node.Features != null)
-                handler(node);
+            {
+                if (handler != null)
+                    handler(node);
+            }
             else
             {
-                node.OnFeatures += handler;
+                if (handler != null)
+                    node.OnFeatures += handler;
                 RequestInfo(node);
             }
         }

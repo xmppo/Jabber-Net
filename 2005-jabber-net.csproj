@@ -174,7 +174,6 @@
     <Compile Include="bedrock\util\Version.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="jabber\connection\BindingStanzaStream.cs" />
     <Compile Include="jabber\connection\DiscoManager.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -261,8 +260,6 @@
     <Compile Include="jabber\protocol\ElementStream.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="jabber\protocol\httpbind\Body.cs" />
-    <Compile Include="jabber\protocol\httpbind\Factory.cs" />
     <Compile Include="jabber\protocol\iq\Agents.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -414,6 +411,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="jabber\connection\DiscoManager.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="jabber\protocol\httpbind\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

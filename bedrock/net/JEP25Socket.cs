@@ -301,7 +301,10 @@ namespace bedrock.net
 
 #if NET20
 
-        private bool ValidateRemoteCertificate(Object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+        private bool ValidateRemoteCertificate(Object sender, 
+                                               X509Certificate certificate, 
+                                               X509Chain chain, 
+                                               System.Net.Security.SslPolicyErrors sslPolicyErrors)
         {                        
             return UntrustedRootOK;
         }
@@ -400,7 +403,8 @@ namespace bedrock.net
                 try
                 {
 #if NET20
-                    ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(ValidateRemoteCertificate);
+                    ServicePointManager.ServerCertificateValidationCallback = 
+                        new System.Net.Security.RemoteCertificateValidationCallback(ValidateRemoteCertificate);
 #else
 					if (UntrustedRootOK)
 						ServicePointManager.CertificatePolicy = new TrustAllCertificatePolicy();

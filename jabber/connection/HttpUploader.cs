@@ -1,3 +1,16 @@
+/* --------------------------------------------------------------------------
+ * Copyrights
+ * 
+ * Portions created by or assigned to Cursive Systems, Inc. are 
+ * Copyright (c) 2002-2006 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * information for Cursive Systems, Inc. is available at
+ * http://www.cursive.net/.
+ *
+ * License
+ * 
+ * Jabber-Net can be used under either JOSL or the GPL.  
+ * See LICENSE.txt for details.
+ * --------------------------------------------------------------------------*/
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,8 +21,8 @@ using System.Collections;
 
 namespace jabber.connection
 {
-	public class HttpUploader
-	{
+    public class HttpUploader
+    {
 
         public event bedrock.ObjectHandler OnUpload;
         
@@ -30,21 +43,25 @@ namespace jabber.connection
             //try
             //{
             StreamReader reader = new StreamReader(filename);
-            HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(uri);
+            HttpWebRequest request =
+                (HttpWebRequest)HttpWebRequest.Create(uri);
+            
             request.Method = "POST";
-            request.Headers.Add(HttpRequestHeader.Authorization, "x-xmpp-auth jid=\"" + jid + "\"");
+            request.Headers.Add(HttpRequestHeader.Authorization,
+                                "x-xmpp-auth jid=\"" + jid + "\"");
             
             StreamWriter writer = new StreamWriter(request.GetRequestStream());
             writer.Write(reader.ReadToEnd());            
             
             reader.Close();
     
-            request.BeginGetResponse(new AsyncCallback(ResponseCallback), request);
+            request.BeginGetResponse(new AsyncCallback(ResponseCallback),
+                                     request);
             writer.Close();
-           // }
-           // catch (WebException)
-           // {
-           // }
+            // }
+            // catch (WebException)
+            // {
+            // }
         }
-	}
+    }
 }

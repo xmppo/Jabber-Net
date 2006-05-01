@@ -1047,12 +1047,15 @@ namespace jabber.connection
                     OnSASLStart(this, null); // Hack.  Old-style auth for jabberclient.
                 }
             }
+// TODO: Fix broken build            
+/*
             else if (elem is jabber.protocol.httpbind.Body)
             {
                 jabber.protocol.httpbind.Body body = elem as jabber.protocol.httpbind.Body;
 
                 m_streamID = body.AuthID;
             }
+*/
         }
 
         /// <summary>
