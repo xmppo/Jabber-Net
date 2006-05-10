@@ -68,8 +68,8 @@ namespace jabber.protocol.client
         /// <param name="prefix"></param>
         /// <param name="qname"></param>
         /// <param name="doc"></param>
-        public Message(string prefix, XmlQualifiedName qname, XmlDocument doc) : 
-            base(prefix, qname, doc)
+        public Message(string prefix, XmlQualifiedName qname, XmlDocument doc) :
+            base(qname.Name, doc)  // Note:  *NOT* base(prefix, qname, doc), so that xpath matches are easier
         {
         }
 
