@@ -238,7 +238,21 @@ namespace jabber.protocol.iq
         /// </summary>
         public System.Uri Url
         {
-            get { return new Uri(GetElem("URL")); }
+            get 
+            {
+                string url = GetElem("URL");
+                if ((url == null) || (url == ""))
+                    return null;
+                try
+                {
+                    Uri uri = new Uri(url);
+                    return uri;
+                }
+                catch (UriFormatException)
+                {
+                    return null;
+                }
+            }
             set { SetElem("URL", value.ToString()); }
         }
 
@@ -493,12 +507,12 @@ namespace jabber.protocol.iq
             }
 
             /// <summary>
-            /// 
+            /// Orginization Name
             /// </summary>
-            new public string Name
+            public string OrgName
             {
-                get { return GetElem("NAME"); }
-                set { SetElem("NAME", value); }
+                get { return GetElem("ORGNAME"); }
+                set { SetElem("ORGNAME", value); }
             }
 
             /// <summary>
@@ -506,8 +520,8 @@ namespace jabber.protocol.iq
             /// </summary>
             public string Unit
             {
-                get { return GetElem("UNIT"); }
-                set { SetElem("UNIT", value); }
+                get { return GetElem("ORGUNIT"); }
+                set { SetElem("ORGUNIT", value); }
             }
         }
 
@@ -523,7 +537,6 @@ namespace jabber.protocol.iq
             /// <param name="doc"></param>
             public VTelephone(XmlDocument doc) : base("TEL", URI.VCARD, doc)
             {
-                SetElem("NUMBER", null);
             }
 
             /// <summary>
@@ -535,7 +548,6 @@ namespace jabber.protocol.iq
             public VTelephone(string prefix, XmlQualifiedName qname, XmlDocument doc) :
                 base(prefix, qname, doc)
             {
-                SetElem("NUMBER", null);
             }
 
             /// <summary>
@@ -587,8 +599,8 @@ namespace jabber.protocol.iq
             {
                 get
                 {
-                    if (GetElem("WORK") != null) return TelephoneLocation.work;
-                    else if (GetElem("HOME") != null) return TelephoneLocation.home;
+                    if (this["WORK"] != null) return TelephoneLocation.work;
+                    else if (this["HOME"] != null) return TelephoneLocation.home;
                     else return TelephoneLocation.unknown;
                 }
                 set
