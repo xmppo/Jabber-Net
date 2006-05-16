@@ -2,7 +2,7 @@
  * Copyrights
  * 
  * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * Copyright (c) 2002-2006 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
@@ -31,13 +31,13 @@ namespace jabber.protocol
     public class AsynchElementStream : ElementStream
     {
         private static System.Text.Encoding utf = System.Text.Encoding.UTF8;
-        
+
         private BufferAggregate m_buf   = new BufferAggregate();
-        private Encoding        m_enc   = new UTF8Encoding();
-        private NS              m_ns    = new NS();
-        private XmlElement      m_elem  = null;
-        private XmlElement      m_root  = null;
-        private bool            m_cdata = false;
+        private Encoding m_enc   = new UTF8Encoding();
+        private NS m_ns    = new NS();
+        private XmlElement m_elem  = null;
+        private XmlElement m_root  = null;
+        private bool m_cdata = false;
 
         /// <summary>
         /// Create an instance.
@@ -77,7 +77,7 @@ namespace jabber.protocol
             byte[] copy = new byte[length];
             System.Buffer.BlockCopy(buf, offset, copy, 0, length);
             m_buf.Write(copy);
-            
+
             byte[] b = m_buf.GetBuffer();
             int off = 0;
             TOK tok = TOK.END_TAG;
@@ -87,7 +87,7 @@ namespace jabber.protocol
             {
                 while (off < b.Length)
                 {
-                    
+
 
                     if (m_cdata)
                         tok = m_enc.tokenizeCdataSection(b, off, b.Length, ct);
@@ -96,58 +96,58 @@ namespace jabber.protocol
 
                     switch (tok)
                     {
-                        case TOK.EMPTY_ELEMENT_NO_ATTS:
-                        case TOK.EMPTY_ELEMENT_WITH_ATTS:
-                            StartTag(b, off, ct, tok);
-                            EndTag(b, off, ct, tok);
-                            break;
-                        case TOK.START_TAG_NO_ATTS:
-                        case TOK.START_TAG_WITH_ATTS:
-                            StartTag(b, off, ct, tok);
-                            break;
-                        case TOK.END_TAG:
-                            EndTag(b, off, ct, tok);
-                            break;
-                        case TOK.DATA_CHARS:
-                        case TOK.DATA_NEWLINE:
-                            AddText(utf.GetString(b, off, ct.TokenEnd - off));
-                            break;
-                        case TOK.CHAR_REF:
-                        case TOK.MAGIC_ENTITY_REF:
-                            AddText(new string(new char[] {ct.RefChar1}));
-                            break;
-                        case TOK.CHAR_PAIR_REF:
-                            AddText(new string(new char[] {ct.RefChar1,
+                    case TOK.EMPTY_ELEMENT_NO_ATTS:
+                    case TOK.EMPTY_ELEMENT_WITH_ATTS:
+                        StartTag(b, off, ct, tok);
+                        EndTag(b, off, ct, tok);
+                        break;
+                    case TOK.START_TAG_NO_ATTS:
+                    case TOK.START_TAG_WITH_ATTS:
+                        StartTag(b, off, ct, tok);
+                        break;
+                    case TOK.END_TAG:
+                        EndTag(b, off, ct, tok);
+                        break;
+                    case TOK.DATA_CHARS:
+                    case TOK.DATA_NEWLINE:
+                        AddText(utf.GetString(b, off, ct.TokenEnd - off));
+                        break;
+                    case TOK.CHAR_REF:
+                    case TOK.MAGIC_ENTITY_REF:
+                        AddText(new string(new char[] { ct.RefChar1 }));
+                        break;
+                    case TOK.CHAR_PAIR_REF:
+                        AddText(new string(new char[] {ct.RefChar1,
                                                               ct.RefChar2}));
-                            break;
-                        case TOK.COMMENT:
-                            if (m_elem != null)
-                            {
-                                // <!-- 4
-                                //  --> 3
-                                int start = off + 4*m_enc.MinBytesPerChar;
-                                int end = ct.TokenEnd - off -
+                        break;
+                    case TOK.COMMENT:
+                        if (m_elem != null)
+                        {
+                            // <!-- 4
+                            //  --> 3
+                            int start = off + 4*m_enc.MinBytesPerChar;
+                            int end = ct.TokenEnd - off -
                                     7*m_enc.MinBytesPerChar;
-                                string text = utf.GetString(b, start, end);
-                                m_elem.AppendChild(m_doc.CreateComment(text));
-                            }
-                            break;
-                        case TOK.CDATA_SECT_OPEN:
-                            m_cdata = true;
-                            break;
-                        case TOK.CDATA_SECT_CLOSE:
-                            m_cdata = false;
-                            break;
-                        case TOK.XML_DECL:
-                            // thou shalt use UTF8, and XML version 1.
-                            // i shall ignore evidence to the contrary...
-                        
-                            // TODO: Throw an exception if these assuptions are
-                            // wrong
-                            break;
-                        case TOK.ENTITY_REF:
-                        case TOK.PI:
-                            throw new System.NotImplementedException("Token type not implemented: " + tok);
+                            string text = utf.GetString(b, start, end);
+                            m_elem.AppendChild(m_doc.CreateComment(text));
+                        }
+                        break;
+                    case TOK.CDATA_SECT_OPEN:
+                        m_cdata = true;
+                        break;
+                    case TOK.CDATA_SECT_CLOSE:
+                        m_cdata = false;
+                        break;
+                    case TOK.XML_DECL:
+                        // thou shalt use UTF8, and XML version 1.
+                        // i shall ignore evidence to the contrary...
+
+                        // TODO: Throw an exception if these assuptions are
+                        // wrong
+                        break;
+                    case TOK.ENTITY_REF:
+                    case TOK.PI:
+                        throw new System.NotImplementedException("Token type not implemented: " + tok);
                     }
                     off = ct.TokenEnd;
                     ct.clearAttributes();
@@ -165,7 +165,7 @@ namespace jabber.protocol
             {
                 m_buf.Clear(off);
                 ct.clearAttributes();
-            }       
+            }
         }
 
         private void StartTag(byte[] buf, int offset,
@@ -175,10 +175,10 @@ namespace jabber.protocol
             string name;
             string prefix;
             Hashtable ht = new Hashtable();
-            
+
             m_ns.PushScope();
-            
-                        // if i have attributes
+
+            // if i have attributes
             if ((tok == TOK.START_TAG_WITH_ATTS) ||
                 (tok == TOK.EMPTY_ELEMENT_WITH_ATTS))
             {
@@ -190,13 +190,13 @@ namespace jabber.protocol
                     start = ct.getAttributeNameStart(i);
                     end = ct.getAttributeNameEnd(i);
                     name = utf.GetString(buf, start, end - start);
-                    
+
                     start = ct.getAttributeValueStart(i);
                     end =  ct.getAttributeValueEnd(i);
                     val = utf.GetString(buf, start, end - start);
 
-                                        // <foo b='&amp;'/>
-                                        // <foo b='&amp;amp;'
+                    // <foo b='&amp;'/>
+                    // <foo b='&amp;amp;'
                     // TODO: if val includes &amp;, it gets double-escaped
                     if (name.StartsWith("xmlns:"))
                     {
@@ -206,12 +206,9 @@ namespace jabber.protocol
                     }
                     else if (name == "xmlns")
                     {
-                                                m_ns.AddNamespace(string.Empty, val);
+                        m_ns.AddNamespace(string.Empty, val);
                     }
-                    else
-                    {
-                        ht.Add(name, val);
-                    }
+                    ht.Add(name, val);
                 }
             }
 
@@ -234,7 +231,7 @@ namespace jabber.protocol
 
             XmlQualifiedName q = new XmlQualifiedName(name, ns);
             XmlElement elem = m_factory.GetElement(prefix, q, m_doc);
-            
+
 
             foreach (string attrname in ht.Keys)
             {
@@ -247,17 +244,17 @@ namespace jabber.protocol
                     XmlAttribute attr = m_doc.CreateAttribute(prefix,
                                                               name,
                                                               m_ns.LookupNamespace(prefix));
-                                        attr.InnerXml = (string)ht[attrname];
+                    attr.InnerXml = (string)ht[attrname];
                     elem.SetAttributeNode(attr);
                 }
                 else
                 {
                     XmlAttribute attr = m_doc.CreateAttribute(attrname);
-                                        attr.InnerXml = (string)ht[attrname];
-                                        elem.SetAttributeNode(attr);
+                    attr.InnerXml = (string)ht[attrname];
+                    elem.SetAttributeNode(attr);
                 }
             }
-            
+
 
             if (m_root == null)
             {
@@ -296,7 +293,7 @@ namespace jabber.protocol
                                      offset + m_enc.MinBytesPerChar*2,
                                      ct.NameEnd - offset -
                                      m_enc.MinBytesPerChar*2);
-                
+
 
             if (m_elem.Name != name)
                 throw new XmlException("Invalid end tag: " + name +
