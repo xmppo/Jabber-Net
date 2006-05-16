@@ -344,6 +344,9 @@ namespace jabber.connection
 
         /// <summary>
         /// A new stream was initialized.  Add your packet factories to it.
+        /// NOTE: you may NOT make calls to the GUI in this callback, unless you
+        /// call Invoke yourself.  Make sure you add your packet factories before 
+        /// calling Invoke however.
         /// </summary>
         [Category("Stream")]
         public event StreamHandler OnStreamInit;
@@ -1513,9 +1516,12 @@ namespace jabber.connection
         {
             if (OnStreamInit != null)
             {
+                // Race condition.  Make sure not to make GUI calls in OnStreamInit
+                /*
                 if (InvokeRequired)
                     CheckedInvoke(OnStreamInit, new object[] { this, stream });
                 else
+              */
                     OnStreamInit(this, stream);
             }
         }
