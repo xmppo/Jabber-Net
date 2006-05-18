@@ -287,7 +287,7 @@ namespace jabber.server
 
             if (hs == null)
             {
-                FireOnError(new System.Security.SecurityException("Bad protocol.  Needs handshake."));
+                FireOnError(new System.Security.SecurityException("Bad protocol.  Needs handshake, got: " + tag.OuterXml));
                 return;
             }
 
