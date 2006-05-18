@@ -46,6 +46,16 @@ namespace muzzle
 
         private const int EM_SETSCROLLPOS = 0x0400 + 222;
 
+        private const int CCHILDREN_SCROLLBAR = 5;
+        private const int STATE_SYSTEM_INVISIBLE   = 0x00008000;
+        private const int STATE_SYSTEM_OFFSCREEN   = 0x00010000;
+        private const int STATE_SYSTEM_PRESSED     = 0x00000008;
+        private const int STATE_SYSTEM_UNAVAILABLE = 0x00000001;
+
+        private const uint OBJID_CLIENT  = 0xFFFFFFFC;
+        private const uint OBJID_VSCROLL = 0xFFFFFFFB;
+        private const uint OBJID_HSCROLL = 0xFFFFFFFA;
+
         private bool m_bottom = true;
 
         [StructLayout(LayoutKind.Sequential)]
@@ -59,6 +69,28 @@ namespace muzzle
             public int  nPos;
             public int  nTrackPos;
         }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct RECT
+        {
+            public int left;
+            public int top;
+            public int right;
+            public int bottom;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct SCROLLBARINFO
+        {
+            public int cbSize;
+            public RECT rcScrollBar;
+            public int dxyLineButton;
+            public int xyThumbTop;
+            public int xyThumbBottom;
+            public int reserved;
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst=CCHILDREN_SCROLLBAR+1)]
+            public int[] rgstate;
+        } 
 
         [StructLayout(LayoutKind.Sequential)]
         private class POINT
@@ -89,6 +121,8 @@ namespace muzzle
         [DllImport("user32", CharSet=CharSet.Auto)]
         private static extern int SetScrollInfo(IntPtr hWnd, int fnBar, ref SCROLLINFO lpsi, bool fRedraw);
 
+        [DllImport("user32", SetLastError=true, EntryPoint="GetScrollBarInfo")]
+        private static extern int GetScrollBarInfo(IntPtr hWnd, uint idObject, ref SCROLLBARINFO psbi);
 
         /// <summary> 
         /// Required designer variable.
@@ -155,6 +189,16 @@ namespace muzzle
             base.WndProc(ref m);
         }
 
+        public void ClearAndScroll()
+        {
+            this.Text = "";
+            this.Select(0, 0);
+            this.ScrollToCaret();
+            m_bottom = true;
+            
+            //SendMessage(this.Handle, EM_SETSCROLLPOS, 0, new POINT(0, 0));
+        }
+
         private SCROLLINFO GetScroll()
         {
             SCROLLINFO si = new SCROLLINFO();
@@ -164,13 +208,27 @@ namespace muzzle
             return si;
         }
 
+        private SCROLLBARINFO GetBars()
+        {
+            SCROLLBARINFO si = new SCROLLBARINFO();
+            si.cbSize = Marshal.SizeOf(si);
+            int ret = GetScrollBarInfo(this.Handle, OBJID_VSCROLL, ref si);
+            if (ret == 0)
+                Marshal.ThrowExceptionForHR(Marshal.GetHRForLastWin32Error());
+            return si;
+        }
+
         /// <summary>
         /// Scroll to the bottom of the current text.
         /// </summary>
         public void ScrollToBottom()
         {
-            SCROLLINFO si = GetScroll();
-            SendMessage(this.Handle, EM_SETSCROLLPOS, 0, new POINT(0, si.nMax - (int)si.nPage + 5));
+            SCROLLBARINFO sbi = GetBars();
+            if (sbi.rgstate[0] == 0)
+            {
+                SCROLLINFO si = GetScroll();
+                SendMessage(this.Handle, EM_SETSCROLLPOS, 0, new POINT(0, si.nMax - (int)si.nPage + 5));
+            }
         }
 
         /// <summary>
