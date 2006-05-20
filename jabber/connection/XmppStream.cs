@@ -17,6 +17,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
+using System.IO;
 using System.Threading;
 using System.Security.Cryptography;
 using System.Xml;
@@ -549,13 +550,21 @@ namespace jabber.connection
         public void SetCertificateFile(string filename,
                                        string password)
         {
-            this[Options.LOCAL_CERTIFICATE] = new X509Certificate2(filename, password);
-
-                /*
+#if __MonoCS__
+            byte[] data = null;
+            using (FileStream fs = File.OpenRead (filename))
+            {
+                data = new byte [fs.Length];
+                fs.Read (data, 0, data.Length);
+                fs.Close ();
+            }
+    
             Mono.Security.X509.PKCS12 pfx = new Mono.Security.X509.PKCS12(data, password);
             if (pfx.Certificates.Count > 0) 
                 this[Options.LOCAL_CERTIFICATE] = new X509Certificate(pfx.Certificates[0].RawData);
-*/
+#else
+            this[Options.LOCAL_CERTIFICATE] = new X509Certificate2(filename, password);
+#endif
         }
 
 #elif !NO_SSL
@@ -868,9 +877,9 @@ namespace jabber.connection
             m_stanzas.Write(elem);
         }
 
-		/// <summary>
-		/// Send raw string.
-		/// </summary>
+        /// <summary>
+        /// Send raw string.
+        /// </summary>
         public void Write(string str)
         {
             m_stanzas.Write(str);

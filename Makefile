@@ -53,8 +53,12 @@ $(BASEDIR)/jabber/client/JabberClient.cs \
 $(BASEDIR)/jabber/client/PresenceManager.cs \
 $(BASEDIR)/jabber/client/RosterManager.cs \
 $(BASEDIR)/jabber/connection/IQTracker.cs \
-$(BASEDIR)/jabber/connection/SocketElementStream.cs \
+$(BASEDIR)/jabber/connection/PollingStanzaStream.cs \
+$(BASEDIR)/jabber/connection/SocketStanzaStream.cs \
+$(BASEDIR)/jabber/connection/StanzaStream.cs \
 $(BASEDIR)/jabber/connection/States.cs \
+$(BASEDIR)/jabber/connection/XmppStream.cs \
+$(BASEDIR)/jabber/connection/sasl/ExternalProcessor.cs \
 $(BASEDIR)/jabber/connection/sasl/MD5Processor.cs \
 $(BASEDIR)/jabber/connection/sasl/PlainProcessor.cs \
 $(BASEDIR)/jabber/connection/sasl/SASLProcessor.cs \
@@ -133,7 +137,7 @@ $(BASEDIR)/stringprep/XmppResource.cs
 RESOURCES = \
 -resource:$(BASEDIR)/jabber/client/JabberClient.resx \
 -resource:$(BASEDIR)/jabber/client/RosterManager.resx \
--resource:$(BASEDIR)/jabber/connection/SocketElementStream.resx \
+-resource:$(BASEDIR)/jabber/connection/XmppStream.resx \
 -resource:$(BASEDIR)/jabber/server/JabberService.resx \
 -resource:$(BASEDIR)/jabber/client/JabberClient.bmp \
 -resource:$(BASEDIR)/jabber/client/PresenceManager.bmp \
