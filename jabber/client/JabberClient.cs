@@ -148,6 +148,11 @@ namespace jabber.client
         /// <summary>
         /// After calling Register, information about the user is required.  Fill in the given IQ
         /// with the requested information.
+        /// 
+        /// WARNING: do not perform GUI actions in this callback, since even if your InvokeControl is set,
+        /// this is not guaranteed to be called in the GUI thread.  The IQ modification side-effect is used when
+        /// your event handler returns, so if you need to hop over to the GUI thread, pause the thread where 
+        /// you are called back, then join with it when you are done.
         /// </summary>
         [Category("Protocol")]
         [Description("After calling Register, information about the user is required.")]
@@ -492,10 +497,9 @@ namespace jabber.client
                 Debug.Assert(r != null);
                 r.Username = jid.User;
 
-                if (InvokeRequired)
-                    CheckedInvoke(OnRegisterInfo, new object[] {this, iq});
-                else
-                    OnRegisterInfo(this, iq);
+                // Note: Don't do a CheckedInvoke, since we need the result back here synchronously.
+                // Side effect:  OnRegisterInfo can't do GUI actions.
+                OnRegisterInfo(this, iq);
 
                 Tracker.BeginIQ(iq, new IqCB(OnSetRegister), jid);
             }
