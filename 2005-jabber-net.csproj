@@ -142,6 +142,7 @@
     <Compile Include="bedrock\net\CertUtil.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="bedrock\net\Exceptions.cs" />
     <Compile Include="bedrock\net\JEP124Socket.cs" />
     <Compile Include="bedrock\net\JEP25Socket.cs">
       <SubType>Code</SubType>
