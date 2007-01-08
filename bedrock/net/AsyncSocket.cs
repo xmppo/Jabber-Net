@@ -13,6 +13,7 @@
  * --------------------------------------------------------------------------*/
 using System;
 
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
@@ -39,52 +40,6 @@ namespace bedrock.net
     /// </summary>
     public delegate void AsyncSocketHandler(object sender, BaseSocket sock);
 
-    /// <summary>
-    /// Lame exception, since I couldn't find one I liked.
-    /// </summary>
-    [RCS(@"$Header$")]
-    [Serializable]
-    public class AsyncSocketConnectionException : System.SystemException
-    {
-        /// <summary>
-        /// Create a new exception instance.
-        /// </summary>
-        /// <param name="description"></param>
-        public AsyncSocketConnectionException(string description) : base(description)
-        {
-        }
-
-        /// <summary>
-        /// Create a new exception instance.
-        /// </summary>
-        public AsyncSocketConnectionException() : base()
-        {
-        }
-
-        /// <summary>
-        /// Create a new exception instance, wrapping another exception.
-        /// </summary>
-        /// <param name="description">Desecription of the exception</param>
-        /// <param name="e">Inner exception</param>
-        public AsyncSocketConnectionException(string description, Exception e) : base(description, e)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the
-        /// AsyncSocketConnectionException class with serialized
-        /// data.
-        /// </summary>
-        /// <param name="info">The object that holds the serialized
-        /// object data.</param>
-        /// <param name="ctx">The contextual information about the
-        /// source or destination.</param>
-        protected AsyncSocketConnectionException(System.Runtime.Serialization.SerializationInfo info, 
-            System.Runtime.Serialization.StreamingContext ctx) : 
-            base(info, ctx)
-        {
-        }
-    }
     /// <summary>
     /// An asynchronous socket, which calls a listener class when
     /// interesting things happen.
@@ -150,14 +105,45 @@ namespace bedrock.net
         public const int TRUST_E_BAD_DIGEST           = -2146869232;
         public const int TRUST_E_BASIC_CONSTRAINTS    = -2146869223;
 #endif
-        
+
+        /// <summary>
+        /// The set of allowable errors in SSL certificates if UntrustedRootOK is set to true.
+        /// </summary>
+        public const SslPolicyErrors DefaultUntrustedPolicy = SslPolicyErrors.RemoteCertificateChainErrors;
+
+        /// <summary>
+        /// The allowable SSL certificate errors.  If you modify UntrustedRootOK to true, the side effect will be to 
+        /// set this to DefaultUntrustedPolicy.  False, the default, sets this to None.
+        /// </summary>
+        public static SslPolicyErrors AllowedSSLErrors = SslPolicyErrors.None;
+
         /// <summary>
         /// Are untrusted root certificates OK when connecting using
         /// SSL?  Setting this to true is insecure, but it's unlikely
         /// that you trust jabbber.org or jabber.com's relatively
         /// bogus certificate roots. 
+        /// 
+        /// Setting this modifies AllowedSSLErrors by side-effect.
         /// </summary>
-        public static bool UntrustedRootOK = false;
+        [DefaultValue(true)]
+        public static bool UntrustedRootOK
+        {
+            get
+            {
+                return (AllowedSSLErrors != SslPolicyErrors.None);
+            }
+            set
+            {
+                if (value)
+                {
+                    AllowedSSLErrors = DefaultUntrustedPolicy;
+                }
+                else
+                {
+                    AllowedSSLErrors = SslPolicyErrors.None;
+                }
+            }
+        }
 
 #if NET20
         /// <summary>
@@ -849,16 +835,17 @@ namespace bedrock.net
             if (sslPolicyErrors == SslPolicyErrors.None)
                 return true;
 
-            if ((sslPolicyErrors == SslPolicyErrors.RemoteCertificateChainErrors) && UntrustedRootOK)
+            if ((sslPolicyErrors - AllowedSSLErrors) == (int)SslPolicyErrors.None)
             {
                 // Huh.  Maybe there should be a listener method for this.
                 return true;
             }
 
-            Debug.WriteLine("Certificate error: {0}", sslPolicyErrors.ToString());
+            throw new CertificateException(certificate, chain, sslPolicyErrors); 
+            //Debug.WriteLine("Certificate error: {0}", sslPolicyErrors.ToString());
 
             // Do not allow this client to communicate with unauthenticated servers.
-            return false;
+            //return false;
         }
 
         /// <summary>
@@ -895,8 +882,16 @@ namespace bedrock.net
                     certs = new X509Certificate2Collection();
                     certs.Add(m_cert);
                 }
-                ((SslStream)m_stream).AuthenticateAsClient(m_hostid, certs, m_secureProtocol, false);
-
+                try
+                {
+                    ((SslStream)m_stream).AuthenticateAsClient(m_hostid, certs, m_secureProtocol, false);
+                }
+                catch (Exception ex)
+                {
+                    // FireError(ex);
+                    Close();
+                    throw ex;
+                }
             }
         }
 
