@@ -730,7 +730,11 @@ namespace jabber.client
             }
             if (iq.Type != IQType.result)
             {
-                FireOnError(new AuthenticationFailedException());
+                Error err = iq.Error;
+                if (err == null)
+                    FireOnError(new AuthenticationFailedException("Unknown error binding resource"));
+                else
+                    FireOnError(new AuthenticationFailedException("Error binding resource: " + err.OuterXml));
                 return;
             }
 
