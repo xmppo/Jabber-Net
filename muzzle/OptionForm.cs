@@ -12,6 +12,7 @@
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
+using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
@@ -35,6 +36,8 @@ namespace muzzle
         private Panel panel1;
 
         private XmppStream m_xmpp;
+        private Hashtable m_extra = new Hashtable();
+
         /// <summary>
         /// ToolTips.
         /// </summary>
@@ -155,6 +158,11 @@ namespace muzzle
             doc.AppendChild(root);
 
             WriteElem(root, this);
+
+            foreach (DictionaryEntry ent in m_extra)
+            {
+                root.AppendChild(doc.CreateElement((string)ent.Key)).InnerText = ent.Value.ToString();
+            }
 
             XmlTextWriter xw = new XmlTextWriter(file, System.Text.Encoding.UTF8);
             xw.Formatting = Formatting.Indented;
@@ -311,14 +319,24 @@ namespace muzzle
             get 
             {
                 Control c = FindComponentByTag(this, option);
+                if (c == null)
+                {
+                    if (m_extra.Contains(option))
+                        return m_extra[option];
+                    return null;
+                }
                 return GetControlValue(c);
             }
             set 
             {
                 Control c = FindComponentByTag(this, option);
                 if (c == null)
-                    throw new ArgumentException("Unknown option", option);
-                SetControlValue(c, value);
+                {
+                    //throw new ArgumentException("Unknown option", option);
+                    m_extra[option] = value;
+                }
+                else
+                    SetControlValue(c, value);
             }
         }
 
