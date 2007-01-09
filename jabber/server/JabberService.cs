@@ -121,7 +121,7 @@ namespace jabber.server
             this.Port = port;
 
             this[Options.PASSWORD] = secret;
-            this[Options.COMPONENT_DIRECTION] = ComponentType.Accept;
+            this[Options.COMPONENT_DIRECTION] = ComponentType.Connect;
         }
 
         /// <summary>

@@ -214,7 +214,10 @@ namespace jabber.connection
             ((AsyncSocket)m_sock).LocalCertificate = m_listener[Options.LOCAL_CERTIFICATE] as
                 System.Security.Cryptography.X509Certificates.X509Certificate;
 #endif
-            m_sock.Accept(new Address((int)m_listener[Options.PORT]));
+            Address addr = new Address((string)m_listener[Options.NETWORK_HOST],
+                (int)m_listener[Options.PORT]);
+
+            m_sock.Accept(addr);
             m_sock.RequestAccept();
         }
 
@@ -358,7 +361,16 @@ namespace jabber.connection
             m_timer.Change(tim, tim);
 
             m_listener.BytesRead(buf, offset, length);
-            m_elements.Push(buf, 0, length);
+            try
+            {
+                m_elements.Push(buf, 0, length);
+            }
+            catch (Exception e)
+            {
+                ((ISocketEventListener)this).OnError(sock, e);
+                sock.Close();
+                return false;
+            }
             return true;
         }
 
