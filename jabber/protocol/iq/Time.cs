@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -20,7 +20,7 @@ using bedrock.util;
 namespace jabber.protocol.iq
 {
     /*
-     * <iq type="result" to="romeo@montague.net/orchard" 
+     * <iq type="result" to="romeo@montague.net/orchard"
      *                   from="juliet@capulet.com/balcony"
      *                   id="i_time_001">
      *   <query xmlns="jabber:iq:time">
@@ -53,7 +53,7 @@ namespace jabber.protocol.iq
     public class Time : Element
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="doc"></param>
         public Time(XmlDocument doc) : base("query", URI.TIME, doc)
@@ -61,7 +61,7 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="prefix"></param>
         /// <param name="qname"></param>
@@ -86,7 +86,7 @@ namespace jabber.protocol.iq
         /// <summary>
         /// Universal coordinated time.  (More or less GMT).
         /// </summary>
-        public DateTime UTC 
+        public DateTime UTC
         {
             get { return JabberDate(GetElem("utc")); }
             set { SetElem("utc", JabberDate(value)); }
@@ -96,7 +96,7 @@ namespace jabber.protocol.iq
         /// Timezone
         /// </summary>
         //TODO: return System.TimeZone?
-        public string TZ 
+        public string TZ
         {
             get { return GetElem("tz"); }
             set { SetElem("tz", value); }

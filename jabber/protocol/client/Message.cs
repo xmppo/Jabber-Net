@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -28,11 +28,11 @@ namespace jabber.protocol.client
         /// <summary>
         /// Normal message
         /// </summary>
-        normal = -1, 
+        normal = -1,
         /// <summary>
         /// Error message
         /// </summary>
-        error, 
+        error,
         /// <summary>
         /// Chat (one-to-one) message
         /// </summary>
@@ -47,7 +47,7 @@ namespace jabber.protocol.client
         headline
     }
     /// <summary>
-    /// A client-to-client message.  
+    /// A client-to-client message.
     /// TODO: Some XHTML is supported by setting the .Html property,
     /// but extra xmlns="" get put everywhere at the moment.
     /// </summary>
@@ -55,7 +55,7 @@ namespace jabber.protocol.client
     public class Message : Packet
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="doc"></param>
         public Message(XmlDocument doc) : base("message", doc)
@@ -63,7 +63,7 @@ namespace jabber.protocol.client
             ID = NextID();
         }
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="prefix"></param>
         /// <param name="qname"></param>
@@ -79,12 +79,12 @@ namespace jabber.protocol.client
         public MessageType Type
         {
             get { return (MessageType) GetEnumAttr("type", typeof(MessageType)); }
-            set 
-            { 
+            set
+            {
                 if (value == MessageType.normal)
                     RemoveAttribute("type");
                 else
-                    SetAttribute("type", value.ToString()); 
+                    SetAttribute("type", value.ToString());
             }
         }
 
@@ -105,7 +105,7 @@ namespace jabber.protocol.client
         public string Html
         {
             get
-            { 
+            {
                 // Thanks, Mr. Postel.
                 XmlElement h = this["html"];
                 if (h == null)
@@ -117,8 +117,8 @@ namespace jabber.protocol.client
                 // HACK: yeah, yeah, I know.
                 return xml.Replace(" xmlns=\"" + URI.XHTML + "\"", "");
             }
-            set 
-            { 
+            set
+            {
                 XmlElement old = this["html"];
                 if (old != null)
                     this.RemoveChild(old);
@@ -172,10 +172,10 @@ namespace jabber.protocol.client
         public Error Error
         {
             get { return (Error) this["error"]; }
-            set 
+            set
             {
-                this.Type = MessageType.error;    
-                ReplaceChild(value); 
+                this.Type = MessageType.error;
+                ReplaceChild(value);
             }
         }
     }

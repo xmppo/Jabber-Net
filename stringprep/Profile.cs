@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -19,7 +19,7 @@ using stringprep.steps;
 
 namespace stringprep
 {
-   
+
     /// <summary>
     /// Summary description for Prep.
     /// </summary>
@@ -40,47 +40,47 @@ namespace stringprep
 
         /// <summary>
         /// RFC 3454, Appendix C.1.1
-        /// </summary>        
+        /// </summary>
         public static readonly ProhibitStep C_1_1 = new ProhibitStep(RFC3454.C_1_1, "RFC3454.C_1_1");
         /// <summary>
         /// RFC 3454, Appendix C.1.2
-        /// </summary>        
+        /// </summary>
         public static readonly ProhibitStep C_1_2 = new ProhibitStep(RFC3454.C_1_2, "RFC3454.C_1_2");
         /// <summary>
         /// RFC 3454, Appendix C.2.1
-        /// </summary>        
+        /// </summary>
         public static readonly ProhibitStep C_2_1 = new ProhibitStep(RFC3454.C_2_1, "RFC3454.C_2_1");
         /// <summary>
         /// RFC 3454, Appendix C.2.2
-        /// </summary>        
+        /// </summary>
         public static readonly ProhibitStep C_2_2 = new ProhibitStep(RFC3454.C_2_2, "RFC3454.C_2_2");
         /// <summary>
         /// RFC 3454, Appendix C.3
-        /// </summary>        
+        /// </summary>
         public static readonly ProhibitStep C_3   = new ProhibitStep(RFC3454.C_3, "RFC3454.C_3");
         /// <summary>
         /// RFC 3454, Appendix C.4
-        /// </summary>        
+        /// </summary>
         public static readonly ProhibitStep C_4   = new ProhibitStep(RFC3454.C_4, "RFC3454.C_4");
         /// <summary>
         /// RFC 3454, Appendix C.5
-        /// </summary>        
+        /// </summary>
         public static readonly ProhibitStep C_5   = new ProhibitStep(RFC3454.C_5, "RFC3454.C_5");
         /// <summary>
         /// RFC 3454, Appendix C.6
-        /// </summary>        
+        /// </summary>
         public static readonly ProhibitStep C_6   = new ProhibitStep(RFC3454.C_6, "RFC3454.C_6");
         /// <summary>
         /// RFC 3454, Appendix C.7
-        /// </summary>        
+        /// </summary>
         public static readonly ProhibitStep C_7   = new ProhibitStep(RFC3454.C_7, "RFC3454.C_7");
         /// <summary>
         /// RFC 3454, Appendix C.8
-        /// </summary>        
+        /// </summary>
         public static readonly ProhibitStep C_8   = new ProhibitStep(RFC3454.C_8, "RFC3454.C_8");
         /// <summary>
         /// RFC 3454, Appendix C.9
-        /// </summary>        
+        /// </summary>
         public static readonly ProhibitStep C_9   = new ProhibitStep(RFC3454.C_9, "RFC3454.C_9");
 
         /// <summary>
@@ -127,7 +127,7 @@ namespace stringprep
         /// </summary>
         /// <param name="result">The string to prepare in place</param>
         public virtual void Prepare(StringBuilder result)
-        { 
+        {
             foreach (ProfileStep step in m_profile)
             {
                 step.Prepare(result);

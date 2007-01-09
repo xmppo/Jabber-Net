@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -29,14 +29,14 @@ namespace bedrock.collections
         /// <summary>
         /// The default probability for adding new node levels.
         /// .25 provides a good balance of speed and size.
-        /// .5 will be slightly less variable in run time, 
+        /// .5 will be slightly less variable in run time,
         /// and take up more space
         /// </summary>
         private const float DEFAULT_PROBABILITY = 0.25F;
 
         /// <summary>
         /// The maximum depth for searching.
-        /// log(1/p, n), where n is the max number of 
+        /// log(1/p, n), where n is the max number of
         /// expected nodes.  For the defaults, n = 4096.
         /// The list will continue to work for larger lists,
         /// but performance will start to degrade toward
@@ -92,7 +92,7 @@ namespace bedrock.collections
         /// <summary>
         /// Add an item to the list.
         /// </summary>
-        /// <param name="key">Key for later retrieval.  
+        /// <param name="key">Key for later retrieval.
         /// Must implement IComparable.</param>
         /// <param name="val">The value to store</param>
         /// <exception cref="ArgumentException">Thrown if the same key is added twice</exception>
@@ -117,8 +117,8 @@ namespace bedrock.collections
                 }
                 update[i] = n;
             }
-            if ((n.Level > 0) && 
-                (n[0] != null) && 
+            if ((n.Level > 0) &&
+                (n[0] != null) &&
                 (m_comparator.Compare(n[0].Key, key) == 0))
             { // already here
                 //n.Value = val;
@@ -209,7 +209,7 @@ namespace bedrock.collections
                     next = n[i];
                 }
                 update[i] = n;
-            }   
+            }
             if (n.Level == 0)
                 return; // or assert
 
@@ -309,11 +309,11 @@ namespace bedrock.collections
                 throw new ArgumentNullException("array");
             if (array.Rank != 1)
                 throw new ArgumentException("Array must be single dimensional", "array");
-            if (arrayIndex < 0) 
+            if (arrayIndex < 0)
                 throw new ArgumentOutOfRangeException("arrayIndex", "starting index may not be negative");
             if (array.Length - arrayIndex < m_count)
                 throw new ArgumentException("Array too small", "array");
-        
+
             int count = arrayIndex;
             foreach (DictionaryEntry e in this)
             {
@@ -354,7 +354,7 @@ namespace bedrock.collections
             SkipListNode n = m_header;
             SkipListNode next;
 
-            for(int i=m_header.Level-1; i>=0; i--) 
+            for(int i=m_header.Level-1; i>=0; i--)
             {
                 next = n[i];
                 while((next != null) &&
@@ -413,7 +413,7 @@ namespace bedrock.collections
             public int Level
             {
                 get { return m_next.Length; }
-                set 
+                set
                 {
                     Debug.Assert(value > m_next.Length);
                     SkipListNode[] n = new SkipListNode[value];

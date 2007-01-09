@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -100,10 +100,10 @@ namespace muzzle
                 }
                 return m_xmpp;
             }
-            set 
-            { 
-                m_xmpp = value; 
-                ReadXmpp(); 
+            set
+            {
+                m_xmpp = value;
+                ReadXmpp();
             }
         }
 
@@ -134,7 +134,7 @@ namespace muzzle
         {
             if (c.Tag != null)
             {
-                root.AppendChild(root.OwnerDocument.CreateElement((string)c.Tag)).InnerText = 
+                root.AppendChild(root.OwnerDocument.CreateElement((string)c.Tag)).InnerText =
                     GetControlValue(c).ToString();
             }
             if (c.HasChildren)
@@ -316,7 +316,7 @@ namespace muzzle
         /// <returns></returns>
         public object this[string option]
         {
-            get 
+            get
             {
                 Control c = FindComponentByTag(this, option);
                 if (c == null)
@@ -327,7 +327,7 @@ namespace muzzle
                 }
                 return GetControlValue(c);
             }
-            set 
+            set
             {
                 Control c = FindComponentByTag(this, option);
                 if (c == null)
@@ -372,9 +372,9 @@ namespace muzzle
             ((System.ComponentModel.ISupportInitialize)(this.error)).BeginInit();
 #endif
             this.SuspendLayout();
-            // 
+            //
             // btnCancel
-            // 
+            //
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.CausesValidation = false;
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
@@ -384,9 +384,9 @@ namespace muzzle
             this.btnCancel.TabIndex = 1;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
-            // 
+            //
             // btnOK
-            // 
+            //
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOK.Location = new System.Drawing.Point(172, 8);
             this.btnOK.Name = "btnOK";
@@ -394,9 +394,9 @@ namespace muzzle
             this.btnOK.TabIndex = 0;
             this.btnOK.Text = "OK";
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
-            // 
+            //
             // panel1
-            // 
+            //
             this.panel1.CausesValidation = false;
             this.panel1.Controls.Add(this.btnCancel);
             this.panel1.Controls.Add(this.btnOK);
@@ -405,13 +405,13 @@ namespace muzzle
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(292, 40);
             this.panel1.TabIndex = 1000;
-            // 
+            //
             // error
-            // 
+            //
             this.error.ContainerControl = this;
-            // 
+            //
             // OptionForm
-            // 
+            //
             this.AcceptButton = this.btnOK;
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(292, 266);
@@ -461,7 +461,7 @@ namespace muzzle
             WriteXmpp();
 
             this.DialogResult = DialogResult.OK;
-            this.Close();        
+            this.Close();
         }
 
         private void btnCancel_Click(object sender, EventArgs e)

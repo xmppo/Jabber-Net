@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -70,7 +70,7 @@ namespace bedrock.util
                     break;
                 d = p.FullName;
             }
-            
+
             throw new FileNotFoundException(name);
         }
 
@@ -83,7 +83,7 @@ namespace bedrock.util
         }
 
         /// <summary>
-        /// Get the configuration file XML node associated 
+        /// Get the configuration file XML node associated
         /// with a given XPath query.
         /// </summary>
         /// <param name="xpath"></param>
@@ -103,7 +103,7 @@ namespace bedrock.util
             return m_doc.SelectNodes(xpath);
         }
         /// <summary>
-        /// Get the configuration file string associated 
+        /// Get the configuration file string associated
         /// with a given XPath query, or null if not found.
         /// </summary>
         public string this[string xpath]
@@ -114,14 +114,14 @@ namespace bedrock.util
             }
         }
         /// <summary>
-        /// Get the configuration file string associated 
+        /// Get the configuration file string associated
         /// with a given XPath query, or defaultValue if not found.
         /// </summary>
         public string this[string xpath, string defaultValue]
         {
             get
-            {  
-                string val;  
+            {
+                string val;
                 XmlNode n = m_doc.SelectSingleNode(xpath);
                 if (n != null)
                 {

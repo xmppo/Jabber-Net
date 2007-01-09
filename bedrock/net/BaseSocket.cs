@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -31,7 +31,7 @@ namespace bedrock.net
 
         /// <summary>
         /// Call through this interface when events happen.  WARNING:
-        /// AsyncSocket assumes this is not NULL. 
+        /// AsyncSocket assumes this is not NULL.
         /// </summary>
         protected ISocketEventListener m_listener = null;
 
@@ -58,7 +58,7 @@ namespace bedrock.net
         /// </summary>
         public virtual ISocketEventListener Listener
         {
-            get 
+            get
             {
                 return m_listener;
             }
@@ -94,14 +94,14 @@ namespace bedrock.net
         public abstract void Accept(Address addr, int backlog);
 
         /// <summary>
-        /// Start the flow of async accepts.  Flow will continue while 
+        /// Start the flow of async accepts.  Flow will continue while
         /// Listener.OnAccept() returns true.  Otherwise, call RequestAccept() again
         /// to continue.
         /// </summary>
         public abstract void RequestAccept();
 
         /// <summary>
-        /// Outbound connection.  Eventually calls Listener.OnConnect() when 
+        /// Outbound connection.  Eventually calls Listener.OnConnect() when
         /// the connection comes up.  Don't forget to call RequestRead() in
         /// OnConnect()!
         /// </summary>
@@ -116,7 +116,7 @@ namespace bedrock.net
         }
 
         /// <summary>
-        /// Outbound connection.  Eventually calls Listener.OnConnect() when 
+        /// Outbound connection.  Eventually calls Listener.OnConnect() when
         /// the connection comes up.  Don't forget to call RequestRead() in
         /// OnConnect()!
         /// </summary>

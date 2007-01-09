@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -42,7 +42,7 @@ namespace jabber.protocol.iq
     public class Roster : Element
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="doc"></param>
         public Roster(XmlDocument doc) : base("query", URI.ROSTER, doc)
@@ -50,7 +50,7 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="prefix"></param>
         /// <param name="qname"></param>
@@ -144,7 +144,7 @@ namespace jabber.protocol.iq
     public class Item : Element
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="doc"></param>
         public Item(XmlDocument doc) : base("item", URI.ROSTER, doc)
@@ -152,7 +152,7 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="prefix"></param>
         /// <param name="qname"></param>
@@ -195,12 +195,12 @@ namespace jabber.protocol.iq
         public Ask Ask
         {
             get { return (Ask) GetEnumAttr("ask", typeof(Ask)); }
-            set 
-            { 
-                if (value == Ask.NONE) 
+            set
+            {
+                if (value == Ask.NONE)
                     RemoveAttribute("ask");
                 else
-                    SetAttribute("ask", value.ToString()); 
+                    SetAttribute("ask", value.ToString());
             }
         }
 
@@ -271,7 +271,7 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
-        /// Get the group object of the given name in this item.  
+        /// Get the group object of the given name in this item.
         /// If there is no group of that name, returns null.
         /// </summary>
         /// <param name="name">The name of the group to return</param>
@@ -294,7 +294,7 @@ namespace jabber.protocol.iq
     public class Group : Element
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="doc"></param>
         public Group(XmlDocument doc) : base("group", URI.ROSTER, doc)
@@ -302,7 +302,7 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="prefix"></param>
         /// <param name="qname"></param>

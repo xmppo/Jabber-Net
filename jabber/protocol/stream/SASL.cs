@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -23,10 +23,10 @@ namespace jabber.protocol.stream
     /// </summary>
     [RCS(@"$Header$")]
     [Flags]
-    public enum MechanismType 
+    public enum MechanismType
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         NONE = 0,
         /// <summary>
@@ -34,7 +34,7 @@ namespace jabber.protocol.stream
         /// </summary>
         KERBEROS_V4 = (1 << 0),
         /// <summary>
-        /// COMMON   [RFC2222]   IESG &lt;iesg@ietf.org&gt; 
+        /// COMMON   [RFC2222]   IESG &lt;iesg@ietf.org&gt;
         /// </summary>
         GSSAPI = (1 << 1),
         /// <summary>
@@ -46,7 +46,7 @@ namespace jabber.protocol.stream
         /// </summary>
         EXTERNAL = (1 << 3),
         /// <summary>
-        /// LIMITED  [RFC2195]   IESG &lt;iesg@ietf.org&gt; 
+        /// LIMITED  [RFC2195]   IESG &lt;iesg@ietf.org&gt;
         /// </summary>
         CRAM_MD5 = (1 << 4),
         /// <summary>
@@ -126,7 +126,7 @@ namespace jabber.protocol.stream
     public class Mechanisms : Element
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="doc"></param>
         public Mechanisms(XmlDocument doc) :
@@ -135,12 +135,12 @@ namespace jabber.protocol.stream
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="prefix"></param>
         /// <param name="qname"></param>
         /// <param name="doc"></param>
-        public Mechanisms(string prefix, XmlQualifiedName qname, XmlDocument doc) : 
+        public Mechanisms(string prefix, XmlQualifiedName qname, XmlDocument doc) :
             base(prefix, qname, doc)
         {
         }
@@ -186,7 +186,7 @@ namespace jabber.protocol.stream
     public class Mechanism : Element
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="doc"></param>
         public Mechanism(XmlDocument doc) :
@@ -195,12 +195,12 @@ namespace jabber.protocol.stream
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="prefix"></param>
         /// <param name="qname"></param>
         /// <param name="doc"></param>
-        public Mechanism(string prefix, XmlQualifiedName qname, XmlDocument doc) : 
+        public Mechanism(string prefix, XmlQualifiedName qname, XmlDocument doc) :
             base(prefix, qname, doc)
         {
         }
@@ -337,28 +337,28 @@ namespace jabber.protocol.stream
     }
 
     /// <summary>
-    /// Auth, Challenge, and Response. 
+    /// Auth, Challenge, and Response.
     /// </summary>
     public abstract class Step : Element
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="prefix"></param>
         /// <param name="qname"></param>
         /// <param name="doc"></param>
-        public Step(string prefix, XmlQualifiedName qname, XmlDocument doc) : 
+        public Step(string prefix, XmlQualifiedName qname, XmlDocument doc) :
             base(prefix, qname, doc)
         {
         }
 
         /// <summary>
-        /// The innards of the step.  If it is "=", it 
+        /// The innards of the step.  If it is "=", it
         /// means an intentionally blank response, not one waiting for a challenge.
         /// </summary>
         public byte[] Bytes
         {
-            get 
+            get
             {
                 string it = this.InnerText;
                 if (it == "")
@@ -386,7 +386,7 @@ namespace jabber.protocol.stream
     public class Auth : Step
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="doc"></param>
         public Auth(XmlDocument doc) :
@@ -395,12 +395,12 @@ namespace jabber.protocol.stream
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="prefix"></param>
         /// <param name="qname"></param>
         /// <param name="doc"></param>
-        public Auth(string prefix, XmlQualifiedName qname, XmlDocument doc) : 
+        public Auth(string prefix, XmlQualifiedName qname, XmlDocument doc) :
             base(prefix, qname, doc)
         {
         }
@@ -410,15 +410,15 @@ namespace jabber.protocol.stream
         /// </summary>
         public MechanismType Mechanism
         {
-            get 
-            { 
+            get
+            {
                 string m = GetAttribute("mechanism");
                 return jabber.protocol.stream.Mechanism.GetMechanismType(m);
             }
             set
             {
                 string m = jabber.protocol.stream.Mechanism.GetMechanism(value);
-                SetAttribute("mechanism", m); 
+                SetAttribute("mechanism", m);
             }
         }
     }
@@ -429,7 +429,7 @@ namespace jabber.protocol.stream
     public class Challenge : Step
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="doc"></param>
         public Challenge(XmlDocument doc) :
@@ -438,12 +438,12 @@ namespace jabber.protocol.stream
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="prefix"></param>
         /// <param name="qname"></param>
         /// <param name="doc"></param>
-        public Challenge(string prefix, XmlQualifiedName qname, XmlDocument doc) : 
+        public Challenge(string prefix, XmlQualifiedName qname, XmlDocument doc) :
             base(prefix, qname, doc)
         {
         }
@@ -456,7 +456,7 @@ namespace jabber.protocol.stream
     public class Response : Step
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="doc"></param>
         public Response(XmlDocument doc) :
@@ -465,12 +465,12 @@ namespace jabber.protocol.stream
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="prefix"></param>
         /// <param name="qname"></param>
         /// <param name="doc"></param>
-        public Response(string prefix, XmlQualifiedName qname, XmlDocument doc) : 
+        public Response(string prefix, XmlQualifiedName qname, XmlDocument doc) :
             base(prefix, qname, doc)
         {
         }
@@ -483,7 +483,7 @@ namespace jabber.protocol.stream
     public class SASLFailure : Step
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="doc"></param>
         public SASLFailure(XmlDocument doc) :
@@ -492,12 +492,12 @@ namespace jabber.protocol.stream
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="prefix"></param>
         /// <param name="qname"></param>
         /// <param name="doc"></param>
-        public SASLFailure(string prefix, XmlQualifiedName qname, XmlDocument doc) : 
+        public SASLFailure(string prefix, XmlQualifiedName qname, XmlDocument doc) :
             base(prefix, qname, doc)
         {
         }
@@ -510,7 +510,7 @@ namespace jabber.protocol.stream
     public class Abort : Step
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="doc"></param>
         public Abort(XmlDocument doc) :
@@ -519,12 +519,12 @@ namespace jabber.protocol.stream
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="prefix"></param>
         /// <param name="qname"></param>
         /// <param name="doc"></param>
-        public Abort(string prefix, XmlQualifiedName qname, XmlDocument doc) : 
+        public Abort(string prefix, XmlQualifiedName qname, XmlDocument doc) :
             base(prefix, qname, doc)
         {
         }
@@ -537,7 +537,7 @@ namespace jabber.protocol.stream
     public class Success : Step
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="doc"></param>
         public Success(XmlDocument doc) :
@@ -546,12 +546,12 @@ namespace jabber.protocol.stream
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="prefix"></param>
         /// <param name="qname"></param>
         /// <param name="doc"></param>
-        public Success(string prefix, XmlQualifiedName qname, XmlDocument doc) : 
+        public Success(string prefix, XmlQualifiedName qname, XmlDocument doc) :
             base(prefix, qname, doc)
         {
         }

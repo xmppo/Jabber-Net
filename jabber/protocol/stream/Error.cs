@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -20,13 +20,13 @@ using bedrock.util;
 namespace jabber.protocol.stream
 {
     /// <summary>
-    /// Stream error packet. 
+    /// Stream error packet.
     /// </summary>
     [RCS(@"$Header$")]
     public class Error : Element
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="doc"></param>
         public Error(XmlDocument doc) : base("stream", new XmlQualifiedName("error", URI.STREAM), doc)
@@ -34,12 +34,12 @@ namespace jabber.protocol.stream
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="prefix"></param>
         /// <param name="qname"></param>
         /// <param name="doc"></param>
-        public Error(string prefix, XmlQualifiedName qname, XmlDocument doc) : 
+        public Error(string prefix, XmlQualifiedName qname, XmlDocument doc) :
             base(prefix, qname, doc)
         {
         }

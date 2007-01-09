@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -52,7 +52,7 @@ namespace jabber.protocol.client
     public class IQ : Packet
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="doc"></param>
         public IQ(XmlDocument doc) : base("iq", doc)
@@ -61,24 +61,24 @@ namespace jabber.protocol.client
             Type = IQType.get;  // get better errors than when there is no type specified.
         }
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="prefix"></param>
         /// <param name="qname"></param>
         /// <param name="doc"></param>
-        public IQ(string prefix, XmlQualifiedName qname, XmlDocument doc) : 
+        public IQ(string prefix, XmlQualifiedName qname, XmlDocument doc) :
             base(qname.Name, doc) // Note:  *NOT* base(prefix, qname, doc), so that xpath matches are easier
         {
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public IQType Type
         {
             get { return (IQType) GetEnumAttr("type", typeof(IQType)); }
-            set 
-            { 
+            set
+            {
                 IQType cur = this.Type;
                 if (cur == value)
                     return;
@@ -97,10 +97,10 @@ namespace jabber.protocol.client
         public Error Error
         {
             get { return (Error) this["error"]; }
-            set 
+            set
             {
-                this.Type = IQType.error;    
-                ReplaceChild(value); 
+                this.Type = IQType.error;
+                ReplaceChild(value);
             }
         }
 

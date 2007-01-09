@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -158,7 +158,7 @@ namespace jabber.server
         }
 
         /// <summary>
-        /// The name of the server to connect to.  
+        /// The name of the server to connect to.
         /// </summary>
         [Description("The name of the Jabber server.")]
         [DefaultValue("jabber.com")]
@@ -192,7 +192,7 @@ namespace jabber.server
         public ComponentType Type
         {
             get { return (ComponentType)this[Options.COMPONENT_DIRECTION]; }
-            set 
+            set
             {
                 if ((ComponentType)this[Options.COMPONENT_DIRECTION] != value)
                 {
@@ -268,7 +268,7 @@ namespace jabber.server
                 if (ServerVersion.StartsWith("1."))
                     str.Version = "1.0";
 
-                
+
                 WriteStartTag(str);
 
                 if (ServerVersion.StartsWith("1."))
@@ -294,7 +294,7 @@ namespace jabber.server
             if (this.Type == ComponentType.Accept)
                 IsAuthenticated = true;
             else
-            {       
+            {
                 string test = hs.Digest;
                 string good = Element.ShaHash(StreamID, this.Secret);
                 if (test == good)

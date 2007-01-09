@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -36,7 +36,7 @@ namespace bedrock.net
     public class JEP124Exception : WebException
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="reason"></param>
         public JEP124Exception(string reason) : base(reason)
@@ -49,7 +49,7 @@ namespace bedrock.net
     /// TODO: get rid of the PipeStream, if possible.
     /// </summary>
     [RCS(@"$Header$")]
-    public class JEP124Socket : BaseSocket 
+    public class JEP124Socket : BaseSocket
     {
         private const string CONTENT_TYPE = "text/xml; charset=utf-8";
         private const string METHOD       = "POST";
@@ -68,7 +68,7 @@ namespace bedrock.net
 
 
         private int        m_awaiting = 0;
-        
+
         private int        m_maxPoll = 30;
         private int        m_minPoll = 1;
         private double     m_curPoll = 1.0;
@@ -121,7 +121,7 @@ namespace bedrock.net
         }
 
         /// <summary>
-        /// The number of keys to generate at a time.  Higher numbers use more memory, 
+        /// The number of keys to generate at a time.  Higher numbers use more memory,
         /// and more CPU to generate keys, less often.  Defaults to 512.
         /// </summary>
         public int NumKeys
@@ -149,7 +149,7 @@ namespace bedrock.net
         {
             throw new NotImplementedException("HTTP binding server not implemented yet");
         }
-    
+
         /// <summary>
         /// Stop polling.
         /// </summary>
@@ -162,15 +162,15 @@ namespace bedrock.net
             }
             m_listener.OnClose(this);
         }
-    
+
         /// <summary>
         /// Start polling
         /// </summary>
         /// <param name="addr"></param>
         public override void Connect(Address addr)
-        {            
+        {
             Debug.Assert(m_url != null);
-            m_curKey = -1;                       
+            m_curKey = -1;
 
             if (m_thread == null)
             {
@@ -182,7 +182,7 @@ namespace bedrock.net
 
             m_listener.OnConnect(this);
         }
-    
+
         /// <summary>
         /// Not implemented
         /// </summary>
@@ -190,7 +190,7 @@ namespace bedrock.net
         {
             throw new NotImplementedException();
         }
-    
+
         /// <summary>
         /// Start reading.
         /// </summary>
@@ -210,7 +210,7 @@ namespace bedrock.net
             throw new NotImplementedException();
         }
 #endif
-    
+
         /// <summary>
         /// Send bytes to the jabber server
         /// </summary>
@@ -225,7 +225,7 @@ namespace bedrock.net
                 Monitor.Pulse(m_lock);
             }
         }
-        
+
         private void GenKeys()
         {
             byte[] seed = new byte[32];
@@ -254,20 +254,20 @@ namespace bedrock.net
             int l = sb.Length - 1;
             bool carry = true;
             while (carry && l >= 0)
-            {                
-                int d = int.Parse(sb[l].ToString());                
+            {
+                int d = int.Parse(sb[l].ToString());
                 carry = ((d++ == 9) ? 0 : d) == 0;
                 sb[l--] = d.ToString()[0];
             }
             if (carry)
-                sb.Insert(0, '1');            
+                sb.Insert(0, '1');
 
             return sb.ToString();
         }
 
 
         /// <summary>
-        /// Keep polling until 
+        /// Keep polling until
         /// </summary>
         private void PollThread()
         {
@@ -347,7 +347,7 @@ namespace bedrock.net
 
                     ++m_awaiting;
                     req.BeginGetResponse(new AsyncCallback(GotResponse), req);
-                    
+
                 }
 
                 lock (m_lock)
@@ -393,7 +393,7 @@ namespace bedrock.net
                 string body;
                 string content = null;
                 if (tokens.Length == 2)
-                {                    
+                {
                     body = tokens[0].Substring(0, xml.IndexOf('>')) + "/>";
                     content = tokens[0].Substring(body.Length - 1);
                 }
@@ -441,8 +441,8 @@ namespace bedrock.net
                         return;
                     }
                 }
-                    
-                
+
+
             }
             catch (WebException ex)
             {

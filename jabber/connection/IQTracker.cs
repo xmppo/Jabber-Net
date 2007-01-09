@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -61,7 +61,7 @@ namespace jabber.connection
             m_cli = stream;
             m_cli.OnProtocol += new jabber.protocol.ProtocolHandler(OnIQ);
         }
-        
+
         private void OnIQ(object sender, XmlElement elem)
         {
             IQ iq = elem as IQ;
@@ -75,7 +75,7 @@ namespace jabber.connection
             {
                 td = (TrackerData) m_pending[id];
 
-                // this wasn't one that was being tracked.  
+                // this wasn't one that was being tracked.
                 if (td == null)
                 {
                     return;

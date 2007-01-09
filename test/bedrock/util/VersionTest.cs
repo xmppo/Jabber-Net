@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -27,37 +27,37 @@ namespace test.bedrock.util
         [StarTeam("$" + "Header" + "$")]
             private class vFoo
         {
-            
+
         }
         [StarTeam(Archive="$" + @"Header: C:\Prj\Dognapper\Microsoft\Common\src\com.ilg.Util\Test\VersionTest.cs" + "$",
-             Author="$" + "Author: Joe Hildebrand" + "$", 
-             DateString="02/12/2001 6:25:04 PM", 
+             Author="$" + "Author: Joe Hildebrand" + "$",
+             DateString="02/12/2001 6:25:04 PM",
              Revision="1")]
             private class vInd
         {
-            
+
         }
         [StarTeam("$" + @"Header: C:\Prj\Dognapper\Microsoft\Common\src\com.ilg.Util\Test\VersionTest.cs, 1.11, 02/12/2001 6:25:04 PM, Joe Hildebrand" + "$")]
             private class vBar
         {
-            
+
         }
         [StarTeam("$" + @"Header: C:\Prj\Dognapper\Microsoft\Common\src\com.ilg.Util\Test\VersionTest.cs, 11, 02/12/2001 6:25:04 PM, Joe Hildebrand" + "$")]
             private class vBaz
         {
-            
+
         }
         [RCS("$" + @"Header: /u1/html/cvsroot/www.cyclic.com/RCS-html/info-ref.html,v 1.1 2001/02/12 18:25:04 kingdon Exp " + "$")]
             private class RCSVer
         {
-            
+
         }
         [SourceSafe("$" + @"Header: /t.cs 1     2/12/01 6:25p Hildebzj " + "$")]
             private class VssVer
         {
-            
+
         }
-        [Test] public void Test_Empty() 
+        [Test] public void Test_Empty()
         {
             SourceVersionAttribute foo = SourceVersionAttribute.GetVersion(typeof(vFoo));
             Assert.AreEqual(null,               foo.Revision, "Revision");
@@ -71,7 +71,7 @@ namespace test.bedrock.util
             SourceVersionAttribute bar = SourceVersionAttribute.GetVersion(typeof(vBar));
             Assert.AreEqual("1.11",             bar.Revision);
             Assert.AreEqual(
-                new DateTime(2001, 2, 12, 18, 25, 4), 
+                new DateTime(2001, 2, 12, 18, 25, 4),
                 bar.Date);
             Assert.AreEqual("Joe Hildebrand",   bar.Author);
             Assert.AreEqual(new Version(1, 11), bar.Version);
@@ -89,7 +89,7 @@ namespace test.bedrock.util
             SourceVersionAttribute baz = SourceVersionAttribute.GetVersion(typeof(vBaz));
             Assert.AreEqual("11",               baz.Revision);
             Assert.AreEqual(
-                new DateTime(2001, 2, 12, 18, 25, 4), 
+                new DateTime(2001, 2, 12, 18, 25, 4),
                 baz.Date);
             Assert.AreEqual("Joe Hildebrand",   baz.Author);
             Assert.AreEqual(new Version(1, 11), baz.Version);
@@ -100,7 +100,7 @@ namespace test.bedrock.util
             RCSAttribute c = (RCSAttribute) SourceVersionAttribute.GetVersion(typeof(RCSVer));
             Assert.AreEqual("1.1",               c.Revision);
             Assert.AreEqual(
-                new DateTime(2001, 2, 12, 18, 25, 4), 
+                new DateTime(2001, 2, 12, 18, 25, 4),
                 c.Date);
             Assert.AreEqual("kingdon",           c.Author);
             Assert.AreEqual(new Version(1, 1),   c.Version);
@@ -112,13 +112,13 @@ namespace test.bedrock.util
             SourceSafeAttribute c = (SourceSafeAttribute) SourceVersionAttribute.GetVersion(typeof(VssVer));
             Assert.AreEqual("1",                 c.Revision);
             Assert.AreEqual(
-                new DateTime(2001, 2, 12, 18, 25, 0), 
+                new DateTime(2001, 2, 12, 18, 25, 0),
                 c.Date);
             Assert.AreEqual("Hildebzj",          c.Author);
             Assert.AreEqual(new Version(1, 1),   c.Version);
             Assert.AreEqual(@"/t.cs",            c.Archive);
         }
-        
+
         [Test] public void Test_GetAll()
         {
             SourceVersionCollection tv = SourceVersionAttribute.GetVersion();

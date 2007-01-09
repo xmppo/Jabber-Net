@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -72,12 +72,12 @@ namespace jabber.protocol
     /// a wide variety of different types.
     /// </summary>
     [RCS(@"$Header$")]
-    public class ElementFactory 
+    public class ElementFactory
     {
         private Hashtable m_types = new Hashtable();
-        private static readonly Type[] s_constructorTypes = 
-            new Type[] { typeof(string), 
-                           typeof(XmlQualifiedName), 
+        private static readonly Type[] s_constructorTypes =
+            new Type[] { typeof(string),
+                           typeof(XmlQualifiedName),
                            typeof(XmlDocument) };
         /// <summary>
         /// Add a type to the packet factory.
@@ -142,7 +142,7 @@ namespace jabber.protocol
         /// <param name="doc">The document to create the element in.</param>
         /// <returns></returns>
         public Element GetElement(string prefix, XmlQualifiedName qname, XmlDocument doc)
-        {            
+        {
             ConstructorInfo ci = (ConstructorInfo) m_types[qname];
             if (ci == null)
             {

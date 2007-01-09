@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -17,7 +17,7 @@ using System.Collections;
 using NUnit.Framework;
 using bedrock.collections;
 using bedrock.util;
-    
+
 namespace test.bedrock.collections
 {
     /// <summary>
@@ -47,7 +47,7 @@ namespace test.bedrock.collections
             Trie t = new Trie();
             Assert.AreEqual("bedrock.collections.Trie", t.GetType().FullName);
         }
-        [Test] public void Test_Main() 
+        [Test] public void Test_Main()
         {
             Trie t = new Trie();
             t["one"] = "two";
@@ -64,7 +64,7 @@ namespace test.bedrock.collections
             string s;
             foreach (DictionaryEntry o in t)
             {
-                s = "s|" + System.Text.Encoding.UTF8.GetString((byte[])o.Key) + 
+                s = "s|" + System.Text.Encoding.UTF8.GetString((byte[])o.Key) +
                     "|=|" + o.Value + "|";
                 Console.WriteLine(s);
                 i++;

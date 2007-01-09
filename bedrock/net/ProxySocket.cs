@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -115,7 +115,7 @@ namespace bedrock.net
         }
 
         /// <summary>
-        /// Close the socket.  This is NOT async.  .Net doesn't have async closes.  
+        /// Close the socket.  This is NOT async.  .Net doesn't have async closes.
         /// But, it can be *called* async, particularly from GotData.
         /// Attempts to do a shutdown() first.
         /// </summary>
@@ -150,7 +150,7 @@ namespace bedrock.net
 #endif
 
         /// <summary>
-        /// Start the flow of async accepts.  Flow will continue while 
+        /// Start the flow of async accepts.  Flow will continue while
         /// Listener.OnAccept() returns true.  Otherwise, call RequestAccept() again
         /// to continue.
         /// </summary>
@@ -183,7 +183,7 @@ namespace bedrock.net
         #region Implementation of ISocketEventListener
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="newSock"></param>
         public virtual void OnInit(BaseSocket newSock)
@@ -192,7 +192,7 @@ namespace bedrock.net
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="newSock"></param>
         /// <returns></returns>
@@ -202,7 +202,7 @@ namespace bedrock.net
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="newsocket"></param>
         /// <returns></returns>
@@ -212,7 +212,7 @@ namespace bedrock.net
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="sock"></param>
         public virtual void OnConnect(BaseSocket sock)
@@ -229,7 +229,7 @@ namespace bedrock.net
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="sock"></param>
         public virtual void OnClose(BaseSocket sock)
@@ -238,7 +238,7 @@ namespace bedrock.net
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="sock"></param>
         /// <param name="ex"></param>
@@ -248,7 +248,7 @@ namespace bedrock.net
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="sock"></param>
         /// <param name="buf"></param>
@@ -261,7 +261,7 @@ namespace bedrock.net
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="sock"></param>
         /// <param name="buf"></param>

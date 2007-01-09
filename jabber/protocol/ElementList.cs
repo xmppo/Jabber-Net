@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -20,8 +20,8 @@ using bedrock.util;
 namespace jabber.protocol
 {
     /// <summary>
-    /// Replacement for XmlElementList that removes the safety belt of checking for changes during traversal, 
-    /// but removes the big old memory leak in MS's implementation.  Also, only returns first-level children, 
+    /// Replacement for XmlElementList that removes the safety belt of checking for changes during traversal,
+    /// but removes the big old memory leak in MS's implementation.  Also, only returns first-level children,
     /// rather than all children below here with the given name.  Thanks, MS.
     /// </summary>
     [RCS(@"$Header$")]
@@ -75,7 +75,7 @@ namespace jabber.protocol
                 n = n.NextSibling;
             }
             return n;
-        } 
+        }
 
         private bool IsMatch(XmlNode curNode)
         {
@@ -85,11 +85,11 @@ namespace jabber.protocol
             if (m_name == null)
                 return true;
 
-            if (m_uri == null) 
+            if (m_uri == null)
                 return (curNode.LocalName == m_name);
-        
+
             return (curNode.LocalName == m_name) && (curNode.NamespaceURI == m_uri);
-        } 
+        }
 
         /// <summary>
         /// Enumerate over the matching children.

@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -22,19 +22,19 @@ using bedrock.io;
 namespace jabber.protocol
 {
     /// <summary>
-    /// Reverse-engineered from the Beta1 System.Xml.XmlLoader, since that's private 
+    /// Reverse-engineered from the Beta1 System.Xml.XmlLoader, since that's private
     /// and the version accessible from System.Xml.XmlDocument.ReadNode()
-    /// is wrapped in a call to set and clear IsLoading, which makes it 
-    /// non-reentrant.  At least that's what I think is happening.  The 
-    /// symptom is that ReadNode() doesn't return the last element until 
+    /// is wrapped in a call to set and clear IsLoading, which makes it
+    /// non-reentrant.  At least that's what I think is happening.  The
+    /// symptom is that ReadNode() doesn't return the last element until
     /// the next element comes in.
-    /// 
-    /// I left some stuff unimplemented; mostly default attributes from a DTD.  
-    /// Those classes are private, too in System.Xml.  Thanks, guys.  Oh, and 
+    ///
+    /// I left some stuff unimplemented; mostly default attributes from a DTD.
+    /// Those classes are private, too in System.Xml.  Thanks, guys.  Oh, and
     /// entity references.  I don't believe in them, therefore they must not exist.
-    /// 
+    ///
     /// I've now made enough changes to this implementation that it probably will
-    /// have to stay around.  Someone should probably re-write it without the 
+    /// have to stay around.  Someone should probably re-write it without the
     /// reverse-engineering.
     /// </summary>
     [RCS(@"$Header$")]
@@ -50,7 +50,7 @@ namespace jabber.protocol
         /// Create a new instance.
         /// </summary>
         /// <param name="r">The reader to read from</param>
-        /// <param name="d">The XmlDocument to create nodes in.  The nodes are 
+        /// <param name="d">The XmlDocument to create nodes in.  The nodes are
         /// not added to the document root, though</param>
         public XmlLoader(XmlReader r, XmlDocument d)
         {
@@ -71,11 +71,11 @@ namespace jabber.protocol
         /// </summary>
         public ElementFactory Factory
         {
-            get 
-            { 
+            get
+            {
                 if (m_factory == null)
                     m_factory = new ElementFactory();
-                return m_factory; 
+                return m_factory;
             }
             set { m_factory = value; }
         }
@@ -88,7 +88,7 @@ namespace jabber.protocol
         public XmlElement ReadStartTag()
         {
             XmlElement tag = null;
-            XmlQualifiedName qname  = new XmlQualifiedName(reader.LocalName, 
+            XmlQualifiedName qname  = new XmlQualifiedName(reader.LocalName,
                 reader.NamespaceURI);
             tag = m_factory.GetElement(reader.Prefix, qname, doc);
             ReadAttributes(tag);
@@ -113,19 +113,19 @@ namespace jabber.protocol
             {
                 case XmlNodeType.Element:
                     XmlElement currentElem = null;
-                    XmlQualifiedName qname = new XmlQualifiedName(reader.LocalName, 
+                    XmlQualifiedName qname = new XmlQualifiedName(reader.LocalName,
                         reader.NamespaceURI);
                     currentElem = m_factory.GetElement(reader.Prefix, qname, doc);
                     bool isEmpty = currentElem.IsEmpty = reader.IsEmptyElement;
                     ReadAttributes(currentElem);
-                
+
                     if (! isEmpty)
                     {
                         LoadChildren(currentElem);
                     }
                     lastNode = currentElem;
                     break;
-                
+
                 case XmlNodeType.Attribute:
                     if (reader.IsDefault)
                     {
@@ -189,13 +189,13 @@ namespace jabber.protocol
                 case XmlNodeType.Text:
                     lastNode = doc.CreateTextNode(reader.Value);
                     break;
-                
+
                 case XmlNodeType.CDATA:
                     lastNode = doc.CreateCDataSection(reader.Value);
                     break;
                 case XmlNodeType.EntityReference:
                     eRef = doc.CreateEntityReference(reader.Name);
-                    if ((this.loadMode == XmlLoaderMode.ExpandEnity) || 
+                    if ((this.loadMode == XmlLoaderMode.ExpandEnity) ||
                         (this.loadMode == XmlLoaderMode.ExpandEntityReference))
                     {
                         this.ExpandEntityReference(eRef);
@@ -215,7 +215,7 @@ namespace jabber.protocol
                         out standalone);
                     lastNode = doc.CreateXmlDeclaration(version, encoding, standalone);
                     break;
-                
+
                 case XmlNodeType.ProcessingInstruction:
                     lastNode = doc.CreateProcessingInstruction(reader.LocalName,
                         reader.Value);
@@ -230,7 +230,7 @@ namespace jabber.protocol
                         String.Empty);
                     V_11.Value = reader.Value;
                     this.LoadDocumentType(V_11);
-                    lastNode = V_11;        
+                    lastNode = V_11;
                     break;
                 case XmlNodeType.EndElement:
                 case XmlNodeType.EndEntity:
@@ -249,7 +249,7 @@ namespace jabber.protocol
                 if (parent.NodeType != XmlNodeType.Document)
                 {
                     parent.AppendChild(lastNode);
-                }                
+                }
             }
         }
         private void LoadAttributeChildren(XmlNode parent)
@@ -263,13 +263,13 @@ namespace jabber.protocol
                 {
                     case XmlNodeType.EndEntity:
                         return;
-                    
+
                     case XmlNodeType.Text:
                         parent.AppendChild(doc.CreateTextNode(reader.Value));
                         break;
                     case XmlNodeType.EntityReference:
                         V_0 = doc.CreateEntityReference(reader.LocalName);
-                        if ((loadMode == XmlLoaderMode.ExpandEnity) || 
+                        if ((loadMode == XmlLoaderMode.ExpandEnity) ||
                             (loadMode == XmlLoaderMode.ExpandEntityReference))
                         {
                             this.ExpandEntityReference(V_0);
@@ -281,14 +281,14 @@ namespace jabber.protocol
                         }
                         parent.AppendChild(V_0);
                         break;
-                    
+
                     case XmlNodeType.CDATA:
                     default:
                         throw new InvalidOperationException();
                 }
             }
         }
-        
+
         private static void ParseXmlDeclarationValue(String strValue,
             out String version,
             out String encoding,
@@ -296,7 +296,7 @@ namespace jabber.protocol
         {
             XmlTextReader r;
             string        n;
-            
+
             version    = null;
             encoding   = null;
             standalone = null;
@@ -304,7 +304,7 @@ namespace jabber.protocol
             try
             {
                 r.Read();
-                
+
                 for (int i=0; i<r.AttributeCount; i++)
                 {
                     r.MoveToAttribute(i);
@@ -338,7 +338,7 @@ namespace jabber.protocol
                         throw new Exception();
                     }
                 }
-                
+
                 if (r.Read())
                 {
                     throw new Exception();
@@ -356,7 +356,7 @@ namespace jabber.protocol
         }
         private void ExpandEntityReference(XmlEntityReference eref)
         {
-            throw new NotImplementedException("Way too much work for something I don't plan on using");            
+            throw new NotImplementedException("Way too much work for something I don't plan on using");
         }
         private enum XmlLoaderMode
         {

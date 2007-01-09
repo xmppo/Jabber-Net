@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -54,7 +54,7 @@ namespace jabber.protocol.accept
     public class Log : jabber.protocol.Packet
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="doc"></param>
         public Log(XmlDocument doc) : base("log", doc)
@@ -62,12 +62,12 @@ namespace jabber.protocol.accept
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="prefix"></param>
         /// <param name="qname"></param>
         /// <param name="doc"></param>
-        public Log(string prefix, XmlQualifiedName qname, XmlDocument doc) : 
+        public Log(string prefix, XmlQualifiedName qname, XmlDocument doc) :
             base(prefix, qname, doc)
         {
         }
@@ -87,8 +87,8 @@ namespace jabber.protocol.accept
         public LogType Type
         {
             get { return (LogType) GetEnumAttr("type", typeof(LogType)); }
-            set 
-            { 
+            set
+            {
                 LogType cur = this.Type;
                 if (cur == value)
                     return;
@@ -119,7 +119,7 @@ namespace jabber.protocol.accept
         {
             get { return GetAttribute("thread"); }
             set { SetAttribute("thread", value); }
-        }    
+        }
 
         /// <summary>
         /// Time sent.

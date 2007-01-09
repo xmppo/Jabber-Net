@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -44,16 +44,16 @@ namespace jabber.protocol.iq
     public class GeoLoc : Element
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="doc"></param>
-        public GeoLoc(XmlDocument doc) : 
+        public GeoLoc(XmlDocument doc) :
             base("geoloc", URI.GEOLOC, doc)
         {
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="prefix"></param>
         /// <param name="qname"></param>
@@ -75,7 +75,7 @@ namespace jabber.protocol.iq
 
         /// <summary>
         /// Assuming decimal degrees to true north.
-        /// Note: this is being further specified in the JEP.  
+        /// Note: this is being further specified in the JEP.
         /// </summary>
         public double Bearing
         {
@@ -88,9 +88,9 @@ namespace jabber.protocol.iq
         /// </summary>
         public string Datum
         {
-            get 
-            { 
-                string datum = GetElem("datum"); 
+            get
+            {
+                string datum = GetElem("datum");
                 if ((datum == null) || (datum == ""))
                     datum = "WGS84";
                 return datum;

@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2004 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -69,7 +69,7 @@ namespace jabber.protocol
             string[] parts = qName.Split(new char[] {':'});
             return (parts.Length == 2) ? parts[0] : "";
         }
-    
+
         #region IContentHandler Members
 
         void IContentHandler.StartDocument()
@@ -93,7 +93,7 @@ namespace jabber.protocol
                 a.AppendChild(m_doc.CreateTextNode(atts.GetValue(i)));
                 elem.SetAttributeNode(a);
             }
-            
+
             if ((elem.LocalName != "stream") || (elem.NamespaceURI != URI.STREAM))
             {
                 if (m_stanza != null)
@@ -103,7 +103,7 @@ namespace jabber.protocol
             else
             {
                 FireOnDocumentStart(elem);
-            }            
+            }
         }
 
         void IContentHandler.EndPrefixMapping(string prefix)

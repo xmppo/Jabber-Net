@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -55,15 +55,15 @@ namespace jabber
         /// </summary>
         /// <param name="info">The object that holds the serialized object data.</param>
         /// <param name="ctx">The contextual information about the source or destination.</param>
-        protected JIDFormatException(System.Runtime.Serialization.SerializationInfo info, 
-            System.Runtime.Serialization.StreamingContext ctx) : 
+        protected JIDFormatException(System.Runtime.Serialization.SerializationInfo info,
+            System.Runtime.Serialization.StreamingContext ctx) :
             base(info, ctx)
         {
         }
     }
 
     /// <summary>
-    /// Simple JID management.  There should be more, here, particularly 
+    /// Simple JID management.  There should be more, here, particularly
     /// with respect to interning.
     /// </summary>
     [RCS(@"$Header$")]
@@ -385,7 +385,7 @@ namespace jabber
                 parse();
                 return m_server;
             }
-            set 
+            set
             {
                 parse();
                 m_server = value;
@@ -403,7 +403,7 @@ namespace jabber
                 parse();
                 return m_resource;
             }
-            set 
+            set
             {
                 parse();
                 m_resource = value;
@@ -429,9 +429,9 @@ namespace jabber
         /// </summary>
         /// <param name="obj">An object to compare with this instance.</param>
         /// <returns>A 32-bit signed integer that indicates the relative order of the comparands. The return value has these meanings:
-        /// Less than zero This instance is less than obj. 
-        /// Zero This instance is equal to obj. 
-        /// Greater than zero This instance is greater than obj. 
+        /// Less than zero This instance is less than obj.
+        /// Zero This instance is equal to obj.
+        /// Greater than zero This instance is greater than obj.
         /// </returns>
         public int CompareTo(object obj)
         {
@@ -444,7 +444,7 @@ namespace jabber
             if (oj == null)
                 throw new ArgumentException("Comparison of JID to non-JID", "obj");
 
-            // hm.  How tricky to get?  
+            // hm.  How tricky to get?
             // It could be that sorting by domain first is correct...
             //return this.m_JID.CompareTo(oj.m_JID);
             this.parse();

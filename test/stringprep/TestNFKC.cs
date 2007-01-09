@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 #if !NO_STRINGPREP
@@ -70,7 +70,7 @@ namespace test.stringprep
 
         [Test] public void Test_Navajo()
         {
-            // a + ogonek + acute ==> a-ogonek + acute 
+            // a + ogonek + acute ==> a-ogonek + acute
             TryOne("\x0061\x0328\x0301", "\x0105\x0301");
             // i + ogonek + acute ==> i-ogonek + acute
             TryOne("i\x0328\x0301", "\x012F\x0301");
@@ -83,8 +83,8 @@ namespace test.stringprep
             // The NFKC stuff does a Compose after these are specified, though.
 
             // a-diaeresis + underdot => a + underdot + diaeresis
-            TryOne("\x00e4\x0323", "\x1ea1\x0308"); 
-            TryOne("\x00e4\x0323\x00e4\x0323\x00e4\x0323", "\x1ea1\x0308\x1ea1\x0308\x1ea1\x0308"); 
+            TryOne("\x00e4\x0323", "\x1ea1\x0308");
+            TryOne("\x00e4\x0323\x00e4\x0323\x00e4\x0323", "\x1ea1\x0308\x1ea1\x0308\x1ea1\x0308");
 
             // a + diaeresis + underdot => a + underdot + diaeresis
             TryOne("a\x0308\x0323", "\x1ea1\x0308");

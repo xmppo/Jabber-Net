@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -71,7 +71,7 @@ namespace jabber.protocol
         /// <summary>
         /// S2S connection
         /// </summary>
-        public const string SERVER = "jabber:server"; 
+        public const string SERVER = "jabber:server";
         /// <summary>
         /// S2S dialback
         /// </summary>
@@ -119,7 +119,7 @@ namespace jabber.protocol
         public const string VCARD    = "vcard-temp";
 
         /// <summary>
-        /// Geographic locaiotn (lat/long).  
+        /// Geographic locaiotn (lat/long).
         /// See JEP-80 (http://www.jabber.org/jeps/jep-0080.html)
 
         /// </summary>
@@ -148,7 +148,7 @@ namespace jabber.protocol
         /// </summary>
         public const string XROSTER  = "jabber:x:roster";
         /// <summary>
-        /// The jabber:x:event namespace qualifies extensions used to request and respond to 
+        /// The jabber:x:event namespace qualifies extensions used to request and respond to
         /// events relating to the delivery, display, and composition of messages.
         /// </summary>
         public const string XEVENT = "jabber:x:event";

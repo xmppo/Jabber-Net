@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -50,14 +50,14 @@ namespace jabber.protocol.iq
     public class OOB : Element
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="doc"></param>
         public OOB(XmlDocument doc) : base("query", URI.OOB, doc)
         {
         }
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="prefix"></param>
         /// <param name="qname"></param>
@@ -70,7 +70,7 @@ namespace jabber.protocol.iq
         /// <summary>
         /// URL to send/receive from
         /// </summary>
-        public string Url 
+        public string Url
         {
             get { return GetElem("url"); }
             set { SetElem("url", value); }
@@ -79,7 +79,7 @@ namespace jabber.protocol.iq
         /// <summary>
         /// File description
         /// </summary>
-        public string Desc 
+        public string Desc
         {
             get { return GetElem("desc"); }
             set { SetElem("desc", value); }

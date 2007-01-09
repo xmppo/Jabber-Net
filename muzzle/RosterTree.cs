@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -28,7 +28,7 @@ using jabber.protocol.iq;
 namespace muzzle
 {
     /// <summary>
-    /// A TreeView optimized for showing Jabber roster items.  Make sure that the 
+    /// A TreeView optimized for showing Jabber roster items.  Make sure that the
     /// form you drop this on has a JabberClient, a PresenceManager, and a RosterManager
     /// on the form first, and this widget will automatically connect to them.
     /// </summary>
@@ -71,7 +71,7 @@ namespace muzzle
             this.Sorted = true;
         }
 
-        /// <summary> 
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         protected override void Dispose( bool disposing )
@@ -87,8 +87,8 @@ namespace muzzle
         }
 
         #region Component Designer generated code
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// <summary>
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
@@ -98,9 +98,9 @@ namespace muzzle
             this.il = new System.Windows.Forms.ImageList(this.components);
             this.tt = new System.Windows.Forms.ToolTip(this.components);
             this.SuspendLayout();
-            // 
+            //
             // il
-            // 
+            //
             this.il.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("il.ImageStream")));
             this.il.TransparentColor = System.Drawing.Color.Magenta;
 #if NET20
@@ -125,7 +125,7 @@ namespace muzzle
         [Category("Managers")]
         public RosterManager RosterManager
         {
-            get 
+            get
             {
                 // If we are running in the designer, let's try to auto-hook a JabberClient
                 if ((m_roster == null) && DesignMode)
@@ -147,11 +147,11 @@ namespace muzzle
                         }
                     }
                 }
-                return m_roster; 
+                return m_roster;
             }
-            set 
-            { 
-                m_roster = value; 
+            set
+            {
+                m_roster = value;
                 m_roster.OnRosterBegin += new bedrock.ObjectHandler(m_roster_OnRosterBegin);
                 m_roster.OnRosterEnd += new bedrock.ObjectHandler(m_roster_OnRosterEnd);
                 m_roster.OnRosterItem += new RosterItemHandler(m_roster_OnRosterItem);
@@ -164,7 +164,7 @@ namespace muzzle
         [Category("Managers")]
         public PresenceManager PresenceManager
         {
-            get 
+            get
             {
                 // If we are running in the designer, let's try to auto-hook a JabberClient
                 if ((m_roster == null) && DesignMode)
@@ -186,11 +186,11 @@ namespace muzzle
                         }
                     }
                 }
-                return m_pres; 
+                return m_pres;
             }
-            set 
-            { 
-                m_pres = value; 
+            set
+            {
+                m_pres = value;
             }
         }
 
@@ -200,7 +200,7 @@ namespace muzzle
         [Category("Managers")]
         public JabberClient Client
         {
-            get 
+            get
             {
                 // If we are running in the designer, let's try to auto-hook a JabberClient
                 if ((m_roster == null) && DesignMode)
@@ -222,11 +222,11 @@ namespace muzzle
                         }
                     }
                 }
-                return m_client; 
+                return m_client;
             }
-            set 
-            { 
-                m_client = value; 
+            set
+            {
+                m_client = value;
                 m_client.OnDisconnect += new bedrock.ObjectHandler(m_client_OnDisconnect);
                 m_client.OnPresence += new PresenceHandler(m_client_OnPresence);
             }
@@ -294,14 +294,14 @@ namespace muzzle
                     groups[i].GroupName = UNFILED;
             }
 
-            if (groups.Length == 0) 
+            if (groups.Length == 0)
             {
                 groups = new Group[] { new Group(ri.OwnerDocument) };
                 groups[0].GroupName = UNFILED;
             }
 
             LinkedList nodelist = (LinkedList) m_items[ri.JID.ToString()];
-            if (nodelist == null) 
+            if (nodelist == null)
             {
                 nodelist = new LinkedList();
                 m_items.Add(ri.JID.ToString(), nodelist);
@@ -361,7 +361,7 @@ namespace muzzle
                 return;
 
             LinkedList nodelist = (LinkedList) m_items[pres.From.Bare];
-            if (nodelist == null) 
+            if (nodelist == null)
                 return;
 
             foreach (ItemNode n in nodelist)

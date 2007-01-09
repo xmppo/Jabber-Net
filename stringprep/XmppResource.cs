@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -25,7 +25,7 @@ namespace stringprep
         /// <summary>
         /// Create an instance of an XmppResource
         /// </summary>
-        public XmppResource() : 
+        public XmppResource() :
             base( new ProfileStep[] {   B_1, NFKC,
                                         C_1_2, C_2_1, C_2_2,
                                         C_3, C_4, C_5, C_6, C_7, C_8, C_9,

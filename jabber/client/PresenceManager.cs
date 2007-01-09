@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -60,11 +60,11 @@ namespace jabber.client
         /// The JabberClient to hook up to.
         /// </summary>
         [Description("The JabberClient to hook up to.")]
-        [Category("Jabber")]        
+        [Category("Jabber")]
         public JabberClient Client
         {
-            get 
-            { 
+            get
+            {
                 // If we are running in the designer, let's try to get an invoke control
                 // from the environment.  VB programmers can't seem to follow directions.
                 if ((this.m_client == null) && DesignMode)
@@ -83,10 +83,10 @@ namespace jabber.client
                                     break;
                                 }
                             }
-                        } 
+                        }
                     }
                 }
-                return m_client; 
+                return m_client;
             }
             set
             {
@@ -109,7 +109,7 @@ namespace jabber.client
         public void AddPresence(Presence p)
         {
             // can't use .From, since that will cause a JID parse.
-            Debug.Assert(p.GetAttribute("from") != "", 
+            Debug.Assert(p.GetAttribute("from") != "",
                 "Do not call AddPresence by hand.  I can tell you are doing that because you didn't put a from address on your presence packet, and all presences from the server have a from address.");
             GotPresence(this, p);
         }
@@ -126,7 +126,7 @@ namespace jabber.client
             {
                 UserPresenceManager upm = (UserPresenceManager)m_items[f.Bare];
 
-                if (t == PresenceType.available) 
+                if (t == PresenceType.available)
                 {
                     if (upm == null)
                     {
@@ -151,7 +151,7 @@ namespace jabber.client
         }
 
         /// <summary>
-        /// Is this user online with any resource?  This performs better than retrieving 
+        /// Is this user online with any resource?  This performs better than retrieving
         /// the particular associated presence packet.
         /// </summary>
         /// <param name="jid">The JID to look up.</param>
@@ -199,7 +199,7 @@ namespace jabber.client
         }
 
         /// <summary>
-        /// Manage the presence for all of the resources of a user.  No locking is performed, 
+        /// Manage the presence for all of the resources of a user.  No locking is performed,
         /// since PresenceManager is already doing locking.
         /// </summary>
         private class UserPresenceManager
@@ -265,13 +265,13 @@ namespace jabber.client
                             maxp = curp;
                         }
                     }
-                    
+
                 }
             }
 
             public int Count
             {
-                get 
+                get
                 {
                     if (m_items.Count > 0)
                         return m_items.Count;

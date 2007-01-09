@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -70,11 +70,11 @@ namespace jabber.client
         /// The JabberClient to hook up to.
         /// </summary>
         [Description("The JabberClient to hook up to.")]
-        [Category("Jabber")]        
+        [Category("Jabber")]
         public JabberClient Client
         {
-            get 
-            { 
+            get
+            {
                 // If we are running in the designer, let's try to get an invoke control
                 // from the environment.  VB programmers can't seem to follow directions.
                 if ((this.m_client == null) && DesignMode)
@@ -93,10 +93,10 @@ namespace jabber.client
                                     break;
                                 }
                             }
-                        } 
+                        }
                     }
                 }
-                return m_client; 
+                return m_client;
             }
 
             set
@@ -111,7 +111,7 @@ namespace jabber.client
         /// Convenience event for new roster items.
         /// </summary>
         [Description("Convenience event for new roster items.")]
-        [Category("Jabber")]        
+        [Category("Jabber")]
         public event RosterItemHandler OnRosterItem;
 
         /// <summary>
@@ -119,14 +119,14 @@ namespace jabber.client
         /// This will not fire for type='set', which is probably what you want.
         /// </summary>
         [Description("Roster result about to start being processed.")]
-        [Category("Jabber")]        
+        [Category("Jabber")]
         public event bedrock.ObjectHandler OnRosterBegin;
 
         /// <summary>
         /// Fired when a roster result is completed being processed.
         /// </summary>
         [Description("Roster result finished being processed.")]
-        [Category("Jabber")]        
+        [Category("Jabber")]
         public event bedrock.ObjectHandler OnRosterEnd;
 
         /// <summary>
@@ -134,10 +134,10 @@ namespace jabber.client
         /// </summary>
         public Item this[JID jid]
         {
-            get 
-            { 
+            get
+            {
                 lock (this)
-                    return (Item) m_items[jid]; 
+                    return (Item) m_items[jid];
             }
         }
 
@@ -146,7 +146,7 @@ namespace jabber.client
         /// </summary>
         public int Count
         {
-            get 
+            get
             {
                 lock (this)
                     return m_items.Count;

@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -38,8 +38,8 @@ namespace muzzle
     /// <summary>
     /// Litmus is like StripChart, but shows a graphical representation of protocol going by.
     /// This was inspired by DW &amp; Craig&apos;s suggestion that the next generation protocol should
-    /// just be shades of blue.  
-    /// 
+    /// just be shades of blue.
+    ///
     /// Good gracious.  Did I really take the time to write this?
     /// </summary>
     public class Litmus : System.Windows.Forms.UserControl
@@ -50,7 +50,7 @@ namespace muzzle
         private Queue             m_list  = new Queue(100);
         private LitmusColorScheme m_scheme = LitmusColorScheme.Blue;
         private System.Windows.Forms.PictureBox pictureBox1;
-        /// <summary> 
+        /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.Container components = null;
@@ -64,7 +64,7 @@ namespace muzzle
             InitializeComponent();
             // TODO: Add any initialization after the InitForm call
         }
-        /// <summary> 
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         protected override void Dispose( bool disposing )
@@ -86,7 +86,7 @@ namespace muzzle
         [Category("Chart")]
         public LitmusColorScheme ColorScheme
         {
-            get 
+            get
             {
                 return m_scheme;
             }
@@ -117,7 +117,7 @@ namespace muzzle
         /// </summary>
         public bool Paused
         {
-            get 
+            get
             {
                 return m_pause;
             }
@@ -138,7 +138,7 @@ namespace muzzle
         }
 
         /// <summary>
-        /// Add a string to the window.  Each byte will become roughly a 
+        /// Add a string to the window.  Each byte will become roughly a
         /// pixel with color based on the byte's value.
         /// </summary>
         /// <param name="text"></param>
@@ -155,7 +155,7 @@ namespace muzzle
         }
 
         /// <summary>
-        /// Add bytes to the window.  Each byte will become roughly a 
+        /// Add bytes to the window.  Each byte will become roughly a
         /// pixel with color based on the byte's value.
         /// </summary>
         /// <param name="buf"></param>
@@ -229,25 +229,25 @@ namespace muzzle
             pictureBox1.Image = bm;
         }
         #region Component Designer generated code
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// <summary>
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
         {
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.SuspendLayout();
-            // 
+            //
             // pictureBox1
-            // 
+            //
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(150, 150);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
-            // 
+            //
             // Litmus
-            // 
+            //
             this.Controls.AddRange(new System.Windows.Forms.Control[] {
                                                                           this.pictureBox1});
             this.Name = "Litmus";

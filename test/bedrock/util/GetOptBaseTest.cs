@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -87,7 +87,7 @@ namespace test.bedrock.util
             Assert.AreEqual("one",  go.Args[1]);
             Assert.AreEqual("more", go.Args[2]);
         }
-        
+
         [Test] public void Test_DashArgs()
         {
             TestGetOpt go = new TestGetOpt(new string[] {"-bar", "four", "-baz:one", "more"});
@@ -97,11 +97,11 @@ namespace test.bedrock.util
             Assert.AreEqual(1,      go.Args.Length);
             Assert.AreEqual("more", go.Args[0]);
         }
-        
+
         [Test] public void Test_Env()
         {
             TestGetOpt go = new TestGetOpt(null);
-            
+
             Assert.IsTrue(go.Args[0].StartsWith("test"));
         }
         [Test] public void Test_CaseInsensitive()
@@ -213,7 +213,7 @@ namespace test.bedrock.util
         FOO,
         BAR
     }
-    
+
     public class TestGetOpt : GetOpt
     {
         [CommandLine("f", Description = "Foo or not")]
@@ -225,11 +225,11 @@ namespace test.bedrock.util
         [CommandLine("baz", "A property test")]
         public string baz
         {
-            get 
+            get
             {
                 return m_baz;
             }
-            set 
+            set
             {
                 m_baz = value;
             }
@@ -241,7 +241,7 @@ namespace test.bedrock.util
         [CommandLine]
         public int other
         {
-            get 
+            get
             {
                 return m_other;
             }
@@ -260,7 +260,7 @@ namespace test.bedrock.util
         public bool d = true;
         [CommandLine]
         public string e = null;
-        
+
         [CommandLine]
         public TestOptEnum fb = TestOptEnum.FOO;
 

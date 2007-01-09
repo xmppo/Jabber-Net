@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -75,13 +75,13 @@ namespace jabber.connection
         void Accepted();
 
         /// <summary>
-        /// Text was read from the server.  Use for debugging only.  
+        /// Text was read from the server.  Use for debugging only.
         /// Will NOT be complete nodes at a time.
         /// </summary>
         void BytesRead(byte[] buf, int offset, int len);
 
         /// <summary>
-        /// Text was written to the server.  Use for debugging only.  
+        /// Text was written to the server.  Use for debugging only.
         /// Will NOT be complete nodes at a time.
         /// </summary>
         void BytesWritten(byte[] buf, int offset, int len);
@@ -199,7 +199,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Write a stream:stream.  Some underlying implementations will ignore this, 
+        /// Write a stream:stream.  Some underlying implementations will ignore this,
         /// but may pull out pertinent data.
         /// </summary>
         /// <param name="stream"></param>
@@ -211,10 +211,10 @@ namespace jabber.connection
         /// <param name="elem"></param>
         abstract public void Write(XmlElement elem);
 
-		/// <summary>
-		/// Write raw string.
-		/// </summary>
-		/// <param name="str"></param>
+        /// <summary>
+        /// Write raw string.
+        /// </summary>
+        /// <param name="str"></param>
         abstract public void Write(string str);
 
         /// <summary>

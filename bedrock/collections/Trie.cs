@@ -1,21 +1,21 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
 
 using System.Collections;
 using bedrock.util;
-    
+
 namespace bedrock.collections
 {
     /// <summary>
@@ -27,7 +27,7 @@ namespace bedrock.collections
     /// </summary>
     public delegate bool TrieWalker(TrieNode e, object data);
     /// <summary>
-    /// A trie is a tree structure that implements a radix search.  Each node of the tree has a 
+    /// A trie is a tree structure that implements a radix search.  Each node of the tree has a
     /// sub-node for each possible next byte.
     /// </summary>
     [RCS(@"$Header$")]
@@ -53,7 +53,7 @@ namespace bedrock.collections
         /// <summary>
         /// Find a node for a given key, somewhere under the root.
         /// </summary>
-        /// <param name="key">The bytes to search for, where key[0] corresponds to a child 
+        /// <param name="key">The bytes to search for, where key[0] corresponds to a child
         /// node of the root.</param>
         /// <param name="create">Create nodes that don't exist, while searching.</param>
         protected virtual TrieNode FindNode(byte[] key, bool create)
@@ -70,7 +70,7 @@ namespace bedrock.collections
         {
             TrieNode current = startAt;
             byte b;
-            
+
             for (int i=0; (i<key.Length) && (current != null); i++)
             {
                 b = key[i];
@@ -79,7 +79,7 @@ namespace bedrock.collections
             return current;
         }
         /// <summary>
-        /// Compute the byte array corresping to the given object.  
+        /// Compute the byte array corresping to the given object.
         /// This is likely to cause problems for non 7-bit ASCII text.
         /// </summary>
         /// <param name="key"> </param>
@@ -89,11 +89,11 @@ namespace bedrock.collections
             {
                 return (byte[]) key;
             }
-            
+
             return ENCODING.GetBytes(key.ToString());
         }
         /// <summary>
-        /// Extra functionality for trie's whose values are integers.  
+        /// Extra functionality for trie's whose values are integers.
         /// Increment the value corresponding to the key.  If
         /// the key doesn't exist, put in a value of '1'.
         /// </summary>
@@ -119,7 +119,7 @@ namespace bedrock.collections
         {
             Traverse(w, data, m_root, new ByteStack());
         }
-        
+
         /// <summary>
         /// Perform the given function on every element of the trie.  Perl's map() operator.
         /// </summary>
@@ -138,10 +138,10 @@ namespace bedrock.collections
                 key.Push(e.Byte);
                 Traverse(w, data, e, key);
                 key.Pop();
-            }       
+            }
         }
         /// <summary>
-        /// Perform the given function on every element of the trie.  Perl's map() operator.  
+        /// Perform the given function on every element of the trie.  Perl's map() operator.
         /// Don't keep track of the keys (slightly faster than the other Traverse() method).
         /// </summary>
         /// <param name="w">The function to call</param>
@@ -165,7 +165,7 @@ namespace bedrock.collections
             foreach (TrieNode e in current)
             {
                 Traverse(w, data, e);
-            }       
+            }
         }
         #region System.Collections.IDictionary
 
@@ -421,7 +421,7 @@ namespace bedrock.collections
                 }
 
                 m_current = (TrieNode) m_pos.Pop();
-                
+
                 foreach (TrieNode e in m_current)
                 {
                     m_pos.Push(e);

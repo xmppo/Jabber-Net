@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -43,16 +43,16 @@ namespace jabber.protocol.iq
     public class Register : Element
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="doc"></param>
-        public Register(XmlDocument doc) : 
+        public Register(XmlDocument doc) :
             base("query", URI.REGISTER, doc)
         {
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="prefix"></param>
         /// <param name="qname"></param>
@@ -231,8 +231,8 @@ namespace jabber.protocol.iq
         public bool Registered
         {
             get { return (this["registered"] != null); }
-            set 
-            {  
+            set
+            {
                 if (value)
                 {
                     SetElem("registered", null);
@@ -252,8 +252,8 @@ namespace jabber.protocol.iq
         public bool Remove
         {
             get { return GetElem("remove") != null; }
-            set 
-            {  
+            set
+            {
                 if (value)
                 {
                     SetElem("remove", null);

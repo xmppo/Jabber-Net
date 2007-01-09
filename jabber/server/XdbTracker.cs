@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -49,7 +49,7 @@ namespace jabber.server
         }
 
         /// <summary>
-        /// Received an XDB element on Component.  
+        /// Received an XDB element on Component.
         /// Is this a response to a tracked request?
         /// </summary>
         /// <param name="sender"></param>
@@ -63,7 +63,7 @@ namespace jabber.server
             {
                 td = (TrackerData) m_pending[id];
 
-                // this wasn't one that was being tracked.  
+                // this wasn't one that was being tracked.
                 if (td == null)
                 {
                     return;
@@ -82,10 +82,10 @@ namespace jabber.server
         /// <param name="ns"></param>
         /// <param name="cb"></param>
         /// <param name="cbArg"></param>
-        public void BeginXdbGet(string owner, string ns, 
+        public void BeginXdbGet(string owner, string ns,
             XdbCB cb, object cbArg)
         {
-            BeginXdb(null, XdbType.get, owner, ns, XdbAction.NONE, cb, cbArg); 
+            BeginXdb(null, XdbType.get, owner, ns, XdbAction.NONE, cb, cbArg);
         }
 
         /// <summary>
@@ -96,10 +96,10 @@ namespace jabber.server
         /// <param name="ns"></param>
         /// <param name="cb"></param>
         /// <param name="cbArg"></param>
-        public void BeginXdbSet(XmlElement root, string owner, string ns, 
+        public void BeginXdbSet(XmlElement root, string owner, string ns,
             XdbCB cb, object cbArg)
         {
-            BeginXdb(root, XdbType.set, owner, ns, XdbAction.NONE, cb, cbArg); 
+            BeginXdb(root, XdbType.set, owner, ns, XdbAction.NONE, cb, cbArg);
         }
 
         /// <summary>
@@ -111,7 +111,7 @@ namespace jabber.server
         /// <param name="ns"></param>
         /// <param name="cb"></param>
         /// <param name="cbArg"></param>
-        public void BeginXdb(XmlElement root, XdbType xtype, 
+        public void BeginXdb(XmlElement root, XdbType xtype,
             string owner, string ns,
             XdbCB cb, object cbArg)
         {
@@ -128,7 +128,7 @@ namespace jabber.server
         /// <param name="action"></param>
         /// <param name="cb"></param>
         /// <param name="cbArg"></param>
-        public void BeginXdb(XmlElement root, XdbType xtype, 
+        public void BeginXdb(XmlElement root, XdbType xtype,
             string owner, string ns, XdbAction action,
             XdbCB cb, object cbArg)
         {
@@ -138,7 +138,7 @@ namespace jabber.server
             xdb.NS   = ns;
             xdb.Type = xtype;
             xdb.To   = owner;
-            xdb.From = m_comp.ComponentID; 
+            xdb.From = m_comp.ComponentID;
             if (action != XdbAction.NONE)
                 xdb.Action = action;
             if (root != null)

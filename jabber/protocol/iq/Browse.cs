@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -44,16 +44,16 @@ namespace jabber.protocol.iq
     public class Browse : Element
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="doc"></param>
-        public Browse(XmlDocument doc) : 
+        public Browse(XmlDocument doc) :
             base("query", URI.BROWSE, doc)
         {
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="prefix"></param>
         /// <param name="qname"></param>
@@ -73,7 +73,7 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
-        /// One of the categories from the category list, or a non-standard category prefixed with the string "x-". 
+        /// One of the categories from the category list, or a non-standard category prefixed with the string "x-".
         /// </summary>
         public string Category
         {
@@ -82,7 +82,7 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
-        /// One of the official types from the specified category, or a non-standard type prefixed with the string "x-". 
+        /// One of the official types from the specified category, or a non-standard type prefixed with the string "x-".
         /// </summary>
         public string Type
         {
@@ -91,7 +91,7 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
-        /// A friendly name that may be used in a user interface. 
+        /// A friendly name that may be used in a user interface.
         /// </summary>
         public string BrowseName
         {
@@ -100,9 +100,9 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
-        /// A string containing the version of the node, equivalent to the response provided to a 
-        /// query in the 'jabber:iq:version' namespace. This is useful for servers, especially for lists of services 
-        /// (see the 'service/serverlist' category/type above). 
+        /// A string containing the version of the node, equivalent to the response provided to a
+        /// query in the 'jabber:iq:version' namespace. This is useful for servers, especially for lists of services
+        /// (see the 'service/serverlist' category/type above).
         /// </summary>
         public string Version
         {

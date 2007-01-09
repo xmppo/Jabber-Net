@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -29,7 +29,7 @@ namespace bedrock.util
     /// <see cref="RCSAttribute"/>
     //    [RCS(@"$Header$")]
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Enum | AttributeTargets.Struct,
-                    AllowMultiple = false, 
+                    AllowMultiple = false,
                     Inherited     = false)]
     public abstract class SourceVersionAttribute : Attribute
     {
@@ -58,13 +58,13 @@ namespace bedrock.util
         /// </summary>
         private   bool     m_parsed  = false;
         // TODO: replace all of the subclasses with a single, uber-regex.
-        private static readonly Regex REGEX = 
+        private static readonly Regex REGEX =
             new Regex(@"^(\$(?<field>[a-z]+): *(?<value>.+) *\$)|( *(?<value>.+) *)$",
                       RegexOptions.IgnoreCase | RegexOptions.Compiled);
         /// <summary>
         /// Construct the attribute.  Parsing is delayed until needed.
         /// </summary>
-        /// <param name="header">the Header keyword for your CM system.  
+        /// <param name="header">the Header keyword for your CM system.
         /// Usually &#36;Header&#36;</param>
         public SourceVersionAttribute(string header)
         {
@@ -75,7 +75,7 @@ namespace bedrock.util
         /// </summary>
         public SourceVersionAttribute()
         {
-            
+
         }
         /// <summary>
         /// Give back the header string.
@@ -128,7 +128,7 @@ namespace bedrock.util
         protected string GetField(string src)
         {
             Match m = REGEX.Match(src);
-            if (!m.Success) 
+            if (!m.Success)
             {
                 throw new FormatException("Bad header format: " + src + " != " + REGEX.ToString());
             }
@@ -143,7 +143,7 @@ namespace bedrock.util
         /// </summary>
         public string Revision
         {
-            get 
+            get
             {
                 CheckParse();
                 return m_version;
@@ -178,7 +178,7 @@ namespace bedrock.util
         /// </summary>
         public DateTime Date
         {
-            get 
+            get
             {
                 CheckParse();
                 return m_date;
@@ -194,7 +194,7 @@ namespace bedrock.util
         /// </summary>
         public string DateString
         {
-            get 
+            get
             {
                 CheckParse();
                 return m_date.ToString();
@@ -210,10 +210,10 @@ namespace bedrock.util
         /// </summary>
         public string Author
         {
-            get 
+            get
             {
                 CheckParse();
-                return m_author; 
+                return m_author;
             }
             set
             {
@@ -242,7 +242,7 @@ namespace bedrock.util
         /// </summary>
         /// <param name="t"></param>
         /// <returns></returns>
-        public static SourceVersionAttribute GetVersion(Type t) 
+        public static SourceVersionAttribute GetVersion(Type t)
         {
             object[] sta = t.GetCustomAttributes(typeof(SourceVersionAttribute), true);
             if (sta.Length == 0)
@@ -292,12 +292,12 @@ namespace bedrock.util
     }
     /// <summary>
     /// Make StarTeam versoning available at run-time.
-    /// 
+    ///
     /// </summary>
     /// <example>
     /// [StarTeam(@"&#36;Header&#36;")]
     /// public class foo {}
-    /// 
+    ///
     /// SourceVersionAttribute sta = SourceVersionAttribute.GetVersion(typeof(foo));
     /// </example>
     [RCS(@"$Header$")]
@@ -306,13 +306,13 @@ namespace bedrock.util
     public class StarTeamAttribute : SourceVersionAttribute
     {
         // Dammit gumby.  Don't mess up my regex.
-        private static readonly Regex REGEX = 
+        private static readonly Regex REGEX =
             new Regex(@"^\$" + @"Header(: (?<archive>[^,]+), (?<version>[0-9.]+), (?<date>[^,]+), (?<author>[^$]+))?" + @"\$$");
         /// <summary>
         /// Normal usage
         /// </summary>
         /// <param name="header"></param>
-        public StarTeamAttribute(string header) : base(header) 
+        public StarTeamAttribute(string header) : base(header)
         {
         }
         /// <summary>
@@ -321,7 +321,7 @@ namespace bedrock.util
         public StarTeamAttribute() : base()
         {
         }
-   
+
         /// <summary>
         /// Return normalized header
         /// </summary>
@@ -333,8 +333,8 @@ namespace bedrock.util
             {
                 return s;
             }
-            
-            return String.Format("{0}Header: {1}, {2}, {3:MM/dd/yyyy h:mm:ss tt}, {4}{5}", 
+
+            return String.Format("{0}Header: {1}, {2}, {3:MM/dd/yyyy h:mm:ss tt}, {4}{5}",
                                  new object[] {"$", m_archive, m_version, m_date, m_author, "$"});
         }
         /// <summary>
@@ -343,7 +343,7 @@ namespace bedrock.util
         protected override void Parse()
         {
             Match m = REGEX.Match(m_header);
-            if (!m.Success) 
+            if (!m.Success)
             {
                 throw new FormatException("Bad header format: " + m_header + " != " + REGEX.ToString());
             }
@@ -365,7 +365,7 @@ namespace bedrock.util
     public class RCSAttribute : SourceVersionAttribute
     {
         // Header: /u1/html/cvsroot/www.cyclic.com/RCS-html/info-ref.html,v 1.1 1999/04/14 19:04:02 kingdon Exp
-        private static readonly Regex REGEX = 
+        private static readonly Regex REGEX =
             new Regex(@"^\$" + @"Header(: +(?<archive>[^ ]+) +(?<version>[0-9.]+) +(?<date>[0-9/]+ [0-9:]+) +(?<author>[^ ]+) +(?<state>[^ ]+) *)?" + @"\$$");
         private string m_state = null;
         /// <summary>
@@ -373,7 +373,7 @@ namespace bedrock.util
         /// </summary>
         /// <param name="header"></param>
         public RCSAttribute(string header) : base(header)
-        {   
+        {
         }
         /// <summary>
         /// Null constructor.  This is rarely right.
@@ -387,7 +387,7 @@ namespace bedrock.util
         protected override void Parse()
         {
             Match m = REGEX.Match(m_header);
-            if (!m.Success) 
+            if (!m.Success)
             {
                 throw new FormatException("Bad header format: " + m_header + " != " + REGEX.ToString());
             }
@@ -418,17 +418,17 @@ namespace bedrock.util
         }
     }
     /// <summary>
-    /// Version control attribute for SourceSafe.  
-    /// I don't use this any more, so someone tell me if it breaks with 
+    /// Version control attribute for SourceSafe.
+    /// I don't use this any more, so someone tell me if it breaks with
     /// some new release.
     /// </summary>
     [RCS(@"$Header$")]
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Enum | AttributeTargets.Struct, 
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Enum | AttributeTargets.Struct,
                     AllowMultiple=false, Inherited=false)]
     public class SourceSafeAttribute : SourceVersionAttribute
     {
-        // Header: /t.cs 1     2/14/01 3:57p Hildebzj 
-        private static readonly Regex REGEX = 
+        // Header: /t.cs 1     2/14/01 3:57p Hildebzj
+        private static readonly Regex REGEX =
             new Regex(@"^\$" + @"Header(: +(?<archive>[^ ]+) +(?<version>[0-9.]+) +(?<date>[0-9/]+ [0-9:]+)(?<ampm>[ap]) +(?<author>[^ ]+) *)?" + @"\$$");
         //private string m_state = null;
         /// <summary>
@@ -450,7 +450,7 @@ namespace bedrock.util
         protected override void Parse()
         {
             Match m = REGEX.Match(m_header);
-            if (!m.Success) 
+            if (!m.Success)
             {
                 throw new FormatException("Bad header format: " + m_header + " != " + REGEX.ToString());
             }
@@ -548,7 +548,7 @@ namespace bedrock.util
         /// </summary>
         public string this[int index]
         {
-            get 
+            get
             {
                 return BaseGetKey(index);
             }
@@ -558,7 +558,7 @@ namespace bedrock.util
         /// </summary>
         public SourceVersionAttribute this[string type]
         {
-            get 
+            get
             {
                 return Get(type);
             }
@@ -572,7 +572,7 @@ namespace bedrock.util
         /// </summary>
         public SourceVersionAttribute this[Type type]
         {
-            get 
+            get
             {
                 return Get(type.FullName);
             }

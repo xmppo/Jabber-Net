@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -50,7 +50,7 @@ namespace jabber.protocol.x
     public class Data : Element
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="doc"></param>
         public Data(XmlDocument doc) : base("x", URI.XDATA, doc)
@@ -58,7 +58,7 @@ namespace jabber.protocol.x
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="prefix"></param>
         /// <param name="qname"></param>
@@ -68,7 +68,7 @@ namespace jabber.protocol.x
         {
         }
 
-        
+
         /// <summary>
         /// Form instructions.
         /// </summary>
@@ -77,7 +77,7 @@ namespace jabber.protocol.x
             get { return GetElem("instructions"); }
             set { SetElem("instructions", value); }
         }
-        
+
         /// <summary>
         /// The form title, for display at the top of a window.
         /// </summary>
@@ -169,7 +169,7 @@ namespace jabber.protocol.x
     }
 
     /// <summary>
-    /// Types of fields.  This enum doesn't exactly match the JEP, 
+    /// Types of fields.  This enum doesn't exactly match the JEP,
     /// since most of the field types aren't valid identifiers in C#.
     /// </summary>
     [RCS(@"$Header$")]
@@ -224,7 +224,7 @@ namespace jabber.protocol.x
     public class Field : Element
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="doc"></param>
         public Field(XmlDocument doc) : base("field", URI.XDATA, doc)
@@ -232,7 +232,7 @@ namespace jabber.protocol.x
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="prefix"></param>
         /// <param name="qname"></param>
@@ -240,14 +240,14 @@ namespace jabber.protocol.x
         public Field(string prefix, XmlQualifiedName qname, XmlDocument doc) :
             base(prefix, qname, doc)
         {
-        }    
+        }
 
         /// <summary>
         /// Field type.
         /// </summary>
         public FieldType Type
         {
-            get 
+            get
             {
                 switch (GetAttribute("type"))
                 {
@@ -257,17 +257,17 @@ namespace jabber.protocol.x
                         return FieldType.text_private;
                     case "text-multi":
                         return FieldType.text_multi;
-                    case "list-multi": 
+                    case "list-multi":
                         return FieldType.list_multi;
                     case "list-single":
                         return FieldType.list_single;
                     case "boolean":
                         return FieldType.boolean;
-                    case "fixed": 
+                    case "fixed":
                         return FieldType.Fixed;
                     case "hidden":
                         return FieldType.hidden;
-                    case "jid-single": 
+                    case "jid-single":
                         return FieldType.jid_single;
                     case "jid-multi":
                         return FieldType.jid_multi;
@@ -275,7 +275,7 @@ namespace jabber.protocol.x
                         throw new ArgumentException("Unknown x:data field type: " + GetAttribute("type"));
                 }
             }
-            set 
+            set
             {
                 switch (value)
                 {
@@ -320,7 +320,7 @@ namespace jabber.protocol.x
         /// </summary>
         public string Label
         {
-            get 
+            get
             {
                 string lbl = GetAttribute("label");
                 if (lbl == null)
@@ -345,8 +345,8 @@ namespace jabber.protocol.x
         public bool IsRequired
         {
             get { return this["required"] != null; }
-            set 
-            { 
+            set
+            {
                 if (value)
                     this.SetElem("required", null);
                 else
@@ -368,7 +368,7 @@ namespace jabber.protocol.x
         /// </summary>
         public bool BoolVal
         {
-            get 
+            get
             {
                 string sval = Val;
                 return !((sval == null) || (sval == "0"));
@@ -507,7 +507,7 @@ namespace jabber.protocol.x
     public class Option : Element
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="doc"></param>
         public Option(XmlDocument doc) : base("option", URI.XDATA, doc)
@@ -515,7 +515,7 @@ namespace jabber.protocol.x
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="prefix"></param>
         /// <param name="qname"></param>
@@ -523,7 +523,7 @@ namespace jabber.protocol.x
         public Option(string prefix, XmlQualifiedName qname, XmlDocument doc) :
             base(prefix, qname, doc)
         {
-        }    
+        }
 
         /// <summary>
         /// Option label
@@ -541,7 +541,7 @@ namespace jabber.protocol.x
         {
             get { return GetElem("value"); }
             set { SetElem("value", value); }
-        }    
+        }
 
         /// <summary>
         /// Return the label for this option, so that a ComboBox.ObjectCollection can manage these directly.

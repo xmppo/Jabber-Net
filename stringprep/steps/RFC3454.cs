@@ -1,17 +1,30 @@
+/* --------------------------------------------------------------------------
+ * Copyrights
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * information for Cursive Systems, Inc. is available at
+ * http://www.cursive.net/.
+ *
+ * License
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
+ * See LICENSE.txt for details.
+ * --------------------------------------------------------------------------*/
 /* This file is auto-generated.  DO NOT EDIT! */
 
 using System;
 namespace stringprep
 {
     /// <summary>
-	/// Constants from RFC 3454, Stringprep.
-	/// </summary>
+    /// Constants from RFC 3454, Stringprep.
+    /// </summary>
     public class RFC3454
     {
 
         /// <summary>
         /// A.1 Unassigned code points in Unicode 3.2
-        /// 
+        ///
         /// </summary>
         public static readonly char[][] A_1 = new char[][]
         {
@@ -369,7 +382,7 @@ namespace stringprep
 
         /// <summary>
         /// B.1 Commonly mapped to nothing
-        /// 
+        ///
         /// </summary>
         public static readonly string[] B_1 = new string[]
         {
@@ -405,7 +418,7 @@ namespace stringprep
 
         /// <summary>
         /// B.2 Mapping for case-folding used with NFKC
-        /// 
+        ///
         /// </summary>
         public static readonly string[] B_2 = new string[]
         {
@@ -1299,7 +1312,7 @@ namespace stringprep
 
         /// <summary>
         /// B.3 Mapping for case-folding used with no normalization
-        /// 
+        ///
         /// </summary>
         public static readonly string[] B_3 = new string[]
         {
@@ -2108,7 +2121,7 @@ namespace stringprep
 
         /// <summary>
         /// C.1.1 ASCII space characters
-        /// 
+        ///
         /// </summary>
         public static readonly char[][] C_1_1 = new char[][]
         {
@@ -2143,7 +2156,7 @@ namespace stringprep
 
         /// <summary>
         /// C.2.1 ASCII control characters
-        /// 
+        ///
         /// </summary>
         public static readonly char[][] C_2_1 = new char[][]
         {
@@ -2154,7 +2167,7 @@ namespace stringprep
 
         /// <summary>
         /// C.2.2 Non-ASCII control characters
-        /// 
+        ///
         /// </summary>
         public static readonly char[][] C_2_2 = new char[][]
         {
@@ -2178,7 +2191,7 @@ namespace stringprep
 
         /// <summary>
         /// C.3 Private use
-        /// 
+        ///
         /// </summary>
         public static readonly char[][] C_3 = new char[][]
         {
@@ -2188,7 +2201,7 @@ namespace stringprep
 
         /// <summary>
         /// C.4 Non-character code points
-        /// 
+        ///
         /// </summary>
         public static readonly char[][] C_4 = new char[][]
         {
@@ -2199,7 +2212,7 @@ namespace stringprep
 
         /// <summary>
         /// C.5 Surrogate codes
-        /// 
+        ///
         /// </summary>
         public static readonly char[][] C_5 = new char[][]
         {
@@ -2209,7 +2222,7 @@ namespace stringprep
 
         /// <summary>
         /// C.6 Inappropriate for plain text
-        /// 
+        ///
         /// </summary>
         public static readonly char[][] C_6 = new char[][]
         {
@@ -2223,7 +2236,7 @@ namespace stringprep
 
         /// <summary>
         /// C.7 Inappropriate for canonical representation
-        /// 
+        ///
         /// </summary>
         public static readonly char[][] C_7 = new char[][]
         {
@@ -2233,7 +2246,7 @@ namespace stringprep
 
         /// <summary>
         /// C.8 Change display properties or are deprecated
-        /// 
+        ///
         /// </summary>
         public static readonly char[][] C_8 = new char[][]
         {
@@ -2257,7 +2270,7 @@ namespace stringprep
 
         /// <summary>
         /// C.9 Tagging characters
-        /// 
+        ///
         /// </summary>
         public static readonly char[][] C_9 = new char[][]
         {
@@ -2266,7 +2279,7 @@ namespace stringprep
 
         /// <summary>
         /// D.1 Characters with bidirectional property "R" or "AL"
-        /// 
+        ///
         /// </summary>
         public static readonly char[][] D_1 = new char[][]
         {
@@ -2309,7 +2322,7 @@ namespace stringprep
 
         /// <summary>
         /// D.2 Characters with bidirectional property "L"
-        /// 
+        ///
         /// </summary>
         public static readonly char[][] D_2 = new char[][]
         {

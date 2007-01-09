@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -39,9 +39,9 @@ namespace jabber.connection.sasl
             Auth a = new Auth(doc);
             a.Mechanism = MechanismType.PLAIN;
             MemoryStream ms = new MemoryStream();
-   
+
             // message = [authorize-id] NUL authenticate-id NUL password
-   
+
             // Skip authzid.
             ms.WriteByte(0);
             string u = this[USERNAME];

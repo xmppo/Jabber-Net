@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -47,7 +47,7 @@ namespace jabber.protocol.iq
         {
             this.Query = new DiscoItems(doc);
         }
-        
+
         /// <summary>
         /// The node on the query.
         /// </summary>
@@ -119,7 +119,7 @@ namespace jabber.protocol.iq
      *   </query>
      * </iq>
      */
-    
+
 
     /// <summary>
     /// A disco#items query element.
@@ -129,7 +129,7 @@ namespace jabber.protocol.iq
     public class DiscoItems : Element
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="doc"></param>
         public DiscoItems(XmlDocument doc) : base("query", URI.DISCO_ITEMS, doc)
@@ -137,7 +137,7 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="prefix"></param>
         /// <param name="qname"></param>
@@ -212,7 +212,7 @@ namespace jabber.protocol.iq
     public class DiscoItem : Element
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="doc"></param>
         public DiscoItem(XmlDocument doc) : base("item", URI.DISCO_ITEMS, doc)
@@ -220,7 +220,7 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="prefix"></param>
         /// <param name="qname"></param>
@@ -263,12 +263,12 @@ namespace jabber.protocol.iq
         public DiscoAction Action
         {
             get { return (DiscoAction) GetEnumAttr("action", typeof(DiscoAction)); }
-            set 
-            { 
-                if (value == DiscoAction.NONE) 
+            set
+            {
+                if (value == DiscoAction.NONE)
                     RemoveAttribute("action");
                 else
-                    SetAttribute("action", value.ToString()); 
+                    SetAttribute("action", value.ToString());
             }
         }
     }
@@ -303,7 +303,7 @@ namespace jabber.protocol.iq
     public class DiscoInfo : Element
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="doc"></param>
         public DiscoInfo(XmlDocument doc) : base("query", URI.DISCO_INFO, doc)
@@ -311,7 +311,7 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="prefix"></param>
         /// <param name="qname"></param>
@@ -413,7 +413,7 @@ namespace jabber.protocol.iq
     public class DiscoIdentity : Element
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="doc"></param>
         public DiscoIdentity(XmlDocument doc) : base("identity", URI.DISCO_INFO, doc)
@@ -421,7 +421,7 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="prefix"></param>
         /// <param name="qname"></param>
@@ -467,7 +467,7 @@ namespace jabber.protocol.iq
     public class DiscoFeature : Element
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="doc"></param>
         public DiscoFeature(XmlDocument doc) : base("feature", URI.DISCO_ITEMS, doc)
@@ -475,7 +475,7 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="prefix"></param>
         /// <param name="qname"></param>
@@ -486,7 +486,7 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
-        /// The namespace name or feature name. 
+        /// The namespace name or feature name.
         /// </summary>
         public string Var
         {

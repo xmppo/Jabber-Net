@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -59,7 +59,7 @@ namespace bedrock.net
                 m_state = States.WaitingForAuth;
                 string cmd = "CONNECT " + RemoteAddress.Hostname + ":" + RemoteAddress.Port + " HTTP/1.0\r\n";
                 // if authinfo is set, send it.
-                if (Username != null && Username.Length > 0 && Password != null && Password.Length > 0) 
+                if (Username != null && Username.Length > 0 && Password != null && Password.Length > 0)
                 {
                     string auth = Convert.ToBase64String(Encoding.ASCII.GetBytes(Username + ":" + Password));
                     cmd += "Proxy-Authorization: Basic " + auth + "\r\n";
@@ -72,7 +72,7 @@ namespace bedrock.net
         }
 
         /// <summary>
-        /// Overridden OnRead to handle 4 Socks5 states... 
+        /// Overridden OnRead to handle 4 Socks5 states...
         /// </summary>
         /// <param name="sock"></param>
         /// <param name="buf"></param>
@@ -81,7 +81,7 @@ namespace bedrock.net
         /// <returns></returns>
         public override bool OnRead(bedrock.net.BaseSocket sock, byte[] buf, int offset, int length)
         {
-            switch (m_state) 
+            switch (m_state)
             {
                 case States.WaitingForAuth:
                     m_state = States.Running;
@@ -104,7 +104,7 @@ namespace bedrock.net
         /// <param name="length"></param>
         public override void OnWrite(bedrock.net.BaseSocket sock, byte[] buf, int offset, int length)
         {
-            if (m_state == States.Running) 
+            if (m_state == States.Running)
             {
                 base.OnWrite(sock, buf, offset, length);
             }

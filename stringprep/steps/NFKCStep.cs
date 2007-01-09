@@ -1,21 +1,21 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 
 
 /*
  * Assumption: UCS2.  The astral planes don't exist.  At least according to windows?
- * 
+ *
  * Look over here.  Something shiny!
  */
 using System;
@@ -44,15 +44,15 @@ namespace stringprep.steps
         {
             // From Unicode TR15: (http://www.unicode.org/reports/tr15)
             // R1. Normalization Form C
-            // The Normalization Form C for a string S is obtained by applying the following process, 
+            // The Normalization Form C for a string S is obtained by applying the following process,
             // or any other process that leads to the same result:
             //
-            // 1) Generate the canonical decomposition for the source string S according to the 
-            // decomposition mappings in the latest supported version of the Unicode Character Database. 
+            // 1) Generate the canonical decomposition for the source string S according to the
+            // decomposition mappings in the latest supported version of the Unicode Character Database.
             //
-            // 2) Iterate through each character C in that decomposition, from first to last. 
-            // If C is not blocked from the last starter L, and it can be primary combined with L, 
-            // then replace L by the composite L-C, and remove C. 
+            // 2) Iterate through each character C in that decomposition, from first to last.
+            // If C is not blocked from the last starter L, and it can be primary combined with L,
+            // then replace L by the composite L-C, and remove C.
             Decomp(result);
 
             if (result.Length > 0)
@@ -61,7 +61,7 @@ namespace stringprep.steps
                 Comp(result);
             }
         }
-      
+
 
         private void Decomp(StringBuilder result)
         {
@@ -81,7 +81,7 @@ namespace stringprep.steps
                 {
                     result.Insert(i+1, ex.ToCharArray(1, ex.Length-1));
                     i += len;
-                }                
+                }
             }
         }
 
@@ -104,7 +104,7 @@ namespace stringprep.steps
             // R2 Wenever any pair (A, B) of adjacent characters in D is such that p(B)!=0 and
             //    p(A)>p(B), exchange those characters
             // R3 Repeat step R2 until no exchanges can be made among any of the characters in D
-            do 
+            do
             {
                 swap = false;
                 p_a = Combining.Class(buf[start]);
@@ -130,8 +130,8 @@ namespace stringprep.steps
                     }
                     p_a = p_b;
 
-                    // once we get to a start character without any swaps, 
-                    // there can be no further changes.  No sense constantly 
+                    // once we get to a start character without any swaps,
+                    // there can be no further changes.  No sense constantly
                     // rechecking stuff we've already checked.
                     if (!swap && (p_a == 0))
                         start = i;
@@ -171,7 +171,7 @@ namespace stringprep.steps
                     last_start = i;
 
                 last_cc = cc;
-            }        
+            }
         }
     }
 }

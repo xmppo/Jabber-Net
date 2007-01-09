@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -33,13 +33,13 @@ namespace jabber.connection.sasl
     public class SASLException : ApplicationException
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="message"></param>
         public SASLException(string message) : base(message){}
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public SASLException() : base(){}
     }
@@ -51,16 +51,16 @@ namespace jabber.connection.sasl
     public class AuthenticationFailedException : SASLException
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public AuthenticationFailedException() : base()
         {}
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="message"></param>
-        public AuthenticationFailedException(string message) : base(message) 
+        public AuthenticationFailedException(string message) : base(message)
         {}
     }
 
@@ -71,13 +71,13 @@ namespace jabber.connection.sasl
     public class MissingDirectiveException : SASLException
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="message"></param>
         public MissingDirectiveException(string message) : base(message)
         {}
     }
-    
+
     /// <summary>
     /// Server sent an invalid challenge
     /// </summary>
@@ -85,7 +85,7 @@ namespace jabber.connection.sasl
     public class InvalidServerChallengeException : SASLException
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="message"></param>
         public InvalidServerChallengeException(string message) : base(message)
@@ -108,12 +108,12 @@ namespace jabber.connection.sasl
 
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         private Hashtable m_directives = new Hashtable();
-        
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public SASLProcessor()
         {
@@ -171,7 +171,7 @@ namespace jabber.connection.sasl
             {
                 sb.Append(b.ToString("x2"));
             }
-            return sb.ToString();            
+            return sb.ToString();
         }
     }
 }

@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 namespace bedrock.util
@@ -22,8 +22,8 @@ namespace bedrock.util
     using System.Text.RegularExpressions;
 
     /// <summary>
-    /// GetOpt should be subclassed to create a class that handles 
-    /// command-line parameters.  The subclass should use fields or properties 
+    /// GetOpt should be subclassed to create a class that handles
+    /// command-line parameters.  The subclass should use fields or properties
     /// that have the CommandLine attribute set on them.  Fields and properties
     /// of type bool will be toggle flags, other types will take a value as
     /// either the next command-line parameter or following a colon.
@@ -39,7 +39,7 @@ namespace bedrock.util
 #if NET20
             new Hashtable(StringComparer.InvariantCultureIgnoreCase);
 #else
-            new Hashtable(CaseInsensitiveHashCodeProvider.Default, 
+            new Hashtable(CaseInsensitiveHashCodeProvider.Default,
                           CaseInsensitiveComparer.Default);
 #endif
 
@@ -48,7 +48,7 @@ namespace bedrock.util
         // /a:foo
         // -a
         // -a:foo
-        private static readonly Regex FLAG_REGEX = 
+        private static readonly Regex FLAG_REGEX =
             new Regex("[/-]([a-z0-9_]+)([:=](.*))?", RegexOptions.IgnoreCase);
         /// <summary>
         /// Really only useful for subclasses, I think.
@@ -108,7 +108,7 @@ namespace bedrock.util
                 {
                     break;
                 }
-                
+
                 mi = (MemberInfo) m_flags[rm.Groups[1].ToString()];
                 if (mi == null)
                 {
@@ -117,7 +117,7 @@ namespace bedrock.util
 
                 mit = GetMemberType(mi);
                 // methods return null types, for now.
-                // TODO: should this be moved to SetValue?  
+                // TODO: should this be moved to SetValue?
                 // Not sure what to do with bool params, then.
                 if (mit == null)
                 {
@@ -166,7 +166,7 @@ namespace bedrock.util
             CheckRequired();
         }
         /// <summary>
-        /// Look at myself, to see if there are any command line 
+        /// Look at myself, to see if there are any command line
         /// parameter fields or properties.
         /// </summary>
         private void SetFlags()
@@ -207,7 +207,7 @@ namespace bedrock.util
             }
         }
         /// <summary>
-        /// Set the value of a field or property, depending on the kind of member.  
+        /// Set the value of a field or property, depending on the kind of member.
         /// Coerce the type of the value passed in, as possible
         /// </summary>
         /// <param name="mi">The member to set</param>
@@ -229,7 +229,7 @@ namespace bedrock.util
             }
         }
         /// <summary>
-        /// Convert a field value representation to a value of the correct type.  
+        /// Convert a field value representation to a value of the correct type.
         /// Enums need special handling, at least for now.
         /// </summary>
         /// <param name="val">The value to convert</param>
@@ -287,24 +287,24 @@ namespace bedrock.util
             default:
                 throw new ArgumentException("Invalid member type", "mi");
             }
-            return ret;            
+            return ret;
         }
         /// <summary>
         /// Get all of the members that are tagged with the CommandLineAttribute.
-        /// NOTE: this currently returns private members as well, but setting the 
+        /// NOTE: this currently returns private members as well, but setting the
         /// BindingFlags to public doesn't return anything.  Could be a bug in the BCL?
         /// </summary>
         private MemberInfo[] GetCommandLineMembers()
         {
             Type t = m_obj.GetType();
-            MemberInfo[] mis = t.FindMembers(MemberTypes.All, 
-                                             BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance, 
+            MemberInfo[] mis = t.FindMembers(MemberTypes.All,
+                                             BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance,
                                              new MemberFilter(AttrMemberFilter),
                                              typeof(CommandLineAttribute));
             Debug.Assert(mis.Length > 0, "Must have at least one CommandLine attribute on class: " + t.FullName);
             return mis;
         }
-        
+
         /// <summary>
         /// Filter proc for GetCommandLineMembers.  Returns true if the member
         /// implements a given attribute.
@@ -316,7 +316,7 @@ namespace bedrock.util
             return m.GetCustomAttributes((Type)filterCriteria, true).Length > 0;
         }
         /// <summary>
-        /// Get the CommandLineAttribute off of a member.  Assumes that the member implements 
+        /// Get the CommandLineAttribute off of a member.  Assumes that the member implements
         ///<i>exactly</i> one instance of the attribute.
         /// </summary>
         /// <param name="mi">The member to retrieve from</param>
@@ -341,7 +341,7 @@ namespace bedrock.util
         /// </summary>
         public object this[string flag]
         {
-            get 
+            get
             {
                 SetFlags();
                 MemberInfo mi = (MemberInfo) m_flags[flag];
@@ -355,12 +355,12 @@ namespace bedrock.util
             }
         }
         /// <summary>
-        /// Get a usage description string from the object.  
+        /// Get a usage description string from the object.
         /// Use the CommandLineAttribute descriptions wherever possible.
         /// </summary>
         public virtual string Usage
         {
-            get 
+            get
             {
                 SetFlags();
                 StringBuilder sb = new StringBuilder();
@@ -387,7 +387,7 @@ namespace bedrock.util
                         MethodInfo meth = (MethodInfo) mi;
                         ParameterInfo[] pis = meth.GetParameters();
                         sb.AppendFormat("/{0}", key);
-                        foreach (ParameterInfo pi in pis) 
+                        foreach (ParameterInfo pi in pis)
                         {
                             sb.Append(" ");
                             sb.Append(pi.ParameterType.Name);
@@ -456,8 +456,8 @@ namespace bedrock.util
         /// (since we do not have user-visible stdout)
         /// </summary>
         public virtual void UsageGUIExit()
-        {        
-            /*   
+        {
+            /*
           MessageBox.Show
             (Usage, "Command-line argument usage",
              MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -468,7 +468,7 @@ namespace bedrock.util
     }
     /// <summary>
     /// Attribute to annotate subclasses of GetOpt.  Any field or property
-    /// that gets this attribute is a possible command-line argument for the 
+    /// that gets this attribute is a possible command-line argument for the
     /// program containing the GetOpt subclass.
     /// </summary>
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Method,

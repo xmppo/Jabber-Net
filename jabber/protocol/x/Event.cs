@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -31,28 +31,28 @@ namespace jabber.protocol.x
         /// </summary>
         NONE = 0,
         /// <summary>
-        /// Indicates that the message has been stored offline by the server, because the 
-        /// intended recipient is not available. This event is to be raised by the Jabber server. 
+        /// Indicates that the message has been stored offline by the server, because the
+        /// intended recipient is not available. This event is to be raised by the Jabber server.
         /// </summary>
         offline = 1,
         /// <summary>
-        /// Indicates that the message has been delivered to the recipient. This signifies 
-        /// that the message has reached the Jabber client, but does not necessarily mean 
+        /// Indicates that the message has been delivered to the recipient. This signifies
+        /// that the message has reached the Jabber client, but does not necessarily mean
         /// that the message has been displayed. This event is to be raised by the Jabber client.
         /// </summary>
         delivered = 2,
         /// <summary>
-        /// Once the message has been received by the Jabber client, it may be displayed 
-        /// to the user. This event indicates that the message has been displayed, and is 
-        /// to be raised by the Jabber client. Even if a message is displayed multiple times, 
+        /// Once the message has been received by the Jabber client, it may be displayed
+        /// to the user. This event indicates that the message has been displayed, and is
+        /// to be raised by the Jabber client. Even if a message is displayed multiple times,
         /// this event should only be raised once.
         /// </summary>
         displayed = 4,
         /// <summary>
-        /// In threaded chat conversations, this indicates that the recipient is composing 
-        /// a reply to a message that was just sent. The event is to be raised by the Jabber 
-        /// client. A Jabber client is allowed to raise this event multiple times in response 
-        /// to the same request, providing that a specific sequence is followed. 
+        /// In threaded chat conversations, this indicates that the recipient is composing
+        /// a reply to a message that was just sent. The event is to be raised by the Jabber
+        /// client. A Jabber client is allowed to raise this event multiple times in response
+        /// to the same request, providing that a specific sequence is followed.
         /// </summary>
         composing = 8
     }
@@ -64,7 +64,7 @@ namespace jabber.protocol.x
     public class Event : Element
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="doc"></param>
         public Event(XmlDocument doc) : base("x", URI.XEVENT, doc)
@@ -72,7 +72,7 @@ namespace jabber.protocol.x
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="prefix"></param>
         /// <param name="qname"></param>
@@ -115,14 +115,14 @@ namespace jabber.protocol.x
         }
 
         /// <summary>
-        /// Indicates that the message has been stored offline by the server, because the 
-        /// intended recipient is not available. This event is to be raised by the Jabber server. 
+        /// Indicates that the message has been stored offline by the server, because the
+        /// intended recipient is not available. This event is to be raised by the Jabber server.
         /// </summary>
         public bool IsOffline
         {
             get { return this["offline"] != null; }
-            set 
-            { 
+            set
+            {
                 if (value)
                     this.SetElem("offline", null);
                 else
@@ -130,15 +130,15 @@ namespace jabber.protocol.x
             }
         }
         /// <summary>
-        /// Indicates that the message has been delivered to the recipient. This signifies 
-        /// that the message has reached the Jabber client, but does not necessarily mean 
+        /// Indicates that the message has been delivered to the recipient. This signifies
+        /// that the message has reached the Jabber client, but does not necessarily mean
         /// that the message has been displayed. This event is to be raised by the Jabber client.
         /// </summary>
         public bool IsDelivered
         {
             get { return this["delivered"] != null; }
-            set 
-            { 
+            set
+            {
                 if (value)
                     this.SetElem("delivered", null);
                 else
@@ -146,16 +146,16 @@ namespace jabber.protocol.x
             }
         }
         /// <summary>
-        /// Once the message has been received by the Jabber client, it may be displayed 
-        /// to the user. This event indicates that the message has been displayed, and is 
-        /// to be raised by the Jabber client. Even if a message is displayed multiple times, 
+        /// Once the message has been received by the Jabber client, it may be displayed
+        /// to the user. This event indicates that the message has been displayed, and is
+        /// to be raised by the Jabber client. Even if a message is displayed multiple times,
         /// this event should only be raised once.
         /// </summary>
         public bool IsDisplayed
         {
             get { return this["displayed"] != null; }
-            set 
-            { 
+            set
+            {
                 if (value)
                     this.SetElem("displayed", null);
                 else
@@ -163,16 +163,16 @@ namespace jabber.protocol.x
             }
         }
         /// <summary>
-        /// In threaded chat conversations, this indicates that the recipient is composing 
-        /// a reply to a message that was just sent. The event is to be raised by the Jabber 
-        /// client. A Jabber client is allowed to raise this event multiple times in response 
-        /// to the same request, providing that a specific sequence is followed. 
+        /// In threaded chat conversations, this indicates that the recipient is composing
+        /// a reply to a message that was just sent. The event is to be raised by the Jabber
+        /// client. A Jabber client is allowed to raise this event multiple times in response
+        /// to the same request, providing that a specific sequence is followed.
         /// </summary>
         public bool IsComposing
         {
             get { return this["composing"] != null; }
-            set 
-            { 
+            set
+            {
                 if (value)
                     this.SetElem("composing", null);
                 else

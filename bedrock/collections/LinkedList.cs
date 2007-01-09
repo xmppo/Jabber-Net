@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -18,8 +18,8 @@ using bedrock.util;
 namespace bedrock.collections
 {
     /// <summary>
-    /// A doubly-linked list implementation, with a sentinal wrap-around 
-    /// m_header.  Yes, it <b>does</b> seem like this should have been included 
+    /// A doubly-linked list implementation, with a sentinal wrap-around
+    /// m_header.  Yes, it <b>does</b> seem like this should have been included
     /// in System.Collections.  This may be a nicer implementation of Queue
     /// than the one in System.Collections, which uses an array.  YMMV.
     /// </summary>
@@ -40,7 +40,7 @@ namespace bedrock.collections
             m_header.next = m_header.previous = m_header;
         }
         /// <summary>
-        /// Create a list with the targets of the given 
+        /// Create a list with the targets of the given
         /// enumeration copied into it.
         /// </summary>
         /// <param name="e"></param>
@@ -67,7 +67,7 @@ namespace bedrock.collections
         /// </summary>
         public int Count
         {
-            get 
+            get
             {
                 return m_size;
             }
@@ -78,7 +78,7 @@ namespace bedrock.collections
         /// </summary>
         public bool IsReadOnly
         {
-            get 
+            get
             {
                 return m_readOnly;
             }
@@ -108,7 +108,7 @@ namespace bedrock.collections
         /// The object to synchronize on.
         /// TODO: implement settable SyncRoot
         /// </summary>
-        public object SyncRoot 
+        public object SyncRoot
         {
             get
             {
@@ -134,15 +134,15 @@ namespace bedrock.collections
         /// <summary>
         /// Walk the list to get the index'th element
         /// </summary>
-        public object this[int index] 
+        public object this[int index]
         {
             get
             {
                 return GetNode(index).element;
             }
-            set 
+            set
             {
-                GetNode(index).element = value;                                
+                GetNode(index).element = value;
             }
         }
 
@@ -187,7 +187,7 @@ namespace bedrock.collections
             int index = 0;
             if (value == null)
             {
-                for (Node e = m_header.next; e != m_header; e = e.next) 
+                for (Node e = m_header.next; e != m_header; e = e.next)
                 {
                     if (e.element == null)
                         return index;
@@ -196,7 +196,7 @@ namespace bedrock.collections
             }
             else
             {
-                for (Node e = m_header.next; e != m_header; e = e.next) 
+                for (Node e = m_header.next; e != m_header; e = e.next)
                 {
                     if (value.Equals(e.element))
                         return index;
@@ -242,7 +242,7 @@ namespace bedrock.collections
         {
             if (value == null)
             {
-                for (Node e = m_header.next; e != m_header; e = e.next) 
+                for (Node e = m_header.next; e != m_header; e = e.next)
                 {
                     if (e.element == null)
                     {
@@ -253,7 +253,7 @@ namespace bedrock.collections
             }
             else
             {
-                for (Node e = m_header.next; e != m_header; e = e.next) 
+                for (Node e = m_header.next; e != m_header; e = e.next)
                 {
                     if (value.Equals(e.element))
                     {
@@ -275,7 +275,7 @@ namespace bedrock.collections
             Remove(e);
         }
         #endregion
-        
+
         #region Queue
         /// <summary>
         /// Insert an element at the end of the list
@@ -330,26 +330,26 @@ namespace bedrock.collections
         {
             if ((index < 0) || (index >= m_size))
             {
-                throw new IndexOutOfRangeException("Must choose index between 0 and " + 
+                throw new IndexOutOfRangeException("Must choose index between 0 and " +
                                                    (m_size-1));
             }
-                    
+
             Node e = m_header;
             // start from end if closer
-            if (index < m_size/2) 
+            if (index < m_size/2)
             {
                 for (int i = 0; i <= index; i++)
                     e = e.next;
             }
-            else 
+            else
             {
                 for (int i = m_size; i > index; i--)
                     e = e.previous;
-            }            
+            }
             return e;
         }
 
-        private Node AddBefore(object value, Node n) 
+        private Node AddBefore(object value, Node n)
         {
             if (m_readOnly)
             {
@@ -379,7 +379,7 @@ namespace bedrock.collections
             return newNode;
         }
 
-        private void Remove(Node n) 
+        private void Remove(Node n)
         {
             if (n == m_header)
                 throw new InvalidOperationException("Deleting from an empty list");
@@ -428,7 +428,7 @@ namespace bedrock.collections
                 {
                     first = false;
                 }
-                
+
                 if (o == null)
                     sb.Append("null");
                 else
@@ -458,7 +458,7 @@ namespace bedrock.collections
 
             int index=0;
             int c;
-            for (Node n = m_header.next; n != m_header; n = n.next, index++) 
+            for (Node n = m_header.next; n != m_header; n = n.next, index++)
             {
                 c = m_comparator.Compare(value, n.element);
                 if (c < 0)
@@ -472,7 +472,7 @@ namespace bedrock.collections
                     return index;
                 }
             }
-            
+
             // got to the end without inserting.  Put it on the end.
             AddBefore(value, m_header);
             return m_size-1;
@@ -495,7 +495,7 @@ namespace bedrock.collections
         }
 
         /// <summary>
-        /// Return a read-only linked list from the given enumeration.  
+        /// Return a read-only linked list from the given enumeration.
         /// This doesn't seem all that useful to me.  An array might be
         /// a better choice.
         /// </summary>
@@ -522,7 +522,7 @@ namespace bedrock.collections
                 mods    = list.m_modCount;
             }
 
-            public object Current 
+            public object Current
             {
                 get
                 {
@@ -548,13 +548,13 @@ namespace bedrock.collections
         }
         #endregion
         #region Node
-        private class Node 
+        private class Node
         {
             public object element;
             public Node  next;
             public Node  previous;
 
-            public Node(object element, Node next, Node previous) 
+            public Node(object element, Node next, Node previous)
             {
                 this.element = element;
                 this.next = next;

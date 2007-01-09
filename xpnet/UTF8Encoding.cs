@@ -1,16 +1,16 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
- * 
+ *
  * xpnet is a deriviative of James Clark's XP.  See copying.txt for more info.
  * --------------------------------------------------------------------------*/
 namespace xpnet
@@ -59,7 +59,7 @@ namespace xpnet
 
         private static int[] utf8TypeTable = new int[256];
 
-        static UTF8Encoding() 
+        static UTF8Encoding()
         {
             System.Array.Copy(asciiTypeTable,  0, utf8TypeTable,   0, 128);
             System.Array.Copy(utf8HiTypeTable, 0, utf8TypeTable, 128, 128);
@@ -78,7 +78,7 @@ namespace xpnet
         /// <param name="buf"></param>
         /// <param name="off"></param>
         /// <returns></returns>
-        protected override int byteType(byte[] buf, int off) 
+        protected override int byteType(byte[] buf, int off)
         {
             return utf8TypeTable[buf[off] & 0xFF];
         }
@@ -89,7 +89,7 @@ namespace xpnet
         /// <param name="buf"></param>
         /// <param name="off"></param>
         /// <returns></returns>
-        protected override char byteToAscii(byte[] buf, int off) 
+        protected override char byteToAscii(byte[] buf, int off)
         {
             return (char)buf[off];
         }
@@ -101,7 +101,7 @@ namespace xpnet
         /// <param name="off"></param>
         /// <param name="c"></param>
         /// <returns></returns>
-        protected override bool charMatches(byte[] buf, int off, char c) 
+        protected override bool charMatches(byte[] buf, int off, char c)
         {
             return ((char)buf[off]) == c;
         }
@@ -121,7 +121,7 @@ namespace xpnet
 
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="sourceBuf"></param>
         /// <param name="sourceStart"></param>
@@ -135,14 +135,14 @@ namespace xpnet
         {
             int initTargetStart = targetStart;
             int c;
-            while (sourceStart != sourceEnd) 
+            while (sourceStart != sourceEnd)
             {
                 byte b = sourceBuf[sourceStart++];
                 if (b >= 0)
                     targetBuf[targetStart++] = (char)b;
-                else 
+                else
                 {
-                    switch (utf8TypeTable[b & 0xFF]) 
+                    switch (utf8TypeTable[b & 0xFF])
                     {
                         case BT_LEAD2:
                             /* 5, 6 */
@@ -173,24 +173,24 @@ namespace xpnet
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="buf"></param>
         /// <param name="off"></param>
         /// <param name="end"></param>
         /// <param name="pos"></param>
-        protected override void movePosition(byte[] buf, int off, int end, Position pos) 
+        protected override void movePosition(byte[] buf, int off, int end, Position pos)
         {
             /* Maintain the invariant: off - colDiff == colNumber. */
             int colDiff = off - pos.ColumnNumber;
             int lineNumber = pos.LineNumber;
-            while (off != end) 
+            while (off != end)
             {
                 byte b = buf[off];
-                if (b >= 0) 
+                if (b >= 0)
                 {
                     ++off;
-                    switch (b) 
+                    switch (b)
                     {
                         case (byte)'\n':
                             lineNumber += 1;
@@ -204,9 +204,9 @@ namespace xpnet
                             break;
                     }
                 }
-                else 
+                else
                 {
-                    switch (utf8TypeTable[b & 0xFF]) 
+                    switch (utf8TypeTable[b & 0xFF])
                     {
                         default:
                             off += 1;
@@ -233,18 +233,18 @@ namespace xpnet
         /*
         int extendData(byte[] buf, int off, int end)
         {
-            while (off != end) 
+            while (off != end)
             {
                 int type = utf8TypeTable[buf[off] & 0xFF];
                 if (type >= 0)
                     off++;
                 else if (type < BT_LEAD4)
                     break;
-                else 
+                else
                 {
                     if (end - off + type < 0)
                         break;
-                    switch (type) 
+                    switch (type)
                     {
                         case BT_LEAD3:
                             check3(buf, off);

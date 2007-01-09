@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -56,7 +56,7 @@ namespace jabber.connection
         private AsynchElementStream m_elements = null;
         private BaseSocket          m_sock = null;
         private Timer               m_timer = null;
-        
+
         /// <summary>
         /// Create a new one.
         /// </summary>
@@ -79,8 +79,8 @@ namespace jabber.connection
         /// </summary>
         public override bool SupportsTLS
         {
-            get 
-            { 
+            get
+            {
 #if NO_SSL
                 return false;
 #else
@@ -164,12 +164,12 @@ namespace jabber.connection
                 */
             case ProxyType.None:
                 m_sock = new AsyncSocket(null, this, (bool)m_listener[Options.SSL], false);
-                
+
 #if NET20
-                ((AsyncSocket)m_sock).LocalCertificate = m_listener[Options.LOCAL_CERTIFICATE] as 
+                ((AsyncSocket)m_sock).LocalCertificate = m_listener[Options.LOCAL_CERTIFICATE] as
                     System.Security.Cryptography.X509Certificates.X509Certificate;
 
-				((AsyncSocket)m_sock).CertificateGui = (bool)m_listener[Options.CERTIFICATE_GUI];
+                ((AsyncSocket)m_sock).CertificateGui = (bool)m_listener[Options.CERTIFICATE_GUI];
 #endif
                 break;
 
@@ -222,11 +222,11 @@ namespace jabber.connection
         }
 
         public override void Write(string str)
-        {            
+        {
             int keep = (int)m_listener[Options.KEEP_ALIVE];
             m_timer.Change(keep, keep);
             m_sock.Write(ENC.GetBytes(str));
- 
+
         }
 
         /// <summary>

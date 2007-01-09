@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -36,7 +36,7 @@ namespace test.jabber.protocol.stream
         {
             Stream s = new Stream(doc, "jabber:client");
             Assert.IsTrue(
-                Regex.IsMatch(s.ToString(), 
+                Regex.IsMatch(s.ToString(),
                 "<stream:stream id=\"[a-z0-9]+\" xmlns=\"jabber:client\" xmlns:stream=\"http://etherx\\.jabber\\.org/streams\" />",
                 RegexOptions.IgnoreCase), s.ToString());
         }
@@ -44,7 +44,7 @@ namespace test.jabber.protocol.stream
         {
             Error err = new Error(doc);
             err.Message = "foo";
-            Assert.AreEqual("<stream:error " + 
+            Assert.AreEqual("<stream:error " +
                 "xmlns:stream=\"http://etherx.jabber.org/streams\">foo</stream:error>", err.ToString());
             ElementFactory sf = new ElementFactory();
             sf.AddType(new fact());
@@ -56,7 +56,7 @@ namespace test.jabber.protocol.stream
         {
             Stream s = new Stream(doc, "jabber:client");
             Assert.IsTrue(
-                Regex.IsMatch(s.StartTag(), 
+                Regex.IsMatch(s.StartTag(),
                 "<stream:stream xmlns:stream=\"http://etherx\\.jabber\\.org/streams\" id=\"[a-z0-9]+\" xmlns=\"jabber:client\">",
                 RegexOptions.IgnoreCase), s.StartTag());
         }

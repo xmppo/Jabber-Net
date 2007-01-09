@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -70,8 +70,8 @@ namespace test.jabber.protocol.client
         {
             Message msg = new Message(doc);
             msg.Body = "&";
-            Assert.AreEqual("<message id=\"JN_1\"><body>&amp;</body></message>", msg.ToString());            
-            msg.RemoveChild(msg["body"]);                   
+            Assert.AreEqual("<message id=\"JN_1\"><body>&amp;</body></message>", msg.ToString());
+            msg.RemoveChild(msg["body"]);
             Assert.AreEqual("<message id=\"JN_1\"></message>", msg.ToString());
             try
             {

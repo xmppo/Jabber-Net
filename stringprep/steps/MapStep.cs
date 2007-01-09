@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -20,7 +20,7 @@ namespace stringprep.steps
 {
     /// <summary>
     /// A stringprep profile step to map one input character into 0 or
-    /// more output characters. 
+    /// more output characters.
     /// </summary>
     public class MapStep : ProfileStep
     {
@@ -67,7 +67,7 @@ namespace stringprep.steps
                 else
                 {
                     result[i] = map[1];
-                    if (len > 2) 
+                    if (len > 2)
                     {
                         result.Insert(i+1, map.ToCharArray(2, len - 2));
                         i += len - 2;

@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -46,7 +46,7 @@ namespace muzzle
 
         }
 
-        /// <summary> 
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         protected override void Dispose( bool disposing )
@@ -85,8 +85,8 @@ namespace muzzle
         }
 
         #region Component Designer generated code
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// <summary>
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
@@ -101,9 +101,9 @@ namespace muzzle
             this.txtEntry = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // lstJID
-            // 
+            //
             this.lstJID.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lstJID.IntegralHeight = false;
             this.lstJID.Location = new System.Drawing.Point(0, 32);
@@ -112,13 +112,13 @@ namespace muzzle
             this.lstJID.Sorted = true;
             this.lstJID.TabIndex = 0;
             this.lstJID.SelectedIndexChanged += new System.EventHandler(this.lstJID_SelectedIndexChanged);
-            // 
+            //
             // error
-            // 
+            //
             this.error.ContainerControl = this;
-            // 
+            //
             // panel1
-            // 
+            //
             this.panel1.Controls.Add(this.btnRemove);
             this.panel1.Controls.Add(this.btnAdd);
             this.panel1.Controls.Add(this.txtEntry);
@@ -127,9 +127,9 @@ namespace muzzle
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(256, 32);
             this.panel1.TabIndex = 4;
-            // 
+            //
             // btnRemove
-            // 
+            //
             this.btnRemove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnRemove.Location = new System.Drawing.Point(232, 5);
             this.btnRemove.Name = "btnRemove";
@@ -138,9 +138,9 @@ namespace muzzle
             this.btnRemove.Text = "-";
             this.tip.SetToolTip(this.btnRemove, "Remove from the list the Jabber ID on the left");
             this.btnRemove.Click += new System.EventHandler(this.btnRemove_Click);
-            // 
+            //
             // btnAdd
-            // 
+            //
             this.btnAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnAdd.Location = new System.Drawing.Point(208, 5);
             this.btnAdd.Name = "btnAdd";
@@ -149,10 +149,10 @@ namespace muzzle
             this.btnAdd.Text = "+";
             this.tip.SetToolTip(this.btnAdd, "Add to the list the Jabber ID to the left");
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
-            // 
+            //
             // txtEntry
-            // 
-            this.txtEntry.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.txtEntry.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.txtEntry.Location = new System.Drawing.Point(0, 6);
             this.txtEntry.Name = "txtEntry";
@@ -161,9 +161,9 @@ namespace muzzle
             this.txtEntry.Text = "";
             this.tip.SetToolTip(this.txtEntry, "Enter a Jabber ID here, and press the + or - button to add or remove it from the " +
                 "list.");
-            // 
+            //
             // JidMulti
-            // 
+            //
             this.Controls.Add(this.lstJID);
             this.Controls.Add(this.panel1);
             this.Name = "JidMulti";
@@ -200,7 +200,7 @@ namespace muzzle
                 int i = 0;
                 foreach (object o in lstJID.Items)
                 {
-                    if (jid.Equals(o)) 
+                    if (jid.Equals(o))
                     {
                         lstJID.Items.RemoveAt(i);
                         txtEntry.Clear();
@@ -213,7 +213,7 @@ namespace muzzle
             catch (Exception ex)
             {
                 error.SetError(txtEntry, "Invalid JID: " + ex.ToString());
-            }        
+            }
             this.Cursor = Cursors.Default;
         }
 

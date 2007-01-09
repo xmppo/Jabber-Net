@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -25,7 +25,7 @@ namespace jabber.protocol.iq
     [RCS(@"$Header$")]
     public class Factory : IPacketTypes
     {
-        private static QnameType[] s_qnt = new QnameType[] 
+        private static QnameType[] s_qnt = new QnameType[]
         {
             new QnameType("query", URI.AUTH,     typeof(jabber.protocol.iq.Auth)),
             new QnameType("query", URI.REGISTER, typeof(jabber.protocol.iq.Register)),
@@ -50,7 +50,7 @@ namespace jabber.protocol.iq
             new QnameType("GEO",   URI.VCARD, typeof(jabber.protocol.iq.VCard.VGeo)),
             new QnameType("PHOTO", URI.VCARD, typeof(jabber.protocol.iq.VCard.VPhoto)),
             new QnameType("ADR", URI.VCARD, typeof(jabber.protocol.iq.VCard.VAddress)),
-            
+
             // Disco
             new QnameType("query",    URI.DISCO_ITEMS, typeof(jabber.protocol.iq.DiscoItems)),
             new QnameType("item",     URI.DISCO_ITEMS, typeof(jabber.protocol.iq.DiscoItem)),

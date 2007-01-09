@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -78,7 +78,7 @@ namespace test.bedrock.net
 #endif
             m_cli = c_w.CreateConnectSocket(this, a, true, "localhost");
         }
-    
+
         private void Server()
         {
             SocketWatcher s_w = new SocketWatcher(20);
@@ -124,7 +124,7 @@ namespace test.bedrock.net
 
         public void OnError(BaseSocket sock, System.Exception ex)
         {
-                
+
         }
 
         public void OnConnect(BaseSocket sock)
@@ -134,12 +134,12 @@ namespace test.bedrock.net
 
         public void OnClose(BaseSocket sock)
         {
-                
+
         }
 
         public void OnInit(BaseSocket new_sock)
         {
-                
+
         }
 
         public ISocketEventListener GetListener(BaseSocket new_sock)

@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -18,9 +18,9 @@ using bedrock.util;
 namespace bedrock.collections
 {
     /// <summary>
-    /// A basic balanced tree implementation.  Yes, it seems like 
-    /// this might have been something nice to have been in 
-    /// System.Collections.  Not yet complete, but the algorithmic 
+    /// A basic balanced tree implementation.  Yes, it seems like
+    /// this might have been something nice to have been in
+    /// System.Collections.  Not yet complete, but the algorithmic
     /// stuff is here.
     /// </summary>
     [RCS(@"$Header$")]
@@ -115,29 +115,29 @@ namespace bedrock.collections
 
             Node n = root;
 
-            if (n == null) 
+            if (n == null)
             {
                 sizeUp();
                 root = new Node(key, value, null);
                 return;
             }
 
-            while (true) 
+            while (true)
             {
                 int cmp = comparator.Compare(key, n.key);
-                if (cmp == 0) 
+                if (cmp == 0)
                 {
                     //n.value = value;
                     //return;
                     throw new ArgumentException("Can't add the same key twice", "key");
-                } 
-                else if (cmp < 0) 
+                }
+                else if (cmp < 0)
                 {
-                    if (n.left != null) 
+                    if (n.left != null)
                     {
                         n = n.left;
                     }
-                    else 
+                    else
                     {
                         sizeUp();
                         n.left = new Node(key, value, n);
@@ -146,11 +146,11 @@ namespace bedrock.collections
                     }
                 }
                 else // cmp > 0
-                { 
+                {
                     if (n.right != null) {
                         n = n.right;
                     }
-                    else 
+                    else
                     {
                         sizeUp();
                         n.right = new Node(key, value, n);
@@ -159,7 +159,7 @@ namespace bedrock.collections
                     }
                 }
             }
-            
+
         }
 
         /// <summary>
@@ -192,7 +192,7 @@ namespace bedrock.collections
         }
 
         /// <summary>
-        /// Remove the element from the tree associated 
+        /// Remove the element from the tree associated
         /// with this key, possibly rebalancing.
         /// </summary>
         /// <param name="key"></param>
@@ -210,43 +210,43 @@ namespace bedrock.collections
             {
                 Node s = successor(n);
                 swapPosition(s, n);
-            } 
+            }
 
             // Start fixup at replacement node, if it exists.
             Node replacement = ((n.left != null) ? n.left : n.right);
 
-            if (replacement != null) 
+            if (replacement != null)
             {
-                // Link replacement to parent 
+                // Link replacement to parent
                 replacement.parent = n.parent;
-                if (n.parent == null)       
-                    root = replacement; 
-                else if (n == n.parent.left)  
+                if (n.parent == null)
+                    root = replacement;
+                else if (n == n.parent.left)
                     n.parent.left = replacement;
                 else
                     n.parent.right = replacement;
 
                 // Null out links so they are OK to use by fixAfterDeletion.
                 n.left = n.right = n.parent = null;
-              
+
                 // Fix replacement
-                if (n.color == NodeColor.BLACK) 
+                if (n.color == NodeColor.BLACK)
                 fixAfterDeletion(replacement);
-            } 
-            else if (n.parent == null) 
-            { 
-                root = null;
-            } 
-            else 
+            }
+            else if (n.parent == null)
             {
-                if (n.color == NodeColor.BLACK) 
+                root = null;
+            }
+            else
+            {
+                if (n.color == NodeColor.BLACK)
                     fixAfterDeletion(n);
 
-                if (n.parent != null) 
+                if (n.parent != null)
                 {
-                    if (n == n.parent.left) 
+                    if (n == n.parent.left)
                         n.parent.left = null;
-                    else if (n == n.parent.right) 
+                    else if (n == n.parent.right)
                         n.parent.right = null;
                     n.parent = null;
                 }
@@ -274,7 +274,7 @@ namespace bedrock.collections
         /// <summary>
         /// Retrieve a list of keys.
         /// </summary>
-        public ICollection Keys 
+        public ICollection Keys
         {
             get
             {
@@ -295,7 +295,7 @@ namespace bedrock.collections
         /// <summary>
         /// Retrieve a list of values.
         /// </summary>
-        public ICollection Values 
+        public ICollection Values
         {
             get
             {
@@ -352,7 +352,7 @@ namespace bedrock.collections
                 {
                     f = false;
                 }
-                
+
                 sb.AppendFormat("{0}={1}", n.key, n.value);
             }
             return sb.ToString();
@@ -369,7 +369,7 @@ namespace bedrock.collections
             return root.ToString();
         }
         #region hidden
-        private static Node first(Node n) 
+        private static Node first(Node n)
         {
             if (n != null)
             {
@@ -379,12 +379,12 @@ namespace bedrock.collections
             return n;
         }
 
-        private static Node successor(Node t) 
+        private static Node successor(Node t)
         {
             if (t == null)
                 return null;
 
-            if (t.right != null) 
+            if (t.right != null)
             {
                 Node n = t.right;
                 while (n.left != null)
@@ -394,18 +394,18 @@ namespace bedrock.collections
 
             Node p = t.parent;
             Node ch = t;
-            while (p != null && ch == p.right) 
+            while (p != null && ch == p.right)
             {
                 ch = p;
                 p = p.parent;
             }
             return p;
         }
-    
-        private Node getNode(object key) 
+
+        private Node getNode(object key)
         {
             Node n = root;
-            while (n != null) 
+            while (n != null)
             {
                 int cmp = comparator.Compare(key, n.key);
                 if (cmp == 0)
@@ -418,7 +418,7 @@ namespace bedrock.collections
             return null;
         }
 
-        private void swapPosition(Node x, Node y) 
+        private void swapPosition(Node x, Node y)
         {
             Node px = x.parent;
             Node lx = x.left;
@@ -429,60 +429,60 @@ namespace bedrock.collections
             bool xWasLeftChild = (px != null) && (x == px.left);
             bool yWasLeftChild = (py != null) && (y == py.left);
 
-            if (x == py) 
-            { 
+            if (x == py)
+            {
                 x.parent = y;
-                if (yWasLeftChild) 
-                { 
-                    y.left = x; 
-                    y.right = rx; 
-                } 
-                else 
+                if (yWasLeftChild)
+                {
+                    y.left = x;
+                    y.right = rx;
+                }
+                else
                 {
                     y.right = x;
-                    y.left = lx;  
+                    y.left = lx;
                 }
-            } 
-            else 
+            }
+            else
             {
-                x.parent = py; 
-                if (py != null) 
+                x.parent = py;
+                if (py != null)
                 {
                     if (yWasLeftChild)
                         py.left = x;
                     else
                         py.right = x;
                 }
-                y.left = lx;   
+                y.left = lx;
                 y.right = rx;
             }
 
-            if (y == px) 
+            if (y == px)
             {
                 y.parent = x;
-                if (xWasLeftChild) 
-                { 
-                    x.left = y; 
-                    x.right = ry; 
-                } 
-                else 
+                if (xWasLeftChild)
+                {
+                    x.left = y;
+                    x.right = ry;
+                }
+                else
                 {
                     x.right = y;
-                    x.left = ly;  
+                    x.left = ly;
                 }
             }
-            else 
+            else
             {
-                y.parent = px; 
-                if (px != null) 
+                y.parent = px;
+                if (px != null)
                 {
                     if (xWasLeftChild)
                         px.left = y;
                     else
                         px.right = y;
                 }
-                x.left = ly;   
-                x.right = ry;  
+                x.left = ly;
+                x.right = ry;
             }
 
             if (x.left != null)
@@ -504,33 +504,33 @@ namespace bedrock.collections
                 root = x;
         }
 
-        private static NodeColor colorOf(Node n) 
+        private static NodeColor colorOf(Node n)
         {
             return (n == null ? NodeColor.BLACK : n.color);
         }
 
-        private static Node  parentOf(Node n) 
-        { 
+        private static Node  parentOf(Node n)
+        {
             return (n == null ? null: n.parent);
         }
 
-        private static void setColor(Node n, NodeColor c) 
-        { 
-            if (n != null)  
-                n.color = c; 
+        private static void setColor(Node n, NodeColor c)
+        {
+            if (n != null)
+                n.color = c;
         }
 
-        private static Node leftOf(Node n) 
-        { 
-            return (n == null)? null: n.left; 
+        private static Node leftOf(Node n)
+        {
+            return (n == null)? null: n.left;
         }
 
-        private static Node rightOf(Node n) 
-        { 
-            return (n == null)? null: n.right; 
+        private static Node rightOf(Node n)
+        {
+            return (n == null)? null: n.right;
         }
 
-        private void rotateLeft(Node n) 
+        private void rotateLeft(Node n)
         {
             Node r = n.right;
             n.right = r.left;
@@ -549,11 +549,11 @@ namespace bedrock.collections
             n.parent = r;
         }
 
-        private void rotateRight(Node n) 
+        private void rotateRight(Node n)
         {
             Node l = n.left;
             n.left = l.right;
-            if (l.right != null) 
+            if (l.right != null)
                 l.right.parent = n;
             l.parent = n.parent;
 
@@ -561,7 +561,7 @@ namespace bedrock.collections
                 root = l;
             else if (n.parent.right == n)
                 n.parent.right = l;
-            else 
+            else
                 n.parent.left = l;
 
             l.right = n;
@@ -569,58 +569,58 @@ namespace bedrock.collections
         }
 
 
-        private void fixAfterInsertion(Node n) 
+        private void fixAfterInsertion(Node n)
         {
             n.color = NodeColor.RED;
 
-            while ((n != null) && 
-                   (n != root) && 
+            while ((n != null) &&
+                   (n != root) &&
                    (n.parent.color == NodeColor.RED))
             {
                 if (parentOf(n) == leftOf(parentOf(parentOf(n))))
                 {
                     Node y = rightOf(parentOf(parentOf(n)));
-                    if (colorOf(y) == NodeColor.RED) 
+                    if (colorOf(y) == NodeColor.RED)
                     {
                         setColor(parentOf(n), NodeColor.BLACK);
                         setColor(y, NodeColor.BLACK);
                         setColor(parentOf(parentOf(n)), NodeColor.RED);
                         n = parentOf(parentOf(n));
                     }
-                    else 
+                    else
                     {
-                        if (n == rightOf(parentOf(n))) 
+                        if (n == rightOf(parentOf(n)))
                         {
                             n = parentOf(n);
                             rotateLeft(n);
                         }
-            
+
                         setColor(parentOf(n), NodeColor.BLACK);
                         setColor(parentOf(parentOf(n)), NodeColor.RED);
-                        if (parentOf(parentOf(n)) != null) 
+                        if (parentOf(parentOf(n)) != null)
                             rotateRight(parentOf(parentOf(n)));
                     }
-                } 
-                else 
+                }
+                else
                 {
                     Node y = leftOf(parentOf(parentOf(n)));
-                    if (colorOf(y) == NodeColor.RED) 
+                    if (colorOf(y) == NodeColor.RED)
                     {
                         setColor(parentOf(n), NodeColor.BLACK);
                         setColor(y, NodeColor.BLACK);
                         setColor(parentOf(parentOf(n)), NodeColor.RED);
                         n = parentOf(parentOf(n));
-                    } 
-                    else 
+                    }
+                    else
                     {
-                        if (n == leftOf(parentOf(n))) 
+                        if (n == leftOf(parentOf(n)))
                         {
                             n = parentOf(n);
                             rotateRight(n);
                         }
                         setColor(parentOf(n),  NodeColor.BLACK);
                         setColor(parentOf(parentOf(n)), NodeColor.RED);
-                        if (parentOf(parentOf(n)) != null) 
+                        if (parentOf(parentOf(n)) != null)
                             rotateLeft(parentOf(parentOf(n)));
                     }
                 }
@@ -628,15 +628,15 @@ namespace bedrock.collections
             root.color = NodeColor.BLACK;
         }
 
-        private void fixAfterDeletion(Node x) 
+        private void fixAfterDeletion(Node x)
         {
             while ((x != root) && (colorOf(x) == NodeColor.BLACK))
             {
-                if (x == leftOf(parentOf(x))) 
+                if (x == leftOf(parentOf(x)))
                 {
                     Node sib = rightOf(parentOf(x));
 
-                    if (colorOf(sib) == NodeColor.RED) 
+                    if (colorOf(sib) == NodeColor.RED)
                     {
                         setColor(sib, NodeColor.BLACK);
                         setColor(parentOf(x), NodeColor.RED);
@@ -644,15 +644,15 @@ namespace bedrock.collections
                         sib = rightOf(parentOf(x));
                     }
 
-                    if ((colorOf(leftOf(sib))  == NodeColor.BLACK) && 
+                    if ((colorOf(leftOf(sib))  == NodeColor.BLACK) &&
                         (colorOf(rightOf(sib)) == NodeColor.BLACK))
                     {
                         setColor(sib,  NodeColor.RED);
                         x = parentOf(x);
                     }
-                    else 
+                    else
                     {
-                        if (colorOf(rightOf(sib)) == NodeColor.BLACK) 
+                        if (colorOf(rightOf(sib)) == NodeColor.BLACK)
                         {
                             setColor(leftOf(sib), NodeColor.BLACK);
                             setColor(sib, NodeColor.RED);
@@ -665,8 +665,8 @@ namespace bedrock.collections
                         rotateLeft(parentOf(x));
                         x = root;
                     }
-                } 
-                else 
+                }
+                else
                 {
                     Node sib = leftOf(parentOf(x));
 
@@ -678,13 +678,13 @@ namespace bedrock.collections
                         sib = leftOf(parentOf(x));
                     }
 
-                    if (colorOf(rightOf(sib)) == NodeColor.BLACK && 
-                        colorOf(leftOf(sib)) == NodeColor.BLACK) 
+                    if (colorOf(rightOf(sib)) == NodeColor.BLACK &&
+                        colorOf(leftOf(sib)) == NodeColor.BLACK)
                     {
                         setColor(sib,  NodeColor.RED);
                         x = parentOf(x);
-                    } 
-                    else 
+                    }
+                    else
                     {
                         if (colorOf(leftOf(sib)) == NodeColor.BLACK) {
                         setColor(rightOf(sib), NodeColor.BLACK);
@@ -701,7 +701,7 @@ namespace bedrock.collections
                 }
             }
 
-            setColor(x, NodeColor.BLACK); 
+            setColor(x, NodeColor.BLACK);
         }
 
         private void sizeUp()   { modCount++; size++; }
@@ -723,8 +723,8 @@ namespace bedrock.collections
             public Node parent;
             public NodeColor color = NodeColor.BLACK;
 
-            public Node(object key, object value, Node parent) 
-            { 
+            public Node(object key, object value, Node parent)
+            {
                 this.key = key;
                 this.value = value;
                 this.parent = parent;
@@ -752,8 +752,8 @@ namespace bedrock.collections
                 {
                     return key.ToString();
                 }
-                return key + " (" + 
-                    ((left == null) ? "null" : left.ToString()) + "," + 
+                return key + " (" +
+                    ((left == null) ? "null" : left.ToString()) + "," +
                     ((right == null) ? "null" : right.ToString()) + ")";
             }
 
@@ -780,7 +780,7 @@ namespace bedrock.collections
                 current.right = first(n);
             }
 
-            public object Current 
+            public object Current
             {
                 get
                 {

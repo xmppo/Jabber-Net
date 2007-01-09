@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -45,16 +45,16 @@ namespace jabber.protocol.iq
     public class Auth : Element
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="doc"></param>
-        public Auth(XmlDocument doc) : 
+        public Auth(XmlDocument doc) :
             base("query", URI.AUTH, doc)
         {
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="prefix"></param>
         /// <param name="qname"></param>
@@ -65,12 +65,12 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
-        /// Set the authentication information.  
+        /// Set the authentication information.
         /// TODO: 0k
         /// </summary>
         /// <param name="username">The user name.  NOT the JID.</param>
         /// <param name="password">The user's password.</param>
-        /// <param name="StreamID">The id from the stream:stream 
+        /// <param name="StreamID">The id from the stream:stream
         /// that the server sent, or null for plaintext.</param>
         public void SetDigest(string username, string password, string StreamID)
         {
@@ -100,9 +100,9 @@ namespace jabber.protocol.iq
         /// <param name="password"></param>
         /// <param name="token"></param>
         /// <param name="sequence"></param>
-        public void SetZeroK(string username, 
-            string password, 
-            string token, 
+        public void SetZeroK(string username,
+            string password,
+            string token,
             int    sequence)
         {
             Debug.Assert(username != null);

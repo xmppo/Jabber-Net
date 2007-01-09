@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -28,8 +28,8 @@ namespace muzzle
     /// </summary>
     /// <example>
     /// ComponentLogin l = new ComponentLogin(jc);
-    ///        
-    /// if (l.ShowDialog(this) == DialogResult.OK) 
+    ///
+    /// if (l.ShowDialog(this) == DialogResult.OK)
     /// {
     ///     jc.Connect();
     /// }
@@ -115,37 +115,37 @@ namespace muzzle
             ((System.ComponentModel.ISupportInitialize)(this.error)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numPort)).BeginInit();
             this.SuspendLayout();
-            // 
+            //
             // label1
-            // 
+            //
             this.label1.Location = new System.Drawing.Point(8, 7);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(48, 23);
             this.label1.TabIndex = 0;
             this.label1.Text = "Host:";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
+            //
             // label2
-            // 
+            //
             this.label2.Location = new System.Drawing.Point(8, 63);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(48, 23);
             this.label2.TabIndex = 4;
             this.label2.Text = "ID:";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
+            //
             // label3
-            // 
+            //
             this.label3.Location = new System.Drawing.Point(8, 35);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(48, 23);
             this.label3.TabIndex = 2;
             this.label3.Text = "Port:";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
+            //
             // txtUser
-            // 
-            this.txtUser.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.txtUser.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtUser.Location = new System.Drawing.Point(56, 64);
             this.txtUser.Name = "txtUser";
@@ -154,10 +154,10 @@ namespace muzzle
             this.tip.SetToolTip(this.txtUser, "Service ID for this component");
             this.txtUser.Validated += new System.EventHandler(this.onValidated);
             this.txtUser.Validating += new System.ComponentModel.CancelEventHandler(this.Required_Validating);
-            // 
+            //
             // txtServer
-            // 
-            this.txtServer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.txtServer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtServer.Location = new System.Drawing.Point(56, 8);
             this.txtServer.Name = "txtServer";
@@ -166,10 +166,10 @@ namespace muzzle
             this.tip.SetToolTip(this.txtServer, "DNS name or IP address of router to connect to.  Not required if in Listen mode.");
             this.txtServer.Validated += new System.EventHandler(this.onValidated);
             this.txtServer.Validating += new System.ComponentModel.CancelEventHandler(this.Required_Validating);
-            // 
+            //
             // numPort
-            // 
-            this.numPort.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.numPort.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.numPort.Location = new System.Drawing.Point(56, 36);
             this.numPort.Maximum = new decimal(new int[] {
@@ -191,10 +191,10 @@ namespace muzzle
             0,
             0,
             0});
-            // 
+            //
             // txtPass
-            // 
-            this.txtPass.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.txtPass.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtPass.Location = new System.Drawing.Point(56, 92);
             this.txtPass.Name = "txtPass";
@@ -204,36 +204,36 @@ namespace muzzle
             this.tip.SetToolTip(this.txtPass, "Secret shared with router");
             this.txtPass.Validated += new System.EventHandler(this.onValidated);
             this.txtPass.Validating += new System.ComponentModel.CancelEventHandler(this.Required_Validating);
-            // 
+            //
             // label4
-            // 
+            //
             this.label4.Location = new System.Drawing.Point(8, 91);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(48, 23);
             this.label4.TabIndex = 6;
             this.label4.Text = "Secret:";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
+            //
             // cmbType
-            // 
-            this.cmbType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.cmbType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbType.Location = new System.Drawing.Point(56, 118);
             this.cmbType.Name = "cmbType";
             this.cmbType.Size = new System.Drawing.Size(221, 21);
             this.cmbType.TabIndex = 9;
-            // 
+            //
             // label5
-            // 
+            //
             this.label5.Location = new System.Drawing.Point(8, 116);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(48, 23);
             this.label5.TabIndex = 8;
             this.label5.Text = "Type:";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
+            //
             // ComponentLogin
-            // 
+            //
             this.ClientSize = new System.Drawing.Size(292, 266);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.txtPass);

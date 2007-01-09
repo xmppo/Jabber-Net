@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 #if !NO_STRINGPREP
@@ -30,7 +30,7 @@ namespace test.stringprep
         private Profile nameprep = new Nameprep();
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="p"></param>
         /// <param name="input">string with one UTF-8 byte per char, to enable easy cut-n-paste from the libidn tests.</param>
@@ -328,7 +328,7 @@ namespace test.stringprep
         [Test] public void Test_LargerShrinking()
         {
             // Larger test (shrinking)",
-            //  TryOne("X\xC2\xAD\xC3\xDF\xC4\xB0\xE2\x84\xA1\x6a\xcc\x8c\xc2\xa0\xc2" + "\xaa\xce\xb0\xe2\x80\x80", 
+            //  TryOne("X\xC2\xAD\xC3\xDF\xC4\xB0\xE2\x84\xA1\x6a\xcc\x8c\xc2\xa0\xc2" + "\xaa\xce\xb0\xe2\x80\x80",
             //         "xssi\xcc\x87" + "tel\xc7\xb0 a\xce\xb0 ");
             TryOne("X\xC2\xAD\xC3\x9F\xC4\xB0\xE2\x84\xA1\x6a\xcc\x8c\xc2\xa0\xc2" + "\xaa\xce\xb0\xe2\x80\x80",
                 "xssi\xcc\x87" + "tel\xc7\xb0 a\xce\xb0 ");
@@ -338,7 +338,7 @@ namespace test.stringprep
         {
             // Larger test (expanding)",
             TryOne("X\xC3\x9F\xe3\x8c\x96\xC4\xB0\xE2\x84\xA1\xE2\x92\x9F\xE3\x8c\x80",
-                "xss\xe3\x82\xad\xe3\x83\xad\xe3\x83\xa1\xe3\x83\xbc\xe3\x83\x88" + 
+                "xss\xe3\x82\xad\xe3\x83\xad\xe3\x83\xa1\xe3\x83\xbc\xe3\x83\x88" +
                 "\xe3\x83\xab" + "i\xcc\x87" + "tel\x28" + "d\x29\xe3\x82\xa2\xe3\x83\x91" +
                 "\xe3\x83\xbc\xe3\x83\x88");
         }

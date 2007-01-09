@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System.Collections;
@@ -21,7 +21,7 @@ namespace jabber.protocol
     public class NS
     {
         private Stack m_stack = new Stack();
-        
+
         /// <summary>
         /// Create a new stack, primed with xmlns and xml as prefixes.
         /// </summary>
@@ -31,7 +31,7 @@ namespace jabber.protocol
             AddNamespace("xmlns", "http://www.w3.org/2000/xmlns/");
             AddNamespace("xml", "http://www.w3.org/XML/1998/namespace");
         }
-        
+
         /// <summary>
         /// Declare a new scope, typically at the start of each element
         /// </summary>
@@ -80,7 +80,7 @@ namespace jabber.protocol
         {
             get { return LookupNamespace(string.Empty); }
         }
-        
+
         /// <summary>
         /// Debug output only.
         /// </summary>
@@ -88,7 +88,7 @@ namespace jabber.protocol
         public override string ToString()
         {
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
-            
+
             foreach (Hashtable ht in m_stack)
             {
                 sb.Append("---\n");
@@ -98,6 +98,6 @@ namespace jabber.protocol
                 }
             }
             return sb.ToString();
-        }        
+        }
     }
 }

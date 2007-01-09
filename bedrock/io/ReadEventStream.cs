@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -47,7 +47,7 @@ namespace bedrock.io
         {
             get { return m_stream.CanRead; }
         }
-    
+
         /// <summary>
         /// Gets a value indicating whether the current stream supports seeking.
         /// </summary>
@@ -55,7 +55,7 @@ namespace bedrock.io
         {
             get { return m_stream.CanSeek; }
         }
-    
+
         /// <summary>
         /// Gets a value indicating whether the current stream supports writing.
         /// </summary>
@@ -63,7 +63,7 @@ namespace bedrock.io
         {
             get { return m_stream.CanWrite; }
         }
-    
+
         /// <summary>
         /// Gets the length in bytes of the stream.
         /// </summary>
@@ -71,7 +71,7 @@ namespace bedrock.io
         {
             get { return m_stream.Length; }
         }
-    
+
         /// <summary>
         /// Gets or sets the position within the current stream.
         /// </summary>
@@ -80,7 +80,7 @@ namespace bedrock.io
             get { return m_stream.Position; }
             set { m_stream.Position = value; }
         }
-    
+
         /// <summary>
         /// Begins an asynchronous read operation.
         /// </summary>
@@ -94,7 +94,7 @@ namespace bedrock.io
         {
             return m_stream.BeginRead (buffer, offset, count, callback, state);
         }
-    
+
         /// <summary>
         /// Begins an asynchronous write operation.
         /// </summary>
@@ -108,7 +108,7 @@ namespace bedrock.io
         {
             return m_stream.BeginWrite (buffer, offset, count, callback, state);
         }
-    
+
         /// <summary>
         /// Closes the current stream and releases any resources (such as sockets and file handles) associated with the current stream.
         /// </summary>
@@ -116,7 +116,7 @@ namespace bedrock.io
         {
             m_stream.Close ();
         }
-    
+
         /// <summary>
         /// Waits for the pending asynchronous read to complete.
         /// </summary>
@@ -129,7 +129,7 @@ namespace bedrock.io
             FireOnRead(buf, 0, buf.Length);
             return count;
         }
-    
+
         /// <summary>
         /// Ends an asynchronous write operation.
         /// </summary>
@@ -138,18 +138,18 @@ namespace bedrock.io
         {
             m_stream.EndWrite (asyncResult);
         }
-    
+
         /// <summary>
-        /// Clears all buffers for this stream and causes any buffered data to be written to 
+        /// Clears all buffers for this stream and causes any buffered data to be written to
         /// the underlying device.
         /// </summary>
         public override void Flush()
         {
             m_stream.Flush();
         }
-    
+
         /// <summary>
-        /// Reads a sequence of bytes from the current stream and advances the position within the stream 
+        /// Reads a sequence of bytes from the current stream and advances the position within the stream
         /// by the number of bytes read.
         /// </summary>
         /// <param name="buffer"></param>
@@ -162,9 +162,9 @@ namespace bedrock.io
             FireOnRead(buffer, offset, rcount);
             return rcount;
         }
-    
+
         /// <summary>
-        /// Reads a byte from the stream and advances the position within the stream by one byte, 
+        /// Reads a byte from the stream and advances the position within the stream by one byte,
         /// or returns -1 if at the end of the stream.
         /// </summary>
         /// <returns></returns>
@@ -172,7 +172,7 @@ namespace bedrock.io
         {
             return m_stream.ReadByte();
         }
-    
+
         /// <summary>
         /// Sets the position within the current stream.
         /// </summary>
@@ -183,7 +183,7 @@ namespace bedrock.io
         {
             return m_stream.Seek(offset, origin);
         }
-    
+
         /// <summary>
         /// Sets the length of the current stream.
         /// </summary>
@@ -192,9 +192,9 @@ namespace bedrock.io
         {
             m_stream.SetLength(value);
         }
-    
+
         /// <summary>
-        /// writes a sequence of bytes to the current stream and advances 
+        /// writes a sequence of bytes to the current stream and advances
         /// the current position within this stream by the number of bytes written.
         /// </summary>
         /// <param name="buffer"></param>
@@ -204,9 +204,9 @@ namespace bedrock.io
         {
             m_stream.Write(buffer, offset, count);
         }
-    
+
         /// <summary>
-        /// Writes a byte to the current position in the stream and advances 
+        /// Writes a byte to the current position in the stream and advances
         /// the position within the stream by one byte.
         /// </summary>
         /// <param name="val"></param>
@@ -214,9 +214,9 @@ namespace bedrock.io
         {
             m_stream.WriteByte(val);
         }
-    
+
         /// <summary>
-        /// Serves as a hash function for a particular type, suitable for use 
+        /// Serves as a hash function for a particular type, suitable for use
         /// in hashing algorithms and data structures like a hash table.
         /// </summary>
         /// <returns></returns>

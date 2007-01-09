@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -50,15 +50,15 @@ namespace bedrock.net
 
         /*
          * The SOCKS request is formed as follows:
-         * 
+         *
          *      +----+-----+-------+------+----------+----------+
          *      |VER | CMD |  RSV  | ATYP | DST.ADDR | DST.PORT |
          *      +----+-----+-------+------+----------+----------+
          *      | 1  |  1  | X'00' |  1   | Variable |    2     |
          *      +----+-----+-------+------+----------+----------+
-         * 
+         *
          *   Where:
-         * 
+         *
          *        o  VER    protocol version: X'05'
          *        o  CMD
          *           o  CONNECT X'01'
@@ -93,19 +93,19 @@ namespace bedrock.net
 
         private bool HandleGetMethodsResponse(int ver, int method)
         {
-            if (ver != 5) 
+            if (ver != 5)
             {
                 Debug.WriteLine("bogus version  from proxy: " + ver);
                 return false;
             }
-            if (method == 0xff) 
+            if (method == 0xff)
             {
                 Debug.WriteLine("no valid method returned from proxy");
                 return false;
-            } 
+            }
 
             Debug.WriteLine("proxy accepted our connection: " + method);
-            switch (method) 
+            switch (method)
             {
                 case 2:
                     /*
@@ -137,17 +137,17 @@ namespace bedrock.net
 
         private bool HandleAuthResponse(int ver, int status)
         {
-            if (ver != 1) 
+            if (ver != 1)
             {
                 Debug.WriteLine("bogus subnegotiation version from proxy: " + ver);
                 return false;
             }
-            if (status != 0) 
+            if (status != 0)
             {
                 Debug.WriteLine("username/password auth failed on proxy");
                 return false;
-            } 
-            
+            }
+
             Debug.WriteLine("proxy accepted our auth handshake");
             RequestProxyConnection();
             return true;
@@ -159,9 +159,9 @@ namespace bedrock.net
          * +----+-----+-------+------+----------+----------+
          * | 1  |  1  | X'00' |  1   | Variable |    2     |
          * +----+-----+-------+------+----------+----------+
-         * 
+         *
          *     Where:
-         * 
+         *
          *           o  VER    protocol version: X'05'
          *           o  REP    Reply field:
          *              o  X'00' succeeded
@@ -177,17 +177,17 @@ namespace bedrock.net
          */
         private bool HandleRequestResponse(int ver, int reply)
         {
-            if (ver != 5) 
+            if (ver != 5)
             {
                 Debug.WriteLine("bogus version in reply from proxy: " + ver);
                 return false;
             }
-            if (reply != 0) 
+            if (reply != 0)
             {
                 Debug.WriteLine("request failed on proxy: " + reply);
                 return false;
-            } 
-            
+            }
+
             Debug.WriteLine("proxy complete");
             m_state = States.Running;
             return true;
@@ -218,7 +218,7 @@ namespace bedrock.net
         }
 
         /// <summary>
-        /// Overridden OnRead to handle 4 Socks5 states... 
+        /// Overridden OnRead to handle 4 Socks5 states...
         /// </summary>
         /// <param name="sock"></param>
         /// <param name="buf"></param>
@@ -227,7 +227,7 @@ namespace bedrock.net
         /// <returns></returns>
         public override bool OnRead(bedrock.net.BaseSocket sock, byte[] buf, int offset, int length)
         {
-            switch (m_state) 
+            switch (m_state)
             {
                 case States.GettingMethods:
                     return HandleGetMethodsResponse(buf[offset], buf[offset + 1]);
@@ -235,7 +235,7 @@ namespace bedrock.net
                     return HandleAuthResponse(buf[offset], buf[offset + 1]);
                 case States.RequestingProxy:
                     bool ret = HandleRequestResponse(buf[offset], buf[offset + 1]);
-                    if (ret) 
+                    if (ret)
                     {
                         m_listener.OnConnect(sock); // tell the real listener that we're connected.
                         // they'll call RequestRead(), so we can return false here.
@@ -255,7 +255,7 @@ namespace bedrock.net
         /// <param name="length"></param>
         public override void OnWrite(bedrock.net.BaseSocket sock, byte[] buf, int offset, int length)
         {
-            if (m_state == States.Running) 
+            if (m_state == States.Running)
             {
                 base.OnWrite(sock, buf, offset, length);
             }

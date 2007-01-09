@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -31,27 +31,27 @@ namespace bedrock.net
 
 #if !NET20
 
-	/// <summary>
-	/// Certificate policy that trusts all
-	/// </summary>
-	[RCS(@"$Header$")]
-	public class TrustAllCertificatePolicy : System.Net.ICertificatePolicy
-	{
-		/// <summary>
-		/// Construction
-		/// </summary>
-		public TrustAllCertificatePolicy()
-		{}
- 
-		/// <summary>
-		/// Check validation callback
-		/// </summary>
-		public bool CheckValidationResult(System.Net.ServicePoint sp,
-			System.Security.Cryptography.X509Certificates.X509Certificate cert,System.Net.WebRequest req, int problem)
-		{
-			return true;
-		}
-	}
+    /// <summary>
+    /// Certificate policy that trusts all
+    /// </summary>
+    [RCS(@"$Header$")]
+    public class TrustAllCertificatePolicy : System.Net.ICertificatePolicy
+    {
+        /// <summary>
+        /// Construction
+        /// </summary>
+        public TrustAllCertificatePolicy()
+        {}
+
+        /// <summary>
+        /// Check validation callback
+        /// </summary>
+        public bool CheckValidationResult(System.Net.ServicePoint sp,
+            System.Security.Cryptography.X509Certificates.X509Certificate cert,System.Net.WebRequest req, int problem)
+        {
+            return true;
+        }
+    }
 
 #endif
 
@@ -63,7 +63,7 @@ namespace bedrock.net
     public class JEP25Exception : WebException
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="reason"></param>
         public JEP25Exception(string reason) : base(reason)
@@ -76,7 +76,7 @@ namespace bedrock.net
     /// TODO: get rid of the PipeStream, if possible.
     /// </summary>
     [RCS(@"$Header$")]
-    public class JEP25Socket : BaseSocket 
+    public class JEP25Socket : BaseSocket
     {
         private const string CONTENT_TYPE = "application/x-www-form-urlencoded";
         private const string METHOD       = "POST";
@@ -99,10 +99,10 @@ namespace bedrock.net
         private X509Certificate m_cert = null;
         private X509Certificate m_remote_cert = null;
 
-		/// <summary>
-		/// Do trust all server sertificates?
-		/// </summary>
-		public static bool UntrustedRootOK = false;
+        /// <summary>
+        /// Do trust all server sertificates?
+        /// </summary>
+        public static bool UntrustedRootOK = false;
 
         /// <summary>
         /// Create an instance
@@ -143,7 +143,7 @@ namespace bedrock.net
 
 
         /// <summary>
-        /// The number of keys to generate at a time.  Higher numbers use more memory, 
+        /// The number of keys to generate at a time.  Higher numbers use more memory,
         /// and more CPU to generate keys, less often.  Defaults to 512.
         /// </summary>
         public int NumKeys
@@ -171,9 +171,9 @@ namespace bedrock.net
             set { m_cert = value; }
         }
 
-		/// <summary>
-		/// The remote certificate.
-		/// </summary>
+        /// <summary>
+        /// The remote certificate.
+        /// </summary>
         public X509Certificate RemoteCertificate
         {
             get { return m_remote_cert; }
@@ -189,7 +189,7 @@ namespace bedrock.net
         {
             throw new NotImplementedException("HTTP polling server not implemented yet");
         }
-    
+
         /// <summary>
         /// Stop polling.
         /// </summary>
@@ -204,7 +204,7 @@ namespace bedrock.net
         }
 
 
-    
+
         /// <summary>
         /// Start polling
         /// </summary>
@@ -216,7 +216,7 @@ namespace bedrock.net
             m_curKey = -1;
 
             if (m_thread == null)
-            {                
+            {
                 m_thread = new Thread(new ThreadStart(PollThread));
                 m_thread.IsBackground = true;
                 m_thread.Start();
@@ -224,7 +224,7 @@ namespace bedrock.net
 
             m_listener.OnConnect(this);
         }
-    
+
         /// <summary>
         /// Not implemented
         /// </summary>
@@ -232,7 +232,7 @@ namespace bedrock.net
         {
             throw new NotImplementedException();
         }
-    
+
         /// <summary>
         /// Start reading.
         /// </summary>
@@ -252,7 +252,7 @@ namespace bedrock.net
             throw new NotImplementedException();
         }
 #endif
-    
+
         /// <summary>
         /// Send bytes to the jabber server
         /// </summary>
@@ -277,7 +277,7 @@ namespace bedrock.net
                 Monitor.Pulse(m_lock);
             }
         }
-        
+
         private void GenKeys()
         {
             byte[] seed = new byte[32];
@@ -301,11 +301,11 @@ namespace bedrock.net
 
 #if NET20
 
-        private bool ValidateRemoteCertificate(Object sender, 
-                                               X509Certificate certificate, 
-                                               X509Chain chain, 
+        private bool ValidateRemoteCertificate(Object sender,
+                                               X509Certificate certificate,
+                                               X509Chain chain,
                                                System.Net.Security.SslPolicyErrors sslPolicyErrors)
-        {                        
+        {
             return UntrustedRootOK;
         }
 
@@ -313,7 +313,7 @@ namespace bedrock.net
 
 
         /// <summary>
-        /// Keep polling until 
+        /// Keep polling until
         /// </summary>
         private void PollThread()
         {
@@ -345,10 +345,10 @@ namespace bedrock.net
                 // did we get closed?
                 if (!m_running)
                     break;
-                
+
 
                 if (m_id == null)
-                { 
+                {
                     GenKeys();
                     start = new WriteBuf(string.Format("0;{0},", m_keys[m_curKey]));
                 }
@@ -381,36 +381,36 @@ namespace bedrock.net
                 req.CookieContainer = cookies;
                 req.ContentType     = CONTENT_TYPE;
                 req.Method          = METHOD;
-                
+
                 if (m_cert != null)
                     req.ClientCertificates.Add(m_cert);
 
                 req.KeepAlive       = false;
-                
+
 #if NET20
                 req.CachePolicy = new System.Net.Cache.HttpRequestCachePolicy(System.Net.Cache.HttpRequestCacheLevel.NoCacheNoStore);
-                
+
 #endif
 
-            
+
                 if (m_proxy != null)
                     req.Proxy = m_proxy;
                 req.ContentLength = count;
-                
-              
+
+
 
                 resp = null;
                 try
                 {
 #if NET20
-                    ServicePointManager.ServerCertificateValidationCallback = 
+                    ServicePointManager.ServerCertificateValidationCallback =
                         new System.Net.Security.RemoteCertificateValidationCallback(ValidateRemoteCertificate);
 #else
-					if (UntrustedRootOK)
-						ServicePointManager.CertificatePolicy = new TrustAllCertificatePolicy();
-					else
-						ServicePointManager.CertificatePolicy = null;
-						
+                    if (UntrustedRootOK)
+                        ServicePointManager.CertificatePolicy = new TrustAllCertificatePolicy();
+                    else
+                        ServicePointManager.CertificatePolicy = null;
+
 #endif
                     s = req.GetRequestStream();
                     s.Write(start.buf, start.offset, start.len);
@@ -433,7 +433,7 @@ namespace bedrock.net
                     goto POLL;
                 }
 
-                
+
 
                 if (resp.StatusCode != HttpStatusCode.OK)
                 {
@@ -480,16 +480,16 @@ namespace bedrock.net
                     }
                 }
 
-                if (ms.Length > 0) 
+                if (ms.Length > 0)
                 {
                     m_listener.OnWrite(this, buf, 0, buf.Length);
                 }
 
                 ms.SetLength(0);
                 rs = resp.GetResponseStream();
-                
-                
-                
+
+
+
 
                 while ((readlen = rs.Read(readbuf, 0, readbuf.Length)) > 0)
                 {
@@ -522,9 +522,9 @@ namespace bedrock.net
             }
         }
 
-		/// <summary>
-		/// Is socket connected.
-		/// </summary>
+        /// <summary>
+        /// Is socket connected.
+        /// </summary>
         public bool Connected
         {
             get

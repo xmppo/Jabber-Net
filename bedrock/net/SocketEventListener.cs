@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -26,19 +26,19 @@ namespace bedrock.net
     public interface ISocketEventListener
     {
         /// <summary>
-        /// An accept socket is about to be bound, or a connect socket is about to connect, 
-        /// or an incoming socket just came in.  Use this as an opportunity to 
+        /// An accept socket is about to be bound, or a connect socket is about to connect,
+        /// or an incoming socket just came in.  Use this as an opportunity to
         /// </summary>
         /// <param name="newSock">The new socket that is about to be connected.</param>
         void OnInit(BaseSocket newSock);
 
         /// <summary>
         /// We accepted a socket, and need to get a listener.
-        /// If the return value is null, then the socket will be closed, 
+        /// If the return value is null, then the socket will be closed,
         /// and RequestAccept will ALWAYS be called.
         /// </summary>
         /// <param name="newSock">The new socket.</param>
-        /// <returns>The listener for the *new* socket, as compared to 
+        /// <returns>The listener for the *new* socket, as compared to
         /// the listener for the *listen* socket</returns>
         ISocketEventListener GetListener(BaseSocket newSock);
 
@@ -90,8 +90,8 @@ namespace bedrock.net
     {
         #region Implementation of ISocketEventListener
         /// <summary>
-        /// An accept socket is about to be bound, or a connect socket is about to connect, 
-        /// or an incoming socket just came in.  Use this as an opportunity to 
+        /// An accept socket is about to be bound, or a connect socket is about to connect,
+        /// or an incoming socket just came in.  Use this as an opportunity to
         /// </summary>
         /// <param name="newSock">The new socket that is about to be connected.</param>
         public virtual void OnInit(BaseSocket newSock)
@@ -100,11 +100,11 @@ namespace bedrock.net
 
         /// <summary>
         /// We accepted a socket, and need to get a listener.
-        /// If the return value is null, then the socket will be closed, 
+        /// If the return value is null, then the socket will be closed,
         /// and RequestAccept will ALWAYS be called.
         /// </summary>
         /// <param name="newSock">The new socket.</param>
-        /// <returns>The listener for the *new* socket, as compared to 
+        /// <returns>The listener for the *new* socket, as compared to
         /// the listener for the *listen* socket</returns>
         public virtual ISocketEventListener GetListener(BaseSocket newSock)
         {
@@ -168,7 +168,7 @@ namespace bedrock.net
         /// <param name="length">Number of bytes to use out of the buffer</param>
         public virtual void OnWrite(BaseSocket sock, byte[] buf, int offset, int length)
         {
-        }    
+        }
         #endregion
     }
 }

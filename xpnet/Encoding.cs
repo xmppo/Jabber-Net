@@ -1,16 +1,16 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
- * 
+ *
  * xpnet is a deriviative of James Clark's XP.  See copying.txt for more info.
  * --------------------------------------------------------------------------*/
 namespace xpnet
@@ -246,7 +246,7 @@ namespace xpnet
          */
         COMMA,
     };
-     
+
     /// <summary>
     /// Base tokenizer class
     /// </summary>
@@ -344,11 +344,11 @@ namespace xpnet
         /// </summary>
         protected const int BT_S = BT_LSQB + 1;
         /// <summary>
-        /// 
+        ///
         /// </summary>
         protected const int BT_NMSTRT = BT_S + 1;
         /// <summary>
-        /// 
+        ///
         /// </summary>
         protected const int BT_NAME = BT_NMSTRT + 1;
         /// <summary>
@@ -372,7 +372,7 @@ namespace xpnet
         /// </summary>
         protected const int BT_RPAR = BT_LPAR + 1;
         /// <summary>
-        /// 
+        ///
         /// </summary>
         protected const int BT_AST = BT_RPAR + 1;
         /// <summary>
@@ -428,7 +428,7 @@ namespace xpnet
         };
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="sourceBuf"></param>
         /// <param name="sourceStart"></param>
@@ -483,7 +483,7 @@ namespace xpnet
             }
             return null;
         }
-        
+
         private int minBPC;
 
         /// <summary>
@@ -527,29 +527,29 @@ namespace xpnet
         /// <param name="buf"></param>
         /// <param name="off"></param>
         /// <returns></returns>
-        protected virtual int byteType2(byte[] buf, int off) 
+        protected virtual int byteType2(byte[] buf, int off)
         {
             return BT_OTHER;
         }
-        
+
         /// <summary>
         /// Called only when byteType(buf, off) == BT_LEAD3
         /// </summary>
         /// <param name="buf"></param>
         /// <param name="off"></param>
         /// <returns></returns>
-        int byteType3(byte[] buf, int off) 
+        int byteType3(byte[] buf, int off)
         {
             return BT_OTHER;
         }
-        
+
         /// <summary>
         /// Called only when byteType(buf, off) == BT_LEAD4
         /// </summary>
         /// <param name="buf"></param>
         /// <param name="off"></param>
         /// <returns></returns>
-        int byteType4(byte[] buf, int off) 
+        int byteType4(byte[] buf, int off)
         {
             return BT_OTHER;
         }
@@ -557,7 +557,7 @@ namespace xpnet
         void check2(byte[] buf, int off) { }
         void check3(byte[] buf, int off) { }
         void check4(byte[] buf, int off) { }
-        
+
         /**
          * Moves a position forward.  On entry, <code>pos</code> gives
          * the position of the byte at index <code>off</code> in
@@ -571,7 +571,7 @@ namespace xpnet
          * <code>movePosition</code> together.
          */
         protected abstract void movePosition(byte[] buf, int off, int end, Position pos);
-        
+
         private void checkCharMatches(byte[] buf, int off, char c)
         {
             if (!charMatches(buf, off, c))
@@ -581,13 +581,13 @@ namespace xpnet
         /* off points to character following "<!-" */
         private TOK scanComment(byte[] buf, int off, int end, Token token)
         {
-            if (off != end) 
+            if (off != end)
             {
                 checkCharMatches(buf, off, '-');
                 off += minBPC;
-                while (off != end) 
+                while (off != end)
                 {
-                    switch (byteType(buf, off)) 
+                    switch (byteType(buf, off))
                     {
                         case BT_LEAD2:
                             if (end - off < 2)
@@ -613,7 +613,7 @@ namespace xpnet
                         case BT_MINUS:
                             if ((off += minBPC) == end)
                                 throw new PartialTokenException();
-                            if (charMatches(buf, off, '-')) 
+                            if (charMatches(buf, off, '-'))
                             {
                                 if ((off += minBPC) == end)
                                     throw new PartialTokenException();
@@ -636,7 +636,7 @@ namespace xpnet
         {
             if (off == end)
                 throw new PartialTokenException();
-            switch (byteType(buf, off)) 
+            switch (byteType(buf, off))
             {
                 case BT_MINUS:
                     return scanComment(buf, off + minBPC, end, token);
@@ -649,15 +649,15 @@ namespace xpnet
                 default:
                     throw new InvalidTokenException(off);
             }
-            while (off != end) 
+            while (off != end)
             {
-                switch (byteType(buf, off)) 
+                switch (byteType(buf, off))
                 {
                     case BT_PERCNT:
                         if (off + minBPC == end)
                             throw new PartialTokenException();
                         /* don't allow <!ENTITY% foo "whatever"> */
-                    switch (byteType(buf, off + minBPC)) 
+                    switch (byteType(buf, off + minBPC))
                     {
                         case BT_S:
                         case BT_CR:
@@ -687,7 +687,7 @@ namespace xpnet
             bool upper = false;
             if (end - off != minBPC*3)
                 return false;
-            switch (byteToAscii(buf, off)) 
+            switch (byteToAscii(buf, off))
             {
                 case 'x':
                     break;
@@ -698,7 +698,7 @@ namespace xpnet
                     return false;
             }
             off += minBPC;
-            switch (byteToAscii(buf, off)) 
+            switch (byteToAscii(buf, off))
             {
                 case 'm':
                     break;
@@ -709,7 +709,7 @@ namespace xpnet
                     return false;
             }
             off += minBPC;
-            switch (byteToAscii(buf, off)) 
+            switch (byteToAscii(buf, off))
             {
                 case 'l':
                     break;
@@ -731,7 +731,7 @@ namespace xpnet
             int target = off;
             if (off == end)
                 throw new PartialTokenException();
-            switch (byteType(buf, off)) 
+            switch (byteType(buf, off))
             {
                 case BT_NMSTRT:
                     off += minBPC;
@@ -760,9 +760,9 @@ namespace xpnet
                 default:
                     throw new InvalidTokenException(off);
             }
-            while (off != end) 
+            while (off != end)
             {
-                switch (byteType(buf, off)) 
+                switch (byteType(buf, off))
                 {
                     case BT_NMSTRT:
                     case BT_NAME:
@@ -796,9 +796,9 @@ namespace xpnet
                         bool isXml = targetIsXml(buf, target, off);
                         token.NameEnd = off;
                         off += minBPC;
-                        while (off != end) 
+                        while (off != end)
                         {
-                            switch (byteType(buf, off)) 
+                            switch (byteType(buf, off))
                             {
                                 case BT_LEAD2:
                                     if (end - off < 2)
@@ -825,7 +825,7 @@ namespace xpnet
                                     off += minBPC;
                                     if (off == end)
                                         throw new PartialTokenException();
-                                    if (charMatches(buf, off, '>')) 
+                                    if (charMatches(buf, off, '>'))
                                     {
                                         token.TokenEnd = off + minBPC;
                                         if (isXml)
@@ -923,7 +923,7 @@ namespace xpnet
                     off += minBPC;
                     if (off == end)
                         throw new PartialTokenException();
-                    if (!charMatches(buf, off, '>')) 
+                    if (!charMatches(buf, off, '>'))
                     {
                         off -= minBPC;
                         break;
@@ -1014,7 +1014,7 @@ namespace xpnet
         {
             if (off == end)
                 throw new PartialTokenException();
-            switch (byteType(buf, off)) 
+            switch (byteType(buf, off))
             {
                 case BT_NMSTRT:
                     off += minBPC;
@@ -1043,9 +1043,9 @@ namespace xpnet
                 default:
                     throw new InvalidTokenException(off);
             }
-            while (off != end) 
+            while (off != end)
             {
-                switch (byteType(buf, off)) 
+                switch (byteType(buf, off))
                 {
                     case BT_NMSTRT:
                     case BT_NAME:
@@ -1077,9 +1077,9 @@ namespace xpnet
                     case BT_CR:
                     case BT_LF:
                         token.NameEnd = off;
-                        for (off += minBPC; off != end; off += minBPC) 
+                        for (off += minBPC; off != end; off += minBPC)
                         {
-                            switch (byteType(buf, off)) 
+                            switch (byteType(buf, off))
                             {
                                 case BT_S:
                                 case BT_CR:
@@ -1120,7 +1120,7 @@ namespace xpnet
                     case 'A': case 'B': case 'C': case 'D': case 'E': case 'F':
                         num = c - ('A' - 10);
                         break;
-                    case 'a': case 'b': case 'c': case 'd': case 'e': case 'f': 
+                    case 'a': case 'b': case 'c': case 'd': case 'e': case 'f':
                         num = c - ('a' - 10);
                         break;
                     default:
@@ -1129,7 +1129,7 @@ namespace xpnet
                 for (off += minBPC; off != end; off += minBPC)
                 {
                     c = byteToAscii(buf, off);
-                    switch (c) 
+                    switch (c)
                     {
                         case '0': case '1': case '2': case '3': case '4':
                         case '5': case '6': case '7': case '8': case '9':
@@ -1138,7 +1138,7 @@ namespace xpnet
                         case 'A': case 'B': case 'C': case 'D': case 'E': case 'F':
                             num = (num << 4) + c - ('A' - 10);
                             break;
-                        case 'a': case 'b': case 'c': case 'd': case 'e': case 'f': 
+                        case 'a': case 'b': case 'c': case 'd': case 'e': case 'f':
                             num = (num << 4) + c - ('a' - 10);
                             break;
                         case ';':
@@ -1178,12 +1178,12 @@ namespace xpnet
                     default:
                         throw new InvalidTokenException(off);
                 }
-                
+
                 int num = c - '0';
-                for (off += minBPC; off != end; off += minBPC) 
+                for (off += minBPC; off != end; off += minBPC)
                 {
                     c = byteToAscii(buf, off);
-                    switch (c) 
+                    switch (c)
                     {
                         case '0':
                         case '1':
@@ -1212,7 +1212,7 @@ namespace xpnet
         }
 
         /* num is known to be < 0x110000; return the token code */
-        private TOK setRefChar(int num, Token token) 
+        private TOK setRefChar(int num, Token token)
         {
             if (num < 0x10000)
             {
@@ -1301,7 +1301,7 @@ namespace xpnet
             }
             return false;
         }
-        
+
         /* off points to character following "&" */
         private TOK scanRef(byte[] buf, int off, int end, Token token)
         {
@@ -1309,7 +1309,7 @@ namespace xpnet
                 throw new PartialTokenException();
             if (isMagicEntityRef(buf, off, end, token))
                 return TOK.MAGIC_ENTITY_REF;
-            switch (byteType(buf, off)) 
+            switch (byteType(buf, off))
             {
                 case BT_NMSTRT:
                     off += minBPC;
@@ -1340,9 +1340,9 @@ namespace xpnet
                 default:
                     throw new InvalidTokenException(off);
             }
-            while (off != end) 
+            while (off != end)
             {
-                switch (byteType(buf, off)) 
+                switch (byteType(buf, off))
                 {
                     case BT_NMSTRT:
                     case BT_NAME:
@@ -1446,16 +1446,16 @@ namespace xpnet
                         if (NameEnd < 0)
                             NameEnd = off;
                         int open;
-                        for (;;) 
+                        for (;;)
                         {
-          
+
                             off += minBPC;
                             if (off == end)
                                 throw new PartialTokenException();
                             open = byteType(buf, off);
                             if (open == BT_QUOT || open == BT_APOS)
                                 break;
-                            switch (open) 
+                            switch (open)
                             {
                                 case BT_S:
                                 case BT_LF:
@@ -1477,7 +1477,7 @@ namespace xpnet
                             t = byteType(buf, off);
                             if (t == open)
                                 break;
-                            switch (t) 
+                            switch (t)
                             {
                                 case BT_NONXML:
                                 case BT_MALFORM:
@@ -1538,7 +1538,7 @@ namespace xpnet
                         if (off == end)
                             throw new PartialTokenException();
                         t = byteType(buf, off);
-                        switch (t) 
+                        switch (t)
                         {
                             case BT_S:
                             case BT_CR:
@@ -1557,7 +1557,7 @@ namespace xpnet
                         /* off points to closing quote */
                         for (;;)
                         {
-                            switch (t) 
+                            switch (t)
                             {
                                 case BT_NMSTRT:
                                     nameStart = off;
@@ -1611,7 +1611,7 @@ namespace xpnet
                                 throw new PartialTokenException();
                             t = byteType(buf, off);
                         }
-                        
+
                         skipToName:
                             NameEnd = -1;
                         break;
@@ -1877,7 +1877,7 @@ namespace xpnet
                     off += minBPC;
                     if (off == end)
                         throw new ExtensibleTokenException(TOK.DATA_CHARS);
-                    if (!charMatches(buf, off, '>')) 
+                    if (!charMatches(buf, off, '>'))
                     {
                         off -= minBPC;
                         break;
@@ -1992,9 +1992,9 @@ namespace xpnet
                 default:
                     throw new InvalidTokenException(off);
             }
-            while (off != end) 
+            while (off != end)
             {
-                switch (byteType(buf, off)) 
+                switch (byteType(buf, off))
                 {
                     case BT_NMSTRT:
                     case BT_NAME:
@@ -2034,11 +2034,11 @@ namespace xpnet
         }
 
 
-        private TOK scanPoundName(byte[] buf, int off, int end, Token token) 
+        private TOK scanPoundName(byte[] buf, int off, int end, Token token)
         {
             if (off == end)
                 throw new PartialTokenException();
-            switch (byteType(buf, off)) 
+            switch (byteType(buf, off))
             {
                 case BT_NMSTRT:
                     off += minBPC;
@@ -2067,9 +2067,9 @@ namespace xpnet
                 default:
                     throw new InvalidTokenException(off);
             }
-            while (off != end) 
+            while (off != end)
             {
-                switch (byteType(buf, off)) 
+                switch (byteType(buf, off))
                 {
                     case BT_NMSTRT:
                     case BT_NAME:
@@ -2173,7 +2173,7 @@ namespace xpnet
          * Returns an encoding object to be used to start parsing an
          * external entity.  The encoding is chosen based on the
          * initial 4 bytes of the entity.
-         * 
+         *
          * @param buf the byte array containing the initial bytes of
          * the entity @param off the index in <code>buf</code> of the
          * first byte of the entity @param end the index in
@@ -2374,7 +2374,7 @@ namespace xpnet
                 end = adjustEnd(off, end);
             if (off == end)
                 throw new EmptyTokenException();
-            switch (byteType(buf, off)) 
+            switch (byteType(buf, off))
             {
                 case BT_QUOT:
                     return scanLit(BT_QUOT, buf, off + minBPC, end, token);
@@ -2385,7 +2385,7 @@ namespace xpnet
                     off += minBPC;
                     if (off == end)
                         throw new PartialTokenException();
-                    switch (byteType(buf, off)) 
+                    switch (byteType(buf, off))
                     {
                         case BT_EXCL:
                             return scanDecl(buf, off + minBPC, end, token);
@@ -2407,12 +2407,12 @@ namespace xpnet
                     goto case BT_S;
                 case BT_S:
                 case BT_LF:
-                    for (;;) 
+                    for (;;)
                     {
                         off += minBPC;
                         if (off == end)
                             break;
-                        switch (byteType(buf, off)) 
+                        switch (byteType(buf, off))
                         {
                             case BT_S:
                             case BT_LF:
@@ -2442,11 +2442,11 @@ namespace xpnet
                     off += minBPC;
                     if (off == end)
                         throw new ExtensibleTokenException(TOK.CLOSE_BRACKET);
-                    if (charMatches(buf, off, ']')) 
+                    if (charMatches(buf, off, ']'))
                     {
                         if (off + minBPC == end)
                             throw new PartialTokenException();
-                        if (charMatches(buf, off + minBPC, '>')) 
+                        if (charMatches(buf, off + minBPC, '>'))
                         {
                             token.TokenEnd = off + 2*minBPC;
                             return TOK.COND_SECT_CLOSE;
@@ -2461,7 +2461,7 @@ namespace xpnet
                     off += minBPC;
                     if (off == end)
                         throw new ExtensibleTokenException(TOK.CLOSE_PAREN);
-                switch (byteType(buf, off)) 
+                switch (byteType(buf, off))
                 {
                     case BT_AST:
                         token.TokenEnd = off + minBPC;
@@ -2494,7 +2494,7 @@ namespace xpnet
                 case BT_LEAD2:
                     if (end - off < 2)
                         throw new PartialCharException(off);
-                switch (byteType2(buf, off)) 
+                switch (byteType2(buf, off))
                 {
                     case BT_NMSTRT:
                         off += 2;
@@ -2511,7 +2511,7 @@ namespace xpnet
                 case BT_LEAD3:
                     if (end - off < 3)
                         throw new PartialCharException(off);
-                switch (byteType3(buf, off)) 
+                switch (byteType3(buf, off))
                 {
                     case BT_NMSTRT:
                         off += 3;
@@ -2528,7 +2528,7 @@ namespace xpnet
                 case BT_LEAD4:
                     if (end - off < 4)
                         throw new PartialCharException(off);
-                switch (byteType4(buf, off)) 
+                switch (byteType4(buf, off))
                 {
                     case BT_NMSTRT:
                         off += 4;
@@ -2554,9 +2554,9 @@ namespace xpnet
                 default:
                     throw new InvalidTokenException(off);
             }
-            while (off != end) 
+            while (off != end)
             {
-                switch (byteType(buf, off)) 
+                switch (byteType(buf, off))
                 {
                     case BT_NMSTRT:
                     case BT_NAME:
@@ -2767,9 +2767,9 @@ namespace xpnet
             if (off == end)
                 throw new EmptyTokenException();
             int start = off;
-            while (off != end) 
+            while (off != end)
             {
-                switch (byteType(buf, off)) 
+                switch (byteType(buf, off))
                 {
                     case BT_LEAD2:
                         if (end - off < 2)
@@ -2797,7 +2797,7 @@ namespace xpnet
                         token.TokenEnd = off;
                         return TOK.DATA_CHARS;
                     case BT_LF:
-                        if (off == start) 
+                        if (off == start)
                         {
                             token.TokenEnd = off + minBPC;
                             return TOK.DATA_NEWLINE;
@@ -2805,7 +2805,7 @@ namespace xpnet
                         token.TokenEnd = off;
                         return TOK.DATA_CHARS;
                     case BT_CR:
-                        if (off == start) 
+                        if (off == start)
                         {
                             off += minBPC;
                             if (off == end)
@@ -2891,7 +2891,7 @@ namespace xpnet
                         off += minBPC;
                         if (off == end)
                             goto loop;
-                        if (charMatches(buf, off, '>')) 
+                        if (charMatches(buf, off, '>'))
                         {
                             if (level == 0)
                                 return off + minBPC;
@@ -2955,7 +2955,7 @@ namespace xpnet
                         break;
                     case BT_NAME:
                     case BT_NMSTRT:
-                        if ((c & ~0x7f) == 0) 
+                        if ((c & ~0x7f) == 0)
                         {
                             sbuf.Append(c);
                             break;
@@ -2963,7 +2963,7 @@ namespace xpnet
                         // fall through
                         goto default;
                     default:
-                    switch (c) 
+                    switch (c)
                     {
                         case '$':
                         case '@':
@@ -2988,7 +2988,7 @@ namespace xpnet
             int len = str.Length;
             if (len*minBPC != end - off)
                 return false;
-            for (int i = 0; i < len; off += minBPC, i++) 
+            for (int i = 0; i < len; off += minBPC, i++)
             {
                 if (!charMatches(buf, off, str[i]))
                     return false;
@@ -3005,9 +3005,9 @@ namespace xpnet
          */
         public int skipS(byte[] buf, int off, int end)
         {
-            while (off < end) 
+            while (off < end)
             {
-                switch (byteType(buf, off)) 
+                switch (byteType(buf, off))
                 {
                     case BT_S:
                     case BT_CR:
@@ -3027,13 +3027,13 @@ namespace xpnet
             int bt = byteType2(buf, off);
             return bt == BT_NAME || bt == BT_NMSTRT;
         }
-        
+
         private bool isNameChar3(byte[] buf, int off)
         {
             int bt = byteType3(buf, off);
             return bt == BT_NAME || bt == BT_NMSTRT;
         }
-        
+
         private bool isNameChar4(byte[] buf, int off)
         {
             int bt = byteType4(buf, off);
@@ -3046,7 +3046,7 @@ namespace xpnet
             "\u0ea7\u0eb0\u0ebd\u1100\u1109\u113c\u113e\u1140\u114c\u114e\u1150\u1159" +
             "\u1163\u1165\u1167\u1169\u1175\u119e\u11a8\u11ab\u11ba\u11eb\u11f0\u11f9" +
             "\u1f59\u1f5b\u1f5d\u1fbe\u2126\u212e\u3007";
-        
+
         private const string nameStartRanges =
             "\u0041\u005a\u0061\u007a\u00c0\u00d6\u00d8\u00f6\u00f8\u00ff\u0100\u0131" +
             "\u0134\u013e\u0141\u0148\u014a\u017e\u0180\u01c3\u01cd\u01f0\u01f4\u01f5" +
@@ -3074,13 +3074,13 @@ namespace xpnet
             "\u1fc6\u1fcc\u1fd0\u1fd3\u1fd6\u1fdb\u1fe0\u1fec\u1ff2\u1ff4\u1ff6\u1ffc" +
             "\u212a\u212b\u2180\u2182\u3041\u3094\u30a1\u30fa\u3105\u312c\uac00\ud7a3" +
             "\u4e00\u9fa5\u3021\u3029";
-        
+
         private const string nameSingles =
             "\u002d\u002e\u05bf\u05c4\u0670\u093c\u094d\u09bc\u09be\u09bf\u09d7\u0a02" +
             "\u0a3c\u0a3e\u0a3f\u0abc\u0b3c\u0bd7\u0d57\u0e31\u0eb1\u0f35\u0f37\u0f39" +
             "\u0f3e\u0f3f\u0f97\u0fb9\u20e1\u3099\u309a\u00b7\u02d0\u02d1\u0387\u0640" +
             "\u0e46\u0ec6\u3005";
-        
+
         private const string nameRanges =
             "\u0300\u0345\u0360\u0361\u0483\u0486\u0591\u05a1\u05a3\u05b9\u05bb\u05bd" +
             "\u05c1\u05c2\u064b\u0652\u06d6\u06dc\u06dd\u06df\u06e0\u06e4\u06e7\u06e8" +
@@ -3098,7 +3098,7 @@ namespace xpnet
             "\u0e50\u0e59\u0ed0\u0ed9\u0f20\u0f29\u3031\u3035\u309d\u309e\u30fc\u30fe";
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         protected static int[][] charTypeTable;
         private static void setCharType(char c, int type)
@@ -3106,7 +3106,7 @@ namespace xpnet
             if (c < 0x80)
                 return;
             int hi = c >> 8;
-            if (charTypeTable[hi] == null) 
+            if (charTypeTable[hi] == null)
             {
                 charTypeTable[hi] = new int[256];
                 for (int i = 0; i < 256; i++)

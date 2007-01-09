@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -184,7 +184,7 @@ namespace jabber.connection
     /// </summary>
     [RCS(@"$Header$")]
     abstract public class XmppStream :
-        System.ComponentModel.Component, 
+        System.ComponentModel.Component,
         IStanzaEventListener
     {
         private static readonly object[][] DEFAULTS = new object[][] {
@@ -277,14 +277,14 @@ namespace jabber.connection
         /// <returns></returns>
         public object this[string prop]
         {
-            get 
+            get
             {
                 if (!m_properties.Contains(prop))
                     return null;
-                return m_properties[prop]; 
+                return m_properties[prop];
             }
-            set 
-            { 
+            set
+            {
                 m_properties[prop] = value;
                 if (PropertyChanged != null)
                 {
@@ -330,14 +330,14 @@ namespace jabber.connection
         */
 
         /// <summary>
-        /// Text was written to the server.  Use for debugging only.  
+        /// Text was written to the server.  Use for debugging only.
         /// Will NOT be complete nodes at a time.
         /// </summary>
         [Category("Debug")]
         public event bedrock.TextHandler OnWriteText;
 
         /// <summary>
-        /// Text was read from the server.  Use for debugging only.  
+        /// Text was read from the server.  Use for debugging only.
         /// Will NOT be complete nodes at a time.
         /// </summary>
         [Category("Debug")]
@@ -346,21 +346,21 @@ namespace jabber.connection
         /// <summary>
         /// A new stream was initialized.  Add your packet factories to it.
         /// NOTE: you may NOT make calls to the GUI in this callback, unless you
-        /// call Invoke yourself.  Make sure you add your packet factories before 
+        /// call Invoke yourself.  Make sure you add your packet factories before
         /// calling Invoke however.
         /// </summary>
         [Category("Stream")]
         public event StreamHandler OnStreamInit;
 
         /// <summary>
-        /// Some error occurred when processing.  
+        /// Some error occurred when processing.
         /// The connection has been closed.
         /// </summary>
         [Category("Stream")]
         public event bedrock.ExceptionHandler OnError;
 
         /// <summary>
-        /// Get notified for every jabber packet.  
+        /// Get notified for every jabber packet.
         /// This is a union of OnPresence, OnMessage, and OnIQ.
         /// Use this *or* the others, but not both, as a matter of style.
         /// </summary>
@@ -424,7 +424,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// The name of the server to connect to.  
+        /// The name of the server to connect to.
         /// </summary>
         [Description("The name of the Jabber server.")]
         [DefaultValue("jabber.com")]
@@ -436,7 +436,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// The address to use on the "to" attribute of the stream:stream.  
+        /// The address to use on the "to" attribute of the stream:stream.
         /// You can put the network hostname or IP address of the server to connect to.
         /// If none is specified, the Server will be used.
         /// Eventually, when SRV is supported, this will be deprecated.
@@ -527,7 +527,7 @@ namespace jabber.connection
         /// <summary>
         /// Set the certificate to be used for accept sockets.  To
         /// generate a test .pfx file using openssl, add this to
-        /// openssl.conf: 
+        /// openssl.conf:
         ///   <blockquote>
         ///   [ serverex ]
         ///   extendedKeyUsage=1.3.6.1.5.5.7.3.1
@@ -535,18 +535,18 @@ namespace jabber.connection
         /// and run the following commands:
         ///   <blockquote>
         ///   openssl req -new -x509 -newkey rsa:1024 -keyout
-        ///     privkey.pem -out key.pem -extensions serverex 
+        ///     privkey.pem -out key.pem -extensions serverex
         ///   openssl pkcs12 -export -in key.pem -inkey privkey.pem
-        ///     -name localhost -out localhost.pfx 
+        ///     -name localhost -out localhost.pfx
         ///   </blockquote>
         /// If you leave the certificate null, and you are doing
         /// Accept, the SSL class will try to find a default server
         /// cert on your box.  If you have IIS installed with a cert,
-        /// this might just go... 
+        /// this might just go...
         /// </summary>
         /// <param name="filename">A .pfx or .cer file</param>
         /// <param name="password">The password, if this is a .pfx
-        /// file, null if .cer file.</param> 
+        /// file, null if .cer file.</param>
         public void SetCertificateFile(string filename,
                                        string password)
         {
@@ -558,9 +558,9 @@ namespace jabber.connection
                 fs.Read (data, 0, data.Length);
                 fs.Close ();
             }
-    
+
             Mono.Security.X509.PKCS12 pfx = new Mono.Security.X509.PKCS12(data, password);
-            if (pfx.Certificates.Count > 0) 
+            if (pfx.Certificates.Count > 0)
                 this[Options.LOCAL_CERTIFICATE] = new X509Certificate(pfx.Certificates[0].RawData);
 #else
             this[Options.LOCAL_CERTIFICATE] = new X509Certificate2(filename, password);
@@ -570,12 +570,12 @@ namespace jabber.connection
 #elif !NO_SSL
         /// <summary>
         /// The certificate to be used for the local side of sockets,
-        /// with SSL on. 
+        /// with SSL on.
         /// </summary>
         [Browsable(false)]
         public Certificate LocalCertificate
         {
-            
+
             get { return this[Options.LOCAL_CERTIFICATE] as Certificate; }
             set { this[Options.LOCAL_CERTIFICATE] = value; }
         }
@@ -603,16 +603,16 @@ namespace jabber.connection
         /// file, null if .cer file.</param>
         public void SetCertificateFile(string filename, string password)
         {
-                        if (!File.Exists(filename)) 
+                        if (!File.Exists(filename))
                         {
                                 throw new CertificateException("File does not exist: " + filename);
                         }
                         CertificateStore store;
-                        if (password != null) 
+                        if (password != null)
                         {
                                 store = CertificateStore.CreateFromPfxFile(filename, password);
-                        } 
-                        else 
+                        }
+                        else
                         {
                                 store = CertificateStore.CreateFromCerFile(filename);
                         }
@@ -634,7 +634,7 @@ namespace jabber.connection
             {
                 // If we are running in the designer, let's try to get
                 // an invoke control from the environment.  VB
-                // programmers can't seem to follow directions. 
+                // programmers can't seem to follow directions.
                 if ((this.m_invoker == null) && DesignMode)
                 {
                     IDesignerHost host = (IDesignerHost)base.GetService(typeof(IDesignerHost));
@@ -644,7 +644,7 @@ namespace jabber.connection
                         if ((root != null) && (root is ISynchronizeInvoke))
                         {
                             m_invoker = (ISynchronizeInvoke)root;
-                            // TODO: fire some sort of propertyChanged event, 
+                            // TODO: fire some sort of propertyChanged event,
                             // so that old code gets cleaned up correctly.
                         }
                     }
@@ -771,7 +771,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// The current state of the connection.  
+        /// The current state of the connection.
         /// Lock on StateLock before accessing.
         /// </summary>
         [Browsable(false)]
@@ -849,7 +849,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [Description("The version string returned in the server's open stream element")]
         [DefaultValue(null)]
@@ -947,7 +947,7 @@ namespace jabber.connection
         {
             bool doClose = false;
             bool doStream = false;
-            
+
             lock (StateLock)
             {
                 if ((m_state == RunningState.Instance) && (clean))
@@ -1017,7 +1017,7 @@ namespace jabber.connection
         protected virtual void OnDocumentStart(object sender, System.Xml.XmlElement elem)
         {
             bool hack = false;
-                                   
+
             if (elem is jabber.protocol.stream.Stream)
             {
                 jabber.protocol.stream.Stream str = elem as jabber.protocol.stream.Stream;
@@ -1059,7 +1059,7 @@ namespace jabber.connection
                     OnSASLStart(this, null); // Hack.  Old-style auth for jabberclient.
                 }
             }
-// TODO: Fix broken build            
+// TODO: Fix broken build
 /*
             else if (elem is jabber.protocol.httpbind.Body)
             {
@@ -1120,9 +1120,9 @@ namespace jabber.connection
                 // don't do starttls if we're already on an SSL socket.
                 // bad server setup, but no skin off our teeth, we're already
                 // SSL'd.  Also, start-tls won't work when polling.
-                if ((bool)this[Options.AUTO_TLS] && 
-                    (f.StartTLS != null) && 
-                    (!m_sslOn) && 
+                if ((bool)this[Options.AUTO_TLS] &&
+                    (f.StartTLS != null) &&
+                    (!m_sslOn) &&
                     m_stanzas.SupportsTLS)
                 {
                     // start-tls
@@ -1155,7 +1155,7 @@ namespace jabber.connection
                             types = ms.Types;
                     }
 
-                    
+
 
                     if ((types != MechanismType.NONE) && ((bool)this[Options.SASL]))
                     {
@@ -1300,7 +1300,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="message"></param>
         public void OnSASLException(string message)
@@ -1492,7 +1492,7 @@ namespace jabber.connection
                     CheckedInvoke(OnConnect, new object[] { this, m_stanzas });
                 else
                 {
-                    // Um.  This cast might not be right, but I don't want to break backward compatibility 
+                    // Um.  This cast might not be right, but I don't want to break backward compatibility
                     // if I don't have to by changing the delegate interface.
                     OnConnect(this, m_stanzas);
                 }
@@ -1553,7 +1553,7 @@ namespace jabber.connection
                     OnError(this, ex);
             }
 
-            // TODO: Figure out what the "good" errors are, and try to 
+            // TODO: Figure out what the "good" errors are, and try to
             // reconnect.  There are too many "bad" errors to just let this fly.
             //TryReconnect();
         }
@@ -1580,7 +1580,7 @@ namespace jabber.connection
 
         void IStanzaEventListener.DocumentStarted(XmlElement elem)
         {
-            // The OnDocumentStart logic stays outside the listener, so that it can be 
+            // The OnDocumentStart logic stays outside the listener, so that it can be
             // more easily overriden by subclasses.
             OnDocumentStart(m_stanzas, elem);
         }
@@ -1602,7 +1602,7 @@ namespace jabber.connection
 
         void IStanzaEventListener.StanzaReceived(XmlElement elem)
         {
-            // The OnElement logic stays outside the listener, so that it can be 
+            // The OnElement logic stays outside the listener, so that it can be
             // more easily overriden by subclasses.
                 OnElement(m_stanzas, elem);
         }

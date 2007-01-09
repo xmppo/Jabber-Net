@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -67,7 +67,7 @@ namespace bedrock.net
         /// <summary>
         /// Create a new instance.
         /// </summary>
-        /// <param name="maxsockets">Maximum number of sockets to watch.  In this version, 
+        /// <param name="maxsockets">Maximum number of sockets to watch.  In this version,
         /// this is mostly for rate-limiting purposes.</param>
         public SocketWatcher(int maxsockets)
         {
@@ -84,21 +84,21 @@ namespace bedrock.net
         }
 
         /// <summary>
-        /// The maximum number of sockets watched.  Throws 
-        /// InvalidOperationException if the new value is fewer than the number 
+        /// The maximum number of sockets watched.  Throws
+        /// InvalidOperationException if the new value is fewer than the number
         /// currently open.  -1 means no limit.
         /// </summary>
         public int MaxSockets
         {
             get { return m_maxSocks; }
-            set 
-            { 
+            set
+            {
                 lock(m_lock)
                 {
                     if ((value >= 0) && (m_socks.Count >= value))
                         throw new InvalidOperationException("Too many sockets: " + m_socks.Count);
-                
-                    m_maxSocks = value; 
+
+                    m_maxSocks = value;
                 }
             }
         }
@@ -139,7 +139,7 @@ namespace bedrock.net
         /// </summary>
         /// <param name="filename">A .pfx or .cer file</param>
         /// <param name="password">The password, if this is a .pfx file, null if .cer file.</param>
-#if NET20                                      
+#if NET20
         public void SetCertificateFile(string filename,
                                        string password)
         {
@@ -159,7 +159,7 @@ namespace bedrock.net
 
             Mono.Security.X509.PKCS12 pfx =
                 new Mono.Security.X509.PKCS12(data, password);
-            if (pfx.Certificates.Count > 0) 
+            if (pfx.Certificates.Count > 0)
                 m_cert = new X509Certificate(pfx.Certificates[0].RawData);
             // TODO: check cert for validity
         }
@@ -175,7 +175,7 @@ namespace bedrock.net
             throw new NotImplementedException("Not implemented yet.  Need to figure out how to search for 'server' certs.");
         }
 #endif
-    
+
 #elif !NO_SSL
         /// <summary>
         /// The certificate to be used for the local side of sockets, with SSL on.
@@ -205,16 +205,16 @@ namespace bedrock.net
         /// <param name="password">The password, if this is a .pfx file, null if .cer file.</param>
         public void SetCertificateFile(string filename, string password)
         {
-            if (!File.Exists(filename)) 
+            if (!File.Exists(filename))
             {
                 throw new CertificateException("File does not exist: " + filename);
             }
             CertificateStore store;
-            if (password != null) 
+            if (password != null)
             {
                 store = CertificateStore.CreateFromPfxFile(filename, password);
-            } 
-            else 
+            }
+            else
             {
                 store = CertificateStore.CreateFromCerFile(filename);
             }
@@ -230,7 +230,7 @@ namespace bedrock.net
         public void SetCertificateStore(string storeName)
         {
             CertificateStore store = new CertificateStore(storeName);
-            
+
             m_cert = CertUtil.FindServerCert(store);
             if (m_cert == null)
                 throw new CertificateException("The certificate file does not contain a server authentication certificate.");
@@ -333,7 +333,7 @@ namespace bedrock.net
                                                string               hostId)
         {
             AsyncSocket result;
-   
+
             // Create the socket:
             result = new AsyncSocket(this, listener, SSL, m_synch);
             if (SSL)
@@ -355,7 +355,7 @@ namespace bedrock.net
         /// <param name="s">New socket connection</param>
         public void RegisterSocket(AsyncSocket s)
         {
-            
+
             lock (m_lock)
             {
                 if ((m_maxSocks >= 0) && (m_socks.Count >= m_maxSocks))
@@ -373,12 +373,12 @@ namespace bedrock.net
             lock (m_lock)
             {
                 m_socks.Remove(s);
-                
+
                 if (m_pending.Contains(s))
                 {
                     m_pending.Remove(s);
                 }
-                else 
+                else
                 {
                     foreach (AsyncSocket sock in m_pending)
                     {
@@ -390,7 +390,7 @@ namespace bedrock.net
         }
 
         /// <summary>
-        /// Called by AsyncSocket when this class is full, and the listening AsyncSocket 
+        /// Called by AsyncSocket when this class is full, and the listening AsyncSocket
         /// socket would like to be restarted when there are slots free.
         /// </summary>
         /// <param name="s">Listening socket</param>
@@ -416,6 +416,6 @@ namespace bedrock.net
                 }
                 m_socks.Clear();
             }
-        }        
+        }
     }
 }

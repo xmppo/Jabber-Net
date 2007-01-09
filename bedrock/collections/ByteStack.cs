@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -17,7 +17,7 @@ using bedrock.util;
 namespace bedrock.collections
 {
     /// <summary>
-    /// A type-safe stack for bytes, implemented as a growable  
+    /// A type-safe stack for bytes, implemented as a growable
     /// buffer.
     /// </summary>
     [RCS(@"$Header$")]
@@ -51,7 +51,7 @@ namespace bedrock.collections
         }
         /// <summary>
         /// Create an instance with the given initial value.  The initial size
-        /// will be grown from the size of the given bytes.  A copy is made of 
+        /// will be grown from the size of the given bytes.  A copy is made of
         /// the given bytes.
         /// </summary>
         /// <param name="start"> </param>
@@ -81,7 +81,7 @@ namespace bedrock.collections
         /// </summary>
         public int Count
         {
-            get 
+            get
             {
                 return m_count;
             }
@@ -91,7 +91,7 @@ namespace bedrock.collections
         /// </summary>
         public int Capacity
         {
-            get 
+            get
             {
                 return m_capacity;
             }

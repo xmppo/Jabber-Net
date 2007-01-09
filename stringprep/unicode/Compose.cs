@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -48,9 +48,9 @@ namespace stringprep.unicode
         public static bool Combine(char a, char b, out char result)
         {
 
-            // FIRST_START..FIRST_SINGLE_START: 
+            // FIRST_START..FIRST_SINGLE_START:
             // FIRST_SINGLE_START..SECOND_START: look up a to see if b matches
-            // SECOND_START..SECOND_SINGLE_START: 
+            // SECOND_START..SECOND_SINGLE_START:
             // SECOND_SINGLE_START..: look up b to see if a matches
 
             int index_a = Index(a);

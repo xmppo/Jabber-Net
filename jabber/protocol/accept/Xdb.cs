@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -74,7 +74,7 @@ namespace jabber.protocol.accept
     public class Xdb : jabber.protocol.Packet
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="doc"></param>
         public Xdb(XmlDocument doc) : base("xdb", doc)
@@ -83,12 +83,12 @@ namespace jabber.protocol.accept
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="prefix"></param>
         /// <param name="qname"></param>
         /// <param name="doc"></param>
-        public Xdb(string prefix, XmlQualifiedName qname, XmlDocument doc) : 
+        public Xdb(string prefix, XmlQualifiedName qname, XmlDocument doc) :
             base(prefix, qname, doc)
         {
         }
@@ -99,7 +99,7 @@ namespace jabber.protocol.accept
         public XmlElement Contents
         {
             get { return (XmlElement) this.FirstChild; }
-            set 
+            set
             {
                 this.InnerXml = "";
                 AddChild(value);
@@ -112,8 +112,8 @@ namespace jabber.protocol.accept
         public XdbType Type
         {
             get { return (XdbType) GetEnumAttr("type", typeof(XdbType)); }
-            set 
-            { 
+            set
+            {
                 XdbType cur = this.Type;
                 if (cur == value)
                     return;
@@ -134,8 +134,8 @@ namespace jabber.protocol.accept
         public XdbAction Action
         {
             get { return (XdbAction) GetEnumAttr("action", typeof(XdbAction)); }
-            set 
-            { 
+            set
+            {
                 XdbAction cur = this.Action;
                 if (cur == value)
                     return;

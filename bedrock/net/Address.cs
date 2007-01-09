@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -27,7 +27,7 @@ namespace bedrock.net
     public delegate void AddressResolved(Address addr);
     /// <summary>
     /// Encapsulation and caching of IP address information.  Very similar to System.Net.IPEndPoint,
-    /// but adds async DNS lookups.  
+    /// but adds async DNS lookups.
     /// TODO: add SRV?
     /// </summary>
     [RCS(@"$Header$")]
@@ -70,7 +70,7 @@ namespace bedrock.net
         public string Hostname
         {
             get { return m_hostname; }
-            set 
+            set
             {
                 if ((value == null) || (value == ""))
                 {
@@ -81,19 +81,19 @@ namespace bedrock.net
                 if (m_hostname != value)
                 {
                     m_hostname = value;
-                
+
                     try
                     {
                         m_ip = IPAddress.Parse(m_hostname);
                     }
-                    catch (FormatException) 
+                    catch (FormatException)
                     {
                         m_ip = null;
                     }
                 }
             }
         }
-            
+
         /// <summary>
         /// Port number.
         /// TODO: add string version that looks in /etc/services (or equiv)?
@@ -101,20 +101,20 @@ namespace bedrock.net
         public int Port
         {
             get { return m_port; }
-            set 
+            set
             {
                 Debug.Assert(value > 0);
-                m_port = value; 
+                m_port = value;
             }
         }
         /// <summary>
-        /// The binary IP address.  Gives IPAddress.Any if resolution hasn't occured, and 
+        /// The binary IP address.  Gives IPAddress.Any if resolution hasn't occured, and
         /// null if resolution failed.
         /// </summary>
         public IPAddress IP
         {
             get { return m_ip; }
-            set 
+            set
             {
                 m_ip = value;
                 m_hostname = m_ip.ToString();
@@ -152,7 +152,7 @@ namespace bedrock.net
         /// <param name="callback">Called when resolution complete.</param>
         public void Resolve(AddressResolved callback)
         {
-            if ((m_ip != null) && (m_ip != IPAddress.Any) 
+            if ((m_ip != null) && (m_ip != IPAddress.Any)
 #if !OLD_CLR
                 && (m_ip != IPAddress.IPv6Any)
 #endif
@@ -164,7 +164,7 @@ namespace bedrock.net
             {
 // hm. this seems to work now, but I'm leaving the comments here for now,
 // just in case.
-                
+
 // #if MONO
 //                 Resolve();
 //                 callback(this);
@@ -209,7 +209,7 @@ namespace bedrock.net
 #if NET20
                 IPHostEntry ent = Dns.EndGetHostEntry(ar);
 #else
-				IPHostEntry ent = Dns.EndResolve(ar);
+                IPHostEntry ent = Dns.EndResolve(ar);
 #endif
                 if (ent.AddressList.Length <= 0)
                 {
@@ -217,8 +217,8 @@ namespace bedrock.net
                 }
                 else
                 {
-                    // From docs: 
-                    // When hostName is a DNS-style host name associated with multiple IP addresses, 
+                    // From docs:
+                    // When hostName is a DNS-style host name associated with multiple IP addresses,
                     // only the first IP address that resolves to that host name is returned.
                     m_ip = ent.AddressList[0];
                 }

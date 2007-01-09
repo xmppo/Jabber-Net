@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -68,12 +68,12 @@ namespace bedrock.net
      */
         private bool HandleRequestResponse(int ver, int reply)
         {
-            if (ver != 0) 
+            if (ver != 0)
             {
                 Debug.WriteLine("bogus version in reply from proxy: " + ver);
                 return false;
             }
-            if (reply != 90) 
+            if (reply != 90)
             {
                 Debug.WriteLine("request failed on proxy: " + reply);
                 return false;
@@ -144,7 +144,7 @@ namespace bedrock.net
         }
 
         /// <summary>
-        /// Overridden OnRead to handle 4 Socks5 states... 
+        /// Overridden OnRead to handle 4 Socks5 states...
         /// </summary>
         /// <param name="sock"></param>
         /// <param name="buf"></param>
@@ -153,11 +153,11 @@ namespace bedrock.net
         /// <returns></returns>
         public override bool OnRead(bedrock.net.BaseSocket sock, byte[] buf, int offset, int length)
         {
-            switch (m_state) 
+            switch (m_state)
             {
                 case States.RequestingProxy:
                     bool ret = HandleRequestResponse(buf[offset], buf[offset + 1]);
-                    if (ret) 
+                    if (ret)
                     {
                         m_listener.OnConnect(sock); // tell the real listener that we're connected.
                         // they'll call RequestRead(), so we can return false here.
@@ -177,7 +177,7 @@ namespace bedrock.net
         /// <param name="length"></param>
         public override void OnWrite(bedrock.net.BaseSocket sock, byte[] buf, int offset, int length)
         {
-            if (m_state == States.Running) 
+            if (m_state == States.Running)
             {
                 base.OnWrite(sock, buf, offset, length);
             }

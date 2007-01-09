@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -58,7 +58,7 @@ namespace jabber.protocol.client
         /// </summary>
         error,
         /// <summary>
-        /// Invisible presence: we're unavailable to them, but still see 
+        /// Invisible presence: we're unavailable to them, but still see
         /// theirs.
         /// </summary>
         invisible
@@ -71,16 +71,16 @@ namespace jabber.protocol.client
     public class Presence : Packet
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="doc"></param>
-        public Presence(XmlDocument doc) : 
+        public Presence(XmlDocument doc) :
             base("presence", doc)
         {
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="prefix"></param>
         /// <param name="qname"></param>
@@ -96,12 +96,12 @@ namespace jabber.protocol.client
         public PresenceType Type
         {
             get { return (PresenceType) GetEnumAttr("type", typeof(PresenceType)); }
-            set 
-            { 
+            set
+            {
                 if (value == PresenceType.available)
                     RemoveAttribute("type");
                 else
-                    SetAttribute("type", value.ToString()); 
+                    SetAttribute("type", value.ToString());
             }
         }
 
@@ -138,10 +138,10 @@ namespace jabber.protocol.client
         public Error Error
         {
             get { return (Error) this["error"]; }
-            set 
+            set
             {
-                this.Type = PresenceType.error;    
-                ReplaceChild(value); 
+                this.Type = PresenceType.error;
+                ReplaceChild(value);
             }
         }
     }

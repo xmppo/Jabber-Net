@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -140,7 +140,7 @@ namespace jabber.connection
 
     /// <summary>
     /// The info and children of a given JID/Node combination.
-    /// 
+    ///
     /// Note: if you have multiple connections in the same process, they all share the same Disco cache.
     /// This works fine in the real world today, since I don't know of any implementations that return different
     /// disco for different requestors, but it is completely legal protocol to have done so.
@@ -420,7 +420,7 @@ namespace jabber.connection
         public IQ ItemsIQ(System.Xml.XmlDocument doc)
         {
             m_pendingItems = true;
- 
+
             DiscoItemsIQ iiq = new DiscoItemsIQ(doc);
             iiq.To = JID;
             iiq.Type = IQType.get;
@@ -540,7 +540,7 @@ namespace jabber.connection
 
         /// <summary>
         /// The root node.  This is probably the server that you connected to.
-        /// If the Children property of this is null, we haven't received an answer to 
+        /// If the Children property of this is null, we haven't received an answer to
         /// our disco#items request; register on this node's OnFeatures callback.
         /// </summary>
         public DiscoNode Root
@@ -598,7 +598,7 @@ namespace jabber.connection
             {
                 if (dn == m_root)
                 {
-                    // root node. 
+                    // root node.
                     // Try agents.
                     if ((iq.Error.Code == ErrorCode.NOT_IMPLEMENTED) ||
                         (iq.Error.Code == ErrorCode.SERVICE_UNAVAILABLE))
@@ -758,7 +758,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Make a call to get the feaures to this node, and call back on handler.  
+        /// Make a call to get the feaures to this node, and call back on handler.
         /// If the information is in the cache, handler gets called right now.
         /// </summary>
         /// <param name="node"></param>
@@ -779,7 +779,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Make a call to get the feaures to this node, and call back on handler.  
+        /// Make a call to get the feaures to this node, and call back on handler.
         /// If the information is in the cache, handler gets called right now.
         /// </summary>
         /// <param name="jid"></param>
@@ -791,7 +791,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Make a call to get the child items of this node, and call back on handler.  
+        /// Make a call to get the child items of this node, and call back on handler.
         /// If the information is in the cache, handler gets called right now.
         /// </summary>
         /// <param name="node"></param>
@@ -812,7 +812,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Make a call to get the child items of this node, and call back on handler.  
+        /// Make a call to get the child items of this node, and call back on handler.
         /// If the information is in the cache, handler gets called right now.
         /// </summary>
         /// <param name="jid"></param>

@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -87,9 +87,9 @@ namespace Example
             this.txtBody = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // panel1
-            // 
+            //
             this.panel1.Controls.Add(this.btnCancel);
             this.panel1.Controls.Add(this.btnSend);
             this.panel1.Controls.Add(this.txtSubject);
@@ -101,9 +101,9 @@ namespace Example
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(312, 72);
             this.panel1.TabIndex = 1;
-            // 
+            //
             // btnCancel
-            // 
+            //
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.Location = new System.Drawing.Point(256, 40);
@@ -112,9 +112,9 @@ namespace Example
             this.btnCancel.TabIndex = 2;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
-            // 
+            //
             // btnSend
-            // 
+            //
             this.btnSend.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSend.Location = new System.Drawing.Point(256, 8);
             this.btnSend.Name = "btnSend";
@@ -122,45 +122,45 @@ namespace Example
             this.btnSend.TabIndex = 1;
             this.btnSend.Text = "Send";
             this.btnSend.Click += new System.EventHandler(this.btnSend_Click);
-            // 
+            //
             // txtSubject
-            // 
-            this.txtSubject.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.txtSubject.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.txtSubject.Location = new System.Drawing.Point(64, 41);
             this.txtSubject.Name = "txtSubject";
             this.txtSubject.Size = new System.Drawing.Size(184, 20);
             this.txtSubject.TabIndex = 0;
             this.txtSubject.Text = "";
-            // 
+            //
             // txtTo
-            // 
-            this.txtTo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.txtTo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.txtTo.Location = new System.Drawing.Point(64, 9);
             this.txtTo.Name = "txtTo";
             this.txtTo.Size = new System.Drawing.Size(184, 20);
             this.txtTo.TabIndex = 3;
             this.txtTo.Text = "";
-            // 
+            //
             // label2
-            // 
+            //
             this.label2.Location = new System.Drawing.Point(8, 40);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(48, 23);
             this.label2.TabIndex = 2;
             this.label2.Text = "Subject:";
-            // 
+            //
             // label1
-            // 
+            //
             this.label1.Location = new System.Drawing.Point(8, 8);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(48, 23);
             this.label1.TabIndex = 0;
             this.label1.Text = "To:";
-            // 
+            //
             // txtBody
-            // 
+            //
             this.txtBody.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtBody.Location = new System.Drawing.Point(0, 72);
             this.txtBody.Multiline = true;
@@ -169,9 +169,9 @@ namespace Example
             this.txtBody.Size = new System.Drawing.Size(312, 194);
             this.txtBody.TabIndex = 0;
             this.txtBody.Text = "";
-            // 
+            //
             // SendMessage
-            // 
+            //
             this.AcceptButton = this.btnSend;
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.CancelButton = this.btnCancel;

@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -21,7 +21,7 @@ using jabber;
 using jabber.client;
 using jabber.protocol.client;
 
-namespace test.jabber.client1 // TODO: Client1 due to a bug in NUnit.  
+namespace test.jabber.client1 // TODO: Client1 due to a bug in NUnit.
 {
     /// <summary>
     /// Summary description for PPDP.
@@ -139,6 +139,6 @@ namespace test.jabber.client1 // TODO: Client1 due to a bug in NUnit.
             Assert.AreEqual("support@conference.192.168.32.109/bob", pp[f].From.ToString());
             f.Resource = null;
             Assert.AreEqual("support@conference.192.168.32.109/bob", pp[f].From.ToString());
-        }        
+        }
     }
 }

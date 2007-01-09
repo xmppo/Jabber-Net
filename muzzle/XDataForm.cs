@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -95,7 +95,7 @@ namespace muzzle
             this.SuspendLayout();
             if (x.Title != null)
                 this.Text = x.Title;
-            if (m_type == XDataType.cancel) 
+            if (m_type == XDataType.cancel)
             {
                 lblInstructions.Text = "Form canceled.";  // TODO: Localize!
                 lblInstructions.Resize += new EventHandler(lblInstructions_Resize);
@@ -120,7 +120,7 @@ namespace muzzle
 
             panel1.TabIndex = fields.Length;
 
-            if (m_type != XDataType.form) 
+            if (m_type != XDataType.form)
             {
                 btnOK.Location = btnCancel.Location;
                 btnCancel.Visible = false;
@@ -176,9 +176,9 @@ namespace muzzle
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // panel1
-            // 
+            //
             this.panel1.CausesValidation = false;
             this.panel1.Controls.Add(this.panel2);
             this.panel1.Controls.Add(this.btnCancel);
@@ -188,18 +188,18 @@ namespace muzzle
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(292, 34);
             this.panel1.TabIndex = 2;
-            // 
+            //
             // panel2
-            // 
+            //
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(292, 4);
             this.panel2.TabIndex = 2;
-            // 
+            //
             // btnCancel
-            // 
+            //
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.CausesValidation = false;
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
@@ -207,18 +207,18 @@ namespace muzzle
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.TabIndex = 1;
             this.btnCancel.Text = "Cancel";
-            // 
+            //
             // btnOK
-            // 
+            //
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOK.Location = new System.Drawing.Point(132, 7);
             this.btnOK.Name = "btnOK";
             this.btnOK.TabIndex = 0;
             this.btnOK.Text = "OK";
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
-            // 
+            //
             // lblInstructions
-            // 
+            //
             this.lblInstructions.BackColor = System.Drawing.SystemColors.Control;
             this.lblInstructions.Dock = System.Windows.Forms.DockStyle.Top;
             this.lblInstructions.ForeColor = System.Drawing.SystemColors.HotTrack;
@@ -226,9 +226,9 @@ namespace muzzle
             this.lblInstructions.Name = "lblInstructions";
             this.lblInstructions.Size = new System.Drawing.Size(292, 16);
             this.lblInstructions.TabIndex = 1;
-            // 
+            //
             // pnlFields
-            // 
+            //
             this.pnlFields.AutoScroll = true;
             this.pnlFields.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlFields.DockPadding.Bottom = 3;
@@ -239,22 +239,22 @@ namespace muzzle
             this.pnlFields.Name = "pnlFields";
             this.pnlFields.Size = new System.Drawing.Size(292, 212);
             this.pnlFields.TabIndex = 0;
-            // 
+            //
             // error
-            // 
+            //
             this.error.ContainerControl = this;
-            // 
+            //
             // panel3
-            // 
+            //
             this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel3.Location = new System.Drawing.Point(0, 16);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(292, 4);
             this.panel3.TabIndex = 3;
-            // 
+            //
             // XDataForm
-            // 
+            //
             this.AcceptButton = this.btnOK;
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.CancelButton = this.btnCancel;
@@ -301,13 +301,13 @@ namespace muzzle
         /// <returns>A stanza ready to be sent back to the originator.</returns>
         public Packet GetResponse()
         {
-            if (m_parent == null) 
+            if (m_parent == null)
                 throw new ArgumentException("parent was null", "parent");
-            if (m_type != XDataType.form) 
+            if (m_type != XDataType.form)
                 throw new InvalidOperationException("Can only generate a submit response for x:data of type 'form'");
 
             m_parent.Swap();
-            
+
             Data x = new Data(m_parent.OwnerDocument);
             if (m_parent is Msg)
             {
@@ -330,7 +330,7 @@ namespace muzzle
             }
 
             x.Type = XDataType.submit;
-            foreach (FormField f in m_fields) 
+            foreach (FormField f in m_fields)
             {
                 f.AppendField(x);
             }
@@ -400,7 +400,7 @@ namespace muzzle
                         foreach (Option o in f.GetOptions())
                         {
                             int i = box.Items.Add(o);
-                            
+
                             if (o.Val == v)
                             {
                                 box.SelectedIndex = i;
@@ -430,15 +430,15 @@ namespace muzzle
                     case FieldType.jid_multi:
                         JidMulti multi = new JidMulti();
                         multi.AddRange(m_val);
-                        m_control = multi;                        
+                        m_control = multi;
                         break;
 
                     case FieldType.Fixed:
                         // All of this so that we can detect URLs.
                         // We can't just make it disabled, because then the URL clicked
-                        // event handler doesn't fire, and there's no way to set the 
+                        // event handler doesn't fire, and there's no way to set the
                         // text foreground color.
-                        // It would be cool to make copy work, but it doesn't work for 
+                        // It would be cool to make copy work, but it doesn't work for
                         // labels, either.
                         RichTextBox rich = new RichTextBox();
                         rich.DetectUrls = true;
@@ -475,7 +475,7 @@ namespace muzzle
                     else if (f.Var != "")
                         lblText = f.Var + ":";
 
-                    if (lblText != "") 
+                    if (lblText != "")
                     {
                         m_label = new Label();
                         m_label.Parent = p;
@@ -532,7 +532,7 @@ namespace muzzle
 
             public string[] Value
             {
-                get 
+                get
                 {
                     if (m_control == null)
                         return m_val;
@@ -557,7 +557,7 @@ namespace muzzle
                     return true;
                 if (!m_required)
                     return true;
-                
+
                 if ((Value == null) || (Value.Length == 0))
                 {
                     m_form.error.SetError(m_control, "Required");
@@ -582,7 +582,7 @@ namespace muzzle
             {
                 m_form.error.SetError(m_control, "");
             }
-            
+
             private void lbl_Resize(object sender, EventArgs e)
             {
                 RichTextBox lbl = (RichTextBox) sender;
@@ -603,14 +603,14 @@ namespace muzzle
                 // HACK: Oh.  My.  God.
                 // This was found through trial and error, and I'm NOT happy with it.
                 // The deal is that there is a bug in the MS implementation of ListBox, such
-                // that if you call SetSelected before the underlying window has been created, 
+                // that if you call SetSelected before the underlying window has been created,
                 // the SetSelected call gets ignored.
 
-                // So, what we do here is wait for VisibleChanged events...  this is the only event 
+                // So, what we do here is wait for VisibleChanged events...  this is the only event
                 // I could find that always fires after the Handle is set.  But, it also fires before
                 // the handle is set, and several times so quickly in succession that the remove
                 // event handler code below can happen while there is an event still in the queue.
-                // Apparently that message that is already in the queue fires this callback again, 
+                // Apparently that message that is already in the queue fires this callback again,
                 // even though it's been removed.
                 CheckedListBox lb = (CheckedListBox) sender;
                 if (lb.Handle == IntPtr.Zero)
@@ -653,7 +653,7 @@ namespace muzzle
             public void AppendField(Data x)
             {
                 String[] vals = this.Value;
-                if ((vals != null) && (vals.Length > 0)) 
+                if ((vals != null) && (vals.Length > 0))
                 {
                     Field f = x.AddField(m_var, m_type, null, null, null);
                     foreach (String v in vals)
@@ -675,7 +675,7 @@ namespace muzzle
 
             private void rich_GotFocus(object sender, EventArgs e)
             {
-                // gyrate, trying to prevent focus from ever landing on the 
+                // gyrate, trying to prevent focus from ever landing on the
                 // richtext box.
                 RichTextBox rich = (RichTextBox) sender;
                 Control nxt = m_form.GetNextControl(rich, true);

@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -35,7 +35,7 @@ namespace bedrock.collections
         private TrieNode   m_parent   = null;
         private Object     m_value    = null;
         private byte       m_key      = 0;
-        
+
         /// <summary>
         /// Create a new node
         /// </summary>
@@ -46,7 +46,7 @@ namespace bedrock.collections
             m_parent = parent;
             m_key    = key;
         }
-        
+
         /// <summary>
         /// Add a child to this node
         /// </summary>
@@ -75,13 +75,13 @@ namespace bedrock.collections
                 return true;
             }
         }
-        
+
         /// <summary>
         /// Get the parent of this node
         /// </summary>
         public TrieNode Parent
         {
-            get 
+            get
             {
                 return m_parent;
             }
@@ -91,18 +91,18 @@ namespace bedrock.collections
         /// </summary>
         public byte Byte
         {
-            get 
+            get
             {
                 return m_key;
             }
         }
-        
+
         /// <summary>
         /// Retrive the full key for this node, traversing parent-ward toward the root.
         /// </summary>
         public byte[] Key
         {
-            get 
+            get
             {
                 MemoryStream ms = new MemoryStream();
                 TrieNode current = this;
@@ -121,11 +121,11 @@ namespace bedrock.collections
         /// </summary>
         public Object Value
         {
-            get 
+            get
             {
                 return m_value;
             }
-            set 
+            set
             {
                 m_value = value;;
             }
@@ -135,7 +135,7 @@ namespace bedrock.collections
         /// </summary>
         public TrieNode this[byte key]
         {
-            get 
+            get
             {
                 return (TrieNode) m_children[key];
             }
@@ -152,7 +152,7 @@ namespace bedrock.collections
         /// </summary>
         public TrieNode this[byte key, bool create]
         {
-            get 
+            get
             {
                 TrieNode e = this[key];
                 if (e != null)
@@ -206,11 +206,11 @@ namespace bedrock.collections
                 return false;
             if (o == this)
                 return true;
-            
+
             if (! (o is TrieNode))
                 return false;
             TrieNode e = (TrieNode) o;
-            
+
             return ((Key == null)    ? (e.Key   == null) : Key.Equals(e.Key))  &&
                 ((Value == null) ? (e.Value == null) : Value.Equals(e.Value));
         }

@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -18,8 +18,8 @@ using bedrock.util;
 namespace bedrock.collections
 {
     /// <summary>
-    /// A Trie that is searchable for substrings.  Uses a separate set of indexes 
-    /// to allow entry into the Trie at any point.  Yes, this 
+    /// A Trie that is searchable for substrings.  Uses a separate set of indexes
+    /// to allow entry into the Trie at any point.  Yes, this
     /// </summary>
     [RCS(@"$Header$")]
     public class IndexedTrie : Trie
@@ -28,12 +28,12 @@ namespace bedrock.collections
         private int  m_maxResults = 100;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public IndexedTrie()  {}
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="maxResults"></param>
         public IndexedTrie(int maxResults)
@@ -44,9 +44,9 @@ namespace bedrock.collections
         /// <summary>
         /// The maximum number of results to return from any query.  This is an approximate number.
         /// </summary>
-        public int MaxResults 
+        public int MaxResults
         {
-            get 
+            get
             {
                 return m_maxResults;
             }
@@ -60,7 +60,7 @@ namespace bedrock.collections
         /// </summary>
         protected ArrayList this[byte b]
         {
-            get 
+            get
             {
                 return (ArrayList) m_indexes[b];
             }

@@ -1,3 +1,16 @@
+/* --------------------------------------------------------------------------
+ * Copyrights
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * information for Cursive Systems, Inc. is available at
+ * http://www.cursive.net/.
+ *
+ * License
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
+ * See LICENSE.txt for details.
+ * --------------------------------------------------------------------------*/
 using System;
 using System.Collections;
 using System.ComponentModel;
@@ -59,7 +72,7 @@ namespace muzzle
         private bool m_bottom = true;
 
         [StructLayout(LayoutKind.Sequential)]
-        private struct SCROLLINFO 
+        private struct SCROLLINFO
         {
             public int  cbSize;
             public uint fMask;
@@ -90,7 +103,7 @@ namespace muzzle
             public int reserved;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst=CCHILDREN_SCROLLBAR+1)]
             public int[] rgstate;
-        } 
+        }
 
         [StructLayout(LayoutKind.Sequential)]
         private class POINT
@@ -107,7 +120,7 @@ namespace muzzle
                 this.x = x;
                 this.y = y;
             }
-        } 
+        }
 
         [DllImport("user32", CharSet=CharSet.Auto)]
         private static extern bool GetScrollRange(IntPtr hWnd, int nBar, out int lpMinPos, out int lpMaxPos);
@@ -124,7 +137,7 @@ namespace muzzle
         [DllImport("user32", SetLastError=true, EntryPoint="GetScrollBarInfo")]
         private static extern int GetScrollBarInfo(IntPtr hWnd, uint idObject, ref SCROLLBARINFO psbi);
 
-        /// <summary> 
+        /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.Container components = null;
@@ -149,7 +162,7 @@ namespace muzzle
             get { return m_bottom; }
         }
 
-        /// <summary> 
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         protected override void Dispose( bool disposing )
@@ -165,8 +178,8 @@ namespace muzzle
         }
 
         #region Component Designer generated code
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// <summary>
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
@@ -195,7 +208,7 @@ namespace muzzle
             this.Select(0, 0);
             this.ScrollToCaret();
             m_bottom = true;
-            
+
             //SendMessage(this.Handle, EM_SETSCROLLPOS, 0, new POINT(0, 0));
         }
 

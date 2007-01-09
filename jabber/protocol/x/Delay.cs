@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -26,7 +26,7 @@ namespace jabber.protocol.x
     public class Delay : Element
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="doc"></param>
         public Delay(XmlDocument doc) : base("x", URI.XDELAY, doc)
@@ -34,7 +34,7 @@ namespace jabber.protocol.x
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="prefix"></param>
         /// <param name="qname"></param>
@@ -47,7 +47,7 @@ namespace jabber.protocol.x
         /// <summary>
         /// From whom?
         /// </summary>
-        public string From 
+        public string From
         {
             get { return GetAttribute("from"); }
             set { SetAttribute("from", value); }
@@ -56,7 +56,7 @@ namespace jabber.protocol.x
         /// <summary>
         /// Date/time stamp.
         /// </summary>
-        public DateTime Stamp 
+        public DateTime Stamp
         {
             get { return JabberDate(GetAttribute("stamp")); }
             set { SetAttribute("stamp", JabberDate(value)); }
@@ -65,7 +65,7 @@ namespace jabber.protocol.x
         /// <summary>
         /// Description
         /// </summary>
-        public string Desc 
+        public string Desc
         {
             get { return this.InnerText; }
             set { this.InnerText = value; }

@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System.Collections;
@@ -26,11 +26,11 @@ namespace bedrock.io
             public byte[] buf;
             public BufNode next = null;
         }
-        
+
         private MemoryStream m_stream = new MemoryStream();
         private BufNode m_head = null;
         private BufNode m_tail = null;
-        
+
         /// <summary>
         /// Create an empty buffer
         /// </summary>
@@ -39,7 +39,7 @@ namespace bedrock.io
         }
 
         /// <summary>
-        /// Write to the buffer.  Please make sure that you won't use this memory any more after you hand it in.  
+        /// Write to the buffer.  Please make sure that you won't use this memory any more after you hand it in.
         /// It will get mangled.
         /// </summary>
         /// <param name="buf"></param>
@@ -100,7 +100,7 @@ namespace bedrock.io
             m_head = bn;
             if (m_head == null)
                 m_tail = null;
-            
+
             if (save > 0)
             {
                 byte[] buf = new byte[save];
@@ -109,7 +109,7 @@ namespace bedrock.io
                     buf, 0, save);
                 m_head.buf = buf;
             }
-            
+
             m_stream.SetLength(0);
             for (bn = m_head; bn != null; bn = bn.next)
             {

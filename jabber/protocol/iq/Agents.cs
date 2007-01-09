@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -53,14 +53,14 @@ namespace jabber.protocol.iq
     public class AgentsQuery : Element
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="doc"></param>
         public AgentsQuery(XmlDocument doc) : base("query", URI.AGENTS, doc)
         {
         }
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="prefix"></param>
         /// <param name="qname"></param>
@@ -106,7 +106,7 @@ namespace jabber.protocol.iq
     public class Agent : Element
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="doc"></param>
         public Agent(XmlDocument doc) : base("agent", URI.AGENTS, doc)
@@ -114,7 +114,7 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="prefix"></param>
         /// <param name="qname"></param>
@@ -154,11 +154,11 @@ namespace jabber.protocol.iq
         /// <summary>
         /// Is the agent a transport?
         /// </summary>
-        public bool Transport 
+        public bool Transport
         {
             get { return this["transport"] != null; }
-            set 
-            { 
+            set
+            {
                 if (value)
                 {
                     SetElem("transport", null);
@@ -173,11 +173,11 @@ namespace jabber.protocol.iq
         /// <summary>
         /// Is the agent for groupchat?
         /// </summary>
-        public bool Groupchat 
+        public bool Groupchat
         {
             get { return this["groupchat"] != null; }
-            set 
-            { 
+            set
+            {
                 if (value)
                 {
                     SetElem("groupchat", null);
@@ -192,7 +192,7 @@ namespace jabber.protocol.iq
         /// <summary>
         /// The agent service name.
         /// </summary>
-        public string Service 
+        public string Service
         {
             get { return GetElem("service"); }
             set { SetElem("service", value); }
@@ -201,11 +201,11 @@ namespace jabber.protocol.iq
         /// <summary>
         /// Is the agent a registrar?
         /// </summary>
-        public bool Register 
+        public bool Register
         {
             get { return this["register"] != null; }
-            set 
-            { 
+            set
+            {
                 if (value)
                 {
                     SetElem("register", null);
@@ -220,11 +220,11 @@ namespace jabber.protocol.iq
         /// <summary>
         /// Is the agent for JUD?
         /// </summary>
-        public bool Search 
+        public bool Search
         {
             get { return this["search"] != null; }
-            set 
-            { 
+            set
+            {
                 if (value)
                 {
                     SetElem("search", null);

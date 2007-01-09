@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2006 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -25,7 +25,7 @@ namespace jabber.connection
     {
 
         public event bedrock.ObjectHandler OnUpload;
-        
+
         public HttpUploader()
         {
         }
@@ -45,16 +45,16 @@ namespace jabber.connection
             StreamReader reader = new StreamReader(filename);
             HttpWebRequest request =
                 (HttpWebRequest)HttpWebRequest.Create(uri);
-            
+
             request.Method = "POST";
             request.Headers.Add(HttpRequestHeader.Authorization,
                                 "x-xmpp-auth jid=\"" + jid + "\"");
-            
+
             StreamWriter writer = new StreamWriter(request.GetRequestStream());
-            writer.Write(reader.ReadToEnd());            
-            
+            writer.Write(reader.ReadToEnd());
+
             reader.Close();
-    
+
             request.BeginGetResponse(new AsyncCallback(ResponseCallback),
                                      request);
             writer.Close();

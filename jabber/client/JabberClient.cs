@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -65,7 +65,7 @@ namespace jabber.client
 
             this.OnSASLStart += new jabber.connection.sasl.SASLProcessorHandler(JabberClient_OnSASLStart);
             this.OnSASLEnd += new jabber.protocol.stream.FeaturesHandler(JabberClient_OnSASLEnd);
-            this.OnStreamInit += new StreamHandler(JabberClient_OnStreamInit);            
+            this.OnStreamInit += new StreamHandler(JabberClient_OnStreamInit);
         }
 
         /// <summary>
@@ -119,8 +119,8 @@ namespace jabber.client
         public event IQHandler OnIQ;
 
         /// <summary>
-        /// Authentication failed.  The connection is not 
-        /// terminated if there is an auth error and there 
+        /// Authentication failed.  The connection is not
+        /// terminated if there is an auth error and there
         /// is at least one event handler for this event.
         /// </summary>
         [Category("Protocol")]
@@ -129,9 +129,9 @@ namespace jabber.client
 
         /// <summary>
         /// AutoLogin is false, and it's time to log in.
-        /// This callback will receive the results of the IQ type=get 
-        /// in the jabber:iq:auth namespace.  When login is complete, 
-        /// set IsConnected to true.  If there is a login error, call 
+        /// This callback will receive the results of the IQ type=get
+        /// in the jabber:iq:auth namespace.  When login is complete,
+        /// set IsConnected to true.  If there is a login error, call
         /// FireAuthError().
         /// </summary>
         [Category("Protocol")]
@@ -148,10 +148,10 @@ namespace jabber.client
         /// <summary>
         /// After calling Register, information about the user is required.  Fill in the given IQ
         /// with the requested information.
-        /// 
+        ///
         /// WARNING: do not perform GUI actions in this callback, since even if your InvokeControl is set,
         /// this is not guaranteed to be called in the GUI thread.  The IQ modification side-effect is used when
-        /// your event handler returns, so if you need to hop over to the GUI thread, pause the thread where 
+        /// your event handler returns, so if you need to hop over to the GUI thread, pause the thread where
         /// you are called back, then join with it when you are done.
         /// </summary>
         [Category("Protocol")]
@@ -183,8 +183,8 @@ namespace jabber.client
         }
 
         /// <summary>
-        /// The password to use for connecting.  
-        /// This may be sent across the wire plaintext, if the 
+        /// The password to use for connecting.
+        /// This may be sent across the wire plaintext, if the
         /// server doesn't support digest and PlaintextAuth is true.
         /// </summary>
         [Description("The password to use for connecting.  " +
@@ -197,7 +197,7 @@ namespace jabber.client
             get { return this[Options.PASSWORD] as string; }
             set { this[Options.PASSWORD] = value; }
         }
-        
+
         /// <summary>
         /// Automatically log in on connection.
         /// </summary>
@@ -209,7 +209,7 @@ namespace jabber.client
             get { return (bool)this[Options.AUTO_LOGIN]; }
             set { this[Options.AUTO_LOGIN] = value; }
         }
-        
+
         /// <summary>
         /// Automatically retrieve roster on connection.
         /// </summary>
@@ -233,12 +233,12 @@ namespace jabber.client
             get { return (bool)this[Options.AUTO_PRESENCE]; }
             set { this[Options.AUTO_PRESENCE] = value; }
         }
-        
+
         /// <summary>
-        /// The connecting resource.  
+        /// The connecting resource.
         /// Used to identify a unique connection.
         /// </summary>
-        [Description("The connecting resource.  " + 
+        [Description("The connecting resource.  " +
              "Used to identify a unique connection.")]
         [DefaultValue("Jabber.Net")]
         [Category("Jabber")]
@@ -339,7 +339,7 @@ namespace jabber.client
             string show,
             int priority)
         {
-            if (IsAuthenticated) 
+            if (IsAuthenticated)
             {
                 Presence p = new Presence(Document);
                 if (status != null)
@@ -369,7 +369,7 @@ namespace jabber.client
             string to,
             string body)
         {
-            if (IsAuthenticated) 
+            if (IsAuthenticated)
             {
                 Message msg = new Message(Document);
                 msg.Type = t;
@@ -382,7 +382,7 @@ namespace jabber.client
                 throw new InvalidOperationException("Client must be authenticated before sending messages.");
             }
         }
- 
+
         /// <summary>
         /// Send a message packet to another user
         /// </summary>
@@ -400,7 +400,7 @@ namespace jabber.client
         /// </summary>
         public void GetRoster()
         {
-            if (IsAuthenticated) 
+            if (IsAuthenticated)
             {
                 RosterIQ riq = new RosterIQ(Document);
                 riq.Type = IQType.get;
@@ -411,7 +411,7 @@ namespace jabber.client
                 throw new InvalidOperationException("Client must be authenticated before getting roster.");
             }
         }
-        
+
         /// <summary>
         /// Request a list of agents from the server
         /// </summary>
@@ -450,7 +450,7 @@ namespace jabber.client
 
 
         /// <summary>
-        /// Attempt to register a new user.  This will fire OnRegisterInfo to retrieve 
+        /// Attempt to register a new user.  This will fire OnRegisterInfo to retrieve
         /// information about the new user, and OnRegistered when the registration is complete or failed.
         /// </summary>
         /// <param name="jid">The user to register</param>
@@ -472,7 +472,7 @@ namespace jabber.client
                 FireOnError(new IQTimeoutException((JID) data));
                 return;
             }
-            
+
             if (iq.Type == IQType.error)
             {
                 if (OnRegistered != null)
@@ -534,7 +534,7 @@ namespace jabber.client
             AuthIQ aiq = new AuthIQ(Document);
             aiq.Type = IQType.set;
             Auth a = (Auth) aiq.Query;
-                
+
             if ((res["sequence"] != null) && (res["token"] != null))
             {
                 a.SetZeroK(User, Password, res.Token, res.Sequence);
@@ -626,7 +626,7 @@ namespace jabber.client
 
         /// <summary>
         /// An error occurred authenticating.
-        /// This is public so that manual authenticators 
+        /// This is public so that manual authenticators
         /// can fire errors using the same events.
         /// </summary>
         /// <param name="i"></param>
@@ -651,7 +651,7 @@ namespace jabber.client
             {
                 s = State;
             }
-            
+
             // HACK: fire OnSASLStart with state of NonSASLAuthState to initiate old-style auth.
             if (s == NonSASLAuthState.Instance)
             {
@@ -701,7 +701,7 @@ namespace jabber.client
                 jabber.protocol.stream.Bind bind = new jabber.protocol.stream.Bind(this.Document);
                 if ((Resource != null) && (Resource != ""))
                     bind.Resource = Resource;
-                                            
+
                 iq.AddChild(bind);
                 this.Tracker.BeginIQ(iq, new IqCB(GotResource), feat);
             }
@@ -718,7 +718,7 @@ namespace jabber.client
         }
 
         private void GotResource(object sender, IQ iq, object state)
-        {            
+        {
 
             jabber.protocol.stream.Features feat =
                 state as jabber.protocol.stream.Features;
@@ -781,7 +781,7 @@ namespace jabber.client
         /// </summary>
         public static readonly jabber.connection.BaseState Instance = new GetAuthState();
     }
-    
+
     /// <summary>
     /// Setting authorization information
     /// </summary>
@@ -793,7 +793,7 @@ namespace jabber.client
         /// </summary>
         public static readonly jabber.connection.BaseState Instance = new SetAuthState();
     }
-    
+
     /// <summary>
     /// Waiting for manual login.
     /// </summary>

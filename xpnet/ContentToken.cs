@@ -1,16 +1,16 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
- * 
+ *
  * xpnet is a deriviative of James Clark's XP.  See copying.txt for more info.
  * --------------------------------------------------------------------------*/
 namespace xpnet
@@ -23,7 +23,7 @@ namespace xpnet
     public class ContentToken : Token
     {
         private const int INIT_ATT_COUNT = 8;
-        
+
         private int attCount = 0;
         private int[] attNameStart = new int[INIT_ATT_COUNT];
         private int[] attNameEnd = new int[INIT_ATT_COUNT];
@@ -31,12 +31,12 @@ namespace xpnet
         private int[] attValueEnd = new int[INIT_ATT_COUNT];
         private bool[] attNormalized = new bool[INIT_ATT_COUNT];
 
-                
+
         /// <summary>
         /// Returns the number of attributes specified in the start-tag or empty element tag.
         /// </summary>
         /// <returns></returns>
-        public int getAttributeSpecifiedCount() 
+        public int getAttributeSpecifiedCount()
         {
             return attCount;
         }
@@ -47,7 +47,7 @@ namespace xpnet
         /// </summary>
         /// <param name="i"></param>
         /// <returns></returns>
-        public int getAttributeNameStart(int i) 
+        public int getAttributeNameStart(int i)
         {
             if (i >= attCount)
                 throw new System.IndexOutOfRangeException();
@@ -58,7 +58,7 @@ namespace xpnet
                  * Returns the index following the last character of the name of the
                  * attribute index <code>i</code>.
                  */
-        public int getAttributeNameEnd(int i) 
+        public int getAttributeNameEnd(int i)
         {
             if (i >= attCount)
                 throw new System.IndexOutOfRangeException();
@@ -69,7 +69,7 @@ namespace xpnet
          * Returns the index of the character following the opening quote of
          * attribute index <code>i</code>.
          */
-        public int getAttributeValueStart(int i) 
+        public int getAttributeValueStart(int i)
         {
             if (i >= attCount)
                 throw new System.IndexOutOfRangeException();
@@ -79,7 +79,7 @@ namespace xpnet
         /**
          * Returns the index of the closing quote attribute index <code>i</code>.
          */
-        public int getAttributeValueEnd(int i) 
+        public int getAttributeValueEnd(int i)
         {
             if (i >= attCount)
                 throw new System.IndexOutOfRangeException();
@@ -92,7 +92,7 @@ namespace xpnet
                  * of the attribute to be avoided when it is known that normalization
                  * cannot change the value of the attribute.
                  */
-        public bool isAttributeNormalized(int i) 
+        public bool isAttributeNormalized(int i)
         {
             if (i >= attCount)
                 throw new System.IndexOutOfRangeException();
@@ -103,11 +103,11 @@ namespace xpnet
         /// <summary>
         /// Clear out all of the current attributes
         /// </summary>
-        public void clearAttributes() 
+        public void clearAttributes()
         {
             attCount = 0;
         }
-  
+
         /// <summary>
         /// Add a new attribute
         /// </summary>
@@ -118,10 +118,10 @@ namespace xpnet
         /// <param name="normalized"></param>
         public void appendAttribute(int nameStart, int nameEnd,
             int valueStart, int valueEnd,
-            bool normalized) 
+            bool normalized)
         {
 
-            if (attCount == attNameStart.Length) 
+            if (attCount == attNameStart.Length)
             {
                 attNameStart = grow(attNameStart);
                 attNameEnd = grow(attNameEnd);
@@ -143,18 +143,18 @@ namespace xpnet
         /// <param name="buf"></param>
         public void checkAttributeUniqueness(byte[] buf)
         {
-            for (int i = 1; i < attCount; i++) 
+            for (int i = 1; i < attCount; i++)
             {
-                int len = attNameEnd[i] - attNameStart[i];                
+                int len = attNameEnd[i] - attNameStart[i];
 
-                for (int j = 0; j < i; j++) 
+                for (int j = 0; j < i; j++)
                 {
-                    if (attNameEnd[j] - attNameStart[j] == len) 
+                    if (attNameEnd[j] - attNameStart[j] == len)
                     {
                         int n = len;
                         int s1 = attNameStart[i];
                         int s2 = attNameStart[j];
-                        do 
+                        do
                         {
                             if (--n < 0)
                                 throw new InvalidTokenException(attNameStart[i],
@@ -165,7 +165,7 @@ namespace xpnet
             }
         }
 
-        private static int[] grow(int[] v) 
+        private static int[] grow(int[] v)
         {
             int[] tem = v;
             v = new int[tem.Length << 1];
@@ -175,7 +175,7 @@ namespace xpnet
             return v;
         }
 
-        private static bool[] grow(bool[] v) 
+        private static bool[] grow(bool[] v)
         {
             bool[] tem = v;
             v = new bool[tem.Length << 1];

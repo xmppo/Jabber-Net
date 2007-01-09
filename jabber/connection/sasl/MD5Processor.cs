@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -46,7 +46,7 @@ namespace jabber.connection.sasl
         private string  m_charset;
         private string  m_algorithm;
         private string  m_authzid;
-        
+
 
         /// <summary>
         /// DIGEST-MD5 Realm
@@ -72,7 +72,7 @@ namespace jabber.connection.sasl
         /// DIGEST-MD5 authorization id
         /// </summary>
         public const string AUTHZID = "authzid";
-        
+
         /// <summary>
         /// The directives that are required to be set on the SASLProcessor in OnSASLStart
         /// </summary>
@@ -82,13 +82,13 @@ namespace jabber.connection.sasl
         private static readonly System.Text.Encoding     ENC = System.Text.Encoding.UTF8;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public MD5Processor() : base()
         {
             m_nc = 0;
         }
-        
+
         /// <summary>
         /// Process the next DIGEST-MD5 step.
         /// </summary>
@@ -128,10 +128,10 @@ namespace jabber.connection.sasl
                 }
             }
             return resp;
-        } 
+        }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="decoded"></param>
         private void populateDirectives(string decoded)
@@ -139,7 +139,7 @@ namespace jabber.connection.sasl
             string key = "";
             string data = "";
             string pDelimStr = ",";
-            
+
             char[] pDelimiter = pDelimStr.ToCharArray();
 
             string[] split = null;
@@ -166,9 +166,9 @@ namespace jabber.connection.sasl
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
-        /// 
+        ///
         private void validateStartDirectives()
         {
             Object n;
@@ -192,7 +192,7 @@ namespace jabber.connection.sasl
             {
                 throw new MissingDirectiveException("Missing SASL password directive");
             }
-            
+
             if ( (n = this[REALM]) != null)
             {
                 m_realm = n.ToString();
@@ -230,7 +230,7 @@ namespace jabber.connection.sasl
                 m_authzid = n.ToString();
             }
         }
-        
+
         /// <summary>
         /// Generates the entrire response to send to the server
         /// </summary>
@@ -281,19 +281,19 @@ namespace jabber.connection.sasl
             uri = "xmpp/" + m_realm;
             Random r = new Random();
             int v = r.Next(1024);
-            
+
             StringBuilder sb = new StringBuilder();
             sb.Append(v.ToString());
             sb.Append(":");
             sb.Append(m_username);
             sb.Append(":");
             sb.Append(m_password);
-            
+
             m_cnonce = HexString(AE.GetBytes(sb.ToString())).ToLower();
-            
+
             m_nc++;
             m_ncString = m_nc.ToString().PadLeft(8,'0');
-            
+
             sb.Remove(0,sb.Length);
             sb.Append(m_username);
             sb.Append(":");
@@ -321,7 +321,7 @@ namespace jabber.connection.sasl
             ms.Write(temp,0,temp.Length);
             ms.Seek(0,System.IO.SeekOrigin.Begin);
             H1 = MD5.ComputeHash(ms);
-            
+
             sb.Remove(0,sb.Length);
             sb.Append("AUTHENTICATE:");
             sb.Append(uri);
@@ -332,11 +332,11 @@ namespace jabber.connection.sasl
             A2 = sb.ToString();
             H2 = AE.GetBytes(A2);
             H2 = MD5.ComputeHash(H2);
-            
+
             // create p1 and p2 as the hex representation of H1 and H2
             p1 = HexString(H1).ToLower();
             p2 = HexString(H2).ToLower();
-            
+
             sb.Remove(0, sb.Length);
             sb.Append(p1);
             sb.Append(":");
@@ -349,10 +349,10 @@ namespace jabber.connection.sasl
             sb.Append(m_qop);
             sb.Append(":");
             sb.Append(p2);
-            
+
             A3 = sb.ToString();
             H3 = MD5.ComputeHash(AE.GetBytes(A3));
-            m_response = HexString(H3).ToLower();           
+            m_response = HexString(H3).ToLower();
         }
 
         private bool validateResponseAuth()

@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -32,10 +32,10 @@ namespace jabber.protocol
     public delegate void ProtocolHandler(Object sender, System.Xml.XmlElement rp);
 
     /// <summary>
-    /// Async XML parsing, according to jabber protocol rules of "interesting". 
+    /// Async XML parsing, according to jabber protocol rules of "interesting".
     /// The root node fires IElementStreamListener.OnDocumentStart(), and each
     /// direct child of the root fires IElementStreamListener.OnTag().
-    /// 
+    ///
     /// TODO: Combine with AsyncElementStream, since there's only one impl.
     /// </summary>
     [RCS(@"$Header$")]
@@ -58,7 +58,7 @@ namespace jabber.protocol
         public event ProtocolHandler       OnDocumentStart;
 
         /// <summary>
-        /// The document has completed.  
+        /// The document has completed.
         /// TODO: This isn't fired as often as it needs to be, yet.
         /// </summary>
         public event bedrock.ObjectHandler OnDocumentEnd;
@@ -74,7 +74,7 @@ namespace jabber.protocol
         public event bedrock.ExceptionHandler OnError;
 
         /// <summary>
-        /// Create a parser that will report events to the listener.  
+        /// Create a parser that will report events to the listener.
         /// </summary>
         protected ElementStream()
         {
@@ -85,7 +85,7 @@ namespace jabber.protocol
         }
 
         /// <summary>
-        /// The document being read into.  This document is used for creating nodes, 
+        /// The document being read into.  This document is used for creating nodes,
         /// but does not actually contain the nodes.
         /// </summary>
         public XmlDocument Document

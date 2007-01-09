@@ -36,7 +36,7 @@ def fixup(f):
                 if cl != line:
                     line = cl
                     cr = True
-            fh.write(line + "\r\n")
+            fh.write(line + "\n")
         fh.close()
         bh.close()
         if not cr:

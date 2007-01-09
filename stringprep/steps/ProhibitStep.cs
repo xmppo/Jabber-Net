@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -27,13 +27,13 @@ namespace stringprep.steps
         /// The character that was invalid.
         /// </summary>
         public char InvalidChar;
-        
+
         /// <summary>
         /// Create an instance.
         /// </summary>
         /// <param name="step">In which step did this occur?</param>
         /// <param name="c">The offending character</param>
-        public ProhibitedCharacterException(ProfileStep step, char c) : 
+        public ProhibitedCharacterException(ProfileStep step, char c) :
             base(string.Format("Step {0} prohibits string (character U+{1:x04}).", step.Name, (ushort) c))
         {
             InvalidChar = c;
@@ -83,7 +83,7 @@ namespace stringprep.steps
         /// Check all of the characters for prohbition.
         /// </summary>
         /// <param name="s">String to check</param>
-        /// <returns>If one of the characters is prohibited, returns the index of that character.  
+        /// <returns>If one of the characters is prohibited, returns the index of that character.
         /// If all are allowed, returns -1.</returns>
         public int FindStringInTable(StringBuilder s)
         {
@@ -122,7 +122,7 @@ namespace stringprep.steps
                 char c = (char) y;
                 if (c < bounds[0])
                     return 1;
-                
+
                 if (c > bounds[1])
                     return -1;
 

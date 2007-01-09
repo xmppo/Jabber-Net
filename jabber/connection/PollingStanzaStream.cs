@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -105,10 +105,10 @@ namespace jabber.connection
             //    }
             //    j25s.Proxy = wp;
             //}
-            
+
             m_sock = j25s;
 
-            
+
             string to = (string)m_listener[Options.TO];
             Debug.Assert(to != null);
 
@@ -122,7 +122,7 @@ namespace jabber.connection
             j25s.URL = ((ssl)?"https://":"http://") + host + ":" + port.ToString() + "/" + url;
 
 
-            Address addr = new Address(host, port);            
+            Address addr = new Address(host, port);
             m_sock.Connect(addr, (string)m_listener[Options.SERVER_ID]);
         }
 
@@ -249,7 +249,7 @@ namespace jabber.connection
             if ((bool)m_listener[Options.SSL])
             {
                 JEP25Socket s = sock as JEP25Socket;
-                
+
                 m_listener[Options.REMOTE_CERTIFICATE] = s.RemoteCertificate;
             }
 #endif

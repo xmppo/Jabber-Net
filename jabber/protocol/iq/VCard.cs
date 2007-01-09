@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -37,35 +37,35 @@ namespace jabber.protocol.iq
         /// <summary>
         /// fax
         /// </summary>
-        fax, 
+        fax,
         /// <summary>
         /// pager
         /// </summary>
-        pager, 
+        pager,
         /// <summary>
         /// voice mail
         /// </summary>
-        msg, 
+        msg,
         /// <summary>
         /// mobile
         /// </summary>
-        cell, 
+        cell,
         /// <summary>
         /// video phone
         /// </summary>
-        video, 
+        video,
         /// <summary>
         /// Bulletin Board System
         /// </summary>
-        bbs, 
+        bbs,
         /// <summary>
         /// Modem
         /// </summary>
-        modem, 
+        modem,
         /// <summary>
         /// ISDN
         /// </summary>
-        isdn, 
+        isdn,
         /// <summary>
         /// dunno.
         /// </summary>
@@ -80,7 +80,7 @@ namespace jabber.protocol.iq
         /// <summary>
         /// Home
         /// </summary>
-        home, 
+        home,
         /// <summary>
         /// Work
         /// </summary>
@@ -99,7 +99,7 @@ namespace jabber.protocol.iq
         /// <summary>
         /// Home
         /// </summary>
-        home, 
+        home,
         /// <summary>
         /// Work
         /// </summary>
@@ -122,11 +122,11 @@ namespace jabber.protocol.iq
         /// <summary>
         /// Home
         /// </summary>
-        home, 
+        home,
         /// <summary>
         /// Work
         /// </summary>
-        work, 
+        work,
         /// <summary>
         /// Internet
         /// </summary>
@@ -155,7 +155,7 @@ namespace jabber.protocol.iq
         /// <summary>
         /// returns the vCard element for this iq.
         /// </summary>
-        public VCard VCard 
+        public VCard VCard
         {
             get { return (VCard)this["vCard"]; }
         }
@@ -168,7 +168,7 @@ namespace jabber.protocol.iq
     public class VCard : Element
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="doc"></param>
         public VCard(XmlDocument doc) : base("vCard", URI.VCARD, doc)
@@ -177,7 +177,7 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="prefix"></param>
         /// <param name="qname"></param>
@@ -206,7 +206,7 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
-        /// Person's nick name.  This might be a good choice for a default roster nick, 
+        /// Person's nick name.  This might be a good choice for a default roster nick,
         /// for instance.
         /// </summary>
         public string Nickname
@@ -238,7 +238,7 @@ namespace jabber.protocol.iq
         /// </summary>
         public System.Uri Url
         {
-            get 
+            get
             {
                 string url = GetElem("URL");
                 if ((url == null) || (url == ""))
@@ -257,7 +257,7 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public VOrganization Organization
         {
@@ -266,7 +266,7 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public string Title
         {
@@ -275,7 +275,7 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public string Role
         {
@@ -293,7 +293,7 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public string Description
         {
@@ -319,7 +319,7 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="type"></param>
         /// <param name="location"></param>
@@ -405,11 +405,11 @@ namespace jabber.protocol.iq
         public void SetEmail(VEmail email)
         {
             VEmail existing = GetEmail(email.Type);
-            if (existing == null) 
+            if (existing == null)
             {
                 AddChild(email);
-            } 
-            else 
+            }
+            else
             {
                 existing.UserId = email.UserId;
             }
@@ -426,16 +426,16 @@ namespace jabber.protocol.iq
                 VEmail vemail = GetEmail(EmailType.internet);
                 return vemail == null ? null : vemail.UserId;
             }
-        }    
+        }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [RCS(@"$Header$")]
         public class VName : Element
         {
             /// <summary>
-            /// 
+            ///
             /// </summary>
             /// <param name="doc"></param>
             public VName(XmlDocument doc) : base("N", URI.VCARD, doc)
@@ -443,7 +443,7 @@ namespace jabber.protocol.iq
             }
 
             /// <summary>
-            /// 
+            ///
             /// </summary>
             /// <param name="prefix"></param>
             /// <param name="qname"></param>
@@ -488,7 +488,7 @@ namespace jabber.protocol.iq
         public class VOrganization : Element
         {
             /// <summary>
-            /// 
+            ///
             /// </summary>
             /// <param name="doc"></param>
             public VOrganization(XmlDocument doc) : base("ORG", URI.VCARD, doc)
@@ -496,7 +496,7 @@ namespace jabber.protocol.iq
             }
 
             /// <summary>
-            /// 
+            ///
             /// </summary>
             /// <param name="prefix"></param>
             /// <param name="qname"></param>
@@ -516,7 +516,7 @@ namespace jabber.protocol.iq
             }
 
             /// <summary>
-            /// 
+            ///
             /// </summary>
             public string Unit
             {
@@ -532,7 +532,7 @@ namespace jabber.protocol.iq
         public class VTelephone : Element
         {
             /// <summary>
-            /// 
+            ///
             /// </summary>
             /// <param name="doc"></param>
             public VTelephone(XmlDocument doc) : base("TEL", URI.VCARD, doc)
@@ -540,7 +540,7 @@ namespace jabber.protocol.iq
             }
 
             /// <summary>
-            /// 
+            ///
             /// </summary>
             /// <param name="prefix"></param>
             /// <param name="qname"></param>
@@ -560,7 +560,7 @@ namespace jabber.protocol.iq
             }
 
             /// <summary>
-            /// 
+            ///
             /// </summary>
             public TelephoneType Type
             {
@@ -593,7 +593,7 @@ namespace jabber.protocol.iq
             }
 
             /// <summary>
-            /// 
+            ///
             /// </summary>
             public TelephoneLocation Location
             {
@@ -628,7 +628,7 @@ namespace jabber.protocol.iq
         public class VAddress : Element
         {
             /// <summary>
-            /// 
+            ///
             /// </summary>
             /// <param name="doc"></param>
             public VAddress(XmlDocument doc) : base("ADR", URI.VCARD, doc)
@@ -636,7 +636,7 @@ namespace jabber.protocol.iq
             }
 
             /// <summary>
-            /// 
+            ///
             /// </summary>
             /// <param name="prefix"></param>
             /// <param name="qname"></param>
@@ -647,7 +647,7 @@ namespace jabber.protocol.iq
             }
 
             /// <summary>
-            /// 
+            ///
             /// </summary>
             public string Street
             {
@@ -656,7 +656,7 @@ namespace jabber.protocol.iq
             }
 
             /// <summary>
-            /// 
+            ///
             /// </summary>
             public string Locality
             {
@@ -665,7 +665,7 @@ namespace jabber.protocol.iq
             }
 
             /// <summary>
-            /// 
+            ///
             /// </summary>
             public string Region
             {
@@ -674,7 +674,7 @@ namespace jabber.protocol.iq
             }
 
             /// <summary>
-            /// 
+            ///
             /// </summary>
             public string PostalCode
             {
@@ -683,7 +683,7 @@ namespace jabber.protocol.iq
             }
 
             /// <summary>
-            /// 
+            ///
             /// </summary>
             public string Country
             {
@@ -692,7 +692,7 @@ namespace jabber.protocol.iq
             }
 
             /// <summary>
-            /// 
+            ///
             /// </summary>
             public string Extra
             {
@@ -701,7 +701,7 @@ namespace jabber.protocol.iq
             }
 
             /// <summary>
-            /// 
+            ///
             /// </summary>
             public AddressLocation Location
             {
@@ -736,7 +736,7 @@ namespace jabber.protocol.iq
         public class VEmail : Element
         {
             /// <summary>
-            /// 
+            ///
             /// </summary>
             /// <param name="doc"></param>
             public VEmail(XmlDocument doc) : base("EMAIL", URI.VCARD, doc)
@@ -744,7 +744,7 @@ namespace jabber.protocol.iq
             }
 
             /// <summary>
-            /// 
+            ///
             /// </summary>
             /// <param name="prefix"></param>
             /// <param name="qname"></param>
@@ -769,7 +769,7 @@ namespace jabber.protocol.iq
             public bool IsPreferred
             {
                 get { return (this["PREF"] != null); }
-                set 
+                set
                 {
                     if (value)
                         SetElem("PREF", null);
@@ -824,7 +824,7 @@ namespace jabber.protocol.iq
         public class VGeo : Element
         {
             /// <summary>
-            /// 
+            ///
             /// </summary>
             /// <param name="doc"></param>
             public VGeo(XmlDocument doc) : base("GEO", URI.VCARD, doc)
@@ -832,7 +832,7 @@ namespace jabber.protocol.iq
             }
 
             /// <summary>
-            /// 
+            ///
             /// </summary>
             /// <param name="prefix"></param>
             /// <param name="qname"></param>
@@ -862,13 +862,13 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [RCS(@"$Header$")]
         public class VPhoto : Element
         {
             /// <summary>
-            /// 
+            ///
             /// </summary>
             /// <param name="doc"></param>
             public VPhoto(XmlDocument doc) : base("PHOTO", URI.VCARD, doc)
@@ -876,7 +876,7 @@ namespace jabber.protocol.iq
             }
 
             /// <summary>
-            /// 
+            ///
             /// </summary>
             /// <param name="prefix"></param>
             /// <param name="qname"></param>
@@ -888,7 +888,7 @@ namespace jabber.protocol.iq
 
             /*
             /// <summary>
-            /// 
+            ///
             /// </summary>
             public System.Drawing.Image Bitmap
             {
@@ -904,7 +904,7 @@ namespace jabber.protocol.iq
                     XmlElement binv = this["BINVAL"];
                     if (binv != null)
                     {
-                        
+
                     }
                     return null;
                 }

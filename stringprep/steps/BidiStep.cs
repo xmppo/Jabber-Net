@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -31,7 +31,7 @@ namespace stringprep.steps
     }
 
     /// <summary>
-    /// A stringprep profile step to check for Bidirectional correctness.  
+    /// A stringprep profile step to check for Bidirectional correctness.
     /// If the NO_BIDI flag is set, this is a no-op.
     /// </summary>
     public class BidiStep : ProfileStep
@@ -49,7 +49,7 @@ namespace stringprep.steps
 
         /// <summary>
         /// Perform BiDi checks.
-        /// 
+        ///
         /// From RFC 3454, Section 6:
         /// In any profile that specifies bidirectional character handling, all
         /// three of the following requirements MUST be met:

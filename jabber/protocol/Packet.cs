@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -29,7 +29,7 @@ namespace jabber.protocol
     public class Packet : Element
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="prefix"></param>
         /// <param name="qname"></param>
@@ -40,7 +40,7 @@ namespace jabber.protocol
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="localName"></param>
         /// <param name="doc"></param>
@@ -55,12 +55,12 @@ namespace jabber.protocol
         public JID To
         {
             get { return new JID(this.GetAttribute("to")); }
-            set 
-            { 
+            set
+            {
                 if (value == null)
                     this.RemoveAttribute("to");
                 else
-                    this.SetAttribute("to", value); 
+                    this.SetAttribute("to", value);
             }
         }
 
@@ -71,14 +71,14 @@ namespace jabber.protocol
         {
             get { return new JID(this.GetAttribute("from")); }
             set
-            { 
+            {
                 if (value == null)
                     this.RemoveAttribute("from");
                 else
-                    this.SetAttribute("from", value); 
+                    this.SetAttribute("from", value);
             }
         }
-   
+
         /// <summary>
         /// The packet ID.
         /// </summary>

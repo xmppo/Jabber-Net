@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -50,7 +50,7 @@ namespace jabber.protocol.accept
     public class Route : jabber.protocol.Packet
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="doc"></param>
         public Route(XmlDocument doc) : base("route", doc)
@@ -58,12 +58,12 @@ namespace jabber.protocol.accept
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="prefix"></param>
         /// <param name="qname"></param>
         /// <param name="doc"></param>
-        public Route(string prefix, XmlQualifiedName qname, XmlDocument doc) : 
+        public Route(string prefix, XmlQualifiedName qname, XmlDocument doc) :
             base(prefix, qname, doc)
         {
         }
@@ -74,7 +74,7 @@ namespace jabber.protocol.accept
         public XmlElement Contents
         {
             get { return (XmlElement) this.FirstChild; }
-            set 
+            set
             {
                 this.InnerXml = "";
                 AddChild(value);
@@ -87,8 +87,8 @@ namespace jabber.protocol.accept
         public RouteType Type
         {
             get { return (RouteType) GetEnumAttr("type", typeof(RouteType)); }
-            set 
-            { 
+            set
+            {
                 RouteType cur = this.Type;
                 if (cur == value)
                     return;

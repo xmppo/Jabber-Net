@@ -1,14 +1,14 @@
 /* --------------------------------------------------------------------------
  * Copyrights
- * 
- * Portions created by or assigned to Cursive Systems, Inc. are 
- * Copyright (c) 2002-2005 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
  * License
- * 
- * Jabber-Net can be used under either JOSL or the GPL.  
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
@@ -44,7 +44,7 @@ namespace muzzle
     }
     // TODO: Add vertical scrolling as an option.
     /// <summary>
-    /// A StripChart is a scrolling window showing a set number of data points.  
+    /// A StripChart is a scrolling window showing a set number of data points.
     /// As new points are added, old points get shifted along.
     /// </summary>
     public class StripChart : System.Windows.Forms.UserControl
@@ -100,9 +100,9 @@ namespace muzzle
         public bool ShowLastValue
         {
             get { return m_showLast; }
-            set 
-            { 
-                m_showLast = value; 
+            set
+            {
+                m_showLast = value;
                 DesignReDraw();
             }
         }
@@ -116,9 +116,9 @@ namespace muzzle
         public string Title
         {
             get { return m_title; }
-            set 
-            { 
-                m_title = value; 
+            set
+            {
+                m_title = value;
                 DesignReDraw();
             }
         }
@@ -148,7 +148,7 @@ namespace muzzle
         [Category("Chart")]
         public ChartStyle Style
         {
-            get 
+            get
             {
                 return m_style;
             }
@@ -194,10 +194,10 @@ namespace muzzle
             }
         }
         /// <summary>
-        /// Reset min and max as necessary to show all points.  
+        /// Reset min and max as necessary to show all points.
         /// This must be set before adding any points.
         /// </summary>
-        [Description("Reset min and max as necessary to show all points.  " + 
+        [Description("Reset min and max as necessary to show all points.  " +
              "This must be set before adding any points.")]
         [DefaultValue(true)]
         [Category("Chart")]
@@ -276,7 +276,7 @@ namespace muzzle
         [Category("Appearance")]
         public Color TextColor
         {
-            get 
+            get
             {
                 return m_textColor;
             }
@@ -294,7 +294,7 @@ namespace muzzle
         [Category("Appearance")]
         public Color ZeroColor
         {
-            get 
+            get
             {
                 return m_zeroColor;
             }
@@ -309,7 +309,7 @@ namespace muzzle
         /// </summary>
         public override Color ForeColor
         {
-            get 
+            get
             {
                 return base.ForeColor;
             }
@@ -324,7 +324,7 @@ namespace muzzle
         /// </summary>
         public override Color BackColor
         {
-            get 
+            get
             {
                 return base.BackColor;
             }
@@ -336,7 +336,7 @@ namespace muzzle
             }
         }
         /// <summary>
-        /// Add a point to the strip chart.  If more than the history size are already 
+        /// Add a point to the strip chart.  If more than the history size are already
         /// in the chart, extras are dropped.
         /// </summary>
         /// <param name="val">The value to add</param>
@@ -423,8 +423,8 @@ namespace muzzle
                 float y   = 0F;
                 int count = 0;
 
-                // this is kinda ugly, because of the repeated code.  
-                // But it's better, perf-wise, than repeating the switch statement 
+                // this is kinda ugly, because of the repeated code.
+                // But it's better, perf-wise, than repeating the switch statement
                 // every time through the loop.
                 switch (m_style)
                 {
@@ -475,7 +475,7 @@ namespace muzzle
                 g.DrawString(m_min.ToString(), font, textBrush, 2, h + fh);
                 g.DrawString(m_max.ToString(), font, textBrush, 2, 2);
             }
-            if (m_showLast) 
+            if (m_showLast)
             {
                 string last = m_last.ToString();
                 float fw = g.MeasureString(last, font).Width + 2;
@@ -485,7 +485,7 @@ namespace muzzle
             {
                 float fw = g.MeasureString(m_title, font).Width;
                 g.DrawString(m_title, font, textBrush, (w - fw)/2F, 2);
-            }       
+            }
             return bm;
         }
 
@@ -500,24 +500,24 @@ namespace muzzle
         }
         #region Component Designer generated code
         /// <summary>
-        /// Required method for Designer support - do not modify 
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
         {
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.SuspendLayout();
-            // 
+            //
             // pictureBox1
-            // 
+            //
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(150, 150);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
-            // 
+            //
             // StripChart
-            // 
+            //
             this.Controls.AddRange(new System.Windows.Forms.Control[] {
                                                                           this.pictureBox1});
             this.Name = "StripChart";
