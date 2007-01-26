@@ -104,18 +104,41 @@ namespace bedrock.net
         public const int CERT_E_VALIDITYPERIODNESTING = -2146762494;
         public const int TRUST_E_BAD_DIGEST           = -2146869232;
         public const int TRUST_E_BASIC_CONSTRAINTS    = -2146869223;
-#endif
 
-        /// <summary>
-        /// The set of allowable errors in SSL certificates if UntrustedRootOK is set to true.
-        /// </summary>
-        public const SslPolicyErrors DefaultUntrustedPolicy = SslPolicyErrors.RemoteCertificateChainErrors;
+        public string CertErrorString(int err)
+        {
+            switch (err)
+            {
+            case CERT_E_CHAINING:
+                return "CERT_E_CHAINING";
+            case CERT_E_CN_NO_MATCH:
+                return "CERT_E_CN_NO_MATCH";
+            case CERT_E_EXPIRED:
+                return "CERT_E_EXPIRED";
+            case CERT_E_PURPOSE:
+                return "CERT_E_PURPOSE";
+            case CERT_E_UNTRUSTEDROOT:
+                return "CERT_E_UNTRUSTEDROOT";
+            case CERT_E_VALIDITYPERIODNESTING:
+                return "CERT_E_VALIDITYPERIODNESTING";
+            case TRUST_E_BAD_DIGEST:
+                return "TRUST_E_BAD_DIGEST";
+            case TRUST_E_BASIC_CONSTRAINTS:
+                return "TRUST_E_BASIC_CONSTRAINTS";
+            }
+            return "Unknown error: " + err.ToString();
+        }
+        
+        /// <summary> The set of allowable errors in SSL certificates
+        /// if UntrustedRootOK is set to true.  </summary>
+        public static int[] DefaultUntrustedPolicy =
+            new int[] { CERT_E_UNTRUSTEDROOT, CERT_E_CHAINING};
 
-        /// <summary>
-        /// The allowable SSL certificate errors.  If you modify UntrustedRootOK to true, the side effect will be to
-        /// set this to DefaultUntrustedPolicy.  False, the default, sets this to None.
-        /// </summary>
-        public static SslPolicyErrors AllowedSSLErrors = SslPolicyErrors.None;
+        /// <summary> The allowable SSL certificate errors.  If you
+        /// modify UntrustedRootOK to true, the side effect will be to
+        /// set this to DefaultUntrustedPolicy.  False, the default,
+        /// sets this to None.  </summary>
+        public static int[] AllowedSSLErrors = new int[] {};
 
         /// <summary>
         /// Are untrusted root certificates OK when connecting using
@@ -125,7 +148,48 @@ namespace bedrock.net
         ///
         /// Setting this modifies AllowedSSLErrors by side-effect.
         /// </summary>
-        [DefaultValue(true)]
+        [DefaultValue(false)]
+        public static bool UntrustedRootOK
+        {
+            get
+            {
+                return (AllowedSSLErrors.Length != 0);
+            }
+            set
+            {
+                if (value)
+                {
+                    AllowedSSLErrors = DefaultUntrustedPolicy;
+                }
+                else
+                {
+                    AllowedSSLErrors = new int[] {};
+                }
+            }
+        }
+#endif
+
+#if NET20
+        /// <summary> The set of allowable errors in SSL certificates
+        /// if UntrustedRootOK is set to true.  </summary>
+        public const SslPolicyErrors DefaultUntrustedPolicy =
+                 SslPolicyErrors.RemoteCertificateChainErrors;
+
+        /// <summary> The allowable SSL certificate errors.  If you
+        /// modify UntrustedRootOK to true, the side effect will be to
+        /// set this to DefaultUntrustedPolicy.  False, the default,
+        /// sets this to None.  </summary>
+        public static SslPolicyErrors AllowedSSLErrors = SslPolicyErrors.None;
+    
+        /// <summary>
+        /// Are untrusted root certificates OK when connecting using
+        /// SSL?  Setting this to true is insecure, but it's unlikely
+        /// that you trust jabbber.org or jabber.com's relatively
+        /// bogus certificate roots.
+        ///
+        /// Setting this modifies AllowedSSLErrors by side-effect.
+        /// </summary>
+        [DefaultValue(false)]
         public static bool UntrustedRootOK
         {
             get
@@ -145,7 +209,6 @@ namespace bedrock.net
             }
         }
 
-#if NET20
         /// <summary>
         /// The types of SSL to support.  SSL3 and TLS1 by default.
         /// That should be good enough for most apps, and was
@@ -213,7 +276,11 @@ namespace bedrock.net
         /// StartTLS later if this is false, and TLS only is needed
         /// later)</param>
         /// <param name="synch">Synchronous operation</param>
-        public AsyncSocket(SocketWatcher w, ISocketEventListener listener, bool SSL, bool synch) : base(listener)
+        public AsyncSocket(SocketWatcher w,
+                           ISocketEventListener listener,
+                           bool SSL,
+                           bool synch) :
+            base(listener)
         {
             m_watcher = w;
             m_synch = synch;
@@ -823,7 +890,10 @@ namespace bedrock.net
         /// <param name="chain"></param>
         /// <param name="sslPolicyErrors"></param>
         /// <returns></returns>
-        protected bool ValidateServerCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+        protected bool ValidateServerCertificate(object sender,
+                                                 X509Certificate certificate,
+                                                 X509Chain chain,
+                                                 SslPolicyErrors sslPolicyErrors)
         {
             // TODO: add a new ISocketEventListener to validate cert.
             // Note: Don't write servers with Jabber-Net, please.  :)
@@ -929,49 +999,21 @@ namespace bedrock.net
             Console.WriteLine("UntrustedRoot: " + UntrustedRootOK +
                               " (" + certificateErrors.Length + ")");
             bool ok = true;
+
             foreach (int i in certificateErrors)
             {
-                Console.WriteLine("Error: " + i);
-                // if untrustedRoot is ok, then ignore untrustedRoot
-                // and chaining errors.
-                if (!
-                    (UntrustedRootOK &&
-                     ((i == CERT_E_UNTRUSTEDROOT) ||
-                      (i == CERT_E_CHAINING))))
+                bool eok = false;
+                foreach (int j in DefaultUntrustedPolicy)
                 {
-                    string err = null;
-                    switch (i)
+                    if (i == j)
                     {
-                    case CERT_E_CHAINING:
-                        err = "CERT_E_CHAINING";
-                        break;
-                    case CERT_E_CN_NO_MATCH:
-                        err = "CERT_E_CN_NO_MATCH";
-                        break;
-                    case CERT_E_EXPIRED:
-                        err = "CERT_E_EXPIRED";
-                        break;
-                    case CERT_E_PURPOSE:
-                        err = "CERT_E_PURPOSE";
-                        break;
-                    case CERT_E_UNTRUSTEDROOT:
-                        err = "CERT_E_UNTRUSTEDROOT";
-                        break;
-                    case CERT_E_VALIDITYPERIODNESTING:
-                        err = "CERT_E_VALIDITYPERIODNESTING";
-                        break;
-                    case TRUST_E_BAD_DIGEST:
-                        err = "TRUST_E_BAD_DIGEST";
-                        break;
-                    case TRUST_E_BASIC_CONSTRAINTS:
-                        err = "TRUST_E_BASIC_CONSTRAINTS";
-                        break;
-                    default:
-                        err = "Unknown error: " + i.ToString();
+                        eok = true;
                         break;
                     }
-
-                    Console.WriteLine("Error: " + err);
+                }
+                if (! eok)
+                {
+                    Console.WriteLine("Error: " + CertErrorString(i));
                     ok = false;
                 }
             }
@@ -993,7 +1035,8 @@ namespace bedrock.net
 
             // we're really doing start-tls.
             if (m_secureProtocol == 0)
-                m_secureProtocol = Mono.Security.Protocol.Tls.SecurityProtocolType.Ssl3;
+                m_secureProtocol =
+                    Mono.Security.Protocol.Tls.SecurityProtocolType.Ssl3;
 
             try
             {
