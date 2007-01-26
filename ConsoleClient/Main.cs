@@ -34,7 +34,14 @@ namespace ConsoleClient
 
         public Class1(string[] args)
         {
+#if __MonoCS__
+            bedrock.net.AsyncSocket.AllowedSSLErrors = new int[]
+                { bedrock.net.AsyncSocket.CERT_E_UNTRUSTEDROOT,
+                  bedrock.net.AsyncSocket.CERT_E_CHAINING,
+                  bedrock.net.AsyncSocket.CERT_E_PURPOSE };
+#else
             bedrock.net.AsyncSocket.UntrustedRootOK = true;
+#endif
             JabberClient jc = new JabberClient();
             jc.OnReadText += new bedrock.TextHandler(jc_OnReadText);
             jc.OnWriteText += new bedrock.TextHandler(jc_OnWriteText);
