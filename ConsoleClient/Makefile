@@ -27,9 +27,7 @@ RESOURCES =
 SYSTEM_REFERENCES = -r:System.dll -r:System.Xml.dll
 
 MCS_OPTIONS =   -lib:$(BASEDIR)/bin/debug -debug \
-		-define:NO_SSL \
-		-define:DEBUG \
-		-define:NO_STRINGPREP
+		-define:DEBUG
 
 all: bin/debug/console-client.exe
 

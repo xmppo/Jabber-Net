@@ -996,14 +996,11 @@ namespace bedrock.net
             if (certificateErrors.Length == 0)
                 return true;
 
-            Console.WriteLine("UntrustedRoot: " + UntrustedRootOK +
-                              " (" + certificateErrors.Length + ")");
             bool ok = true;
-
             foreach (int i in certificateErrors)
             {
                 bool eok = false;
-                foreach (int j in DefaultUntrustedPolicy)
+                foreach (int j in AllowedSSLErrors)
                 {
                     if (i == j)
                     {
