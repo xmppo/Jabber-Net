@@ -18,6 +18,8 @@ using System.Xml;
 using bedrock.util;
 using jabber;
 using jabber.client;
+using jabber.protocol.client;
+using jabber.protocol.iq;
 
 namespace ConsoleClient
 {
@@ -31,6 +33,15 @@ namespace ConsoleClient
 
         [CommandLine("p", "Password", true)]
         public string pass = null;
+
+        [CommandLine("n", "Network Host", false)]
+        public string networkHost = null;
+
+        [CommandLine("t", "TLS auto-start", false)]
+        public bool TLS = true;
+
+        [CommandLine("r", "Register user", false)]
+        public bool register = false;
 
         public Class1(string[] args)
         {
@@ -63,16 +74,34 @@ namespace ConsoleClient
             JID j = new JID(jid);
             jc.User = j.User;
             jc.Server = j.Server;
+            jc.NetworkHost = networkHost;
             jc.Resource = "Jabber.Net Console Client";
             jc.Password = pass;
+            jc.AutoStartTLS = TLS;
+
+            if (register)
+            {
+                jc.AutoLogin = false;
+                jc.OnLoginRequired +=
+                    new bedrock.ObjectHandler(jc_OnLoginRequired);
+                jc.OnRegisterInfo += new IQHandler(this.jc_OnRegisterInfo);
+                jc.OnRegistered += new IQHandler(jc_OnRegistered);
+            }
             jc.Connect();
 
             string line;
             while ((line = Console.ReadLine()) != "")
             {
+                if (line == "/clear")
+                {
+                    // Hm.... I wonder if this works on windows.
+                    Console.Write("\x1b[H\x1b[2J");
+                    continue;
+                }
                 try
                 {
-                    // TODO: deal with stanzas that span lines... keep parsing until we have a full "doc".
+                    // TODO: deal with stanzas that span lines... keep
+                    // parsing until we have a full "doc".
                     XmlDocument doc = new XmlDocument();
                     doc.LoadXml(line);
                     XmlElement elem = doc.DocumentElement;
@@ -111,6 +140,28 @@ namespace ConsoleClient
         {
             Console.WriteLine("ERROR: " + ex.ToString());
             Environment.Exit(1);
+        }
+
+        private void jc_OnLoginRequired(object sender)
+        {
+            Console.WriteLine("Registering");
+            JabberClient jc = (JabberClient) sender;
+            jc.Register(new JID(jc.User, jc.Server, null));
+        }
+
+        private void jc_OnRegistered(object sender,
+                                     IQ iq)
+        {
+            JabberClient jc = (JabberClient) sender;
+            if (iq.Type == IQType.result)
+                jc.Login();
+        }
+        
+        private void jc_OnRegisterInfo(object sender, IQ iq)
+        {
+            JabberClient jc = (JabberClient) sender;
+            Register r = iq.Query as Register;
+            r.Password = jc.Password;
         }
     }
 }
