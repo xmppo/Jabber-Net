@@ -132,6 +132,33 @@ namespace jabber.protocol.client
             set { SetElem("priority", value); }
         }
 
+        public int IntPriority
+        {
+            get
+            {
+                String pri = Priority;
+                if ((pri == null) || (pri == ""))
+                    return 0;
+                try
+                {
+                    int i = int.Parse(pri);
+                    if (i < -128)
+                        return -128;
+                    if (i > 127)
+                        return 127;
+                    return i;
+                }
+                catch (Exception)
+                {
+                    return 0;
+                }
+            }
+            set
+            {
+                SetElem("priority", value.ToString());
+            }
+        }
+
         /// <summary>
         /// Presence error.
         /// </summary>
@@ -143,6 +170,87 @@ namespace jabber.protocol.client
                 this.Type = PresenceType.error;
                 ReplaceChild(value);
             }
+        }
+
+        private static int IntShow(string show)
+        {
+            switch (show)
+            {
+            case "dnd":
+                return 0;
+            case "xa":
+                return 1;
+            case "away":
+                return 2;
+            case "chat":
+                return 4;
+            default:
+                return 3;
+            }
+        }
+
+        /// <summary>
+        /// Compare two presences (from the same bare JID, but from different resources), 
+        /// to determine which is "more available".
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <returns></returns>
+        public static bool operator<(Presence first, Presence second)
+        {
+            int fp = first.IntPriority;
+            int sp = second.IntPriority;
+            if (fp < sp)
+                return true;
+            if (fp > sp)
+                return false;
+
+            // equal priority
+            int fs = IntShow(first.Show);
+            int ss = IntShow(second.Show);
+
+            if (fp < sp)
+                return true;
+            if (fp > sp)
+                return false;
+
+            // TODO: check times.  probably have to ensure that inbound presences get DateTime 
+            // stamped if they don't have one.
+
+            // equal show
+            return false;
+        }
+
+        /// <summary>
+        /// Compare two presences (from the same bare JID, but from different resources), 
+        /// to determine which is "more available".
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <returns></returns>
+        public static bool operator>(Presence first, Presence second)
+        {
+            int fp = first.IntPriority;
+            int sp = second.IntPriority;
+            if (fp > sp)
+                return true;
+            if (fp < sp)
+                return false;
+
+            // equal priority
+            int fs = IntShow(first.Show);
+            int ss = IntShow(second.Show);
+
+            if (fp > sp)
+                return true;
+            if (fp < sp)
+                return false;
+
+            // TODO: check times.  probably have to ensure that inbound presences get DateTime 
+            // stamped if they don't have one.
+
+            // equal show
+            return false;
         }
     }
 }
