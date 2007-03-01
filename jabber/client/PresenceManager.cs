@@ -182,6 +182,20 @@ namespace jabber.client
             }
         }
 
+        /// <summary>
+        /// Get all of the current presence stanzas for the given user.
+        /// </summary>
+        /// <param name="jid"></param>
+        /// <returns></returns>
+        public Presence[] GetAll(JID jid)
+        {
+            UserPresenceManager upm = (UserPresenceManager)m_items[jid.Bare];
+            if (upm == null)
+                return new Presence[0];
+            return upm.GetAll();
+        }
+
+
         #region Component Designer generated code
         /// <summary>
         /// Required method for Designer support - do not modify
@@ -201,40 +215,62 @@ namespace jabber.client
         /// <summary>
         /// Manage the presence for all of the resources of a user.  No locking is performed,
         /// since PresenceManager is already doing locking.
+        /// 
+        /// The intent of this class is to be able to deliver the last presence stanza 
+        /// from the "most available" resource. 
+        /// Note that negative priority sessions are never the most available.
         /// </summary>
         private class UserPresenceManager
         {
             private Tree m_items = new Tree();
             private Presence m_pres = null;
 
+            private void Mostest(Presence p)
+            {
+                // TODO: trigger event
+                m_pres = p;
+            }
+
             public void AddPresence(Presence p)
             {
                 JID from = p.From;
                 string res = from.Resource;
                 Debug.Assert(p.Type == PresenceType.available);
+
+                // this is probably a service of some kind.  presumably, there will
+                // onlly ever be one resource.
                 if (res == null)
                 {
-                    m_pres = p;
+                    if (p.IntPriority >= 0)
+                        Mostest(p);
                     return;
                 }
 
                 // Tree can't overwrite. Have to delete first.
                 m_items.Remove(res);
                 m_items[res] = p;
-
-                if ((m_pres == null) || (m_pres.From.Resource == res))
+                if (p.IntPriority < 0)
+                    return;
+    
+                // first one is always highest
+                if (m_pres == null)
                 {
-                    m_pres = p;
+                    Mostest(p);
                     return;
                 }
-                string pri = p.Priority;
-                int new_pri = (pri == null) ? 0 : int.Parse(pri);
-                pri = m_pres.Priority;
-                int old_pri = (pri == null) ? 0 : int.Parse(pri);
-                if (new_pri > old_pri)
+
+                if (m_pres.From == p.From)
                 {
-                    m_pres = p;
+                    // replacing.  If we're going up, or staying the same, no need to recalc.
+                    if (!(p < m_pres))
+                    {
+                        Mostest(p);
+                        return;
+                    }
                 }
+
+                // Otherwise, recalc
+                SetHighest();
             }
 
             public void RemovePresence(Presence p)
@@ -248,25 +284,28 @@ namespace jabber.client
 
                 if (m_pres.From.Resource == res)
                 {
-                    // this was the high pri resource.  Find the next highest.
-                    m_pres = null;
-
-                    int curp;
-                    int maxp = -1;
-
-                    foreach (DictionaryEntry de in m_items)
-                    {
-                        Presence tp = (Presence) de.Value;
-                        string pri = tp.Priority;
-                        curp = (pri == null) ? 0 : int.Parse(pri);
-                        if (curp > maxp)
-                        {
-                            m_pres = tp;
-                            maxp = curp;
-                        }
-                    }
-
+                    SetHighest();
                 }
+            }
+
+            private void SetHighest()
+            {
+                Presence p = null;
+                foreach (DictionaryEntry de in m_items)
+                {
+                    Presence tp = (Presence)de.Value;
+                    if (tp.IntPriority < 0)
+                        continue;
+
+                    if (p == null)
+                        p = tp;
+                    else
+                    {
+                        if (tp > p)
+                            p = tp;
+                    }
+                }
+                Mostest(p);
             }
 
             public int Count
@@ -289,6 +328,20 @@ namespace jabber.client
                         return m_pres;
                     return (Presence) m_items[Resource];
                 }
+            }
+
+            public Presence[] GetAll()
+            {
+                Presence[] all; 
+                if (m_items.Count > 0)
+                    all = new Presence[m_items.Count];
+                else if (m_pres == null)
+                    return new Presence[0];
+                else
+                    return new Presence[] {m_pres};
+
+                m_items.CopyTo(all, 0);
+                return all;
             }
         }
     }
