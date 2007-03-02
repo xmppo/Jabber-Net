@@ -23,7 +23,7 @@ namespace jabber
     /// <summary>
     /// An attempt was made to parse a badly-formatted JID.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class JIDFormatException : ApplicationException
     {
         /// <summary>
@@ -66,7 +66,7 @@ namespace jabber
     /// Simple JID management.  There should be more, here, particularly
     /// with respect to interning.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class JID : IComparable
     {
 #if !NO_STRINGPREP
