@@ -21,7 +21,7 @@ namespace jabber.protocol.stream
     /// <summary>
     /// Session start after binding
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class Session : Element
     {
         /// <summary>

@@ -21,7 +21,7 @@ namespace jabber.protocol.stream
     /// <summary>
     /// Bind start after binding
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class Bind : Element
     {
         /// <summary>

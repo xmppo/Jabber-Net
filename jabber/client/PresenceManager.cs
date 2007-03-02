@@ -37,7 +37,7 @@ namespace jabber.client
     /// <summary>
     /// Presence proxy database.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class PresenceManager : System.ComponentModel.Component, IEnumerable
     {
         /// <summary>

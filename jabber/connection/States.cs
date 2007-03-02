@@ -20,7 +20,7 @@ namespace jabber.connection
     /// <summary>
     /// Base class for all states.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public abstract class BaseState
     {
     }
@@ -29,7 +29,7 @@ namespace jabber.connection
     /// Up and running.  If subclasses change the state transition
     /// approach, they should end at the RunningState state.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class RunningState : BaseState
     {
         /// <summary>
@@ -41,7 +41,7 @@ namespace jabber.connection
     /// <summary>
     /// Not connected.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class ClosedState : BaseState
     {
         /// <summary>
@@ -53,7 +53,7 @@ namespace jabber.connection
     /// <summary>
     /// In the process of connecting.  DNS lookup, socket setup, etc.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class ConnectingState : BaseState
     {
         /// <summary>
@@ -65,7 +65,7 @@ namespace jabber.connection
     /// <summary>
     /// Have a connected socket.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class ConnectedState : BaseState
     {
         /// <summary>
@@ -77,7 +77,7 @@ namespace jabber.connection
     /// <summary>
     /// Got the stream:stream.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class StreamState : BaseState
     {
         /// <summary>
@@ -89,7 +89,7 @@ namespace jabber.connection
     /// <summary>
     /// A close was requested, but hasn't yet finalized.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class ClosingState : BaseState
     {
         /// <summary>
@@ -101,7 +101,7 @@ namespace jabber.connection
     /// <summary>
     /// Paused, waiting for reconnect timeout.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class ReconnectingState : BaseState
     {
         /// <summary>
@@ -113,7 +113,7 @@ namespace jabber.connection
     /// <summary>
     /// Accepting incoming socket connections.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class AcceptingState : BaseState
     {
         /// <summary>
@@ -124,7 +124,7 @@ namespace jabber.connection
     /// <summary>
     /// Old-style auth, iq:auth or handshake.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class NonSASLAuthState : BaseState
     {
         /// <summary>
@@ -135,7 +135,7 @@ namespace jabber.connection
     /// <summary>
     /// Waiting for the server to send the features element
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class ServerFeaturesState : BaseState
     {
         /// <summary>
@@ -146,7 +146,7 @@ namespace jabber.connection
     /// <summary>
     /// Start-TLS is starting to TLS.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class StartTLSState : BaseState
     {
         /// <summary>
@@ -157,7 +157,7 @@ namespace jabber.connection
     /// <summary>
     /// SASL Authentication in process
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class SASLState : BaseState
     {
         /// <summary>
@@ -168,7 +168,7 @@ namespace jabber.connection
     /// <summary>
     /// SASL Authentication finished.  Restarting the stream for the last time.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class SASLAuthedState : BaseState
     {
         /// <summary>
@@ -179,7 +179,7 @@ namespace jabber.connection
     /// <summary>
     /// Binding session
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class BindState : BaseState
     {
         /// <summary>

@@ -25,7 +25,7 @@ namespace test.jabber.protocol.x
     /// <summary>
     /// Summary description for AuthTest.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     [TestFixture]
     public class EventTest
     {

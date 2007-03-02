@@ -34,7 +34,7 @@ namespace jabber.protocol.iq
     /// <summary>
     /// IQ packet with an agents query element inside.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class AgentsIQ : jabber.protocol.client.IQ
     {
         /// <summary>
@@ -49,7 +49,7 @@ namespace jabber.protocol.iq
     /// <summary>
     /// An agents query element.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class AgentsQuery : Element
     {
         /// <summary>
@@ -102,7 +102,7 @@ namespace jabber.protocol.iq
     /// <summary>
     /// Agent items
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class Agent : Element
     {
         /// <summary>

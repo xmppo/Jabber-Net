@@ -33,7 +33,7 @@ namespace jabber.server
     /// This list will grow over time to include
     /// queued connections, direct (in-proc) connections, etc.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public enum ComponentType
     {
         /// <summary>
@@ -64,7 +64,7 @@ namespace jabber.server
     /// <summary>
     /// Summary description for ServerComponent.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class JabberService : jabber.connection.XmppStream
     {
         private static readonly object[][] DEFAULTS = new object[][] {
@@ -398,7 +398,7 @@ namespace jabber.server
     /// <summary>
     /// Waiting for handshake result.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class HandshakingState : jabber.connection.BaseState
     {
         /// <summary>
@@ -410,7 +410,7 @@ namespace jabber.server
     /// <summary>
     /// Waiting for socket connection.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class AcceptingState : jabber.connection.BaseState
     {
         /// <summary>

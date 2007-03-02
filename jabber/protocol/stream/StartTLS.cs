@@ -21,7 +21,7 @@ namespace jabber.protocol.stream
     /// <summary>
     /// Start-TLS in stream features.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class StartTLS : Element
     {
         /// <summary>
@@ -73,7 +73,7 @@ namespace jabber.protocol.stream
     /// <summary>
     /// Start-TLS proceed.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class Proceed : Element
     {
         /// <summary>
@@ -101,7 +101,7 @@ namespace jabber.protocol.stream
     /// <summary>
     /// Start-TLS failure.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class TLSFailure : Element
     {
         /// <summary>

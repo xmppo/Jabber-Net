@@ -37,7 +37,7 @@ namespace jabber.protocol
     /// have to stay around.  Someone should probably re-write it without the
     /// reverse-engineering.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class XmlLoader
     {
         private XmlReader     reader;

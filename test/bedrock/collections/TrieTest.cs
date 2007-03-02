@@ -23,7 +23,7 @@ namespace test.bedrock.collections
     /// <summary>
     ///    Summary description for TemplateTest.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     [TestFixture]
     public class TrieTest
     {

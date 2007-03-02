@@ -22,7 +22,7 @@ namespace jabber.protocol.accept
     /// <summary>
     /// The type attribute
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public enum XdbType
     {
         /// <summary>
@@ -50,7 +50,7 @@ namespace jabber.protocol.accept
     /// <summary>
     /// The action attribute.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public enum XdbAction
     {
         /// <summary>
@@ -70,7 +70,7 @@ namespace jabber.protocol.accept
     /// <summary>
     /// The XDB packet.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class Xdb : jabber.protocol.Packet
     {
         /// <summary>

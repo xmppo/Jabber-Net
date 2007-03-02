@@ -26,7 +26,7 @@ namespace test.jabber.protocol.x
     /// <summary>
     /// Summary description for DataTest.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     [TestFixture]
     public class DataTest
     {

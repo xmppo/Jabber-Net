@@ -22,7 +22,7 @@ namespace jabber.protocol.x
     /// <summary>
     /// ElementFactory for all currently supported IQ namespaces.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class Factory : IPacketTypes
     {
         private static QnameType[] s_qnt = new QnameType[]

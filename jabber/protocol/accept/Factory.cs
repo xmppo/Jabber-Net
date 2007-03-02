@@ -22,7 +22,7 @@ namespace jabber.protocol.accept
     /// <summary>
     /// A packet factory for the jabber:component:accept namespace.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class Factory : IPacketTypes
     {
         private static QnameType[] s_qnt = new QnameType[]

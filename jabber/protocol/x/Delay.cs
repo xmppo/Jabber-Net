@@ -22,7 +22,7 @@ namespace jabber.protocol.x
     /// <summary>
     /// A delay x element.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class Delay : Element
     {
         /// <summary>

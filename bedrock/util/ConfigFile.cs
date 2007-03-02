@@ -23,7 +23,7 @@ namespace bedrock.util
     /// <summary>
     /// XML configuration file manager.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class ConfigFile
     {
         private string m_file;

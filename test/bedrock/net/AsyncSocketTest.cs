@@ -22,7 +22,7 @@ namespace test.bedrock.net
     /// <summary>
     ///    Summary description for AsyncSocketTest.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     [TestFixture]
     public class AsyncSocketTest : ISocketEventListener
     {

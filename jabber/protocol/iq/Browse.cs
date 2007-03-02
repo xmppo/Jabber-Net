@@ -24,7 +24,7 @@ namespace jabber.protocol.iq
     /// <summary>
     /// An browse IQ.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class BrowseIQ : jabber.protocol.client.IQ
     {
         /// <summary>
@@ -40,7 +40,7 @@ namespace jabber.protocol.iq
     /// <summary>
     /// Browse IQ query.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class Browse : Element
     {
         /// <summary>

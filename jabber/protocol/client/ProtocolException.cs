@@ -20,7 +20,7 @@ namespace jabber.protocol.client
     /// <summary>
     /// A jabber error, in an IQ.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class ProtocolException : Exception
     {
         private ErrorCode m_code;

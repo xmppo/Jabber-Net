@@ -22,7 +22,7 @@ namespace bedrock.net
     /// <summary>
     /// Utilities for creating certificates
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class CertUtil
     {
         /// <summary>

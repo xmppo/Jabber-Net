@@ -34,7 +34,7 @@ namespace jabber.client
     /// <summary>
     /// Summary description for RosterManager.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class RosterManager : System.ComponentModel.Component
     {
         /// <summary>

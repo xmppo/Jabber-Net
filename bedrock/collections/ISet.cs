@@ -21,7 +21,7 @@ namespace bedrock.collections
     /// <summary>
     /// Set operations.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public interface ISet : ICollection
     {
         /// <summary>

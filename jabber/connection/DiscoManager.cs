@@ -47,7 +47,7 @@ namespace jabber.connection
     /// <summary>
     /// A JID/Node combination.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class JIDNode
     {
         private JID m_jid = null;
@@ -145,7 +145,7 @@ namespace jabber.connection
     /// This works fine in the real world today, since I don't know of any implementations that return different
     /// disco for different requestors, but it is completely legal protocol to have done so.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class DiscoNode : JIDNode, IEnumerable
     {
         private static Tree m_items = new Tree();
@@ -467,7 +467,7 @@ namespace jabber.connection
     /// TODO: cache JEP-115 client caps data to disk
     /// TODO: add negative caching
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class DiscoManager : System.ComponentModel.Component, IEnumerable
     {
         /// <summary>

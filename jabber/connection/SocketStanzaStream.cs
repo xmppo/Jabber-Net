@@ -25,7 +25,7 @@ namespace jabber.connection
     /// <summary>
     /// The types of proxies we support.  This is only for socket connections.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public enum ProxyType
     {
         /// <summary>
@@ -50,7 +50,7 @@ namespace jabber.connection
     /// <summary>
     /// "Standard" XMPP socket, connecting outward.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class SocketStanzaStream : StanzaStream, ISocketEventListener
     {
         private AsynchElementStream m_elements = null;

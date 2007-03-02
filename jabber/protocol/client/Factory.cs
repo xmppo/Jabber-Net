@@ -21,7 +21,7 @@ namespace jabber.protocol.client
     /// <summary>
     /// ElementFactory for the jabber:client namespace.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class Factory : IPacketTypes
     {
         private static QnameType[] s_qnt = new QnameType[]

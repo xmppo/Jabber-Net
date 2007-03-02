@@ -26,7 +26,7 @@ namespace test.jabber.protocol.client
     /// <summary>
     /// Summary description for IQTest.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     [TestFixture]
     public class IQTest
     {

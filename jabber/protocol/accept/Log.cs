@@ -22,7 +22,7 @@ namespace jabber.protocol.accept
     /// <summary>
     /// The type field in a log tag.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public enum LogType
     {
         /// <summary>
@@ -50,7 +50,7 @@ namespace jabber.protocol.accept
     /// <summary>
     /// The log packet.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class Log : jabber.protocol.Packet
     {
         /// <summary>

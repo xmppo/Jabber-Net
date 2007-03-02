@@ -24,7 +24,7 @@ namespace test.jabber.protocol
     /// <summary>
     /// Summary description for PacketTest.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     [TestFixture]
     public class PacketTest
     {

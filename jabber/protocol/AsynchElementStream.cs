@@ -27,7 +27,7 @@ namespace jabber.protocol
     /// Summary description for AsynchElementStream.
     /// TODO: combine with ElementStream, since there's only one impl now.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class AsynchElementStream : ElementStream
     {
         private static System.Text.Encoding utf = System.Text.Encoding.UTF8;

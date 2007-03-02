@@ -30,7 +30,7 @@ namespace bedrock.net
     /// but adds async DNS lookups.
     /// TODO: add SRV?
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class Address
     {
         private string    m_hostname = null;

@@ -26,7 +26,7 @@ namespace test.jabber.protocol.iq
     /// <summary>
     /// Summary description for AuthTest.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     [TestFixture]
     public class AuthTest
     {

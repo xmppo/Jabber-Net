@@ -26,7 +26,7 @@ namespace test.jabber.protocol
     /// <summary>
     /// Summary description for ElementListTest.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     [TestFixture]
     public class ElementListTest
     {

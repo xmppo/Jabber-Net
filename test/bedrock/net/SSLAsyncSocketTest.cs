@@ -27,7 +27,7 @@ namespace test.bedrock.net
     /// <summary>
     ///  Not really async.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     [TestFixture]
     public class SSLAsyncSocketTest : ISocketEventListener
     {

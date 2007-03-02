@@ -22,7 +22,7 @@ namespace jabber.protocol.x
     /// <summary>
     /// XData types.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public enum XDataType
     {
         /// <summary>
@@ -46,7 +46,7 @@ namespace jabber.protocol.x
     /// <summary>
     /// jabber:x:data support, as in http://www.jabber.org/jeps/jep-0004.html.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class Data : Element
     {
         /// <summary>
@@ -172,7 +172,7 @@ namespace jabber.protocol.x
     /// Types of fields.  This enum doesn't exactly match the JEP,
     /// since most of the field types aren't valid identifiers in C#.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public enum FieldType
     {
         /// <summary>
@@ -220,7 +220,7 @@ namespace jabber.protocol.x
     /// <summary>
     /// Form field.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class Field : Element
     {
         /// <summary>
@@ -503,7 +503,7 @@ namespace jabber.protocol.x
     /// <summary>
     /// Field options, for list-single and list-multi type fields.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class Option : Element
     {
         /// <summary>

@@ -23,7 +23,7 @@ namespace bedrock.collections
     /// in System.Collections.  This may be a nicer implementation of Queue
     /// than the one in System.Collections, which uses an array.  YMMV.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class LinkedList : IList
     {
         private Node      m_header     = new Node(null, null, null);

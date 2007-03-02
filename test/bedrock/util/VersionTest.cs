@@ -20,7 +20,7 @@ namespace test.bedrock.util
     /// <summary>
     ///    Summary description for AssemblyXMLTest.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     [TestFixture]
     public class VersionTest
     {
@@ -57,6 +57,14 @@ namespace test.bedrock.util
         {
 
         }
+
+        [SVN("$" + @"Id: calc.c 148 2002-07-28 21:30:43Z sally " + "$")]
+        private class SvnVer
+        {
+
+        }
+
+
         [Test] public void Test_Empty()
         {
             SourceVersionAttribute foo = SourceVersionAttribute.GetVersion(typeof(vFoo));
@@ -127,6 +135,7 @@ namespace test.bedrock.util
             Assert.IsTrue(tv[typeof(vBaz)]   != null);
             Assert.IsTrue(tv["test.bedrock.util.VersionTest+RCSVer"] != null);
             Assert.IsTrue(tv["test.bedrock.util.VersionTest+VssVer"] != null);
+            Assert.IsTrue(tv["test.bedrock.util.VersionTest+SvnVer"] != null);
             Assert.IsTrue(tv["test.bedrock.util.VersionTest+vBax"]   == null);
             foreach (string c in tv)
             {
@@ -134,5 +143,19 @@ namespace test.bedrock.util
                 Assert.IsTrue(tv[c] != null);
             }
         }
+
+        [Test]
+        public void Test_SVN()
+        {
+            SVNAttribute c = (SVNAttribute)SourceVersionAttribute.GetVersion(typeof(SvnVer));
+            Assert.AreEqual("148", c.Revision);
+            Assert.AreEqual(
+                new DateTime(2002, 7, 28, 21, 30, 43),
+                c.Date);
+            Assert.AreEqual("sally", c.Author);
+            Assert.AreEqual(new Version(1, 148), c.Version);
+            Assert.AreEqual(@"calc.c", c.Archive);
+        }
+
     }
 }

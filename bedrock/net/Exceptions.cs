@@ -23,7 +23,7 @@ namespace bedrock.net
     /// <summary>
     /// Error connecting with certificate.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class CertificateException : System.Exception
     {
         /// <summary>
@@ -78,7 +78,7 @@ namespace bedrock.net
     /// <summary>
     /// Lame exception, since I couldn't find one I liked.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     [Serializable]
     public class AsyncSocketConnectionException : System.SystemException
     {

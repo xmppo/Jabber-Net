@@ -22,7 +22,7 @@ namespace test.bedrock.collections
     /// <summary>
     /// Summary description for SetTest.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     [TestFixture]
     public class SetTest
     {

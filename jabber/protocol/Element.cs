@@ -27,7 +27,7 @@ namespace jabber.protocol
     /// An XmlElement with type-safe accessors.  This class is not much use by itself,
     /// but provides a number of utility functions for its descendants.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class Element : XmlElement
     {
         /// <summary>

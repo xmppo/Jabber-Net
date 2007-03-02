@@ -44,13 +44,13 @@ namespace bedrock.net
     /// An asynchronous socket, which calls a listener class when
     /// interesting things happen.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class AsyncSocket : BaseSocket, IComparable
     {
         /// <summary>
         /// Socket states.
         /// </summary>
-        [RCS(@"$Header$")]
+        [SVN(@"$Id$")]
             private enum SocketState
         {
             /// <summary>

@@ -23,7 +23,7 @@ namespace jabber.protocol.stream
     /// <summary>
     /// The fabled stream:stream packet.  Id's get assigned automatically on allocation.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class Stream : Packet
     {
         private static readonly RandomNumberGenerator RNG = RandomNumberGenerator.Create();

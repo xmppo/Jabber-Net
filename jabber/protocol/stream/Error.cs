@@ -22,7 +22,7 @@ namespace jabber.protocol.stream
     /// <summary>
     /// Stream error packet.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class Error : Element
     {
         /// <summary>

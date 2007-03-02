@@ -21,7 +21,7 @@ namespace bedrock.collections
     /// A Trie that is searchable for substrings.  Uses a separate set of indexes
     /// to allow entry into the Trie at any point.  Yes, this
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class IndexedTrie : Trie
     {
         private Tree m_indexes    = new Tree();

@@ -21,7 +21,7 @@ using bedrock.util;
 
 namespace test.stringprep
 {
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     [TestFixture]
     public class TestResourceprep
     {

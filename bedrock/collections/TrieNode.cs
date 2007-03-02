@@ -21,7 +21,7 @@ namespace bedrock.collections
     /// <summary>
     /// A node in a Trie.  This class is public to support traversal via Trie.Traverse().
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class TrieNode : IEnumerable
     {
         // Warning: Assumption of 7-bit ASCII encoding!

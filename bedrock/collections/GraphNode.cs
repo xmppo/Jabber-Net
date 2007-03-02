@@ -20,7 +20,7 @@ namespace bedrock.collections
     /// <summary>
     /// A node in a Graph, such as a Tree
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class GraphNode : IEnumerable
     {
         private object      m_key      = null;

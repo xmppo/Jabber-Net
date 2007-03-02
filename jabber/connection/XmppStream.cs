@@ -45,7 +45,7 @@ namespace jabber.connection
     /// <summary>
     /// Option names.  These must be well-formed XML element names.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public abstract class Options
     {
         /// <summary>
@@ -182,7 +182,7 @@ namespace jabber.connection
     /// <summary>
     /// Summary description for SocketElementStream.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     abstract public class XmppStream :
         System.ComponentModel.Component,
         IStanzaEventListener

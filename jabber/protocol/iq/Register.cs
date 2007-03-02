@@ -23,7 +23,7 @@ namespace jabber.protocol.iq
     /// <summary>
     /// IQ packet with a register query element inside.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class RegisterIQ : jabber.protocol.client.IQ
     {
         /// <summary>
@@ -39,7 +39,7 @@ namespace jabber.protocol.iq
     /// <summary>
     /// User registration
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class Register : Element
     {
         /// <summary>

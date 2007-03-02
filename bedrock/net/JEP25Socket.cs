@@ -34,7 +34,7 @@ namespace bedrock.net
     /// <summary>
     /// Certificate policy that trusts all
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class TrustAllCertificatePolicy : System.Net.ICertificatePolicy
     {
         /// <summary>
@@ -59,7 +59,7 @@ namespace bedrock.net
     /// <summary>
     /// JEP25 Error conditions
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class JEP25Exception : WebException
     {
         /// <summary>
@@ -75,7 +75,7 @@ namespace bedrock.net
     /// Make a JEP-25 (http://www.jabber.org/jeps/jep-0025.html) polling "connection" look like a socket.
     /// TODO: get rid of the PipeStream, if possible.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class JEP25Socket : BaseSocket
     {
         private const string CONTENT_TYPE = "application/x-www-form-urlencoded";

@@ -24,7 +24,7 @@ namespace jabber.protocol
     /// but removes the big old memory leak in MS's implementation.  Also, only returns first-level children,
     /// rather than all children below here with the given name.  Thanks, MS.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class ElementList : XmlNodeList
     {
         private XmlElement m_parent = null;

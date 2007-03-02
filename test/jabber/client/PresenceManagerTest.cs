@@ -26,7 +26,7 @@ namespace test.jabber.client1 // TODO: Client1 due to a bug in NUnit.
     /// <summary>
     /// Summary description for PPDP.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     [TestFixture]
     public class PresenceManagerTest
     {

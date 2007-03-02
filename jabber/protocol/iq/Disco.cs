@@ -36,7 +36,7 @@ namespace jabber.protocol.iq
     /// <summary>
     /// IQ packet with a disco#items query element inside.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class DiscoItemsIQ : jabber.protocol.client.IQ
     {
         /// <summary>
@@ -67,7 +67,7 @@ namespace jabber.protocol.iq
     /// <summary>
     /// IQ packet with a disco#info query element inside.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class DiscoInfoIQ : jabber.protocol.client.IQ
     {
         /// <summary>
@@ -125,7 +125,7 @@ namespace jabber.protocol.iq
     /// A disco#items query element.
     /// See <a href="http://www.jabber.org/jeps/jep-0030.html">JEP-0030</a> for more information.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class DiscoItems : Element
     {
         /// <summary>
@@ -188,7 +188,7 @@ namespace jabber.protocol.iq
     /// <summary>
     /// Actions for iq/set in the disco#items namespace.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public enum DiscoAction
     {
         /// <summary>
@@ -208,7 +208,7 @@ namespace jabber.protocol.iq
     /// <summary>
     /// An item inside a disco#items result.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class DiscoItem : Element
     {
         /// <summary>
@@ -299,7 +299,7 @@ namespace jabber.protocol.iq
     /// <summary>
     /// The information associated with a disco node.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class DiscoInfo : Element
     {
         /// <summary>
@@ -409,7 +409,7 @@ namespace jabber.protocol.iq
     /// <summary>
     /// The identitiy associated with a disco node.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class DiscoIdentity : Element
     {
         /// <summary>
@@ -463,7 +463,7 @@ namespace jabber.protocol.iq
     /// <summary>
     /// A feature associated with a disco node.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class DiscoFeature : Element
     {
         /// <summary>

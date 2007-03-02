@@ -25,7 +25,7 @@ namespace test.jabber.protocol.client
     /// <summary>
     /// Summary description for MessageTest.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     [TestFixture]
     public class MessageTest
     {

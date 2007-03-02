@@ -30,7 +30,7 @@ namespace jabber.server
     /// <summary>
     /// Track outstanding XDB requests.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class XdbTracker
     {
         // this hash doesn't need concurrency control, i don't think,

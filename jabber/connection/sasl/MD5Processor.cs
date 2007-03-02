@@ -28,7 +28,7 @@ namespace jabber.connection.sasl
     /// <summary>
     /// RFC2831 DIGEST-MD5 SASL mechanism
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class MD5Processor : SASLProcessor
     {
         /// <summary>

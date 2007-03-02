@@ -26,7 +26,7 @@ namespace jabber.connection
     /// <summary>
     /// The types of proxies we support.  This is only for socket connections.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
 
 
     /// <summary>

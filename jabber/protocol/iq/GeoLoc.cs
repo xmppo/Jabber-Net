@@ -24,7 +24,7 @@ namespace jabber.protocol.iq
     /// <summary>
     /// A GeoLoc IQ.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class GeoLocIQ : jabber.protocol.client.IQ
     {
         /// <summary>
@@ -40,7 +40,7 @@ namespace jabber.protocol.iq
     /// <summary>
     /// Geographic location.  See http://www.jabber.org/jeps/jep-0080.html.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class GeoLoc : Element
     {
         /// <summary>

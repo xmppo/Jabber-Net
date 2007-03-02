@@ -22,7 +22,7 @@ namespace jabber.protocol.accept
     /// <summary>
     /// The type field in a route tag.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public enum RouteType
     {
         /// <summary>
@@ -46,7 +46,7 @@ namespace jabber.protocol.accept
     /// <summary>
     /// The route packet.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class Route : jabber.protocol.Packet
     {
         /// <summary>

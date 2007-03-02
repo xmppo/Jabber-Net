@@ -23,7 +23,7 @@ namespace bedrock.collections
     /// <summary>
     /// Summary description for SkipList.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class SkipList : IEnumerable, IDictionary
     {
         /// <summary>

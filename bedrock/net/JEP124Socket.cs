@@ -32,7 +32,7 @@ namespace bedrock.net
     /// <summary>
     /// JEP124 Error conditions
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class JEP124Exception : WebException
     {
         /// <summary>
@@ -48,7 +48,7 @@ namespace bedrock.net
     /// Make a JEP-124 (http://www.jabber.org/jeps/jep-0124.html) polling "connection" look like a socket.
     /// TODO: get rid of the PipeStream, if possible.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class JEP124Socket : BaseSocket
     {
         private const string CONTENT_TYPE = "text/xml; charset=utf-8";

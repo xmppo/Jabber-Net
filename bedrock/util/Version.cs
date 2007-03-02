@@ -27,7 +27,7 @@ namespace bedrock.util
     /// <see cref="StarTeamAttribute"/>
     /// <see cref="SourceSafeAttribute"/>
     /// <see cref="RCSAttribute"/>
-    //    [RCS(@"$Header$")]
+    //    [SVN(@"$Id$")]
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Enum | AttributeTargets.Struct,
                     AllowMultiple = false,
                     Inherited     = false)]
@@ -300,7 +300,7 @@ namespace bedrock.util
     ///
     /// SourceVersionAttribute sta = SourceVersionAttribute.GetVersion(typeof(foo));
     /// </example>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Enum | AttributeTargets.Struct,
                     AllowMultiple=false, Inherited=false)]
     public class StarTeamAttribute : SourceVersionAttribute
@@ -359,7 +359,7 @@ namespace bedrock.util
     /// <summary>
     /// Version control attribute for RCS and CVS.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Enum | AttributeTargets.Struct,
                     AllowMultiple=false, Inherited=false)]
     public class RCSAttribute : SourceVersionAttribute
@@ -422,7 +422,7 @@ namespace bedrock.util
     /// I don't use this any more, so someone tell me if it breaks with
     /// some new release.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Enum | AttributeTargets.Struct,
                     AllowMultiple=false, Inherited=false)]
     public class SourceSafeAttribute : SourceVersionAttribute
@@ -472,7 +472,7 @@ namespace bedrock.util
     /// return a list of all of the versioned classes in the
     /// current working set.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class SourceVersionCollection : NameObjectCollectionBase
     {
         /// <summary>
@@ -579,6 +579,53 @@ namespace bedrock.util
             set
             {
                 Set(type.FullName, value);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Version control attribute for Subversion.
+    /// </summary>
+    [SVN(@"$Id$")]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Enum | AttributeTargets.Struct,
+                    AllowMultiple=false, Inherited=false)]
+    public class SVNAttribute : SourceVersionAttribute
+    {
+        // Header: /u1/html/cvsroot/www.cyclic.com/RCS-html/info-ref.html,v 1.1 1999/04/14 19:04:02 kingdon Exp
+        // Id: calc.c 148 2002-07-28 21:30:43Z sally
+        private static readonly Regex REGEX =
+            new Regex(@"^\$" + @"Id(: +(?<archive>[^ ]+) +(?<version>[0-9.]+) +(?<date>[0-9-]+ [0-9:]+)Z +(?<author>[^ ]+) *)?\$$");
+        /// <summary>
+        /// The most common.  Pass in @"$ Id $" (without the spaces).
+        /// </summary>
+        /// <param name="header"></param>
+        public SVNAttribute(string header)
+            : base(header)
+        {
+        }
+        /// <summary>
+        /// Null constructor.  This is rarely right.
+        /// </summary>
+        public SVNAttribute()
+            : base()
+        {
+        }
+        /// <summary>
+        /// Parse the header string.
+        /// </summary>
+        protected override void Parse()
+        {
+            Match m = REGEX.Match(m_header);
+            if (!m.Success)
+            {
+                throw new FormatException("Bad header format: " + m_header + " != " + REGEX.ToString());
+            }
+            if (m.Groups["archive"].Success)
+            {
+                m_archive = m.Groups["archive"].ToString();
+                m_version = m.Groups["version"].ToString();
+                m_date    = DateTime.Parse(m.Groups["date"].ToString());
+                m_author  = m.Groups["author"].ToString();
             }
         }
     }

@@ -140,7 +140,7 @@ namespace jabber.protocol.iq
     /// <summary>
     /// IQ packet with a version query element inside.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class VCardIQ : jabber.protocol.client.IQ
     {
         /// <summary>
@@ -164,7 +164,7 @@ namespace jabber.protocol.iq
     /// <summary>
     /// A vCard element.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class VCard : Element
     {
         /// <summary>
@@ -431,7 +431,7 @@ namespace jabber.protocol.iq
         /// <summary>
         ///
         /// </summary>
-        [RCS(@"$Header$")]
+        [SVN(@"$Id$")]
         public class VName : Element
         {
             /// <summary>
@@ -484,7 +484,7 @@ namespace jabber.protocol.iq
         /// <summary>
         /// vCard Org Element
         /// </summary>
-        [RCS(@"$Header$")]
+        [SVN(@"$Id$")]
         public class VOrganization : Element
         {
             /// <summary>
@@ -528,7 +528,7 @@ namespace jabber.protocol.iq
         /// <summary>
         /// vCard Telephone Element
         /// </summary>
-        [RCS(@"$Header$")]
+        [SVN(@"$Id$")]
         public class VTelephone : Element
         {
             /// <summary>
@@ -624,7 +624,7 @@ namespace jabber.protocol.iq
         /// <summary>
         /// vCard Address Element
         /// </summary>
-        [RCS(@"$Header$")]
+        [SVN(@"$Id$")]
         public class VAddress : Element
         {
             /// <summary>
@@ -732,7 +732,7 @@ namespace jabber.protocol.iq
         /// <summary>
         /// vCard Email Element
         /// </summary>
-        [RCS(@"$Header$")]
+        [SVN(@"$Id$")]
         public class VEmail : Element
         {
             /// <summary>
@@ -820,7 +820,7 @@ namespace jabber.protocol.iq
         /// <summary>
         /// Geographic location
         /// </summary>
-        [RCS(@"$Header$")]
+        [SVN(@"$Id$")]
         public class VGeo : Element
         {
             /// <summary>
@@ -864,7 +864,7 @@ namespace jabber.protocol.iq
         /// <summary>
         ///
         /// </summary>
-        [RCS(@"$Header$")]
+        [SVN(@"$Id$")]
         public class VPhoto : Element
         {
             /// <summary>

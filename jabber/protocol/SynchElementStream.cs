@@ -28,7 +28,7 @@ namespace jabber.protocol
     /// <summary>
     /// Summary description for SynchElementStream.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class SynchElementStream : ElementStream, IContentHandler, IErrorHandler
     {
         private XmlElement m_stanza = null;

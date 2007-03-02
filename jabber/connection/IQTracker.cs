@@ -46,7 +46,7 @@ namespace jabber.connection
     /// <summary>
     /// Track outstanding IQ requests.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class IQTracker
     {
         private Hashtable  m_pending = new Hashtable();

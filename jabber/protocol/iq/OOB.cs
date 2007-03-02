@@ -30,7 +30,7 @@ namespace jabber.protocol.iq
     /// <summary>
     /// IQ packet with an oob query element inside.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class OobIQ : jabber.protocol.client.IQ
     {
         /// <summary>
@@ -46,7 +46,7 @@ namespace jabber.protocol.iq
     /// <summary>
     /// An oob query element for file transfer.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class OOB : Element
     {
         /// <summary>

@@ -22,7 +22,7 @@ namespace jabber.protocol.client
     /// <summary>
     /// Presence type attribute
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public enum PresenceType
     {
         /// <summary>
@@ -67,7 +67,7 @@ namespace jabber.protocol.client
     /// <summary>
     /// Client presence packet.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class Presence : Packet
     {
         /// <summary>

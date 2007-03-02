@@ -22,7 +22,7 @@ namespace jabber.protocol.client
     /// <summary>
     /// IQ type attribute
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public enum IQType
     {
         /// <summary>
@@ -48,7 +48,7 @@ namespace jabber.protocol.client
     /// There should usually be a convenience class next to the Query type, which
     /// creates an IQ with the appropriate type of query inside.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class IQ : Packet
     {
         /// <summary>

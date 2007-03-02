@@ -23,7 +23,7 @@ namespace test.jabber
     /// <summary>
     /// Summary description for JIDTest.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     [TestFixture]
     public class JIDTest
     {

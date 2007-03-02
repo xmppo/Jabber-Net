@@ -22,7 +22,7 @@ namespace jabber.protocol.iq
     /// <summary>
     /// IQ packet with a version query element inside.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class VersionIQ : jabber.protocol.client.IQ
     {
         /// <summary>
@@ -38,7 +38,7 @@ namespace jabber.protocol.iq
     /// <summary>
     /// A time query element.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class Version : Element
     {
         /// <summary>

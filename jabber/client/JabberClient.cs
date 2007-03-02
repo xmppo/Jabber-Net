@@ -47,7 +47,7 @@ namespace jabber.client
     /// Install this in your Toolbox, drop onto a form, a service,
     /// etc.  Hook into the OnProtocol event.  Call Connect().
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class JabberClient : XmppStream
     {
         private static readonly object[][] DEFAULTS = new object[][] {
@@ -773,7 +773,7 @@ namespace jabber.client
     /// <summary>
     /// Getting authorization information
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class GetAuthState : jabber.connection.BaseState
     {
         /// <summary>
@@ -785,7 +785,7 @@ namespace jabber.client
     /// <summary>
     /// Setting authorization information
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class SetAuthState : jabber.connection.BaseState
     {
         /// <summary>
@@ -797,7 +797,7 @@ namespace jabber.client
     /// <summary>
     /// Waiting for manual login.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class ManualLoginState : jabber.connection.BaseState
     {
         /// <summary>

@@ -38,7 +38,7 @@ namespace jabber.protocol
     ///
     /// TODO: Combine with AsyncElementStream, since there's only one impl.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class ElementStream
     {
         /// <summary>

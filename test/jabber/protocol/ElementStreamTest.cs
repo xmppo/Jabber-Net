@@ -26,7 +26,7 @@ namespace test.jabber.protocol
     /// <summary>
     /// Summary description for ElementStreamTest.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     [TestFixture]
     public class ElementStreamTest
     {

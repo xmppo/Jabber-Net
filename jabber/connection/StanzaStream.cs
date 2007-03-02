@@ -25,7 +25,7 @@ namespace jabber.connection
     /// <summary>
     /// How to connect?  Socket?  Polling?
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public enum ConnectionType
     {
         /// <summary>
@@ -45,7 +45,7 @@ namespace jabber.connection
     /// <summary>
     /// Listen for stanza and connection events
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public interface IStanzaEventListener
     {
         /// <summary>
@@ -125,7 +125,7 @@ namespace jabber.connection
     /// <summary>
     /// Base stream for reading and writing full stanzas.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public abstract class StanzaStream
         {
         /// <summary>

@@ -22,7 +22,7 @@ namespace bedrock.net
     /// <summary>
     /// Proxy object for sockets that want to do SHHTP proxying.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class ShttpProxy : ProxySocket
     {
         private enum States { None, Connecting, WaitingForAuth, Running, Closed }

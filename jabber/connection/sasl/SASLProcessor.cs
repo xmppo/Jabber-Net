@@ -29,7 +29,7 @@ namespace jabber.connection.sasl
     /// <summary>
     /// Some sort of SASL error
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class SASLException : ApplicationException
     {
         /// <summary>
@@ -47,7 +47,7 @@ namespace jabber.connection.sasl
     /// <summary>
     /// Authentication failed.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class AuthenticationFailedException : SASLException
     {
         /// <summary>
@@ -67,7 +67,7 @@ namespace jabber.connection.sasl
     /// <summary>
     /// A required directive wasn't supplied.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class MissingDirectiveException : SASLException
     {
         /// <summary>
@@ -81,7 +81,7 @@ namespace jabber.connection.sasl
     /// <summary>
     /// Server sent an invalid challenge
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class InvalidServerChallengeException : SASLException
     {
         /// <summary>
@@ -94,7 +94,7 @@ namespace jabber.connection.sasl
     /// <summary>
     /// Summary description for SASLProcessor.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public abstract class SASLProcessor
     {
         /// <summary>

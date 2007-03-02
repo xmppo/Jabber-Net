@@ -35,7 +35,7 @@ namespace muzzle
     ///     jc.Connect();
     /// }
     /// </example>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class ClientLogin : OptionForm
     {
         private System.Windows.Forms.CheckBox cbSSL;

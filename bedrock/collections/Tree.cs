@@ -23,7 +23,7 @@ namespace bedrock.collections
     /// System.Collections.  Not yet complete, but the algorithmic
     /// stuff is here.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class Tree : IEnumerable, IDictionary
     {
         private Node      root       = null;

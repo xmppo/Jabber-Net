@@ -20,7 +20,7 @@ namespace test.bedrock.util
     /// <summary>
     ///    Summary description for GetOptBaseTest.
     /// </summary>
-    [RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     [TestFixture]
     public class GetOptTest
     {
