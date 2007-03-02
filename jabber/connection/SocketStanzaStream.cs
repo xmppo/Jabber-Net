@@ -221,6 +221,10 @@ namespace jabber.connection
             m_sock.RequestAccept();
         }
 
+        /// <summary>
+        /// Write the given string to the socket after UTF-8 encoding.
+        /// </summary>
+        /// <param name="str"></param>
         public override void Write(string str)
         {
             int keep = (int)m_listener[Options.KEEP_ALIVE];

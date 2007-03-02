@@ -217,18 +217,27 @@ namespace jabber.connection
             }
         }
 
+        /// <summary>
+        /// Are we waiting on info to be returned?
+        /// </summary>
         [Category("Status")]
         public bool PendingInfo
         {
             get { return m_pendingInfo; }
         }
 
+        /// <summary>
+        /// Are we waiting on items to be returned?
+        /// </summary>
         [Category("Status")]
         public bool PendingItems
         {
             get { return m_pendingItems; }
         }
 
+        /// <summary>
+        /// The features associated with this node.
+        /// </summary>
         [Category("Info")]
         public string[] FeatureNames
         {

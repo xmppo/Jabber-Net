@@ -26,6 +26,7 @@ namespace ConsoleClient
     /// <summary>
     /// Summary description for Class1.
     /// </summary>
+    [SVN(@"$Id$")]
     class Class1
     {
         [CommandLine("j", "user@host Jabber ID", true)]

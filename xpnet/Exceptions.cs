@@ -15,10 +15,12 @@
  * --------------------------------------------------------------------------*/
 namespace xpnet
 {
+    using bedrock.util;
+
     /// <summary>
     /// Base class for other exceptions
     /// </summary>
-    [bedrock.util.RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class TokenException : System.Exception
     {
     }
@@ -27,7 +29,7 @@ namespace xpnet
     /// An empty token was detected.  This only happens with a buffer of length 0 is passed in
     /// to the parser.
     /// </summary>
-    [bedrock.util.RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class EmptyTokenException : TokenException
     {
     }
@@ -35,7 +37,7 @@ namespace xpnet
     /// <summary>
     /// End of prolog.
     /// </summary>
-    [bedrock.util.RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class EndOfPrologException : TokenException
     {
     }
@@ -46,7 +48,7 @@ namespace xpnet
      * would throw this if the byte subarray consists of a legal XML name.
      * @version $Revision$ $Date$
      */
-    [bedrock.util.RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class ExtensibleTokenException : TokenException
     {
         private TOK tokType;
@@ -72,7 +74,7 @@ namespace xpnet
     /// <summary>
     /// Several kinds of token problems.
     /// </summary>
-    [bedrock.util.RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class InvalidTokenException : TokenException
     {
         private int offset;
@@ -135,7 +137,7 @@ namespace xpnet
      * more bytes were added.
      * @version $Revision$ $Date$
      */
-    [bedrock.util.RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class PartialCharException : PartialTokenException
     {
         private int leadByteIndex;
@@ -162,7 +164,7 @@ namespace xpnet
     /// <summary>
     /// A partial token was received.  Try again, after you add more bytes to the buffer.
     /// </summary>
-    [bedrock.util.RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class PartialTokenException : TokenException
     {
     }

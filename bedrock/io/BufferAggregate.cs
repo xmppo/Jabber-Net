@@ -14,11 +14,14 @@
 using System.Collections;
 using System.IO;
 
+using bedrock.util;
+
 namespace bedrock.io
 {
     /// <summary> Aggregate byte arrays together, so we can parse
     /// across IP packet boundaries
     /// </summary>
+    [SVN(@"$Id$")]
     public class BufferAggregate
     { // RingBuffer of the Nieblung
         private class BufNode

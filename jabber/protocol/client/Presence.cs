@@ -132,6 +132,9 @@ namespace jabber.protocol.client
             set { SetElem("priority", value); }
         }
 
+        /// <summary>
+        /// An integer version of the priority, constrained to -128..127.  0 if there was no priority element or it wasn't an integer.
+        /// </summary>
         public int IntPriority
         {
             get

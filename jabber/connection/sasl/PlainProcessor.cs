@@ -24,7 +24,7 @@ namespace jabber.connection.sasl
     /// <summary>
     /// SASL Mechanism PLAIN as specified in RFC 2595.
     /// </summary>
-    [RCS("$Header$")]
+    [SVN(@"$Id$")]
     public class PlainProcessor : SASLProcessor
     {
         /// <summary>

@@ -20,6 +20,7 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using System.Xml;
 
+using bedrock.util;
 using jabber;
 using jabber.protocol;
 using jabber.protocol.client;
@@ -32,6 +33,7 @@ namespace Example
     /// <summary>
     /// Summary description for MainForm.
     /// </summary>
+    [SVN(@"$Id$")]
     public class MainForm : System.Windows.Forms.Form
     {
         private System.Windows.Forms.StatusBar sb;

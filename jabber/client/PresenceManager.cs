@@ -31,7 +31,6 @@ namespace jabber.client
     /// </summary>
     /// <param name="sender">The PresenceManager object that sent the update</param>
     /// <param name="bare">The bare JID (node@domain) of the user whose presence changed</param>
-    /// <param name="pres">The new primary session presence stanza.  The priority will be >= 0.</param>
     public delegate void PrimarySessionHandler(object sender, JID bare);
 
     /// <summary>

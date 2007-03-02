@@ -121,7 +121,6 @@ namespace jabber.protocol
         /// <summary>
         /// Geographic locaiotn (lat/long).
         /// See JEP-80 (http://www.jabber.org/jeps/jep-0080.html)
-
         /// </summary>
         public const string GEOLOC   = "http://jabber.org/protocol/geoloc";
 

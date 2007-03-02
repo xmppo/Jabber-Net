@@ -20,9 +20,12 @@ using System.Windows.Forms;
 
 namespace Example
 {
+    using bedrock.util;
+
     /// <summary>
     /// Summary description for SendMessage.
     /// </summary>
+    [SVN(@"$Id$")]
     public class SendMessage : System.Windows.Forms.Form
     {
         private jabber.client.JabberClient m_jc;

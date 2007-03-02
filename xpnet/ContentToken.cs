@@ -15,11 +15,13 @@
  * --------------------------------------------------------------------------*/
 namespace xpnet
 {
+    using bedrock.util;
+
     /// <summary>
     /// Represents information returned by <code>Encoding.tokenizeContent</code>.
     /// @see Encoding#tokenizeContent
     /// </summary>
-    [bedrock.util.RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class ContentToken : Token
     {
         private const int INIT_ATT_COUNT = 8;

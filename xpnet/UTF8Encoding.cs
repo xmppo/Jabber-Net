@@ -15,10 +15,12 @@
  * --------------------------------------------------------------------------*/
 namespace xpnet
 {
+    using bedrock.util;
+
     /// <summary>
     /// UTF-8 specific tokenizer.
     /// </summary>
-    [bedrock.util.RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class UTF8Encoding : Encoding
     {
         private static readonly int[] utf8HiTypeTable = new int[]

@@ -453,12 +453,18 @@ namespace bedrock.net
 
         }
 
+        /// <summary>
+        /// Are we connected?
+        /// </summary>
         public bool Connected
         {
             get
             { return m_running; }
         }
 
+        /// <summary>
+        /// The certificate from the server.
+        /// </summary>
         public X509Certificate RemoteCertificate
         {
             get { return m_remote_cert; }

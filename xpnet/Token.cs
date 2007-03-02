@@ -15,10 +15,12 @@
  * --------------------------------------------------------------------------*/
 namespace xpnet
 {
+    using bedrock.util;
+
     /// <summary>
     /// A token that was parsed.
     /// </summary>
-    [bedrock.util.RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class Token
     {
         private int tokenEnd = -1;

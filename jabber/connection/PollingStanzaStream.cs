@@ -24,14 +24,9 @@ using System.Security.Cryptography;
 namespace jabber.connection
 {
     /// <summary>
-    /// The types of proxies we support.  This is only for socket connections.
-    /// </summary>
-    [SVN(@"$Id$")]
-
-
-    /// <summary>
     /// Http Polling XMPP stream.
     /// </summary>
+    [SVN(@"$Id$")]
     public class PollingStanzaStream : StanzaStream, ISocketEventListener
     {
         private AsynchElementStream m_elements = null;

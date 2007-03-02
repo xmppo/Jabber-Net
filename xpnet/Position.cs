@@ -15,6 +15,7 @@
  * --------------------------------------------------------------------------*/
 namespace xpnet
 {
+    using bedrock.util;
 
     /**
      * Represents a position in an entity.
@@ -22,7 +23,7 @@ namespace xpnet
      * @see Encoding#movePosition
      * @version $Revision$ $Date$
      */
-    [bedrock.util.RCS(@"$Header$")]
+    [SVN(@"$Id$")]
     public class Position : System.ICloneable
     {
         private int lineNumber;
