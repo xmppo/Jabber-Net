@@ -25,7 +25,7 @@
     <StartArguments>test.dll</StartArguments>
     <StartPage>
     </StartPage>
-    <StartProgram>D:\Development\jabber-net\jabber-net\test\nunit\nunit-gui.exe</StartProgram>
+    <StartProgram>C:\src\jabber-net\test\nunit\nunit-gui.exe</StartProgram>
     <StartURL>
     </StartURL>
     <StartWorkingDirectory>
