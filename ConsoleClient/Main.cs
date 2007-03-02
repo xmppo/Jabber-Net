@@ -91,12 +91,20 @@ namespace ConsoleClient
             jc.Connect();
 
             string line;
-            while ((line = Console.ReadLine()) != "")
+            while ((line = Console.ReadLine()) != null)
             {
                 if (line == "/clear")
                 {
                     // Hm.... I wonder if this works on windows.
                     Console.Write("\x1b[H\x1b[2J");
+                    continue;
+                }
+                if ((line == "/q") || (line == "/quit"))
+                {
+                    break;
+                }
+                if (line.Trim() == "")
+                {
                     continue;
                 }
                 try
