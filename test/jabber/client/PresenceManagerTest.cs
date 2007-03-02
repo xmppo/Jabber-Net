@@ -32,11 +32,18 @@ namespace test.jabber.client1 // TODO: Client1 due to a bug in NUnit.
     {
         XmlDocument doc = new XmlDocument();
 
-        [Test] public void Test_Create()
+        JID bare = "foo@bar";
+        JID baz  = "foo@bar/baz";
+        JID boo  = "foo@bar/boo";
+
+
+        [Test] 
+        public void Test_Create()
         {
             PresenceManager pp = new PresenceManager();
             Assert.AreEqual("jabber.client.PresenceManager", pp.GetType().FullName);
         }
+        [Test]
         public void TestAdd()
         {
             PresenceManager pp = new PresenceManager();
@@ -54,6 +61,7 @@ namespace test.jabber.client1 // TODO: Client1 due to a bug in NUnit.
             pp.AddPresence(pres);
             Assert.AreEqual("wandering", pp[f].Status);
         }
+        [Test]
         public void TestRetrieve()
         {
             PresenceManager pp = new PresenceManager();
@@ -77,6 +85,7 @@ namespace test.jabber.client1 // TODO: Client1 due to a bug in NUnit.
             pp.AddPresence(pres);
             Assert.AreEqual("foo@bar/baz", pp[f.Bare].From.ToString());
         }
+        [Test]
         public void TestUserHost()
         {
             PresenceManager pp = new PresenceManager();
@@ -86,6 +95,7 @@ namespace test.jabber.client1 // TODO: Client1 due to a bug in NUnit.
             pp.AddPresence(pres);
             Assert.AreEqual("foo@bar", pp[f.Bare].From.ToString());
         }
+        [Test]
         public void TestHost()
         {
             PresenceManager pp = new PresenceManager();
@@ -95,6 +105,7 @@ namespace test.jabber.client1 // TODO: Client1 due to a bug in NUnit.
             pp.AddPresence(pres);
             Assert.AreEqual("bar", pp[f.Bare].From.ToString());
         }
+        [Test]
         public void TestHostResource()
         {
             PresenceManager pp = new PresenceManager();
@@ -104,6 +115,7 @@ namespace test.jabber.client1 // TODO: Client1 due to a bug in NUnit.
             pp.AddPresence(pres);
             Assert.AreEqual("bar/baz", pp[f.Bare].From.ToString());
         }
+        [Test]
         public void TestRemove()
         {
             PresenceManager pp = new PresenceManager();
@@ -128,6 +140,7 @@ namespace test.jabber.client1 // TODO: Client1 due to a bug in NUnit.
             pp.AddPresence(pres);
             Assert.AreEqual("Working", pp[f].Status);
         }
+        [Test]
         public void TestNumeric()
         {
             PresenceManager pp = new PresenceManager();
@@ -139,6 +152,103 @@ namespace test.jabber.client1 // TODO: Client1 due to a bug in NUnit.
             Assert.AreEqual("support@conference.192.168.32.109/bob", pp[f].From.ToString());
             f.Resource = null;
             Assert.AreEqual("support@conference.192.168.32.109/bob", pp[f].From.ToString());
+        }
+
+        [Test]
+        public void TestGetAll()
+        {
+            PresenceManager pp = new PresenceManager();
+
+            Presence pres = new Presence(doc);
+            pres.From = baz;
+            pp.AddPresence(pres);
+
+            pres = new Presence(doc);
+            pres.From = boo;
+            pp.AddPresence(pres);
+
+            Presence[] pa = pp.GetAll(bare);
+            Assert.AreEqual(2, pa.Length);
+            Assert.IsInstanceOfType(typeof(Presence), pa[0]);
+        }
+
+        [Test]
+        public void TestNewPrimaryAlgorithm()
+        {
+            PresenceManager pp = new PresenceManager();
+
+            Presence pres = new Presence(doc);
+            pres.From = baz;
+            pres.IntPriority = 1;
+            pp.AddPresence(pres);
+            Assert.AreEqual(1, pp[bare].IntPriority);
+            Assert.AreEqual(baz, pp[bare].From);
+
+            pres = new Presence(doc);
+            pres.From = boo;
+            pres.IntPriority = 2;
+            pp.AddPresence(pres);
+            // duh.
+            Assert.AreEqual(2, pp[bare].IntPriority);
+            Assert.AreEqual(boo, pp[bare].From);
+
+            pres = new Presence(doc);
+            pres.From = boo;
+            pres.IntPriority = 0;
+            pp.AddPresence(pres);
+            Assert.AreEqual(1, pp[bare].IntPriority);
+            Assert.AreEqual(baz, pp[bare].From); // ooo
+
+            pres = new Presence(doc);
+            pres.From = boo;
+            pres.Type = PresenceType.unavailable;
+            pp.AddPresence(pres);
+            Assert.AreEqual(1, pp[bare].IntPriority);
+            Assert.AreEqual(baz, pp[bare].From);
+
+            pres = new Presence(doc);
+            pres.From = baz;
+            pres.IntPriority = -1;
+            pp.AddPresence(pres);
+            Assert.AreEqual(null, pp[bare]);
+
+            pres = new Presence(doc);
+            pres.From = baz;
+            pres.Type = PresenceType.unavailable;
+            pp.AddPresence(pres);
+            Assert.AreEqual(0, pp.GetAll(bare).Length);
+        }
+
+        [Test]
+        public void TestComparisons()
+        {
+            PresenceManager pp = new PresenceManager();
+
+            Presence pres = new Presence(doc);
+            pres.From = baz;
+            pres.IntPriority = -1;
+            pp.AddPresence(pres);
+            Assert.AreEqual(null, pp[bare]);
+
+            pres = new Presence(doc);
+            pres.From = boo;
+            pres.IntPriority = 0;
+            pres.Show = "away";
+            pp.AddPresence(pres);
+            Assert.AreEqual(boo, pp[bare].From);
+
+            pres = new Presence(doc);
+            pres.From = baz;
+            pres.IntPriority = 0;
+            pres.Show = "xa";
+            pp.AddPresence(pres);
+            Assert.AreEqual(boo, pp[bare].From);
+
+            pres = new Presence(doc);
+            pres.From = boo;
+            pres.IntPriority = 1;
+            pp.AddPresence(pres);
+            Assert.AreEqual(boo, pp[bare].From);
         }
     }
 }

@@ -241,9 +241,9 @@ namespace jabber.protocol.client
             int fs = IntShow(first.Show);
             int ss = IntShow(second.Show);
 
-            if (fp > sp)
+            if (fs > ss)
                 return true;
-            if (fp < sp)
+            if (fs < ss)
                 return false;
 
             // TODO: check times.  probably have to ensure that inbound presences get DateTime 

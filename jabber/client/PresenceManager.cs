@@ -25,6 +25,15 @@ using jabber.protocol.client;
 
 namespace jabber.client
 {
+
+    /// <summary>
+    /// A change of derived primary session for a user
+    /// </summary>
+    /// <param name="sender">The PresenceManager object that sent the update</param>
+    /// <param name="bare">The bare JID (node@domain) of the user whose presence changed</param>
+    /// <param name="pres">The new primary session presence stanza.  The priority will be >= 0.</param>
+    public delegate void PrimarySessionHandler(object sender, JID bare);
+
     /// <summary>
     /// Presence proxy database.
     /// </summary>
@@ -96,6 +105,11 @@ namespace jabber.client
             }
         }
 
+        /// <summary>
+        /// The primary session has changed for a user.
+        /// </summary>
+        public event PrimarySessionHandler OnPrimarySessionChange;
+
         private void GotDisconnect(object sender)
         {
             lock(this)
@@ -130,17 +144,17 @@ namespace jabber.client
                 {
                     if (upm == null)
                     {
-                        upm = new UserPresenceManager();
+                        upm = new UserPresenceManager(f.Bare);
                         m_items[f.Bare] = upm;
                     }
 
-                    upm.AddPresence(p);
+                    upm.AddPresence(p, this);
                 }
                 else
                 {
                     if (upm != null)
                     {
-                        upm.RemovePresence(p);
+                        upm.RemovePresence(p, this);
                         if (upm.Count == 0)
                         {
                             m_items.Remove(f.Bare);
@@ -148,6 +162,12 @@ namespace jabber.client
                     }
                 }
             }
+        }
+
+        private void FireOnPrimarySessionChange(JID from)
+        {
+            if (OnPrimarySessionChange != null)
+                OnPrimarySessionChange(this, from);
         }
 
         /// <summary>
@@ -224,38 +244,45 @@ namespace jabber.client
         {
             private Tree m_items = new Tree();
             private Presence m_pres = null;
+            private JID m_jid = null;
 
-            private void Mostest(Presence p)
+            public UserPresenceManager(JID jid)
             {
-                // TODO: trigger event
-                m_pres = p;
+                Debug.Assert(jid.Resource == null);
+                m_jid = jid;
             }
 
-            public void AddPresence(Presence p)
+            private void Primary(Presence p, PresenceManager handler)
+            {
+                Debug.Assert((p == null) ? true : (p.IntPriority >= 0), "Primary presence is always positive priority");
+                m_pres = p;
+                handler.FireOnPrimarySessionChange(m_jid);
+            }
+
+            public void AddPresence(Presence p, PresenceManager handler)
             {
                 JID from = p.From;
                 string res = from.Resource;
                 Debug.Assert(p.Type == PresenceType.available);
 
                 // this is probably a service of some kind.  presumably, there will
-                // onlly ever be one resource.
+                // only ever be one resource.
                 if (res == null)
                 {
                     if (p.IntPriority >= 0)
-                        Mostest(p);
+                        Primary(p, handler);
                     return;
                 }
 
                 // Tree can't overwrite. Have to delete first.
                 m_items.Remove(res);
                 m_items[res] = p;
-                if (p.IntPriority < 0)
-                    return;
     
                 // first one is always highest
                 if (m_pres == null)
                 {
-                    Mostest(p);
+                    if (p.IntPriority >= 0)
+                        Primary(p, handler);
                     return;
                 }
 
@@ -264,16 +291,17 @@ namespace jabber.client
                     // replacing.  If we're going up, or staying the same, no need to recalc.
                     if (!(p < m_pres))
                     {
-                        Mostest(p);
+                        // can't be negative priority here, since m_pres is always >= 0.
+                        Primary(p, handler);
                         return;
                     }
                 }
 
                 // Otherwise, recalc
-                SetHighest();
+                SetHighest(handler);
             }
 
-            public void RemovePresence(Presence p)
+            public void RemovePresence(Presence p, PresenceManager handler)
             {
                 JID from = p.From;
                 string res = from.Resource;
@@ -282,13 +310,16 @@ namespace jabber.client
                 if (res != null)
                     m_items.Remove(res);
 
+                if (m_pres == null)
+                    return;
+
                 if (m_pres.From.Resource == res)
                 {
-                    SetHighest();
+                    SetHighest(handler);
                 }
             }
 
-            private void SetHighest()
+            private void SetHighest(PresenceManager handler)
             {
                 Presence p = null;
                 foreach (DictionaryEntry de in m_items)
@@ -305,7 +336,7 @@ namespace jabber.client
                             p = tp;
                     }
                 }
-                Mostest(p);
+                Primary(p, handler);
             }
 
             public int Count
