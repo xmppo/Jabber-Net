@@ -161,6 +161,10 @@ namespace jabber.protocol
             {
                 // ignored;
             }
+            catch (Exception e)
+            {
+                throw new XMLParseException(e, this, buf, offset, length);
+            }
             finally
             {
                 m_buf.Clear(off);
@@ -312,6 +316,76 @@ namespace jabber.protocol
             if (m_elem != null)
             {
                 m_elem.AppendChild(m_doc.CreateTextNode(text));
+            }
+        }
+
+        /// <summary>
+        /// There was an error parsing XML.  What was the context?
+        /// </summary>
+        public class XMLParseException : Exception
+        {
+            private string m_context = null;
+
+            /// <summary>
+            /// Some XML parsing error occurred.  Wrap it, and generate a little more context, so that we can try
+            /// to figure out where the actual error happened.
+            /// </summary>
+            /// <param name="innerException"></param>
+            /// <param name="stream"></param>
+            /// <param name="buf"></param>
+            /// <param name="offset"></param>
+            /// <param name="length"></param>
+            public XMLParseException(Exception innerException, AsynchElementStream stream, byte[] buf, int offset, int length)
+                : base("Parsing exception", innerException)
+            {
+                XmlElement e = stream.m_elem;
+                XmlElement last = null;
+                System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                
+                while (e != null)
+                {
+                    last = e;
+                    e = e.ParentNode as XmlElement;
+                }
+
+                if (last != null)
+                {
+                    sb.Append("Outer element: ");
+                    sb.Append(last.OuterXml);
+                    sb.Append("\n");
+                }
+                else
+                {
+                    sb.Append("Root stanza\n");
+                }
+
+                sb.Append("New text (note: it's normal to see what looks like extra close tags here): ");
+                try
+                {
+                    sb.Append(AsynchElementStream.utf.GetString(buf, offset, length));
+                }
+                catch (Exception)
+                {
+                    sb.Append("Error in UTF8 decode: ");
+                    sb.Append(Element.HexString(buf, offset, length));
+                }
+                m_context = sb.ToString();
+            }
+            /// <summary>
+            /// More context of where the error ocurred
+            /// </summary>
+            public string Context
+            {
+                get { return m_context; }
+            }
+
+            /// <summary>
+            /// String representation.
+            /// </summary>
+            /// <returns></returns>
+            public override string ToString()
+            {
+                return base.ToString() + "\n----------\n\nContext:\n" + m_context;
             }
         }
     }

@@ -904,10 +904,12 @@ namespace jabber.connection
         /// </summary>
         protected virtual void Accept()
         {
-            m_stanzas = StanzaStream.Create(this.Connection, this);
+            if ((m_stanzas == null) || (!m_stanzas.Acceptable))
+                m_stanzas = StanzaStream.Create(this.Connection, this);
             lock (StateLock)
             {
                 this.State = AcceptingState.Instance;
+                m_reconnect = ((int)this[Options.RECONNECT_TIMEOUT] >= 0);
             }
             m_stanzas.Accept();
         }
@@ -1245,17 +1247,8 @@ namespace jabber.connection
                 switch (tag.Name)
                 {
                 case "proceed":
-                    try
-                    {
-                        m_stanzas.StartTLS();
-                    }
-                    catch (Exception e)
-                    {
-                        m_reconnect = false;
-                        FireOnError(e);
+                    if (!StartTLS())
                         return;
-                    }
-                    m_sslOn = true;
                     SendNewStreamHeader();
                     break;
                 case "failure":
@@ -1290,6 +1283,25 @@ namespace jabber.connection
         }
 
         /// <summary>
+        /// Begin the TLS handshake, either client- or server- side.
+        /// </summary>
+        protected bool StartTLS()
+        {
+            try
+            {
+                m_stanzas.StartTLS();
+            }
+            catch (Exception e)
+            {
+                m_reconnect = false;
+                FireOnError(e);
+                return false;
+            }
+            m_sslOn = true;
+            return true;
+        }
+
+        /// <summary>
         /// The SASLClient is reporting an exception
         /// </summary>
         /// <param name="e"></param>
@@ -1310,14 +1322,10 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Send a stream:stream
+        /// Get ready for a new stream:stream by starting a new XML document.  Needed after start-tls or compression, for example.
         /// </summary>
-        protected void SendNewStreamHeader()
+        protected void InitializeStream()
         {
-            jabber.protocol.stream.Stream str = new jabber.protocol.stream.Stream(m_doc, NS);
-            str.To = new JID((string)this[Options.TO]);
-            str.Version = "1.0";
-            m_stanzas.WriteStartTag(str);
             try
             {
                 m_stanzas.InitializeStream();
@@ -1326,6 +1334,18 @@ namespace jabber.connection
             {
                 FireOnError(e);
             }
+        }
+
+        /// <summary>
+        /// Send a stream:stream
+        /// </summary>
+        protected void SendNewStreamHeader()
+        {
+            jabber.protocol.stream.Stream str = new jabber.protocol.stream.Stream(m_doc, NS);
+            str.To = new JID((string)this[Options.TO]);
+            str.Version = "1.0";
+            m_stanzas.WriteStartTag(str);
+            InitializeStream();
         }
 
         /// <summary>
@@ -1542,7 +1562,8 @@ namespace jabber.connection
             lock (m_stateLock)
             {
                 m_state = ClosedState.Instance;
-                m_stanzas = null;
+                if ((m_stanzas != null) && (!m_stanzas.Acceptable))
+                    m_stanzas = null;
             }
 
             if (OnError != null)
@@ -1563,7 +1584,8 @@ namespace jabber.connection
             lock (StateLock)
             {
                 m_state = ClosedState.Instance;
-                m_stanzas = null;
+                if ((m_stanzas != null) && (!m_stanzas.Acceptable))
+                    m_stanzas = null;
                 m_sslOn = false;
             }
 

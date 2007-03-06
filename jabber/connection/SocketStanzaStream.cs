@@ -54,8 +54,9 @@ namespace jabber.connection
     public class SocketStanzaStream : StanzaStream, ISocketEventListener
     {
         private AsynchElementStream m_elements = null;
-        private BaseSocket          m_sock = null;
-        private Timer               m_timer = null;
+        private BaseSocket          m_sock     = null;
+        private BaseSocket          m_accept   = null;
+        private Timer               m_timer    = null;
 
         /// <summary>
         /// Create a new one.
@@ -209,16 +210,27 @@ namespace jabber.connection
         /// </summary>
         public override void Accept()
         {
-            m_sock = new AsyncSocket(null, this, (bool)m_listener[Options.SSL], false);
+            if (m_accept == null)
+            {
+                m_accept = new AsyncSocket(null, this, (bool)m_listener[Options.SSL], false);
 #if NET20
-            ((AsyncSocket)m_sock).LocalCertificate = m_listener[Options.LOCAL_CERTIFICATE] as
-                System.Security.Cryptography.X509Certificates.X509Certificate;
+                ((AsyncSocket)m_accept).LocalCertificate = m_listener[Options.LOCAL_CERTIFICATE] as
+                    System.Security.Cryptography.X509Certificates.X509Certificate;
 #endif
-            Address addr = new Address((string)m_listener[Options.NETWORK_HOST],
-                (int)m_listener[Options.PORT]);
+                Address addr = new Address((string)m_listener[Options.NETWORK_HOST],
+                    (int)m_listener[Options.PORT]);
 
-            m_sock.Accept(addr);
-            m_sock.RequestAccept();
+                m_accept.Accept(addr);
+            }
+            m_accept.RequestAccept();
+        }
+
+        public override bool Acceptable
+        {
+            get
+            {
+                return (m_accept != null);
+            }
         }
 
         /// <summary>
@@ -228,7 +240,8 @@ namespace jabber.connection
         public override void Write(string str)
         {
             int keep = (int)m_listener[Options.KEEP_ALIVE];
-            m_timer.Change(keep, keep);
+            if (keep > 0)
+                m_timer.Change(keep, keep);
             m_sock.Write(ENC.GetBytes(str));
 
         }
@@ -362,7 +375,8 @@ namespace jabber.connection
         bool ISocketEventListener.OnRead(BaseSocket sock, byte[] buf, int offset, int length)
         {
             int tim = (int)m_listener[Options.KEEP_ALIVE];
-            m_timer.Change(tim, tim);
+            if (tim > 0)
+                m_timer.Change(tim, tim);
 
             m_listener.BytesRead(buf, offset, length);
             try
@@ -381,7 +395,8 @@ namespace jabber.connection
         void ISocketEventListener.OnWrite(BaseSocket sock, byte[] buf, int offset, int length)
         {
             int tim = (int)m_listener[Options.KEEP_ALIVE];
-            m_timer.Change(tim, tim);
+            if (tim > 0)
+                m_timer.Change(tim, tim);
 
             m_listener.BytesWritten(buf, offset, length);
         }

@@ -80,8 +80,7 @@ namespace jabber.protocol.stream
         ///
         /// </summary>
         /// <param name="doc"></param>
-        /// <param name="xmlns"></param>
-        public Proceed(XmlDocument doc, string xmlns) :
+        public Proceed(XmlDocument doc) :
             base("", new XmlQualifiedName("proceed", jabber.protocol.URI.START_TLS), doc)
         {
         }

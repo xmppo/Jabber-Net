@@ -184,6 +184,14 @@ namespace jabber.connection
         }
 
         /// <summary>
+        /// Is it legal to call Accept() at the moment?
+        /// </summary>
+        virtual public bool Acceptable
+        {
+            get { return false; }
+        }
+
+        /// <summary>
         /// Handshake TLS now.
         /// </summary>
         virtual public void StartTLS()

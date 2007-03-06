@@ -274,7 +274,7 @@ namespace jabber.server
                 if (ServerVersion.StartsWith("1."))
                 {
                     Features f = new Features(this.Document);
-                    if (AutoStartTLS && !SSLon)
+                    if (AutoStartTLS && !SSLon && (this[Options.LOCAL_CERTIFICATE] != null))
                         f.StartTLS = new StartTLS(this.Document);
                     Write(f);
                 }
@@ -319,6 +319,15 @@ namespace jabber.server
         {
             lock (StateLock)
             {
+                StartTLS start = tag as StartTLS;
+                if (start != null)
+                {
+                    State = ConnectedState.Instance;
+                    InitializeStream();
+                    this.Write(new Proceed(this.Document));
+                    this.StartTLS();
+                    return;
+                }
                 if (State == HandshakingState.Instance)
                 {
                     // sets IsConnected

@@ -254,6 +254,25 @@ namespace jabber.protocol
             return sb.ToString();
         }
         /// <summary>
+        /// Convert the given array of bytes into a string, having two characters
+        /// for each byte, corresponding to the hex representation of that byte.
+        /// </summary>
+        /// <param name="buf">The byte buffer</param>
+        /// <param name="offset">The offset into the buffer for the start</param>
+        /// <param name="length">The number of bytes to read, starting at the offset.</param>
+        /// <returns></returns>
+        public static string HexString(byte[] buf, int offset, int length)
+        {
+            // it seems like there ought to be a better way to do this.
+            StringBuilder sb = new StringBuilder();
+            for (int i=offset; i < length; i++)
+            {
+                sb.Append(buf[i].ToString("x2"));
+            }
+            return sb.ToString();
+        }
+
+        /// <summary>
         /// Compute the SHA1 hash of the id and secret concatenated together.
         /// </summary>
         /// <param name="id">UTF8-encoded id</param>
