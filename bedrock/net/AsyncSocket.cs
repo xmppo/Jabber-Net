@@ -1500,12 +1500,6 @@ namespace bedrock.net
                 {
                     State = SocketState.Closing;
 
-                    try
-                    {
-                        m_sock.Shutdown(SocketShutdown.Both);
-                    }
-                    catch { }
-
 #if NET20 || __MonoCS__
                     if (m_stream != null)
                         m_stream.Close();

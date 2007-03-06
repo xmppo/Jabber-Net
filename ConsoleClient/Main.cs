@@ -101,6 +101,7 @@ namespace ConsoleClient
                 }
                 if ((line == "/q") || (line == "/quit"))
                 {
+                    jc.Close();
                     break;
                 }
                 if (line.Trim() == "")
