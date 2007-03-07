@@ -44,6 +44,13 @@ namespace ConsoleClient
         [CommandLine("r", "Register user", false)]
         public bool register = false;
 
+        [CommandLine("c", "Certificate file", false)]
+        public string certificateFile = null;
+
+        [CommandLine("w", "Certificate password", false)]
+        public string certificatePass = "";
+        
+
         public Class1(string[] args)
         {
 #if __MonoCS__
@@ -79,6 +86,12 @@ namespace ConsoleClient
             jc.Resource = "Jabber.Net Console Client";
             jc.Password = pass;
             jc.AutoStartTLS = TLS;
+
+            if (certificateFile != null)
+            {
+                jc.SetCertificateFile(certificateFile, certificatePass);
+                Console.WriteLine(jc.LocalCertificate.ToString(true));
+            }
 
             if (register)
             {
