@@ -393,6 +393,11 @@ namespace bedrock.net
             X509Certificate remoteCertificate,
             string[] acceptableIssuers)
         {
+            // this will be called twice if the server requires a client cert.  
+            // Ignore the callback the first time; I think this is a .Net bug.
+            if (acceptableIssuers.Length == 0)
+                return null;
+
             if (CertificateGui)
             {
                 if (m_cert != null)

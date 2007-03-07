@@ -32,7 +32,7 @@ namespace ConsoleClient
         [CommandLine("j", "user@host Jabber ID", true)]
         public string jid = null;
 
-        [CommandLine("p", "Password", true)]
+        [CommandLine("p", "Password", false)]
         public string pass = null;
 
         [CommandLine("n", "Network Host", false)]
