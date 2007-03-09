@@ -225,6 +225,9 @@ namespace jabber.connection
             m_accept.RequestAccept();
         }
 
+        /// <summary>
+        /// Can Accept() be called npw?
+        /// </summary>
         public override bool Acceptable
         {
             get
