@@ -356,24 +356,54 @@ namespace bedrock.net
         /// none available, returns right away.
         /// If there is exactly one, uses it.
         /// Otherwise, prompts.
-        /// TODO: figure out something for server certs, too.
         /// </summary>
+        [Obsolete("Pass in a list of acceptable issuers")]
         public void ChooseClientCertificate()
         {
+            ChooseClientCertificate(null);
+        }
 
+        /// <summary>
+        /// Choose a certificate from the local store.  If there are
+        /// none available, returns right away.
+        /// If there is exactly one, uses it.
+        /// Otherwise, prompts.
+        /// TODO: figure out something for server certs, too.
+            /// </summary>
+        /// <param name="acceptableIssuers">A list of DNs of CAs that are trusted by the other party</param>
+        public void ChooseClientCertificate(string[] acceptableIssuers)
+        {
             X509Store store = new X509Store(StoreName.My, StoreLocation.CurrentUser);
             store.Open(OpenFlags.ReadOnly);
+            X509Certificate2Collection coll = new X509Certificate2Collection();
+            if (acceptableIssuers == null)
+            {
+                coll.AddRange(store.Certificates);
+            }
+            else
+            {
+                foreach (X509Certificate2 cert in store.Certificates)
+                {
+                    foreach (string issuer in acceptableIssuers)
+                    {
+                        if (cert.Issuer == issuer)
+                        {
+                            coll.Add(cert);
+                        }
+                    }
+                }
+            }
 
-            //m_cert = null;
-            switch (store.Certificates.Count)
+            switch (coll.Count)
             {
                 case 0:
-                    break;
+                    return;
                 case 1:
-                    m_cert = store.Certificates[0];
-                    break;
+                    m_cert = coll[0];
+                    return;
                 default:
-                    X509Certificate2Collection certs = X509Certificate2UI.SelectFromCollection(store.Certificates,
+                    X509Certificate2Collection certs = X509Certificate2UI.SelectFromCollection(
+                        coll,
                         "Select certificate",
                         "Use this certificate to log in",
                         X509SelectionFlag.SingleSelection);
@@ -403,7 +433,7 @@ namespace bedrock.net
                 if (m_cert != null)
                     return m_cert;
 
-                ChooseClientCertificate();
+                ChooseClientCertificate(acceptableIssuers);
             }
             return m_cert;
         }
