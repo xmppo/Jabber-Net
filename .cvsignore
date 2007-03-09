@@ -3,7 +3,6 @@ bin5
 obj
 obj5
 jabber-net.xml
-jabber-net.suo
 jabber-net.csproj.user
 2005-jabber-net.xml
-2005-jabber-net.suo
+*.suo
