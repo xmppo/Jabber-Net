@@ -17,7 +17,7 @@ using System.Xml;
 
 using bedrock.util;
 
-// http://www.jabber.org/jeps/jep-0054.html
+// http://www.xmpp.org/extensions/xep-0054.html
 
 namespace jabber.protocol.iq
 {

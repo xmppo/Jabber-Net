@@ -143,10 +143,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="bedrock\net\Exceptions.cs" />
-    <Compile Include="bedrock\net\JEP124Socket.cs" />
-    <Compile Include="bedrock\net\JEP25Socket.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="bedrock\net\ProxySocket.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -165,6 +161,8 @@
     <Compile Include="bedrock\net\Socks5Proxy.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="bedrock\net\XEP124Socket.cs" />
+    <Compile Include="bedrock\net\XEP25Socket.cs" />
     <Compile Include="bedrock\util\ConfigFile.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -44,7 +44,7 @@ namespace jabber.protocol.x
     }
 
     /// <summary>
-    /// jabber:x:data support, as in http://www.jabber.org/jeps/jep-0004.html.
+    /// jabber:x:data support, as in http://www.xmpp.org/extensions/xep-0004.html.
     /// </summary>
     [SVN(@"$Id$")]
     public class Data : Element
@@ -169,7 +169,7 @@ namespace jabber.protocol.x
     }
 
     /// <summary>
-    /// Types of fields.  This enum doesn't exactly match the JEP,
+    /// Types of fields.  This enum doesn't exactly match the XEP,
     /// since most of the field types aren't valid identifiers in C#.
     /// </summary>
     [SVN(@"$Id$")]

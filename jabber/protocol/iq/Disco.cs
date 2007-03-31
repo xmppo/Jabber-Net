@@ -123,7 +123,7 @@ namespace jabber.protocol.iq
 
     /// <summary>
     /// A disco#items query element.
-    /// See <a href="http://www.jabber.org/jeps/jep-0030.html">JEP-0030</a> for more information.
+    /// See <a href="http://www.xmpp.org/extensions/xep-0030.html">XEP-0030</a> for more information.
     /// </summary>
     [SVN(@"$Id$")]
     public class DiscoItems : Element

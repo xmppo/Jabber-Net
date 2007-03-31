@@ -254,6 +254,10 @@ namespace jabber.connection
                 return names;
             }
         }
+
+        /// <summary>
+        /// The disco identities of the node.
+        /// </summary>
         [Category("Info")]
         public string[] Identities
         {
@@ -271,6 +275,9 @@ namespace jabber.connection
             }
         }
 
+        /// <summary>
+        /// The x:data extensions of the disco information.
+        /// </summary>
         public jabber.protocol.x.Data Extensions
         {
             get
@@ -473,7 +480,7 @@ namespace jabber.connection
     /// <summary>
     /// Disco database.
     /// TODO: once etags are finished, make all of this information cached on disk.
-    /// TODO: cache JEP-115 client caps data to disk
+    /// TODO: cache XEP-115 client caps data to disk
     /// TODO: add negative caching
     /// </summary>
     [SVN(@"$Id$")]

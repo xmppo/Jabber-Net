@@ -57,9 +57,9 @@ namespace jabber.connection
             get { return false; }
         }
 
-        private JEP25Socket Sock
+        private XEP25Socket Sock
         {
-            get { return m_sock as JEP25Socket; }
+            get { return m_sock as XEP25Socket; }
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace jabber.connection
             int port = (int)m_listener[Options.PORT];
             Debug.Assert(port > 0);
 
-            JEP25Socket j25s = new JEP25Socket(this);
+            XEP25Socket j25s = new XEP25Socket(this);
             //if (m_ProxyHost != null)
             //{
             //    System.Net.WebProxy wp = new System.Net.WebProxy();
@@ -135,6 +135,10 @@ namespace jabber.connection
             m_sock.RequestAccept();
         }
 
+        /// <summary>
+        /// Write a string to the stream.
+        /// </summary>
+        /// <param name="str">The string to write; this will be transcoded to UTF-8.</param>
         public override void Write(string str)
         {
             //int keep = (int)m_listener[Options.KEEP_ALIVE];
@@ -184,7 +188,7 @@ namespace jabber.connection
         public override void StartTLS()
         {
             //m_sock.StartTLS();
-            //JEP25Socket s = Sock;
+            //XEP25Socket s = Sock;
 
             //Debug.Assert(s != null);
             //m_listener[Options.REMOTE_CERTIFICATE] = s.RemoteCertificate;
@@ -243,7 +247,7 @@ namespace jabber.connection
 #if !NO_SSL
             if ((bool)m_listener[Options.SSL])
             {
-                JEP25Socket s = sock as JEP25Socket;
+                XEP25Socket s = sock as XEP25Socket;
 
                 m_listener[Options.REMOTE_CERTIFICATE] = s.RemoteCertificate;
             }

@@ -120,7 +120,7 @@ namespace jabber.protocol
 
         /// <summary>
         /// Geographic locaiotn (lat/long).
-        /// See JEP-80 (http://www.jabber.org/jeps/jep-0080.html)
+        /// See XEP-80 (http://www.xmpp.org/extensions/xep-0080.html)
         /// </summary>
         public const string GEOLOC   = "http://jabber.org/protocol/geoloc";
 
@@ -152,34 +152,34 @@ namespace jabber.protocol
         /// </summary>
         public const string XEVENT = "jabber:x:event";
         /// <summary>
-        /// jabber:x:data, as described in JEP-0004.
+        /// jabber:x:data, as described in XEP-0004.
         /// </summary>
         public const string XDATA = "jabber:x:data";
 
         /// <summary>
         /// jabber:iq:search.
-        /// See JEP-55 (http://www.jabber.org/jeps/jep-0055.html)
+        /// See XEP-55 (http://www.xmpp.org/extensions/xep-0055.html)
         /// </summary>
         public const string SEARCH = "jabber:iq:search";
 
         /// <summary>
         /// Multi-user chat.
-        /// See JEP-45 (http://www.jabber.org/jeps/jep-0045.html)
+        /// See XEP-45 (http://www.xmpp.org/extensions/xep-0045.html)
         /// </summary>
         public const string MUC = "http://jabber.org/protocol/muc";
         /// <summary>
         /// Multi-user chat user functions.
-        /// See JEP-45 (http://www.jabber.org/jeps/jep-0045.html)
+        /// See XEP-45 (http://www.xmpp.org/extensions/xep-0045.html)
         /// </summary>
         public const string MUC_USER = "http://jabber.org/protocol/muc#user";
         /// <summary>
         /// Multi-user chat admin functions.
-        /// See JEP-45 (http://www.jabber.org/jeps/jep-0045.html)
+        /// See XEP-45 (http://www.xmpp.org/extensions/xep-0045.html)
         /// </summary>
         public const string MUC_ADMIN = "http://jabber.org/protocol/muc#admin";
         /// <summary>
         /// Multi-user chat owner functions.
-        /// See JEP-45 (http://www.jabber.org/jeps/jep-0045.html)
+        /// See XEP-45 (http://www.xmpp.org/extensions/xep-0045.html)
         /// </summary>
         public const string MUC_OWNER = "http://jabber.org/protocol/muc#owner";
     }

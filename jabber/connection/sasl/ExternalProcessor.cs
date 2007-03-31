@@ -22,7 +22,7 @@ using jabber.protocol.stream;
 namespace jabber.connection.sasl
 {
     /// <summary>
-    /// SASL Mechanism EXTERNAL as specified in JEP-0178.
+    /// SASL Mechanism EXTERNAL as specified in XEP-0178.
     /// </summary>
     [SVN(@"$Id$")]
     public class ExternalProcessor : SASLProcessor

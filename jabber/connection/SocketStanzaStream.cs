@@ -148,7 +148,7 @@ namespace jabber.connection
 
                 /*
             case ProxyType.HTTP_Polling:
-                JEP25Socket j25s = new JEP25Socket(this);
+                XEP25Socket j25s = new XEP25Socket(this);
                 if (m_ProxyHost != null)
                 {
                     System.Net.WebProxy wp = new System.Net.WebProxy();

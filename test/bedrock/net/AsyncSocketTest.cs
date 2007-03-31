@@ -59,13 +59,13 @@ namespace test.bedrock.net
             a.Resolve();
             AsyncSocket one = w.CreateListenSocket(this, a);
             AsyncSocket two = null;
-            Assert.IsTrue(one == one);
-            Assert.IsTrue(two == two);
-            Assert.IsTrue(one >= one);
-            Assert.IsTrue(two >= two);
-            Assert.IsTrue(one <= one);
-            Assert.IsTrue(two <= two);
-            Assert.IsTrue(one != two);
+            Assert.IsTrue(one == one); // intentional.  Ignore warning.
+            Assert.IsTrue(two == two); // intentional.  Ignore warning.
+            Assert.IsTrue(one >= one); // intentional.  Ignore warning.
+            Assert.IsTrue(two >= two); // intentional.  Ignore warning.
+            Assert.IsTrue(one <= one); // intentional.  Ignore warning.
+            Assert.IsTrue(two <= two); // intentional.  Ignore warning.
+            Assert.IsTrue(one != two); 
             Assert.IsTrue(two != one);
             Assert.IsTrue(one > two);
             Assert.IsTrue(one >= two);
@@ -73,12 +73,12 @@ namespace test.bedrock.net
             Assert.IsTrue(two <= one);
 
             two = w.CreateListenSocket(this, a);
-            Assert.IsTrue(one == one);
-            Assert.IsTrue(two == two);
-            Assert.IsTrue(one >= one);
-            Assert.IsTrue(two >= two);
-            Assert.IsTrue(one <= one);
-            Assert.IsTrue(two <= two);
+            Assert.IsTrue(one == one); // intentional.  Ignore warning.
+            Assert.IsTrue(two == two); // intentional.  Ignore warning.
+            Assert.IsTrue(one >= one); // intentional.  Ignore warning.
+            Assert.IsTrue(two >= two); // intentional.  Ignore warning.
+            Assert.IsTrue(one <= one); // intentional.  Ignore warning.
+            Assert.IsTrue(two <= two); // intentional.  Ignore warning.
             Assert.IsTrue(one != two);
             Assert.IsTrue(two != one);
 

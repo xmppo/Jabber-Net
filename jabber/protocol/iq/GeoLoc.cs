@@ -38,7 +38,7 @@ namespace jabber.protocol.iq
     }
 
     /// <summary>
-    /// Geographic location.  See http://www.jabber.org/jeps/jep-0080.html.
+    /// Geographic location.  See http://www.xmpp.org/extensions/xep-0080.html.
     /// </summary>
     [SVN(@"$Id$")]
     public class GeoLoc : Element
@@ -75,7 +75,7 @@ namespace jabber.protocol.iq
 
         /// <summary>
         /// Assuming decimal degrees to true north.
-        /// Note: this is being further specified in the JEP.
+        /// Note: this is being further specified in the XEP.
         /// </summary>
         public double Bearing
         {

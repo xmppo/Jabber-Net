@@ -21,11 +21,19 @@ using System.Collections;
 
 namespace jabber.connection
 {
+    /// <summary>
+    /// An implementation of XEP-70, I suppose.F
+    /// </summary>
     public class HttpUploader
     {
-
+        /// <summary>
+        /// An upload has finished.
+        /// </summary>
         public event bedrock.ObjectHandler OnUpload;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public HttpUploader()
         {
         }
@@ -38,6 +46,12 @@ namespace jabber.connection
                 OnUpload(this);
         }
 
+        /// <summary>
+        /// Upload a file to a given URL, doing XEP-70 authentication.
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <param name="jid"></param>
+        /// <param name="filename"></param>
         public void Upload(string uri, string jid, string filename)
         {
             //try

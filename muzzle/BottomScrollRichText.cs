@@ -84,7 +84,7 @@ namespace muzzle
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public struct RECT
+        private struct RECT
         {
             public int left;
             public int top;
@@ -93,7 +93,7 @@ namespace muzzle
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public struct SCROLLBARINFO
+        private struct SCROLLBARINFO
         {
             public int cbSize;
             public RECT rcScrollBar;
@@ -202,6 +202,9 @@ namespace muzzle
             base.WndProc(ref m);
         }
 
+        /// <summary>
+        /// Clear the text, and scroll back to the top.
+        /// </summary>
         public void ClearAndScroll()
         {
             this.Text = "";

@@ -58,7 +58,7 @@ namespace jabber.protocol.x
     }
 
     /// <summary>
-    /// A event x element, described by JEP-0022.
+    /// A event x element, described by XEP-0022.
     /// </summary>
     [SVN(@"$Id$")]
     public class Event : Element

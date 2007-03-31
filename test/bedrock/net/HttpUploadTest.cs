@@ -21,6 +21,9 @@ using System.Threading;
 
 namespace test.bedrock.net
 {
+    /// <summary>
+    /// TODO: This test is known to not work.  Add one that does, please.
+    /// </summary>
     [TestFixture]
     public class HttpUploadTest
     {

@@ -33,11 +33,11 @@ namespace jabber.connection
         /// </summary>
         Socket,
         /// <summary>
-        /// HTTP Polling, as in http://www.jabber.org/jeps/jep-0025.html
+        /// HTTP Polling, as in http://www.xmpp.org/extensions/xep-0025.html
         /// </summary>
         HTTP_Polling,
         /// <summary>
-        /// HTTP Binding, as in http://www.jabber.org/jeps/jep-0124.html
+        /// HTTP Binding, as in http://www.xmpp.org/extensions/xep-0124.html
         /// </summary>
         HTTP_Binding
     }
