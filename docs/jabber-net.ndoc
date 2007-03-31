@@ -1,8 +1,8 @@
-<project SchemaVersion="1.3">
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<project SchemaVersion="2.0">
     <assemblies>
-        <assembly location="C:\src\jabber\jabber-net\bin\Debug\jabber-net.dll" documentation="C:\src\jabber\jabber-net\bin\Debug\jabber-net.xml" />
-        <assembly location="C:\src\jabber\jabber-net\muzzle\bin\Debug\muzzle.dll" documentation="C:\src\jabber\jabber-net\muzzle\bin\Debug\muzzle.xml" />
-        <assembly location="C:\src\jabber\jabber-net\stringprep\bin\Debug\stringprep.dll" documentation="C:\src\jabber\jabber-net\stringprep\bin\Debug\stringprep.xml" />
+        <assembly location="C:\src\jabber-net\bin5\Debug\jabber-net.dll" documentation="C:\src\jabber-net\bin5\Debug\2005-jabber-net.xml" />
+        <assembly location="C:\src\jabber-net\muzzle\bin5\Debug\muzzle.dll" documentation="C:\src\jabber-net\muzzle\bin5\Debug\muzzle.xml" />
     </assemblies>
     <namespaces>
         <namespace name="bedrock">Low-level utility routines.</namespace>
@@ -27,64 +27,30 @@
         <namespace name="xpnet">Partial port of James Clark's XP XML parser to .Net.  See http://www.jclark.com/xml/ for more details.</namespace>
     </namespaces>
     <documenters>
-        <documenter name="JavaDoc">
-            <property name="Title" value="Jabber-Net Documentation" />
-            <property name="OutputDirectory" value="JavaDoc\" />
-            <property name="AssemblyVersionInfo" value="AssemblyVersion" />
-            <property name="CopyrightText" value="Copyright © 2002-2004 Cursive Systems" />
-            <property name="CopyrightHref" value="http://www.cursive.net/" />
-            <property name="FeedbackEmailAddress" value="joe-jabber-net@cursive.net" />
-            <property name="CleanIntermediates" value="True" />
-        </documenter>
-        <documenter name="LaTeX">
-            <property name="OutputDirectory" value="Tex" />
-            <property name="TextFileFullName" value="Documentation.tex" />
-            <property name="TexFileBaseName" value="Documentation" />
-            <property name="LatexCompiler" value="latex" />
-            <property name="TexFileFullPath" value="Tex\Documentation.tex" />
-        </documenter>
-        <documenter name="LinearHtml">
-            <property name="OutputDirectory" value=".\doc\" />
-            <property name="Title" value="An NDoc Documented Class Library" />
-        </documenter>
-        <documenter name="MSDN">
-            <property name="OutputDirectory" value="Msdn\" />
-            <property name="HtmlHelpName" value="jabber-net" />
-            <property name="Title" value="Jabber-Net Documentation" />
-            <property name="IncludeFavorites" value="True" />
-            <property name="RootPageTOCName" value="Getting Started" />
-            <property name="RootPageFileName" value="howto.htm" />
-            <property name="AssemblyVersionInfo" value="AssemblyVersion" />
-            <property name="CopyrightText" value="Copyright &amp;copy; 2002-2005 Cursive Systems" />
-            <property name="CopyrightHref" value="http://www.cursive.net/" />
-            <property name="FeedbackEmailAddress" value="joe-jabber-net@cursive.net" />
-            <property name="DocumentAttributes" value="True" />
-            <property name="DocumentedAttributes" value="RCS,Version" />
-            <property name="IncludeDefaultThreadSafety" value="False" />
-            <property name="CleanIntermediates" value="True" />
-        </documenter>
-        <documenter name="MSDN 2003">
-            <property name="OutputDirectory" value=".\doc\" />
-            <property name="Title" value="An NDoc Documented Class Library" />
-        </documenter>
-        <documenter name="VS.NET 2003">
-            <property name="OutputDirectory" value="VS.Net-2003\" />
-            <property name="HtmlHelpName" value="jabber-net" />
-            <property name="Title" value="Jabber-Net Documentation" />
-            <property name="RegisterTitleWithNamespace" value="True" />
-            <property name="CollectionNamespace" value="http://www.cursive.net/jabber-net" />
-            <property name="RegisterTitleAsCollection" value="True" />
-            <property name="IntroductionPage" value=".\howto.htm" />
-            <property name="AssemblyVersionInfo" value="AssemblyVersion" />
-            <property name="CopyrightText" value="Copyright © 2002-2004 Cursive Systems" />
-            <property name="CopyrightHref" value="http://www.cursive.net/" />
-            <property name="FeedbackEmailAddress" value="joe-jabber-net@cursive.net" />
-            <property name="UseNamespaceDocSummaries" value="True" />
-            <property name="DocumentAttributes" value="True" />
-            <property name="DocumentedAttributes" value="RCS,Version" />
-        </documenter>
         <documenter name="XML">
             <property name="OutputFile" value=".\docs\doc.xml" />
+        </documenter>
+        <documenter name="MSDN-CHM">
+            <property name="RootPageTocName" value="HowTo" />
+            <property name="RootPageFileName" value="C:\src\jabber-net\docs\howto.htm" />
+            <property name="OutputDirectory" value=".\doc\" />
+            <property name="HtmlHelpName" value="jabber-net" />
+            <property name="Title" value="Jabber-Net: An XMPP library for .Net" />
+            <property name="IncrementalBuild" value="True" />
+            <property name="FooterHtml" value="&lt;a href='http://code.google.com/p/jabber-net/'&gt;More Information&lt;/a&gt;" />
+            <property name="CopyrightText" value="Copyright (c) 2007 Cursive Systems, Inc." />
+            <property name="CopyrightHref" value="http://www.cursive.net" />
+            <property name="FeedbackEmailAddress" value="jabber-net@googlegroups.com" />
+            <property name="DocumentAttributes" value="False" />
+            <property name="IncludeDefaultThreadSafety" value="False" />
+        </documenter>
+        <documenter name="Intellisense">
+            <property name="OutputDirectory" value=".\intellisense\" />
+        </documenter>
+        <documenter name="MSDN-Web">
+            <property name="OutputDirectory" value=".\web\" />
+            <property name="HtmlHelpName" value="Jabber-Net" />
+            <property name="Title" value="Jabber-Net: a library for XMPP access in .Net" />
         </documenter>
     </documenters>
 </project>
