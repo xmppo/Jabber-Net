@@ -39,7 +39,8 @@ $(BASEDIR)/bedrock/net/AsyncSocket.cs \
 $(BASEDIR)/bedrock/net/BaseSocket.cs \
 $(BASEDIR)/bedrock/net/CertUtil.cs \
 $(BASEDIR)/bedrock/net/Exceptions.cs \
-$(BASEDIR)/bedrock/net/JEP25Socket.cs \
+$(BASEDIR)/bedrock/net/XEP25Socket.cs \
+$(BASEDIR)/bedrock/net/XEP124Socket.cs \
 $(BASEDIR)/bedrock/net/ProxySocket.cs \
 $(BASEDIR)/bedrock/net/ShttpProxy.cs \
 $(BASEDIR)/bedrock/net/SocketEventListener.cs \
