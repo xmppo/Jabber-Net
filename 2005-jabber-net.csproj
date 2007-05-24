@@ -173,6 +173,9 @@
     <Compile Include="bedrock\util\Version.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="jabber\connection\CapsManager.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="jabber\connection\DiscoManager.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -334,6 +337,7 @@
     <Compile Include="jabber\protocol\XmlLoader.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="jabber\protocol\x\Caps.cs" />
     <Compile Include="jabber\protocol\x\Data.cs">
       <SubType>Code</SubType>
     </Compile>

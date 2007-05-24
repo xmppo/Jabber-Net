@@ -129,6 +129,15 @@ namespace xpnet
         {
             get { return this.type; }
         }
+
+        /// <summary>
+        /// String
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return "OFFSET: " + this.offset.ToString() + "\r\nTYPE: " + this.type.ToString() + "\r\n" +  base.ToString();
+        }
     }
 
     /**
