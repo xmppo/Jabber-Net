@@ -23,7 +23,8 @@ namespace jabber.protocol.client
     [SVN(@"$Id$")]
     public class ProtocolException : Exception
     {
-        private ErrorCode m_code;
+        // TODO: fix this up for new error codes.
+        private int m_code;
         private string m_message;
 
         /// <summary>
@@ -37,7 +38,7 @@ namespace jabber.protocol.client
             if (iq == null)
             {
                 //timeout
-                m_code = ErrorCode.REQUEST_TIMEOUT;
+                m_code = 504;
                 m_message = "Request timed out";
             }
             else
@@ -51,7 +52,7 @@ namespace jabber.protocol.client
         /// <summary>
         /// The Jabber error number
         /// </summary>
-        public ErrorCode Code
+        public int Code
         {
             get { return m_code; }
         }

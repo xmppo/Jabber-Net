@@ -19,12 +19,21 @@ using bedrock.util;
 
 namespace jabber.protocol.client
 {
+    /*
     /// <summary>
     /// Error codes for IQ and message
     /// </summary>
     [SVN(@"$Id$")]
     public enum ErrorCode
     {
+        /// <summary>
+        ///  None specified.
+        /// </summary>
+        none = -1,
+        /// <summary>
+        /// Gone (302)
+        /// </summary>
+        GONE = 302,
         /// <summary>
         /// Bad request (400)
         /// </summary>
@@ -90,6 +99,39 @@ namespace jabber.protocol.client
         /// </summary>
         DISCONNECTED            = 510
     }
+     */
+
+    /// <summary>
+    /// See RFC 3920, section 9.3.2.  These are the possible error types.
+    /// </summary>
+    public enum ErrorType
+    {
+        /// <summary>
+        /// None specified (protocol error)
+        /// </summary>
+        NONE = -1,
+        /// <summary>
+        /// do not retry (the error is unrecoverable)
+        /// </summary>
+        cancel, 
+        /// <summary>
+        /// proceed (the condition was only a warning)
+        /// </summary>
+        @continue, 
+        /// <summary>
+        /// retry after changing the data sent
+        /// </summary>
+        modify, 
+        /// <summary>
+        /// retry after providing credentials
+        /// </summary>
+        auth, 
+        /// <summary>
+        /// retry after waiting (the error is temporary)
+        /// </summary>
+        wait 
+    }
+
 
     /// <summary>
     /// Error IQ
@@ -101,13 +143,11 @@ namespace jabber.protocol.client
         /// Create an error IQ with the given code and message.
         /// </summary>
         /// <param name="doc"></param>
-        /// <param name="code"></param>
-        public IQError(XmlDocument doc, ErrorCode code) : base(doc)
+        /// <param name="condition"></param>
+        public IQError(XmlDocument doc, string condition) : base(doc)
         {
-            XmlElement e = doc.CreateElement("error");
             this.Type = IQType.error;
-            e.SetAttribute("code", ((int)code).ToString());
-            e.InnerText = code.ToString();
+            Error e = Error.GetStanzaError(doc, condition);
             this.AppendChild(e);
         }
     }
@@ -118,6 +158,147 @@ namespace jabber.protocol.client
     [SVN(@"$Id$")]
     public class Error : Element
     {
+        /// <summary>
+        /// modify  	400
+        /// </summary>
+        public const string BAD_REQUEST = "bad-request";
+        /// <summary>
+        /// cancel  	409
+        /// </summary>
+        public const string CONFLICT = "conflict";
+        /// <summary>
+        /// cancel 	501
+        /// </summary>
+        public const string FEATURE_NOT_IMPLEMENTED = "feature-not-implemented";
+        /// <summary>
+        /// auth 	403
+        /// </summary>
+        public const string FORBIDDEN = "forbidden";
+        /// <summary>
+        /// 	modify 	302 (permanent)
+        /// </summary>
+        public const string GONE = "gone";
+        /// <summary>
+        /// 	wait 	500
+        /// </summary>
+        public const string INTERNAL_SERVER_ERROR = "internal-server-error";
+        /// <summary>
+        /// 	cancel 	404
+        /// </summary>
+        public const string ITEM_NOT_FOUND = "item-not-found";
+        /// <summary>
+        /// 	modify 	400
+        /// </summary>
+        public const string JID_MALFORMED = "jid-malformed";
+        /// <summary>
+        /// 	modify 	406
+        /// </summary>
+        public const string NOT_ACCEPTABLE = "not-acceptable";
+        /// <summary>
+        /// 	cancel 	405
+        /// </summary>
+        public const string NOT_ALLOWED = "not-allowed";
+        /// <summary>
+        /// 	auth 	401
+        /// </summary>
+        public const string NOT_AUTHORIZED = "not-authorized";
+        /// <summary>
+        /// 	auth 	402
+        /// </summary>
+        public const string PAYMENT_REQUIRED = "payment-required";
+        /// <summary>
+        /// 	wait 	404
+        /// </summary>
+        public const string RECIPIENT_UNAVAILABLE = "recipient-unavailable";
+        /// <summary>
+        /// 	modify 	302 (temporary)
+        /// </summary>
+        public const string REDIRECT = "redirect";
+        /// <summary>
+        /// 	auth 	407
+        /// </summary>
+        public const string REGISTRATION_REQUIRED = "registration-required";
+        /// <summary>
+        /// 	cancel 	404
+        /// </summary>
+        public const string REMOTE_SERVER_NOT_FOUND = "remote-server-not-found";
+        /// <summary>
+        /// 	wait 	504
+        /// </summary>
+        public const string REMOTE_SERVER_TIMEOUT = "remote-server-timeout";
+        /// <summary>
+        /// 	wait 	500
+        /// </summary>
+        public const string RESOURCE_CONSTRAINT = "resource-constraint";
+        /// <summary>
+        /// 	cancel 	503
+        /// </summary>
+        public const string SERVICE_UNAVAILABLE = "service-unavailable";
+        /// <summary>
+        /// 	auth 	407
+        /// </summary>
+        public const string SUBSCRIPTION_REQUIRED = "subscription-required";
+        /// <summary>
+        /// 	[any] 	500
+        /// </summary>
+        public const string UNDEFINED_CONDITION = "undefined-condition";
+        /// <summary>
+        /// 	wait 	400
+        /// </summary>
+        public const string UNEXPECTED_REQUEST = "unexpected-request";
+
+        private static System.Collections.Hashtable s_errors = new System.Collections.Hashtable();
+        private struct CodeType
+        {
+            public int Code;
+            public ErrorType Type;
+            public CodeType(int code, ErrorType type)
+            {
+                Code = code;
+                Type = type;
+            }
+        }
+
+        static Error()
+        {
+            // See XEP-86.  (http://www.xmpp.org/extensions/xep-0086.html)
+            s_errors.Add(BAD_REQUEST, new CodeType(400, ErrorType.modify));
+            s_errors.Add(CONFLICT, new CodeType(409, ErrorType.cancel));
+            s_errors.Add(FEATURE_NOT_IMPLEMENTED, new CodeType(501, ErrorType.cancel));
+            s_errors.Add(FORBIDDEN, new CodeType(403, ErrorType.auth));
+            s_errors.Add(GONE, new CodeType(302, ErrorType.modify));
+            s_errors.Add(INTERNAL_SERVER_ERROR, new CodeType(500, ErrorType.wait));
+            s_errors.Add(ITEM_NOT_FOUND, new CodeType(404, ErrorType.cancel));
+            s_errors.Add(JID_MALFORMED, new CodeType(400, ErrorType.modify));
+            s_errors.Add(NOT_ACCEPTABLE, new CodeType(406, ErrorType.modify));
+            s_errors.Add(NOT_ALLOWED, new CodeType(405, ErrorType.cancel));
+            s_errors.Add(NOT_AUTHORIZED, new CodeType(401, ErrorType.auth));
+            s_errors.Add(PAYMENT_REQUIRED, new CodeType(402, ErrorType.auth));
+            s_errors.Add(RECIPIENT_UNAVAILABLE, new CodeType(404, ErrorType.wait));
+            /*
+            s_errors.Add(, new CodeType(ErrorCode., ErrorType.));
+            s_errors.Add(, new CodeType(ErrorCode., ErrorType.));
+            s_errors.Add(, new CodeType(ErrorCode., ErrorType.));
+            s_errors.Add(, new CodeType(ErrorCode., ErrorType.));
+            s_errors.Add(, new CodeType(ErrorCode., ErrorType.));
+            s_errors.Add(, new CodeType(ErrorCode., ErrorType.));
+            s_errors.Add(, new CodeType(ErrorCode., ErrorType.));
+            s_errors.Add(, new CodeType(ErrorCode., ErrorType.));
+            s_errors.Add(, new CodeType(ErrorCode., ErrorType.));
+            s_errors.Add(, new CodeType(ErrorCode., ErrorType.));
+            s_errors.Add(, new CodeType(ErrorCode., ErrorType.));
+            s_errors.Add(, new CodeType(ErrorCode., ErrorType.));
+            s_errors.Add(, new CodeType(ErrorCode., ErrorType.));
+            s_errors.Add(, new CodeType(ErrorCode., ErrorType.));
+            s_errors.Add(, new CodeType(ErrorCode., ErrorType.));
+            s_errors.Add(, new CodeType(ErrorCode., ErrorType.));
+            s_errors.Add(, new CodeType(ErrorCode., ErrorType.));
+            s_errors.Add(, new CodeType(ErrorCode., ErrorType.));
+            s_errors.Add(, new CodeType(ErrorCode., ErrorType.));
+            s_errors.Add(, new CodeType(ErrorCode., ErrorType.));
+             * */
+        }
+
         /// <summary>
         ///
         /// </summary>
@@ -138,29 +319,122 @@ namespace jabber.protocol.client
         }
 
         /// <summary>
-        /// The error code, as an enumeration.
+        /// Create an error element with the element name of the error condition.
         /// </summary>
-        public ErrorCode Code
+        /// <param name="doc"></param>
+        /// <param name="condition"></param>
+        /// <returns></returns>
+        public static Error GetStanzaError(XmlDocument doc, string condition)
         {
-            get { return (ErrorCode) IntCode; }
-            set { IntCode = (int) value; }
+            if (!s_errors.Contains(condition))
+                throw new ArgumentException("Unknown condition: " + condition, "condition");
+
+            CodeType ct = (CodeType) s_errors[condition];
+            return GetStanzaError(doc, ct.Type, ct.Code, condition);
+        }
+
+        /// <summary>
+        /// Get an error element with a urn:ietf:params:xml:ns:xmpp-stanzas condition.
+        /// Likely, you want the GetStanzaError(doc, condition) instead.
+        /// </summary>
+        /// <param name="doc"></param>
+        /// <param name="type"></param>
+        /// <param name="code"></param>
+        /// <param name="condition"></param>
+        /// <returns></returns>
+        public static Error GetStanzaError(XmlDocument doc, ErrorType type, int code, string condition)
+        {
+            Error error = new Error(doc);
+            error.ErrorType = type;
+            error.Code = code;
+            error.AppendChild(doc.CreateElement(condition, URI.STANZA_ERROR));
+            return error;
+        }
+
+        /// <summary>
+        /// Get an error stanza with a urn:ietf:params:xml:ns:xmpp-streams condition.
+        /// </summary>
+        /// <param name="doc"></param>
+        /// <param name="type"></param>
+        /// <param name="code"></param>
+        /// <param name="condition"></param>
+        /// <returns></returns>
+        public static Error GetStreamError(XmlDocument doc, ErrorType type, int code, string condition)
+        {
+            Error error = new Error(doc);
+            error.ErrorType = type;
+            error.Code = code;
+            error.AppendChild(doc.CreateElement(condition, URI.STREAM));
+            return error;
         }
 
         /// <summary>
         /// The error code, as an integer.
         /// </summary>
-        public int IntCode
+        public int Code
         {
             get { return GetIntAttr("code"); }
             set { this.SetAttribute("code", value.ToString()); }
         }
 
         /// <summary>
-        /// The error message
+        /// The type of the error
+        /// </summary>
+        public ErrorType ErrorType
+        {
+            get { return (ErrorType)this.GetEnumAttr("type", typeof(ErrorType)); }
+            set { this.SetAttribute("type", value.ToString()); }
+        }
+
+        /// <summary>
+        /// The inner error condition element.
+        /// </summary>
+        public string Condition
+        {
+            get 
+            {
+                foreach (XmlNode n in this.ChildNodes)
+                {
+                    if (n.NodeType != XmlNodeType.Element)
+                        continue;
+                    if ((n.NamespaceURI != URI.STANZA_ERROR) &&
+                        (n.NamespaceURI != URI.STREAM_ERROR))
+                        continue;
+                    return n.LocalName;
+                }
+                // uh-oh.  Old-school error.  See section 3 of XEP-86.
+                switch (this.Code)
+                {
+                case 302: return REDIRECT;
+                case 400: return BAD_REQUEST;
+                case 401: return NOT_AUTHORIZED;
+                case 402: return PAYMENT_REQUIRED;
+                case 403: return FORBIDDEN;
+                case 404: return ITEM_NOT_FOUND;
+                case 405: return NOT_ALLOWED;
+                case 406: return NOT_ACCEPTABLE;
+                case 407: return REGISTRATION_REQUIRED;
+                case 408: return REMOTE_SERVER_TIMEOUT;
+                case 409: return CONFLICT;
+                case 500: return INTERNAL_SERVER_ERROR;
+                case 501: return FEATURE_NOT_IMPLEMENTED;
+                case 502: return SERVICE_UNAVAILABLE;
+                case 503: return SERVICE_UNAVAILABLE;
+                case 504: return REMOTE_SERVER_TIMEOUT;
+                case 510: return SERVICE_UNAVAILABLE;
+                }
+                // best we can do.
+                return UNDEFINED_CONDITION;
+            }
+            set { this.InnerXml = ""; this.AddChild(GetStanzaError(this.OwnerDocument, value)); }
+        }
+
+        /// <summary>
+        /// The error message.  Not used anymore (not I18N).
         /// </summary>
         public string Message
         {
-            get { return this.InnerXml; }
+            get { return this.InnerText; }
             set { this.InnerText = value; }
         }
     }

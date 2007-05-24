@@ -114,5 +114,56 @@ namespace jabber.protocol.client
             get { return this.GetFirstChildElement(); }
             set { this.InnerXml = ""; this.AddChild(value); }
         }
+
+        /// <summary>
+        /// Swap the to and from, set the type to result.
+        /// </summary>
+        /// <param name="doc"></param>
+        /// <returns></returns>
+        public IQ GetResponse(XmlDocument doc)
+        {
+            IQ resp = new IQ(doc);
+            resp.From = this.To;
+            resp.To = this.From;
+            resp.ID = this.ID;
+            resp.Type = IQType.result;
+
+            XmlElement q = this.Query;
+            if (q != null)
+            {
+                if (q is Element)
+                    resp.AppendChild((XmlElement)((Element)q).CloneNode(true, doc));
+                else
+                    resp.AppendChild(doc.ImportNode(q, true));
+            }
+
+            return resp;
+        }
+
+        /// <summary>
+        /// Respond to this IQ with an error.
+        /// </summary>
+        /// <param name="doc"></param>
+        /// <param name="condition"></param>
+        /// <returns></returns>
+        public IQ GetErrorResponse(XmlDocument doc, string condition)
+        {
+            IQ resp = new IQError(doc, condition);
+            resp.From = this.To;
+            resp.To = this.From;
+            resp.ID = this.ID;
+            resp.Type = IQType.error;
+
+            XmlElement q = this.Query;
+            if (q != null)
+            {
+                if (q is Element)
+                    resp.AppendChild((XmlElement)((Element)q).CloneNode(true, doc));
+                else
+                    resp.AppendChild(doc.ImportNode(q, true));
+            }
+
+            return resp;
+        }
     }
 }

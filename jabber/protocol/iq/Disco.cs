@@ -470,7 +470,7 @@ namespace jabber.protocol.iq
         ///
         /// </summary>
         /// <param name="doc"></param>
-        public DiscoFeature(XmlDocument doc) : base("feature", URI.DISCO_ITEMS, doc)
+        public DiscoFeature(XmlDocument doc) : base("feature", URI.DISCO_INFO, doc)
         {
         }
 

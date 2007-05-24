@@ -161,9 +161,14 @@ namespace jabber.protocol
             {
                 // ignored;
             }
-            catch (Exception e)
+            catch (xpnet.InvalidTokenException e)
             {
                 throw new XMLParseException(e, this, buf, offset, length);
+                //return;
+            }
+            catch (Exception e)
+            {
+                throw e;
             }
             finally
             {

@@ -127,6 +127,14 @@ namespace jabber.client
         [Description("Authentication failed.")]
         public event IQHandler OnAuthError;
 
+
+        /// <summary>
+        /// Presence is about to be sent.  This gives a chance to modify outbound presence (e.g. entity caps)
+        /// </summary>
+        [Category("Protocol")]
+        [Description("Presence is about to be sent.  This gives a chance to modify outbound presence (e.g. entity caps)")]
+        public event PresenceHandler OnBeforePresenceOut;
+
         /// <summary>
         /// AutoLogin is false, and it's time to log in.
         /// This callback will receive the results of the IQ type=get
@@ -333,7 +341,8 @@ namespace jabber.client
         /// <param name="status">How to show us?</param>
         /// <param name="show">away, dnd, etc.</param>
         /// <param name="priority">How to prioritize this connection.
-        /// Higher number mean higher priority.  0 minumum.</param>
+        /// Higher number mean higher priority.  0 minumum, 127 max.  
+        /// -1 means this is a presence-only connection.</param>
         public void Presence(PresenceType t,
             string status,
             string show,
@@ -341,6 +350,11 @@ namespace jabber.client
         {
             if (IsAuthenticated)
             {
+                if ((priority < -128) || (priority > 127))
+                {
+                    throw new ArgumentException("Priority must be -128 to 127", "priority");
+                }
+
                 Presence p = new Presence(Document);
                 if (status != null)
                     p.Status = status;
@@ -351,6 +365,9 @@ namespace jabber.client
                 if (show != null)
                     p.Show = show;
                 p.Priority = priority.ToString();
+
+                if (OnBeforePresenceOut != null)
+                    OnBeforePresenceOut(this, p);
                 Write(p);
             }
             else

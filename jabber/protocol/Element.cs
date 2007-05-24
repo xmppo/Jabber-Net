@@ -437,26 +437,56 @@ namespace jabber.protocol
         /// <returns>Cloned node, with type info intact</returns>
         public override XmlNode CloneNode(bool deep)
         {
+            return CloneNode(deep, this.OwnerDocument);
+        }
+
+        /// <summary>
+        /// Clone this node into the target document, preserving type information.
+        /// </summary>
+        /// <param name="deep"></param>
+        /// <param name="doc"></param>
+        /// <returns></returns>
+        public XmlNode CloneNode(bool deep, XmlDocument doc)
+        {
             ConstructorInfo ci = this.GetType().GetConstructor(s_constructor_parms);
             if (ci == null)
-                return base.CloneNode(deep);
+                return doc.ImportNode(this, deep);
+            if (ci.DeclaringType != this.GetType())
+            {
+                Debug.WriteLine("Bad type: " + ci.DeclaringType.ToString());
+            }
+            XmlElement el = (Element)ci.Invoke(new object[] { this.Prefix, new XmlQualifiedName(this.Name, this.NamespaceURI), doc });
+            if (el.GetType() != this.GetType())
+            {
+                Debug.Assert(el.GetType() == this.GetType());
+            }
 
-            XmlElement el = (Element) ci.Invoke(new object[] {this.Prefix, new XmlQualifiedName(this.Name, this.NamespaceURI), this.OwnerDocument});
             if (el.IsEmpty != this.IsEmpty)
                 el.IsEmpty = this.IsEmpty;
+
 
             if (this.HasAttributes)
             {
                 foreach (XmlAttribute attr in this.Attributes)
-                    el.Attributes.Append((XmlAttribute) attr.CloneNode(true));
+                    el.Attributes.Append((XmlAttribute)doc.ImportNode(attr, true));
             }
 
             if (deep)
             {
                 foreach (XmlNode n in this.ChildNodes)
-                    el.AppendChild(n.CloneNode(deep));
+                {
+                    if (n is Element)
+                    {
+                        el.AppendChild(((Element)n).CloneNode(deep, doc));
+                    }
+                    else
+                    {
+                        doc.ImportNode(n, deep);
+                    }
+                }
             }
             return el;
+
         }
 
         /// <summary>

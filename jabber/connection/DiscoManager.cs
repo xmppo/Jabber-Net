@@ -616,12 +616,17 @@ namespace jabber.connection
                 {
                     // root node.
                     // Try agents.
-                    if ((iq.Error.Code == ErrorCode.NOT_IMPLEMENTED) ||
-                        (iq.Error.Code == ErrorCode.SERVICE_UNAVAILABLE))
+                    Error err = iq.Error;
+                    if (err != null)
                     {
-                        IQ aiq = new AgentsIQ(m_stream.Document);
-                        m_stream.Tracker.BeginIQ(aiq, new jabber.connection.IqCB(GotAgents), m_root);
-                        return;
+                        string cond = err.Condition;
+                        if ((cond == Error.FEATURE_NOT_IMPLEMENTED) ||
+                            (cond == Error.SERVICE_UNAVAILABLE))
+                        {
+                            IQ aiq = new AgentsIQ(m_stream.Document);
+                            m_stream.Tracker.BeginIQ(aiq, new jabber.connection.IqCB(GotAgents), m_root);
+                            return;
+                        }
                     }
                 }
             }

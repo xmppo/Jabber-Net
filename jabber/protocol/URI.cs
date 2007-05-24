@@ -53,6 +53,14 @@ namespace jabber.protocol
         /// </summary>
         public const string BIND = "urn:ietf:params:xml:ns:xmpp-bind";
         /// <summary>
+        /// Stanza errors.  See RFC 3920, section 9.3.
+        /// </summary>
+        public const string STANZA_ERROR = "urn:ietf:params:xml:ns:xmpp-stanzas";
+        /// <summary>
+        /// Stream errors.  See RFC 3920, section 4.7.
+        /// </summary>
+        public const string STREAM_ERROR = "urn:ietf:params:xml:ns:xmpp-streams";
+        /// <summary>
         /// Jabber client connections
         /// </summary>
         public const string CLIENT = "jabber:client";
@@ -182,5 +190,12 @@ namespace jabber.protocol
         /// See XEP-45 (http://www.xmpp.org/extensions/xep-0045.html)
         /// </summary>
         public const string MUC_OWNER = "http://jabber.org/protocol/muc#owner";
+
+        /// <summary>
+        /// Entity Capabilities.
+        /// See XEP-115 (http://www.xmpp.org/extensions/xep-0115.html)
+        /// </summary>
+        public const string CAPS = "http://jabber.org/protocol/caps";
+
     }
 }

@@ -38,6 +38,9 @@ namespace ConsoleClient
         [CommandLine("n", "Network Host", false)]
         public string networkHost = null;
 
+        [CommandLine("o", "Port", false)]
+        public int port = 5222;
+
         [CommandLine("t", "TLS auto-start", false)]
         public bool TLS = true;
 
@@ -89,6 +92,7 @@ namespace ConsoleClient
             jc.User = j.User;
             jc.Server = j.Server;
             jc.NetworkHost = networkHost;
+            jc.Port = port;
             jc.Resource = "Jabber.Net Console Client";
             jc.Password = pass;
             jc.AutoStartTLS = TLS;

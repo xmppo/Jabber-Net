@@ -28,8 +28,6 @@ using jabber.protocol.iq;
 
 namespace Example
 {
-
-
     /// <summary>
     /// Summary description for MainForm.
     /// </summary>
@@ -63,6 +61,7 @@ namespace Example
         private bedrock.util.IdleTime m_idle;
         private PropertyGrid pgServices;
         private Splitter splitter2;
+        private jabber.connection.CapsManager cm;
 
         private bool m_err = false;
 
@@ -87,6 +86,13 @@ namespace Example
 #else
             jc.AutoStartTLS = false;  // Mentalis stopped working with XCP 5
 #endif
+            cm.Version = System.Reflection.Assembly.GetCallingAssembly().GetName().Version.ToString();
+            cm.BaseFeatures.Add(URI.TIME);
+            cm.BaseFeatures.Add(URI.VERSION);
+            cm.BaseFeatures.Add(URI.LAST);
+            cm.BaseFeatures.Add(URI.DISCO_INFO);
+            cm["sag"].Add("http://jabber.com/protocols/SAG");
+
             AppDomain.CurrentDomain.UnhandledException +=new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
         }
 
@@ -140,6 +146,8 @@ namespace Example
             this.pm = new jabber.client.PresenceManager(this.components);
             this.rm = new jabber.client.RosterManager(this.components);
             this.tpServices = new System.Windows.Forms.TabPage();
+            this.pgServices = new System.Windows.Forms.PropertyGrid();
+            this.splitter2 = new System.Windows.Forms.Splitter();
             this.tvServices = new System.Windows.Forms.TreeView();
             this.tpDebug = new System.Windows.Forms.TabPage();
             this.debug = new muzzle.BottomScrollRichText();
@@ -152,8 +160,7 @@ namespace Example
             this.mnuOffline = new System.Windows.Forms.MenuItem();
             this.menuItem2 = new System.Windows.Forms.MenuItem();
             this.dm = new jabber.connection.DiscoManager(this.components);
-            this.splitter2 = new System.Windows.Forms.Splitter();
-            this.pgServices = new System.Windows.Forms.PropertyGrid();
+            this.cm = new jabber.connection.CapsManager(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pnlCon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pnlSSL)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pnlPresence)).BeginInit();
@@ -162,9 +169,9 @@ namespace Example
             this.tpServices.SuspendLayout();
             this.tpDebug.SuspendLayout();
             this.SuspendLayout();
-            //
+            // 
             // sb
-            //
+            // 
             this.sb.Location = new System.Drawing.Point(0, 416);
             this.sb.Name = "sb";
             this.sb.Panels.AddRange(new System.Windows.Forms.StatusBarPanel[] {
@@ -175,27 +182,30 @@ namespace Example
             this.sb.Size = new System.Drawing.Size(632, 22);
             this.sb.TabIndex = 0;
             this.sb.PanelClick += new System.Windows.Forms.StatusBarPanelClickEventHandler(this.sb_PanelClick);
-            //
+            // 
             // pnlCon
-            //
+            // 
             this.pnlCon.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Spring;
+            this.pnlCon.Name = "pnlCon";
             this.pnlCon.Text = "Click on \"Offline\", and select a presence to log in.";
             this.pnlCon.Width = 538;
-            //
+            // 
             // pnlSSL
-            //
+            // 
             this.pnlSSL.Alignment = System.Windows.Forms.HorizontalAlignment.Center;
+            this.pnlSSL.Name = "pnlSSL";
             this.pnlSSL.Width = 30;
-            //
+            // 
             // pnlPresence
-            //
+            // 
             this.pnlPresence.Alignment = System.Windows.Forms.HorizontalAlignment.Right;
             this.pnlPresence.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Contents;
+            this.pnlPresence.Name = "pnlPresence";
             this.pnlPresence.Text = "Offline";
             this.pnlPresence.Width = 47;
-            //
+            // 
             // tabControl1
-            //
+            // 
             this.tabControl1.Controls.Add(this.tpRoster);
             this.tabControl1.Controls.Add(this.tpServices);
             this.tabControl1.Controls.Add(this.tpDebug);
@@ -205,18 +215,18 @@ namespace Example
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(632, 416);
             this.tabControl1.TabIndex = 2;
-            //
+            // 
             // tpRoster
-            //
+            // 
             this.tpRoster.Controls.Add(this.roster);
             this.tpRoster.Location = new System.Drawing.Point(4, 22);
             this.tpRoster.Name = "tpRoster";
             this.tpRoster.Size = new System.Drawing.Size(624, 390);
             this.tpRoster.TabIndex = 1;
             this.tpRoster.Text = "Roster";
-            //
+            // 
             // roster
-            //
+            // 
             this.roster.Client = this.jc;
             this.roster.Dock = System.Windows.Forms.DockStyle.Fill;
             this.roster.ImageIndex = 1;
@@ -231,9 +241,9 @@ namespace Example
             this.roster.Sorted = true;
             this.roster.TabIndex = 0;
             this.roster.DoubleClick += new System.EventHandler(this.roster_DoubleClick);
-            //
+            // 
             // jc
-            //
+            // 
             this.jc.AutoReconnect = 3F;
             this.jc.AutoStartTLS = true;
             this.jc.InvokeControl = this;
@@ -253,18 +263,18 @@ namespace Example
             this.jc.OnRegistered += new jabber.client.IQHandler(this.jc_OnRegistered);
             this.jc.OnIQ += new jabber.client.IQHandler(this.jc_OnIQ);
             this.jc.OnWriteText += new bedrock.TextHandler(this.jc_OnWriteText);
-            //
+            // 
             // pm
-            //
+            // 
             this.pm.Client = this.jc;
-            //
+            // 
             // rm
-            //
+            // 
             this.rm.Client = this.jc;
             this.rm.OnRosterEnd += new bedrock.ObjectHandler(this.rm_OnRosterEnd);
-            //
+            // 
             // tpServices
-            //
+            // 
             this.tpServices.Controls.Add(this.pgServices);
             this.tpServices.Controls.Add(this.splitter2);
             this.tpServices.Controls.Add(this.tvServices);
@@ -273,9 +283,25 @@ namespace Example
             this.tpServices.Size = new System.Drawing.Size(624, 390);
             this.tpServices.TabIndex = 2;
             this.tpServices.Text = "Services";
-            //
+            // 
+            // pgServices
+            // 
+            this.pgServices.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pgServices.Location = new System.Drawing.Point(350, 0);
+            this.pgServices.Name = "pgServices";
+            this.pgServices.Size = new System.Drawing.Size(274, 390);
+            this.pgServices.TabIndex = 2;
+            // 
+            // splitter2
+            // 
+            this.splitter2.Location = new System.Drawing.Point(347, 0);
+            this.splitter2.Name = "splitter2";
+            this.splitter2.Size = new System.Drawing.Size(3, 390);
+            this.splitter2.TabIndex = 1;
+            this.splitter2.TabStop = false;
+            // 
             // tvServices
-            //
+            // 
             this.tvServices.Dock = System.Windows.Forms.DockStyle.Left;
             this.tvServices.Location = new System.Drawing.Point(0, 0);
             this.tvServices.Name = "tvServices";
@@ -286,9 +312,9 @@ namespace Example
             this.tvServices.TabIndex = 0;
             this.tvServices.AfterCollapse += new System.Windows.Forms.TreeViewEventHandler(this.tvServices_AfterCollapse);
             this.tvServices.AfterExpand += new System.Windows.Forms.TreeViewEventHandler(this.tvServices_AfterExpand);
-            //
+            // 
             // tpDebug
-            //
+            // 
             this.tpDebug.Controls.Add(this.debug);
             this.tpDebug.Controls.Add(this.splitter1);
             this.tpDebug.Controls.Add(this.txtDebugInput);
@@ -297,9 +323,9 @@ namespace Example
             this.tpDebug.Size = new System.Drawing.Size(624, 390);
             this.tpDebug.TabIndex = 0;
             this.tpDebug.Text = "Debug";
-            //
+            // 
             // debug
-            //
+            // 
             this.debug.Dock = System.Windows.Forms.DockStyle.Fill;
             this.debug.Location = new System.Drawing.Point(0, 0);
             this.debug.Name = "debug";
@@ -307,18 +333,18 @@ namespace Example
             this.debug.TabIndex = 2;
             this.debug.Text = "";
             this.debug.WordWrap = false;
-            //
+            // 
             // splitter1
-            //
+            // 
             this.splitter1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.splitter1.Location = new System.Drawing.Point(0, 339);
             this.splitter1.Name = "splitter1";
             this.splitter1.Size = new System.Drawing.Size(624, 3);
             this.splitter1.TabIndex = 3;
             this.splitter1.TabStop = false;
-            //
+            // 
             // txtDebugInput
-            //
+            // 
             this.txtDebugInput.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.txtDebugInput.Location = new System.Drawing.Point(0, 342);
             this.txtDebugInput.Multiline = true;
@@ -326,71 +352,61 @@ namespace Example
             this.txtDebugInput.Size = new System.Drawing.Size(624, 48);
             this.txtDebugInput.TabIndex = 4;
             this.txtDebugInput.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtDebugInput_KeyUp);
-            //
+            // 
             // mnuPresence
-            //
+            // 
             this.mnuPresence.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.mnuAvailable,
             this.mnuAway,
             this.menuItem1,
             this.mnuOffline,
             this.menuItem2});
-            //
+            // 
             // mnuAvailable
-            //
+            // 
             this.mnuAvailable.Index = 0;
             this.mnuAvailable.Shortcut = System.Windows.Forms.Shortcut.CtrlO;
             this.mnuAvailable.Text = "&Available";
             this.mnuAvailable.Click += new System.EventHandler(this.mnuAvailable_Click);
-            //
+            // 
             // mnuAway
-            //
+            // 
             this.mnuAway.Index = 1;
             this.mnuAway.Shortcut = System.Windows.Forms.Shortcut.CtrlA;
             this.mnuAway.Text = "A&way";
             this.mnuAway.Click += new System.EventHandler(this.mnuAway_Click);
-            //
+            // 
             // menuItem1
-            //
+            // 
             this.menuItem1.Index = 2;
             this.menuItem1.Text = "-";
-            //
+            // 
             // mnuOffline
-            //
+            // 
             this.mnuOffline.Index = 3;
             this.mnuOffline.Shortcut = System.Windows.Forms.Shortcut.F9;
             this.mnuOffline.Text = "&Offline";
             this.mnuOffline.Click += new System.EventHandler(this.mnuOffline_Click);
-            //
+            // 
             // menuItem2
-            //
+            // 
             this.menuItem2.Index = 4;
             this.menuItem2.Shortcut = System.Windows.Forms.Shortcut.CtrlQ;
             this.menuItem2.Text = "E&xit";
             this.menuItem2.Click += new System.EventHandler(this.menuItem2_Click);
-            //
+            // 
             // dm
-            //
+            // 
             this.dm.Stream = this.jc;
-            //
-            // splitter2
-            //
-            this.splitter2.Location = new System.Drawing.Point(347, 0);
-            this.splitter2.Name = "splitter2";
-            this.splitter2.Size = new System.Drawing.Size(3, 390);
-            this.splitter2.TabIndex = 1;
-            this.splitter2.TabStop = false;
-            //
-            // pgServices
-            //
-            this.pgServices.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pgServices.Location = new System.Drawing.Point(350, 0);
-            this.pgServices.Name = "pgServices";
-            this.pgServices.Size = new System.Drawing.Size(274, 390);
-            this.pgServices.TabIndex = 2;
-            //
+            // 
+            // cm
+            // 
+            this.cm.Node = "http://cursive.net/clients/csharp-example";
+            this.cm.Stream = this.jc;
+            this.cm.Version = null;
+            // 
             // MainForm
-            //
+            // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.ClientSize = new System.Drawing.Size(632, 438);
             this.ContextMenu = this.mnuPresence;
@@ -461,7 +477,6 @@ namespace Example
             debug.AppendText(txt);
             debug.AppendMaybeScroll("\r\n");
         }
-
 
         private void jc_OnAuthenticate(object sender)
         {
@@ -641,25 +656,11 @@ namespace Example
                 return;
             }
 
-            jabber.protocol.iq.DiscoInfo info = iq.Query as jabber.protocol.iq.DiscoInfo;
-            if (info != null)
-            {
-                iq.Swap();
-                iq.Type = IQType.result;
-                info.AddIdentity("client", "pc", "Jabber-Net Example");
-                info.AddFeature(URI.VERSION);
-                info.AddFeature(URI.TIME);
-                info.AddFeature(URI.LAST);
-                info.AddFeature(URI.DISCO_INFO);
-                jc.Write(iq);
+            if (cm.IsCaps(iq))
                 return;
-            }
-
+            
             // else
-            iq.Swap();
-            iq.Type = IQType.error;
-            iq.Error.Code = ErrorCode.NOT_IMPLEMENTED;
-            jc.Write(iq);
+            jc.Write(iq.GetErrorResponse(jc.Document, Error.FEATURE_NOT_IMPLEMENTED));
         }
 
         private void roster_DoubleClick(object sender, System.EventArgs e)

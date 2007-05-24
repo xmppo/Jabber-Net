@@ -7,7 +7,7 @@ using bedrock.util;
 namespace jabber.protocol.x
 {
     /// <summary>
-    /// Entity Capabilities.  <see cref="http://www.xmpp.org/extensions/xep-0115.html"/>
+    /// Entity Capabilities.  See http://www.xmpp.org/extensions/xep-0115.html.
     /// </summary>
     [SVN(@"$Id$")]
     public class Caps : Element
@@ -58,7 +58,36 @@ namespace jabber.protocol.x
         public string[] Extensions
         {
             get { return GetAttribute("ext").Split(SPLIT, StringSplitOptions.RemoveEmptyEntries); }
-            set { SetAttribute("ext", string.Join(" ", value)); }
+            set 
+            {
+                if (value.Length == 0)
+                {
+                    if (this.HasAttribute("ext"))
+                        RemoveAttribute("ext");
+                }
+                else
+                    SetAttribute("ext", string.Join(" ", value)); 
+            }
+        }
+
+        /// <summary>
+        /// All of the combinations of node#ver, node#ext.
+        /// </summary>
+        public string[] DiscoInfoNodes
+        {
+            get
+            {
+                string[] exts = Extensions;
+                string[] nodes = new string[exts.Length + 1];
+                int count = 0;
+                nodes[count] = Node + "#" + Version;
+                foreach (string ext in exts)
+                {
+                    nodes[++count] = Node + "#" + ext;
+                }
+
+                return nodes;
+            }
         }
     }
 }
