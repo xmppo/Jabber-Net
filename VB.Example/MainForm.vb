@@ -387,10 +387,7 @@ Public Class MainForm
             ver.Ver = Application.ProductVersion
             jc.Write(iq)
         Else
-            iq.Swap()
-            iq.Type = jabber.protocol.client.IQType.error
-            iq.Error.Code = jabber.protocol.client.ErrorCode.NOT_IMPLEMENTED
-            jc.Write(iq)
+            jc.Write(iq.GetErrorResponse(jc.Document, jabber.protocol.client.Error.FEATURE_NOT_IMPLEMENTED))
         End If
     End Sub
 
