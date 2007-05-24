@@ -91,7 +91,6 @@ namespace Example
             cm.BaseFeatures.Add(URI.VERSION);
             cm.BaseFeatures.Add(URI.LAST);
             cm.BaseFeatures.Add(URI.DISCO_INFO);
-            cm["sag"].Add("http://jabber.com/protocols/SAG");
 
             AppDomain.CurrentDomain.UnhandledException +=new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
         }
