@@ -1,5 +1,5 @@
 bin 
 obj 
-VB.Example.vbproj.user 
+*.vbproj.user 
 bin5
 obj5
