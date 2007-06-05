@@ -416,6 +416,9 @@
     <EmbeddedResource Include="jabber\connection\DiscoManager.bmp" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="jabber\connection\CapsManager.bmp" />
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="jabber\protocol\httpbind\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
