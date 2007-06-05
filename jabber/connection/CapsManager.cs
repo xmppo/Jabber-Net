@@ -30,8 +30,8 @@ namespace jabber.connection
 		/// </summary>
 		private System.ComponentModel.IContainer components = null;
 
-        private string m_node;
-        private string m_version;
+        private string m_node = null;
+        private string m_version = null;
         private FeatureSet m_base = new FeatureSet();
         
         private jabber.connection.XmppStream m_stream = null;
@@ -73,6 +73,7 @@ namespace jabber.connection
         /// <summary>
         /// The base features of this client, associated with Node#Version.
         /// </summary>
+        [Category("Capabilities")]
         public FeatureSet BaseFeatures
         {
             get { return m_base; }
@@ -103,6 +104,8 @@ namespace jabber.connection
         /// <summary>
         /// Node URI for this client.
         /// </summary>
+        [Category("Capabilities")]
+        [DefaultValue(null)]
         public string Node
         {
             get { return m_node; }
@@ -112,6 +115,8 @@ namespace jabber.connection
         /// <summary>
         /// Current version number for this client.
         /// </summary>
+        [Category("Capabilities")]
+        [DefaultValue(null)]
         public string Version
         {
             get { return m_version; }
@@ -121,6 +126,7 @@ namespace jabber.connection
         /// <summary>
         /// The list of extensions that are currently turned on.
         /// </summary>
+        [Category("Capabilities")]
         public string[] Extensions
         {
             get 
@@ -205,7 +211,7 @@ namespace jabber.connection
             return false;
         }
 
-        void jc_OnIQ(object sender, IQ iq)
+        private void jc_OnIQ(object sender, IQ iq)
         {
             if (!IsCaps(iq))
                 return;
@@ -264,7 +270,7 @@ namespace jabber.connection
             }
         }
 
-        void jc_OnBeforePresenceOut(object sender, Presence pres)
+        private void jc_OnBeforePresenceOut(object sender, Presence pres)
         {
             Debug.Assert(m_node != null, "Node is required");
             Debug.Assert(m_version != null, "Version is required");
