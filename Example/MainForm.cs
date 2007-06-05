@@ -622,44 +622,39 @@ namespace Example
             if (iq.Type != IQType.get)
                 return;
 
+            XmlElement query = iq.Query;
+            if (query == null)
+                return;
+
             // <iq id="jcl_8" to="me" from="you" type="get"><query xmlns="jabber:iq:version"/></iq>
-            jabber.protocol.iq.Version ver = iq.Query as jabber.protocol.iq.Version;
-            if (ver != null)
+            if (query is jabber.protocol.iq.Version)
             {
-                iq.Swap();
-                iq.Type = IQType.result;
+                iq = iq.GetResponse(jc.Document);
+                jabber.protocol.iq.Version ver = iq.Query as jabber.protocol.iq.Version;
                 ver.OS = Environment.OSVersion.ToString();
                 ver.EntityName = Application.ProductName;
                 ver.Ver = Application.ProductVersion;
                 jc.Write(iq);
                 return;
             }
-
-            jabber.protocol.iq.Time tim = iq.Query as jabber.protocol.iq.Time;
-            if (tim != null)
+            
+            if (query is jabber.protocol.iq.Time)
             {
-                iq.Swap();
-                iq.Type = IQType.result;
+                iq = iq.GetResponse(jc.Document);
+                jabber.protocol.iq.Time tim = iq.Query as jabber.protocol.iq.Time;
                 tim.SetCurrentTime();
                 jc.Write(iq);
                 return;
             }
-
-            jabber.protocol.iq.Last last = iq.Query as jabber.protocol.iq.Last;
-            if (last != null)
+            
+            if (query is jabber.protocol.iq.Last)
             {
-                iq.Swap();
-                iq.Type = IQType.result;
+                iq = iq.GetResponse(jc.Document);
+                jabber.protocol.iq.Last last = iq.Query as jabber.protocol.iq.Last;
                 last.Seconds = (int)bedrock.util.IdleTime.GetIdleTime();
                 jc.Write(iq);
                 return;
             }
-
-            if (cm.IsCaps(iq))
-                return;
-            
-            // else
-            jc.Write(iq.GetErrorResponse(jc.Document, Error.FEATURE_NOT_IMPLEMENTED));
         }
 
         private void roster_DoubleClick(object sender, System.EventArgs e)

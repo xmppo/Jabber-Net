@@ -124,6 +124,10 @@ namespace jabber.connection
         /// </summary>
         public const string AUTO_ROSTER   = "auto.roster";
         /// <summary>
+        /// Automatically send back 501/feature-not-implemented to IQs that have not been handled.
+        /// </summary>
+        public const string AUTO_IQ_ERRORS   = "auto.iq_errors";
+        /// <summary>
         /// Automatically send presence.
         /// </summary>
         public const string AUTO_PRESENCE = "auto.presence";

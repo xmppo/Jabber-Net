@@ -91,7 +91,7 @@ namespace jabber.protocol
         /// <summary>
         /// Swap the To and the From addresses.
         /// </summary>
-        public void Swap()
+        public virtual void Swap()
         {
             string tmp = this.GetAttribute("to");
             this.SetAttribute("to", this.GetAttribute("from"));

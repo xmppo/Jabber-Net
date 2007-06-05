@@ -176,7 +176,11 @@ namespace jabber.connection
             }
         }
 
-
+        /// <summary>
+        /// Is this a capabilities request?
+        /// </summary>
+        /// <param name="iq"></param>
+        /// <returns></returns>
         public bool IsCaps(IQ iq)
         {
             if (iq.Type != IQType.get)

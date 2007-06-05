@@ -55,6 +55,7 @@ namespace jabber.client
             new object[] {Options.PRIORITY, 0},
             new object[] {Options.AUTO_LOGIN, true},
             new object[] {Options.AUTO_ROSTER, true},
+            new object[] {Options.AUTO_IQ_ERRORS, true},
             new object[] {Options.AUTO_PRESENCE, true},
             new object[] {Options.PROXY_PORT, 1080},
         };
@@ -228,6 +229,18 @@ namespace jabber.client
         {
             get { return (bool)this[Options.AUTO_ROSTER]; }
             set { this[Options.AUTO_ROSTER] = value; }
+        }
+
+        /// <summary>
+        /// Automatically send back 501/feature-not-implemented to IQs that have not been handled.
+        /// </summary>
+        [Description("Automatically send back 501/feature-not-implemented to IQs that have not been handled.")]
+        [DefaultValue(true)]
+        [Category("Automation")]
+        public bool AutoIQErrors
+        {
+            get { return (bool)this[Options.AUTO_IQ_ERRORS]; }
+            set { this[Options.AUTO_IQ_ERRORS] = value; }
         }
 
         /// <summary>
@@ -627,16 +640,30 @@ namespace jabber.client
                     return;
                 }
             }
-            if (OnIQ != null)
+
+            IQ i = tag as IQ;
+            if (i != null)
             {
-                IQ i = tag as IQ;
-                if (i != null)
+                if (InvokeRequired)
+                    CheckedInvoke(new IQHandler(FireOnIQ) , new object[] { this, i });
+                else
+                    FireOnIQ(this, i);
+                return;
+            }
+        }
+
+        private void FireOnIQ(object sender, IQ iq)
+        {
+            // We know we're on the GUI thread.
+            if (OnIQ != null)
+                OnIQ(this, iq);
+
+            if (AutoIQErrors)
+            {
+                if (!iq.Handled && 
+                ((iq.Type == IQType.get) || (iq.Type == IQType.set)))
                 {
-                    if (InvokeRequired)
-                        CheckedInvoke(OnIQ, new object[] {this, i});
-                    else
-                        OnIQ(this, i);
-                    return;
+                    Write(iq.GetErrorResponse(this.Document, Error.FEATURE_NOT_IMPLEMENTED));
                 }
             }
         }

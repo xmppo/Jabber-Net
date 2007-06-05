@@ -51,6 +51,8 @@ namespace jabber.protocol.client
     [SVN(@"$Id$")]
     public class IQ : Packet
     {
+        private bool m_handled = false;
+
         /// <summary>
         ///
         /// </summary>
@@ -69,6 +71,16 @@ namespace jabber.protocol.client
         public IQ(string prefix, XmlQualifiedName qname, XmlDocument doc) :
             base(qname.Name, doc) // Note:  *NOT* base(prefix, qname, doc), so that xpath matches are easier
         {
+        }
+
+        /// <summary>
+        /// Has this IQ been handled?  Set automatically by GetResponse and GetErrorResponse.  If this is not
+        /// set to true, Jabber-Net will respond automatically with a 501 error.
+        /// </summary>
+        public bool Handled
+        {
+            get { return m_handled; }
+            set { m_handled = value; }
         }
 
         /// <summary>
@@ -116,6 +128,16 @@ namespace jabber.protocol.client
         }
 
         /// <summary>
+        /// Swap the To and the From addresses.
+        /// Obsolete: Use GetResponse or GetErrorResponse, now, for IQs.
+        /// </summary>
+        [Obsolete("Use GetResponse or GetErrorResponse, now.")]
+        public override void Swap()
+        {
+            base.Swap();
+        }
+
+        /// <summary>
         /// Swap the to and from, set the type to result.
         /// </summary>
         /// <param name="doc"></param>
@@ -137,6 +159,7 @@ namespace jabber.protocol.client
                     resp.AppendChild(doc.ImportNode(q, true));
             }
 
+            this.Handled = true;
             return resp;
         }
 
@@ -163,6 +186,7 @@ namespace jabber.protocol.client
                     resp.AppendChild(doc.ImportNode(q, true));
             }
 
+            this.Handled = true;
             return resp;
         }
     }

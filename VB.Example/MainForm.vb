@@ -378,16 +378,18 @@ Public Class MainForm
     Private Sub jc_OnIQ(ByVal sender As Object, ByVal iq As jabber.protocol.client.IQ) Handles jc.OnIQ
         If iq.Type <> jabber.protocol.client.IQType.get Then Return
 
-        If TypeOf iq.Query Is Version Then
+        Dim query As XmlElement = iq.Query
+        If (query Is Nothing) Then
+            Return
+        End If
+
+        If TypeOf query Is Version Then
+            iq = iq.GetResponse(jc.Document)
             Dim ver As jabber.protocol.iq.Version = DirectCast(iq.Query, jabber.protocol.iq.Version)
-            iq.Swap()
-            iq.Type = jabber.protocol.client.IQType.result
             ver.OS = Environment.OSVersion.ToString()
             ver.EntityName = Application.ProductName
             ver.Ver = Application.ProductVersion
             jc.Write(iq)
-        Else
-            jc.Write(iq.GetErrorResponse(jc.Document, jabber.protocol.client.Error.FEATURE_NOT_IMPLEMENTED))
         End If
     End Sub
 
