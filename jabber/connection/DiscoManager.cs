@@ -377,6 +377,11 @@ namespace jabber.connection
                     Identity.Add(i);
                 }
             }
+            if (OnIdentities != null)
+            {
+                OnIdentities(this);
+                OnIdentities = null;
+            }
         }
 
         internal DiscoNode AddItem(DiscoItem di)
