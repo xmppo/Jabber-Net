@@ -179,12 +179,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "bedrock\net\JEP124Socket.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "bedrock\net\JEP25Socket.cs"
+                    RelPath = "bedrock\net\Exceptions.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -215,6 +210,16 @@
                 />
                 <File
                     RelPath = "bedrock\net\Socks5Proxy.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "bedrock\net\XEP124Socket.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "bedrock\net\XEP25Socket.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -279,6 +284,11 @@
                     RelPath = "jabber\client\RosterManager.resx"
                     DependentUpon = "RosterManager.cs"
                     BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "jabber\connection\CapsManager.cs"
+                    SubType = "Component"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "jabber\connection\DiscoManager.bmp"
@@ -547,6 +557,11 @@
                 />
                 <File
                     RelPath = "jabber\protocol\stream\Stream.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "jabber\protocol\x\Caps.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

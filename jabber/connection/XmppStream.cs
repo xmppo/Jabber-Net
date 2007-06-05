@@ -31,7 +31,6 @@ using jabber.connection.sasl;
 #if NET20 || __MonoCS__
 using System.Security.Cryptography.X509Certificates;
 #elif !NO_SSL
-using System.IO;
 using Org.Mentalis.Security.Certificates;
 #endif
 

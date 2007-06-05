@@ -169,7 +169,7 @@ namespace test.jabber.client1 // TODO: Client1 due to a bug in NUnit.
 
             Presence[] pa = pp.GetAll(bare);
             Assert.AreEqual(2, pa.Length);
-            Assert.IsInstanceOfType(typeof(Presence), pa[0]);
+            Assert.AreEqual(pa[0].GetType(), typeof(Presence));
         }
 
         [Test]

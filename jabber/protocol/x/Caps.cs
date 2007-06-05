@@ -57,7 +57,7 @@ namespace jabber.protocol.x
         /// </summary>
         public string[] Extensions
         {
-            get { return GetAttribute("ext").Split(SPLIT, StringSplitOptions.RemoveEmptyEntries); }
+            get { return GetAttribute("ext").Split(SPLIT); }
             set 
             {
                 if (value.Length == 0)

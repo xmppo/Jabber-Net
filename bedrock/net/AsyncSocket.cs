@@ -234,6 +234,17 @@ namespace bedrock.net
         private MemoryStream         m_pending        = new MemoryStream();
         private bool                 m_writing        = false;
 #elif !NO_SSL
+		/// <summary>
+		/// Are untrusted root certificates OK when connecting using
+		/// SSL?  Setting this to true is insecure, but it's unlikely
+		/// that you trust jabbber.org or jabber.com's relatively
+		/// bogus certificate roots.
+		///
+		/// Setting this modifies AllowedSSLErrors by side-effect.
+		/// </summary>
+		[DefaultValue(false)]
+		public static bool UntrustedRootOK = false;
+
         /// <summary>
         /// The types of SSL to support.  SSL3 and TLS1 by default.
         /// That should be good enough for most apps, and was

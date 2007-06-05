@@ -185,21 +185,18 @@ namespace Example
             // pnlCon
             // 
             this.pnlCon.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Spring;
-            this.pnlCon.Name = "pnlCon";
             this.pnlCon.Text = "Click on \"Offline\", and select a presence to log in.";
             this.pnlCon.Width = 538;
             // 
             // pnlSSL
             // 
             this.pnlSSL.Alignment = System.Windows.Forms.HorizontalAlignment.Center;
-            this.pnlSSL.Name = "pnlSSL";
             this.pnlSSL.Width = 30;
             // 
             // pnlPresence
             // 
             this.pnlPresence.Alignment = System.Windows.Forms.HorizontalAlignment.Right;
             this.pnlPresence.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Contents;
-            this.pnlPresence.Name = "pnlPresence";
             this.pnlPresence.Text = "Offline";
             this.pnlPresence.Width = 47;
             // 

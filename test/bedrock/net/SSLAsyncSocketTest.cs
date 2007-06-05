@@ -19,6 +19,7 @@ using bedrock.net;
 using bedrock.util;
 #if NET20
 using System.Security.Cryptography.X509Certificates;
+using System.Security.Permissions;
 #endif
 
 namespace test.bedrock.net
@@ -82,9 +83,36 @@ namespace test.bedrock.net
         private void Server()
         {
             SocketWatcher s_w = new SocketWatcher(20);
-            s_w.SetCertificateFile("../../localhost.pfx", "test");
+
+            //s_w.RequireClientCert = true;
+
 #if NET20
-            s_w.RequireClientCert = true;
+            X509Certificate2 c2;
+            X509Store store = new X509Store(StoreName.My, StoreLocation.LocalMachine);
+            store.Open(OpenFlags.ReadWrite);
+            X509CertificateCollection cert = store.Certificates.Find(X509FindType.FindBySubjectName, "localhost", true);
+            if (cert.Count == 0)
+            {
+                c2 = new X509Certificate2("../../localhost-cert.p12", "test");
+                store.Add(c2);
+            }
+            else
+            {
+                c2 = (X509Certificate2) cert[0];
+            }
+            Assert.IsTrue(c2.HasPrivateKey);
+            Assert.IsNotNull(c2.PrivateKey);
+            Assert.IsInstanceOfType(typeof(X509Certificate2), c2);
+
+            cert = store.Certificates.Find(X509FindType.FindByThumbprint, c2.GetCertHashString(), false);
+            c2 = (X509Certificate2) cert[0];
+            Assert.IsInstanceOfType(typeof(X509Certificate2), c2);
+            Assert.IsTrue(c2.HasPrivateKey);
+            Assert.IsNotNull(c2.PrivateKey);
+            store.Close();
+            s_w.LocalCertificate = c2;
+#else
+            s_w.SetCertificateFile("../../localhost-cert.p12", "test");
 #endif
             s_w.Synchronous = true;
             m_listen = s_w.CreateListenSocket(this, a, true);
