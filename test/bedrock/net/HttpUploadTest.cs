@@ -27,7 +27,7 @@ namespace test.bedrock.net
     [TestFixture]
     public class HttpUploadTest
     {
-        private object m_lock;
+        private object m_lock = new object();
 
         private void uploader_OnUpload(object sender)
         {
