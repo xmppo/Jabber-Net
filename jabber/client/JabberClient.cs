@@ -58,6 +58,7 @@ namespace jabber.client
             new object[] {Options.AUTO_IQ_ERRORS, true},
             new object[] {Options.AUTO_PRESENCE, true},
             new object[] {Options.PROXY_PORT, 1080},
+            new object[] {Options.SRV_PREFIX, "_xmpp-client._tcp."},
         };
 
         private void init()

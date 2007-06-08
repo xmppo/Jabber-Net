@@ -419,6 +419,12 @@
     <EmbeddedResource Include="jabber\connection\CapsManager.bmp" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="Wrappers\2005-Wrappers.vcproj">
+      <Project>{CA8F79B3-1B71-4B1A-B9D6-2F0CEE674EC6}</Project>
+      <Name>2005-Wrappers</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="jabber\protocol\httpbind\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

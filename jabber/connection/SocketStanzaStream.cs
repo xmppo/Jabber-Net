@@ -19,6 +19,7 @@ using System.Xml;
 using bedrock.net;
 using bedrock.util;
 using jabber.protocol;
+using Wrappers;
 
 namespace jabber.connection
 {
@@ -121,6 +122,59 @@ namespace jabber.connection
 
         }
 
+#if NET20
+        private static SRVRecord PickSRV(SRVRecord[] srv)
+        {
+            if ((srv == null) || (srv.Length == 0))
+                return null;
+            if (srv.Length == 1)
+                return srv[0];
+
+            // randomize order.  One might wish that the OS would have done this for us.
+            // cf. Bob Schriter's Grandfather.
+            Random rnd = new Random();
+            byte[] keys = new byte[srv.Length];
+            rnd.NextBytes(keys);
+            Array.Sort(keys, srv);  // Permute me, Knuth!  (I wish I had a good anagram for that)
+
+            int minpri = int.MaxValue;
+            foreach (SRVRecord rec in srv)
+            {
+                if (rec.Priority < minpri)
+                {
+                    minpri = rec.Priority;
+                }
+            }
+
+            int weight = 0;
+            foreach (SRVRecord rec in srv)
+            {
+                if (rec.Priority == minpri)
+                {
+                    weight += rec.Weight;
+                }
+            }
+
+            int pos = rnd.Next(weight);
+            weight = 0;
+            foreach (SRVRecord rec in srv)
+            {
+                if (rec.Priority == minpri)
+                {
+                    weight += rec.Weight;
+                    if ((pos < weight) || (weight == 0))
+                    {
+                        return rec;
+                    }
+                }
+            }
+            // Shouldn't be able to get here, I hope.
+            Debug.Assert(false);
+            return null;
+        }
+        
+#endif
+
         /// <summary>
         /// Connect the socket, outbound.
         /// </summary>
@@ -193,13 +247,31 @@ namespace jabber.connection
                 m_sock = proxy;
             }
 
-            // TODO: SRV lookup
             string to = (string)m_listener[Options.TO];
             Debug.Assert(to != null);
 
             string host = (string)m_listener[Options.NETWORK_HOST];
             if ((host == null) || (host == ""))
+            {
+#if NET20
+                // Hang on!  We're going for an SRV ride.
+                // See: http://en.wikipedia.org/wiki/SRV_Records
+                SRVRecord[] srv = Wrappers.DNS.SRVLookup(m_listener[Options.SRV_PREFIX] + to);
+                SRVRecord rec = PickSRV(srv);
+                if (rec == null)
+                {
+                    host = to;
+                }
+                else
+                {
+                    host = rec.Target;
+                    port = rec.Port;
+                }
+                Debug.Assert(host != null);
+#else
                 host = to;
+#endif
+            }
 
             Address addr = new Address(host, port);
             m_sock.Connect(addr, (string)m_listener[Options.SERVER_ID]);

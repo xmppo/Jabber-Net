@@ -113,7 +113,10 @@ namespace jabber.connection
         /// Default priority for presence.
         /// </summary>
         public const string PRIORITY = "priority";
-
+        /// <summary>
+        /// DNS Service/Protocol to prepend to domain.  Example: _xmpp-client._tcp.
+        /// </summary>
+        public const string SRV_PREFIX = "srv.prefix";
         /// <summary>
         /// Automatically login.
         /// </summary>
