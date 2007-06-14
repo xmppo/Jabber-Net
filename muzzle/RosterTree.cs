@@ -232,6 +232,19 @@ namespace muzzle
             }
         }
 
+        /// <summary>
+        /// The group names for the roster
+        /// </summary>
+        public string[] Groups
+        {
+            get
+            {
+                string[] g = new string[m_groups.Count];
+                m_groups.Keys.CopyTo(g, 0);
+                return g;
+            }
+        }
+
         private void m_roster_OnRosterBegin(object sender)
         {
             this.BeginUpdate();

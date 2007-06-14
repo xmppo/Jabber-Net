@@ -259,7 +259,13 @@ namespace bedrock.collections
         {
             get
             {
-                throw new NotImplementedException();
+                object[] keys = new object[m_count];
+                int count = 0;
+                foreach (DictionaryEntry e in this)
+                {
+                    keys[count++] = e.Key;
+                }
+                return keys;
             }
         }
 

@@ -443,6 +443,62 @@ namespace jabber.client
             }
         }
 
+
+        /// <summary>
+        /// Send a presence subscription request and update the roster for a new roster contact.
+        /// </summary>
+        /// <param name="to">The JID of the contact (required)</param>
+        /// <param name="nickname">The nickname to show for the user.</param>
+        /// <param name="groups">A list of groups to put the contact in.  May be null.  Hint: new string[] {"foo", "bar"}</param>
+        public void Subscribe(JID to, string nickname, string[] groups)
+        {
+            Debug.Assert(to != null);
+
+            RosterIQ riq = new RosterIQ(Document);
+            riq.Type = IQType.set;
+            Roster r = (Roster)riq.Query;
+            Item i = r.AddItem();
+            i.JID = to;
+            if (nickname != null)
+                i.Nickname = nickname;
+            if (groups != null)
+            {
+                foreach (string g in groups)
+                    i.AddGroup(g);
+            }
+            Write(riq); // don't care about result.  we should get a iq/response and a roster push.
+
+            Presence pres = new Presence(Document);
+            pres.To = to;
+            pres.Type = PresenceType.subscribe;
+            Write(pres);
+        }
+
+        /// <summary>
+        /// Remove an item from the roster.  
+        /// This will have the side-effect of bi-directionally unsubscribing to/from the user.
+        /// </summary>
+        /// <param name="to">The JID to remove</param>
+        public void RemoveRosterItem(JID to)
+        {
+            Debug.Assert(to != null);
+
+/*
+<iq from='juliet@example.com/balcony' type='set' id='roster_4'>
+  <query xmlns='jabber:iq:roster'>
+    <item jid='nurse@example.com' subscription='remove'/>
+  </query>
+</iq>
+ */
+            RosterIQ riq = new RosterIQ(Document);
+            riq.Type = IQType.set;
+            Roster r = (Roster)riq.Query;
+            Item i = r.AddItem();
+            i.JID = to;
+            i.Subscription = Subscription.remove;
+            Write(riq); // don't care about result.  we should get a iq/response and a roster push.
+        }
+
         /// <summary>
         /// Request a list of agents from the server
         /// </summary>
@@ -662,7 +718,8 @@ namespace jabber.client
             if (AutoIQErrors)
             {
                 if (!iq.Handled && 
-                ((iq.Type == IQType.get) || (iq.Type == IQType.set)))
+                    iq.HasAttribute("from") &&   // Belt.  Suspenders.  Don't respond to roster pushes.
+                    ((iq.Type == IQType.get) || (iq.Type == IQType.set)))
                 {
                     Write(iq.GetErrorResponse(this.Document, Error.FEATURE_NOT_IMPLEMENTED));
                 }

@@ -175,6 +175,7 @@ namespace jabber.client
                 ((iq.Type != IQType.result) && (iq.Type != IQType.set)))
                 return;
 
+            iq.Handled = true;
             Roster r = (Roster) iq.Query;
             if ((iq.Type == IQType.result) && (OnRosterBegin != null))
                 OnRosterBegin(this);

@@ -62,6 +62,9 @@ namespace Example
         private PropertyGrid pgServices;
         private Splitter splitter2;
         private jabber.connection.CapsManager cm;
+        private MenuItem menuItem4;
+        private MenuItem menuItem3;
+        private MenuItem menuItem5;
 
         private bool m_err = false;
 
@@ -155,11 +158,14 @@ namespace Example
             this.mnuPresence = new System.Windows.Forms.ContextMenu();
             this.mnuAvailable = new System.Windows.Forms.MenuItem();
             this.mnuAway = new System.Windows.Forms.MenuItem();
+            this.menuItem4 = new System.Windows.Forms.MenuItem();
+            this.menuItem3 = new System.Windows.Forms.MenuItem();
             this.menuItem1 = new System.Windows.Forms.MenuItem();
             this.mnuOffline = new System.Windows.Forms.MenuItem();
             this.menuItem2 = new System.Windows.Forms.MenuItem();
             this.dm = new jabber.connection.DiscoManager(this.components);
             this.cm = new jabber.connection.CapsManager(this.components);
+            this.menuItem5 = new System.Windows.Forms.MenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pnlCon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pnlSSL)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pnlPresence)).BeginInit();
@@ -185,18 +191,21 @@ namespace Example
             // pnlCon
             // 
             this.pnlCon.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Spring;
+            this.pnlCon.Name = "pnlCon";
             this.pnlCon.Text = "Click on \"Offline\", and select a presence to log in.";
             this.pnlCon.Width = 538;
             // 
             // pnlSSL
             // 
             this.pnlSSL.Alignment = System.Windows.Forms.HorizontalAlignment.Center;
+            this.pnlSSL.Name = "pnlSSL";
             this.pnlSSL.Width = 30;
             // 
             // pnlPresence
             // 
             this.pnlPresence.Alignment = System.Windows.Forms.HorizontalAlignment.Right;
             this.pnlPresence.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Contents;
+            this.pnlPresence.Name = "pnlPresence";
             this.pnlPresence.Text = "Offline";
             this.pnlPresence.Width = 47;
             // 
@@ -354,6 +363,9 @@ namespace Example
             this.mnuPresence.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.mnuAvailable,
             this.mnuAway,
+            this.menuItem4,
+            this.menuItem3,
+            this.menuItem5,
             this.menuItem1,
             this.mnuOffline,
             this.menuItem2});
@@ -372,21 +384,33 @@ namespace Example
             this.mnuAway.Text = "A&way";
             this.mnuAway.Click += new System.EventHandler(this.mnuAway_Click);
             // 
+            // menuItem4
+            // 
+            this.menuItem4.Index = 2;
+            this.menuItem4.Text = "-";
+            // 
+            // menuItem3
+            // 
+            this.menuItem3.Index = 3;
+            this.menuItem3.Shortcut = System.Windows.Forms.Shortcut.Ins;
+            this.menuItem3.Text = "Add &Contact";
+            this.menuItem3.Click += new System.EventHandler(this.menuItem3_Click);
+            // 
             // menuItem1
             // 
-            this.menuItem1.Index = 2;
+            this.menuItem1.Index = 5;
             this.menuItem1.Text = "-";
             // 
             // mnuOffline
             // 
-            this.mnuOffline.Index = 3;
+            this.mnuOffline.Index = 6;
             this.mnuOffline.Shortcut = System.Windows.Forms.Shortcut.F9;
             this.mnuOffline.Text = "&Offline";
             this.mnuOffline.Click += new System.EventHandler(this.mnuOffline_Click);
             // 
             // menuItem2
             // 
-            this.menuItem2.Index = 4;
+            this.menuItem2.Index = 7;
             this.menuItem2.Shortcut = System.Windows.Forms.Shortcut.CtrlQ;
             this.menuItem2.Text = "E&xit";
             this.menuItem2.Click += new System.EventHandler(this.menuItem2_Click);
@@ -399,7 +423,13 @@ namespace Example
             // 
             this.cm.Node = "http://cursive.net/clients/csharp-example";
             this.cm.Stream = this.jc;
-            this.cm.Version = null;
+            // 
+            // menuItem5
+            // 
+            this.menuItem5.Index = 4;
+            this.menuItem5.Shortcut = System.Windows.Forms.Shortcut.Del;
+            this.menuItem5.Text = "&Remove Contact";
+            this.menuItem5.Click += new System.EventHandler(this.menuItem5_Click);
             // 
             // MainForm
             // 
@@ -763,6 +793,25 @@ namespace Example
             this.Close();
         }
 
+        private void menuItem3_Click(object sender, EventArgs e)
+        {
+            AddContact ac = new AddContact();
+            ac.AllGroups = roster.Groups;
+            if (ac.ShowDialog() != DialogResult.OK)
+                return;
+
+            jc.Subscribe(ac.JID, ac.Nickname, ac.SelectedGroups);
+        }
+
+        private void menuItem5_Click(object sender, EventArgs e)
+        {
+            muzzle.RosterTree.ItemNode n = roster.SelectedNode as muzzle.RosterTree.ItemNode;
+            if (n == null)
+                return;
+            jc.RemoveRosterItem(n.JID);
+       }
+
+
 #if NET20
         void tvServices_NodeMouseDoubleClick(object sender,
                                              TreeNodeMouseClickEventArgs e)
@@ -777,6 +826,8 @@ namespace Example
             jabber.connection.DiscoNode dn = (jabber.connection.DiscoNode)e.Node.Tag;
             dm.BeginGetFeatures(dn, new jabber.connection.DiscoNodeHandler(GotInfo));
         }
+
+
 #endif
     }
 }
