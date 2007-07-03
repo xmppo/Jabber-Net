@@ -19,7 +19,10 @@ using System.Xml;
 using bedrock.net;
 using bedrock.util;
 using jabber.protocol;
+
+#if NET20 && !NO_SRV
 using Wrappers;
+#endif
 
 namespace jabber.connection
 {
@@ -122,7 +125,7 @@ namespace jabber.connection
 
         }
 
-#if NET20
+#if NET20 && !NO_SRV
         private static SRVRecord PickSRV(SRVRecord[] srv)
         {
             if ((srv == null) || (srv.Length == 0))
@@ -253,7 +256,7 @@ namespace jabber.connection
             string host = (string)m_listener[Options.NETWORK_HOST];
             if ((host == null) || (host == ""))
             {
-#if NET20
+#if NET20 && !NO_SRV
                 // Hang on!  We're going for an SRV ride.
                 // See: http://en.wikipedia.org/wiki/SRV_Records
                 SRVRecord[] srv = Wrappers.DNS.SRVLookup(m_listener[Options.SRV_PREFIX] + to);

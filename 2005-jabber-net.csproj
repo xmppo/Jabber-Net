@@ -37,7 +37,7 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>TRACE;DEBUG;NET20</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET20 NO_SRV</DefineConstants>
     <DocumentationFile>2005-jabber-net.xml</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
@@ -417,12 +417,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="jabber\connection\CapsManager.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="Wrappers\2005-Wrappers.vcproj">
-      <Project>{CA8F79B3-1B71-4B1A-B9D6-2F0CEE674EC6}</Project>
-      <Name>2005-Wrappers</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="jabber\protocol\httpbind\" />
