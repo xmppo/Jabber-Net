@@ -951,7 +951,7 @@ namespace bedrock.net
             if (sslPolicyErrors == SslPolicyErrors.None)
                 return true;
 
-            if ((sslPolicyErrors - AllowedSSLErrors) == (int)SslPolicyErrors.None)
+            if ((sslPolicyErrors & (sslPolicyErrors ^ AllowedSSLErrors)) == SslPolicyErrors.None)
             {
                 // Huh.  Maybe there should be a listener method for this.
                 return true;
