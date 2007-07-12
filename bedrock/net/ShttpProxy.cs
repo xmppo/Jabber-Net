@@ -87,7 +87,9 @@ namespace bedrock.net
                     m_state = States.Running;
                     string reply = Encoding.ASCII.GetString(buf, offset, length);
                     Debug.WriteLine("PRECV: " + reply);
-                    if (reply.StartsWith("HTTP/1.0 200 "))
+
+                    // TODO: Quick hack.  Replace with a regex or something.
+                    if (reply.Contains("200"))
                     {
                         m_listener.OnConnect(sock); // tell the real listener that we're connected.
                     }
