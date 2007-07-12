@@ -124,14 +124,17 @@ Host: {0}
                     case 3:
                         if (b == '\n')
                         {
+                            Debug.WriteLine("End of proxy headers");
                             string line0 = (string)m_headers[0];
                             if (!line0.Contains("200"))
                             {
+                                Debug.WriteLine("200 response not detected.  Closing.");
                                 m_state = States.Error;
                                 this.Close();
                             }
                             else
                             {
+                                Debug.WriteLine("Proxy connected");
                                 m_listener.OnConnect(sock); // tell the real listener that we're connected.
                                 m_state = States.Running;
                             }
