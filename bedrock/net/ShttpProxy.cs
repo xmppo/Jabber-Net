@@ -65,7 +65,7 @@ namespace bedrock.net
                     cmd += "Proxy-Authorization: Basic " + auth + "\r\n";
                 }
                 cmd += "\r\n";
-                Debug.WriteLine("sending command to proxy...");
+                Debug.WriteLine("PSEND:" + cmd);
                 Write(Encoding.ASCII.GetBytes(cmd));
                 RequestRead();
             }
@@ -86,8 +86,15 @@ namespace bedrock.net
                 case States.WaitingForAuth:
                     m_state = States.Running;
                     string reply = Encoding.ASCII.GetString(buf, offset, length);
-                    Debug.WriteLine("proxy returned : " + reply);
-                    m_listener.OnConnect(sock); // tell the real listener that we're connected.
+                    Debug.WriteLine("PRECV: " + reply);
+                    if (reply.StartsWith("HTTP/1.0 200 "))
+                    {
+                        m_listener.OnConnect(sock); // tell the real listener that we're connected.
+                    }
+                    else
+                    {
+                        this.Close();
+                    }
                     // they'll call RequestRead(), so we can return false here.
                     return false;
                 default:
