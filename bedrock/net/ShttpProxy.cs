@@ -25,8 +25,10 @@ namespace bedrock.net
     [SVN(@"$Id$")]
     public class ShttpProxy : ProxySocket
     {
-        private enum States { None, Connecting, WaitingForAuth, Running, Closed }
+        private enum States { None, Connecting, WaitingForAuth, Running, Closed, Error }
         private States m_state = States.None;
+        private System.IO.MemoryStream m_headerstream = new System.IO.MemoryStream();
+        private System.Collections.ArrayList m_headers = new System.Collections.ArrayList();
 
         /// <summary>
         /// Wrap an existing socket event listener with a ShttpProxy proxy.  Make SURE to set Socket after this.
@@ -86,24 +88,66 @@ Host: {0}
         {
             switch (m_state)
             {
-                case States.WaitingForAuth:
-                    m_state = States.Running;
-                    string reply = Encoding.ASCII.GetString(buf, offset, length);
-                    Debug.WriteLine("PRECV: " + reply);
-
-                    // TODO: Quick hack.  Replace with a regex or something.
-                    if (reply.Contains("200"))
+            case States.WaitingForAuth:
+                m_headerstream.Write(buf, offset, length);
+                int state = 0;
+                int line = 0;
+                foreach (byte b in buf)
+                {
+                    // Look for \r\n\r\n for end of response header
+                    switch (state)
                     {
-                        m_listener.OnConnect(sock); // tell the real listener that we're connected.
+                    case 0:
+                        if (b == '\r')
+                            state++;
+                        break;
+                    case 1:
+                        if (b == '\n')
+                        {
+                            byte[] hs = m_headerstream.ToArray();
+                            string s = System.Text.Encoding.UTF8.GetString(hs);
+                            Debug.Write("PRECV: " + s);
+                            m_headers.Add(s);
+                            m_headerstream.SetLength(0);
+                            state++;
+                            line++;
+                        }
+                        else
+                            state = 0;
+                        break;
+                    case 2:
+                        if (b == '\r')
+                            state++;
+                        else
+                            state = 0;
+                        break;
+                    case 3:
+                        if (b == '\n')
+                        {
+                            string line0 = (string)m_headers[0];
+                            if (!line0.Contains("200"))
+                            {
+                                m_state = States.Error;
+                                this.Close();
+                            }
+                            else
+                            {
+                                m_listener.OnConnect(sock); // tell the real listener that we're connected.
+                                m_state = States.Running;
+                            }
+                            // they'll call RequestRead(), so we can return false here.
+                            return false;
+                        }
+                        else
+                            state = 0;
+                        break;
                     }
-                    else
-                    {
-                        this.Close();
-                    }
-                    // they'll call RequestRead(), so we can return false here.
-                    return false;
-                default:
-                    return base.OnRead(sock, buf, offset, length);
+                }
+                return true;
+            case States.Error:
+                throw new InvalidOperationException("Cannot read after error");
+            default:
+                return base.OnRead(sock, buf, offset, length);
             }
         }
 
