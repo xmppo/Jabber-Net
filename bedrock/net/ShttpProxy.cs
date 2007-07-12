@@ -57,7 +57,10 @@ namespace bedrock.net
             if (m_state == States.Connecting)
             { // CONNECT users.instapix.com:5222 HTTP/1.0
                 m_state = States.WaitingForAuth;
-                string cmd = "CONNECT " + RemoteAddress.Hostname + ":" + RemoteAddress.Port + " HTTP/1.0\r\n";
+                string cmd = string.Format(@"CONNECT {0}:{1} HTTP/1.1
+Host: {0}
+", RemoteAddress.Hostname, RemoteAddress.Port);
+                    
                 // if authinfo is set, send it.
                 if (Username != null && Username.Length > 0 && Password != null && Password.Length > 0)
                 {
