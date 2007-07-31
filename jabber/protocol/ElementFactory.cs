@@ -90,7 +90,7 @@ namespace jabber.protocol
             Debug.Assert(t.IsSubclassOf(typeof(Element)));
             ConstructorInfo ci = t.GetConstructor(s_constructorTypes);
             Debug.Assert(ci != null);
-            m_types.Add(new XmlQualifiedName(localName, ns), ci);
+            AddType(new XmlQualifiedName(localName, ns), ci);
         }
         /// <summary>
         /// Add a type to the packet factory.
@@ -102,7 +102,7 @@ namespace jabber.protocol
             Debug.Assert(t.IsSubclassOf(typeof(Element)));
             ConstructorInfo ci = t.GetConstructor(s_constructorTypes);
             Debug.Assert(ci != null);
-            m_types.Add(qname, ci);
+            AddType(qname, ci);
         }
         /// <summary>
         /// Add a type to the packet factory.
@@ -112,7 +112,9 @@ namespace jabber.protocol
         public void AddType(XmlQualifiedName qname, ConstructorInfo ci)
         {
             Debug.Assert(ci != null);
-            m_types.Add(qname, ci);
+            if (m_types.Contains(qname))
+                Debug.WriteLine("Warning: overriding existing packet factory");
+            m_types[qname] = ci;
         }
         /// <summary>
         /// Add a type to the packet factory.
