@@ -28,7 +28,7 @@ using jabber.protocol.iq;
 
 namespace jabber.connection
 {
-    internal class Ident
+    public class Ident
     {
         public string name;
         public string category;
@@ -273,6 +273,22 @@ namespace jabber.connection
                 }
                 return names;
             }
+        }
+
+        /// <summary>
+        /// Retrieve an identity object for each identity of the node.  
+        /// This should have been the default, but for whatever reason I didn't think we'd need it.
+        /// </summary>
+        /// <returns></returns>
+        public Ident[] GetIdentities()
+        {
+            Ident[] ret = new Ident[Identity.Count];
+            int count = 0;
+            foreach (Ident i in Identity)
+            {
+                ret[count++] = i;
+            }
+            return ret;
         }
 
         /// <summary>
