@@ -35,25 +35,22 @@ namespace jabber.client
     /// Summary description for RosterManager.
     /// </summary>
     [SVN(@"$Id$")]
-    public class RosterManager : System.ComponentModel.Component
+    public class RosterManager : jabber.connection.StreamComponent
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.Container components = null;
-        private JabberClient m_client = null;
         private Tree m_items = new Tree();
 
         /// <summary>
         /// Create a roster manager inside a container
         /// </summary>
         /// <param name="container"></param>
-        public RosterManager(System.ComponentModel.IContainer container)
+        public RosterManager(System.ComponentModel.IContainer container) : this()
         {
             // Required for Windows.Forms Class Composition Designer support
             container.Add(this);
-            InitializeComponent();
-
         }
 
         /// <summary>
@@ -63,7 +60,16 @@ namespace jabber.client
         {
             // Required for Windows.Forms Class Composition Designer support
             InitializeComponent();
+            this.OnStreamChanged += new bedrock.ObjectHandler(RosterManager_OnStreamChanged);
+        }
 
+        private void RosterManager_OnStreamChanged(object sender)
+        {
+            JabberClient cli = m_stream as JabberClient;
+            if (cli == null)
+                return;
+            cli.OnIQ += new IQHandler(GotIQ);
+            cli.OnDisconnect += new bedrock.ObjectHandler(GotDisconnect);
         }
 
         /// <summary>
@@ -71,40 +77,12 @@ namespace jabber.client
         /// </summary>
         [Description("The JabberClient to hook up to.")]
         [Category("Jabber")]
+        [Browsable(false)]
+        [Obsolete("Use the Stream property instead")]
         public JabberClient Client
         {
-            get
-            {
-                // If we are running in the designer, let's try to get an invoke control
-                // from the environment.  VB programmers can't seem to follow directions.
-                if ((this.m_client == null) && DesignMode)
-                {
-                    IDesignerHost host = (IDesignerHost) base.GetService(typeof(IDesignerHost));
-                    if (host != null)
-                    {
-                        Component root = host.RootComponent as Component;
-                        if (root != null)
-                        {
-                            foreach (Component c in root.Container.Components)
-                            {
-                                if (c is JabberClient)
-                                {
-                                    m_client = (JabberClient) c;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-                return m_client;
-            }
-
-            set
-            {
-                m_client = value;
-                m_client.OnIQ += new IQHandler(GotIQ);
-                m_client.OnDisconnect += new bedrock.ObjectHandler(GotDisconnect);
-            }
+            get { return (JabberClient) this.Stream; }
+            set { this.Stream = value; }
         }
 
         /// <summary>

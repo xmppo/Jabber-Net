@@ -203,6 +203,9 @@
     <Compile Include="jabber\connection\sasl\SASLProcessor.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="jabber\connection\StreamComponent.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="jabber\connection\XmppStream.cs">
       <SubType>Component</SubType>
     </Compile>

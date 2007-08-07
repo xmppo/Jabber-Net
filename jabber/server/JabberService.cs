@@ -176,6 +176,9 @@ namespace jabber.server
         [Description("Component secret.")]
         [DefaultValue(null)]
         [Category("Component")]
+#if NET20
+        [PasswordPropertyText]
+#endif
         public string Secret
         {
             get { return (string)this[Options.PASSWORD]; }

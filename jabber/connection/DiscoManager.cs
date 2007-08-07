@@ -28,11 +28,28 @@ using jabber.protocol.iq;
 
 namespace jabber.connection
 {
+    /// <summary>
+    /// A disco identity.  See XEP-0030.
+    /// </summary>
     public class Ident
     {
+        /// <summary>
+        /// Description of the entity.
+        /// </summary>
         public string name;
+        /// <summary>
+        /// Category (server, client, gateway, directory, etc.) 
+        /// </summary>
         public string category;
+        /// <summary>
+        /// Entity type.
+        /// </summary>
         public string type;
+
+        /// <summary>
+        /// category/type
+        /// </summary>
+        /// <returns></returns>
         public string GetKey()
         {
             string key = "";
@@ -505,23 +522,21 @@ namespace jabber.connection
     /// TODO: add negative caching
     /// </summary>
     [SVN(@"$Id$")]
-    public class DiscoManager : System.ComponentModel.Component, IEnumerable
+    public class DiscoManager : StreamComponent, IEnumerable
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.Container components = null;
-        private XmppStream m_stream = null;
         private DiscoNode m_root = null;
 
         /// <summary>
         /// Construct a PresenceManager object.
         /// </summary>
         /// <param name="container"></param>
-        public DiscoManager(System.ComponentModel.IContainer container)
+        public DiscoManager(System.ComponentModel.IContainer container) : this()
         {
             container.Add(this);
-            InitializeComponent();
         }
 
         /// <summary>
@@ -530,50 +545,9 @@ namespace jabber.connection
         public DiscoManager()
         {
             InitializeComponent();
+            this.OnStreamChanged +=new bedrock.ObjectHandler(DiscoManager_OnStreamChanged);
         }
 
-        /// <summary>
-        /// The JabberClient to hook up to.
-        /// </summary>
-        [Description("The JabberClient or JabberService to hook up to.")]
-        [Category("Jabber")]
-        public virtual XmppStream Stream
-        {
-            get
-            {
-                // If we are running in the designer, let's try to get an invoke control
-                // from the environment.  VB programmers can't seem to follow directions.
-                if ((this.m_stream == null) && DesignMode)
-                {
-                    IDesignerHost host = (IDesignerHost)base.GetService(typeof(IDesignerHost));
-                    if (host != null)
-                    {
-                        Component root = host.RootComponent as Component;
-                        if (root != null)
-                        {
-                            foreach (Component c in root.Container.Components)
-                            {
-                                if (c is XmppStream)
-                                {
-                                    m_stream = (XmppStream)c;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-                return m_stream;
-            }
-            set
-            {
-                m_stream = value;
-                m_stream.OnDisconnect += new bedrock.ObjectHandler(GotDisconnect);
-                if (m_stream is jabber.client.JabberClient)
-                {
-                    m_stream.OnAuthenticate += new bedrock.ObjectHandler(m_client_OnAuthenticate);
-                }
-            }
-        }
 
         /// <summary>
         /// The root node.  This is probably the server that you connected to.
@@ -583,6 +557,13 @@ namespace jabber.connection
         public DiscoNode Root
         {
             get { return m_root; }
+        }
+
+        private void DiscoManager_OnStreamChanged(object sender)
+        {
+            if (m_stream == null)
+                return;
+            m_stream.OnAuthenticate += new bedrock.ObjectHandler(m_client_OnAuthenticate);
         }
 
         private void m_client_OnAuthenticate(object sender)

@@ -89,7 +89,7 @@ Public Class MainForm
 
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
-        Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(MainForm))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MainForm))
         Me.sb = New System.Windows.Forms.StatusBar
         Me.pnlCon = New System.Windows.Forms.StatusBarPanel
         Me.pnlPresence = New System.Windows.Forms.StatusBarPanel
@@ -126,13 +126,15 @@ Public Class MainForm
         'pnlCon
         '
         Me.pnlCon.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Spring
+        Me.pnlCon.Name = "pnlCon"
         Me.pnlCon.Text = "Click on ""Offline"", and select a presence to log in."
-        Me.pnlCon.Width = 569
+        Me.pnlCon.Width = 568
         '
         'pnlPresence
         '
         Me.pnlPresence.Alignment = System.Windows.Forms.HorizontalAlignment.Right
         Me.pnlPresence.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Contents
+        Me.pnlPresence.Name = "pnlPresence"
         Me.pnlPresence.Text = "Offline"
         Me.pnlPresence.Width = 47
         '
@@ -147,17 +149,18 @@ Public Class MainForm
         '
         'rm
         '
-        Me.rm.Client = Me.jc
+        Me.rm.Stream = Me.jc
         '
         'pm
         '
-        Me.pm.Client = Me.jc
+        Me.pm.Stream = Me.jc
         '
         'ilPresence
         '
-        Me.ilPresence.ImageSize = New System.Drawing.Size(20, 20)
         Me.ilPresence.ImageStream = CType(resources.GetObject("ilPresence.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.ilPresence.TransparentColor = System.Drawing.Color.Transparent
+        Me.ilPresence.Images.SetKeyName(0, "")
+        Me.ilPresence.Images.SetKeyName(1, "")
         '
         'mnuPresence
         '
@@ -215,6 +218,7 @@ Public Class MainForm
         Me.roster.Name = "roster"
         Me.roster.PresenceManager = Me.pm
         Me.roster.RosterManager = Me.rm
+        Me.roster.SelectedImageIndex = 0
         Me.roster.ShowLines = False
         Me.roster.ShowRootLines = False
         Me.roster.Size = New System.Drawing.Size(624, 218)

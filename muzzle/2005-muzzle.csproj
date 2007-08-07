@@ -122,6 +122,9 @@
     <Compile Include="RosterTree.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="StreamControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="StripChart.cs">
       <SubType>UserControl</SubType>
     </Compile>

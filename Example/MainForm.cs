@@ -271,11 +271,11 @@ namespace Example
             // 
             // pm
             // 
-            this.pm.Client = this.jc;
+            this.pm.Stream = this.jc;
             // 
             // rm
             // 
-            this.rm.Client = this.jc;
+            this.rm.Stream = this.jc;
             this.rm.OnRosterEnd += new bedrock.ObjectHandler(this.rm_OnRosterEnd);
             // 
             // tpServices

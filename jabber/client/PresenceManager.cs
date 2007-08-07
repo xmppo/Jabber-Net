@@ -37,23 +37,21 @@ namespace jabber.client
     /// Presence proxy database.
     /// </summary>
     [SVN(@"$Id$")]
-    public class PresenceManager : System.ComponentModel.Component, IEnumerable
+    public class PresenceManager : jabber.connection.StreamComponent, IEnumerable
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.Container components = null;
-        private JabberClient m_client = null;
         private Tree m_items = new Tree();
 
         /// <summary>
         /// Construct a PresenceManager object.
         /// </summary>
         /// <param name="container"></param>
-        public PresenceManager(System.ComponentModel.IContainer container)
+        public PresenceManager(System.ComponentModel.IContainer container) : this()
         {
             container.Add(this);
-            InitializeComponent();
         }
 
         /// <summary>
@@ -62,6 +60,18 @@ namespace jabber.client
         public PresenceManager()
         {
             InitializeComponent();
+
+            this.OnStreamChanged += new bedrock.ObjectHandler(PresenceManager_OnStreamChanged);
+        }
+
+        private void PresenceManager_OnStreamChanged(object sender)
+        {
+            JabberClient cli = m_stream as JabberClient;
+            if (cli == null)
+                return;
+
+            cli.OnPresence += new PresenceHandler(GotPresence);
+            cli.OnDisconnect += new bedrock.ObjectHandler(GotDisconnect);
         }
 
         /// <summary>
@@ -69,39 +79,12 @@ namespace jabber.client
         /// </summary>
         [Description("The JabberClient to hook up to.")]
         [Category("Jabber")]
+        [Browsable(false)]
+        [Obsolete("Use the Stream property instead")]
         public JabberClient Client
         {
-            get
-            {
-                // If we are running in the designer, let's try to get an invoke control
-                // from the environment.  VB programmers can't seem to follow directions.
-                if ((this.m_client == null) && DesignMode)
-                {
-                    IDesignerHost host = (IDesignerHost) base.GetService(typeof(IDesignerHost));
-                    if (host != null)
-                    {
-                        Component root = host.RootComponent as Component;
-                        if (root != null)
-                        {
-                            foreach (Component c in root.Container.Components)
-                            {
-                                if (c is JabberClient)
-                                {
-                                    m_client = (JabberClient) c;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-                return m_client;
-            }
-            set
-            {
-                m_client = value;
-                m_client.OnPresence += new PresenceHandler(GotPresence);
-                m_client.OnDisconnect += new bedrock.ObjectHandler(GotDisconnect);
-            }
+            get { return (JabberClient)this.Stream; }
+            set { this.Stream = value; }
         }
 
         /// <summary>

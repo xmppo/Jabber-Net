@@ -82,21 +82,9 @@ namespace muzzle
                 if ((m_xmpp == null) && DesignMode)
                 {
                     IDesignerHost host = (IDesignerHost)base.GetService(typeof(IDesignerHost));
-                    if (host != null)
-                    {
-                        Component root = host.RootComponent as Component;
-                        if (root != null)
-                        {
-                            foreach (Component c in root.Container.Components)
-                            {
-                                if (c is XmppStream)
-                                {
-                                    m_xmpp = (XmppStream)c;
-                                    break;
-                                }
-                            }
-                        }
-                    }
+                    if (host == null)
+                        return null;
+                    m_xmpp = StreamComponent.GetStreamFromHost(host);
                 }
                 return m_xmpp;
             }

@@ -1,3 +1,16 @@
+/* --------------------------------------------------------------------------
+ * Copyrights
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * information for Cursive Systems, Inc. is available at
+ * http://www.cursive.net/.
+ *
+ * License
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
+ * See LICENSE.txt for details.
+ * --------------------------------------------------------------------------*/
 using System;
 using System.Collections;
 using System.ComponentModel;
@@ -23,7 +36,7 @@ namespace jabber.connection
     /// <summary>
     /// Manage entity capabilities information, for the local connection as well as remote ones.
     /// </summary>
-	public class CapsManager: Component
+	public class CapsManager: StreamComponent
 	{	
         /// <summary>
 		/// Required designer variable.
@@ -33,8 +46,6 @@ namespace jabber.connection
         private string m_node = null;
         private string m_version = null;
         private FeatureSet m_base = new FeatureSet();
-        
-        private jabber.connection.XmppStream m_stream = null;
         private Hashtable m_bundles = new Hashtable();
 		
         /// <summary>
@@ -43,17 +54,16 @@ namespace jabber.connection
 		public CapsManager()
 		{
 			InitializeComponent();
+            this.OnStreamChanged += new bedrock.ObjectHandler(CapsManager_OnStreamChanged);
 		}
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="container"></param>
-		public CapsManager(IContainer container)
+		public CapsManager(IContainer container) : this()
 		{
 			container.Add(this);
-
-			InitializeComponent();
 		}
 
         /// <summary> 
@@ -138,48 +148,14 @@ namespace jabber.connection
             }
         }
 
-        /// <summary>
-        /// The JabberClient to hook up to.
-        /// </summary>
-        [Description("The JabberClient or JabberService to hook up to.")]
-        [Category("Jabber")]
-        public virtual XmppStream Stream
+        private void CapsManager_OnStreamChanged(object sender)
         {
-            get
-            {
-                // If we are running in the designer, let's try to get an invoke control
-                // from the environment.  VB programmers can't seem to follow directions.
-                if ((this.m_stream == null) && DesignMode)
-                {
-                    IDesignerHost host = (IDesignerHost)base.GetService(typeof(IDesignerHost));
-                    if (host != null)
-                    {
-                        Component root = host.RootComponent as Component;
-                        if (root != null)
-                        {
-                            foreach (Component c in root.Container.Components)
-                            {
-                                if (c is XmppStream)
-                                {
-                                    m_stream = (XmppStream)c;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-                return m_stream;
-            }
-            set
-            {
-                m_stream = value;
-                jabber.client.JabberClient jc = m_stream as jabber.client.JabberClient;
-                if (jc != null)
-                {
-                    jc.OnBeforePresenceOut += new jabber.client.PresenceHandler(jc_OnBeforePresenceOut);
-                    jc.OnIQ += new jabber.client.IQHandler(jc_OnIQ);
-                }
-            }
+            jabber.client.JabberClient jc = m_stream as jabber.client.JabberClient;
+            if (jc == null)
+                return;
+
+            jc.OnBeforePresenceOut += new jabber.client.PresenceHandler(jc_OnBeforePresenceOut);
+            jc.OnIQ += new jabber.client.IQHandler(jc_OnIQ);
         }
 
         /// <summary>
