@@ -411,6 +411,9 @@ namespace muzzle
             float    h  = this.Height - (2*fh);
             float    w  = this.Width;
             float    s  = m_max - m_min;
+            if (s <= float.Epsilon)
+                return null;
+
             Bitmap   bm = new Bitmap(this.Width, this.Height);
             Graphics g  = Graphics.FromImage(bm);
             g.SmoothingMode     = SmoothingMode.AntiAlias;
