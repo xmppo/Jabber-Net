@@ -91,21 +91,22 @@ namespace muzzle
             set
             {
                 m_xmpp = value;
-                ReadXmpp();
+                if (!DesignMode)
+                    ReadXmpp();
             }
         }
 
-        private void WriteValues(Control parent)
+        private void WriteValues(Control parent, XmppStream stream)
         {
             if (parent.Tag != null)
             {
-                m_xmpp[(string)parent.Tag] = GetControlValue(parent);
+                stream[(string)parent.Tag] = GetControlValue(parent);
             }
             if (parent.HasChildren)
             {
                 foreach (Control child in parent.Controls)
                 {
-                    WriteValues(child);
+                    WriteValues(child, stream);
                 }
             }
         }
@@ -115,7 +116,13 @@ namespace muzzle
         /// </summary>
         protected void WriteXmpp()
         {
-            WriteValues(this);
+            if (m_xmpp != null)
+                WriteValues(this, m_xmpp);
+        }
+
+        public void Configure(XmppStream stream)
+        {
+            WriteValues(this, stream);
         }
 
         private void WriteElem(XmlElement root, Control c)
@@ -142,7 +149,10 @@ namespace muzzle
         public void WriteToFile(string file)
         {
             XmlDocument doc = new XmlDocument();
-            XmlElement root = (XmlElement)doc.CreateElement(m_xmpp.GetType().Name);
+            string name = "JabberClient";
+            if (m_xmpp != null)
+                name = m_xmpp.GetType().Name;
+            XmlElement root = (XmlElement)doc.CreateElement(name);
             doc.AppendChild(root);
 
             WriteElem(root, this);
@@ -160,6 +170,11 @@ namespace muzzle
 
         private void ReadControls(Control parent)
         {
+            if (parent == null)
+                return;
+            if (m_xmpp == null)
+                return;
+
             if (parent.Tag != null)
                 SetControlValue(parent, m_xmpp[(string)parent.Tag]);
             if (parent.HasChildren)
@@ -460,7 +475,8 @@ namespace muzzle
 
         private void OptionForm_Load(object sender, EventArgs e)
         {
-            ReadXmpp();
+            if (!DesignMode)
+                ReadXmpp();
         }
     }
 }

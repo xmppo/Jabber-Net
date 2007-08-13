@@ -263,9 +263,12 @@ namespace muzzle
             set
             {
                 m_hist = value;
-                while (m_list.Count > m_hist)
-                    m_list.Dequeue();
-                ReDraw();
+                lock (m_list)
+                {
+                    while (m_list.Count > m_hist)
+                        m_list.Dequeue();
+                }
+                DesignReDraw();
             }
         }
         /// <summary>
@@ -342,9 +345,12 @@ namespace muzzle
         /// <param name="val">The value to add</param>
         public void AddPoint(float val)
         {
-            while (m_list.Count >= m_hist)
-                m_list.Dequeue();
-            m_list.Enqueue(val);
+            lock (m_list)
+            {
+                while (m_list.Count >= m_hist)
+                    m_list.Dequeue();
+                m_list.Enqueue(val);
+            }
             m_last = val;
             if (m_auto)
             {
@@ -369,7 +375,8 @@ namespace muzzle
         /// </summary>
         public void Clear()
         {
-            m_list.Clear();
+            lock(m_list)
+                m_list.Clear();
             ReDraw();
         }
 
@@ -385,14 +392,22 @@ namespace muzzle
 
         private void DesignReDraw()
         {
+            /*
             if (this.DesignMode)
                 ReDraw();
+             */
+            ExecReDraw();
         }
         private void ReDraw()
         {
-            Thread t = new Thread(new ThreadStart(ExecReDraw));
-            t.IsBackground = true;
-            t.Start();
+            if (DesignMode)
+                ExecReDraw();
+            else
+            {
+                Thread t = new Thread(new ThreadStart(ExecReDraw));
+                t.IsBackground = true;
+                t.Start();
+            }
         }
 
         private delegate void BMCB(Bitmap bm);
@@ -419,18 +434,20 @@ namespace muzzle
             g.SmoothingMode     = SmoothingMode.AntiAlias;
             g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
             g.Clear(BackColor);
-            if (m_list.Count > 0)
+            lock (m_list)
             {
-                float stripw = w / ((float)m_hist - 1F);
-                Debug.Assert(s != 0);
-                float y   = 0F;
-                int count = 0;
-
-                // this is kinda ugly, because of the repeated code.
-                // But it's better, perf-wise, than repeating the switch statement
-                // every time through the loop.
-                switch (m_style)
+                if (m_list.Count > 0)
                 {
+                    float stripw = w / ((float)m_hist - 1F);
+                    Debug.Assert(s != 0);
+                    float y   = 0F;
+                    int count = 0;
+
+                    // this is kinda ugly, because of the repeated code.
+                    // But it's better, perf-wise, than repeating the switch statement
+                    // every time through the loop.
+                    switch (m_style)
+                    {
                     case ChartStyle.Bar:
                         RectangleF[] rects = new RectangleF[m_list.Count];
                         foreach (float val in m_list)
@@ -464,6 +481,7 @@ namespace muzzle
                             g.DrawLines(new Pen(ForeColor), points);
                         }
                         break;
+                    }
                 }
             }
             Brush textBrush = new SolidBrush(m_textColor);
@@ -499,8 +517,14 @@ namespace muzzle
                 return;
 
             if (this.IsHandleCreated)
-                Invoke(new BMCB(BitBlt), new object[] {bm});
+            {
+                if (this.InvokeRequired)
+                    Invoke(new BMCB(BitBlt), new object[] { bm });
+                else
+                    BitBlt(bm);
+            }
         }
+
         #region Component Designer generated code
         /// <summary>
         /// Required method for Designer support - do not modify
@@ -528,6 +552,7 @@ namespace muzzle
 
         }
         #endregion
+
         /// <summary>
         /// The control has been resized.  Redraw.
         /// </summary>

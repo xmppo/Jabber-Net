@@ -40,7 +40,7 @@ namespace muzzle
     {
         private System.Windows.Forms.CheckBox cbSSL;
         private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tpBasic;
+        protected TabPage tpBasic;
         private System.Windows.Forms.TextBox txtPass;
         private System.Windows.Forms.TextBox txtServer;
         private System.Windows.Forms.TextBox txtUser;
@@ -176,10 +176,8 @@ namespace muzzle
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.cmbProxy = new System.Windows.Forms.ComboBox();
-#if NET20
             ((System.ComponentModel.ISupportInitialize)(this.error)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numPort)).BeginInit();
-#endif
             this.tabControl1.SuspendLayout();
             this.tpBasic.SuspendLayout();
             this.tpNetwork.SuspendLayout();
@@ -187,10 +185,10 @@ namespace muzzle
             this.tpProxy.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numProxyPort)).BeginInit();
             this.SuspendLayout();
-            //
+            // 
             // txtServer
-            //
-            this.txtServer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            // 
+            this.txtServer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtServer.Location = new System.Drawing.Point(72, 72);
             this.txtServer.Name = "txtServer";
@@ -199,10 +197,10 @@ namespace muzzle
             this.tip.SetToolTip(this.txtServer, "The name of the Jabber server");
             this.txtServer.Validated += new System.EventHandler(this.onValidated);
             this.txtServer.Validating += new System.ComponentModel.CancelEventHandler(this.Required_Validating);
-            //
+            // 
             // txtUser
-            //
-            this.txtUser.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            // 
+            this.txtUser.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtUser.Location = new System.Drawing.Point(72, 8);
             this.txtUser.Name = "txtUser";
@@ -212,9 +210,9 @@ namespace muzzle
             this.tip.SetToolTip(this.txtUser, "The user portion of the JID only.");
             this.txtUser.Validated += new System.EventHandler(this.onValidated);
             this.txtUser.Validating += new System.ComponentModel.CancelEventHandler(this.Required_Validating);
-            //
+            // 
             // cbSSL
-            //
+            // 
             this.cbSSL.AccessibleDescription = "";
             this.cbSSL.Location = new System.Drawing.Point(8, 64);
             this.cbSSL.Name = "cbSSL";
@@ -223,9 +221,9 @@ namespace muzzle
             this.cbSSL.Text = "SSL";
             this.tip.SetToolTip(this.cbSSL, "Connect using Secure Socket Layer encryption");
             this.cbSSL.CheckedChanged += new System.EventHandler(this.cbSSL_CheckedChanged);
-            //
+            // 
             // numPort
-            //
+            // 
             this.numPort.Location = new System.Drawing.Point(88, 10);
             this.numPort.Maximum = new decimal(new int[] {
             65535,
@@ -246,9 +244,9 @@ namespace muzzle
             0,
             0,
             0});
-            //
+            // 
             // tabControl1
-            //
+            // 
             this.tabControl1.Controls.Add(this.tpBasic);
             this.tabControl1.Controls.Add(this.tpNetwork);
             this.tabControl1.Controls.Add(this.tpConnection);
@@ -259,9 +257,9 @@ namespace muzzle
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(292, 226);
             this.tabControl1.TabIndex = 0;
-            //
+            // 
             // tpBasic
-            //
+            // 
             this.tpBasic.Controls.Add(this.cbPlaintext);
             this.tpBasic.Controls.Add(this.txtPass);
             this.tpBasic.Controls.Add(this.txtServer);
@@ -274,20 +272,20 @@ namespace muzzle
             this.tpBasic.Size = new System.Drawing.Size(284, 200);
             this.tpBasic.TabIndex = 0;
             this.tpBasic.Text = "Basic";
-            //
+            // 
             // cbPlaintext
-            //
-            this.cbPlaintext.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            // 
+            this.cbPlaintext.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cbPlaintext.Location = new System.Drawing.Point(8, 104);
             this.cbPlaintext.Name = "cbPlaintext";
             this.cbPlaintext.Size = new System.Drawing.Size(268, 32);
             this.cbPlaintext.TabIndex = 6;
             this.cbPlaintext.Text = "Allow plaintext authentication";
-            //
+            // 
             // txtPass
-            //
-            this.txtPass.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            // 
+            this.txtPass.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtPass.Location = new System.Drawing.Point(72, 40);
             this.txtPass.Name = "txtPass";
@@ -296,36 +294,36 @@ namespace muzzle
             this.txtPass.TabIndex = 3;
             this.txtPass.Validated += new System.EventHandler(this.onValidated);
             this.txtPass.Validating += new System.ComponentModel.CancelEventHandler(this.Required_Validating);
-            //
+            // 
             // label4
-            //
+            // 
             this.label4.Location = new System.Drawing.Point(8, 39);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(64, 23);
             this.label4.TabIndex = 2;
             this.label4.Text = "Password:";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            //
+            // 
             // label2
-            //
+            // 
             this.label2.Location = new System.Drawing.Point(8, 71);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(48, 23);
             this.label2.TabIndex = 4;
             this.label2.Text = "Server:";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            //
+            // 
             // label1
-            //
+            // 
             this.label1.Location = new System.Drawing.Point(8, 7);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(48, 23);
             this.label1.TabIndex = 0;
             this.label1.Text = "User:";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            //
+            // 
             // tpNetwork
-            //
+            // 
             this.tpNetwork.Controls.Add(this.txtNetworkHost);
             this.tpNetwork.Controls.Add(this.label5);
             this.tpNetwork.Controls.Add(this.cbSSL);
@@ -336,36 +334,36 @@ namespace muzzle
             this.tpNetwork.Size = new System.Drawing.Size(284, 200);
             this.tpNetwork.TabIndex = 2;
             this.tpNetwork.Text = "Network";
-            //
+            // 
             // txtNetworkHost
-            //
-            this.txtNetworkHost.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            // 
+            this.txtNetworkHost.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtNetworkHost.Location = new System.Drawing.Point(88, 37);
             this.txtNetworkHost.Name = "txtNetworkHost";
             this.txtNetworkHost.Size = new System.Drawing.Size(173, 20);
             this.txtNetworkHost.TabIndex = 3;
-            //
+            // 
             // label5
-            //
+            // 
             this.label5.Location = new System.Drawing.Point(8, 36);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(80, 23);
             this.label5.TabIndex = 2;
             this.label5.Text = "Network Host:";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            //
+            // 
             // label3
-            //
+            // 
             this.label3.Location = new System.Drawing.Point(8, 9);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(80, 23);
             this.label3.TabIndex = 0;
             this.label3.Text = "Port:";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            //
+            // 
             // tpConnection
-            //
+            // 
             this.tpConnection.Controls.Add(this.txtURL);
             this.tpConnection.Controls.Add(this.label12);
             this.tpConnection.Controls.Add(this.cmbConnectionType);
@@ -375,29 +373,29 @@ namespace muzzle
             this.tpConnection.Size = new System.Drawing.Size(284, 200);
             this.tpConnection.TabIndex = 3;
             this.tpConnection.Text = "Connection";
-            //
+            // 
             // txtURL
-            //
-            this.txtURL.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            // 
+            this.txtURL.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtURL.Enabled = false;
             this.txtURL.Location = new System.Drawing.Point(50, 40);
             this.txtURL.Name = "txtURL";
             this.txtURL.Size = new System.Drawing.Size(170, 20);
             this.txtURL.TabIndex = 3;
-            //
+            // 
             // label12
-            //
+            // 
             this.label12.AutoSize = true;
             this.label12.Location = new System.Drawing.Point(14, 43);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(32, 13);
             this.label12.TabIndex = 2;
             this.label12.Text = "URL:";
-            //
+            // 
             // cmbConnectionType
-            //
-            this.cmbConnectionType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            // 
+            this.cmbConnectionType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbConnectionType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbConnectionType.Location = new System.Drawing.Point(50, 9);
@@ -405,18 +403,18 @@ namespace muzzle
             this.cmbConnectionType.Size = new System.Drawing.Size(170, 21);
             this.cmbConnectionType.TabIndex = 1;
             this.cmbConnectionType.SelectedIndexChanged += new System.EventHandler(this.cmbConnectionType_SelectedIndexChanged);
-            //
+            // 
             // label11
-            //
+            // 
             this.label11.AutoSize = true;
             this.label11.Location = new System.Drawing.Point(10, 12);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(34, 13);
             this.label11.TabIndex = 0;
             this.label11.Text = "Type:";
-            //
+            // 
             // tpProxy
-            //
+            // 
             this.tpProxy.Controls.Add(this.txtProxyPassword);
             this.tpProxy.Controls.Add(this.txtProxyUser);
             this.tpProxy.Controls.Add(this.numProxyPort);
@@ -432,10 +430,10 @@ namespace muzzle
             this.tpProxy.Size = new System.Drawing.Size(284, 200);
             this.tpProxy.TabIndex = 1;
             this.tpProxy.Text = "Proxy";
-            //
+            // 
             // txtProxyPassword
-            //
-            this.txtProxyPassword.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            // 
+            this.txtProxyPassword.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtProxyPassword.Enabled = false;
             this.txtProxyPassword.Location = new System.Drawing.Point(72, 117);
@@ -443,20 +441,20 @@ namespace muzzle
             this.txtProxyPassword.PasswordChar = '*';
             this.txtProxyPassword.Size = new System.Drawing.Size(140, 20);
             this.txtProxyPassword.TabIndex = 9;
-            //
+            // 
             // txtProxyUser
-            //
-            this.txtProxyUser.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            // 
+            this.txtProxyUser.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtProxyUser.Enabled = false;
             this.txtProxyUser.Location = new System.Drawing.Point(72, 90);
             this.txtProxyUser.Name = "txtProxyUser";
             this.txtProxyUser.Size = new System.Drawing.Size(140, 20);
             this.txtProxyUser.TabIndex = 7;
-            //
+            // 
             // numProxyPort
-            //
-            this.numProxyPort.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            // 
+            this.numProxyPort.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.numProxyPort.Enabled = false;
             this.numProxyPort.Location = new System.Drawing.Point(72, 63);
@@ -478,65 +476,65 @@ namespace muzzle
             0,
             0,
             0});
-            //
+            // 
             // txtProxyHost
-            //
-            this.txtProxyHost.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            // 
+            this.txtProxyHost.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtProxyHost.Enabled = false;
             this.txtProxyHost.Location = new System.Drawing.Point(72, 36);
             this.txtProxyHost.Name = "txtProxyHost";
             this.txtProxyHost.Size = new System.Drawing.Size(140, 20);
             this.txtProxyHost.TabIndex = 3;
-            //
+            // 
             // label10
-            //
+            // 
             this.label10.Location = new System.Drawing.Point(8, 116);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(64, 23);
             this.label10.TabIndex = 8;
             this.label10.Text = "Password:";
             this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            //
+            // 
             // label9
-            //
+            // 
             this.label9.Location = new System.Drawing.Point(8, 89);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(64, 23);
             this.label9.TabIndex = 6;
             this.label9.Text = "User:";
             this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            //
+            // 
             // label8
-            //
+            // 
             this.label8.Location = new System.Drawing.Point(8, 62);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(64, 23);
             this.label8.TabIndex = 4;
             this.label8.Text = "Port:";
             this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            //
+            // 
             // label7
-            //
+            // 
             this.label7.Location = new System.Drawing.Point(8, 35);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(64, 23);
             this.label7.TabIndex = 2;
             this.label7.Text = "Server:";
             this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            //
+            // 
             // label6
-            //
+            // 
             this.label6.Location = new System.Drawing.Point(8, 7);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(64, 23);
             this.label6.TabIndex = 0;
             this.label6.Text = "Type:";
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            //
+            // 
             // cmbProxy
-            //
-            this.cmbProxy.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            // 
+            this.cmbProxy.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbProxy.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbProxy.Location = new System.Drawing.Point(72, 8);
@@ -544,19 +542,17 @@ namespace muzzle
             this.cmbProxy.Size = new System.Drawing.Size(140, 21);
             this.cmbProxy.TabIndex = 1;
             this.cmbProxy.SelectedIndexChanged += new System.EventHandler(this.cmbProxy_SelectedIndexChanged);
-            //
+            // 
             // ClientLogin
-            //
+            // 
             this.ClientSize = new System.Drawing.Size(292, 266);
             this.Controls.Add(this.tabControl1);
             this.MinimizeBox = false;
             this.Name = "ClientLogin";
             this.Text = "Login";
             this.Controls.SetChildIndex(this.tabControl1, 0);
-#if NET20
             ((System.ComponentModel.ISupportInitialize)(this.error)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numPort)).EndInit();
-#endif
             this.tabControl1.ResumeLayout(false);
             this.tpBasic.ResumeLayout(false);
             this.tpBasic.PerformLayout();

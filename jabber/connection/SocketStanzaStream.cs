@@ -183,6 +183,7 @@ namespace jabber.connection
         /// </summary>
         public override void Connect()
         {
+            m_elements = null;
             int port = (int)m_listener[Options.PORT];
             Debug.Assert(port > 0);
             //m_sslOn = m_ssl;
@@ -437,7 +438,7 @@ namespace jabber.connection
             //System.Windows.Forms.Application.DoEvents();
             //System.Threading.Thread.Sleep(1000);
             m_listener[Options.REMOTE_CERTIFICATE] = null;
-            m_elements = null;
+            //m_elements = null;
             m_timer.Change(Timeout.Infinite, Timeout.Infinite);
             m_listener.Closed();
         }
@@ -445,7 +446,7 @@ namespace jabber.connection
         void ISocketEventListener.OnError(BaseSocket sock, Exception ex)
         {
             m_listener[Options.REMOTE_CERTIFICATE] = null;
-            m_elements = null;
+            //m_elements = null;
             m_timer.Change(Timeout.Infinite, Timeout.Infinite);
             m_listener.Errored(ex);
         }
