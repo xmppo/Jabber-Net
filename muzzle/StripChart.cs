@@ -429,6 +429,9 @@ namespace muzzle
             if (s <= float.Epsilon)
                 return null;
 
+            if ((this.Height <= 0) || (this.Width <= 0))
+                return null;
+
             Bitmap   bm = new Bitmap(this.Width, this.Height);
             Graphics g  = Graphics.FromImage(bm);
             g.SmoothingMode     = SmoothingMode.AntiAlias;
