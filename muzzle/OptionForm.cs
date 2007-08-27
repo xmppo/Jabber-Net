@@ -120,6 +120,10 @@ namespace muzzle
                 WriteValues(this, m_xmpp);
         }
 
+        /// <summary>
+        /// Write the configuration values to the given XmppStream.
+        /// </summary>
+        /// <param name="stream">The stream to configure</param>
         public void Configure(XmppStream stream)
         {
             WriteValues(this, stream);

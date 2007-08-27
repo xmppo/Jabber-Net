@@ -40,6 +40,9 @@ namespace muzzle
     {
         private System.Windows.Forms.CheckBox cbSSL;
         private System.Windows.Forms.TabControl tabControl1;
+        /// <summary>
+        /// The basic configuration tab.
+        /// </summary>
         protected TabPage tpBasic;
         private System.Windows.Forms.TextBox txtPass;
         private System.Windows.Forms.TextBox txtServer;
