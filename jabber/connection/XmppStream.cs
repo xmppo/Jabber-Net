@@ -1300,7 +1300,10 @@ namespace jabber.connection
             catch (Exception e)
             {
                 m_reconnect = false;
-                FireOnError(e);
+                if (e.InnerException != null)
+                    FireOnError(e.InnerException);
+                else
+                    FireOnError(e);
                 return false;
             }
             m_sslOn = true;
