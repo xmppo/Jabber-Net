@@ -42,6 +42,7 @@ namespace muzzle
         /// </summary>
         Point
     }
+
     // TODO: Add vertical scrolling as an option.
     /// <summary>
     /// A StripChart is a scrolling window showing a set number of data points.
@@ -49,21 +50,40 @@ namespace muzzle
     /// </summary>
     public class StripChart : System.Windows.Forms.UserControl
     {
+        private bool       m_first     = true;
         private float      m_min       = 0F;
         private float      m_max       = 100F;
         private float      m_last      = 0F;
+        private double     m_mean      = 0F;
+        private double     m_var_s     = 0F;
+        private long       m_count     = 0;
+
         private int        m_hist      = 100;
         private int        m_pointSize = 5;
         private bool       m_auto      = true;
         private bool       m_label     = true;
         private bool       m_zero      = true;
         private bool       m_showLast  = false;
+        private bool       m_showStats = false;
         private string     m_title     = null;
         private Queue      m_list      = new Queue(100);
         private ChartStyle m_style     = ChartStyle.Bar;
         private Color      m_textColor = Color.Red;
         private Color      m_zeroColor = Color.Black;
+        private Color      m_statsColor = Color.Wheat;
         private System.Windows.Forms.PictureBox pictureBox1;
+
+        private static float[] s_sampleData = new float[] { 
+            .9800F,
+            .7572F,
+            .8259F,
+            .3314F,
+            .6175F,
+            .9606F,
+            .7810F,
+            .7958F,
+            .4636F,
+            .0264F };
 
         /// <summary>
         /// Required designer variable.
@@ -78,6 +98,7 @@ namespace muzzle
             // This call is required by the Windows.Forms Form Designer.
             InitializeComponent();
         }
+
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
@@ -102,8 +123,30 @@ namespace muzzle
             get { return m_showLast; }
             set
             {
-                m_showLast = value;
-                DesignReDraw();
+                if (m_showLast != value)
+                {
+                    m_showLast = value;
+                    DesignReDraw();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Display the mean and standard deviation, graphically.
+        /// </summary>
+        [Description("Display the mean and standard deviation, graphically.")]
+        [DefaultValue(false)]
+        [Category("Chart")]
+        public bool ShowStatistics
+        {
+            get { return m_showStats; }
+            set
+            {
+                if (m_showStats != value)
+                {
+                    m_showStats = value;
+                    DesignReDraw();
+                }
             }
         }
 
@@ -118,8 +161,11 @@ namespace muzzle
             get { return m_title; }
             set
             {
-                m_title = value;
-                DesignReDraw();
+                if (m_title != value)
+                {
+                    m_title = value;
+                    DesignReDraw();
+                }
             }
         }
 
@@ -137,9 +183,14 @@ namespace muzzle
             }
             set
             {
-                m_pointSize = value;
+                if (m_pointSize != value)
+                {
+                    m_pointSize = value;
+                    DesignReDraw();
+                }
             }
         }
+
         /// <summary>
         /// Chart drawing style.
         /// </summary>
@@ -154,9 +205,14 @@ namespace muzzle
             }
             set
             {
-                m_style = value;
+                if (m_style != value)
+                {
+                    m_style = value;
+                    DesignReDraw();
+                }
             }
         }
+
         /// <summary>
         /// Initial minimum value shown
         /// </summary>
@@ -171,8 +227,11 @@ namespace muzzle
             }
             set
             {
-                m_min = value;
-                DesignReDraw();
+                if (m_min != value)
+                {
+                    m_min = value;
+                    DesignReDraw();
+                }
             }
         }
         /// <summary>
@@ -189,8 +248,11 @@ namespace muzzle
             }
             set
             {
-                m_max = value;
-                DesignReDraw();
+                if (m_max != value)
+                {
+                    m_max = value;
+                    DesignReDraw();
+                }
             }
         }
         /// <summary>
@@ -212,6 +274,7 @@ namespace muzzle
                 m_auto = value;
             }
         }
+
         /// <summary>
         /// Draw labels with min and max of chart.  Useful with AutoSize set to true.
         /// </summary>
@@ -226,10 +289,14 @@ namespace muzzle
             }
             set
             {
-                m_label = value;
-                DesignReDraw();
+                if (m_label != value)
+                {
+                    m_label = value;
+                    DesignReDraw();
+                }
             }
         }
+
         /// <summary>
         /// Draw a line at zero?
         /// </summary>
@@ -244,10 +311,14 @@ namespace muzzle
             }
             set
             {
-                m_zero = value;
-                DesignReDraw();
+                if (m_zero != value)
+                {
+                    m_zero = value;
+                    DesignReDraw();
+                }
             }
         }
+
         /// <summary>
         /// Number of points to show
         /// </summary>
@@ -262,15 +333,19 @@ namespace muzzle
             }
             set
             {
-                m_hist = value;
-                lock (m_list)
+                if (m_hist != value)
                 {
-                    while (m_list.Count > m_hist)
-                        m_list.Dequeue();
+                    m_hist = value;
+                    lock (m_list)
+                    {
+                        while (m_list.Count > m_hist)
+                            m_list.Dequeue();
+                    }
+                    DesignReDraw();
                 }
-                DesignReDraw();
             }
         }
+
         /// <summary>
         /// Color to draw the min/max value in, if Labels is true
         /// </summary>
@@ -285,10 +360,14 @@ namespace muzzle
             }
             set
             {
-                m_textColor = value;
-                DesignReDraw();
+                if (m_textColor != value)
+                {
+                    m_textColor = value;
+                    DesignReDraw();
+                }
             }
         }
+
         /// <summary>
         /// Color to draw zero line in, if ZeroLine is true
         /// </summary>
@@ -303,10 +382,37 @@ namespace muzzle
             }
             set
             {
-                m_zeroColor = value;
-                DesignReDraw();
+                if (m_zeroColor != value)
+                {
+                    m_zeroColor = value;
+                    DesignReDraw();
+                }
             }
         }
+
+        /// <summary>
+        /// Color to draw the min/max value in, if Labels is true
+        /// </summary>
+        [Description("Color to draw the standard deviation range in, if ShowStats is true")]
+        [DefaultValue("Wheat")]
+        [Category("Appearance")]
+        public Color StatsColor
+        {
+            get
+            {
+                return m_statsColor;
+            }
+            set
+            {
+                if (m_statsColor != value)
+                {
+                    m_statsColor = value;
+                    DesignReDraw();
+                }
+            }
+        }
+
+
         /// <summary>
         /// Foreground color
         /// </summary>
@@ -318,10 +424,14 @@ namespace muzzle
             }
             set
             {
-                base.ForeColor = value;
-                DesignReDraw();
+                if (base.ForeColor != value)
+                {
+                    base.ForeColor = value;
+                    DesignReDraw();
+                }
             }
         }
+
         /// <summary>
         /// Background color
         /// </summary>
@@ -333,11 +443,15 @@ namespace muzzle
             }
             set
             {
-                base.BackColor = value;
-                pictureBox1.BackColor = value;
-                DesignReDraw();
+                if (base.BackColor != value)
+                {
+                    base.BackColor = value;
+                    pictureBox1.BackColor = value;
+                    DesignReDraw();
+                }
             }
         }
+
         /// <summary>
         /// Add a point to the strip chart.  If more than the history size are already
         /// in the chart, extras are dropped.
@@ -359,7 +473,17 @@ namespace muzzle
                 if (val < m_min)
                     m_min = val;
             }
-            ReDraw();
+
+            if (m_showStats)
+            {
+                // See:  http://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Algorithm_III
+                m_count++;
+                double delta = val - m_mean;
+                m_mean += delta / (double)m_count;
+                m_var_s += delta * (val - m_mean);
+            }
+            if (!DesignMode)
+                ReDraw();
         }
 
         /// <summary>
@@ -370,6 +494,7 @@ namespace muzzle
         {
             get { return m_last; }
         }
+
         /// <summary>
         /// Clear all of the points from the chart
         /// </summary>
@@ -392,12 +517,29 @@ namespace muzzle
 
         private void DesignReDraw()
         {
-            /*
-            if (this.DesignMode)
-                ReDraw();
-             */
-            ExecReDraw();
+            if (!DesignMode)
+                return;
+            lock (m_list)
+            {
+                bool cleanup = false;
+                double mean = m_mean;
+                double var_s = m_var_s;
+                if (m_list.Count == 0)
+                {
+                    cleanup = true;
+                    foreach (float x in s_sampleData)
+                        AddPoint(m_min + (x * (m_max - m_min)));
+                }
+                ExecReDraw();
+                if (cleanup)
+                {
+                    m_list.Clear();
+                    m_mean = mean;
+                    m_var_s = var_s;
+                }
+            }
         }
+
         private void ReDraw()
         {
             if (DesignMode)
@@ -416,6 +558,7 @@ namespace muzzle
         {
             pictureBox1.Image = bm;
         }
+
         private Bitmap ReDrawNoInvoke()
         {
             Font font = this.Font;
@@ -494,6 +637,27 @@ namespace muzzle
                 float y = h * (1 + m_min / s) + fh;
                 g.DrawLine(new Pen(m_zeroColor, 1F), 0, y, w, y);
             }
+            if (m_showStats)
+            {
+                float y = (float)(h * (1 - (m_mean - m_min) / s) + fh);
+                Color stats_color = Color.FromArgb(120, m_zeroColor);
+                Pen stats_pen = new Pen(stats_color, 1.0F);
+                stats_pen.DashStyle = DashStyle.Dash;
+                g.DrawLine(stats_pen, 0, y, w, y);
+                if (m_count > 1)
+                {
+                    stats_pen.DashStyle = DashStyle.Dot;
+                    double stddev = Math.Sqrt(m_var_s / (m_count - 1));
+                    y = (float)(h * (1 - (m_mean + stddev - m_min) / s) + fh);
+                    g.DrawLine(stats_pen, 0, y, w, y);
+                    y = (float)(h * (1 - (m_mean - stddev - m_min) / s) + fh);
+                    g.DrawLine(stats_pen, 0, y, w, y);
+
+                    Brush b = new SolidBrush(Color.FromArgb(120, m_statsColor));
+                    float std = (float)(2.0F * h * (stddev / s));
+                    g.FillRectangle(b, 0, y - std, w, std);
+                }
+            }
             if (m_label)
             {
                 g.DrawString(m_min.ToString(), font, textBrush, 2, h + fh);
@@ -536,21 +700,24 @@ namespace muzzle
         private void InitializeComponent()
         {
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
-            //
+            // 
             // pictureBox1
-            //
+            // 
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(150, 150);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
-            //
+            this.pictureBox1.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox1_Paint);
+            // 
             // StripChart
-            //
-            this.Controls.AddRange(new System.Windows.Forms.Control[] {
-                                                                          this.pictureBox1});
+            // 
+            this.Controls.Add(this.pictureBox1);
             this.Name = "StripChart";
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -572,6 +739,14 @@ namespace muzzle
         protected override void OnLoad(System.EventArgs e)
         {
             ReDraw();
+        }
+
+        private void pictureBox1_Paint(object sender, PaintEventArgs e)
+        {
+            if (!m_first)
+                return;
+            m_first = false;
+            DesignReDraw();
         }
     }
 }
