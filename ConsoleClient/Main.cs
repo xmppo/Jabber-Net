@@ -54,7 +54,7 @@ namespace ConsoleClient
         public string certificatePass = "";
 
         [CommandLine("u", "Untrusted certificates OK", false)]
-        public bool untrustedOK = true;
+        public bool untrustedOK = false;
 
         public Class1(string[] args)
         {            
@@ -83,7 +83,8 @@ namespace ConsoleClient
                       bedrock.net.AsyncSocket.CERT_E_CHAINING,
                       bedrock.net.AsyncSocket.CERT_E_PURPOSE };
 #else
-                bedrock.net.AsyncSocket.UntrustedRootOK = true;
+                bedrock.net.AsyncSocket.AllowedSSLErrors = System.Net.Security.SslPolicyErrors.RemoteCertificateChainErrors | System.Net.Security.SslPolicyErrors.RemoteCertificateNameMismatch;
+                //bedrock.net.AsyncSocket.UntrustedRootOK = true;
 #endif
             }
             
