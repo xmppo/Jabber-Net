@@ -1161,6 +1161,14 @@ namespace bedrock.net
         }
 #endif
 
+#if !NO_COMPRESSION
+        public override void StartCompression()
+        {
+            Debug.WriteLine("Start Compression");
+            m_stream = new bedrock.io.ZlibStream(m_stream, ComponentAce.Compression.Libs.zlib.zlibConst.Z_FULL_FLUSH);
+        }
+#endif
+
         /// <summary>
         /// Connection complete.
         /// </summary>
@@ -1304,10 +1312,15 @@ namespace bedrock.net
                     throw;
                 }
             }
-            catch (Exception)
+            catch (IOException)
             {
                 Close();
-                throw;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Exception in RequestRead: " + e.ToString());
+                Close();
+                throw e;
             }
         }
 
@@ -1384,7 +1397,8 @@ namespace bedrock.net
             {
                 if (State != SocketState.Connected)
                 {
-                    throw new InvalidOperationException("Socket must be connected before writing.  Current state: " + State.ToString());
+                    return;
+                    //throw new InvalidOperationException("Socket must be connected before writing.  Current state: " + State.ToString());
                 }
 
                 try

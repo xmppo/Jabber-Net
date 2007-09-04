@@ -149,6 +149,16 @@ namespace bedrock.net
         }
 #endif
 
+#if !NO_COMPRESSION
+        /// <summary>
+        /// Start compression processing on an open socket.
+        /// </summary>
+        public override void StartCompression()
+        {
+            m_sock.StartCompression();
+        }
+#endif
+
         /// <summary>
         /// Start the flow of async accepts.  Flow will continue while
         /// Listener.OnAccept() returns true.  Otherwise, call RequestAccept() again

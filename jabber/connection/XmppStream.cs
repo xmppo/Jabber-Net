@@ -81,6 +81,10 @@ namespace jabber.connection
         /// </summary>
         public const string AUTO_TLS     = "tls.auto";
         /// <summary>
+        /// Automatically negotiate XEP-138 compression.
+        /// </summary>
+        public const string AUTO_COMPRESS = "compress.auto";
+        /// <summary>
         /// Allow plaintext logins.
         /// </summary>
         public const string PLAINTEXT    = "plaintext";
@@ -204,6 +208,9 @@ namespace jabber.connection
             new object[] {Options.REQUIRE_SASL, false},
             new object[] {Options.PLAINTEXT, false},
             new object[] {Options.AUTO_TLS, true},
+#if !NO_COMPRESSION
+            new object[] {Options.AUTO_COMPRESS, true},
+#endif
             new object[] {Options.CERTIFICATE_GUI, true},
             new object[] {Options.PROXY_TYPE, ProxyType.None},
             new object[] {Options.CONNECTION_TYPE, ConnectionType.Socket},
@@ -228,6 +235,7 @@ namespace jabber.connection
         private Timer m_reconnectTimer = null;
         private bool m_reconnect = false;
         private bool m_sslOn = false;
+        private bool m_compressionOn = false;
 
         private XmlNamespaceManager m_ns;
         private ISynchronizeInvoke m_invoker = null;
@@ -483,12 +491,19 @@ namespace jabber.connection
         /// <summary>
         /// Is the current connection SSL/TLS protected?
         /// </summary>
-        [Description("Is the current connection SSL/TLS protected?")]
-        [DefaultValue(false)]
-        [Category("Jabber")]
+        [Browsable(false)]
         public bool SSLon
         {
             get { return m_sslOn; }
+        }
+
+        /// <summary>
+        /// Is the current connection XEP-138 compressed?
+        /// </summary>
+        [Browsable(false)]
+        public bool CompressionOn
+        {
+            get { return m_compressionOn; }
         }
 
         /// <summary>
@@ -517,6 +532,16 @@ namespace jabber.connection
         {
             get { return (bool)this[Options.AUTO_TLS]; }
             set { this[Options.AUTO_TLS] = value; }
+        }
+
+        /// <summary>
+        /// Allow start compression on connection, if the server supports it
+        /// </summary>
+        [Browsable(false)]
+        public bool AutoStartCompression
+        {
+            get { return (bool)this[Options.AUTO_COMPRESS]; }
+            set { this[Options.AUTO_COMPRESS] = value; }
         }
 
 #if NET20 || __MonoCS__
@@ -1143,6 +1168,26 @@ namespace jabber.connection
                 }
 #endif
 
+#if !NO_COMPRESSION
+                Compression comp = f.Compression;
+                if ((bool)this[Options.AUTO_COMPRESS] &&
+                    (comp != null) &&
+                    comp.HasMethod("zlib") &&
+                    (!m_compressionOn) &&
+                    m_stanzas.SupportsCompression )
+                {
+                    // start-tls
+                    lock (m_stateLock)
+                    {
+                        m_state = CompressionState.Instance;
+                    }
+                    Compress c = new Compress(m_doc);
+                    c.Method = "zlib";
+                    this.Write(c);
+                    return;
+                }
+#endif
+
                 // not authenticated yet.  Note: we'll get a stream:features
                 // after the last sasl restart, so we shouldn't try to iq:auth
                 // at that point.
@@ -1152,18 +1197,17 @@ namespace jabber.connection
                     m_saslProc = null;
 
                     MechanismType types = MechanismType.NONE;
-                    try
+
+                    if (ms != null)
                     {
-                        types = (MechanismType)this[Options.SASL_MECHANISMS];
-                        types &= ms.Types;
-                    }
-                    catch
-                    {
-                        if (ms != null)
+                        // if SASL_MECHANISMS is set in the options, it is the limited set 
+                        // of mechanisms we're willing to try.  Mask them off of the offered set.
+                        object smt = this[Options.SASL_MECHANISMS];
+                        if (smt != null)
+                            types = (MechanismType)smt & ms.Types;
+                        else
                             types = ms.Types;
                     }
-
-
 
                     if ((types != MechanismType.NONE) && ((bool)this[Options.SASL]))
                     {
@@ -1263,6 +1307,25 @@ namespace jabber.connection
                 }
             }
 #endif
+
+#if !NO_COMPRESSION
+            else if (m_state == CompressionState.Instance)
+            {
+                switch (tag.Name)
+                {
+                case "compressed":
+                    if (!StartCompression())
+                        return;
+                    SendNewStreamHeader();
+                    break;
+                case "failure":
+                    CompressionFailure fail = tag as CompressionFailure;
+                    FireOnError(new bedrock.io.CompressionFailedException(fail.Error));
+                    return;
+                }
+
+            }
+#endif
             else if (m_state == SASLAuthedState.Instance)
             {
                 Features f = tag as Features;
@@ -1307,6 +1370,26 @@ namespace jabber.connection
                 return false;
             }
             m_sslOn = true;
+            return true;
+        }
+
+        /// <summary>
+        /// Begin compressing.
+        /// </summary>
+        /// <returns></returns>
+        protected bool StartCompression()
+        {
+            try
+            {
+                m_stanzas.StartCompression();
+            }
+            catch (Exception e)
+            {
+                m_reconnect = false;
+                FireOnError(e);
+                return false;
+            }
+            m_compressionOn = true;
             return true;
         }
 
@@ -1596,6 +1679,7 @@ namespace jabber.connection
                 if ((m_stanzas != null) && (!m_stanzas.Acceptable))
                     m_stanzas = null;
                 m_sslOn = false;
+                m_compressionOn = false;
             }
 
             if (OnDisconnect != null)

@@ -118,6 +118,7 @@
     <Compile Include="bedrock\collections\TrieTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="bedrock\io\ZlibStream.cs" />
     <Compile Include="bedrock\net\AsyncSocketTest.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -94,6 +94,21 @@ namespace jabber.connection
             }
         }
 
+        /// <summary>
+        /// If !NO_COMPRESSION, we support compression.
+        /// </summary>
+        public override bool SupportsCompression
+        {
+            get
+            {
+#if NO_COMPRESSION
+                return false;
+#else
+                return true;
+#endif
+            }
+        }
+
         private AsyncSocket ASock
         {
             get
@@ -371,6 +386,16 @@ namespace jabber.connection
 
             Debug.Assert(s != null);
             m_listener[Options.REMOTE_CERTIFICATE] = s.RemoteCertificate;
+        }
+#endif
+
+#if !NO_COMPRESSION
+        /// <summary>
+        /// Negotiate Start-TLS with the other endpoint.
+        /// </summary>
+        public override void StartCompression()
+        {
+            m_sock.StartCompression();
         }
 #endif
 

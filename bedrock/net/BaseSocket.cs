@@ -130,6 +130,10 @@ namespace bedrock.net
         public abstract void StartTLS();
 #endif
 
+#if !NO_COMPRESSION
+        public abstract void StartCompression();
+#endif
+
         /// <summary>
         /// Start an async read from the socket.  Listener.OnRead() is
         /// eventually called when data arrives.

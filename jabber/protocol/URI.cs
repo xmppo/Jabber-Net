@@ -41,6 +41,14 @@ namespace jabber.protocol
         /// </summary>
         public const string START_TLS = "urn:ietf:params:xml:ns:xmpp-tls";
         /// <summary>
+        /// XEP-138 compression feature namespace.  Not the same as for the protocol!
+        /// </summary>
+        public const string COMPRESS_FEATURE = "http://jabber.org/features/compress";
+        /// <summary>
+        /// XEP-138 compression protocol namespace.  Not the same as the feature!
+        /// </summary>
+        public const string COMPRESS = "http://jabber.org/protocol/compress";
+        /// <summary>
         /// SASL feature namespace
         /// </summary>
         public const string SASL = "urn:ietf:params:xml:ns:xmpp-sasl";

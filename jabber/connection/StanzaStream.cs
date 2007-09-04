@@ -127,7 +127,7 @@ namespace jabber.connection
     /// </summary>
     [SVN(@"$Id$")]
     public abstract class StanzaStream
-        {
+    {
         /// <summary>
         /// Text encoding.  Always UTF-8 for XMPP.
         /// </summary>
@@ -152,9 +152,9 @@ namespace jabber.connection
                 return new SocketStanzaStream(listener);
             case ConnectionType.HTTP_Polling:
                 return new PollingStanzaStream(listener);
-// TODO: Fix broken build.
-//            case ConnectionType.HTTP_Binding:
-//                return new BindingStanzaStream(listener);
+            // TODO: Fix broken build.
+            //            case ConnectionType.HTTP_Binding:
+            //                return new BindingStanzaStream(listener);
             default:
                 throw new NotImplementedException("Proxy type not implemented yet: " + kind.ToString());
             }
@@ -195,6 +195,14 @@ namespace jabber.connection
         /// Handshake TLS now.
         /// </summary>
         virtual public void StartTLS()
+        {
+            throw new NotImplementedException("Start-TLS not implemented on this stream type");
+        }
+
+        /// <summary>
+        /// Handshake compression now.
+        /// </summary>
+        virtual public void StartCompression()
         {
             throw new NotImplementedException("Start-TLS not implemented on this stream type");
         }
@@ -245,7 +253,15 @@ namespace jabber.connection
         {
             get { return false; }
         }
+
+        /// <summary>
+        /// Does this stream support XEP-138 compression?
+        /// </summary>
+        virtual public bool SupportsCompression
+        {
+            get { return false; }
         }
+    }
 
     /// <summary>
     /// Something happened on a StanzaStream.

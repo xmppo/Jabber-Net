@@ -204,6 +204,17 @@ namespace bedrock.net
         }
 #endif
 
+#if !NO_COMPRESSION
+
+        /// <summary>
+        /// Start compression over this connection.  Not implemented.
+        /// </summary>
+        public override void StartCompression()
+        {
+            throw new NotImplementedException();
+        }
+#endif
+
         /// <summary>
         /// Send bytes to the jabber server
         /// </summary>

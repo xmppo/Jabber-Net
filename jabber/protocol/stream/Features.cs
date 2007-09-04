@@ -65,5 +65,13 @@ namespace jabber.protocol.stream
             get { return this["mechanisms", jabber.protocol.URI.SASL] as Mechanisms; }
             set { ReplaceChild(value); }
         }
+
+        /// <summary>
+        /// The compression element, or null if none found.
+        /// </summary>
+        public Compression Compression
+        {
+            get { return this["compression", jabber.protocol.URI.COMPRESS_FEATURE] as Compression; }
+        }
     }
 }

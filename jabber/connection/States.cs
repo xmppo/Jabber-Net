@@ -155,6 +155,17 @@ namespace jabber.connection
         public static readonly BaseState Instance = new StartTLSState();
     }
     /// <summary>
+    /// Compression is starting to compress.
+    /// </summary>
+    [SVN(@"$Id$")]
+    public class CompressionState : BaseState
+    {
+        /// <summary>
+        /// The instance that is always used.
+        /// </summary>
+        public static readonly BaseState Instance = new CompressionState();
+    }
+    /// <summary>
     /// SASL Authentication in process
     /// </summary>
     [SVN(@"$Id$")]

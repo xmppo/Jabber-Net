@@ -86,6 +86,10 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
+    <Reference Include="zlib.net, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\zlib.net.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs">
@@ -130,6 +134,7 @@
     <Compile Include="bedrock\io\ReadEventStream.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="bedrock\io\ZlibStream.cs" />
     <Compile Include="bedrock\net\Address.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -313,6 +318,7 @@
     <Compile Include="jabber\protocol\stream\Bind.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="jabber\protocol\stream\Compression.cs" />
     <Compile Include="jabber\protocol\stream\Error.cs">
       <SubType>Code</SubType>
     </Compile>
