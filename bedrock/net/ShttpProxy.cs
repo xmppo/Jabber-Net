@@ -126,7 +126,7 @@ Host: {0}
                         {
                             Debug.WriteLine("End of proxy headers");
                             string line0 = (string)m_headers[0];
-                            if (!line0.Contains("200"))
+                            if (line0.IndexOf("200") == -1)
                             {
                                 Debug.WriteLine("200 response not detected.  Closing.");
                                 m_state = States.Error;
