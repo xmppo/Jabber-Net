@@ -34,6 +34,7 @@ $(BASEDIR)/bedrock/collections/Trie.cs \
 $(BASEDIR)/bedrock/collections/TrieNode.cs \
 $(BASEDIR)/bedrock/io/BufferAggregate.cs \
 $(BASEDIR)/bedrock/io/ReadEventStream.cs \
+$(BASEDIR)/bedrock/io/ZlibStream.cs \
 $(BASEDIR)/bedrock/net/Address.cs \
 $(BASEDIR)/bedrock/net/AsyncSocket.cs \
 $(BASEDIR)/bedrock/net/BaseSocket.cs \
@@ -59,6 +60,7 @@ $(BASEDIR)/jabber/connection/PollingStanzaStream.cs \
 $(BASEDIR)/jabber/connection/SocketStanzaStream.cs \
 $(BASEDIR)/jabber/connection/StanzaStream.cs \
 $(BASEDIR)/jabber/connection/States.cs \
+$(BASEDIR)/jabber/connection/StreamComponent.cs \
 $(BASEDIR)/jabber/connection/XmppStream.cs \
 $(BASEDIR)/jabber/connection/sasl/ExternalProcessor.cs \
 $(BASEDIR)/jabber/connection/sasl/MD5Processor.cs \
@@ -98,6 +100,7 @@ $(BASEDIR)/jabber/protocol/iq/Time.cs \
 $(BASEDIR)/jabber/protocol/iq/VCard.cs \
 $(BASEDIR)/jabber/protocol/iq/Version.cs \
 $(BASEDIR)/jabber/protocol/stream/Bind.cs \
+$(BASEDIR)/jabber/protocol/stream/Compression.cs \
 $(BASEDIR)/jabber/protocol/stream/Error.cs \
 $(BASEDIR)/jabber/protocol/stream/Factory.cs \
 $(BASEDIR)/jabber/protocol/stream/Features.cs \
@@ -105,6 +108,7 @@ $(BASEDIR)/jabber/protocol/stream/SASL.cs \
 $(BASEDIR)/jabber/protocol/stream/Session.cs \
 $(BASEDIR)/jabber/protocol/stream/StartTLS.cs \
 $(BASEDIR)/jabber/protocol/stream/Stream.cs \
+$(BASEDIR)/jabber/protocol/x/Caps.cs \
 $(BASEDIR)/jabber/protocol/x/Data.cs \
 $(BASEDIR)/jabber/protocol/x/Delay.cs \
 $(BASEDIR)/jabber/protocol/x/Event.cs \
@@ -146,9 +150,9 @@ RESOURCES = \
 -resource:$(BASEDIR)/jabber/client/RosterManager.bmp \
 -resource:$(BASEDIR)/jabber/server/JabberService.bmp
 
-SYSTEM_REFERENCES = -r:System.dll -r:System.Xml.dll -r:Mono.Security.dll
+SYSTEM_REFERENCES = -r:zlib.net.dll -r:System.dll -r:System.Xml.dll -r:Mono.Security.dll
 
-MCS_OPTIONS =   -lib:$(BASEDIR)/bin/debug $(DEBUG) \
+MCS_OPTIONS =   -lib:$(BASEDIR)/bin/debug,$(BASEDIR)/lib $(DEBUG) \
 		-define:DEBUG
 
 ASSEMBLIES =
@@ -160,9 +164,6 @@ bin/debug/jabber-net.dll: $(SOURCES)
 	cd bin/debug && mcs $(MCS_OPTIONS) -target:library \
 	-out:"jabber-net.dll" $(RESOURCES) $(SYSTEM_REFERENCES) \
 	$(SOURCES) $(ASSEMBLIES) 
-
-$(BASEDIR)/stringprep/bin/debug/stringprep.dll:
-	$(MAKE) -C stringprep
 
 subdirs: bin/debug/jabber-net.dll
 	$(MAKE) -C ConsoleClient
