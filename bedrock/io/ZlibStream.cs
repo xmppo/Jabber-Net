@@ -58,11 +58,20 @@ namespace bedrock.io
         private byte[] m_inbuf;
         private byte[] m_outbuf;
 
+        /// <summary>
+        /// Wrap a bi-directional stream in a compression stream.
+        /// </summary>
+        /// <param name="innerStream">The stream to wrap.</param>
         public ZlibStream(Stream innerStream)
         {
             init(innerStream);
         }
 
+        /// <summary>
+        /// Wrap a bi-directional stream in a compression stream.
+        /// </summary>
+        /// <param name="innerStream">The stream to wrap.</param>
+        /// <param name="flush">The flush type.  TODO: doc these.</param>
         public ZlibStream(Stream innerStream, int flush)
         {
             m_flush = flush;
@@ -96,16 +105,25 @@ namespace bedrock.io
             }
         }
 
+        /// <summary>
+        /// Is the underlying stream readable?
+        /// </summary>
         public override bool CanRead
         {
             get { return m_stream.CanRead; }
         }
 
+        /// <summary>
+        /// No seeking on compressed streams.  That sounds hard.
+        /// </summary>
         public override bool CanSeek
         {
             get { return false; }
         }
 
+        /// <summary>
+        /// Is the underlying stream writable?
+        /// </summary>
         public override bool CanWrite
         {
             get { return m_stream.CanWrite; }
@@ -119,17 +137,32 @@ namespace bedrock.io
             m_stream.Flush();
         }
 
+        /// <summary>
+        /// Not implemented.
+        /// </summary>
         public override long Length
         {
             get { throw new NotImplementedException("The method or operation is not implemented."); }
         }
 
+        /// <summary>
+        /// Not implemented.
+        /// </summary>
         public override long Position
         {
             get { throw new NotImplementedException("The method or operation is not implemented."); }
             set { throw new NotImplementedException("The method or operation is not implemented."); }
         }
 
+        /// <summary>
+        /// Start an async read. Implemented locally, since Stream.BeginRead() isn't really asynch.
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="offset"></param>
+        /// <param name="count"></param>
+        /// <param name="callback"></param>
+        /// <param name="state"></param>
+        /// <returns></returns>
         public override IAsyncResult BeginRead(byte[] buffer, int offset, int count, AsyncCallback callback, object state)
         {
             if (count <= 0)
@@ -148,6 +181,11 @@ namespace bedrock.io
             return ar;
         }
 
+        /// <summary>
+        /// Complete a pending read, when the callback passed to BeginRead fires.
+        /// </summary>
+        /// <param name="asyncResult"></param>
+        /// <returns></returns>
         public override int EndRead(IAsyncResult asyncResult)
         {
             if (!(asyncResult is ZlibStreamAsyncResult))
@@ -155,6 +193,13 @@ namespace bedrock.io
             return Inflate();
         }
 
+        /// <summary>
+        /// Synchronous read.  Decompresses.
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="offset"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
         public override int Read(byte[] buffer, int offset, int count)
         {
             if (count <= 0)
@@ -188,16 +233,36 @@ namespace bedrock.io
             return (count - m_in.avail_out);
         }
 
+        /// <summary>
+        /// Not implemented.
+        /// </summary>
+        /// <param name="offset"></param>
+        /// <param name="origin"></param>
+        /// <returns></returns>
         public override long Seek(long offset, SeekOrigin origin)
         {
             throw new NotImplementedException("The method or operation is not implemented.");
         }
 
+        /// <summary>
+        /// Not implemented.
+        /// </summary>
+        /// <param name="value"></param>
         public override void SetLength(long value)
         {
             throw new NotImplementedException("The method or operation is not implemented.");
         }
 
+        /// <summary>
+        /// Begin an asynch write, compressing first.  Implemented locally, since Stream.BeginWrite isn't asynch.
+        /// Note: may call Write() on the underlying stream more than once.
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="offset"></param>
+        /// <param name="count"></param>
+        /// <param name="callback"></param>
+        /// <param name="state"></param>
+        /// <returns></returns>
         public override IAsyncResult BeginWrite(byte[] buffer, int offset, int count, AsyncCallback callback, object state)
         {
             if (count <= 0)
@@ -257,6 +322,10 @@ namespace bedrock.io
                 m_stream.BeginWrite(m_outbuf, 0, bufsize - m_out.avail_out, IntermediateWrite, state);
         }
 
+        /// <summary>
+        /// Complete a pending write, when the callback given to BeginWrite is called.
+        /// </summary>
+        /// <param name="asyncResult"></param>
         public override void EndWrite(IAsyncResult asyncResult)
         {
             if (asyncResult is ZlibStreamAsyncResult)
@@ -270,6 +339,12 @@ namespace bedrock.io
             return;
         }
 
+        /// <summary>
+        /// Synchronous write, after compressing.
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="offset"></param>
+        /// <param name="count"></param>
         public override void Write(byte[] buffer, int offset, int count)
         {
             if (count <= 0)

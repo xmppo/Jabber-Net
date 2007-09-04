@@ -131,6 +131,9 @@ namespace bedrock.net
 #endif
 
 #if !NO_COMPRESSION
+        /// <summary>
+        /// Start XEP-138 compression on this socket.
+        /// </summary>
         public abstract void StartCompression();
 #endif
 
