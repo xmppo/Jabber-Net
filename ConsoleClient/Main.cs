@@ -83,8 +83,8 @@ namespace ConsoleClient
                       bedrock.net.AsyncSocket.CERT_E_CHAINING,
                       bedrock.net.AsyncSocket.CERT_E_PURPOSE };
 #else
-                bedrock.net.AsyncSocket.AllowedSSLErrors = System.Net.Security.SslPolicyErrors.RemoteCertificateChainErrors | System.Net.Security.SslPolicyErrors.RemoteCertificateNameMismatch;
-                //bedrock.net.AsyncSocket.UntrustedRootOK = true;
+                //bedrock.net.AsyncSocket.AllowedSSLErrors = System.Net.Security.SslPolicyErrors.RemoteCertificateChainErrors | System.Net.Security.SslPolicyErrors.RemoteCertificateNameMismatch;
+                bedrock.net.AsyncSocket.UntrustedRootOK = true;
 #endif
             }
             

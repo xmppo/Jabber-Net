@@ -28,7 +28,7 @@
                     BaseAddress = "285212672"
                     CheckForOverflowUnderflow = "false"
                     ConfigurationOverrideFile = ""
-                    DefineConstants = "DEBUG;TRACE"
+                    DefineConstants = "DEBUG;TRACE;NO_COMPRESSION"
                     DocumentationFile = "jabber-net.xml"
                     DebugSymbols = "true"
                     FileAlignment = "4096"
@@ -159,6 +159,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "bedrock\io\ZlibStream.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "bedrock\net\Address.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -268,7 +273,7 @@
                 />
                 <File
                     RelPath = "jabber\client\PresenceManager.cs"
-                    SubType = "Component"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
@@ -277,7 +282,7 @@
                 />
                 <File
                     RelPath = "jabber\client\RosterManager.cs"
-                    SubType = "Component"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
@@ -287,7 +292,7 @@
                 />
                 <File
                     RelPath = "jabber\connection\CapsManager.cs"
-                    SubType = "Component"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
@@ -296,7 +301,7 @@
                 />
                 <File
                     RelPath = "jabber\connection\DiscoManager.cs"
-                    SubType = "Component"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
@@ -322,6 +327,11 @@
                 <File
                     RelPath = "jabber\connection\States.cs"
                     SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "jabber\connection\StreamComponent.cs"
+                    SubType = "Component"
                     BuildAction = "Compile"
                 />
                 <File
@@ -522,6 +532,11 @@
                 />
                 <File
                     RelPath = "jabber\protocol\stream\Bind.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "jabber\protocol\stream\Compression.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

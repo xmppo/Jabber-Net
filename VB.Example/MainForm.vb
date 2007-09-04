@@ -126,7 +126,6 @@ Public Class MainForm
         'pnlCon
         '
         Me.pnlCon.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Spring
-        Me.pnlCon.Name = "pnlCon"
         Me.pnlCon.Text = "Click on ""Offline"", and select a presence to log in."
         Me.pnlCon.Width = 568
         '
@@ -134,7 +133,6 @@ Public Class MainForm
         '
         Me.pnlPresence.Alignment = System.Windows.Forms.HorizontalAlignment.Right
         Me.pnlPresence.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Contents
-        Me.pnlPresence.Name = "pnlPresence"
         Me.pnlPresence.Text = "Offline"
         Me.pnlPresence.Width = 47
         '
@@ -159,8 +157,6 @@ Public Class MainForm
         '
         Me.ilPresence.ImageStream = CType(resources.GetObject("ilPresence.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.ilPresence.TransparentColor = System.Drawing.Color.Transparent
-        Me.ilPresence.Images.SetKeyName(0, "")
-        Me.ilPresence.Images.SetKeyName(1, "")
         '
         'mnuPresence
         '

@@ -104,6 +104,16 @@
         <Files>
             <Include>
                 <File
+                    RelPath = "AddContact.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AddContact.resx"
+                    DependentUpon = "AddContact.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

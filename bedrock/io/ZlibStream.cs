@@ -287,7 +287,7 @@ namespace bedrock.io
             if (m_out.avail_in == 0)
                 return m_stream.BeginWrite(m_outbuf, 0, bufsize - m_out.avail_out, callback, state);
             else
-                return m_stream.BeginWrite(m_outbuf, 0, bufsize - m_out.avail_out, IntermediateWrite, new ZlibState(callback, state));
+                return m_stream.BeginWrite(m_outbuf, 0, bufsize - m_out.avail_out, new AsyncCallback(IntermediateWrite), new ZlibState(callback, state));
         }
 
         private void IntermediateWrite(IAsyncResult asyncResult)
@@ -319,7 +319,7 @@ namespace bedrock.io
             if (m_out.avail_in == 0)
                 m_stream.BeginWrite(m_outbuf, 0, bufsize - m_out.avail_out, state.callback, state.state);
             else
-                m_stream.BeginWrite(m_outbuf, 0, bufsize - m_out.avail_out, IntermediateWrite, state);
+                m_stream.BeginWrite(m_outbuf, 0, bufsize - m_out.avail_out, new AsyncCallback(IntermediateWrite), state);
         }
 
         /// <summary>

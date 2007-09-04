@@ -1,16 +1,29 @@
+/* --------------------------------------------------------------------------
+ * Copyrights
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * information for Cursive Systems, Inc. is available at
+ * http://www.cursive.net/.
+ *
+ * License
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
+ * See LICENSE.txt for details.
+ * --------------------------------------------------------------------------*/
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
+using bedrock.util;
 using jabber;
 
 namespace Example
 {
-    public class AddContact : Form
+	[SVN(@"$Id$")]
+	public class AddContact : Form
     {
 
         private Label label1;
@@ -189,7 +202,6 @@ namespace Example
             this.lbGroups.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.lbGroups.FormattingEnabled = true;
             this.lbGroups.Location = new System.Drawing.Point(86, 58);
             this.lbGroups.Name = "lbGroups";
             this.lbGroups.Size = new System.Drawing.Size(269, 124);
@@ -205,7 +217,6 @@ namespace Example
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 8;
             this.btnOK.Text = "OK";
-            this.btnOK.UseVisualStyleBackColor = true;
             // 
             // btnCancel
             // 
@@ -216,7 +227,6 @@ namespace Example
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 9;
             this.btnCancel.Text = "Cancel";
-            this.btnCancel.UseVisualStyleBackColor = true;
             // 
             // txtGroup
             // 
@@ -233,14 +243,11 @@ namespace Example
             this.btnAdd.Size = new System.Drawing.Size(68, 23);
             this.btnAdd.TabIndex = 7;
             this.btnAdd.Text = "Add Group";
-            this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
             // AddContact
             // 
             this.AcceptButton = this.btnOK;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(367, 250);
             this.Controls.Add(this.btnAdd);
@@ -278,7 +285,9 @@ namespace Example
             if (e.KeyCode == Keys.Return)
             {
                 btnAdd_Click(null, null);
+#if NET_20
                 e.SuppressKeyPress = true;
+#endif
             }
         }
 
