@@ -11,10 +11,11 @@
  * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
-using System;
-
+using System.IO;
 using System.Text;
+using System.Threading;
 using System.Xml;
+using System;
 using NUnit.Framework;
 
 using bedrock;
@@ -32,29 +33,70 @@ namespace test.jabber.protocol
     {
         private bool fail = false;
         private System.Text.Encoding ENC = System.Text.Encoding.UTF8;
+        private AutoResetEvent are = new AutoResetEvent(false);
 
+        /*
+         * Try several ways to generate PartialTokenException.
+         */
         [Test] public void Test_Partial()
         {
             fail = false;
-            AsynchElementStream m_ElementStream = new AsynchElementStream();
-            m_ElementStream.OnDocumentEnd += new ObjectHandler(jabOnEnd);
+            AsynchElementStream es = new AsynchElementStream();
+            es.OnDocumentEnd += new ObjectHandler(jabOnEnd);
 
-            m_ElementStream.Push(ENC.GetBytes("<stream>"));
-            m_ElementStream.Push(ENC.GetBytes("<te"));
+            es.Push(ENC.GetBytes("<stream>"));
+            es.OnElement += new ProtocolHandler(jabOnElement);
+            es.Push(ENC.GetBytes("<te"));
 
-            System.Threading.Thread.Sleep(500);
+            are.WaitOne(100, true);
             Assert.IsTrue(! fail);
+
+            es.Push(ENC.GetBytes("st/>"));
+            es.Push(ENC.GetBytes("<test>"));
+            es.Push(ENC.GetBytes("</"));                    
+            es.Push(ENC.GetBytes("test>"));
+            es.Push(ENC.GetBytes("<test>&#1"));
+            es.Push(ENC.GetBytes("16;est</test>"));
+            es.Push(ENC.GetBytes("<test>"));
+            es.Push(new byte[] {0xC5});
+            es.Push(new byte[] {0x81});
+            es.Push(ENC.GetBytes("</test>"));
+            es.Push(ENC.GetBytes("<test f"));
+            es.Push(ENC.GetBytes("oo='bar'/>"));
+            es.Push(ENC.GetBytes("<test foo="));
+            es.Push(ENC.GetBytes("'bar'/>"));
+            es.Push(ENC.GetBytes("<test foo='"));
+            es.Push(ENC.GetBytes("bar'/>"));
+            es.Push(new byte[] {} );
         }
 
+        /*
+         * What happens if we try to parse more than 4k of data at once?
+         */
+        [Test] public void Test_Large()
+        {
+            AsynchElementStream es = new AsynchElementStream();
+            // es.OnElement += new ProtocolHandler(jabOnElement);
+            
+            es.Push(ENC.GetBytes("<stream>"));
+            byte[] buf = ENC.GetBytes("<test/>");
+            MemoryStream ms = new MemoryStream();
+            for (int i=0; i<1024; i++)
+            {
+                ms.Write(buf, 0, buf.Length);
+            }
+            es.Push(ms.ToArray());
+        }
+        
         /*
         [Test] public void Test_NullBody()
         {
             fail = false;
-            AsynchElementStream m_ElementStream = new AsynchElementStream();
-            m_ElementStream.OnDocumentEnd += new ObjectHandler(jabOnEnd);
+            AsynchElementStream es = new AsynchElementStream();
+            es.OnDocumentEnd += new ObjectHandler(jabOnEnd);
 
-            m_ElementStream.Push(ENC.GetBytes("<str"));
-            m_ElementStream.Push(ENC.GetBytes("eam/>"));
+            es.Push(ENC.GetBytes("<str"));
+            es.Push(ENC.GetBytes("eam/>"));
 
             System.Threading.Thread.Sleep(500);
             Assert.IsTrue(! fail);
@@ -66,11 +108,11 @@ namespace test.jabber.protocol
         [Test] public void Test_Comment()
         {
             fail = false;
-            ElementStream m_ElementStream = new ElementStream();
-            m_ElementStream.OnDocumentEnd += new ObjectHandler(jabOnEnd);
+            ElementStream es = new ElementStream();
+            es.OnDocumentEnd += new ObjectHandler(jabOnEnd);
 
-            m_ElementStream.Push(ENC.GetBytes("<stream><!-- <foo/>"));
-            m_ElementStream.Push(ENC.GetBytes(" --></stream>"));
+            es.Push(ENC.GetBytes("<stream><!-- <foo/>"));
+            es.Push(ENC.GetBytes(" --></stream>"));
 
             System.Threading.Thread.Sleep(500);
             Assert.IsTrue(! fail);
@@ -79,7 +121,13 @@ namespace test.jabber.protocol
         void jabOnEnd(object s)
         {
             fail = true;
+            are.Set();
         }
 
+        void jabOnElement(Object sender, System.Xml.XmlElement elem)
+        {
+            Console.WriteLine(elem.OuterXml);
+            Assert.AreEqual("test", elem.Name);
+        }
     }
 }
