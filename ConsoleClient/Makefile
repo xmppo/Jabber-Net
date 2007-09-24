@@ -20,24 +20,29 @@ SOURCES = \
 $(BASEDIR)/AssemblyInfo.cs \
 $(BASEDIR)/Main.cs 
 
-ASSEMBLIES = -r:jabber-net.dll #-r:stringprep.dll
+ASSEMBLIES = -r:jabber-net.dll
 
 RESOURCES = 
 
 SYSTEM_REFERENCES = -r:System.dll -r:System.Xml.dll
 
-MCS_OPTIONS =   -lib:$(BASEDIR)/bin/debug -debug \
-		-define:DEBUG
+OUTDIR = $(BASEDIR)/bin/debug
+MCS_OPTIONS = -lib:$(OUTDIR) -debug -define:DEBUG
 
-all: bin/debug/console-client.exe
+OUTFILE = $(OUTDIR)/console-client.exe
+JNDLL = $(BASEDIR)/../bin/debug/jabber-net.dll
 
-bin/debug/console-client.exe: $(SOURCES) $(BASEDIR)/../bin/debug/jabber-net.dll #$(BASEDIR)/../bin/debug/stringprep.dll
-	-mkdir -p bin/debug
-	cp -f $(BASEDIR)/../bin/debug/jabber-net.dll bin/debug/
-	cp -f $(BASEDIR)/../lib/zlib.net.dll bin/debug/
-	cd bin/debug && mcs $(MCS_OPTIONS) -target:exe \
-	-out:"console-client.exe" $(RESOURCES) $(SYSTEM_REFERENCES) \
-	$(SOURCES) $(ASSEMBLIES) 
+all: $(OUTFILE)
+
+$(OUTDIR):
+	mkdir -p $(OUTDIR)
+
+$(OUTFILE): $(OUTDIR) $(SOURCES) $(JNDLL)
+	cp -f $(JNDLL) $(OUTDIR)
+	cp -f $(BASEDIR)/../lib/*.dll $(OUTDIR)
+	mcs $(MCS_OPTIONS) -target:exe \
+	-out:$(OUTFILE) $(RESOURCES) $(SYSTEM_REFERENCES) $(ASSEMBLIES)  \
+	$(SOURCES) 
 
 clean:
-	rm -rf bin
+	$(RM) -r bin

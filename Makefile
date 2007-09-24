@@ -15,8 +15,6 @@
 # The purpose of this Makefile is to facilitate mono builds.
 
 DEBUG = -debug
-
-#BASEDIR:=$(shell pwd)
 BASEDIR = $(CURDIR)
 
 SOURCES = \
@@ -152,22 +150,30 @@ RESOURCES = \
 
 SYSTEM_REFERENCES = -r:zlib.net.dll -r:System.dll -r:System.Xml.dll -r:Mono.Security.dll
 
-MCS_OPTIONS =   -lib:$(BASEDIR)/bin/debug,$(BASEDIR)/lib $(DEBUG) \
-		-define:DEBUG
+DEBUGDIR = $(BASEDIR)/bin/debug
+
+MCS_OPTIONS = -lib:$(DEBUGDIR),$(BASEDIR)/lib $(DEBUG) -define:DEBUG
 
 ASSEMBLIES =
+DLL = $(DEBUGDIR)/jabber-net.dll
 
-all:  subdirs
+SUBDIRS = ConsoleClient test
+.PHONY: all clean $(SUBDIRS)
 
-bin/debug/jabber-net.dll: $(SOURCES)
+all:  $(DLL) $(SUBDIRS)
+
+$(DLL): $(SOURCES)
 	-mkdir -p bin/debug
-	cd bin/debug && mcs $(MCS_OPTIONS) -target:library \
-	-out:"jabber-net.dll" $(RESOURCES) $(SYSTEM_REFERENCES) \
-	$(SOURCES) $(ASSEMBLIES) 
+	mcs $(MCS_OPTIONS) -target:library \
+	-out:"$@" $(RESOURCES) $(SYSTEM_REFERENCES) \
+	$^ $(ASSEMBLIES) 
 
-subdirs: bin/debug/jabber-net.dll
-	$(MAKE) -C ConsoleClient
+$(SUBDIRS): $(DLL)
+	$(MAKE) -C $@
 
 clean:
-	rm -rf bin
-	$(MAKE) -C ConsoleClient clean
+	$(RM) -r bin
+	for dir in $(SUBDIRS); do \
+		$(MAKE) -C $$dir $@; \
+	done	
+
