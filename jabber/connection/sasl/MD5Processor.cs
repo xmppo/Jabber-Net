@@ -13,11 +13,11 @@
  * --------------------------------------------------------------------------*/
 using System;
 using System.Diagnostics;
-using System.Text;
 using System.Collections;
 using System.Security.Cryptography;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.IO;
-using System.Globalization;
 using System.Xml;
 
 using bedrock.util;
@@ -46,7 +46,6 @@ namespace jabber.connection.sasl
         private string  m_charset;
         private string  m_algorithm;
         private string  m_authzid;
-
 
         /// <summary>
         /// DIGEST-MD5 Realm
@@ -79,7 +78,9 @@ namespace jabber.connection.sasl
         public static readonly string[] s_requiredDirectives = {USERNAME, PASSWORD};
 
         private static readonly MD5CryptoServiceProvider MD5 = new MD5CryptoServiceProvider();
-        private static readonly System.Text.Encoding     ENC = System.Text.Encoding.UTF8;
+        private static readonly Encoding ENC = System.Text.Encoding.UTF8;
+        private static readonly Regex CSV = new Regex(@"(?<tag>[^=]+)=(?:(?<data>[^,""]+)|(?:""(?<data>[^""]*)"")),?",
+                RegexOptions.ExplicitCapture | RegexOptions.Compiled);
 
         /// <summary>
         ///
@@ -108,8 +109,7 @@ namespace jabber.connection.sasl
             }
 
             Debug.Assert(s is Challenge);
-            String decodedChallenge = ENC.GetString(s.Bytes);
-            populateDirectives(decodedChallenge);
+            populateDirectives(ENC.GetString(s.Bytes));
             validateStartDirectives();
 
 
@@ -136,34 +136,13 @@ namespace jabber.connection.sasl
         /// <param name="decoded"></param>
         private void populateDirectives(string decoded)
         {
-            string key = "";
-            string data = "";
-            string pDelimStr = ",";
-
-            char[] pDelimiter = pDelimStr.ToCharArray();
-
-            string[] split = null;
-            split = decoded.Split(pDelimiter);
-            foreach(string name_value in split)
+            MatchCollection coll = CSV.Matches(decoded);
+            foreach (Match m in coll)
             {
-                parsePair(name_value, key, data);
+                this[m.Groups["tag"].Value] = m.Groups["data"].Value;
             }
         }
 
-        private void parsePair(string name_value, string key, string data)
-        {
-            int index = name_value.IndexOf("=");
-            key = name_value.Substring(0,index);
-            int start = index+1;
-            int end = name_value.Length - start;
-            if (name_value[start] == '\"')
-            {
-                start++;
-                end = end-2;
-            }
-            data = name_value.Substring(start, end);
-            this[key] = data;
-        }
 
         /// <summary>
         ///
@@ -172,12 +151,11 @@ namespace jabber.connection.sasl
         private void validateStartDirectives()
         {
             Object n;
-            ASCIIEncoding AE = new ASCIIEncoding();
             string temp;
             if ( (n = this[USERNAME]) != null)
             {
                 temp = n.ToString();
-                m_username = ENC.GetString(AE.GetBytes(temp));
+                m_username = ENC.GetString(ENC.GetBytes(temp));
             }
             else
             {
@@ -186,7 +164,7 @@ namespace jabber.connection.sasl
             if ( (n = this[PASSWORD]) != null)
             {
                 temp = n.ToString();
-                m_password = ENC.GetString(AE.GetBytes(temp));
+                m_password = ENC.GetString(ENC.GetBytes(temp));
             }
             else
             {
