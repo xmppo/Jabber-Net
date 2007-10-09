@@ -205,5 +205,11 @@ namespace jabber.protocol
         /// </summary>
         public const string CAPS = "http://jabber.org/protocol/caps";
 
+        /// <summary>
+        /// Publish/Subscribe
+        /// See XEP-0060 (http://www.xmpp.org/extensions/xep-0060.html)
+        /// </summary>
+        public const string PUBSUB = "http://jabber.org/protocol/pubsub";
+
     }
 }
