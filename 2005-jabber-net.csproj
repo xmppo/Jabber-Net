@@ -294,6 +294,7 @@
     <Compile Include="jabber\protocol\iq\OOB.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="jabber\protocol\iq\PubSub.cs" />
     <Compile Include="jabber\protocol\iq\Register.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -426,9 +427,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="jabber\connection\CapsManager.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="jabber\protocol\httpbind\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
