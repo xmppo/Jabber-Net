@@ -92,6 +92,7 @@ $(BASEDIR)/jabber/protocol/iq/Factory.cs \
 $(BASEDIR)/jabber/protocol/iq/GeoLoc.cs \
 $(BASEDIR)/jabber/protocol/iq/Last.cs \
 $(BASEDIR)/jabber/protocol/iq/OOB.cs \
+$(BASEDIR)/jabber/protocol/iq/PubSub.cs \
 $(BASEDIR)/jabber/protocol/iq/Register.cs \
 $(BASEDIR)/jabber/protocol/iq/Roster.cs \
 $(BASEDIR)/jabber/protocol/iq/Time.cs \
