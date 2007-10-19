@@ -126,6 +126,7 @@ namespace jabber.client
         [Category("Jabber")]
         [Browsable(false)]
         [Obsolete("Use the Stream property instead")]
+        [ReadOnly(true)]
         public JabberClient Client
         {
             get { return (JabberClient) this.Stream; }
