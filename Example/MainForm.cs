@@ -255,7 +255,6 @@ namespace Example
             this.jc.InvokeControl = this;
             this.jc.LocalCertificate = null;
             this.jc.Password = null;
-            this.jc.Priority = 0;
             this.jc.User = null;
             this.jc.OnReadText += new bedrock.TextHandler(this.jc_OnReadText);
             this.jc.OnMessage += new jabber.client.MessageHandler(this.jc_OnMessage);
@@ -272,15 +271,18 @@ namespace Example
             // 
             // pm
             // 
+            this.pm.Client = this.jc;
             this.pm.Stream = this.jc;
             // 
             // rm
             // 
             this.rm.AutoAllow = jabber.client.AutoSubscriptionHanding.AllowIfSubscribed;
             this.rm.AutoSubscribe = true;
+            this.rm.Client = this.jc;
             this.rm.Stream = this.jc;
             this.rm.OnSubscription += new jabber.client.SubscriptionHandler(this.rm_OnSubscription);
             this.rm.OnRosterEnd += new bedrock.ObjectHandler(this.rm_OnRosterEnd);
+            this.rm.OnUnsubscription += new jabber.client.UnsubscriptionHandler(this.rm_OnUnsubscription);
             // 
             // tpServices
             // 
@@ -848,6 +850,11 @@ namespace Example
         {
             jabber.connection.DiscoNode dn = (jabber.connection.DiscoNode)e.Node.Tag;
             dm.BeginGetFeatures(dn, new jabber.connection.DiscoNodeHandler(GotInfo));
+        }
+
+        private void rm_OnUnsubscription(jabber.client.RosterManager manager, Presence pres, ref bool remove)
+        {
+            MessageBox.Show(pres.From + " has removed you from their roster.", "Unsubscription notification", MessageBoxButtons.OK);
         }
 #endif
     }

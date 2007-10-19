@@ -32,12 +32,20 @@ namespace jabber.client
     public delegate void RosterItemHandler(object sender, Item ri);
 
     /// <summary>
-    /// Delegate for (un)subscription requests
+    /// Delegate for subscription requests
     /// </summary>
     /// <param name="manager">The RosterManager than detected the subscription</param>
     /// <param name="ri">The affected roster item, in its current state.  Null if not found (which I think should be rare)</param>
     /// <param name="pres">The inbound presence stanza</param>
     public delegate void SubscriptionHandler(RosterManager manager, Item ri, Presence pres);
+
+    /// <summary>
+    /// Delegate for unsubscription notifications
+    /// </summary>
+    /// <param name="manager">The RosterManager than detected the subscription</param>
+    /// <param name="remove">Set this to false to prevent the user being removed from the roster.</param>
+    /// <param name="pres">The inbound presence stanza</param>
+    public delegate void UnsubscriptionHandler(RosterManager manager, Presence pres, ref bool remove);
 
     /// <summary>
     /// How should a RosterManager deal with incoming subscriptions?
@@ -178,6 +186,15 @@ namespace jabber.client
         public event SubscriptionHandler OnSubscription;
 
         /// <summary>
+        /// Unsubscribe/Unsubscribed notification from other user.  By default,
+        /// the user will be removed from the roster after this event fires.  Set the 
+        /// remove property to false to prevent this.
+        /// </summary>
+        [Description("Unsubscribe/Unsubscribed notification from other user")]
+        [Category("Jabber")]
+        public event UnsubscriptionHandler OnUnsubscription;
+
+        /// <summary>
         /// Get the currently-known version of a roster item for this jid.
         /// </summary>
         public Item this[JID jid]
@@ -256,6 +273,21 @@ namespace jabber.client
                         OnSubscription(this, ri, pres);
                     break;
                 }
+                break;
+            case PresenceType.unsubscribe:
+                // ack.  we'll likely get an unsubscribed soon, anyway.
+                Presence response = new Presence(m_stream.Document);
+                response.To = pres.From;
+                response.Type = PresenceType.unsubscribed;
+                m_stream.Write(response);
+                break;
+            case PresenceType.unsubscribed:
+                bool remove = true;
+                if (OnUnsubscription != null)
+                    OnUnsubscription(this, pres, ref remove);
+
+                if (remove)
+                    Remove(pres.From);
                 break;
             }
         }
@@ -336,6 +368,28 @@ namespace jabber.client
             reply.To = pres.From;
             reply.Type = PresenceType.unsubscribed;
             m_stream.Write(reply);
+        }
+
+        /// <summary>
+        /// Remove a contact from the roster
+        /// </summary>
+        /// <param name="jid">Typically just a user@host JID</param>
+        public void Remove(JID jid)
+        {
+/*
+C: <iq from='juliet@example.com/balcony' type='set' id='delete_1'>
+     <query xmlns='jabber:iq:roster'>
+       <item jid='nurse@example.com' subscription='remove'/>
+     </query>
+   </iq>
+ */
+            RosterIQ iq = new RosterIQ(m_stream.Document);
+            iq.Type = IQType.set;
+            Roster r = (Roster)iq.Query;
+            Item item = r.AddItem();
+            item.JID = jid;
+            item.Subscription = Subscription.remove;
+            m_stream.Write(iq);  // ignore response
         }
 
         #region Component Designer generated code
