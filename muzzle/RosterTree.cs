@@ -264,24 +264,16 @@ namespace muzzle
 
         private void m_roster_OnRosterItem(object sender, jabber.protocol.iq.Item ri)
         {
-            Group[] groups = ri.GetGroups();
-            for (int i=groups.Length-1; i>=0; i--)
-            {
-                if (groups[i].GroupName == "")
-                    groups[i].GroupName = UNFILED;
-            }
+            bool remove = (ri.Subscription == Subscription.remove);
 
-            if (groups.Length == 0)
-            {
-                groups = new Group[] { new Group(ri.OwnerDocument) };
-                groups[0].GroupName = UNFILED;
-            }
-
-            LinkedList nodelist = (LinkedList) m_items[ri.JID.ToString()];
+            LinkedList nodelist = (LinkedList)m_items[ri.JID.ToString()];
             if (nodelist == null)
             {
-                nodelist = new LinkedList();
-                m_items.Add(ri.JID.ToString(), nodelist);
+                if (!remove)
+                {
+                    nodelist = new LinkedList();
+                    m_items.Add(ri.JID.ToString(), nodelist);
+                }
             }
             else
             {
@@ -299,10 +291,27 @@ namespace muzzle
                 nodelist.Clear();
             }
 
+            if (remove)
+                return;
+
+            // add the new ones back
             Hashtable ghash = new Hashtable();
+            Group[] groups = ri.GetGroups();
+            for (int i=groups.Length-1; i>=0; i--)
+            {
+                if (groups[i].GroupName == "")
+                    groups[i].GroupName = UNFILED;
+            }
+
+            if (groups.Length == 0)
+            {
+                groups = new Group[] { new Group(ri.OwnerDocument) };
+                groups[0].GroupName = UNFILED;
+            }
+
             foreach (Group g in groups)
             {
-                TreeNode gn = (TreeNode) m_groups[g.GroupName];
+                TreeNode gn = (TreeNode)m_groups[g.GroupName];
                 if (gn == null)
                 {
                     gn = new TreeNode(g.GroupName, COLLAPSED, COLLAPSED);
@@ -321,6 +330,7 @@ namespace muzzle
                 i.ChangePresence(m_pres[ri.JID]);
                 nodelist.Add(i);
                 gn.Nodes.Add(i);
+
             }
         }
 
