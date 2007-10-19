@@ -160,12 +160,12 @@ namespace Example
             this.mnuAway = new System.Windows.Forms.MenuItem();
             this.menuItem4 = new System.Windows.Forms.MenuItem();
             this.menuItem3 = new System.Windows.Forms.MenuItem();
+            this.menuItem5 = new System.Windows.Forms.MenuItem();
             this.menuItem1 = new System.Windows.Forms.MenuItem();
             this.mnuOffline = new System.Windows.Forms.MenuItem();
             this.menuItem2 = new System.Windows.Forms.MenuItem();
             this.dm = new jabber.connection.DiscoManager(this.components);
             this.cm = new jabber.connection.CapsManager(this.components);
-            this.menuItem5 = new System.Windows.Forms.MenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pnlCon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pnlSSL)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pnlPresence)).BeginInit();
@@ -191,18 +191,21 @@ namespace Example
             // pnlCon
             // 
             this.pnlCon.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Spring;
+            this.pnlCon.Name = "pnlCon";
             this.pnlCon.Text = "Click on \"Offline\", and select a presence to log in.";
-            this.pnlCon.Width = 538;
+            this.pnlCon.Width = 539;
             // 
             // pnlSSL
             // 
             this.pnlSSL.Alignment = System.Windows.Forms.HorizontalAlignment.Center;
+            this.pnlSSL.Name = "pnlSSL";
             this.pnlSSL.Width = 30;
             // 
             // pnlPresence
             // 
             this.pnlPresence.Alignment = System.Windows.Forms.HorizontalAlignment.Right;
             this.pnlPresence.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Contents;
+            this.pnlPresence.Name = "pnlPresence";
             this.pnlPresence.Text = "Offline";
             this.pnlPresence.Width = 47;
             // 
@@ -247,11 +250,12 @@ namespace Example
             // jc
             // 
             this.jc.AutoReconnect = 3F;
+            this.jc.AutoStartCompression = true;
             this.jc.AutoStartTLS = true;
             this.jc.InvokeControl = this;
             this.jc.LocalCertificate = null;
             this.jc.Password = null;
-            this.jc.Priority = -1;
+            this.jc.Priority = 0;
             this.jc.User = null;
             this.jc.OnReadText += new bedrock.TextHandler(this.jc_OnReadText);
             this.jc.OnMessage += new jabber.client.MessageHandler(this.jc_OnMessage);
@@ -272,7 +276,10 @@ namespace Example
             // 
             // rm
             // 
+            this.rm.AutoAllow = jabber.client.AutoSubscriptionHanding.AllowIfSubscribed;
+            this.rm.AutoSubscribe = true;
             this.rm.Stream = this.jc;
+            this.rm.OnSubscription += new jabber.client.SubscriptionHandler(this.rm_OnSubscription);
             this.rm.OnRosterEnd += new bedrock.ObjectHandler(this.rm_OnRosterEnd);
             // 
             // tpServices
@@ -393,6 +400,13 @@ namespace Example
             this.menuItem3.Text = "Add &Contact";
             this.menuItem3.Click += new System.EventHandler(this.menuItem3_Click);
             // 
+            // menuItem5
+            // 
+            this.menuItem5.Index = 4;
+            this.menuItem5.Shortcut = System.Windows.Forms.Shortcut.Del;
+            this.menuItem5.Text = "&Remove Contact";
+            this.menuItem5.Click += new System.EventHandler(this.menuItem5_Click);
+            // 
             // menuItem1
             // 
             this.menuItem1.Index = 5;
@@ -420,13 +434,6 @@ namespace Example
             // 
             this.cm.Node = "http://cursive.net/clients/csharp-example";
             this.cm.Stream = this.jc;
-            // 
-            // menuItem5
-            // 
-            this.menuItem5.Index = 4;
-            this.menuItem5.Shortcut = System.Windows.Forms.Shortcut.Del;
-            this.menuItem5.Text = "&Remove Contact";
-            this.menuItem5.Click += new System.EventHandler(this.menuItem5_Click);
             // 
             // MainForm
             // 
@@ -809,6 +816,25 @@ namespace Example
        }
 
 
+        private void rm_OnSubscription(jabber.client.RosterManager manager, Item ri, Presence pres)
+        {
+            DialogResult res = MessageBox.Show("Allow incoming presence subscription request from: " + pres.From,
+                "Subscription Request",
+                MessageBoxButtons.YesNoCancel);
+            switch (res)
+            {
+            case DialogResult.Yes:
+                manager.ReplyAllow(pres);
+                break;
+            case DialogResult.No:
+                manager.ReplyDeny(pres);
+                break;
+            case DialogResult.Cancel:
+                // do nothing;
+                break;
+            }
+        }
+
 #if NET20
         void tvServices_NodeMouseDoubleClick(object sender,
                                              TreeNodeMouseClickEventArgs e)
@@ -823,8 +849,6 @@ namespace Example
             jabber.connection.DiscoNode dn = (jabber.connection.DiscoNode)e.Node.Tag;
             dm.BeginGetFeatures(dn, new jabber.connection.DiscoNodeHandler(GotInfo));
         }
-
-
 #endif
     }
 }

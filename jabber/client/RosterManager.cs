@@ -32,6 +32,41 @@ namespace jabber.client
     public delegate void RosterItemHandler(object sender, Item ri);
 
     /// <summary>
+    /// Delegate for (un)subscription requests
+    /// </summary>
+    /// <param name="manager">The RosterManager than detected the subscription</param>
+    /// <param name="ri">The affected roster item, in its current state.  Null if not found (which I think should be rare)</param>
+    /// <param name="pres">The inbound presence stanza</param>
+    public delegate void SubscriptionHandler(RosterManager manager, Item ri, Presence pres);
+
+    /// <summary>
+    /// How should a RosterManager deal with incoming subscriptions?
+    /// Two axes: 
+    ///  1) should we allow automatically? (yes, no, only if we're subscribed or subscribing to them)
+    ///  2) should we subscribe automatically? (yes, no).  This one we'll just put in an orthogonal boolean.
+    /// </summary>
+    public enum AutoSubscriptionHanding
+    {
+        /// <summary>
+        /// Don't do any automatic processing
+        /// </summary>
+        NONE = 0,
+        /// <summary>
+        /// Reply with a subscribed to every subscribe
+        /// </summary>
+        AllowAll,
+        /// <summary>
+        /// Reply with an unsubscribed to every subscribe
+        /// </summary>
+        DenyAll,
+        /// <summary>
+        /// If we're either subscribed or trying to subscribe to them, allow their subscription.
+        /// Otherwise, treat as NONE, and fire the OnSubscribe event.
+        /// </summary>
+        AllowIfSubscribed,
+    }
+
+    /// <summary>
     /// Summary description for RosterManager.
     /// </summary>
     [SVN(@"$Id$")]
@@ -42,6 +77,8 @@ namespace jabber.client
         /// </summary>
         private System.ComponentModel.Container components = null;
         private Tree m_items = new Tree();
+        private AutoSubscriptionHanding m_autoAllow = AutoSubscriptionHanding.NONE;
+        private bool m_autoSubscribe = false;
 
         /// <summary>
         /// Create a roster manager inside a container
@@ -69,8 +106,10 @@ namespace jabber.client
             if (cli == null)
                 return;
             cli.OnIQ += new IQHandler(GotIQ);
+            cli.OnPresence += new PresenceHandler(cli_OnPresence);
             cli.OnDisconnect += new bedrock.ObjectHandler(GotDisconnect);
         }
+
 
         /// <summary>
         /// The JabberClient to hook up to.
@@ -83,6 +122,30 @@ namespace jabber.client
         {
             get { return (JabberClient) this.Stream; }
             set { this.Stream = value; }
+        }
+
+        /// <summary>
+        /// How to handle inbound subscriptions
+        /// </summary>
+        [Description("How to handle inbound subscriptions")]
+        [Category("Jabber")]
+        [DefaultValue(AutoSubscriptionHanding.NONE)]
+        public AutoSubscriptionHanding AutoAllow
+        {
+            get { return m_autoAllow; }
+            set { m_autoAllow = value; }
+        }
+
+        /// <summary>
+        /// Should we subscribe to a user whenever we allow a subscription from them?
+        /// </summary>
+        [Description("Should we subscribe to a user whenever we allow a subscription from them?")]
+        [Category("Jabber")]
+        [DefaultValue(false)]        
+        public bool AutoSubscribe
+        {
+            get { return m_autoSubscribe; }
+            set { m_autoSubscribe = value; }
         }
 
         /// <summary>
@@ -106,6 +169,13 @@ namespace jabber.client
         [Description("Roster result finished being processed.")]
         [Category("Jabber")]
         public event bedrock.ObjectHandler OnRosterEnd;
+
+        /// <summary>
+        /// Subscription request received that cannot be auto-handled
+        /// </summary>
+        [Description("Subscription request received that cannot be auto-handled")]
+        [Category("Jabber")]
+        public event SubscriptionHandler OnSubscription;
 
         /// <summary>
         /// Get the currently-known version of a roster item for this jid.
@@ -135,6 +205,59 @@ namespace jabber.client
         {
             lock (this)
                 m_items.Clear();
+        }
+
+        private void cli_OnPresence(object sender, Presence pres)
+        {
+            PresenceType typ = pres.Type;
+            switch (typ)
+            {
+            case PresenceType.available:
+            case PresenceType.unavailable:
+            case PresenceType.error:
+            case PresenceType.probe:
+                return;
+            case PresenceType.subscribe:
+                switch (m_autoAllow)
+                {
+                case AutoSubscriptionHanding.AllowAll:
+                    ReplyAllow(pres);
+                    return;
+                case AutoSubscriptionHanding.DenyAll:
+                    ReplyDeny(pres);
+                    return;
+                case AutoSubscriptionHanding.NONE:
+                    if (OnSubscription != null)
+                        OnSubscription(this, this[pres.From], pres);
+                    return;
+                case AutoSubscriptionHanding.AllowIfSubscribed:
+                    Item ri = this[pres.From];
+                    if (ri != null)
+                    {
+                        switch (ri.Subscription)
+                        {
+                        case Subscription.to:
+                            ReplyAllow(pres);
+                            return;
+                        case Subscription.from:
+                        case Subscription.both:
+                            // Almost an assert
+                            throw new InvalidOperationException("Server sent a presence subscribe for an already-subscribed contact");
+                        case Subscription.none:
+                            if (ri.Ask == Ask.subscribe)
+                            {
+                                ReplyAllow(pres);
+                                return;
+                            }
+                            break;
+                        }
+                    }
+                    if (OnSubscription != null)
+                        OnSubscription(this, ri, pres);
+                    break;
+                }
+                break;
+            }
         }
 
         /// <summary>
@@ -181,6 +304,39 @@ namespace jabber.client
                 OnRosterEnd(this);
         }
 
+        /// <summary>
+        /// Reply to this presence subscription request, allowing it.
+        /// </summary>
+        /// <param name="pres"></param>
+        public void ReplyAllow(Presence pres)
+        {
+            Debug.Assert(pres.Type == PresenceType.subscribe);
+            Presence reply = new Presence(m_stream.Document);
+            reply.To = pres.From;
+            reply.Type = PresenceType.subscribed;
+            m_stream.Write(reply);
+
+            if (m_autoSubscribe)
+            {
+                Presence sub = new Presence(m_stream.Document);
+                sub.To = pres.From;
+                sub.Type = PresenceType.subscribe;
+                m_stream.Write(sub);
+            }
+        }
+
+        /// <summary>
+        /// Reply to this presence subscription request, denying it.
+        /// </summary>
+        /// <param name="pres"></param>
+        public void ReplyDeny(Presence pres)
+        {
+            Debug.Assert(pres.Type == PresenceType.subscribe);
+            Presence reply = new Presence(m_stream.Document);
+            reply.To = pres.From;
+            reply.Type = PresenceType.unsubscribed;
+            m_stream.Write(reply);
+        }
 
         #region Component Designer generated code
         /// <summary>
