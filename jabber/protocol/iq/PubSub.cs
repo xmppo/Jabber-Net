@@ -950,7 +950,6 @@ namespace jabber.protocol.iq
         /// <summary>
         /// Add a new subscription to the list
         /// </summary>
-        /// <param name="id"></param>
         /// <returns></returns>
         public PubSubSubscription AddSubscription()
         {
