@@ -134,13 +134,20 @@ namespace ConsoleClient
                 }
                 try
                 {
-                    // TODO: deal with stanzas that span lines... keep
-                    // parsing until we have a full "doc".
-                    XmlDocument doc = new XmlDocument();
-                    doc.LoadXml(line);
-                    XmlElement elem = doc.DocumentElement;
-                    if (elem != null)
-                        jc.Write(elem);
+                    if (line == "</stream:stream>")
+                    {
+                        jc.Write(line);
+                    }
+                    else
+                    {
+                        // TODO: deal with stanzas that span lines... keep
+                        // parsing until we have a full "doc".
+                        XmlDocument doc = new XmlDocument();
+                        doc.LoadXml(line);
+                        XmlElement elem = doc.DocumentElement;
+                        if (elem != null)
+                            jc.Write(elem);
+                    }
                 }
                 catch (XmlException ex)
                 {
