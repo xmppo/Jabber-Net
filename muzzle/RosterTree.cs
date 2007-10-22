@@ -73,11 +73,17 @@ namespace muzzle
             this.ShowLines = false;
             this.Sorted = true;
 
+            this.AllowDrop = true;
+            this.ItemDrag += new ItemDragEventHandler(RosterTree_ItemDrag);
+            this.DragEnter += new DragEventHandler(RosterTree_DragEnter);
+            this.DragOver += new DragEventHandler(RosterTree_DragOver);
+            this.DragDrop += new DragEventHandler(RosterTree_DragDrop);
 #if NET20
             this.DrawMode = TreeViewDrawMode.OwnerDrawText;
             this.DrawNode += new DrawTreeNodeEventHandler(RosterTree_DrawNode);
 #endif
         }
+
 
 #if NET20
         private void DrawGroup(DrawTreeNodeEventArgs e)
@@ -143,7 +149,65 @@ namespace muzzle
             else
                 e.DrawDefault = true; // or assert(false)
         }
+
 #endif
+
+        private GroupNode GetDropGroup(DragEventArgs e)
+        {
+            if (!e.Data.GetDataPresent(typeof(ItemNode)))
+                return null;
+
+            Point pt = this.PointToClient(new Point(e.X, e.Y));
+            TreeNode node = this.GetNodeAt(pt);
+            while (!(node is GroupNode) && (node != null))
+            {
+                node = node.Parent;
+            }
+            if (node == null)
+                return null;
+
+            ItemNode item = e.Data.GetData(typeof(ItemNode)) as ItemNode;
+            if (item.Parent == node)
+                return null;
+            return (GroupNode)node;
+        }
+        
+        private void RosterTree_DragDrop(object sender, DragEventArgs e)
+        {
+            GroupNode group = GetDropGroup(e);
+            if (group == null)
+                return;
+            ItemNode item = e.Data.GetData(typeof(ItemNode)) as ItemNode;
+            GroupNode parent = (GroupNode)item.Parent;
+            Item i = (Item)item.Item.CloneNode(true, m_client.Document);
+            i.RemoveGroup(parent.GroupName);
+            i.AddGroup(group.GroupName);
+            m_roster.Modify(i);
+        }
+
+
+        private void RosterTree_DragOver(object sender, DragEventArgs e)
+        {
+            if (GetDropGroup(e) == null)
+                e.Effect = DragDropEffects.None;
+            else
+                e.Effect = DragDropEffects.Move;
+        }
+
+
+        private void RosterTree_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(typeof(ItemNode)))
+                e.Effect = DragDropEffects.Move;
+            else
+                e.Effect = DragDropEffects.None;
+        }
+
+        private void RosterTree_ItemDrag(object sender, ItemDragEventArgs e)
+        {
+            if (e.Item is ItemNode)
+                this.DoDragDrop(e.Item, DragDropEffects.Move);
+        }
 
         /// <summary>
         /// Clean up any resources being used.
@@ -319,6 +383,17 @@ namespace muzzle
             }
         }
 
+        /// <summary>
+        /// Add a new, empty group, if this group doesn't exist, otherwise a no-op.
+        /// </summary>
+        /// <param name="groupName"></param>
+        public TreeNode AddGroup(string groupName)
+        {
+            Group g = new Group(m_client.Document);
+            g.GroupName = groupName;
+            return AddGroupNode(g);
+        }
+
         private void m_roster_OnRosterBegin(object sender)
         {
             this.BeginUpdate();
@@ -372,6 +447,18 @@ namespace muzzle
             }
         }
 
+        private GroupNode AddGroupNode(Group g)
+        {
+            GroupNode gn = (GroupNode)m_groups[g.GroupName];
+            if (gn == null)
+            {
+                gn = new GroupNode(g);
+                m_groups.Add(g.GroupName, gn);
+                this.Nodes.Add(gn);
+            }
+            return gn;
+        }
+
         private void m_roster_OnRosterItem(object sender, jabber.protocol.iq.Item ri)
         {
             bool remove = (ri.Subscription == Subscription.remove);
@@ -423,26 +510,16 @@ namespace muzzle
 
             foreach (Group g in groups)
             {
-                GroupNode gn = (GroupNode)m_groups[g.GroupName];
-                if (gn == null)
-                {
-                    gn = new GroupNode(g);
-                    m_groups.Add(g.GroupName, gn);
-                    this.Nodes.Add(gn);
-                }
-                else
-                {
-                    // might have the same group twice.
-                    if (ghash.Contains(g.GroupName))
-                        continue;
-                }
+                GroupNode gn = AddGroupNode(g);
+                // might have the same group twice.
+                if (ghash.Contains(g.GroupName))
+                    continue;
                 ghash.Add(g.GroupName, g);
 
                 ItemNode i = new ItemNode(ri);
                 i.ChangePresence(m_pres[ri.JID]);
                 nodelist.Add(i);
                 gn.Nodes.Add(i);
-
             }
         }
 
@@ -468,6 +545,7 @@ namespace muzzle
                 n.ChangePresence(pres);
             }
         }
+
 
         /// <summary>
         /// A TreeNode to hold a Roster Group
@@ -560,6 +638,14 @@ namespace muzzle
             public string Status
             {
                 get { return m_status; }
+            }
+
+            /// <summary>
+            /// The roster item.  Please make a clone before using it.
+            /// </summary>
+            public Item Item
+            {
+                get { return m_item; }
             }
 
             /// <summary>

@@ -96,6 +96,9 @@
     <Compile Include="AddContact.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="AddGroup.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -108,6 +111,10 @@
     <EmbeddedResource Include="AddContact.resx">
       <SubType>Designer</SubType>
       <DependentUpon>AddContact.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AddGroup.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>AddGroup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

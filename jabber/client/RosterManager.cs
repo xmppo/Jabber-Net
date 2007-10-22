@@ -393,6 +393,20 @@ C: <iq from='juliet@example.com/balcony' type='set' id='delete_1'>
             m_stream.Write(iq);  // ignore response
         }
 
+        /// <summary>
+        /// Modify the item to look like the item given.  This does not modify the model,
+        /// but waits for roster pushes from the server.
+        /// </summary>
+        /// <param name="item"></param>
+        public void Modify(Item item)
+        {
+            RosterIQ iq = new RosterIQ(m_stream.Document);
+            iq.Type = IQType.set;
+            Roster r = (Roster)iq.Query;
+            r.AppendChild(item);
+            m_stream.Write(iq);  // ignore response
+        }
+
         #region Component Designer generated code
         /// <summary>
         /// Required method for Designer support - do not modify

@@ -65,6 +65,7 @@ namespace Example
         private MenuItem menuItem4;
         private MenuItem menuItem3;
         private MenuItem menuItem5;
+        private MenuItem menuItem6;
 
         private bool m_err = false;
 
@@ -166,6 +167,7 @@ namespace Example
             this.menuItem2 = new System.Windows.Forms.MenuItem();
             this.dm = new jabber.connection.DiscoManager(this.components);
             this.cm = new jabber.connection.CapsManager(this.components);
+            this.menuItem6 = new System.Windows.Forms.MenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pnlCon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pnlSSL)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pnlPresence)).BeginInit();
@@ -232,6 +234,7 @@ namespace Example
             // 
             // roster
             // 
+            this.roster.AllowDrop = true;
             this.roster.Client = this.jc;
             this.roster.Dock = System.Windows.Forms.DockStyle.Fill;
             this.roster.DrawMode = System.Windows.Forms.TreeViewDrawMode.OwnerDrawText;
@@ -372,6 +375,7 @@ namespace Example
             this.menuItem4,
             this.menuItem3,
             this.menuItem5,
+            this.menuItem6,
             this.menuItem1,
             this.mnuOffline,
             this.menuItem2});
@@ -411,19 +415,19 @@ namespace Example
             // 
             // menuItem1
             // 
-            this.menuItem1.Index = 5;
+            this.menuItem1.Index = 6;
             this.menuItem1.Text = "-";
             // 
             // mnuOffline
             // 
-            this.mnuOffline.Index = 6;
+            this.mnuOffline.Index = 7;
             this.mnuOffline.Shortcut = System.Windows.Forms.Shortcut.F9;
             this.mnuOffline.Text = "&Offline";
             this.mnuOffline.Click += new System.EventHandler(this.mnuOffline_Click);
             // 
             // menuItem2
             // 
-            this.menuItem2.Index = 7;
+            this.menuItem2.Index = 8;
             this.menuItem2.Shortcut = System.Windows.Forms.Shortcut.CtrlQ;
             this.menuItem2.Text = "E&xit";
             this.menuItem2.Click += new System.EventHandler(this.menuItem2_Click);
@@ -436,6 +440,12 @@ namespace Example
             // 
             this.cm.Node = "http://cursive.net/clients/csharp-example";
             this.cm.Stream = this.jc;
+            // 
+            // menuItem6
+            // 
+            this.menuItem6.Index = 5;
+            this.menuItem6.Text = "Add &Group...";
+            this.menuItem6.Click += new System.EventHandler(this.menuItem6_Click);
             // 
             // MainForm
             // 
@@ -818,6 +828,19 @@ namespace Example
        }
 
 
+        // add group
+        private void menuItem6_Click(object sender, EventArgs e)
+        {
+            AddGroup ag = new AddGroup();
+            if (ag.ShowDialog() == DialogResult.Cancel)
+                return;
+
+            if (ag.GroupName == "")
+                return;
+
+            roster.AddGroup(ag.GroupName).EnsureVisible();
+        }
+
         private void rm_OnSubscription(jabber.client.RosterManager manager, Item ri, Presence pres)
         {
             DialogResult res = MessageBox.Show("Allow incoming presence subscription request from: " + pres.From,
@@ -856,6 +879,7 @@ namespace Example
         {
             MessageBox.Show(pres.From + " has removed you from their roster.", "Unsubscription notification", MessageBoxButtons.OK);
         }
+
 #endif
     }
 }
