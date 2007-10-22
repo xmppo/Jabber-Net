@@ -17,6 +17,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
+using System.Diagnostics;
 using System.Windows.Forms;
 
 using bedrock.collections;
@@ -55,6 +56,8 @@ namespace muzzle
 
         private System.Windows.Forms.ImageList il;
         private System.Windows.Forms.ToolTip tt;
+        private Color m_statusColor = Color.Teal;
+
         private System.ComponentModel.IContainer components;
 
         /// <summary>
@@ -69,7 +72,78 @@ namespace muzzle
             this.ShowRootLines = false;
             this.ShowLines = false;
             this.Sorted = true;
+
+#if NET20
+            this.DrawMode = TreeViewDrawMode.OwnerDrawText;
+            this.DrawNode += new DrawTreeNodeEventHandler(RosterTree_DrawNode);
+#endif
         }
+
+#if NET20
+        private void DrawGroup(DrawTreeNodeEventArgs e)
+        {
+            GroupNode node = (GroupNode)e.Node;
+            string counts = String.Format("({0}/{1})", node.Current, node.Total);
+
+            if ((e.State & TreeNodeStates.Selected) == TreeNodeStates.Selected)
+            {
+                string newText = node.GroupName + " " + counts;
+                if (node.Text != newText)
+                    node.Text = newText;
+                e.DrawDefault = true;
+                return;
+            }
+
+            Graphics g = e.Graphics;
+            Brush fg = new SolidBrush(this.ForeColor);
+            Brush stat_fg = new SolidBrush(this.StatusColor);
+
+            g.DrawString(node.GroupName, this.Font, fg, new Point(e.Bounds.Left, e.Bounds.Top), StringFormat.GenericTypographic);
+            if (node.Total > 0)
+            {
+                SizeF name_size = g.MeasureString(node.GroupName, this.Font);
+                g.DrawString(counts, this.Font, stat_fg, new PointF(e.Bounds.Left + name_size.Width, e.Bounds.Top), StringFormat.GenericTypographic);
+            }
+        }
+
+        private void DrawItem(DrawTreeNodeEventArgs e)
+        {
+            if ((e.State & TreeNodeStates.Selected) == TreeNodeStates.Selected)
+            {
+                e.DrawDefault = true;
+                /*
+                Brush sel = new SolidBrush(SystemColors.Highlight);
+                Brush sel_fg = new SolidBrush(SystemColors.HighlightText);
+                g.FillRectangle(sel, e.Bounds);
+                g.DrawString(node.Text, this.Font, sel_fg, new Point(e.Bounds.Left, e.Bounds.Top), StringFormat.GenericTypographic);
+                 */
+                return;
+            }
+
+            ItemNode node = (ItemNode)e.Node;
+            Graphics g = e.Graphics;
+            Brush fg = new SolidBrush(this.ForeColor);
+            Brush stat_fg = new SolidBrush(this.StatusColor);
+
+            g.DrawString(node.Nickname, this.Font, fg, new Point(e.Bounds.Left, e.Bounds.Top), StringFormat.GenericTypographic);
+            if (node.Status != null)
+            {
+                SizeF nick_size = g.MeasureString(node.Nickname, this.Font);
+                g.DrawString("(" + node.Status + ")", this.Font, stat_fg, new PointF(e.Bounds.Left + nick_size.Width, e.Bounds.Top), StringFormat.GenericTypographic);
+            }
+        }
+       
+
+        private void RosterTree_DrawNode(object sender, DrawTreeNodeEventArgs e)
+        {
+            if (e.Node is GroupNode)
+                DrawGroup(e);
+            else if (e.Node is ItemNode)
+                DrawItem(e);
+            else
+                e.DrawDefault = true; // or assert(false)
+        }
+#endif
 
         /// <summary>
         /// Clean up any resources being used.
@@ -197,6 +271,42 @@ namespace muzzle
         }
 
         /// <summary>
+        /// Color to draw status text with.  Not applicable until .Net 2.0.
+        /// </summary>
+        [Category("Appearance")]
+        public Color StatusColor
+        {
+            get { return m_statusColor; }
+            set { m_statusColor = value; }
+        }
+
+        /// <summary>
+        /// Should we draw status text next to each roster item?  Not applicable until .Net 2.0.
+        /// </summary>
+        [Category("Appearance")]
+        [DefaultValue(true)]
+        public bool DrawStatus
+        {
+            get 
+            { 
+#if NET20
+                return (this.DrawMode == TreeViewDrawMode.OwnerDrawText); 
+#else
+                return false;
+#endif
+            }
+            set 
+            {
+#if NET20
+                if (value)
+                    this.DrawMode = TreeViewDrawMode.OwnerDrawText;
+                else
+                    this.DrawMode = TreeViewDrawMode.Normal;
+#endif
+            }
+        }
+
+        /// <summary>
         /// The group names for the roster
         /// </summary>
         public string[] Groups
@@ -289,6 +399,8 @@ namespace muzzle
                     }
                 }
                 nodelist.Clear();
+                if (remove)
+                    m_items.Remove(ri.JID.ToString());
             }
 
             if (remove)
@@ -311,10 +423,10 @@ namespace muzzle
 
             foreach (Group g in groups)
             {
-                TreeNode gn = (TreeNode)m_groups[g.GroupName];
+                GroupNode gn = (GroupNode)m_groups[g.GroupName];
                 if (gn == null)
                 {
-                    gn = new TreeNode(g.GroupName, COLLAPSED, COLLAPSED);
+                    gn = new GroupNode(g);
                     m_groups.Add(g.GroupName, gn);
                     this.Nodes.Add(gn);
                 }
@@ -358,11 +470,64 @@ namespace muzzle
         }
 
         /// <summary>
+        /// A TreeNode to hold a Roster Group
+        /// </summary>
+        public class GroupNode : TreeNode
+        {
+            private jabber.protocol.iq.Group m_group;
+
+            /// <summary>
+            /// Create a GroupNode
+            /// </summary>
+            /// <param name="rg"></param>
+            public GroupNode(jabber.protocol.iq.Group rg) : base(rg.GroupName, COLLAPSED, COLLAPSED)
+            {
+                m_group = rg;
+            }
+
+            /// <summary>
+            /// The name of the group
+            /// </summary>
+            public string GroupName
+            {
+                get { return m_group.GroupName; }
+            }
+
+            /// <summary>
+            /// Total number of members of the group
+            /// </summary>
+            public int Total
+            {
+                // TODO: what if we're not showing offline?
+                get { return this.Nodes.Count; }
+            }
+
+            /// <summary>
+            /// Current number of online members of the group
+            /// </summary>
+            public int Current
+            {
+                get 
+                {
+                    int count = 0;
+                    foreach (ItemNode i in this.Nodes)
+                    {
+                        if (i.ImageIndex != OFFLINE)
+                            count++;
+                    }
+                    return count;
+                }
+            }
+        }
+
+        /// <summary>
         /// A TreeNode to hold a RosterItem
         /// </summary>
         public class ItemNode : TreeNode
         {
-            private jabber.protocol.iq.Item i;
+            private jabber.protocol.iq.Item m_item;
+            private string m_status = null;
+            private string m_nick = null;
 
             /// <summary>
             /// Create an ItemNode
@@ -370,7 +535,7 @@ namespace muzzle
             /// <param name="ri">The roster item to create from</param>
             public ItemNode(jabber.protocol.iq.Item ri)
             {
-                i = ri;
+                m_item = ri;
             }
 
             /// <summary>
@@ -378,7 +543,23 @@ namespace muzzle
             /// </summary>
             public JID JID
             {
-                get { return i.JID; }
+                get { return m_item.JID; }
+            }
+
+            /// <summary>
+            /// Roster nickname for this user.
+            /// </summary>
+            public string Nickname
+            {
+                get { return m_nick; }
+            }
+
+            /// <summary>
+            /// Last presence status for this item
+            /// </summary>
+            public string Status
+            {
+                get { return m_status; }
             }
 
             /// <summary>
@@ -388,14 +569,23 @@ namespace muzzle
             public void ChangePresence(Presence p)
             {
                 SelectedImageIndex = ImageIndex = getPresenceImage(p);
-                String nick = i.Nickname;
-                if (nick == "")
-                    nick = i.JID.User;
+                m_nick = m_item.Nickname;
+                if ((m_nick == null) || (m_nick == ""))
+                    m_nick = m_item.JID.User;
 
+                string txt = null;
                 if ((p == null) || (p.Status == null) || (p.Status == ""))
-                    Text = nick;
+                {
+                    txt = m_nick;
+                    m_status = null;
+                }
                 else
-                    Text = nick + " (" + p.Status + ")";
+                {
+                    m_status = p.Status;
+                    txt = m_nick + " (" + m_status + ")";
+                }
+                if (Text != txt)
+                    Text = txt;
             }
 
             private static int getPresenceImage(Presence p)

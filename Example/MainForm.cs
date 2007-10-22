@@ -234,6 +234,7 @@ namespace Example
             // 
             this.roster.Client = this.jc;
             this.roster.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.roster.DrawMode = System.Windows.Forms.TreeViewDrawMode.OwnerDrawText;
             this.roster.ImageIndex = 1;
             this.roster.Location = new System.Drawing.Point(0, 0);
             this.roster.Name = "roster";
@@ -244,6 +245,7 @@ namespace Example
             this.roster.ShowRootLines = false;
             this.roster.Size = new System.Drawing.Size(624, 390);
             this.roster.Sorted = true;
+            this.roster.StatusColor = System.Drawing.Color.Teal;
             this.roster.TabIndex = 0;
             this.roster.DoubleClick += new System.EventHandler(this.roster_DoubleClick);
             // 
@@ -271,14 +273,12 @@ namespace Example
             // 
             // pm
             // 
-            this.pm.Client = this.jc;
             this.pm.Stream = this.jc;
             // 
             // rm
             // 
             this.rm.AutoAllow = jabber.client.AutoSubscriptionHanding.AllowIfSubscribed;
             this.rm.AutoSubscribe = true;
-            this.rm.Client = this.jc;
             this.rm.Stream = this.jc;
             this.rm.OnSubscription += new jabber.client.SubscriptionHandler(this.rm_OnSubscription);
             this.rm.OnRosterEnd += new bedrock.ObjectHandler(this.rm_OnRosterEnd);
