@@ -40,7 +40,6 @@ namespace Example
         private jabber.client.PresenceManager pm;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tpDebug;
-        private muzzle.BottomScrollRichText debug;
         private System.Windows.Forms.TabPage tpRoster;
         private System.Windows.Forms.StatusBarPanel pnlCon;
         private System.Windows.Forms.StatusBarPanel pnlPresence;
@@ -50,8 +49,6 @@ namespace Example
         private System.Windows.Forms.MenuItem mnuOffline;
         private System.Windows.Forms.MenuItem menuItem1;
         private System.ComponentModel.IContainer components;
-        private System.Windows.Forms.Splitter splitter1;
-        private System.Windows.Forms.TextBox txtDebugInput;
         private muzzle.RosterTree roster;
         private System.Windows.Forms.StatusBarPanel pnlSSL;
         private jabber.connection.DiscoManager dm;
@@ -66,6 +63,7 @@ namespace Example
         private MenuItem menuItem3;
         private MenuItem menuItem5;
         private MenuItem menuItem6;
+        private muzzle.XmppDebugger debug;
 
         private bool m_err = false;
 
@@ -144,7 +142,6 @@ namespace Example
             this.pnlPresence = new System.Windows.Forms.StatusBarPanel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tpRoster = new System.Windows.Forms.TabPage();
-            this.roster = new muzzle.RosterTree();
             this.jc = new jabber.client.JabberClient(this.components);
             this.pm = new jabber.client.PresenceManager(this.components);
             this.rm = new jabber.client.RosterManager(this.components);
@@ -153,21 +150,20 @@ namespace Example
             this.splitter2 = new System.Windows.Forms.Splitter();
             this.tvServices = new System.Windows.Forms.TreeView();
             this.tpDebug = new System.Windows.Forms.TabPage();
-            this.debug = new muzzle.BottomScrollRichText();
-            this.splitter1 = new System.Windows.Forms.Splitter();
-            this.txtDebugInput = new System.Windows.Forms.TextBox();
             this.mnuPresence = new System.Windows.Forms.ContextMenu();
             this.mnuAvailable = new System.Windows.Forms.MenuItem();
             this.mnuAway = new System.Windows.Forms.MenuItem();
             this.menuItem4 = new System.Windows.Forms.MenuItem();
             this.menuItem3 = new System.Windows.Forms.MenuItem();
             this.menuItem5 = new System.Windows.Forms.MenuItem();
+            this.menuItem6 = new System.Windows.Forms.MenuItem();
             this.menuItem1 = new System.Windows.Forms.MenuItem();
             this.mnuOffline = new System.Windows.Forms.MenuItem();
             this.menuItem2 = new System.Windows.Forms.MenuItem();
             this.dm = new jabber.connection.DiscoManager(this.components);
             this.cm = new jabber.connection.CapsManager(this.components);
-            this.menuItem6 = new System.Windows.Forms.MenuItem();
+            this.roster = new muzzle.RosterTree();
+            this.debug = new muzzle.XmppDebugger();
             ((System.ComponentModel.ISupportInitialize)(this.pnlCon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pnlSSL)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pnlPresence)).BeginInit();
@@ -232,26 +228,6 @@ namespace Example
             this.tpRoster.TabIndex = 1;
             this.tpRoster.Text = "Roster";
             // 
-            // roster
-            // 
-            this.roster.AllowDrop = true;
-            this.roster.Client = this.jc;
-            this.roster.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.roster.DrawMode = System.Windows.Forms.TreeViewDrawMode.OwnerDrawText;
-            this.roster.ImageIndex = 1;
-            this.roster.Location = new System.Drawing.Point(0, 0);
-            this.roster.Name = "roster";
-            this.roster.PresenceManager = this.pm;
-            this.roster.RosterManager = this.rm;
-            this.roster.SelectedImageIndex = 0;
-            this.roster.ShowLines = false;
-            this.roster.ShowRootLines = false;
-            this.roster.Size = new System.Drawing.Size(624, 390);
-            this.roster.Sorted = true;
-            this.roster.StatusColor = System.Drawing.Color.Teal;
-            this.roster.TabIndex = 0;
-            this.roster.DoubleClick += new System.EventHandler(this.roster_DoubleClick);
-            // 
             // jc
             // 
             this.jc.AutoReconnect = 3F;
@@ -261,7 +237,6 @@ namespace Example
             this.jc.LocalCertificate = null;
             this.jc.Password = null;
             this.jc.User = null;
-            this.jc.OnReadText += new bedrock.TextHandler(this.jc_OnReadText);
             this.jc.OnMessage += new jabber.client.MessageHandler(this.jc_OnMessage);
             this.jc.OnConnect += new jabber.connection.StanzaStreamHandler(this.jc_OnConnect);
             this.jc.OnAuthenticate += new bedrock.ObjectHandler(this.jc_OnAuthenticate);
@@ -272,7 +247,6 @@ namespace Example
             this.jc.OnRegisterInfo += new jabber.client.IQHandler(this.jc_OnRegisterInfo);
             this.jc.OnRegistered += new jabber.client.IQHandler(this.jc_OnRegistered);
             this.jc.OnIQ += new jabber.client.IQHandler(this.jc_OnIQ);
-            this.jc.OnWriteText += new bedrock.TextHandler(this.jc_OnWriteText);
             // 
             // pm
             // 
@@ -330,42 +304,11 @@ namespace Example
             // tpDebug
             // 
             this.tpDebug.Controls.Add(this.debug);
-            this.tpDebug.Controls.Add(this.splitter1);
-            this.tpDebug.Controls.Add(this.txtDebugInput);
             this.tpDebug.Location = new System.Drawing.Point(4, 22);
             this.tpDebug.Name = "tpDebug";
             this.tpDebug.Size = new System.Drawing.Size(624, 390);
             this.tpDebug.TabIndex = 0;
             this.tpDebug.Text = "Debug";
-            // 
-            // debug
-            // 
-            this.debug.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.debug.Location = new System.Drawing.Point(0, 0);
-            this.debug.Name = "debug";
-            this.debug.Size = new System.Drawing.Size(624, 339);
-            this.debug.TabIndex = 2;
-            this.debug.Text = "";
-            this.debug.WordWrap = false;
-            // 
-            // splitter1
-            // 
-            this.splitter1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.splitter1.Location = new System.Drawing.Point(0, 339);
-            this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(624, 3);
-            this.splitter1.TabIndex = 3;
-            this.splitter1.TabStop = false;
-            // 
-            // txtDebugInput
-            // 
-            this.txtDebugInput.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.txtDebugInput.Location = new System.Drawing.Point(0, 342);
-            this.txtDebugInput.Multiline = true;
-            this.txtDebugInput.Name = "txtDebugInput";
-            this.txtDebugInput.Size = new System.Drawing.Size(624, 48);
-            this.txtDebugInput.TabIndex = 4;
-            this.txtDebugInput.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtDebugInput_KeyUp);
             // 
             // mnuPresence
             // 
@@ -413,6 +356,12 @@ namespace Example
             this.menuItem5.Text = "&Remove Contact";
             this.menuItem5.Click += new System.EventHandler(this.menuItem5_Click);
             // 
+            // menuItem6
+            // 
+            this.menuItem6.Index = 5;
+            this.menuItem6.Text = "Add &Group...";
+            this.menuItem6.Click += new System.EventHandler(this.menuItem6_Click);
+            // 
             // menuItem1
             // 
             this.menuItem1.Index = 6;
@@ -441,11 +390,39 @@ namespace Example
             this.cm.Node = "http://cursive.net/clients/csharp-example";
             this.cm.Stream = this.jc;
             // 
-            // menuItem6
+            // roster
             // 
-            this.menuItem6.Index = 5;
-            this.menuItem6.Text = "Add &Group...";
-            this.menuItem6.Click += new System.EventHandler(this.menuItem6_Click);
+            this.roster.AllowDrop = true;
+            this.roster.Client = this.jc;
+            this.roster.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.roster.DrawMode = System.Windows.Forms.TreeViewDrawMode.OwnerDrawText;
+            this.roster.ImageIndex = 1;
+            this.roster.Location = new System.Drawing.Point(0, 0);
+            this.roster.Name = "roster";
+            this.roster.PresenceManager = this.pm;
+            this.roster.RosterManager = this.rm;
+            this.roster.SelectedImageIndex = 0;
+            this.roster.ShowLines = false;
+            this.roster.ShowRootLines = false;
+            this.roster.Size = new System.Drawing.Size(624, 390);
+            this.roster.Sorted = true;
+            this.roster.StatusColor = System.Drawing.Color.Teal;
+            this.roster.TabIndex = 0;
+            this.roster.DoubleClick += new System.EventHandler(this.roster_DoubleClick);
+            // 
+            // debug
+            // 
+            this.debug.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.debug.ErrorColor = System.Drawing.Color.Red;
+            this.debug.Location = new System.Drawing.Point(0, 0);
+            this.debug.Name = "debug";
+            this.debug.OtherColor = System.Drawing.Color.Green;
+            this.debug.ReceiveColor = System.Drawing.Color.Orange;
+            this.debug.SendColor = System.Drawing.Color.Blue;
+            this.debug.Size = new System.Drawing.Size(624, 390);
+            this.debug.Stream = this.jc;
+            this.debug.TabIndex = 0;
+            this.debug.TextColor = System.Drawing.Color.Black;
             // 
             // MainForm
             // 
@@ -465,7 +442,6 @@ namespace Example
             this.tpRoster.ResumeLayout(false);
             this.tpServices.ResumeLayout(false);
             this.tpDebug.ResumeLayout(false);
-            this.tpDebug.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -492,34 +468,6 @@ namespace Example
             }
         }
 
-        private void jc_OnReadText(object sender, string txt)
-        {
-            // keepalive
-            if (txt == " ")
-                return;
-
-            Debug.WriteLine("RECV: " + txt);
-            debug.SelectionColor = Color.Red;
-            debug.AppendText("RECV: ");
-            debug.SelectionColor = Color.Black;
-            debug.AppendText(txt);
-            debug.AppendMaybeScroll("\r\n");
-        }
-
-        private void jc_OnWriteText(object sender, string txt)
-        {
-            // keepalive
-            if (txt == " ")
-                return;
-
-            Debug.WriteLine("SEND: " + txt);
-            debug.SelectionColor = Color.Blue;
-            debug.AppendText("SEND: ");
-            debug.SelectionColor = Color.Black;
-            debug.AppendText(txt);
-            debug.AppendMaybeScroll("\r\n");
-        }
-
         private void jc_OnAuthenticate(object sender)
         {
             pnlPresence.Text = "Available";
@@ -535,8 +483,7 @@ namespace Example
                     jc[jabber.connection.Options.REMOTE_CERTIFICATE];
 
                 string cert_str = cert2.ToString(true);
-                debug.AppendText("\r\nServer Certificate:\r\n-------------------\r\n");
-                debug.AppendText(cert_str + "\r\n");
+                debug.Write("CERT:", cert_str);
                 pnlSSL.ToolTipText = cert_str;
 #endif
             }
@@ -609,11 +556,6 @@ namespace Example
 #endif
 
             pnlCon.Text = "Error: " + ex.Message;
-            debug.SelectionColor = Color.Green;
-            debug.AppendText("ERROR: ");
-            debug.SelectionColor = Color.Black;
-            debug.AppendText(ex.ToString());
-            debug.AppendText("\r\n");
         }
 
         private void jc_OnAuthError(object sender, jabber.protocol.client.IQ iq)
@@ -754,6 +696,7 @@ namespace Example
             pnlCon.Text = "Stream error: " + rp.InnerText;
         }
 
+        /*
         private void txtDebugInput_KeyUp(object sender, System.Windows.Forms.KeyEventArgs e)
         {
             if ((e.KeyCode == Keys.Enter) && e.Control)
@@ -774,7 +717,7 @@ namespace Example
             }
 
         }
-
+*/
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             MessageBox.Show(e.ExceptionObject.ToString(), "Unhandled exception: " + e.GetType().ToString());

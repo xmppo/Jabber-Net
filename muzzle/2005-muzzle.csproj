@@ -131,6 +131,9 @@
     <Compile Include="XDataForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="XmppDebugger.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <EmbeddedResource Include="BottomScrollRichText.bmp" />
     <EmbeddedResource Include="BottomScrollRichText.resx">
       <DependentUpon>BottomScrollRichText.cs</DependentUpon>
@@ -166,6 +169,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="XDataForm.resx">
       <DependentUpon>XDataForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="XmppDebugger.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>XmppDebugger.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
