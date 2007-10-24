@@ -25,7 +25,7 @@ namespace muzzle
     /// <summary>
     /// Debug stream for XMPP, so I don't have write it every time.
     /// </summary>
-    [SVN(@"$Id: StreamControl.cs 430 2007-10-22 19:53:54Z hildjj $")]
+    [SVN(@"$Id$")]
     public class XmppDebugger : StreamControl
     {
         private RichTextBox rtSend;
@@ -40,7 +40,7 @@ namespace muzzle
         private string m_send = "SEND:";
         private string m_recv = "RECV:";
         private string m_err = "ERROR:";
-
+        private string m_last = "";
 
         /// <summary> 
         /// Required designer variable.
@@ -271,11 +271,41 @@ namespace muzzle
             }
         }
 
+        private void Search(string txt)
+        {
+            string t = (txt == null) ? m_last : txt;
+            if (t == "")
+                return;
+            m_last = t;
+            int start = rtDebug.SelectionStart + 1;
+            if ((start < 0) || (start > rtDebug.Text.Length))
+                start = 0;
+            int offset = rtDebug.Text.IndexOf(t, start);
+            if (offset < 0)
+            {
+                Console.Beep();
+                offset = 0;
+            }
+            rtDebug.Select(offset, t.Length);
+            rtDebug.ScrollToCaret();
+        }
+
         private void rtDebug_KeyUp(object sender, KeyEventArgs e)
         {
             if ((e.KeyCode == Keys.Delete) && e.Control)
             {
                 Clear();
+            }
+            else if ((e.KeyCode == Keys.F) && e.Control)
+            {
+                InputBox inp = new InputBox();
+                if (inp.ShowDialog("Find text", "Find:", "") != DialogResult.OK)
+                    return;
+                Search(inp.Value);
+            }
+            else if (e.KeyCode == Keys.F3)
+            {
+                Search(null);
             }
         }
 
