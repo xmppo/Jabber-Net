@@ -260,8 +260,11 @@ namespace jabber.server
         /// <param name="elem">The stanza to write</param>
         public override void Write(XmlElement elem)
         {
-            if (elem.GetAttribute("from") == "")
-                elem.SetAttribute("from", this.JID);
+            if (State == RunningState.Instance)
+            {
+                if (elem.GetAttribute("from") == "")
+                    elem.SetAttribute("from", this.JID);
+            }
             base.Write(elem);
         }
 
