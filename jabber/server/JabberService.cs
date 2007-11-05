@@ -167,7 +167,11 @@ namespace jabber.server
         public override string Server
         {
             get { return base.Server; }
-            set { base.Server = value; }
+            set 
+            { 
+                base.Server = value;
+                this[Options.JID] = value;
+            }
         }
 
         /// <summary>
@@ -248,6 +252,17 @@ namespace jabber.server
             {
                 Accept();
             }
+        }
+
+        /// <summary>
+        /// Make sure there's a from address, then write the stanza.
+        /// </summary>
+        /// <param name="elem">The stanza to write</param>
+        public override void Write(XmlElement elem)
+        {
+            if (elem.GetAttribute("from") == "")
+                elem.SetAttribute("from", this.JID);
+            base.Write(elem);
         }
 
         /// <summary>

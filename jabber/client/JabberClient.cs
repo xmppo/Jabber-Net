@@ -339,6 +339,8 @@ namespace jabber.client
             Debug.Assert(Password != null);
             Debug.Assert(Resource != null);
 
+            this[Options.JID] = new JID(User, Server, Resource);
+
             AuthIQ aiq = new AuthIQ(Document);
             aiq.Type = IQType.get;
             Auth a = (Auth) aiq.Query;
@@ -843,6 +845,20 @@ namespace jabber.client
                 return;
             }
 
+            XmlElement bind = iq["bind", URI.BIND];
+            if (bind == null)
+            {
+                FireOnError(new AuthenticationFailedException("No binding returned.  Server implementation error."));
+                return;
+            }
+            XmlElement jid = bind["jid"];
+            if (jid == null)
+            {
+                FireOnError(new AuthenticationFailedException("No jid returned from binding.  Server implementation error."));
+                return;
+            }
+            this[Options.JID] = new JID(jid.InnerText);
+
             if (feat["session", URI.SESSION] != null)
             {
                 IQ iqs = new IQ(this.Document);
@@ -870,9 +886,6 @@ namespace jabber.client
             stream.AddFactory(new jabber.protocol.x.Factory());
 
         }
-
-
-
     }
 
     /// <summary>

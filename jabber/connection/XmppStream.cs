@@ -166,6 +166,10 @@ namespace jabber.connection
         /// Connect to the server or listen for connections.
         /// </summary>
         public const string COMPONENT_DIRECTION = "component.dir";
+        /// <summary>
+        /// The logical JID associated with this connection.
+        /// </summary>
+        public const string JID = "jid";
 
         /// <summary>
         /// Type of proxy
@@ -495,6 +499,16 @@ namespace jabber.connection
         public bool SSLon
         {
             get { return m_sslOn; }
+        }
+
+        /// <summary>
+        /// The JID from the connection
+        /// </summary>
+        [Browsable(false)]
+        public JID JID
+        {
+            // Make sure to set this option in subclasses.
+            get { return (JID)this[Options.JID]; }
         }
 
         /// <summary>
@@ -903,7 +917,7 @@ namespace jabber.connection
         /// Send the given packet to the server.
         /// </summary>
         /// <param name="elem"></param>
-        public void Write(XmlElement elem)
+        public virtual void Write(XmlElement elem)
         {
             m_stanzas.Write(elem);
         }
