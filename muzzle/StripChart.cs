@@ -746,7 +746,7 @@ namespace muzzle
             if (!m_first)
                 return;
             m_first = false;
-            DesignReDraw();
+            ReDraw();
         }
     }
 }
