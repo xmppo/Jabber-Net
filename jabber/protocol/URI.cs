@@ -211,5 +211,11 @@ namespace jabber.protocol
         /// </summary>
         public const string PUBSUB = "http://jabber.org/protocol/pubsub";
 
+        /// <summary>
+        /// Publish/Subscribe Event
+        /// See XEP-0060 (http://www.xmpp.org/extensions/xep-0060.html)
+        /// </summary>
+        public const string PUBSUB_EVENT = "http://jabber.org/protocol/pubsub#event";
+
     }
 }

@@ -507,7 +507,8 @@ namespace jabber.protocol.iq
         /// <returns></returns>
         public PubSubItem[] GetItems()
         {
-            XmlNodeList nl = GetElementsByTagName("item", URI.PUBSUB);
+            // Might be PUBSUB or PUBSUB_EVENT
+            XmlNodeList nl = GetElementsByTagName("item", this.NamespaceURI);
             PubSubItem[] items = new PubSubItem[nl.Count];
             int i=0;
             foreach (XmlNode n in nl)
@@ -531,6 +532,25 @@ namespace jabber.protocol.iq
             AddChild(item);
             return item;
         }
+
+        /// <summary>
+        /// Get a list of id's of deleted items.
+        /// </summary>
+        /// <returns></returns>
+        public string[] GetRetractions()
+        {
+            // Might be PUBSUB or PUBSUB_EVENT
+            XmlNodeList nl = GetElementsByTagName("retract", this.NamespaceURI);
+            string[] ids = new string[nl.Count];
+            int i=0;
+            foreach (XmlElement n in nl)
+            {
+                ids[i] = n.GetAttribute("id");
+                i++;
+            }
+            return ids;
+        }
+
     }
 
 
@@ -1101,7 +1121,39 @@ namespace jabber.protocol.iq
             get { return GetAttribute("subid"); }
             set { SetAttribute("subid", value); }
         }
-
     }
 
+    /// <summary>
+    /// A pubsub event notifification.
+    /// </summary>
+    [SVN(@"$Id$")]
+    public class PubSubEvent : Element
+    {
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="doc"></param>
+        public PubSubEvent(XmlDocument doc) : base("event", URI.PUBSUB_EVENT, doc)
+        {
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="prefix"></param>
+        /// <param name="qname"></param>
+        /// <param name="doc"></param>
+        public PubSubEvent(string prefix, XmlQualifiedName qname, XmlDocument doc)
+            : base(prefix, qname, doc)
+        {
+        }
+
+        /// <summary>
+        /// Get the items for this event.
+        /// </summary>
+        public Items Items
+        {
+            get { return this["items", URI.PUBSUB_EVENT] as Items; }
+        }
+    }
 }

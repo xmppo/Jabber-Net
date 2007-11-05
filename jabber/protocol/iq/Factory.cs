@@ -74,6 +74,9 @@ namespace jabber.protocol.iq
             new QnameType("affiliation",   URI.PUBSUB, typeof(jabber.protocol.iq.Affiliation)),
             new QnameType("item",          URI.PUBSUB, typeof(jabber.protocol.iq.PubSubItem)),
             new QnameType("subscription",  URI.PUBSUB, typeof(jabber.protocol.iq.PubSubSubscription)),
+
+            new QnameType("event", URI.PUBSUB_EVENT, typeof(jabber.protocol.iq.PubSubEvent)),
+            new QnameType("items", URI.PUBSUB_EVENT, typeof(jabber.protocol.iq.Items)),
         };
 
         QnameType[] IPacketTypes.Types { get { return s_qnt; } }
