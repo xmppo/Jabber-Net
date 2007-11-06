@@ -61,7 +61,7 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>TRACE;NET20</DefineConstants>
+    <DefineConstants>TRACE;NET20 NO_SRV</DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
     <DebugSymbols>false</DebugSymbols>
@@ -198,6 +198,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="jabber\connection\PollingStanzaStream.cs" />
+    <Compile Include="jabber\connection\PubSubManager.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="jabber\connection\sasl\ExternalProcessor.cs" />
     <Compile Include="jabber\connection\sasl\MD5Processor.cs">
       <SubType>Code</SubType>
@@ -427,6 +430,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="jabber\connection\CapsManager.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="jabber\connection\PubSubManager.bmp" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
