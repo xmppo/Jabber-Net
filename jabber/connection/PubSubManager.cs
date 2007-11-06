@@ -124,6 +124,7 @@ namespace jabber.connection
     /// A list of items with a maximum size.  Only one item with a given id will be in the 
     /// list at a given time.
     /// </summary>
+    [SVN(@"$Id$")]
     public class ItemList : ArrayList
     {
         private System.Collections.Hashtable m_index = new System.Collections.Hashtable();
@@ -234,6 +235,7 @@ namespace jabber.connection
     /// <summary>
     /// A pubsub error occurred.
     /// </summary>
+    [SVN(@"$Id$")]
     public class PubSubException : Exception
     {
         /// <summary>
