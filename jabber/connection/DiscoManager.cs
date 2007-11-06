@@ -18,6 +18,7 @@ using System.ComponentModel.Design;
 using System.Collections;
 using System.Diagnostics;
 using System.Xml;
+using System.Threading;
 
 using bedrock.util;
 using bedrock.collections;
@@ -331,14 +332,17 @@ namespace jabber.connection
         /// <returns></returns>
         public static DiscoNode GetNode(JID jid, string node)
         {
-            string key = GetKey(jid, node);
-            DiscoNode n = (DiscoNode)m_items[key];
-            if (n == null)
+            lock (m_items)
             {
-                n = new DiscoNode(jid, node);
-                m_items.Add(key, n);
+                string key = GetKey(jid, node);
+                DiscoNode n = (DiscoNode)m_items[key];
+                if (n == null)
+                {
+                    n = new DiscoNode(jid, node);
+                    m_items.Add(key, n);
+                }
+                return n;
             }
-            return n;
         }
 
         /// <summary>
@@ -568,7 +572,8 @@ namespace jabber.connection
 
         private void m_client_OnAuthenticate(object sender)
         {
-            m_root = DiscoNode.GetNode(m_stream.Server);
+            if (m_root == null)
+                m_root = DiscoNode.GetNode(m_stream.Server);
             RequestInfo(m_root);
         }
 
@@ -844,6 +849,66 @@ namespace jabber.connection
         public void BeginGetItems(JID jid, string node, DiscoNodeHandler handler)
         {
             BeginGetItems(DiscoNode.GetNode(jid, node), handler);
+        }
+
+        private class FindServiceRequest
+        {
+            private DiscoManager m_manager;
+            private string m_URI;
+            private DiscoNodeHandler m_handler;
+            private int m_outstanding = 0;
+
+            public FindServiceRequest(DiscoManager man, string featureURI, DiscoNodeHandler handler)
+            {
+                m_manager = man;
+                m_URI = featureURI;
+                m_handler = handler;
+            }
+
+            public void GotFeatures(DiscoNode node)
+            {
+
+                // yes, yes, this may call the handler more than once in multi-threaded world.  Punt for now.
+                if (m_handler != null)
+                {
+                    if (node.HasFeature(m_URI))
+                    {
+                        m_handler(node);
+                        m_handler = null;
+                    }
+                }
+
+                if (Interlocked.Decrement(ref m_outstanding) == 0)
+                {
+                    if (m_handler != null)
+                        m_handler(null);
+                }
+            }
+
+            public void GotRootItems(DiscoNode node)
+            {
+                m_outstanding = node.Children.Count;
+                foreach (DiscoNode n in node.Children)
+                    m_manager.BeginGetFeatures(n, new DiscoNodeHandler(GotFeatures));
+            }
+        }
+
+        /// <summary>
+        /// Look for a component that implements a given feature, which is a child of the root.
+        /// This will call back on the first match.  It will call back with null if none 
+        /// are found.
+        /// </summary>
+        /// <param name="featureURI"></param>
+        /// <param name="handler"></param>
+        public void BeginFindServiceWithFeature(string featureURI, DiscoNodeHandler handler)
+        {
+            if (handler == null)
+                return;  // prove I *didn't* call it. :)
+
+            FindServiceRequest req = new FindServiceRequest(this, featureURI, handler);
+            if (m_root == null)
+                m_root = DiscoNode.GetNode(m_stream.Server);
+            BeginGetItems(m_root, new DiscoNodeHandler(req.GotRootItems));  // hopefully enough to prevent GC.
         }
 
         IEnumerator IEnumerable.GetEnumerator()
