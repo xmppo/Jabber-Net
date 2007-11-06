@@ -162,9 +162,18 @@ namespace muzzle
             rtDebug.AppendMaybeScroll("\r\n");
         }
 
+        /// <summary>
+        /// Write an error to the log.
+        /// </summary>
+        /// <param name="error"></param>
+        public void WriteError(string error)
+        {
+            Write(m_errColor, m_err, error);
+        }
+
         private void m_stream_OnError(object sender, Exception ex)
         {
-            Write(m_errColor, m_err, ex.ToString());
+            WriteError(ex.ToString());
         }
 
         private void m_stream_OnConnect(object sender, jabber.connection.StanzaStream stream)
