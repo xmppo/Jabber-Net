@@ -153,6 +153,15 @@ namespace jabber.connection
                 code ^= m_node.GetHashCode();
             return code;
         }
+
+        /// <summary>
+        /// Returns JID/Node
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return JID + "/" + Node;
+        }
     }
 
 

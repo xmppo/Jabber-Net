@@ -210,6 +210,33 @@ namespace jabber.connection
             if (index != null)
                 this.RemoveAt((int)index);
         }
+
+        /// <summary>
+        /// Return the contents of the specified item
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public XmlElement this[string id]
+        {
+            get
+            {
+                object index = m_index[id];
+                if (index == null)
+                    return null;
+                PubSubItem item = this[(int)index] as PubSubItem;
+                if (item == null)
+                    return null;
+                return item.Contents;
+            }
+            set
+            {
+                // wrap an item around the contents.
+                PubSubItem item = new PubSubItem(value.OwnerDocument);
+                item.Contents = value;
+                item.ID = id;
+                Add(item);
+            }
+        }
     }
 
 
@@ -640,6 +667,21 @@ namespace jabber.connection
         {
             if (OnItemRemove != null)
                 OnItemRemove(this, item);
+        }
+
+        /// <summary>
+        /// Return the contents of the specified item
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public XmlElement this[string id]
+        {
+            get { return m_items[id]; }
+            set 
+            { 
+                // TODO: publish, and reset ID when it comes back.
+                m_items[id] = value; 
+            }
         }
 
         private void m_stream_OnProtocol(object sender, XmlElement rp)
