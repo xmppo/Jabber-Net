@@ -22,6 +22,7 @@ using System.Xml;
 
 using bedrock.util;
 using jabber;
+using jabber.connection;
 using jabber.protocol;
 using jabber.protocol.client;
 using jabber.protocol.iq;
@@ -46,24 +47,31 @@ namespace Example
         private System.Windows.Forms.ContextMenu mnuPresence;
         private System.Windows.Forms.MenuItem mnuAvailable;
         private System.Windows.Forms.MenuItem mnuAway;
-        private System.Windows.Forms.MenuItem mnuOffline;
-        private System.Windows.Forms.MenuItem menuItem1;
         private System.ComponentModel.IContainer components;
         private muzzle.RosterTree roster;
         private System.Windows.Forms.StatusBarPanel pnlSSL;
         private jabber.connection.DiscoManager dm;
         private TabPage tpServices;
-        private TreeView tvServices;
-        private MenuItem menuItem2;
-        private bedrock.util.IdleTime m_idle;
-        private PropertyGrid pgServices;
-        private Splitter splitter2;
         private jabber.connection.CapsManager cm;
-        private MenuItem menuItem4;
-        private MenuItem menuItem3;
-        private MenuItem menuItem5;
-        private MenuItem menuItem6;
         private muzzle.XmppDebugger debug;
+        private jabber.connection.PubSubManager psm;
+        private MenuStrip menuStrip1;
+        private ToolStripMenuItem fileToolStripMenuItem;
+        private ToolStripMenuItem connectToolStripMenuItem;
+        private ToolStripSeparator toolStripMenuItem1;
+        private ToolStripMenuItem exitToolStripMenuItem;
+        private ToolStripMenuItem viewToolStripMenuItem;
+        private ToolStripMenuItem servicesToolStripMenuItem;
+        private ToolStripMenuItem debugToolStripMenuItem;
+        private ToolStripMenuItem rosterToolStripMenuItem;
+        private ToolStripMenuItem addContactToolStripMenuItem;
+        private ToolStripMenuItem removeContactToolStripMenuItem;
+        private ToolStripMenuItem addGroupToolStripMenuItem;
+        private IdleTime idler;
+        private ServiceDisplay services;
+        private ToolStripMenuItem subscribePubSubToolStripMenuItem;
+        private ToolStripMenuItem windowToolStripMenuItem;
+        private ToolStripMenuItem closeTabToolStripMenuItem;
 
         private bool m_err = false;
 
@@ -76,35 +84,29 @@ namespace Example
             //
             InitializeComponent();
 
-            m_idle = new bedrock.util.IdleTime(10, 5 * 60); // check every 10 secs to see if we've been away 5 mins.
-//            m_idle = new bedrock.util.IdleTime(1, 5);
-            m_idle.InvokeControl = jc.InvokeControl;
-            m_idle.OnIdle += new bedrock.util.SpanEventHandler(m_idle_OnIdle);
-            m_idle.OnUnIdle += new bedrock.util.SpanEventHandler(m_idle_OnUnIdle);
-            tvServices.ImageList = roster.ImageList;
-#if NET20
-            tvServices.NodeMouseDoubleClick += new TreeNodeMouseClickEventHandler(tvServices_NodeMouseDoubleClick);
-            tvServices.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvServices_AfterSelect);
-#else
+#if !NET20
             jc.AutoStartTLS = false;  // Mentalis stopped working with XCP 5
 #endif
+            services.ImageList = roster.ImageList;
             cm.Version = System.Reflection.Assembly.GetCallingAssembly().GetName().Version.ToString();
             cm.BaseFeatures.Add(URI.TIME);
             cm.BaseFeatures.Add(URI.VERSION);
             cm.BaseFeatures.Add(URI.LAST);
             cm.BaseFeatures.Add(URI.DISCO_INFO);
 
+            tabControl1.TabPages.Remove(tpServices);
+            tabControl1.TabPages.Remove(tpDebug);
             AppDomain.CurrentDomain.UnhandledException +=new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
         }
 
 
-        void m_idle_OnUnIdle(object sender, TimeSpan span)
+        void idler_OnUnIdle(object sender, TimeSpan span)
         {
             jc.Presence(PresenceType.available, "Available", null, 0);
             pnlPresence.Text = "Available";
         }
 
-        private void m_idle_OnIdle(object sender, TimeSpan span)
+        private void idler_OnIdle(object sender, TimeSpan span)
         {
             jc.Presence(PresenceType.available, "Auto-away", "away", 0);
             pnlPresence.Text = "Away";
@@ -115,7 +117,7 @@ namespace Example
         /// </summary>
         protected override void Dispose( bool disposing )
         {
-            m_idle.Enabled = false;
+            idler.Enabled = false;
 
             if( disposing )
             {
@@ -142,28 +144,36 @@ namespace Example
             this.pnlPresence = new System.Windows.Forms.StatusBarPanel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tpRoster = new System.Windows.Forms.TabPage();
+            this.roster = new muzzle.RosterTree();
             this.jc = new jabber.client.JabberClient(this.components);
             this.pm = new jabber.client.PresenceManager(this.components);
             this.rm = new jabber.client.RosterManager(this.components);
             this.tpServices = new System.Windows.Forms.TabPage();
-            this.pgServices = new System.Windows.Forms.PropertyGrid();
-            this.splitter2 = new System.Windows.Forms.Splitter();
-            this.tvServices = new System.Windows.Forms.TreeView();
+            this.services = new Example.ServiceDisplay();
+            this.dm = new jabber.connection.DiscoManager(this.components);
             this.tpDebug = new System.Windows.Forms.TabPage();
+            this.debug = new muzzle.XmppDebugger();
             this.mnuPresence = new System.Windows.Forms.ContextMenu();
             this.mnuAvailable = new System.Windows.Forms.MenuItem();
             this.mnuAway = new System.Windows.Forms.MenuItem();
-            this.menuItem4 = new System.Windows.Forms.MenuItem();
-            this.menuItem3 = new System.Windows.Forms.MenuItem();
-            this.menuItem5 = new System.Windows.Forms.MenuItem();
-            this.menuItem6 = new System.Windows.Forms.MenuItem();
-            this.menuItem1 = new System.Windows.Forms.MenuItem();
-            this.mnuOffline = new System.Windows.Forms.MenuItem();
-            this.menuItem2 = new System.Windows.Forms.MenuItem();
-            this.dm = new jabber.connection.DiscoManager(this.components);
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.connectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.subscribePubSubToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.servicesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rosterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addContactToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.removeContactToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addGroupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cm = new jabber.connection.CapsManager(this.components);
-            this.roster = new muzzle.RosterTree();
-            this.debug = new muzzle.XmppDebugger();
+            this.psm = new jabber.connection.PubSubManager(this.components);
+            this.idler = new bedrock.util.IdleTime();
+            this.windowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.closeTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pnlCon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pnlSSL)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pnlPresence)).BeginInit();
@@ -171,6 +181,7 @@ namespace Example
             this.tpRoster.SuspendLayout();
             this.tpServices.SuspendLayout();
             this.tpDebug.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // sb
@@ -213,10 +224,10 @@ namespace Example
             this.tabControl1.Controls.Add(this.tpServices);
             this.tabControl1.Controls.Add(this.tpDebug);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl1.Location = new System.Drawing.Point(0, 0);
+            this.tabControl1.Location = new System.Drawing.Point(0, 24);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(632, 416);
+            this.tabControl1.Size = new System.Drawing.Size(632, 392);
             this.tabControl1.TabIndex = 2;
             // 
             // tpRoster
@@ -224,9 +235,30 @@ namespace Example
             this.tpRoster.Controls.Add(this.roster);
             this.tpRoster.Location = new System.Drawing.Point(4, 22);
             this.tpRoster.Name = "tpRoster";
-            this.tpRoster.Size = new System.Drawing.Size(624, 390);
+            this.tpRoster.Size = new System.Drawing.Size(624, 366);
             this.tpRoster.TabIndex = 1;
             this.tpRoster.Text = "Roster";
+            this.tpRoster.UseVisualStyleBackColor = true;
+            // 
+            // roster
+            // 
+            this.roster.AllowDrop = true;
+            this.roster.Client = this.jc;
+            this.roster.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.roster.DrawMode = System.Windows.Forms.TreeViewDrawMode.OwnerDrawText;
+            this.roster.ImageIndex = 1;
+            this.roster.Location = new System.Drawing.Point(0, 0);
+            this.roster.Name = "roster";
+            this.roster.PresenceManager = this.pm;
+            this.roster.RosterManager = this.rm;
+            this.roster.SelectedImageIndex = 0;
+            this.roster.ShowLines = false;
+            this.roster.ShowRootLines = false;
+            this.roster.Size = new System.Drawing.Size(624, 366);
+            this.roster.Sorted = true;
+            this.roster.StatusColor = System.Drawing.Color.Teal;
+            this.roster.TabIndex = 0;
+            this.roster.DoubleClick += new System.EventHandler(this.roster_DoubleClick);
             // 
             // jc
             // 
@@ -263,152 +295,38 @@ namespace Example
             // 
             // tpServices
             // 
-            this.tpServices.Controls.Add(this.pgServices);
-            this.tpServices.Controls.Add(this.splitter2);
-            this.tpServices.Controls.Add(this.tvServices);
+            this.tpServices.Controls.Add(this.services);
             this.tpServices.Location = new System.Drawing.Point(4, 22);
             this.tpServices.Name = "tpServices";
-            this.tpServices.Size = new System.Drawing.Size(624, 390);
+            this.tpServices.Size = new System.Drawing.Size(624, 366);
             this.tpServices.TabIndex = 2;
             this.tpServices.Text = "Services";
+            this.tpServices.UseVisualStyleBackColor = true;
             // 
-            // pgServices
+            // services
             // 
-            this.pgServices.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pgServices.Location = new System.Drawing.Point(350, 0);
-            this.pgServices.Name = "pgServices";
-            this.pgServices.Size = new System.Drawing.Size(274, 390);
-            this.pgServices.TabIndex = 2;
+            this.services.DiscoManager = this.dm;
+            this.services.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.services.ImageList = null;
+            this.services.Location = new System.Drawing.Point(0, 0);
+            this.services.Name = "services";
+            this.services.Size = new System.Drawing.Size(624, 366);
+            this.services.Stream = this.jc;
+            this.services.TabIndex = 0;
             // 
-            // splitter2
+            // dm
             // 
-            this.splitter2.Location = new System.Drawing.Point(347, 0);
-            this.splitter2.Name = "splitter2";
-            this.splitter2.Size = new System.Drawing.Size(3, 390);
-            this.splitter2.TabIndex = 1;
-            this.splitter2.TabStop = false;
-            // 
-            // tvServices
-            // 
-            this.tvServices.Dock = System.Windows.Forms.DockStyle.Left;
-            this.tvServices.Location = new System.Drawing.Point(0, 0);
-            this.tvServices.Name = "tvServices";
-            this.tvServices.ShowLines = false;
-            this.tvServices.ShowPlusMinus = false;
-            this.tvServices.ShowRootLines = false;
-            this.tvServices.Size = new System.Drawing.Size(347, 390);
-            this.tvServices.TabIndex = 0;
-            this.tvServices.AfterCollapse += new System.Windows.Forms.TreeViewEventHandler(this.tvServices_AfterCollapse);
-            this.tvServices.AfterExpand += new System.Windows.Forms.TreeViewEventHandler(this.tvServices_AfterExpand);
+            this.dm.Stream = this.jc;
             // 
             // tpDebug
             // 
             this.tpDebug.Controls.Add(this.debug);
             this.tpDebug.Location = new System.Drawing.Point(4, 22);
             this.tpDebug.Name = "tpDebug";
-            this.tpDebug.Size = new System.Drawing.Size(624, 390);
+            this.tpDebug.Size = new System.Drawing.Size(624, 366);
             this.tpDebug.TabIndex = 0;
             this.tpDebug.Text = "Debug";
-            // 
-            // mnuPresence
-            // 
-            this.mnuPresence.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.mnuAvailable,
-            this.mnuAway,
-            this.menuItem4,
-            this.menuItem3,
-            this.menuItem5,
-            this.menuItem6,
-            this.menuItem1,
-            this.mnuOffline,
-            this.menuItem2});
-            // 
-            // mnuAvailable
-            // 
-            this.mnuAvailable.Index = 0;
-            this.mnuAvailable.Shortcut = System.Windows.Forms.Shortcut.CtrlO;
-            this.mnuAvailable.Text = "&Available";
-            this.mnuAvailable.Click += new System.EventHandler(this.mnuAvailable_Click);
-            // 
-            // mnuAway
-            // 
-            this.mnuAway.Index = 1;
-            this.mnuAway.Shortcut = System.Windows.Forms.Shortcut.CtrlA;
-            this.mnuAway.Text = "A&way";
-            this.mnuAway.Click += new System.EventHandler(this.mnuAway_Click);
-            // 
-            // menuItem4
-            // 
-            this.menuItem4.Index = 2;
-            this.menuItem4.Text = "-";
-            // 
-            // menuItem3
-            // 
-            this.menuItem3.Index = 3;
-            this.menuItem3.Shortcut = System.Windows.Forms.Shortcut.Ins;
-            this.menuItem3.Text = "Add &Contact";
-            this.menuItem3.Click += new System.EventHandler(this.menuItem3_Click);
-            // 
-            // menuItem5
-            // 
-            this.menuItem5.Index = 4;
-            this.menuItem5.Shortcut = System.Windows.Forms.Shortcut.Del;
-            this.menuItem5.Text = "&Remove Contact";
-            this.menuItem5.Click += new System.EventHandler(this.menuItem5_Click);
-            // 
-            // menuItem6
-            // 
-            this.menuItem6.Index = 5;
-            this.menuItem6.Text = "Add &Group...";
-            this.menuItem6.Click += new System.EventHandler(this.menuItem6_Click);
-            // 
-            // menuItem1
-            // 
-            this.menuItem1.Index = 6;
-            this.menuItem1.Text = "-";
-            // 
-            // mnuOffline
-            // 
-            this.mnuOffline.Index = 7;
-            this.mnuOffline.Shortcut = System.Windows.Forms.Shortcut.F9;
-            this.mnuOffline.Text = "&Offline";
-            this.mnuOffline.Click += new System.EventHandler(this.mnuOffline_Click);
-            // 
-            // menuItem2
-            // 
-            this.menuItem2.Index = 8;
-            this.menuItem2.Shortcut = System.Windows.Forms.Shortcut.CtrlQ;
-            this.menuItem2.Text = "E&xit";
-            this.menuItem2.Click += new System.EventHandler(this.menuItem2_Click);
-            // 
-            // dm
-            // 
-            this.dm.Stream = this.jc;
-            // 
-            // cm
-            // 
-            this.cm.Node = "http://cursive.net/clients/csharp-example";
-            this.cm.Stream = this.jc;
-            // 
-            // roster
-            // 
-            this.roster.AllowDrop = true;
-            this.roster.Client = this.jc;
-            this.roster.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.roster.DrawMode = System.Windows.Forms.TreeViewDrawMode.OwnerDrawText;
-            this.roster.ImageIndex = 1;
-            this.roster.Location = new System.Drawing.Point(0, 0);
-            this.roster.Name = "roster";
-            this.roster.PresenceManager = this.pm;
-            this.roster.RosterManager = this.rm;
-            this.roster.SelectedImageIndex = 0;
-            this.roster.ShowLines = false;
-            this.roster.ShowRootLines = false;
-            this.roster.Size = new System.Drawing.Size(624, 390);
-            this.roster.Sorted = true;
-            this.roster.StatusColor = System.Drawing.Color.Teal;
-            this.roster.TabIndex = 0;
-            this.roster.DoubleClick += new System.EventHandler(this.roster_DoubleClick);
+            this.tpDebug.UseVisualStyleBackColor = true;
             // 
             // debug
             // 
@@ -419,10 +337,175 @@ namespace Example
             this.debug.OtherColor = System.Drawing.Color.Green;
             this.debug.ReceiveColor = System.Drawing.Color.Orange;
             this.debug.SendColor = System.Drawing.Color.Blue;
-            this.debug.Size = new System.Drawing.Size(624, 390);
+            this.debug.Size = new System.Drawing.Size(624, 366);
             this.debug.Stream = this.jc;
             this.debug.TabIndex = 0;
             this.debug.TextColor = System.Drawing.Color.Black;
+            // 
+            // mnuPresence
+            // 
+            this.mnuPresence.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.mnuAvailable,
+            this.mnuAway});
+            // 
+            // mnuAvailable
+            // 
+            this.mnuAvailable.Enabled = false;
+            this.mnuAvailable.Index = 0;
+            this.mnuAvailable.Shortcut = System.Windows.Forms.Shortcut.CtrlO;
+            this.mnuAvailable.Text = "&Available";
+            this.mnuAvailable.Click += new System.EventHandler(this.mnuAvailable_Click);
+            // 
+            // mnuAway
+            // 
+            this.mnuAway.Enabled = false;
+            this.mnuAway.Index = 1;
+            this.mnuAway.Shortcut = System.Windows.Forms.Shortcut.CtrlA;
+            this.mnuAway.Text = "A&way";
+            this.mnuAway.Click += new System.EventHandler(this.mnuAway_Click);
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileToolStripMenuItem,
+            this.viewToolStripMenuItem,
+            this.rosterToolStripMenuItem,
+            this.windowToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(632, 24);
+            this.menuStrip1.TabIndex = 3;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // fileToolStripMenuItem
+            // 
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.connectToolStripMenuItem,
+            this.subscribePubSubToolStripMenuItem,
+            this.toolStripMenuItem1,
+            this.exitToolStripMenuItem});
+            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(35, 20);
+            this.fileToolStripMenuItem.Text = "&File";
+            // 
+            // connectToolStripMenuItem
+            // 
+            this.connectToolStripMenuItem.Name = "connectToolStripMenuItem";
+            this.connectToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F9;
+            this.connectToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.connectToolStripMenuItem.Text = "&Connect";
+            this.connectToolStripMenuItem.Click += new System.EventHandler(this.connectToolStripMenuItem_Click);
+            // 
+            // subscribePubSubToolStripMenuItem
+            // 
+            this.subscribePubSubToolStripMenuItem.Name = "subscribePubSubToolStripMenuItem";
+            this.subscribePubSubToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F10;
+            this.subscribePubSubToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.subscribePubSubToolStripMenuItem.Text = "&Subscribe (PubSub)";
+            this.subscribePubSubToolStripMenuItem.Click += new System.EventHandler(this.subscribeToPubSubToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(200, 6);
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.exitToolStripMenuItem.Text = "E&xit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
+            // viewToolStripMenuItem
+            // 
+            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.servicesToolStripMenuItem,
+            this.debugToolStripMenuItem});
+            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
+            this.viewToolStripMenuItem.Text = "&View";
+            // 
+            // servicesToolStripMenuItem
+            // 
+            this.servicesToolStripMenuItem.Name = "servicesToolStripMenuItem";
+            this.servicesToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F8;
+            this.servicesToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.servicesToolStripMenuItem.Text = "&Services";
+            this.servicesToolStripMenuItem.Click += new System.EventHandler(this.servicesToolStripMenuItem_Click);
+            // 
+            // debugToolStripMenuItem
+            // 
+            this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
+            this.debugToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F12;
+            this.debugToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.debugToolStripMenuItem.Text = "&Debug";
+            this.debugToolStripMenuItem.Click += new System.EventHandler(this.debugToolStripMenuItem_Click);
+            // 
+            // rosterToolStripMenuItem
+            // 
+            this.rosterToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addContactToolStripMenuItem,
+            this.removeContactToolStripMenuItem,
+            this.addGroupToolStripMenuItem});
+            this.rosterToolStripMenuItem.Name = "rosterToolStripMenuItem";
+            this.rosterToolStripMenuItem.Size = new System.Drawing.Size(51, 20);
+            this.rosterToolStripMenuItem.Text = "&Roster";
+            // 
+            // addContactToolStripMenuItem
+            // 
+            this.addContactToolStripMenuItem.Name = "addContactToolStripMenuItem";
+            this.addContactToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Insert;
+            this.addContactToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
+            this.addContactToolStripMenuItem.Text = "&Add Contact";
+            this.addContactToolStripMenuItem.Click += new System.EventHandler(this.menuItem3_Click);
+            // 
+            // removeContactToolStripMenuItem
+            // 
+            this.removeContactToolStripMenuItem.Name = "removeContactToolStripMenuItem";
+            this.removeContactToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Delete;
+            this.removeContactToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
+            this.removeContactToolStripMenuItem.Text = "&Remove Contact";
+            this.removeContactToolStripMenuItem.Click += new System.EventHandler(this.menuItem5_Click);
+            // 
+            // addGroupToolStripMenuItem
+            // 
+            this.addGroupToolStripMenuItem.Name = "addGroupToolStripMenuItem";
+            this.addGroupToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
+            this.addGroupToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
+            this.addGroupToolStripMenuItem.Text = "&Add Group";
+            this.addGroupToolStripMenuItem.Click += new System.EventHandler(this.addGroupToolStripMenuItem_Click);
+            // 
+            // cm
+            // 
+            this.cm.Node = "http://cursive.net/clients/csharp-example";
+            this.cm.Stream = this.jc;
+            // 
+            // psm
+            // 
+            this.psm.Stream = this.jc;
+            // 
+            // idler
+            // 
+            this.idler.InvokeControl = this;
+            this.idler.OnIdle += new bedrock.util.SpanEventHandler(this.idler_OnIdle);
+            this.idler.OnUnIdle += new bedrock.util.SpanEventHandler(this.idler_OnUnIdle);
+            // 
+            // windowToolStripMenuItem
+            // 
+            this.windowToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.closeTabToolStripMenuItem});
+            this.windowToolStripMenuItem.Name = "windowToolStripMenuItem";
+            this.windowToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
+            this.windowToolStripMenuItem.Text = "&Window";
+            // 
+            // closeTabToolStripMenuItem
+            // 
+            this.closeTabToolStripMenuItem.Name = "closeTabToolStripMenuItem";
+            this.closeTabToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.W)));
+            this.closeTabToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            this.closeTabToolStripMenuItem.Text = "&Close Tab";
+            this.closeTabToolStripMenuItem.Click += new System.EventHandler(this.closeTabToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -431,7 +514,9 @@ namespace Example
             this.ContextMenu = this.mnuPresence;
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.sb);
+            this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
             this.Text = "MainForm";
             this.Closing += new System.ComponentModel.CancelEventHandler(this.MainForm_Closing);
@@ -442,7 +527,10 @@ namespace Example
             this.tpRoster.ResumeLayout(false);
             this.tpServices.ResumeLayout(false);
             this.tpDebug.ResumeLayout(false);
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -472,6 +560,8 @@ namespace Example
         {
             pnlPresence.Text = "Available";
             pnlCon.Text = "Connected";
+            mnuAway.Enabled = mnuAvailable.Enabled = true;
+
 #if !NO_SSL
             if (jc.SSLon)
             {
@@ -488,67 +578,27 @@ namespace Example
 #endif
             }
 #endif
-#if NET20
-            jabber.connection.DiscoNode dn = jabber.connection.DiscoNode.GetNode(jc.Server, null);
-            tvServices.ShowNodeToolTips = true;
-            TreeNode tn = tvServices.Nodes.Add(dn.Key, dn.Name);
-            tn.ToolTipText = dn.Key.Replace('\u0000', '\n');
-            tn.Tag = dn;
-            tn.ImageIndex = 8;
-            tn.SelectedImageIndex = 8;
-            dm.BeginGetFeatures(dn, new jabber.connection.DiscoNodeHandler(GotInitialFeatures));
-#endif
-            m_idle.Enabled = true;
+            idler.Enabled = true;
         }
 
-        private void GotItems(jabber.connection.DiscoNode node)
-        {
-#if NET20
-            TreeNode[] nodes = tvServices.Nodes.Find(node.Key, true);
-            foreach (TreeNode n in nodes)
-            {
-                n.ImageIndex = 7;
-                n.SelectedImageIndex = 7;
-                foreach (jabber.connection.DiscoNode dn in node.Children)
-                {
-                    TreeNode tn = n.Nodes.Add(dn.Key, dn.Name);
-                    tn.ToolTipText = dn.Key.Replace('\u0000', '\n');
-                    tn.Tag = dn;
-                    tn.ImageIndex = 8;
-                    tn.SelectedImageIndex = 8;
-                }
-            }
-            pgServices.Refresh();
-#endif
-        }
-
-        private void GotInitialFeatures(jabber.connection.DiscoNode node)
-        {
-            dm.BeginGetItems(node, new jabber.connection.DiscoNodeHandler(GotItems));
-        }
-
-        private void GotInfo(jabber.connection.DiscoNode node)
-        {
-#if NET20
-            pgServices.SelectedObject = node;
-#endif
-        }
         private void jc_OnDisconnect(object sender)
         {
-            m_idle.Enabled = false;
+            mnuAway.Enabled = mnuAvailable.Enabled = false;
+            idler.Enabled = false;
             pnlPresence.Text = "Offline";
             pnlSSL.Text = "";
             pnlSSL.ToolTipText = "";
+            connectToolStripMenuItem.Text = "&Connect";
 
-            tvServices.Nodes.Clear();
             if (!m_err)
                 pnlCon.Text = "Disconnected";
-            pgServices.SelectedObject = null;
         }
 
         private void jc_OnError(object sender, System.Exception ex)
         {
-            m_idle.Enabled = false;
+            mnuAway.Enabled = mnuAvailable.Enabled = false;
+            connectToolStripMenuItem.Text = "&Connect";
+            idler.Enabled = false;
 
 #if !NO_SSL && !NET20
             if (ex is Org.Mentalis.Security.Certificates.CertificateException)
@@ -657,6 +707,20 @@ namespace Example
             mnuPresence.Show(sb, new Point(e.X, e.Y));
         }
 
+        private void connectToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (jc.IsAuthenticated)
+            {
+                jc.Close(true);
+                connectToolStripMenuItem.Text = "&Connect";
+            }
+            else
+            {
+                Connect();
+                connectToolStripMenuItem.Text = "Dis&connect";
+            }
+        }
+
         private void mnuAvailable_Click(object sender, System.EventArgs e)
         {
             if (jc.IsAuthenticated)
@@ -734,19 +798,7 @@ namespace Example
                 jc.Close();
         }
 
-        private void tvServices_AfterExpand(object sender, TreeViewEventArgs e)
-        {
-            e.Node.ImageIndex = 6;
-            e.Node.SelectedImageIndex = 6;
-        }
-
-        private void tvServices_AfterCollapse(object sender, TreeViewEventArgs e)
-        {
-            e.Node.ImageIndex = 7;
-            e.Node.SelectedImageIndex = 7;
-        }
-
-        private void menuItem2_Click(object sender, EventArgs e)
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             jc.Close();
             this.Close();
@@ -756,6 +808,7 @@ namespace Example
         {
             AddContact ac = new AddContact();
             ac.AllGroups = roster.Groups;
+            ac.DefaultDomain = jc.Server;
             if (ac.ShowDialog() != DialogResult.OK)
                 return;
 
@@ -772,7 +825,7 @@ namespace Example
 
 
         // add group
-        private void menuItem6_Click(object sender, EventArgs e)
+        private void addGroupToolStripMenuItem_Click(object sender, EventArgs e)
         {
             AddGroup ag = new AddGroup();
             if (ag.ShowDialog() == DialogResult.Cancel)
@@ -782,6 +835,60 @@ namespace Example
                 return;
 
             roster.AddGroup(ag.GroupName).EnsureVisible();
+        }
+
+        private void servicesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (tabControl1.TabPages.Contains(tpServices))
+            {
+                tabControl1.TabPages.Remove(tpServices);
+                servicesToolStripMenuItem.Checked = false;
+            }
+            else
+            {
+                tabControl1.TabPages.Add(tpServices);
+                tabControl1.SelectedTab = tpServices;
+                servicesToolStripMenuItem.Checked = true;
+            }
+        }
+
+        private void debugToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (tabControl1.TabPages.Contains(tpDebug))
+            {
+                tabControl1.TabPages.Remove(tpDebug);
+                debugToolStripMenuItem.Checked = false;
+            }
+            else
+            {
+                tabControl1.TabPages.Add(tpDebug);
+                tabControl1.SelectedTab = tpDebug;
+                debugToolStripMenuItem.Checked = true;
+            }
+        }
+
+        private void subscribeToPubSubToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PubSubSubcribeForm ps = new PubSubSubcribeForm();
+            // this is a small race.  to do it right, I should call dm.BeginFindServiceWithFeature, 
+            // and modify that to call back on all of the found services.  The idea is that
+            // by the the time the user has a chance to click on the menu item, the DiscoManager 
+            // will be populated.
+            ps.DiscoManager = dm;
+            if (ps.ShowDialog() != DialogResult.OK)
+                return;
+            JID jid = ps.JID;
+            string node = ps.Node;
+            string text = string.Format("{0}/{1}", jid, node);
+
+            TabPage tp = new TabPage(text);
+            PubSubDisplay disp = new PubSubDisplay();
+            disp.Node = psm.GetNode(jid, node, 10);
+            tp.Controls.Add(disp);
+            disp.Dock = DockStyle.Fill;
+
+            tabControl1.TabPages.Add(tp);
+            tabControl1.SelectedTab = tp;
         }
 
         private void rm_OnSubscription(jabber.client.RosterManager manager, Item ri, Presence pres)
@@ -803,26 +910,21 @@ namespace Example
             }
         }
 
-#if NET20
-        void tvServices_NodeMouseDoubleClick(object sender,
-                                             TreeNodeMouseClickEventArgs e)
-        {
-            jabber.connection.DiscoNode dn = (jabber.connection.DiscoNode)e.Node.Tag;
-            if (dn.Children == null)
-                dm.BeginGetItems(dn.JID, dn.Node, new jabber.connection.DiscoNodeHandler(GotItems));
-        }
-
-        private void tvServices_AfterSelect(object sender, TreeViewEventArgs e)
-        {
-            jabber.connection.DiscoNode dn = (jabber.connection.DiscoNode)e.Node.Tag;
-            dm.BeginGetFeatures(dn, new jabber.connection.DiscoNodeHandler(GotInfo));
-        }
-
         private void rm_OnUnsubscription(jabber.client.RosterManager manager, Presence pres, ref bool remove)
         {
             MessageBox.Show(pres.From + " has removed you from their roster.", "Unsubscription notification", MessageBoxButtons.OK);
         }
 
-#endif
+        private void closeTabToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TabPage tp = tabControl1.SelectedTab;
+            if (tp == tpRoster)
+                return;
+            else if (tp == tpDebug)
+                debugToolStripMenuItem.Checked = false;
+            else if (tp == tpServices)
+                servicesToolStripMenuItem.Checked = false;
+            tabControl1.TabPages.Remove(tp);
+        }
     }
 }

@@ -37,6 +37,8 @@ namespace Example
         private TextBox txtGroup;
         private Button btnAdd;
 
+        private string m_domain = null;
+
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -100,8 +102,10 @@ namespace Example
             }
             set
             {
+                lbGroups.BeginUpdate();
                 lbGroups.Items.Clear();
                 lbGroups.Items.AddRange(value);
+                lbGroups.EndUpdate();
             }
         }
 
@@ -118,6 +122,7 @@ namespace Example
             }
             set
             {
+                lbGroups.BeginUpdate();
                 lbGroups.ClearSelected();
                 for (int i=0; i<lbGroups.Items.Count; i++ )
                 {
@@ -129,7 +134,17 @@ namespace Example
                         }
                     }
                 }
+                lbGroups.EndUpdate();
             }
+        }
+
+        /// <summary>
+        /// Use this domain, if one isn't provided in the JID.
+        /// </summary>
+        public string DefaultDomain
+        {
+            get { return m_domain; }
+            set { m_domain = value; }
         }
 
         #region Windows Form Designer generated code
@@ -169,6 +184,7 @@ namespace Example
             this.txtJID.Name = "txtJID";
             this.txtJID.Size = new System.Drawing.Size(269, 20);
             this.txtJID.TabIndex = 1;
+            this.txtJID.Leave += new System.EventHandler(this.txtJID_Leave);
             // 
             // label2
             // 
@@ -264,6 +280,7 @@ namespace Example
             this.Text = "Add Contact";
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
         #endregion
@@ -288,6 +305,19 @@ namespace Example
 #if NET_20
                 e.SuppressKeyPress = true;
 #endif
+            }
+        }
+
+        private void txtJID_Leave(object sender, EventArgs e)
+        {
+            if (!txtJID.Text.Contains("@") && (m_domain != null))
+            {
+                txtJID.Text = txtJID.Text + "@" + m_domain;
+            }
+            if (txtNickname.Text == "")
+            {
+                JID jid = new JID(txtJID.Text);
+                txtNickname.Text = jid.User;
             }
         }
 
