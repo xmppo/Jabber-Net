@@ -466,6 +466,7 @@ namespace muzzle
             LinkedList nodelist = (LinkedList)m_items[ri.JID.ToString()];
             if (nodelist == null)
             {
+                // First time through.
                 if (!remove)
                 {
                     nodelist = new LinkedList();
@@ -477,11 +478,11 @@ namespace muzzle
                 // update to an existing item.  remove all of them, and start over.
                 foreach (ItemNode i in nodelist)
                 {
-                    TreeNode gn = i.Parent;
+                    GroupNode gn = i.Parent as GroupNode;
                     i.Remove();
                     if ((gn != null) && (gn.Nodes.Count == 0))
                     {
-                        m_groups.Remove(gn.Text);
+                        m_groups.Remove(gn.GroupName);
                         gn.Remove();
                     }
                 }
@@ -614,6 +615,14 @@ namespace muzzle
             public ItemNode(jabber.protocol.iq.Item ri)
             {
                 m_item = ri;
+                m_nick = ri.Nickname;
+                if (m_nick == "")
+                {
+                    m_nick = ri.JID.User;
+                    if (m_nick == null)
+                        m_nick = ri.JID.ToString(); // punt.
+                }
+                this.Text = m_nick;
             }
 
             /// <summary>
@@ -655,9 +664,6 @@ namespace muzzle
             public void ChangePresence(Presence p)
             {
                 SelectedImageIndex = ImageIndex = getPresenceImage(p);
-                m_nick = m_item.Nickname;
-                if ((m_nick == null) || (m_nick == ""))
-                    m_nick = m_item.JID.User;
 
                 string txt = null;
                 if ((p == null) || (p.Status == null) || (p.Status == ""))
