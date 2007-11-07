@@ -81,7 +81,6 @@
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
-    <Reference Include="System.Data" />
     <Reference Include="System.Security" />
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
@@ -174,11 +173,16 @@
     <Compile Include="bedrock\util\GetOptBase.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="bedrock\util\IdleTime.cs" />
+    <Compile Include="bedrock\util\IdleTime.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="bedrock\util\Version.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="jabber\connection\CapsManager.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="jabber\connection\ConferenceManager.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="jabber\connection\DiscoManager.cs">
