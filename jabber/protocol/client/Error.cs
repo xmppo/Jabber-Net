@@ -275,28 +275,15 @@ namespace jabber.protocol.client
             s_errors.Add(NOT_AUTHORIZED, new CodeType(401, ErrorType.auth));
             s_errors.Add(PAYMENT_REQUIRED, new CodeType(402, ErrorType.auth));
             s_errors.Add(RECIPIENT_UNAVAILABLE, new CodeType(404, ErrorType.wait));
-            /*
-            s_errors.Add(, new CodeType(ErrorCode., ErrorType.));
-            s_errors.Add(, new CodeType(ErrorCode., ErrorType.));
-            s_errors.Add(, new CodeType(ErrorCode., ErrorType.));
-            s_errors.Add(, new CodeType(ErrorCode., ErrorType.));
-            s_errors.Add(, new CodeType(ErrorCode., ErrorType.));
-            s_errors.Add(, new CodeType(ErrorCode., ErrorType.));
-            s_errors.Add(, new CodeType(ErrorCode., ErrorType.));
-            s_errors.Add(, new CodeType(ErrorCode., ErrorType.));
-            s_errors.Add(, new CodeType(ErrorCode., ErrorType.));
-            s_errors.Add(, new CodeType(ErrorCode., ErrorType.));
-            s_errors.Add(, new CodeType(ErrorCode., ErrorType.));
-            s_errors.Add(, new CodeType(ErrorCode., ErrorType.));
-            s_errors.Add(, new CodeType(ErrorCode., ErrorType.));
-            s_errors.Add(, new CodeType(ErrorCode., ErrorType.));
-            s_errors.Add(, new CodeType(ErrorCode., ErrorType.));
-            s_errors.Add(, new CodeType(ErrorCode., ErrorType.));
-            s_errors.Add(, new CodeType(ErrorCode., ErrorType.));
-            s_errors.Add(, new CodeType(ErrorCode., ErrorType.));
-            s_errors.Add(, new CodeType(ErrorCode., ErrorType.));
-            s_errors.Add(, new CodeType(ErrorCode., ErrorType.));
-             * */
+            s_errors.Add(REDIRECT, new CodeType(302, ErrorType.modify));
+            s_errors.Add(REGISTRATION_REQUIRED, new CodeType(407, ErrorType.auth));
+            s_errors.Add(REMOTE_SERVER_NOT_FOUND, new CodeType(404, ErrorType.cancel));
+            s_errors.Add(REMOTE_SERVER_TIMEOUT, new CodeType(504, ErrorType.wait));
+            s_errors.Add(RESOURCE_CONSTRAINT, new CodeType(500, ErrorType.wait));
+            s_errors.Add(SERVICE_UNAVAILABLE, new CodeType(503, ErrorType.cancel));
+            s_errors.Add(SUBSCRIPTION_REQUIRED, new CodeType(407, ErrorType.auth));
+            s_errors.Add(UNDEFINED_CONDITION, new CodeType(500, ErrorType.NONE));
+            s_errors.Add(UNEXPECTED_REQUEST, new CodeType(400, ErrorType.wait));
         }
 
         /// <summary>
