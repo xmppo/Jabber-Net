@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{6CAE854A-F202-4D2B-B10E-E8D8E81E5EF5}"
     >
@@ -83,6 +83,11 @@
                     Name = "System.Data"
                     AssemblyName = "System.Data"
                     HintPath = "..\..\Windows\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
+                />
+                <Reference
+                    Name = "zlib.net-2003"
+                    AssemblyName = "zlib.net-2003"
+                    HintPath = "lib\zlib.net-2003.dll"
                 />
             </References>
         </Build>
@@ -240,7 +245,7 @@
                 />
                 <File
                     RelPath = "bedrock\util\IdleTime.cs"
-                    SubType = "Code"
+                    SubType = "Component"
                     BuildAction = "Compile"
                 />
                 <File
@@ -273,7 +278,7 @@
                 />
                 <File
                     RelPath = "jabber\client\PresenceManager.cs"
-                    SubType = "Code"
+                    SubType = "Component"
                     BuildAction = "Compile"
                 />
                 <File
@@ -282,7 +287,7 @@
                 />
                 <File
                     RelPath = "jabber\client\RosterManager.cs"
-                    SubType = "Code"
+                    SubType = "Component"
                     BuildAction = "Compile"
                 />
                 <File
@@ -292,7 +297,7 @@
                 />
                 <File
                     RelPath = "jabber\connection\CapsManager.cs"
-                    SubType = "Code"
+                    SubType = "Component"
                     BuildAction = "Compile"
                 />
                 <File
@@ -301,7 +306,7 @@
                 />
                 <File
                     RelPath = "jabber\connection\DiscoManager.cs"
-                    SubType = "Code"
+                    SubType = "Component"
                     BuildAction = "Compile"
                 />
                 <File
@@ -502,6 +507,11 @@
                 />
                 <File
                     RelPath = "jabber\protocol\iq\OOB.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "jabber\protocol\iq\PubSub.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
