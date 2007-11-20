@@ -75,6 +75,7 @@ namespace test.bedrock.net
             Assert.IsTrue(two <= one);
 
             two = w.CreateListenSocket(this, a);
+            four = two;
             Assert.IsTrue(one == three);
             Assert.IsTrue(two == four);
             Assert.IsTrue(one >= three);
