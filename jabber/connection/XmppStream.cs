@@ -403,11 +403,6 @@ namespace jabber.connection
         protected event FeaturesHandler OnSASLEnd;
 
         /// <summary>
-        /// Get notified of a SASL error.
-        /// </summary>
-        protected event SASLProcessorHandler OnSASLFailure;
-
-        /// <summary>
         /// We received a stream:error packet.
         /// </summary>
         [Category("Stream")]
