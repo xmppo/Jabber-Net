@@ -120,6 +120,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SendMessage.resx">
       <DependentUpon>SendMessage.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

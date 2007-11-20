@@ -224,6 +224,7 @@ namespace bedrock.net
         private bool                 m_writing           = false;
         private bool                 m_requireClientCert = false;
         private bool                 m_cert_gui          = true;
+        private bool                 m_server         = false;
 
 #elif __MonoCS__
         public static Mono.Security.Protocol.Tls.SecurityProtocolType SSLProtocols     = Mono.Security.Protocol.Tls.SecurityProtocolType.Ssl3 | Mono.Security.Protocol.Tls.SecurityProtocolType.Tls;
@@ -233,6 +234,7 @@ namespace bedrock.net
         private Stream               m_stream         = null;
         private MemoryStream         m_pending        = new MemoryStream();
         private bool                 m_writing        = false;
+        private bool                 m_server         = false;
 #elif !NO_SSL
 		/// <summary>
 		/// Are untrusted root certificates OK when connecting using
@@ -258,7 +260,6 @@ namespace bedrock.net
 #else
         private Socket               m_sock           = null;
 #endif
-        private bool                 m_server         = false;
         private byte[]               m_buf            = new byte[BUFSIZE];
         private SocketState          m_state          = SocketState.Created;
         private SocketWatcher        m_watcher        = null;
@@ -611,7 +612,6 @@ namespace bedrock.net
                     ProtocolType.Tcp,
                     options);
 #else
-                m_server = true;
                 m_sock = new Socket(AddressFamily.InterNetwork,
                                     SocketType.Stream,
                                     ProtocolType.Tcp);
@@ -1167,8 +1167,10 @@ namespace bedrock.net
         /// </summary>
         public override void StartCompression()
         {
+#if NET20
             Debug.WriteLine("Start Compression");
             m_stream = new bedrock.io.ZlibStream(m_stream, ComponentAce.Compression.Libs.zlib.zlibConst.Z_FULL_FLUSH);
+#endif
         }
 #endif
 

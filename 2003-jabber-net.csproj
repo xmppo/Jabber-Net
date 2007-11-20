@@ -86,7 +86,7 @@
                 />
                 <Reference
                     Name = "zlib.net-2003"
-                    AssemblyName = "zlib.net-2003"
+                    AssemblyName = "zlib.net"
                     HintPath = "lib\zlib.net-2003.dll"
                 />
             </References>
@@ -502,6 +502,11 @@
                 />
                 <File
                     RelPath = "jabber\protocol\iq\Last.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "jabber\protocol\iq\MUC.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

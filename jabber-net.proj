@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
+
+  <PropertyGroup>
+    <Major>2</Major>
+    <Minor>0</Minor>
+    <Build>0</Build>
+    <Revision>0</Revision>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <DefaultExclude Include="**\.svn\**" />
+    <DefaultExclude Include="**\bin\**" />
+    <DefaultExclude Include="**\obj\**" />
+    <DefaultExclude Include="**\Release\**" />
+    <DefaultExclude Include="**\Debug\**" />
+    <DefaultExclude Include="**\Test\**" />
+    <DefaultExclude Include="**\TestResults\**" />
+    <DefaultExclude Include="**\doc\**" />
+    <DefaultExclude Include="**\www\**" />
+    <DefaultExclude Include="**\*.user" />
+    <DefaultExclude Include="**\*.suo" />
+    <DefaultExclude Include="**\*.zip" />
+    <DefaultExclude Include="**\*.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ZipFiles Include="mono\Release\*.*" Exclude="@(DefaultExclude)" />
+  </ItemGroup>
+
+  <Target Name="Compile">
+    <MSBuild Projects="mono-jabber-net.csproj"
+             Properties="TargetFrameworkVersion=Mono v2.0" />
+    <Exec Command="&quot;C:\Program Files\Microsoft Visual Studio .NET 2003\Common7\IDE\devenv&quot; 2003-jabber-net.sln /Build Release /Project Setup" />
+    <Exec Command="&quot;C:\Program Files\Microsoft Visual Studio 8\Common7\IDE\devenv&quot; 2005-jabber-net.sln /Build Release /Project 2005-Setup" />
+  </Target>
+
+  <Target Name="Zip" DependsOnTargets="Compile">
+    <Zip Files="@(ZipFiles)"
+         ZipFileName="Jabber-Net.Mono.v$(Major).$(Minor).$(Build).$(Revision).zip" />
+  </Target>
+
+  <Target Name="Build" DependsOnTargets="Zip">
+    <Message Text="Jabber-NET Mono Build Complete"/>
+  </Target>
+
+</Project>

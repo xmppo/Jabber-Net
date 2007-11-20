@@ -169,7 +169,7 @@ namespace bedrock.net
 //                 Resolve();
 //                 callback(this);
 // #else
-#if NET20
+#if NET20 || __MonoCS__
                 Dns.BeginGetHostEntry(m_hostname, new AsyncCallback(OnResolved), callback);
 #else
                 Dns.BeginResolve(m_hostname, new AsyncCallback(OnResolved), callback);
