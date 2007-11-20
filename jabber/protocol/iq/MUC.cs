@@ -23,7 +23,7 @@ namespace jabber.protocol.iq
     /// <summary>
     /// Affiliation with a MUC room, per user.
     /// </summary>
-    public enum ChatAffiliation
+    public enum RoomAffiliation
     {
         /// <summary>
         /// No attribute specified
@@ -54,7 +54,7 @@ namespace jabber.protocol.iq
     /// <summary>
     /// Current role in the room.  Initial role is set by affiliation, if it exits.
     /// </summary>
-    public enum ChatRole
+    public enum RoomRole
     {
         /// <summary>
         /// No attribute specified
@@ -83,7 +83,7 @@ namespace jabber.protocol.iq
     /// Presence to join a multi-user chat.
     /// </summary>
     [SVN(@"$Id$")]
-    public class ChatPresence : jabber.protocol.client.Presence
+    public class RoomPresence : jabber.protocol.client.Presence
     {
         /// <summary>
         /// Create, taking default room history, with no password.
@@ -91,11 +91,11 @@ namespace jabber.protocol.iq
         /// <param name="doc"></param>
         /// <param name="roomAndNick">A jid of the form room@conferenceServer/nick, where nick is the desired
         /// room nickname for this user</param>
-        public ChatPresence(XmlDocument doc, JID roomAndNick)
+        public RoomPresence(XmlDocument doc, JID roomAndNick)
             : base(doc)
         {
             this.To = roomAndNick;
-            this.AppendChild(new ChatX(doc));
+            this.AppendChild(new RoomX(doc));
         }
 
         /// <summary>
@@ -105,11 +105,11 @@ namespace jabber.protocol.iq
         /// <param name="roomAndNick"></param>
         /// <param name="password">Null for non-password rooms</param>
         /// TODO: getHistory?
-        public ChatPresence(XmlDocument doc, JID roomAndNick, string password)
+        public RoomPresence(XmlDocument doc, JID roomAndNick, string password)
             : base(doc)
         {
             this.To = roomAndNick;
-            ChatX x = new ChatX(doc);
+            RoomX x = new RoomX(doc);
             x.Password = password;
             this.AppendChild(x);
         }
@@ -118,9 +118,9 @@ namespace jabber.protocol.iq
         /// The X tag denoting MUC-ness.  Use this to access passord and history
         /// after creation.
         /// </summary>
-        public ChatX X
+        public RoomX X
         {
-            get { return this["x", URI.MUC] as ChatX; }
+            get { return this["x", URI.MUC] as RoomX; }
             set { ReplaceChild(value); }
         }
     }
@@ -130,13 +130,13 @@ namespace jabber.protocol.iq
     /// X tag for presence when joining a room.
     /// </summary>
     [SVN(@"$Id$")]
-    public class ChatX : Element
+    public class RoomX : Element
     {
         /// <summary>
         ///
         /// </summary>
         /// <param name="doc"></param>
-        public ChatX(XmlDocument doc) 
+        public RoomX(XmlDocument doc) 
             : base("x", URI.MUC, doc)
         {
         }
@@ -147,7 +147,7 @@ namespace jabber.protocol.iq
         /// <param name="prefix"></param>
         /// <param name="qname"></param>
         /// <param name="doc"></param>
-        public ChatX(string prefix, XmlQualifiedName qname, XmlDocument doc)
+        public RoomX(string prefix, XmlQualifiedName qname, XmlDocument doc)
             : base(prefix, qname, doc)
         {
         }
@@ -314,9 +314,9 @@ namespace jabber.protocol.iq
         /// <summary>
         /// The associated item
         /// </summary>
-        public ChatItem Item
+        public RoomItem Item
         {
-            get { return GetOrCreateElement("item", null, typeof(ChatItem)) as ChatItem; }
+            get { return GetOrCreateElement("item", null, typeof(RoomItem)) as RoomItem; }
             set { ReplaceChild(value); }
         }
 
@@ -332,9 +332,9 @@ namespace jabber.protocol.iq
         /// <summary>
         /// Status of the request
         /// </summary>
-        public ChatStatus Status
+        public RoomStatus Status
         {
-            get { return GetOrCreateElement("status", null, typeof(ChatStatus)) as ChatStatus; }
+            get { return GetOrCreateElement("status", null, typeof(RoomStatus)) as RoomStatus; }
             set { ReplaceChild(value); }
         }
     }
@@ -522,13 +522,13 @@ namespace jabber.protocol.iq
     /// <summary>
     /// Item associated with a room.
     /// </summary>
-    public class ChatItem : AdminItem
+    public class RoomItem : AdminItem
     {
         /// <summary>
         ///
         /// </summary>
         /// <param name="doc"></param>
-        public ChatItem(XmlDocument doc)
+        public RoomItem(XmlDocument doc)
             : base("item", URI.MUC_USER, doc)
         {
         }
@@ -539,7 +539,7 @@ namespace jabber.protocol.iq
         /// <param name="prefix"></param>
         /// <param name="qname"></param>
         /// <param name="doc"></param>
-        public ChatItem(string prefix, XmlQualifiedName qname, XmlDocument doc)
+        public RoomItem(string prefix, XmlQualifiedName qname, XmlDocument doc)
             : base(prefix, qname, doc)
         {
         }
@@ -567,13 +567,13 @@ namespace jabber.protocol.iq
     /// <summary>
     /// The JID associated with an item
     /// </summary>
-    public class ChatActor : Element
+    public class RoomActor : Element
     {
         /// <summary>
         ///
         /// </summary>
         /// <param name="doc"></param>
-        public ChatActor(XmlDocument doc)
+        public RoomActor(XmlDocument doc)
             : base("actor", URI.MUC_USER, doc)
         {
         }
@@ -584,7 +584,7 @@ namespace jabber.protocol.iq
         /// <param name="prefix"></param>
         /// <param name="qname"></param>
         /// <param name="doc"></param>
-        public ChatActor(string prefix, XmlQualifiedName qname, XmlDocument doc)
+        public RoomActor(string prefix, XmlQualifiedName qname, XmlDocument doc)
             : base(prefix, qname, doc)
         {
         }
@@ -608,13 +608,13 @@ namespace jabber.protocol.iq
     /// <summary>
     /// The status of a room operation.
     /// </summary>
-    public class ChatStatus : Element
+    public class RoomStatus : Element
     {
         /// <summary>
         ///
         /// </summary>
         /// <param name="doc"></param>
-        public ChatStatus(XmlDocument doc)
+        public RoomStatus(XmlDocument doc)
             : base("status", URI.MUC_USER, doc)
         {
         }
@@ -625,7 +625,7 @@ namespace jabber.protocol.iq
         /// <param name="prefix"></param>
         /// <param name="qname"></param>
         /// <param name="doc"></param>
-        public ChatStatus(string prefix, XmlQualifiedName qname, XmlDocument doc)
+        public RoomStatus(string prefix, XmlQualifiedName qname, XmlDocument doc)
             : base(prefix, qname, doc)
         {
         }
@@ -645,13 +645,13 @@ namespace jabber.protocol.iq
     /// <summary>
     /// An IQ with a AdminQuery inside.
     /// </summary>
-    public class ChatAdminIQ : jabber.protocol.client.IQ
+    public class RoomAdminIQ : jabber.protocol.client.IQ
     {
         /// <summary>
         /// Create a admin IQ, with a single muc#admin query element.
         /// </summary>
         /// <param name="doc"></param>
-        public ChatAdminIQ(XmlDocument doc)
+        public RoomAdminIQ(XmlDocument doc)
             : base(doc)
         {
             this.AppendChild(new AdminQuery(doc));
@@ -751,9 +751,9 @@ namespace jabber.protocol.iq
         /// <summary>
         /// The JID associated with this item
         /// </summary>
-        public ChatActor Actor
+        public RoomActor Actor
         {
-            get { return GetOrCreateElement("actor", null, typeof(ChatActor)) as ChatActor; }
+            get { return GetOrCreateElement("actor", null, typeof(RoomActor)) as RoomActor; }
             set { ReplaceChild(value); }
         }
 
@@ -769,18 +769,18 @@ namespace jabber.protocol.iq
         /// <summary>
         /// The affiliation of the item
         /// </summary>
-        public ChatAffiliation Affiliation
+        public RoomAffiliation Affiliation
         {
-            get { return (ChatAffiliation)GetEnumAttr("affiliation", typeof(ChatAffiliation)); }
+            get { return (RoomAffiliation)GetEnumAttr("affiliation", typeof(RoomAffiliation)); }
             set { SetEnumAttr("affiliation", value); }
         }
 
         /// <summary>
         /// The role of the item
         /// </summary>
-        public ChatRole Role
+        public RoomRole Role
         {
-            get { return (ChatRole)GetEnumAttr("role", typeof(ChatRole)); }
+            get { return (RoomRole)GetEnumAttr("role", typeof(RoomRole)); }
             set { SetEnumAttr("role", value); }
         }
 

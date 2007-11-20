@@ -79,16 +79,16 @@ namespace jabber.protocol.iq
             new QnameType("items", URI.PUBSUB_EVENT, typeof(jabber.protocol.iq.Items)),
 
             // Multi-user chat
-            new QnameType("x",       URI.MUC, typeof(jabber.protocol.iq.ChatX)),
+            new QnameType("x",       URI.MUC, typeof(jabber.protocol.iq.RoomX)),
             new QnameType("history", URI.MUC, typeof(jabber.protocol.iq.History)),
 
             new QnameType("x",       URI.MUC_USER, typeof(jabber.protocol.iq.UserX)),
             new QnameType("decline", URI.MUC_USER, typeof(jabber.protocol.iq.Decline)),
             new QnameType("invite",  URI.MUC_USER, typeof(jabber.protocol.iq.Invite)),
             new QnameType("destroy", URI.MUC_USER, typeof(jabber.protocol.iq.Destroy)),
-            new QnameType("item",    URI.MUC_USER, typeof(jabber.protocol.iq.ChatItem)),
-            new QnameType("actor",   URI.MUC_USER, typeof(jabber.protocol.iq.ChatActor)),
-            new QnameType("status",  URI.MUC_USER, typeof(jabber.protocol.iq.ChatStatus)),
+            new QnameType("item",    URI.MUC_USER, typeof(jabber.protocol.iq.RoomItem)),
+            new QnameType("actor",   URI.MUC_USER, typeof(jabber.protocol.iq.RoomActor)),
+            new QnameType("status",  URI.MUC_USER, typeof(jabber.protocol.iq.RoomStatus)),
 
             new QnameType("query",   URI.MUC_ADMIN, typeof(jabber.protocol.iq.AdminQuery)),
             new QnameType("item",    URI.MUC_ADMIN, typeof(jabber.protocol.iq.AdminItem)),
