@@ -198,6 +198,11 @@ namespace jabber.protocol
         /// See XEP-45 (http://www.xmpp.org/extensions/xep-0045.html)
         /// </summary>
         public const string MUC_OWNER = "http://jabber.org/protocol/muc#owner";
+        /// <summary>
+        /// Multi-user chat; request a unique room name.
+        /// See XEP-45 (http://www.xmpp.org/extensions/xep-0045.html)
+        /// </summary>
+        public const string MUC_UNIQUE = "http://jabber.org/protocol/muc#unique";
 
         /// <summary>
         /// Entity Capabilities.
