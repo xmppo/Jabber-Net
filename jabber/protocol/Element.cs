@@ -118,20 +118,70 @@ namespace jabber.protocol
         }
         /// <summary>
         /// Set the text contents of a sub-element.
+        /// Note: don't use this if you want the sub-element to have a type that isn't XmlElement.
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
         protected void SetElem(string name, string value)
         {
-            XmlElement e = this[name];
-            if (e != null)
-                this.RemoveChild(e);
-
-            e = this.OwnerDocument.CreateElement(null, name, this.NamespaceURI);
-            this.AppendChild(e);
+            XmlElement e = GetOrCreateElement(name, null, null);
+            e.RemoveAll();
 
             if (value != null)
                 e.InnerText = value;
+        }
+
+        /// <summary>
+        /// Set the text contents of a sub-element.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <param name="typeToCreate">If the element doesn't exist, create it with this type.  If null, then just use an XmlElement.</param>
+        protected void SetElem(string name, string value, Type typeToCreate)
+        {
+            XmlElement e = GetOrCreateElement(name, null, typeToCreate);
+            e.RemoveAll();
+
+            if (value != null)
+                e.InnerText = value;
+        }
+
+        /// <summary>
+        /// If the named element exists as a child, return it.  Otherwise, gin up
+        /// a new instance of the given class (which must be a subclass of XmlElement)
+        /// add it as a child, and return the result.  Will often be paired with
+        /// ReplaceChild as the setter.
+        /// </summary>
+        /// <remarks>
+        /// This seems kind of around-the-barn.  Wish there was an easier way to do this, 
+        /// rather than having to get the constructor, and whatnot.  Hopefully it won't
+        /// be called all that often, so the speed issue won't be too bad.
+        /// </remarks>
+        /// <param name="name"></param>
+        /// <param name="xmlns">Namespace URI.  Null to use parent's.</param>
+        /// <param name="typeToCreate">If the element doesn't exist, create it with this type.  If null, then just use an XmlElement.</param>
+        /// <returns></returns>
+        protected XmlElement GetOrCreateElement(string name, string xmlns, Type typeToCreate)
+        {
+            string ns = (xmlns!=null) ? xmlns : NamespaceURI;
+            XmlElement child = this[name, ns];
+            if (child != null)
+                return child;
+
+            if (typeToCreate == null)
+                child = this.OwnerDocument.CreateElement(name, ns);
+            else
+            {
+                Debug.Assert(typeToCreate.IsSubclassOf(typeof(XmlElement)));
+
+                ConstructorInfo constructor = typeToCreate.GetConstructor(new Type[] { typeof(XmlDocument) });
+                Debug.Assert(constructor != null);
+                child = constructor.Invoke(new object[] { this.OwnerDocument }) as XmlElement;
+                Debug.Assert(child != null);
+            }
+
+            this.AppendChild(child);
+            return child;
         }
 
         /// <summary>
@@ -142,13 +192,13 @@ namespace jabber.protocol
         /// <returns>The replaced element</returns>
         protected XmlElement ReplaceChild(XmlElement elem)
         {
-            XmlElement old = this[elem.Name];
+            XmlElement old = this[elem.Name, elem.NamespaceURI];
             if (old != null)
             {
                 this.RemoveChild(old);
             }
-
-            AddChild(elem);
+            if (elem != null)
+                AddChild(elem);
             return old;
         }
 
@@ -156,11 +206,13 @@ namespace jabber.protocol
         /// Remove a child element
         /// </summary>
         /// <param name="name"></param>
-        protected void RemoveElem(string name)
+        /// <returns>The old element, or null if it didn't exist.</returns>
+        protected XmlElement RemoveElem(string name)
         {
             XmlElement e = this[name];
             if (e != null)
                 this.RemoveChild(e);
+            return e;
         }
         /// <summary>
         /// Remove all of the matching elements from this element.
@@ -193,6 +245,33 @@ namespace jabber.protocol
                     this.RemoveChild(n);
             }
         }
+
+        /// <summary>
+        /// I think GetAttribute should return null if the attribute is not found.
+        /// Use carefully, when translating to external semantics.
+        /// </summary>
+        /// <param name="name"></param>
+        protected string GetAttr(string name)
+        {
+            if (!HasAttribute(name))
+                return null;
+            return GetAttribute(name);
+        }
+
+        /// <summary>
+        /// I think calling SetAttr with null or "" should remove the attribute.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        protected void SetAttr(string name, string value)
+        {
+            if ((value == null) || (value == ""))
+                // testing shows this is safe for non-existing attributes.
+                RemoveAttribute(name);
+            else
+                SetAttribute(name, value);
+        }
+
         /// <summary>
         /// Get the value of an attribute, as a value in the given Enum type.
         /// </summary>
@@ -213,6 +292,23 @@ namespace jabber.protocol
                 return -1;
             }
         }
+
+        /// <summary>
+        /// Set the value of an attribute, with the value being a enum instance.
+        /// The enum in question should have an entry with int value -1, which 
+        /// corresponds to no attribute.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        protected void SetEnumAttr(string name, object value)
+        {
+            Debug.Assert(value.GetType().IsSubclassOf(typeof(Enum)));
+            if ((int)value == -1)
+                RemoveAttribute(name);
+            else
+                SetAttribute(name, value.ToString());
+        }
+
         /// <summary>
         /// Get the value of a given attribute, as an integer.  Returns -1 for
         /// most errors.   TODO: should this throw exceptions?
@@ -237,6 +333,51 @@ namespace jabber.protocol
                 return -1;
             }
         }
+        /// <summary>
+        /// Set the value of a given attribute, as an integer.  Use -1 
+        /// to remove the attribute.
+        /// </summary>
+        /// <param name="name">The attribute name</param>
+        /// <param name="val">The integer to set</param>
+        /// <returns></returns>
+        protected void SetIntAttr(string name, int val)
+        {
+            if (val < 0)
+                // testing shows this is safe for non-existing attributes.
+                RemoveAttribute(name);
+            else
+                SetAttribute(name, val.ToString()); 
+        }
+
+        /// <summary>
+        /// Get an attribute cast to DateTime, using the DateTime profile
+        /// of XEP-82.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns>DateTime.MinValue if attribute not found.</returns>
+        /// <exception cref="FormatException">Invalid format</exception>
+        protected DateTime GetDateTimeAttr(string name)
+        {
+            string val = GetAttr(name);
+            if (val == null)
+                return DateTime.MinValue;
+            return DateTimeProfile(val);
+        }
+
+        /// <summary>
+        /// Set with DateTime.MinValue to remove the attribute
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        protected void SetDateTimeAttr(string name, DateTime value)
+        {
+            if (value == DateTime.MinValue)
+                // testing shows this is safe for non-existing attributes.
+                RemoveAttribute(name);
+            else
+                SetAttribute(name, DateTimeProfile(value));
+        }
+
         /// <summary>
         /// Convert the given array of bytes into a string, having two characters
         /// for each byte, corresponding to the hex representation of that byte.
