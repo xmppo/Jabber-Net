@@ -90,6 +90,11 @@ namespace jabber.protocol.iq
             new QnameType("actor",   URI.MUC_USER, typeof(jabber.protocol.iq.ChatActor)),
             new QnameType("status",  URI.MUC_USER, typeof(jabber.protocol.iq.ChatStatus)),
 
+            new QnameType("query",   URI.MUC_ADMIN, typeof(jabber.protocol.iq.AdminQuery)),
+            new QnameType("item",    URI.MUC_ADMIN, typeof(jabber.protocol.iq.AdminItem)),
+
+            new QnameType("query",   URI.MUC_OWNER, typeof(jabber.protocol.iq.OwnerQuery)),
+            new QnameType("destroy", URI.MUC_OWNER, typeof(jabber.protocol.iq.OwnerDestroy)),
         };
 
         QnameType[] IPacketTypes.Types { get { return s_qnt; } }

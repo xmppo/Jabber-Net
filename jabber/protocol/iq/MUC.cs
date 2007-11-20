@@ -78,6 +78,7 @@ namespace jabber.protocol.iq
         visitor,
     }
 
+#region base protocol
     /// <summary>
     /// Presence to join a multi-user chat.
     /// </summary>
@@ -123,6 +124,7 @@ namespace jabber.protocol.iq
             set { ReplaceChild(value); }
         }
     }
+
 
     /// <summary>
     /// X tag for presence when joining a room.
@@ -229,7 +231,10 @@ namespace jabber.protocol.iq
             set { SetDateTimeAttr("since", value); }
         }
     }
+#endregion
 
+
+#region Users
     /// <summary>
     /// Information about users
     /// </summary>
@@ -517,7 +522,7 @@ namespace jabber.protocol.iq
     /// <summary>
     /// Item associated with a room.
     /// </summary>
-    public class ChatItem : Element
+    public class ChatItem : AdminItem
     {
         /// <summary>
         ///
@@ -540,24 +545,6 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
-        /// The JID associated with this item
-        /// </summary>
-        public ChatActor Actor
-        {
-            get { return GetOrCreateElement("actor", null, typeof(ChatActor)) as ChatActor; }
-            set { ReplaceChild(value); }
-        }
-
-        /// <summary>
-        /// The reason the room was destroyed.  May be null.
-        /// </summary>
-        public string Reason
-        {
-            get { return GetElem("reason"); }
-            set { SetElem("reason", value); }
-        }
-
-        /// <summary>
         /// This is a continuation from 1-to-1 chat.  Not widely implemented yet.
         /// </summary>
         public bool Continue
@@ -575,49 +562,6 @@ namespace jabber.protocol.iq
                     RemoveElem("continue");
             }
         }
-
-        /// <summary>
-        /// The affiliation of the item
-        /// </summary>
-        public ChatAffiliation Affiliation
-        {
-            get { return (ChatAffiliation) GetEnumAttr("affiliation", typeof(ChatAffiliation)); }
-            set { SetEnumAttr("affiliation", value); }
-        }
-
-        /// <summary>
-        /// The role of the item
-        /// </summary>
-        public ChatRole Role
-        {
-            get { return (ChatRole)GetEnumAttr("role", typeof(ChatRole)); }
-            set { SetEnumAttr("role", value); }
-        }
-
-        /// <summary>
-        /// The JID of the item
-        /// </summary>
-        public JID JID
-        {
-            get
-            {
-                string jid = this.GetAttr("jid");
-                if (jid == null)
-                    return null;
-                return new JID(jid);
-            }
-            set { SetAttr("jid", (string)value); }
-        }
-
-        /// <summary>
-        /// The nickname of the item
-        /// </summary>
-        public string Nick
-        {
-            get { return GetAttr("nick"); }
-            set { SetAttr("nick", value); }
-        }
-
     }
 
     /// <summary>
@@ -693,6 +637,350 @@ namespace jabber.protocol.iq
         {
             get { return GetIntAttr("code"); }
             set { SetIntAttr("code", value); }
+        }
+    }
+#endregion 
+
+#region admin
+    /// <summary>
+    /// An IQ with a AdminQuery inside.
+    /// </summary>
+    public class ChatAdminIQ : jabber.protocol.client.IQ
+    {
+        /// <summary>
+        /// Create a admin IQ, with a single muc#admin query element.
+        /// </summary>
+        /// <param name="doc"></param>
+        public ChatAdminIQ(XmlDocument doc)
+            : base(doc)
+        {
+            this.AppendChild(new AdminQuery(doc));
+        }
+    }
+
+    /// <summary>
+    /// Moderator use cases 
+    /// </summary>
+    public class AdminQuery : Element
+    {
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="doc"></param>
+        public AdminQuery(XmlDocument doc)
+            : base("query", URI.MUC_ADMIN, doc)
+        {
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="prefix"></param>
+        /// <param name="qname"></param>
+        /// <param name="doc"></param>
+        public AdminQuery(string prefix, XmlQualifiedName qname, XmlDocument doc)
+            : base(prefix, qname, doc)
+        {
+        }
+
+        /// <summary>
+        /// The list of invites
+        /// </summary>
+        public AdminItem[] GetItems()
+        {
+            XmlNodeList nl = GetElementsByTagName("item", URI.MUC_ADMIN);
+            AdminItem[] items = new AdminItem[nl.Count];
+            int i=0;
+            foreach (XmlNode n in nl)
+            {
+                items[i] = (AdminItem)n;
+                i++;
+            }
+            return items;
+        }
+
+        /// <summary>
+        /// Add new item
+        /// </summary>
+        /// <returns></returns>
+        public AdminItem AddItem()
+        {
+            AdminItem item = new AdminItem(this.OwnerDocument);
+            this.AddChild(item);
+            return item;
+        }
+    }
+
+
+    /// <summary>
+    /// Item associated with a room.
+    /// </summary>
+    public class AdminItem : Element
+    {
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="doc"></param>
+        public AdminItem(XmlDocument doc)
+            : base("item", URI.MUC_ADMIN, doc)
+        {
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="prefix"></param>
+        /// <param name="qname"></param>
+        /// <param name="doc"></param>
+        public AdminItem(string prefix, XmlQualifiedName qname, XmlDocument doc)
+            : base(prefix, qname, doc)
+        {
+        }
+
+        /// <summary>
+        /// Pass through.  I really wish C# would let me just call grand-superclass constructors.
+        /// </summary>
+        /// <param name="localName"></param>
+        /// <param name="namespaceURI"></param>
+        /// <param name="doc"></param>
+        protected AdminItem(string localName, string namespaceURI, XmlDocument doc)
+            : base(localName, namespaceURI, doc)
+        {
+        }
+
+        /// <summary>
+        /// The JID associated with this item
+        /// </summary>
+        public ChatActor Actor
+        {
+            get { return GetOrCreateElement("actor", null, typeof(ChatActor)) as ChatActor; }
+            set { ReplaceChild(value); }
+        }
+
+        /// <summary>
+        /// The reason the room was destroyed.  May be null.
+        /// </summary>
+        public string Reason
+        {
+            get { return GetElem("reason"); }
+            set { SetElem("reason", value); }
+        }
+
+        /// <summary>
+        /// The affiliation of the item
+        /// </summary>
+        public ChatAffiliation Affiliation
+        {
+            get { return (ChatAffiliation)GetEnumAttr("affiliation", typeof(ChatAffiliation)); }
+            set { SetEnumAttr("affiliation", value); }
+        }
+
+        /// <summary>
+        /// The role of the item
+        /// </summary>
+        public ChatRole Role
+        {
+            get { return (ChatRole)GetEnumAttr("role", typeof(ChatRole)); }
+            set { SetEnumAttr("role", value); }
+        }
+
+        /// <summary>
+        /// The JID of the item
+        /// </summary>
+        public JID JID
+        {
+            get
+            {
+                string jid = this.GetAttr("jid");
+                if (jid == null)
+                    return null;
+                return new JID(jid);
+            }
+            set { SetAttr("jid", (string)value); }
+        }
+
+        /// <summary>
+        /// The nickname of the item
+        /// </summary>
+        public string Nick
+        {
+            get { return GetAttr("nick"); }
+            set { SetAttr("nick", value); }
+        }
+    }
+#endregion
+
+#region owner
+    /// <summary>
+    /// IQ with an OwnerQuery inside
+    /// </summary>
+    public class OwnerIQ : jabber.protocol.client.IQ
+    {
+        /// <summary>
+        /// Create
+        /// </summary>
+        /// <param name="doc"></param>
+        public OwnerIQ(XmlDocument doc)
+            : base(doc)
+        {
+            AppendChild(new OwnerQuery(doc));
+        }
+    }
+
+    /// <summary>
+    /// The query element inside an owner IQ.
+    /// </summary>
+    public class OwnerQuery : Element
+    {
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="doc"></param>
+        public OwnerQuery(XmlDocument doc)
+            : base("query", URI.MUC_OWNER, doc)
+        {
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="prefix"></param>
+        /// <param name="qname"></param>
+        /// <param name="doc"></param>
+        public OwnerQuery(string prefix, XmlQualifiedName qname, XmlDocument doc)
+            : base(prefix, qname, doc)
+        {
+        }
+
+        /// <summary>
+        /// The jabber:x:data form for configuration
+        /// </summary>
+        public jabber.protocol.x.Data Form
+        {
+            get { return GetOrCreateElement("x", URI.XDATA, typeof(jabber.protocol.x.Data)) as jabber.protocol.x.Data; }
+            set { ReplaceChild(value); }
+        }
+
+        /// <summary>
+        /// Should we destroy the room?
+        /// </summary>
+        public OwnerDestroy Destroy
+        {
+            get { return GetOrCreateElement("destroy", URI.MUC_OWNER, typeof(OwnerDestroy)) as OwnerDestroy; }
+            set { ReplaceChild(value); }
+        }
+    }
+
+    /// <summary>
+    /// Destroy the room
+    /// </summary>
+    public class OwnerDestroy : Element
+    {
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="doc"></param>
+        public OwnerDestroy(XmlDocument doc)
+            : base("destroy", URI.MUC_OWNER, doc)
+        {
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="prefix"></param>
+        /// <param name="qname"></param>
+        /// <param name="doc"></param>
+        public OwnerDestroy(string prefix, XmlQualifiedName qname, XmlDocument doc)
+            : base(prefix, qname, doc)
+        {
+        }
+
+        /// <summary>
+        /// Password to destroy room.  Null for no password.
+        /// </summary>
+        public string Password
+        {
+            get { return GetElem("password"); }
+            set { SetElem("password", value); }
+        }
+
+        /// <summary>
+        /// Reason to destroy room.  Null for no reason.
+        /// </summary>
+        public string Reason
+        {
+            get { return GetElem("reason"); }
+            set { SetElem("reason", value); }
+        }
+
+        /// <summary>
+        /// The JID of the destroyer.
+        /// </summary>
+        public JID JID
+        {
+            get
+            {
+                string jid = this.GetAttr("jid");
+                if (jid == null)
+                    return null;
+                return new JID(jid);
+            }
+            set { SetAttr("jid", (string)value); }
+        }
+    }
+#endregion
+
+    /// <summary>
+    /// Request for a unique room name.  Seems like just using a GUID on the 
+    /// create request would be enough, but it's in XEP-45.
+    /// </summary>
+    public class UniqueIQ : jabber.protocol.client.IQ
+    {
+        /// <summary>
+        /// Create
+        /// </summary>
+        /// <param name="doc"></param>
+        public UniqueIQ(XmlDocument doc)
+            : base(doc)
+        {
+            AppendChild(new UniqueRoom(doc));
+        }    
+    }
+
+    /// <summary>
+    /// A unique name for a room.
+    /// </summary>
+    public class UniqueRoom : Element
+    {
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="doc"></param>
+        public UniqueRoom(XmlDocument doc)
+            : base("unique", URI.MUC_UNIQUE, doc)
+        {
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="prefix"></param>
+        /// <param name="qname"></param>
+        /// <param name="doc"></param>
+        public UniqueRoom(string prefix, XmlQualifiedName qname, XmlDocument doc)
+            : base(prefix, qname, doc)
+        {
+        }
+        
+        /// <summary>
+        /// The room name returned by the server.  Note: must add conference server to this, 
+        /// it is just the node.
+        /// </summary>
+        public string RoomNode
+        {
+            get { return this.InnerText; }
+            set { this.InnerText = value; }
         }
     }
 }
