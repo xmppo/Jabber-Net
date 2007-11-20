@@ -119,14 +119,16 @@ namespace jabber.protocol.client
             }
             set
             {
-                XmlElement old = this["html"];
-                if (old != null)
-                    this.RemoveChild(old);
-                XmlElement html = this.OwnerDocument.CreateElement(null, "html", URI.XHTML_IM);
-                XmlElement body = this.OwnerDocument.CreateElement(null, "body", URI.XHTML);
+                XmlElement html = GetOrCreateElement("html", URI.XHTML_IM, null);
+                XmlElement body = html["body", URI.XHTML];
+                if (body == null)
+                {
+                    body =  this.OwnerDocument.CreateElement(null, "body", URI.XHTML);
+                    html.AppendChild(body);
+                }
+                else
+                    body.RemoveAll();
                 NormalizeHtml(body, value);
-                html.AppendChild(body);
-                this.AppendChild(html);
                 this.Body = body.InnerText;
             }
         }
