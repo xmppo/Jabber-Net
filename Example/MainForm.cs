@@ -72,6 +72,8 @@ namespace Example
         private ToolStripMenuItem subscribePubSubToolStripMenuItem;
         private ToolStripMenuItem windowToolStripMenuItem;
         private ToolStripMenuItem closeTabToolStripMenuItem;
+        private ConferenceManager muc;
+        private ToolStripMenuItem joinConferenceToolStripMenuItem;
 
         private bool m_err = false;
 
@@ -169,11 +171,13 @@ namespace Example
             this.addContactToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeContactToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addGroupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.windowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.closeTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cm = new jabber.connection.CapsManager(this.components);
             this.psm = new jabber.connection.PubSubManager(this.components);
             this.idler = new bedrock.util.IdleTime();
-            this.windowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.closeTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.muc = new jabber.connection.ConferenceManager(this.components);
+            this.joinConferenceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pnlCon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pnlSSL)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pnlPresence)).BeginInit();
@@ -382,6 +386,7 @@ namespace Example
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.connectToolStripMenuItem,
             this.subscribePubSubToolStripMenuItem,
+            this.joinConferenceToolStripMenuItem,
             this.toolStripMenuItem1,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
@@ -430,7 +435,7 @@ namespace Example
             // 
             this.servicesToolStripMenuItem.Name = "servicesToolStripMenuItem";
             this.servicesToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F8;
-            this.servicesToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.servicesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.servicesToolStripMenuItem.Text = "&Services";
             this.servicesToolStripMenuItem.Click += new System.EventHandler(this.servicesToolStripMenuItem_Click);
             // 
@@ -438,7 +443,7 @@ namespace Example
             // 
             this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
             this.debugToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F12;
-            this.debugToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.debugToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.debugToolStripMenuItem.Text = "&Debug";
             this.debugToolStripMenuItem.Click += new System.EventHandler(this.debugToolStripMenuItem_Click);
             // 
@@ -476,21 +481,6 @@ namespace Example
             this.addGroupToolStripMenuItem.Text = "&Add Group";
             this.addGroupToolStripMenuItem.Click += new System.EventHandler(this.addGroupToolStripMenuItem_Click);
             // 
-            // cm
-            // 
-            this.cm.Node = "http://cursive.net/clients/csharp-example";
-            this.cm.Stream = this.jc;
-            // 
-            // psm
-            // 
-            this.psm.Stream = this.jc;
-            // 
-            // idler
-            // 
-            this.idler.InvokeControl = this;
-            this.idler.OnIdle += new bedrock.util.SpanEventHandler(this.idler_OnIdle);
-            this.idler.OnUnIdle += new bedrock.util.SpanEventHandler(this.idler_OnUnIdle);
-            // 
             // windowToolStripMenuItem
             // 
             this.windowToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -506,6 +496,33 @@ namespace Example
             this.closeTabToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
             this.closeTabToolStripMenuItem.Text = "&Close Tab";
             this.closeTabToolStripMenuItem.Click += new System.EventHandler(this.closeTabToolStripMenuItem_Click);
+            // 
+            // cm
+            // 
+            this.cm.Node = "http://cursive.net/clients/csharp-example";
+            this.cm.Stream = this.jc;
+            // 
+            // psm
+            // 
+            this.psm.Stream = this.jc;
+            // 
+            // idler
+            // 
+            this.idler.InvokeControl = this;
+            this.idler.OnIdle += new bedrock.util.SpanEventHandler(this.idler_OnIdle);
+            this.idler.OnUnIdle += new bedrock.util.SpanEventHandler(this.idler_OnUnIdle);
+            // 
+            // muc
+            // 
+            this.muc.Stream = this.jc;
+            // 
+            // joinConferenceToolStripMenuItem
+            // 
+            this.joinConferenceToolStripMenuItem.Name = "joinConferenceToolStripMenuItem";
+            this.joinConferenceToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.J)));
+            this.joinConferenceToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.joinConferenceToolStripMenuItem.Text = "&Join Conference";
+            this.joinConferenceToolStripMenuItem.Click += new System.EventHandler(this.joinConferenceToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -925,6 +942,37 @@ namespace Example
             else if (tp == tpServices)
                 servicesToolStripMenuItem.Checked = false;
             tabControl1.TabPages.Remove(tp);
+        }
+
+        private void joinConferenceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ConferenceForm cf = new ConferenceForm();
+            cf.DiscoManager = dm;
+            cf.Nick = jc.JID.User;
+            if (cf.ShowDialog() != DialogResult.OK)
+                return;
+
+            Room room = muc.GetRoom(cf.RoomAndNick);
+            room.OnPresenceError += new RoomPresenceError(room_OnPresenceError);
+            room.OnRoomConfig += new ConfigureRoom(room_OnRoomConfig);
+            //room.DefaultConfig = true;
+            room.Join();
+        }
+
+        private void room_OnRoomConfig(Room room, IQ parent)
+        {
+            muzzle.XDataForm form = new muzzle.XDataForm(parent);
+            if (form.ShowDialog() != DialogResult.OK)
+            {
+                // TODO: send default?
+                return;
+            }
+            room.FinishConfig((IQ)form.GetResponse());
+        }
+
+        private void room_OnPresenceError(Room room, Presence pres)
+        {
+            throw new Exception("The method or operation is not implemented.");
         }
     }
 }
