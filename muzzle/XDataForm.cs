@@ -316,7 +316,7 @@ namespace muzzle
             else if (m_parent is IQ)
             {
                 m_parent.GetFirstChildElement().AppendChild(x);
-                m_parent.SetAttribute("type", "result");
+                m_parent.SetAttribute("type", "set");
             }
             else
             {
