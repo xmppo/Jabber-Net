@@ -299,7 +299,8 @@
     <Compile Include="jabber\protocol\iq\Last.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="jabber\protocol\iq\MUC.cs" />
+    <Compile Include="jabber\protocol\iq\MUC.cs">
+    </Compile>
     <Compile Include="jabber\protocol\iq\OOB.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -88,7 +88,6 @@ namespace jabber.protocol.iq
             new QnameType("destroy", URI.MUC_USER, typeof(jabber.protocol.iq.Destroy)),
             new QnameType("item",    URI.MUC_USER, typeof(jabber.protocol.iq.RoomItem)),
             new QnameType("actor",   URI.MUC_USER, typeof(jabber.protocol.iq.RoomActor)),
-            new QnameType("status",  URI.MUC_USER, typeof(jabber.protocol.iq.RoomStatus)),
 
             new QnameType("query",   URI.MUC_ADMIN, typeof(jabber.protocol.iq.AdminQuery)),
             new QnameType("item",    URI.MUC_ADMIN, typeof(jabber.protocol.iq.AdminItem)),

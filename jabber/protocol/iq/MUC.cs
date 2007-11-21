@@ -20,6 +20,7 @@ using jabber.protocol;
 
 namespace jabber.protocol.iq
 {
+#region enums
     /// <summary>
     /// Affiliation with a MUC room, per user.
     /// </summary>
@@ -77,6 +78,112 @@ namespace jabber.protocol.iq
         /// </summary>
         visitor,
     }
+
+    /// <summary>
+    /// Possible room status values.
+    /// </summary>
+    public enum RoomStatus
+    {
+        /// <summary>
+        /// Inform user that any occupant is allowed to see the user's full JID.
+        /// </summary>
+        NON_ANONYMOUS_JOIN = 100,
+
+        /// <summary>
+        /// Inform user that his or her affiliation changed while not in the room
+        /// </summary>
+        AFILLIATION_CHANGE = 101,
+
+        /// <summary>
+        /// Inform occupants that room now shows unavailable members
+        /// </summary>
+        SHOW_UNAVAILABLE = 102,
+
+        /// <summary>
+        /// Inform occupants that room now does not show unavailable members
+        /// </summary>
+        NO_SHOW_UNAVAILABLE = 103,
+
+        /// <summary>
+        /// Inform occupants that a non-privacy-related room configuration change has occurred
+        /// </summary>
+        PRIVACY_CHANGE = 104,
+
+        /// <summary>
+        /// Inform user that presence refers to one of its own room occupants
+        /// </summary>
+        SELF = 110,
+
+        /// <summary>
+        /// Inform occupants that room logging is now enabled
+        /// </summary>
+        LOGGING_ENABLED = 170,
+
+        /// <summary>
+        /// Inform occupants that room logging is now disabled
+        /// </summary>
+        LOGGING_DISABLED = 171,
+
+        /// <summary>
+        /// Inform occupants that the room is now non-anonymous
+        /// </summary>
+        NON_ANONYMOUS = 172,
+
+        /// <summary>
+        /// Inform occupants that the room is now semi-anonymous
+        /// </summary>
+        SEMI_ANONYMOUS = 173,
+
+        /// <summary>
+        /// Inform occupants that the room is now fully-anonymous
+        /// </summary>
+        ANONYMOUS = 174,
+
+        /// <summary>
+        /// Inform user that a new room has been created
+        /// </summary>
+        CREATED = 201,
+
+        /// <summary>
+        /// Inform user that service has assigned or modified occupant's roomnick
+        /// </summary>
+        NICK_CHANGED = 210,
+
+        /// <summary>
+        /// Inform user that he or she has been banned from the room
+        /// </summary>
+        BANNED = 301,
+
+        /// <summary>
+        /// Inform all occupants of new room nickname
+        /// </summary>
+        NEW_NICK = 303,
+
+        /// <summary>
+        /// Inform user that he or she has been kicked from the room
+        /// </summary>
+        KICKED = 307,
+
+        /// <summary>
+        /// Inform user that he or she is being removed from the room 
+        /// because of an affiliation change
+        /// </summary>
+        REMOVED_AFFILIATION = 321,
+
+        /// <summary>
+        /// Inform user that he or she is being removed from the room 
+        /// because the room has been changed to members-only and the user 
+        /// is not a member
+        /// </summary>
+        REMOVED_NONMEMBER = 322,
+
+        /// <summary>
+        /// Inform user that he or she is being removed from the room 
+        /// because of a system shutdown
+        /// </summary>
+        REMOVED_SHUTDOWN = 332,
+    }
+#endregion
 
 #region base protocol
     /// <summary>
@@ -330,12 +437,50 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
-        /// Status of the request
+        /// Sorted list of statuses of the request.
         /// </summary>
-        public RoomStatus Status
+        /// <exception cref="FormatException">Invalid code</exception>
+        public RoomStatus[] Status
         {
-            get { return GetOrCreateElement("status", null, typeof(RoomStatus)) as RoomStatus; }
-            set { ReplaceChild(value); }
+            get 
+            {
+                XmlNodeList nl = this.GetElementsByTagName("status");
+                RoomStatus[] ret = new RoomStatus[nl.Count];
+                int i = 0;
+                foreach (XmlElement status in nl)
+                {
+                    ret[i++] = (RoomStatus)int.Parse(status.GetAttribute("code"));
+                }
+                Array.Sort(ret);
+                return ret;
+            }
+            set 
+            {
+                RemoveElems("status");
+                foreach (RoomStatus i in value)
+                {
+                    XmlElement status = this.OwnerDocument.CreateElement("status");
+                    status.SetAttribute("code", ((int)i).ToString());
+                    this.AppendChild(status);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Did we receive a given status?
+        /// </summary>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public bool HasStatus(RoomStatus status)
+        {
+            string s = ((int)status).ToString();
+            XmlNodeList nl = this.GetElementsByTagName("status");
+            foreach (XmlElement stat in nl)
+            {
+                if (s == stat.GetAttribute("code"))
+                    return true;
+            }
+            return false;
         }
     }
 
@@ -602,41 +747,6 @@ namespace jabber.protocol.iq
                 return new JID(jid);
             }
             set { SetAttr("jid", (string)value); }
-        }
-    }
-
-    /// <summary>
-    /// The status of a room operation.
-    /// </summary>
-    public class RoomStatus : Element
-    {
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="doc"></param>
-        public RoomStatus(XmlDocument doc)
-            : base("status", URI.MUC_USER, doc)
-        {
-        }
-
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="prefix"></param>
-        /// <param name="qname"></param>
-        /// <param name="doc"></param>
-        public RoomStatus(string prefix, XmlQualifiedName qname, XmlDocument doc)
-            : base(prefix, qname, doc)
-        {
-        }
-
-        /// <summary>
-        /// Error code.
-        /// </summary>
-        public int Code
-        {
-            get { return GetIntAttr("code"); }
-            set { SetIntAttr("code", value); }
         }
     }
 #endregion 
