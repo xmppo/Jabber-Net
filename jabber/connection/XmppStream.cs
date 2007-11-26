@@ -1032,7 +1032,7 @@ namespace jabber.connection
             catch (Exception e)
             {
                 Debug.WriteLine("Exception in XmppStream: " + e.ToString());
-                throw e;
+                throw;
             }
         }
 

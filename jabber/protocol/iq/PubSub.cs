@@ -54,7 +54,11 @@ namespace jabber.protocol.iq
         /// <summary>
         /// Unsubscribe from a node.  See: http://www.xmpp.org/extensions/xep-0060.html#subscriber-unsubscribe
         /// </summary>
-        unsubscribe
+        unsubscribe,
+        /// <summary>
+        /// Delete a node. See: http://www.xmpp.org/extensions/xep-0060.html#owner-delete
+        /// </summary>
+        delete
     }
 
     /// <summary>
@@ -111,7 +115,11 @@ namespace jabber.protocol.iq
             case PubSubCommandType.unsubscribe:
                 cmd = new Unsubscribe(doc);
                 break;
+            case PubSubCommandType.delete:
+                cmd = new Delete(doc);
+                break;
             }
+
             if (node != null)
                 cmd.Node = node;
             this.Query.AppendChild(cmd);
@@ -129,6 +137,18 @@ namespace jabber.protocol.iq
                     return null;
                 return ps.Command;
             }
+        }
+    }
+
+    internal class Delete : PubSubCommand
+    {
+        public Delete(XmlDocument doc) : base("delete", URI.PUBSUB, doc)
+        {
+        }
+
+        public override PubSubCommandType CommandType
+        {
+            get { return PubSubCommandType.delete; }
         }
     }
 

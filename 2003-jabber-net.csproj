@@ -75,19 +75,19 @@
                     HintPath = "..\..\WINDOWS\Microsoft.NET\Framework\v1.0.3705\System.XML.dll"
                 />
                 <Reference
-                    Name = "Org.Mentalis.Security"
-                    AssemblyName = "Org.Mentalis.Security"
-                    HintPath = "lib\Org.Mentalis.Security.dll"
-                />
-                <Reference
                     Name = "System.Data"
                     AssemblyName = "System.Data"
                     HintPath = "..\..\Windows\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
                 />
                 <Reference
-                    Name = "zlib.net-2003"
+                    Name = "zlib.net"
                     AssemblyName = "zlib.net"
-                    HintPath = "lib\zlib.net-2003.dll"
+                    HintPath = "lib11\zlib.net.dll"
+                />
+                <Reference
+                    Name = "Org.Mentalis.Security"
+                    AssemblyName = "Org.Mentalis.Security"
+                    HintPath = "lib11\Org.Mentalis.Security.dll"
                 />
             </References>
         </Build>

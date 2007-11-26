@@ -111,6 +111,30 @@ namespace jabber.connection
             m_nodes[jn] = n;
             return n;
         }
+
+        ///<summary>
+        ///</summary>
+        ///<param name="service"></param>
+        ///<param name="node"></param>
+        ///<param name="errorHandler"></param>
+        public void RemoveNode(JID service, string node, bedrock.ExceptionHandler errorHandler)
+        {
+            JIDNode jn = new JIDNode(service, node);
+
+            PubSubNode psNode = m_nodes[jn] as PubSubNode;
+            if (psNode != null)
+            {
+                m_nodes[jn] = null;
+            }
+            else
+            {
+                psNode = new PubSubNode(Stream, service, node, 10);
+            }
+
+            psNode.OnError += errorHandler;
+
+            psNode.Delete();
+        }
 	}
 
     /// <summary>
@@ -257,6 +281,10 @@ namespace jabber.connection
         /// Get the current items in the node
         /// </summary>
         ITEMS,
+        /// <summary>
+        /// Delete a node
+        /// </summary>
+        DELETE
     }
 
     /// <summary>
@@ -313,12 +341,22 @@ namespace jabber.connection
         }
 
         // indexed by op.
-        private STATE[] m_state = new STATE[] { STATE.Start, STATE.Start, STATE.Start, };
+        private STATE[] m_state = new STATE[] { STATE.Start, STATE.Start, STATE.Start, STATE.Start};
 
         private XmppStream  m_stream = null;
         private JID         m_jid = null;
         private string      m_node = null;
         private ItemList    m_items = null;
+
+        public JID Jid
+        {
+            get { return m_jid; }
+        }
+
+        public string Node
+        {
+            get { return m_node; }
+        }
 
         /// <summary>
         /// Create a Node.  Next, call Create and/or Subscribe.
@@ -474,23 +512,24 @@ namespace jabber.connection
                     FireError(Op.CREATE, "Error creating node", iq);
                     return;
                 }
-                SubscribeIfPending();
-                return;
+            }
+            else
+            {
+                PubSub ps = iq.Query as PubSub;
+                if (ps == null)
+                {
+                    FireError(Op.CREATE, "Invalid protocol", iq);
+                    return;
+                }
+                Create c = ps["create", URI.PUBSUB] as Create;
+                if (c == null)
+                {
+                    FireError(Op.CREATE, "Invalid protocol", iq);
+                    return;
+                }
+                m_node = c.Node;
             }
 
-            PubSub ps = iq.Query as PubSub;
-            if (ps == null)
-            {
-                FireError(Op.CREATE, "Invalid protocol", iq);
-                return;
-            }
-            Create c = ps["create", URI.PUBSUB] as Create;
-            if (c == null)
-            {
-                FireError(Op.CREATE, "Invalid protocol", iq);
-                return;
-            }
-            m_node = c.Node;
             SubscribeIfPending();
         }
 
@@ -530,16 +569,46 @@ namespace jabber.connection
                 this[Op.SUBSCRIBE] = STATE.Asking;
             }
 
-            m_stream.OnProtocol += new ProtocolHandler(m_stream_OnProtocol);
-            PubSubIQ iq = new PubSubIQ(m_stream.Document, PubSubCommandType.subscribe, m_node);
+            sendCommand(PubSubCommandType.subscribe, GotSubscribed, addInfo);
+
+            // don't parallelize getItems, in case sub fails.
+        }
+
+        private delegate void addInfoFunc(PubSubIQ iq);
+        private void sendCommand(PubSubCommandType type, IqCB callback, addInfoFunc func)
+        {
+            m_stream.OnProtocol += m_stream_OnProtocol;
+            PubSubIQ iq = new PubSubIQ(m_stream.Document, type, m_node);
             iq.To = m_jid;
             iq.Type = IQType.set;
             
-            jabber.protocol.iq.Subscribe sub = (jabber.protocol.iq.Subscribe) iq.Command;
-            sub.JID = m_stream.JID;
-            m_stream.Tracker.BeginIQ(iq, new IqCB(GotSubscribed), null);
+            if (func != null)
+                func(iq);
 
-            // don't parallelize getItems, in case sub fails.
+            m_stream.Tracker.BeginIQ(iq, callback, null);
+        }
+
+#if !NET20
+        private delegate void addInfoFuncPlusArg(PubSubIQ iq, object arg);
+        private void sendCommand(PubSubCommandType type, IqCB callback,
+            addInfoFuncPlusArg func, object arg)
+        {
+            m_stream.OnProtocol += m_stream_OnProtocol;
+            PubSubIQ iq = new PubSubIQ(m_stream.Document, type, m_node);
+            iq.To = m_jid;
+            iq.Type = IQType.set;
+
+            if (func != null)
+                func(iq, arg);
+
+            m_stream.Tracker.BeginIQ(iq, callback, null);
+        }
+#endif
+
+        private void addInfo(PubSubIQ iq)
+        {
+            Subscribe sub = (Subscribe) iq.Command;
+            sub.JID = m_stream.JID;
         }
 
         private void GotSubscribed(object sender, IQ iq, object state)
@@ -722,6 +791,12 @@ namespace jabber.connection
         /// </summary>
         public void Unsubscribe()
         {
+            sendCommand(PubSubCommandType.unsubscribe, GotUnsubsribed, null);
+        }
+
+        private void GotUnsubsribed(object sender, IQ iq, object data)
+        {
+            //TODO: Report back error
         }
 
         /// <summary>
@@ -729,6 +804,55 @@ namespace jabber.connection
         /// </summary>
         public void Delete()
         {
+            sendCommand(PubSubCommandType.delete, GotDelete, null);
+        }
+
+        private void GotDelete(object sender, IQ iq, object data)
+        {
+            if (iq.Type != IQType.result)
+            {
+                FireError(Op.DELETE, "Delete failed", iq);
+                return;
+            }
+        }
+
+        /// <summary>
+        /// Delete a single item.
+        /// </summary>
+        /// <param name="id">Id of item.</param>
+        public void DeleteItem(string id)
+        {
+#if NET20
+            sendCommand(PubSubCommandType.retract, OnDeleteNode,
+                delegate(PubSubIQ iq)
+                {
+                    XmlElement element = iq.OwnerDocument.CreateElement("item");
+                    element.InnerText = id;
+                    iq.Command.AppendChild(element);
+                });
+#else
+            sendCommand(PubSubCommandType.retract, OnDeleteNode,
+                AddElementToDeleteNode, id);
+#endif
+        }
+
+#if !NET20
+        private static void AddElementToDeleteNode(PubSubIQ iq, object arg)
+        {
+            string id = arg as string;
+
+            if (id != null)
+            {
+                XmlElement element = iq.OwnerDocument.CreateElement("item");
+                element.InnerText = id;
+                iq.Command.AppendChild(element);
+            }
+        }
+#endif
+
+        private void OnDeleteNode(object sender, IQ iq, object data)
+        {
+            //TODO: Report back error
         }
     }
 }

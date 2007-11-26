@@ -92,11 +92,11 @@
     </Reference>
     <Reference Condition="'$(TargetFrameworkVersion)'!='v1.1'" Include="zlib.net, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>lib\zlib-net.dll</HintPath>
+      <HintPath>lib20\zlib.net.dll</HintPath>
     </Reference>
     <Reference Condition="'$(TargetFrameworkVersion)'=='v1.1'" Include="zlib.net, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>lib\zlib.net-2003.dll</HintPath>
+      <HintPath>lib11\zlib.net.dll</HintPath>
     </Reference>
     <Reference Condition="'$(TargetFrameworkVersion)'=='Mono v2.0'" Include="Mono.Security" />
   </ItemGroup>

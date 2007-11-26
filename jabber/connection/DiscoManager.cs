@@ -132,7 +132,7 @@ namespace jabber.connection
         /// <returns></returns>
         public override bool Equals(object obj)
         {
-            DiscoNode other = obj as DiscoNode;
+            JIDNode other = obj as JIDNode;
             if (other == null)
             {
                 return false;

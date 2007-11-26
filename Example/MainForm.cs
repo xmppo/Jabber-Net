@@ -11,15 +11,13 @@
  * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
-using System;
 
+using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.Collections;
-using System.ComponentModel;
 using System.Windows.Forms;
 using System.Xml;
-
 using bedrock.util;
 using jabber;
 using jabber.connection;
@@ -33,28 +31,30 @@ namespace Example
     /// Summary description for MainForm.
     /// </summary>
     [SVN(@"$Id$")]
-    public class MainForm : System.Windows.Forms.Form
+    public class MainForm : Form
     {
-        private System.Windows.Forms.StatusBar sb;
+        #region Private Members
+
+        private StatusBar sb;
         private jabber.client.JabberClient jc;
         private jabber.client.RosterManager rm;
         private jabber.client.PresenceManager pm;
-        private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tpDebug;
-        private System.Windows.Forms.TabPage tpRoster;
-        private System.Windows.Forms.StatusBarPanel pnlCon;
-        private System.Windows.Forms.StatusBarPanel pnlPresence;
-        private System.Windows.Forms.ContextMenu mnuPresence;
-        private System.Windows.Forms.MenuItem mnuAvailable;
-        private System.Windows.Forms.MenuItem mnuAway;
-        private System.ComponentModel.IContainer components;
+        private TabControl tabControl1;
+        private TabPage tpDebug;
+        private TabPage tpRoster;
+        private StatusBarPanel pnlCon;
+        private StatusBarPanel pnlPresence;
+        private ContextMenu mnuPresence;
+        private MenuItem mnuAvailable;
+        private MenuItem mnuAway;
+        private IContainer components;
         private muzzle.RosterTree roster;
-        private System.Windows.Forms.StatusBarPanel pnlSSL;
-        private jabber.connection.DiscoManager dm;
+        private StatusBarPanel pnlSSL;
+        private DiscoManager dm;
         private TabPage tpServices;
-        private jabber.connection.CapsManager cm;
+        private CapsManager cm;
         private muzzle.XmppDebugger debug;
-        private jabber.connection.PubSubManager psm;
+        private PubSubManager psm;
         private MenuStrip menuStrip1;
         private ToolStripMenuItem fileToolStripMenuItem;
         private ToolStripMenuItem connectToolStripMenuItem;
@@ -69,13 +69,17 @@ namespace Example
         private ToolStripMenuItem addGroupToolStripMenuItem;
         private IdleTime idler;
         private ServiceDisplay services;
-        private ToolStripMenuItem subscribePubSubToolStripMenuItem;
         private ToolStripMenuItem windowToolStripMenuItem;
         private ToolStripMenuItem closeTabToolStripMenuItem;
+        private ToolStripMenuItem deletePubSubToolStripMenuItem;
+        private ToolStripMenuItem subscribePubSubToolStripMenuItem;
+        private ToolStripMenuItem pubSubToolStripMenuItem;
         private ConferenceManager muc;
         private ToolStripMenuItem joinConferenceToolStripMenuItem;
 
         private bool m_err = false;
+
+        #endregion
 
         public MainForm()
         {
@@ -98,7 +102,7 @@ namespace Example
 
             tabControl1.TabPages.Remove(tpServices);
             tabControl1.TabPages.Remove(tpDebug);
-            AppDomain.CurrentDomain.UnhandledException +=new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
         }
 
 
@@ -161,7 +165,6 @@ namespace Example
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.connectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.subscribePubSubToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -173,6 +176,9 @@ namespace Example
             this.addGroupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.windowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pubSubToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.subscribePubSubToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deletePubSubToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cm = new jabber.connection.CapsManager(this.components);
             this.psm = new jabber.connection.PubSubManager(this.components);
             this.idler = new bedrock.util.IdleTime();
@@ -206,7 +212,7 @@ namespace Example
             this.pnlCon.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Spring;
             this.pnlCon.Name = "pnlCon";
             this.pnlCon.Text = "Click on \"Offline\", and select a presence to log in.";
-            this.pnlCon.Width = 539;
+            this.pnlCon.Width = 538;
             // 
             // pnlSSL
             // 
@@ -374,7 +380,8 @@ namespace Example
             this.fileToolStripMenuItem,
             this.viewToolStripMenuItem,
             this.rosterToolStripMenuItem,
-            this.windowToolStripMenuItem});
+            this.windowToolStripMenuItem,
+            this.pubSubToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(632, 24);
@@ -385,7 +392,7 @@ namespace Example
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.connectToolStripMenuItem,
-            this.subscribePubSubToolStripMenuItem,
+            this.joinConferenceToolStripMenuItem,
             this.joinConferenceToolStripMenuItem,
             this.toolStripMenuItem1,
             this.exitToolStripMenuItem});
@@ -397,28 +404,20 @@ namespace Example
             // 
             this.connectToolStripMenuItem.Name = "connectToolStripMenuItem";
             this.connectToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F9;
-            this.connectToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.connectToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.connectToolStripMenuItem.Text = "&Connect";
             this.connectToolStripMenuItem.Click += new System.EventHandler(this.connectToolStripMenuItem_Click);
-            // 
-            // subscribePubSubToolStripMenuItem
-            // 
-            this.subscribePubSubToolStripMenuItem.Name = "subscribePubSubToolStripMenuItem";
-            this.subscribePubSubToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F10;
-            this.subscribePubSubToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
-            this.subscribePubSubToolStripMenuItem.Text = "&Subscribe (PubSub)";
-            this.subscribePubSubToolStripMenuItem.Click += new System.EventHandler(this.subscribeToPubSubToolStripMenuItem_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(200, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -524,6 +523,46 @@ namespace Example
             this.joinConferenceToolStripMenuItem.Text = "&Join Conference";
             this.joinConferenceToolStripMenuItem.Click += new System.EventHandler(this.joinConferenceToolStripMenuItem_Click);
             // 
+            // pubSubToolStripMenuItem
+            // 
+            this.pubSubToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.subscribePubSubToolStripMenuItem,
+            this.deletePubSubToolStripMenuItem});
+            this.pubSubToolStripMenuItem.Name = "pubSubToolStripMenuItem";
+            this.pubSubToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
+            this.pubSubToolStripMenuItem.Text = "PubSub";
+            // 
+            // subscribePubSubToolStripMenuItem
+            // 
+            this.subscribePubSubToolStripMenuItem.Name = "subscribePubSubToolStripMenuItem";
+            this.subscribePubSubToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F10;
+            this.subscribePubSubToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.subscribePubSubToolStripMenuItem.Text = "&Subscribe";
+            this.subscribePubSubToolStripMenuItem.Click += new System.EventHandler(this.subscribeToPubSubToolStripMenuItem_Click);
+            // 
+            // deletePubSubToolStripMenuItem
+            // 
+            this.deletePubSubToolStripMenuItem.Name = "deletePubSubToolStripMenuItem";
+            this.deletePubSubToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F11;
+            this.deletePubSubToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.deletePubSubToolStripMenuItem.Text = "&Delete";
+            this.deletePubSubToolStripMenuItem.Click += new System.EventHandler(this.deletePubSubToolStripMenuItem_Click);
+            // 
+            // cm
+            // 
+            this.cm.Node = "http://cursive.net/clients/csharp-example";
+            this.cm.Stream = this.jc;
+            // 
+            // psm
+            // 
+            this.psm.Stream = this.jc;
+            // 
+            // idler
+            // 
+            this.idler.InvokeControl = this;
+            this.idler.OnIdle += new bedrock.util.SpanEventHandler(this.idler_OnIdle);
+            this.idler.OnUnIdle += new bedrock.util.SpanEventHandler(this.idler_OnUnIdle);
+            // 
             // MainForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
@@ -587,7 +626,7 @@ namespace Example
 #if NET20
                 System.Security.Cryptography.X509Certificates.X509Certificate cert2 =
                     (System.Security.Cryptography.X509Certificates.X509Certificate)
-                    jc[jabber.connection.Options.REMOTE_CERTIFICATE];
+                    jc[Options.REMOTE_CERTIFICATE];
 
                 string cert_str = cert2.ToString(true);
                 debug.Write("CERT:", cert_str);
@@ -611,7 +650,7 @@ namespace Example
                 pnlCon.Text = "Disconnected";
         }
 
-        private void jc_OnError(object sender, System.Exception ex)
+        private void jc_OnError(object sender, Exception ex)
         {
             mnuAway.Enabled = mnuAvailable.Enabled = false;
             connectToolStripMenuItem.Text = "&Connect";
@@ -625,7 +664,7 @@ namespace Example
             pnlCon.Text = "Error: " + ex.Message;
         }
 
-        private void jc_OnAuthError(object sender, jabber.protocol.client.IQ iq)
+        private void jc_OnAuthError(object sender, IQ iq)
         {
             if (MessageBox.Show(this,
                 "Create new account?",
@@ -641,7 +680,7 @@ namespace Example
             }
         }
 
-        private void jc_OnRegistered(object sender, jabber.protocol.client.IQ iq)
+        private void jc_OnRegistered(object sender, IQ iq)
         {
             if (iq.Type == IQType.result)
                 jc.Login();
@@ -649,7 +688,7 @@ namespace Example
                 pnlCon.Text = "Registration error";
         }
 
-        private void jc_OnRegisterInfo(object sender, jabber.protocol.client.IQ iq)
+        private void jc_OnRegisterInfo(object sender, IQ iq)
         {
             Register r = iq.Query as Register;
             Debug.Assert(r != null);
@@ -669,7 +708,7 @@ namespace Example
                 MessageBox.Show(this, msg.Body, msg.From, MessageBoxButtons.OK);
         }
 
-        private void jc_OnIQ(object sender, jabber.protocol.client.IQ iq)
+        private void jc_OnIQ(object sender, IQ iq)
         {
             if (iq.Type != IQType.get)
                 return;
@@ -683,33 +722,36 @@ namespace Example
             {
                 iq = iq.GetResponse(jc.Document);
                 jabber.protocol.iq.Version ver = iq.Query as jabber.protocol.iq.Version;
-                ver.OS = Environment.OSVersion.ToString();
-                ver.EntityName = Application.ProductName;
-                ver.Ver = Application.ProductVersion;
+                if (ver != null)
+                {
+                    ver.OS = Environment.OSVersion.ToString();
+                    ver.EntityName = Application.ProductName;
+                    ver.Ver = Application.ProductVersion;
+                }
                 jc.Write(iq);
                 return;
             }
             
-            if (query is jabber.protocol.iq.Time)
+            if (query is Time)
             {
                 iq = iq.GetResponse(jc.Document);
-                jabber.protocol.iq.Time tim = iq.Query as jabber.protocol.iq.Time;
-                tim.SetCurrentTime();
+                Time tim = iq.Query as Time;
+                if (tim != null) tim.SetCurrentTime();
                 jc.Write(iq);
                 return;
             }
             
-            if (query is jabber.protocol.iq.Last)
+            if (query is Last)
             {
                 iq = iq.GetResponse(jc.Document);
-                jabber.protocol.iq.Last last = iq.Query as jabber.protocol.iq.Last;
-                last.Seconds = (int)bedrock.util.IdleTime.GetIdleTime();
+                Last last = iq.Query as Last;
+                if (last != null) last.Seconds = (int)IdleTime.GetIdleTime();
                 jc.Write(iq);
                 return;
             }
         }
 
-        private void roster_DoubleClick(object sender, System.EventArgs e)
+        private void roster_DoubleClick(object sender, EventArgs e)
         {
             muzzle.RosterTree.ItemNode n = roster.SelectedNode as muzzle.RosterTree.ItemNode;
             if (n == null)
@@ -717,7 +759,7 @@ namespace Example
             new SendMessage(jc, n.JID).Show();
         }
 
-        private void sb_PanelClick(object sender, System.Windows.Forms.StatusBarPanelClickEventArgs e)
+        private void sb_PanelClick(object sender, StatusBarPanelClickEventArgs e)
         {
             if (e.StatusBarPanel != pnlPresence)
                 return;
@@ -738,7 +780,7 @@ namespace Example
             }
         }
 
-        private void mnuAvailable_Click(object sender, System.EventArgs e)
+        private void mnuAvailable_Click(object sender, EventArgs e)
         {
             if (jc.IsAuthenticated)
             {
@@ -749,7 +791,7 @@ namespace Example
                 Connect();
         }
 
-        private void mnuAway_Click(object sender, System.EventArgs e)
+        private void mnuAway_Click(object sender, EventArgs e)
         {
             if (jc.IsAuthenticated)
             {
@@ -760,18 +802,20 @@ namespace Example
                 Connect();
         }
 
-        private void mnuOffline_Click(object sender, System.EventArgs e)
+        /*
+        private void mnuOffline_Click(object sender, EventArgs e)
         {
             if (jc.IsAuthenticated)
                 jc.Close();
         }
+         */
 
-        void jc_OnConnect(object sender, jabber.connection.StanzaStream stream)
+        void jc_OnConnect(object sender, StanzaStream stream)
         {
             m_err = false;
         }
 
-        private void jc_OnStreamError(object sender, System.Xml.XmlElement rp)
+        private void jc_OnStreamError(object sender, XmlElement rp)
         {
             m_err = true;
             pnlCon.Text = "Stream error: " + rp.InnerText;
@@ -799,9 +843,9 @@ namespace Example
 
         }
 */
-        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            MessageBox.Show(e.ExceptionObject.ToString(), "Unhandled exception: " + e.GetType().ToString());
+            MessageBox.Show(e.ExceptionObject.ToString(), "Unhandled exception: " + e.GetType());
         }
 
         private void rm_OnRosterEnd(object sender)
@@ -809,7 +853,7 @@ namespace Example
             roster.ExpandAll();
         }
 
-        private void MainForm_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void MainForm_Closing(object sender, CancelEventArgs e)
         {
             if (jc.IsAuthenticated)
                 jc.Close();
@@ -818,7 +862,7 @@ namespace Example
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             jc.Close();
-            this.Close();
+            Close();
         }
 
         private void menuItem3_Click(object sender, EventArgs e)
@@ -899,6 +943,8 @@ namespace Example
             string text = string.Format("{0}/{1}", jid, node);
 
             TabPage tp = new TabPage(text);
+            tp.Name = text;
+
             PubSubDisplay disp = new PubSubDisplay();
             disp.Node = psm.GetNode(jid, node, 10);
             tp.Controls.Add(disp);
@@ -942,6 +988,45 @@ namespace Example
             else if (tp == tpServices)
                 servicesToolStripMenuItem.Checked = false;
             tabControl1.TabPages.Remove(tp);
+        }
+
+        private void deletePubSubToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PubSubSubcribeForm fm = setupPubSubForm();
+            if (fm.ShowDialog() != DialogResult.OK)
+                return;
+
+            JID jid = fm.JID;
+            string node = fm.Node;
+
+            psm.RemoveNode(jid, node,
+                delegate {
+                    MessageBox.Show("Remove Node unsuccessful.");
+                });
+
+            tabControl1.TabPages.RemoveByKey(string.Format("{0}/{1}", jid, node));
+        }
+
+        private PubSubSubcribeForm setupPubSubForm()
+        {
+            string JID = null;
+            string node = null;
+            if (tabControl1.SelectedTab.Name != null && tabControl1.SelectedTab.Name.Contains("/"))
+            {
+                string value = tabControl1.SelectedTab.Name;
+                int index = value.IndexOf("/");
+
+                JID = value.Substring(0, index);
+                node = value.Substring(index + 1);
+            }
+
+            PubSubSubcribeForm fm = new PubSubSubcribeForm();
+            fm.Text = "Delete PubSub";
+            if (JID != null) fm.JID = JID;
+            if (node != null) fm.Node = node;
+            fm.DiscoManager = dm;
+
+            return fm;
         }
 
         private void joinConferenceToolStripMenuItem_Click(object sender, EventArgs e)

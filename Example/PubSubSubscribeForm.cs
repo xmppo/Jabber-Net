@@ -11,13 +11,10 @@
  * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
+
 using System;
 using System.ComponentModel;
-using System.ComponentModel.Design;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
-
 using bedrock.util;
 using jabber;
 using jabber.connection;
@@ -39,7 +36,7 @@ namespace Example
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private readonly IContainer components = null;
 
         public PubSubSubcribeForm()
         {
@@ -54,7 +51,7 @@ namespace Example
 
         public JID JID
         {
-            get { return (JID)cmbJID.Text; }
+            get { return cmbJID.Text; }
             set { cmbJID.Text = value.ToString(); }
         }
 

@@ -86,9 +86,9 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
-    <Reference Include="zlib-net, Version=1.0.3.0, Culture=neutral, PublicKeyToken=924c5b18328d6f09, processorArchitecture=MSIL">
+    <Reference Include="zlib.net, Version=1.0.3.0, Culture=neutral, PublicKeyToken=924c5b18328d6f09, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>lib\zlib-net.dll</HintPath>
+      <HintPath>lib20\zlib.net.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

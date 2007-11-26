@@ -11,11 +11,10 @@
  * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
-using System;
-using System.ComponentModel;
-using System.Windows.Forms;
-using System.Diagnostics;
 
+using System;
+using System.Diagnostics;
+using System.Windows.Forms;
 using jabber.connection;
 
 namespace Example
@@ -31,7 +30,7 @@ namespace Example
         /// <summary> 
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private readonly System.ComponentModel.IContainer components = null;
 
         public PubSubDisplay()
         {
@@ -47,12 +46,12 @@ namespace Example
                     return;
                 if (m_node != null)
                 {
-                    m_node.OnItemAdd -= new ItemCB(m_node_OnItemAdd);
-                    m_node.OnItemRemove -= new ItemCB(m_node_OnItemRemove);
+                    m_node.OnItemAdd -= m_node_OnItemAdd;
+                    m_node.OnItemRemove -= m_node_OnItemRemove;
                 }
                 m_node = value;
-                m_node.OnItemAdd += new ItemCB(m_node_OnItemAdd);
-                m_node.OnItemRemove += new ItemCB(m_node_OnItemRemove);
+                m_node.OnItemAdd += m_node_OnItemAdd;
+                m_node.OnItemRemove += m_node_OnItemRemove;
                 m_node.AutomatedSubscribe();
             }
         }
