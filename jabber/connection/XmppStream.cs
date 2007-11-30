@@ -503,7 +503,7 @@ namespace jabber.connection
         public JID JID
         {
             // Make sure to set this option in subclasses.
-            get { return (JID)this[Options.JID]; }
+            get { return new JID((string)this[Options.JID]); }
         }
 
         /// <summary>
