@@ -259,5 +259,27 @@ namespace muzzle
             if (bottom)
                 ScrollToBottom();
         }
+
+        /// <summary>
+        /// Add a line that has a colored tag string, followed by a space, followed by
+        /// a chunk of text in the default color, followed by a newline.  
+        /// 
+        /// Note: Although this seems kind of random, it's needed in several places.
+        /// </summary>
+        /// <param name="tagColor">The color to use for the tag</param>
+        /// <param name="tag">The tag string</param>
+        /// <param name="text">The main text</param>
+        public void AppendMaybeScroll(Color tagColor, string tag, string text)
+        {
+            bool bottom = m_bottom;
+            SelectionColor = tagColor;
+            AppendText(tag);
+            AppendText(" ");
+            SelectionColor = ForeColor;
+            AppendText(text);
+            AppendText("\r\n");
+            if (bottom)
+                ScrollToBottom();
+        }
     }
 }

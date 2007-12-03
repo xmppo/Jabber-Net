@@ -34,7 +34,6 @@ namespace muzzle
 
         private Color m_sendColor = Color.Blue;
         private Color m_recvColor = Color.Orange;
-        private Color m_textColor = Color.Black;
         private Color m_errColor = Color.Red;
         private Color m_otherColor = Color.Green;
         private string m_send = "SEND:";
@@ -92,8 +91,8 @@ namespace muzzle
         [Category("Appearance")]
         public Color TextColor
         {
-            get { return m_textColor; }
-            set { m_textColor = value; }
+            get { return rtDebug.ForeColor; }
+            set { rtDebug.ForeColor = value; }
         }
 
         /// <summary>
@@ -153,13 +152,7 @@ namespace muzzle
         private void Write(Color color, string tag, string text)
         {
             Debug.WriteLine(tag + " " + text);
-
-            rtDebug.SelectionColor = color;
-            rtDebug.AppendText(tag);
-            rtDebug.AppendText(" ");
-            rtDebug.SelectionColor = m_textColor;
-            rtDebug.AppendText(text);
-            rtDebug.AppendMaybeScroll("\r\n");
+            rtDebug.AppendMaybeScroll(color, tag, text);
         }
 
         /// <summary>
