@@ -138,6 +138,13 @@ namespace jabber.client
         public event PresenceHandler OnBeforePresenceOut;
 
         /// <summary>
+        /// Presence has been sent.  This gives a chance to send presence to other things, such as chat rooms.
+        /// </summary>
+        [Category("Protocol")]
+        [Description("Presence has been sent.  This gives a chance to send presence to other things, such as chat rooms.")]
+        public event PresenceHandler OnAfterPresenceOut;
+
+        /// <summary>
         /// AutoLogin is false, and it's time to log in.
         /// This callback will receive the results of the IQ type=get
         /// in the jabber:iq:auth namespace.  When login is complete,
@@ -388,6 +395,8 @@ namespace jabber.client
                 if (OnBeforePresenceOut != null)
                     OnBeforePresenceOut(this, p);
                 Write(p);
+                if (OnAfterPresenceOut != null)
+                    OnAfterPresenceOut(this, p);
             }
             else
             {
