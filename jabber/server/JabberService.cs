@@ -171,6 +171,7 @@ namespace jabber.server
             { 
                 base.Server = value;
                 this[Options.JID] = value;
+                this[Options.TO] = value;
             }
         }
 
@@ -263,7 +264,7 @@ namespace jabber.server
             if (State == RunningState.Instance)
             {
                 if (elem.GetAttribute("from") == "")
-                    elem.SetAttribute("from", this.JID);
+                    elem.SetAttribute("from", this.ComponentID);
             }
             base.Write(elem);
         }
