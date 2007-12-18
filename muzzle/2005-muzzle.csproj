@@ -81,6 +81,7 @@
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing">
       <Name>System.Drawing</Name>
     </Reference>
@@ -101,6 +102,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BottomScrollRichText.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ChatHistory.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ClientLogin.cs">
