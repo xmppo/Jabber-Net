@@ -89,6 +89,15 @@ namespace jabber.client
         }
 
         /// <summary>
+        /// Get the current presence state as a string.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return m_items.ToString();
+        }
+
+        /// <summary>
         /// The primary session has changed for a user.
         /// </summary>
         public event PrimarySessionHandler OnPrimarySessionChange;
@@ -233,6 +242,11 @@ namespace jabber.client
             {
                 Debug.Assert(jid.Resource == null);
                 m_jid = jid;
+            }
+
+            public override string ToString()
+            {
+                return "{\r\n" + m_items.ToString() + "\r\n}";
             }
 
             private void Primary(Presence p, PresenceManager handler)

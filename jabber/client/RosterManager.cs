@@ -196,6 +196,15 @@ namespace jabber.client
         public event UnsubscriptionHandler OnUnsubscription;
 
         /// <summary>
+        /// String representation.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return m_items.ToString();
+        }
+
+        /// <summary>
         /// Get the currently-known version of a roster item for this jid.
         /// </summary>
         public Item this[JID jid]
