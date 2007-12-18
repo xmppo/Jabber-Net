@@ -45,10 +45,10 @@ namespace xpnet
 
         /// <summary>
         /// Returns the index of the first character of the name of the
-        /// attribute index <code>i</code>.
+        /// attribute index.
         /// </summary>
-        /// <param name="i"></param>
-        /// <returns></returns>
+        /// <param name="i">Attribute index</param>
+        /// <returns>Index of the first character</returns>
         public int getAttributeNameStart(int i)
         {
             if (i >= attCount)

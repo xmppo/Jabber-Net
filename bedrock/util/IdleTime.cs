@@ -43,9 +43,9 @@ namespace bedrock.util
         private static extern bool GetLastInputInfo(ref LASTINPUTINFO plii);
 
         /// <summary>
-        /// Get the number of seconds since last user input (mouse or keyboard) system-wide.
+        /// Get the lapse time between user input (mouse or keyboard) system-wide.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Lapse time in seconds.</returns>
         public static double GetIdleTime()
         {
             LASTINPUTINFO lii = new LASTINPUTINFO();

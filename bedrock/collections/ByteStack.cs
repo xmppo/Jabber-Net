@@ -54,7 +54,7 @@ namespace bedrock.collections
         /// will be grown from the size of the given bytes.  A copy is made of
         /// the given bytes.
         /// </summary>
-        /// <param name="start"> </param>
+        /// <param name="start">byte array copied into this ByteStack</param>
         public ByteStack(byte[] start)
         {
             m_count  = m_capacity = start.Length;

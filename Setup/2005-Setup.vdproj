@@ -15,50 +15,14 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_0F41A98CBE2026D65BBBCC7B015987DC"
-        "OwnerKey" = "8:_299447DFEC74425E83EA5448D5CC547C"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_110B42E66C834BEA8456A6631F9312A3"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_19AF1D3604262AC23D290BF4C6FCA313"
-        "OwnerKey" = "8:_299447DFEC74425E83EA5448D5CC547C"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_19AF1D3604262AC23D290BF4C6FCA313"
-        "OwnerKey" = "8:_0F41A98CBE2026D65BBBCC7B015987DC"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_299447DFEC74425E83EA5448D5CC547C"
         "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_36A64FBDC48DC3A6E5F3266C00A47DA9"
-        "OwnerKey" = "8:_299447DFEC74425E83EA5448D5CC547C"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_36A64FBDC48DC3A6E5F3266C00A47DA9"
-        "OwnerKey" = "8:_110B42E66C834BEA8456A6631F9312A3"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_36A64FBDC48DC3A6E5F3266C00A47DA9"
-        "OwnerKey" = "8:_530EC376894E43768B3EC622E6F220D6"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -75,26 +39,68 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_84D00CD36CDF5F1BB3FEA0EDA2D5C757"
+        "OwnerKey" = "8:_299447DFEC74425E83EA5448D5CC547C"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_D843B1C5FB1844B6AB2F4FB2D88692C5"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_EEEBAEA70A8F411D8F6906E21EA3A10D"
+        "MsmKey" = "8:_EFCA022848A4E8F18D024E3AAC267322"
+        "OwnerKey" = "8:_110B42E66C834BEA8456A6631F9312A3"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_EFCA022848A4E8F18D024E3AAC267322"
+        "OwnerKey" = "8:_530EC376894E43768B3EC622E6F220D6"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_EFCA022848A4E8F18D024E3AAC267322"
+        "OwnerKey" = "8:_84D00CD36CDF5F1BB3FEA0EDA2D5C757"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_EFCA022848A4E8F18D024E3AAC267322"
+        "OwnerKey" = "8:_299447DFEC74425E83EA5448D5CC547C"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F1DBB80862DFF2585758EDCD1D303A38"
+        "OwnerKey" = "8:_EFCA022848A4E8F18D024E3AAC267322"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F1DBB80862DFF2585758EDCD1D303A38"
         "OwnerKey" = "8:_D843B1C5FB1844B6AB2F4FB2D88692C5"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_EEEBAEA70A8F411D8F6906E21EA3A10D"
-        "OwnerKey" = "8:_36A64FBDC48DC3A6E5F3266C00A47DA9"
+        "MsmKey" = "8:_F1DBB80862DFF2585758EDCD1D303A38"
+        "OwnerKey" = "8:_530EC376894E43768B3EC622E6F220D6"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_EEEBAEA70A8F411D8F6906E21EA3A10D"
-        "OwnerKey" = "8:_19AF1D3604262AC23D290BF4C6FCA313"
+        "MsmKey" = "8:_F1DBB80862DFF2585758EDCD1D303A38"
+        "OwnerKey" = "8:_299447DFEC74425E83EA5448D5CC547C"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F1DBB80862DFF2585758EDCD1D303A38"
+        "OwnerKey" = "8:_110B42E66C834BEA8456A6631F9312A3"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -106,43 +112,37 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_110B42E66C834BEA8456A6631F9312A3"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_D843B1C5FB1844B6AB2F4FB2D88692C5"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_EEEBAEA70A8F411D8F6906E21EA3A10D"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_19AF1D3604262AC23D290BF4C6FCA313"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_0F41A98CBE2026D65BBBCC7B015987DC"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_36A64FBDC48DC3A6E5F3266C00A47DA9"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_530EC376894E43768B3EC622E6F220D6"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_84D00CD36CDF5F1BB3FEA0EDA2D5C757"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_110B42E66C834BEA8456A6631F9312A3"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_EFCA022848A4E8F18D024E3AAC267322"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_F1DBB80862DFF2585758EDCD1D303A38"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -190,7 +190,7 @@
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:Release\\Setup.msi"
+        "OutputFilename" = "8:Release5\\Setup.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -241,14 +241,34 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_0F41A98CBE2026D65BBBCC7B015987DC"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_701684B2AA11450B890FBF820A143149"
+            {
+            "SourcePath" = "8:..\\docs\\jabber-net.chm"
+            "TargetName" = "8:jabber-net.chm"
+            "Tag" = "8:"
+            "Folder" = "8:_BE6198C000D6491DA28459E62520961A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_84D00CD36CDF5F1BB3FEA0EDA2D5C757"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:muzzle, Version=1.0.2880.15574, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:muzzle, Version=1.0.2887.16495, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_0F41A98CBE2026D65BBBCC7B015987DC"
+                    "_84D00CD36CDF5F1BB3FEA0EDA2D5C757"
                     {
                     "Name" = "8:muzzle.dll"
                     "Attributes" = "3:512"
@@ -272,14 +292,14 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_19AF1D3604262AC23D290BF4C6FCA313"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_EFCA022848A4E8F18D024E3AAC267322"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:jabber-net, Version=1.1.2880.15565, Culture=neutral, PublicKeyToken=924c5b18328d6f09, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:jabber-net, Version=1.1.2887.16493, Culture=neutral, PublicKeyToken=924c5b18328d6f09, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_19AF1D3604262AC23D290BF4C6FCA313"
+                    "_EFCA022848A4E8F18D024E3AAC267322"
                     {
                     "Name" = "8:jabber-net.dll"
                     "Attributes" = "3:512"
@@ -287,57 +307,6 @@
                 }
             "SourcePath" = "8:jabber-net.dll"
             "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_BE6198C000D6491DA28459E62520961A"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_36A64FBDC48DC3A6E5F3266C00A47DA9"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:jabber-net, Version=1.1.2880.15677, Culture=neutral, PublicKeyToken=924c5b18328d6f09, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_36A64FBDC48DC3A6E5F3266C00A47DA9"
-                    {
-                    "Name" = "8:jabber-net.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:jabber-net.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_BE6198C000D6491DA28459E62520961A"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_701684B2AA11450B890FBF820A143149"
-            {
-            "SourcePath" = "8:..\\docs\\jabber-net.chm"
-            "TargetName" = "8:jabber-net.chm"
             "Tag" = "8:"
             "Folder" = "8:_BE6198C000D6491DA28459E62520961A"
             "Condition" = "8:"
@@ -351,23 +320,23 @@
             "PackageAs" = "3:1"
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_EEEBAEA70A8F411D8F6906E21EA3A10D"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_F1DBB80862DFF2585758EDCD1D303A38"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:zlib.net, Version=1.0.3.0, Culture=neutral, PublicKeyToken=924c5b18328d6f09, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_EEEBAEA70A8F411D8F6906E21EA3A10D"
+                    "_F1DBB80862DFF2585758EDCD1D303A38"
                     {
-                    "Name" = "8:zlib-net.dll"
+                    "Name" = "8:zlib.net.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:zlib-net.dll"
+            "SourcePath" = "8:zlib.net.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_BE6198C000D6491DA28459E62520961A"

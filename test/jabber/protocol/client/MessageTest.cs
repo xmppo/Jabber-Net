@@ -39,10 +39,10 @@ namespace test.jabber.protocol.client
         {
             Message msg = new Message(doc);
             msg.Html = "foo";
-            Assert.AreEqual("<message id=\"JN_1\"><html xmlns=\"http://jabber.org/protocol/xhtml-im\"><body xmlns=\"http://www.w3.org/1999/xhtml\">foo</body></html><body>foo</body></message>", msg.ToString());
+            Assert.AreEqual("<message id=\""+msg.ID+"\"><html xmlns=\"http://jabber.org/protocol/xhtml-im\"><body xmlns=\"http://www.w3.org/1999/xhtml\">foo</body></html><body>foo</body></message>", msg.ToString());
             // TODO: deal with the namespace problem here
             msg.Html = "f<a href=\"http://www.jabber.org\">o</a>o";
-            Assert.AreEqual("<message id=\"JN_1\"><html xmlns=\"http://jabber.org/protocol/xhtml-im\"><body xmlns=\"http://www.w3.org/1999/xhtml\">f<a href=\"http://www.jabber.org\">o</a>o</body></html><body>foo</body></message>", msg.ToString());
+            Assert.AreEqual("<message id=\""+msg.ID+"\"><html xmlns=\"http://jabber.org/protocol/xhtml-im\"><body xmlns=\"http://www.w3.org/1999/xhtml\">f<a href=\"http://www.jabber.org\">o</a>o</body></html><body>foo</body></message>", msg.ToString());
             Assert.AreEqual("f<a href=\"http://www.jabber.org\">o</a>o", msg.Html);
         }
         [Test] public void Test_NullBody()
@@ -70,9 +70,9 @@ namespace test.jabber.protocol.client
         {
             Message msg = new Message(doc);
             msg.Body = "&";
-            Assert.AreEqual("<message id=\"JN_1\"><body>&amp;</body></message>", msg.ToString());
+            Assert.AreEqual("<message id=\""+msg.ID+"\"><body>&amp;</body></message>", msg.ToString());
             msg.RemoveChild(msg["body"]);
-            Assert.AreEqual("<message id=\"JN_1\"></message>", msg.ToString());
+            Assert.AreEqual("<message id=\""+msg.ID+"\"></message>", msg.ToString());
             try
             {
                 msg.Html = "&";

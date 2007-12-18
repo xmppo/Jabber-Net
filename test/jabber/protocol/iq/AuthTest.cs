@@ -39,7 +39,7 @@ namespace test.jabber.protocol.iq
         [Test] public void Test_Create()
         {
             IQ iq = new AuthIQ(doc);
-            Assert.AreEqual("<iq id=\"JN_1\" type=\"get\"><query xmlns=\"jabber:iq:auth\" /></iq>", iq.ToString());
+            Assert.AreEqual("<iq id=\""+iq.ID+"\" type=\"get\"><query xmlns=\"jabber:iq:auth\" /></iq>", iq.ToString());
         }
         [Test] public void Test_Hash()
         {
@@ -48,7 +48,7 @@ namespace test.jabber.protocol.iq
             Auth a = (Auth) iq.Query;
             a.SetDigest("foo", "bar", "3B513636");
             a.Resource = "Home";
-            Assert.AreEqual("<iq id=\"JN_1\" type=\"set\"><query xmlns=\"jabber:iq:auth\">" +
+            Assert.AreEqual("<iq id=\""+iq.ID+"\" type=\"set\"><query xmlns=\"jabber:iq:auth\">" +
                 "<username>foo</username>" +
                 "<digest>37d9c887967a35d53b81f07916a309a5b8d7e8cc</digest>" +
                 "<resource>Home</resource>" +
@@ -67,7 +67,7 @@ namespace test.jabber.protocol.iq
             Auth a = (Auth) iq.Query;
             a.SetZeroK("zeroktest", "test", "3C7A6B0A", 499);
             a.Resource = "Winjab";
-            Assert.AreEqual("<iq id=\"JN_1\" type=\"set\"><query xmlns=\"jabber:iq:auth\">" +
+            Assert.AreEqual("<iq id=\""+iq.ID+"\" type=\"set\"><query xmlns=\"jabber:iq:auth\">" +
                 "<username>zeroktest</username>" +
                 "<hash>e00c83748492a3bc7e4831c9e973d117082c3abe</hash>" +
                 "<resource>Winjab</resource>" +

@@ -218,7 +218,7 @@ namespace bedrock.net
         public static SslProtocols   SSLProtocols        = SslProtocols.Ssl3 | SslProtocols.Tls;
         private SslProtocols         m_secureProtocol    = SslProtocols.None;
         private Socket               m_sock              = null;
-        private X509Certificate      m_cert              = null;
+        private X509Certificate2     m_cert              = null;
         private Stream               m_stream            = null;
         private MemoryStream         m_pending           = new MemoryStream();
         private bool                 m_writing           = false;
@@ -462,7 +462,7 @@ namespace bedrock.net
         /// <summary>
         /// The local certificate of the socket.
         /// </summary>
-        public X509Certificate LocalCertificate
+        public X509Certificate2 LocalCertificate
         {
             get { return m_cert; }
             set { m_cert = value; }
@@ -647,7 +647,16 @@ namespace bedrock.net
 #if !NO_SSL && !NET20 && !__MonoCS__
                 SecureSocket cli = (SecureSocket) m_sock.Accept();
 #else
-                Socket cli = m_sock.Accept();
+                Socket cli;
+                try
+                {
+                    cli = m_sock.Accept();
+                }
+                catch (SocketException)
+                {
+                    Debug.WriteLine("A cancel call was sent to the accepting socket.");
+                    return;
+                }
 #endif
                 AsyncSocket cliCon = new AsyncSocket(m_watcher);
                 cliCon.m_sock = cli;
@@ -974,7 +983,7 @@ namespace bedrock.net
             if (m_secureProtocol == SslProtocols.None)
                 m_secureProtocol = SslProtocols.Tls;
 
-            m_stream = new SslStream(m_stream, false, new RemoteCertificateValidationCallback(ValidateServerCertificate), new LocalCertificateSelectionCallback(ChooseClientCertificate));
+            m_stream = new SslStream(m_stream, false, ValidateServerCertificate, ChooseClientCertificate);
 
             if (m_server)
             {
@@ -1002,11 +1011,11 @@ namespace bedrock.net
                 {
                     ((SslStream)m_stream).AuthenticateAsClient(m_hostid, certs, m_secureProtocol, false);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     // FireError(ex);
                     Close();
-                    throw ex;
+                    throw;
                 }
             }
         }
@@ -1564,19 +1573,19 @@ namespace bedrock.net
                 if (m_sock.Connected)
                 {
                     State = SocketState.Closing;
+                }
 
 #if NET20 || __MonoCS__
-                    if (m_stream != null)
-                        m_stream.Close();
-                    else
+                if (m_stream != null)
+                    m_stream.Close();
+                else
 #endif
+                {
+                    try
                     {
-                        try
-                        {
-                            m_sock.Close();
-                        }
-                        catch { }
+                        m_sock.Close();
                     }
+                    catch { }
                 }
 
                 if (oldState <= SocketState.Connected)

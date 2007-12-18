@@ -49,7 +49,7 @@ namespace test.jabber.protocol.iq
             AgentsQuery q = (AgentsQuery) aiq.Query;
             Agent a = q.AddAgent();
             a.JID = new JID("hildjj@jabber.com");
-            Assert.AreEqual("<iq id=\"JN_1\" type=\"get\"><query xmlns=\"jabber:iq:agents\">" +
+            Assert.AreEqual("<iq id=\""+aiq.ID+"\" type=\"get\"><query xmlns=\"jabber:iq:agents\">" +
                 "<agent jid=\"hildjj@jabber.com\" /></query></iq>",
                 aiq.ToString());
         }
@@ -75,14 +75,14 @@ namespace test.jabber.protocol.iq
             a.JID = new JID("hildjj@jabber.com");
             a.Transport = true;
             Assert.AreEqual(a.Transport, true);
-            Assert.AreEqual("<iq id=\"JN_1\" type=\"result\"><query xmlns=\"jabber:iq:agents\">" +
+            Assert.AreEqual("<iq id=\""+aiq.ID+"\" type=\"result\"><query xmlns=\"jabber:iq:agents\">" +
                 "<agent jid=\"hildjj@jabber.com\"><transport /></agent></query></iq>",
                 aiq.ToString());
             a.Transport = false;
             Assert.AreEqual(a.Transport, false);
             a.Groupchat = true;
             Assert.AreEqual(a.Groupchat, true);
-            Assert.AreEqual("<iq id=\"JN_1\" type=\"result\"><query xmlns=\"jabber:iq:agents\">" +
+            Assert.AreEqual("<iq id=\""+aiq.ID+"\" type=\"result\"><query xmlns=\"jabber:iq:agents\">" +
                 "<agent jid=\"hildjj@jabber.com\"><groupchat /></agent></query></iq>",
                 aiq.ToString());
         }

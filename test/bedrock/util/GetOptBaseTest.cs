@@ -216,6 +216,8 @@ namespace test.bedrock.util
 
     public class TestGetOpt : GetOpt
     {
+        [CommandLine("nologo", Description="Command line argument for NUnit.")]
+        public bool nologo = false;
         [CommandLine("f", Description = "Foo or not")]
         public bool foo = false;
         [CommandLine(Description = "What's in a bar?")]

@@ -129,7 +129,7 @@ namespace jabber.connection
             m_sock = new AsyncSocket(null, this, (bool)m_listener[Options.SSL], false);
 #if NET20
             ((AsyncSocket)m_sock).LocalCertificate = m_listener[Options.LOCAL_CERTIFICATE] as
-                System.Security.Cryptography.X509Certificates.X509Certificate;
+                System.Security.Cryptography.X509Certificates.X509Certificate2;
 #endif
             m_sock.Accept(new Address((int)m_listener[Options.PORT]));
             m_sock.RequestAccept();

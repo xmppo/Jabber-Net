@@ -101,6 +101,7 @@ namespace bedrock.util
                 args = new string[e.Length - 1];
                 Array.Copy(e, 1, args, 0, e.Length-1);
             }
+
             for (i=0; i<args.Length; i++)
             {
                 rm = FLAG_REGEX.Match(args[i]);

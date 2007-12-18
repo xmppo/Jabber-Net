@@ -23,6 +23,9 @@ namespace xpnet
      * @see Encoding#movePosition
      * @version $Revision$ $Date$
      */
+    ///<summary>
+    /// Position of an entry in a table.
+    ///</summary>
     [SVN(@"$Id$")]
     public class Position : System.ICloneable
     {

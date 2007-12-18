@@ -141,9 +141,9 @@ namespace jabber.connection
         /// <summary>
         /// Factory to create StanzaStream's.
         /// </summary>
-        /// <param name="kind"></param>
-        /// <param name="listener"></param>
-        /// <returns></returns>
+        /// <param name="kind">How to connect?  Socket?  Polling?</param>
+        /// <param name="listener">Connection event listeners</param>
+        /// <returns>StanzaStream used to connect to an XMPP server and send stanzas</returns>
         public static StanzaStream Create(ConnectionType kind, IStanzaEventListener listener)
         {
             switch (kind)

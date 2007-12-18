@@ -1,0 +1,73 @@
+﻿<project schemaVersion="1.6.0.2">
+    <assemblies>
+        <assembly assemblyPath=".\bin5\Debug\jabber-net.dll" xmlCommentsPath=".\bin5\Debug\2005-jabber-net.xml" commentsOnly="False" />
+        <assembly assemblyPath=".\muzzle\bin5\Debug\muzzle.dll" xmlCommentsPath=".\muzzle\bin5\Debug\muzzle.xml" commentsOnly="False" />
+    </assemblies>
+    <namespaceSummaries>
+        <namespaceSummaryItem name="" isDocumented="False" />
+        <namespaceSummaryItem name="bedrock" isDocumented="True">Low-level utility routines.</namespaceSummaryItem>
+        <namespaceSummaryItem name="bedrock.collections" isDocumented="True">Collection classes not in the .Net framework</namespaceSummaryItem>
+        <namespaceSummaryItem name="bedrock.io" isDocumented="True">Input/output classes</namespaceSummaryItem>
+        <namespaceSummaryItem name="bedrock.net" isDocumented="True">Async network access</namespaceSummaryItem>
+        <namespaceSummaryItem name="bedrock.util" isDocumented="True">General utilities</namespaceSummaryItem>
+        <namespaceSummaryItem name="jabber" isDocumented="True">Jabber-specific classes</namespaceSummaryItem>
+        <namespaceSummaryItem name="jabber.client" isDocumented="True">Client connection oriented classes</namespaceSummaryItem>
+        <namespaceSummaryItem name="jabber.connection" isDocumented="True">Base classes for client and service connections</namespaceSummaryItem>
+        <namespaceSummaryItem name="jabber.connection.sasl" isDocumented="False" />
+        <namespaceSummaryItem name="jabber.protocol" isDocumented="True">Jabber protocol implementation</namespaceSummaryItem>
+        <namespaceSummaryItem name="jabber.protocol.accept" isDocumented="True">jabber:component:accept namespace, for services.</namespaceSummaryItem>
+        <namespaceSummaryItem name="jabber.protocol.client" isDocumented="True">jabber:client namespace.  The meat of the protocol.</namespaceSummaryItem>
+        <namespaceSummaryItem name="jabber.protocol.iq" isDocumented="True">The jabber:iq:* namespaces.</namespaceSummaryItem>
+        <namespaceSummaryItem name="jabber.protocol.stream" isDocumented="True">etherx namespace.  stream:stream and friends.</namespaceSummaryItem>
+        <namespaceSummaryItem name="jabber.protocol.x" isDocumented="True">The jabber:x:* namespaces.</namespaceSummaryItem>
+        <namespaceSummaryItem name="jabber.server" isDocumented="True">Service connections and utilties for extending the functionality of a Jabber server.</namespaceSummaryItem>
+        <namespaceSummaryItem name="muzzle" isDocumented="True">User interface elements that might be useful if doing Jabber programming.</namespaceSummaryItem>
+        <namespaceSummaryItem name="stringprep" isDocumented="True">Library for canonicalizing Unicode strings</namespaceSummaryItem>
+        <namespaceSummaryItem name="stringprep.steps" isDocumented="True">Steps along the path to Unicode canonicalization.</namespaceSummaryItem>
+        <namespaceSummaryItem name="stringprep.unicode" isDocumented="True">Unicode data.</namespaceSummaryItem>
+        <namespaceSummaryItem name="xpnet" isDocumented="True">Partial port of James Clark's XP XML parser to .Net.  See http://www.jclark.com/xml/ for more details.</namespaceSummaryItem>
+    </namespaceSummaries>
+    <additionalContent>
+        <contentItem sourcePath=".\docs\howto.htm" destPath="" excludeItems="False" />
+    </additionalContent>
+    <dependencies>
+        <dependencyItem depPath=".\lib20\*.*" />
+    </dependencies>
+    <ProjectSummary />
+    <MissingTags>Summary, Parameter, Returns, AutoDocumentCtors, Namespace</MissingTags>
+    <VisibleItems>InheritedMembers, InheritedFrameworkMembers, Protected, SealedProtected</VisibleItems>
+    <HtmlHelp1xCompilerPath path="" />
+    <HtmlHelp2xCompilerPath path="" />
+    <OutputPath>.\Help\</OutputPath>
+    <SandcastlePath path="..\..\..\..\..\Program Files\Sandcastle\" />
+    <WorkingPath path="" />
+    <CleanIntermediates>True</CleanIntermediates>
+    <KeepLogFile>True</KeepLogFile>
+    <HelpFileFormat>Help1xAnd2xAndWebsite</HelpFileFormat>
+    <PurgeDuplicateTopics>True</PurgeDuplicateTopics>
+    <CppCommentsFixup>False</CppCommentsFixup>
+    <FrameworkVersion>2.0.50727</FrameworkVersion>
+    <BinaryTOC>True</BinaryTOC>
+    <IncludeFavorites>False</IncludeFavorites>
+    <Preliminary>False</Preliminary>
+    <RootNamespaceContainer>False</RootNamespaceContainer>
+    <RootNamespaceTitle />
+    <HelpTitle>Jabber-NET: An XMPP library for .Net</HelpTitle>
+    <HtmlHelpName>jabber-net</HtmlHelpName>
+    <Language>en-US</Language>
+    <CopyrightHref>http://www.cursive.net</CopyrightHref>
+    <CopyrightText>Copyright (c) 2007 Cursive Systems, Inc.</CopyrightText>
+    <FeedbackEMailAddress>jabber-net@googlegroups.com</FeedbackEMailAddress>
+    <HeaderText />
+    <FooterText>&lt;a href='http://code.google.com/p/jabber-net/'&gt;More Information&lt;/a&gt;</FooterText>
+    <ProjectLinkType>Local</ProjectLinkType>
+    <SdkLinkType>Msdn</SdkLinkType>
+    <SdkLinkTarget>Self</SdkLinkTarget>
+    <PresentationStyle>vs2005</PresentationStyle>
+    <NamingMethod>Guid</NamingMethod>
+    <SyntaxFilters>Standard</SyntaxFilters>
+    <ShowFeedbackControl>False</ShowFeedbackControl>
+    <ContentPlacement>AboveNamespaces</ContentPlacement>
+    <ContentSiteMap path="" />
+    <TopicFileTransform path="" />
+</project>

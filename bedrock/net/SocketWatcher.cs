@@ -50,7 +50,7 @@ namespace bedrock.net
         private bool        m_synch = false;
 
 #if NET20 || __MonoCS__
-        private X509Certificate m_cert = null;
+        private X509Certificate2 m_cert = null;
         private bool m_requireClientCert = false;
 #elif !NO_SSL
         private Certificate m_cert = null;
@@ -107,7 +107,7 @@ namespace bedrock.net
         /// <summary>
         /// The certificate to be used for the local side of sockets, with SSL on.
         /// </summary>
-        public X509Certificate LocalCertificate
+        public X509Certificate2 LocalCertificate
         {
             get { return m_cert; }
             set { m_cert = value; }

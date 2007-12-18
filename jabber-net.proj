@@ -29,19 +29,72 @@
     <ZipFiles Include="mono\Release\*.*" Exclude="@(DefaultExclude)" />
   </ItemGroup>
 
-  <Target Name="Compile">
-    <MSBuild Projects="mono-jabber-net.csproj"
-             Properties="TargetFrameworkVersion=Mono v2.0" />
+  <Target Name="Compile" DependsOnTargets="Version">
     <Exec Command="&quot;C:\Program Files\Microsoft Visual Studio .NET 2003\Common7\IDE\devenv&quot; 2003-jabber-net.sln /Build Release /Project Setup" />
+  </Target>
+
+  <Target Name="Compile2005" DependsOnTargets="Version">
+    <Exec Command="&quot;C:\Program Files\Microsoft Visual Studio 8\Common7\IDE\devenv&quot; 2005-jabber-net.sln /Build Debug /Project 2005-jabber-net" />
+    <Exec Command="&quot;C:\Program Files\Microsoft Visual Studio 8\Common7\IDE\devenv&quot; 2005-jabber-net.sln /Build Debug /Project 2005-muzzle" />
+    <Exec Command="&quot;C:\Program Files\Microsoft Visual Studio 8\Common7\IDE\devenv&quot; 2005-jabber-net.sln /Build Debug /Project 2005-test" />
+  </Target>
+
+  <Target Name="Setup2005" DependsOnTargets="NUnit2005;Doc">
     <Exec Command="&quot;C:\Program Files\Microsoft Visual Studio 8\Common7\IDE\devenv&quot; 2005-jabber-net.sln /Build Release /Project 2005-Setup" />
   </Target>
 
-  <Target Name="Zip" DependsOnTargets="Compile">
+  <Target Name="CompileMono" DependsOnTargets="Version">
+    <MSBuild Projects="mono-jabber-net.csproj"
+             Properties="TargetFrameworkVersion=Mono v2.0" />
+  </Target>
+
+  <Target Name="Version">
+      <SvnVersion LocalPath="$(MSBuildProjectDirectory)">
+          <Output TaskParameter="Revision" PropertyName="Revision"/>
+      </SvnVersion>
+
+      <Message Text="Version: $(Major).$(Minor).$(Build).$(Revision)"/>
+
+      <AssemblyInfo CodeLanguage="CS"
+          OutputFile="$(MSBuildProjectDirectory)\AssemblyInfo.cs"
+          AssemblyTitle="Jabber-Net library"
+          AssemblyDescription="Connect to Jabber (http://www.jabber.org/) from .Net"
+          AssemblyCompany="Cursive Systems, Inc."
+          AssemblyProduct="jabber-net"
+          AssemblyCopyright="Copyright (c) Cursive, Inc. 2000-2007"
+          AssemblyConfiguration=""
+          AssemblyTrademark=""
+          AssemblyCulture=""
+          AssemblyVersion="$(Major).$(Minor).$(Build).$(Revision)"
+          AssemblyDelaySign="false"
+          CLSCompliant="true"
+          AssemblyKeyName=""
+          AssemblyKeyFile="../../jabbernet.key" />
+
+  </Target>
+
+  <Target Name="Zip" DependsOnTargets="CompileMono">
     <Zip Files="@(ZipFiles)"
          ZipFileName="Jabber-Net.Mono.v$(Major).$(Minor).$(Build).$(Revision).zip" />
   </Target>
 
-  <Target Name="Build" DependsOnTargets="Zip">
+  <ItemGroup>
+      <TestAssembly Include="test\bin5\Release\test.dll"/>
+  </ItemGroup>
+
+  <Target Name="NUnit2005" DependsOnTargets="Compile2005">
+      <NUnit Assemblies="@(TestAssembly)"/>
+  </Target>
+
+  <Target Name="NDoc" DependsOnTargets="Compile2005">
+      <NDoc Documenter="MSDN" ProjectFilePath="docs\jabber-net.ndoc"/>
+  </Target>
+
+  <Target Name="Doc" DependsOnTargets="Compile2005">
+    <Exec Command="&quot;C:\Program Files\EWSoftware\Sandcastle Help File Builder\SandcastleBuilderConsole.exe&quot; jabber-net-helpfilebuilder.shfb" />
+  </Target>
+
+  <Target Name="Build" DependsOnTargets="Zip;Compile;Setup2005">
     <Message Text="Jabber-NET Mono Build Complete"/>
   </Target>
 

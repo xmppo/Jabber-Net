@@ -20,7 +20,7 @@ using bedrock.util;
 namespace bedrock.net
 {
     /// <summary>
-    /// Proxy object for sockets that want to do SHHTP proxying.
+    /// Proxy object for sockets that want to do SHTTP proxying.
     /// </summary>
     [SVN(@"$Id$")]
     public class ShttpProxy : ProxySocket

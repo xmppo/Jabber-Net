@@ -241,7 +241,7 @@ namespace jabber.connection
 
 #if NET20
                 ((AsyncSocket)m_sock).LocalCertificate = m_listener[Options.LOCAL_CERTIFICATE] as
-                    System.Security.Cryptography.X509Certificates.X509Certificate;
+                    System.Security.Cryptography.X509Certificates.X509Certificate2;
 
                 ((AsyncSocket)m_sock).CertificateGui = (bool)m_listener[Options.CERTIFICATE_GUI];
 #endif
@@ -256,7 +256,7 @@ namespace jabber.connection
                 proxy.Socket = new AsyncSocket(null, proxy, (bool)m_listener[Options.SSL], false);
 #if NET20
                 ((AsyncSocket)proxy.Socket).LocalCertificate = m_listener[Options.LOCAL_CERTIFICATE] as
-                    System.Security.Cryptography.X509Certificates.X509Certificate;
+                    System.Security.Cryptography.X509Certificates.X509Certificate2;
 #endif
 
                 proxy.Host = m_listener[Options.PROXY_HOST] as string;
@@ -306,7 +306,7 @@ namespace jabber.connection
                 m_accept = new AsyncSocket(null, this, (bool)m_listener[Options.SSL], false);
 #if NET20
                 ((AsyncSocket)m_accept).LocalCertificate = m_listener[Options.LOCAL_CERTIFICATE] as
-                    System.Security.Cryptography.X509Certificates.X509Certificate;
+                    System.Security.Cryptography.X509Certificates.X509Certificate2;
 #endif
                 Address addr = new Address((string)m_listener[Options.NETWORK_HOST],
                     (int)m_listener[Options.PORT]);

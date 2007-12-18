@@ -26,24 +26,34 @@ namespace test.bedrock.net
     [TestFixture]
     public class AsyncSocketTest : ISocketEventListener
     {
-        private static System.Text.Encoding ENC = System.Text.Encoding.ASCII;
+        private static readonly System.Text.Encoding ENC = System.Text.Encoding.ASCII;
 
-        private static byte[] sbuf = ENC.GetBytes("01234567890123456789012345678901234567890123456789012345678901234567890123456789");
-        private object done = new object();
+        private static readonly byte[] sbuf = ENC.GetBytes("01234567890123456789012345678901234567890123456789012345678901234567890123456789");
+        private readonly object done = new object();
         private string success = null;
+
+        private bool succeeded = true;
+        private string errorMessage;
 
         [Test] public void Test_Write()
         {
             SocketWatcher w = new SocketWatcher(20);
             Address a = new Address("127.0.0.1", 7001);
             a.Resolve();
+
             AsyncSocket listen = w.CreateListenSocket(this, a);
             listen.RequestAccept();
-            AsyncSocket connect = w.CreateConnectSocket(this, a);
-            lock(done)
+
+            AsyncSocket connect;
+            lock (done)
             {
-                Monitor.Wait(done);
+                connect = w.CreateConnectSocket(this, a);
+                bool NoTimeout = Monitor.Wait(done, new TimeSpan(0, 0, 30));
+
+                Assert.IsTrue(NoTimeout, "The read command didn't complete in time.");
+                Assert.IsTrue(succeeded, errorMessage);
             }
+
             Assert.AreEqual("5678901234", success);
             connect.Close();
             listen.Close();
@@ -135,9 +145,14 @@ namespace test.bedrock.net
             sock.Close();
         }
 
-        public void OnError(BaseSocket sock, System.Exception ex)
+        public void OnError(BaseSocket sock, Exception ex)
         {
-
+            lock (done)
+            {
+                succeeded = false;
+                errorMessage = ex.Message;
+                Monitor.Pulse(done);
+            }
         }
 
         public void OnConnect(BaseSocket sock)

@@ -48,7 +48,7 @@ namespace test.jabber.protocol.iq
             Roster r = (Roster) riq.Query;
             Item i = r.AddItem();
             i.JID = new JID("hildjj@jabber.com");
-            Assert.AreEqual("<iq id=\"JN_1\" type=\"get\"><query xmlns=\"jabber:iq:roster\">" +
+            Assert.AreEqual("<iq id=\""+riq.ID+"\" type=\"get\"><query xmlns=\"jabber:iq:roster\">" +
                 "<item jid=\"hildjj@jabber.com\" /></query></iq>",
                 riq.ToString());
         }
@@ -74,15 +74,15 @@ namespace test.jabber.protocol.iq
             Item i = r.AddItem();
             i.JID = new JID("hildjj@jabber.com");
             Group g = i.AddGroup("foo");
-            Assert.AreEqual("<iq id=\"JN_1\" type=\"get\"><query xmlns=\"jabber:iq:roster\">" +
+            Assert.AreEqual("<iq id=\""+riq.ID+"\" type=\"get\"><query xmlns=\"jabber:iq:roster\">" +
                 "<item jid=\"hildjj@jabber.com\"><group>foo</group></item></query></iq>",
                 riq.ToString());
             g = i.AddGroup("foo");
-            Assert.AreEqual("<iq id=\"JN_1\" type=\"get\"><query xmlns=\"jabber:iq:roster\">" +
+            Assert.AreEqual("<iq id=\""+riq.ID+"\" type=\"get\"><query xmlns=\"jabber:iq:roster\">" +
                 "<item jid=\"hildjj@jabber.com\"><group>foo</group></item></query></iq>",
                 riq.ToString());
             g = i.AddGroup("bar");
-            Assert.AreEqual("<iq id=\"JN_1\" type=\"get\"><query xmlns=\"jabber:iq:roster\">" +
+            Assert.AreEqual("<iq id=\""+riq.ID+"\" type=\"get\"><query xmlns=\"jabber:iq:roster\">" +
                 "<item jid=\"hildjj@jabber.com\"><group>foo</group><group>bar</group></item></query></iq>",
                 riq.ToString());
             Assert.AreEqual(2, i.GetGroups().Length);

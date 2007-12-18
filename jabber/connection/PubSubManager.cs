@@ -11,19 +11,16 @@
  * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
+
 using System;
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Xml;
-
 using bedrock.util;
-using bedrock.collections;
-
-using jabber;
 using jabber.protocol;
-using jabber.protocol.iq;
 using jabber.protocol.client;
+using jabber.protocol.iq;
 
 namespace jabber.connection
 {
@@ -44,7 +41,7 @@ namespace jabber.connection
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
         private Hashtable m_nodes = new Hashtable();
 
         /// <summary>
@@ -151,7 +148,7 @@ namespace jabber.connection
     [SVN(@"$Id$")]
     public class ItemList : ArrayList
     {
-        private System.Collections.Hashtable m_index = new System.Collections.Hashtable();
+        private Hashtable m_index = new Hashtable();
         private PubSubNode m_node = null;
 
         /// <summary>
@@ -181,7 +178,7 @@ namespace jabber.connection
             m_node.ItemRemoved(item);
 
             // renumber
-            for (int i=index; i<this.Count; i++)
+            for (int i=index; i<Count; i++)
             {
                 item = (PubSubItem)this[i];
                 id = item.ID;
@@ -205,9 +202,9 @@ namespace jabber.connection
             int i;
             if (id == "")
             {
-                if (this.Count == this.Capacity)
+                if (Count == Capacity)
                 {
-                    this.RemoveAt(0);
+                    RemoveAt(0);
                 }
                 i = base.Add(value);
                 m_node.ItemAdded(item);
@@ -215,8 +212,8 @@ namespace jabber.connection
             }
 
             RemoveId(id);
-            if (this.Count == this.Capacity)
-                this.RemoveAt(0);
+            if (Count == Capacity)
+                RemoveAt(0);
 
             i = base.Add(value);
             m_index[id] = i;
@@ -232,7 +229,7 @@ namespace jabber.connection
         {
             object index = m_index[id];
             if (index != null)
-                this.RemoveAt((int)index);
+                RemoveAt((int)index);
         }
 
         /// <summary>
@@ -348,11 +345,15 @@ namespace jabber.connection
         private string      m_node = null;
         private ItemList    m_items = null;
 
+        ///<summary>
+        ///</summary>
         public JID Jid
         {
             get { return m_jid; }
         }
 
+        ///<summary>
+        ///</summary>
         public string Node
         {
             get { return m_node; }
@@ -415,7 +416,7 @@ namespace jabber.connection
 
         private void FireError(Op op, string message, XmlElement protocol)
         {
-            Debug.WriteLine(string.Format("Error {0}ing pubsub node: {1}", op.ToString(), message));
+            Debug.WriteLine(string.Format("Error {0}ing pubsub node: {1}", op, message));
             this[op] = STATE.Error;
 
             if (OnError != null)
@@ -488,7 +489,7 @@ namespace jabber.connection
             iq.To = m_jid;
             iq.Type = IQType.set;
             iq.Query.AppendChild(m_stream.Document.CreateElement("configure", URI.PUBSUB));
-            m_stream.Tracker.BeginIQ(iq, new IqCB(GotCreated), null);
+            m_stream.Tracker.BeginIQ(iq, GotCreated, null);
         }
 
         private void GotCreated(object sender, IQ iq, object state)
@@ -569,41 +570,21 @@ namespace jabber.connection
                 this[Op.SUBSCRIBE] = STATE.Asking;
             }
 
-            sendCommand(PubSubCommandType.subscribe, GotSubscribed, addInfo);
-
+            PubSubIQ iq = createCommand(PubSubCommandType.subscribe);
+            addInfo(iq);
+            m_stream.Tracker.BeginIQ(iq, GotSubscribed, null);
             // don't parallelize getItems, in case sub fails.
         }
 
-        private delegate void addInfoFunc(PubSubIQ iq);
-        private void sendCommand(PubSubCommandType type, IqCB callback, addInfoFunc func)
-        {
-            m_stream.OnProtocol += m_stream_OnProtocol;
-            PubSubIQ iq = new PubSubIQ(m_stream.Document, type, m_node);
-            iq.To = m_jid;
-            iq.Type = IQType.set;
-            
-            if (func != null)
-                func(iq);
-
-            m_stream.Tracker.BeginIQ(iq, callback, null);
-        }
-
-#if !NET20
-        private delegate void addInfoFuncPlusArg(PubSubIQ iq, object arg);
-        private void sendCommand(PubSubCommandType type, IqCB callback,
-            addInfoFuncPlusArg func, object arg)
+        private PubSubIQ createCommand(PubSubCommandType type)
         {
             m_stream.OnProtocol += m_stream_OnProtocol;
             PubSubIQ iq = new PubSubIQ(m_stream.Document, type, m_node);
             iq.To = m_jid;
             iq.Type = IQType.set;
 
-            if (func != null)
-                func(iq, arg);
-
-            m_stream.Tracker.BeginIQ(iq, callback, null);
+            return iq;
         }
-#endif
 
         private void addInfo(PubSubIQ iq)
         {
@@ -681,7 +662,7 @@ namespace jabber.connection
             PubSubIQ piq = new PubSubIQ(m_stream.Document, PubSubCommandType.items, m_node);
             piq.To = m_jid;
             piq.Type = IQType.get;
-            m_stream.Tracker.BeginIQ(piq, new IqCB(GotItems), null);
+            m_stream.Tracker.BeginIQ(piq, GotItems, null);
         }
 
         private void GotItems(object sender, IQ iq, object state)
@@ -791,7 +772,8 @@ namespace jabber.connection
         /// </summary>
         public void Unsubscribe()
         {
-            sendCommand(PubSubCommandType.unsubscribe, GotUnsubsribed, null);
+            PubSubIQ iq = createCommand(PubSubCommandType.unsubscribe);
+            m_stream.Tracker.BeginIQ(iq, GotUnsubsribed, null);
         }
 
         private void GotUnsubsribed(object sender, IQ iq, object data)
@@ -804,7 +786,8 @@ namespace jabber.connection
         /// </summary>
         public void Delete()
         {
-            sendCommand(PubSubCommandType.delete, GotDelete, null);
+            PubSubIQ iq = createCommand(PubSubCommandType.delete);
+            m_stream.Tracker.BeginIQ(iq, GotDelete, null);
         }
 
         private void GotDelete(object sender, IQ iq, object data)
@@ -822,33 +805,11 @@ namespace jabber.connection
         /// <param name="id">Id of item.</param>
         public void DeleteItem(string id)
         {
-#if NET20
-            sendCommand(PubSubCommandType.retract, OnDeleteNode,
-                delegate(PubSubIQ iq)
-                {
-                    XmlElement element = iq.OwnerDocument.CreateElement("item");
-                    element.InnerText = id;
-                    iq.Command.AppendChild(element);
-                });
-#else
-            sendCommand(PubSubCommandType.retract, OnDeleteNode,
-                AddElementToDeleteNode, id);
-#endif
+            PubSubIQ iq = createCommand(PubSubCommandType.retract);
+            Retract retract = (Retract)iq.Command;
+            retract.AddItem(id);
+            m_stream.Tracker.BeginIQ(iq, OnDeleteNode, null);
         }
-
-#if !NET20
-        private static void AddElementToDeleteNode(PubSubIQ iq, object arg)
-        {
-            string id = arg as string;
-
-            if (id != null)
-            {
-                XmlElement element = iq.OwnerDocument.CreateElement("item");
-                element.InnerText = id;
-                iq.Command.AppendChild(element);
-            }
-        }
-#endif
 
         private void OnDeleteNode(object sender, IQ iq, object data)
         {
