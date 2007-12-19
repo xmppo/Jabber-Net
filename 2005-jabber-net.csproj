@@ -440,6 +440,9 @@
   <ItemGroup>
     <EmbeddedResource Include="jabber\connection\PubSubManager.bmp" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="jabber\connection\ConferenceManager.bmp" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>
