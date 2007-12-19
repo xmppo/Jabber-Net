@@ -91,6 +91,7 @@ $(BASEDIR)/jabber/protocol/iq/Disco.cs \
 $(BASEDIR)/jabber/protocol/iq/Factory.cs \
 $(BASEDIR)/jabber/protocol/iq/GeoLoc.cs \
 $(BASEDIR)/jabber/protocol/iq/Last.cs \
+$(BASEDIR)/jabber/protocol/iq/MUC.cs \
 $(BASEDIR)/jabber/protocol/iq/OOB.cs \
 $(BASEDIR)/jabber/protocol/iq/PubSub.cs \
 $(BASEDIR)/jabber/protocol/iq/Register.cs \
@@ -153,7 +154,9 @@ SYSTEM_REFERENCES = -r:zlib.net.dll -r:System.dll -r:System.Xml.dll -r:Mono.Secu
 
 DEBUGDIR = $(BASEDIR)/bin/debug
 
-MCS_OPTIONS = -lib:$(DEBUGDIR),$(BASEDIR)/lib $(DEBUG) -define:DEBUG
+MCS=gmcs
+
+MCS_OPTIONS = -lib:$(DEBUGDIR),$(BASEDIR)/lib20 $(DEBUG) -define:DEBUG
 
 ASSEMBLIES =
 DLL = $(DEBUGDIR)/jabber-net.dll
@@ -165,7 +168,7 @@ all:  $(DLL) $(SUBDIRS)
 
 $(DLL): $(SOURCES)
 	-mkdir -p bin/debug
-	mcs $(MCS_OPTIONS) -target:library \
+	$(MCS) $(MCS_OPTIONS) -target:library \
 	-out:"$@" $(RESOURCES) $(SYSTEM_REFERENCES) \
 	$^ $(ASSEMBLIES) 
 

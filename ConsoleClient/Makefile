@@ -27,6 +27,7 @@ RESOURCES =
 SYSTEM_REFERENCES = -r:System.dll -r:System.Xml.dll
 
 OUTDIR = $(BASEDIR)/bin/debug
+MCS=gmcs
 MCS_OPTIONS = -lib:$(OUTDIR) -debug -define:DEBUG
 
 OUTFILE = $(OUTDIR)/console-client.exe
@@ -39,8 +40,8 @@ $(OUTDIR):
 
 $(OUTFILE): $(OUTDIR) $(SOURCES) $(JNDLL)
 	cp -f $(JNDLL) $(OUTDIR)
-	cp -f $(BASEDIR)/../lib/*.dll $(OUTDIR)
-	mcs $(MCS_OPTIONS) -target:exe \
+	cp -f $(BASEDIR)/../lib20/*.dll $(OUTDIR)
+	$(MCS) $(MCS_OPTIONS) -target:exe \
 	-out:$(OUTFILE) $(RESOURCES) $(SYSTEM_REFERENCES) $(ASSEMBLIES)  \
 	$(SOURCES) 
 
