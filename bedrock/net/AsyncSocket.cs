@@ -497,7 +497,7 @@ namespace bedrock.net
         /// </summary>
         public Certificate RemoteCertificate
         {
-            get { return m_sock.RemoteCertificate; }
+			get { return m_sock.RemoteCertificate; }
         }
 
         /// <summary>
@@ -1165,8 +1165,17 @@ namespace bedrock.net
         /// </summary>
         public override void StartTLS()
         {
-            SecurityOptions options = new SecurityOptions(SSLProtocols, null, m_credUse, CredentialVerification.Manual, new CertVerifyEventHandler(OnVerify), m_addr.Hostname, SecurityFlags.Default, SslAlgorithms.ALL, null);
+            SecurityOptions options = new SecurityOptions(SSLProtocols, null, m_credUse, CredentialVerification.Manual, new CertVerifyEventHandler(OnVerify), m_hostid, SecurityFlags.Default, SslAlgorithms.ALL, null);
             m_sock.ChangeSecurityProtocol(options);
+
+			// sweet holy race condition, batman.  Just move to 2k5 if you want to complain about this.
+			int count = 0;
+			while (m_sock.ActiveEncryption == SslAlgorithms.NONE)
+			{
+				if (count++ > 1000)
+					throw new Org.Mentalis.Security.SecurityException("Timeout negotiating SSL/TLS");
+				Thread.Sleep(100);
+			}
         }
 #endif
 
