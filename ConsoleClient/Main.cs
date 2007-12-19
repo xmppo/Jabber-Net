@@ -56,6 +56,9 @@ namespace ConsoleClient
         [CommandLine("u", "Untrusted certificates OK", false)]
         public bool untrustedOK = false;
 
+        [CommandLine("i", "Do not send initial presence", false)]
+        public bool initialPresence = true;
+
         public Class1(string[] args)
         {            
             JabberClient jc = new JabberClient();
@@ -97,6 +100,7 @@ namespace ConsoleClient
             jc.Resource = "Jabber.Net Console Client";
             jc.Password = pass;
             jc.AutoStartTLS = TLS;
+            jc.AutoPresence = initialPresence;
 
             if (certificateFile != null)
             {
