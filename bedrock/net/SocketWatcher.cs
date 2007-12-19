@@ -160,7 +160,7 @@ namespace bedrock.net
             Mono.Security.X509.PKCS12 pfx =
                 new Mono.Security.X509.PKCS12(data, password);
             if (pfx.Certificates.Count > 0)
-                m_cert = new X509Certificate(pfx.Certificates[0].RawData);
+                m_cert = new X509Certificate2(pfx.Certificates[0].RawData);
             // TODO: check cert for validity
         }
 #endif
