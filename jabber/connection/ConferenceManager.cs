@@ -20,6 +20,7 @@ using bedrock.util;
 using jabber.protocol;
 using jabber.protocol.client;
 using jabber.protocol.iq;
+using jabber.client;
 
 namespace jabber.connection
 {
@@ -92,9 +93,30 @@ namespace jabber.connection
             Room r = (Room)m_rooms[roomAndNick];
             if (r != null)
                 return r;
-            r = new Room(this.Stream, roomAndNick);
+            r = new Room(this, this.Stream, roomAndNick);
             m_rooms[roomAndNick] = r;
             return r;
+        }
+
+        /// <summary>
+        /// Is this room being managed by this manager?
+        /// </summary>
+        /// <param name="roomAndNick"></param>
+        /// <returns></returns>
+        public bool HasRoom(JID roomAndNick)
+        {
+            return m_rooms.ContainsKey(roomAndNick);
+        }
+
+        /// <summary>
+        /// Remove the room from the list.
+        /// Should most often be called by Room.Leave()
+        /// If the room does not exist, no exception is thrown.
+        /// </summary>
+        /// <param name="roomAndNick"></param>
+        public void RemoveRoom(JID roomAndNick)
+        {
+            m_rooms.Remove(roomAndNick);
         }
 	}
 
@@ -124,32 +146,39 @@ namespace jabber.connection
             configGet,
             configSet,
             running,
+            leaving,
             error
         }
 
         private STATE m_state = STATE.start;
         private JID m_jid;
-        private string m_room; // room@conference, bare JID.
+        private JID m_room; // room@conference, bare JID.
         private XmppStream m_stream;
         private bool m_default = false;
+        private ConferenceManager m_manager;
 
         /// <summary>
         /// Create.
         /// </summary>
+        /// <param name="manager"></param>
         /// <param name="stream"></param>
         /// <param name="roomAndNick">room@conference/nick, where "nick" is the desred nickname in the room.</param>
-        public Room(XmppStream stream, JID roomAndNick)
+        internal Room(ConferenceManager manager, XmppStream stream, JID roomAndNick)
         {
-            if (stream == null)
-                throw new ArgumentNullException("stream");
+            Debug.Assert(manager != null);
+            Debug.Assert(stream != null);
             if (roomAndNick == null)
                 throw new ArgumentNullException("roomAndNick");
             if (roomAndNick.Resource == null)
                 roomAndNick.Resource = m_stream.JID.User;
+            m_manager = manager;
             m_stream = stream;
             m_jid = roomAndNick;
-            m_room = m_jid.Bare;
+            m_room = new JID(m_jid.User, m_jid.Server, null);
             m_stream.OnProtocol += new jabber.protocol.ProtocolHandler(m_stream_OnProtocol);
+            JabberClient jc = m_stream as JabberClient;
+            if (jc != null)
+                jc.OnAfterPresenceOut += new jabber.client.PresenceHandler(m_stream_OnAfterPresenceOut);
         }
 
         /// <summary>
@@ -174,10 +203,23 @@ namespace jabber.connection
             set { m_default = value; }
         }
 
+        /// <summary>
+        /// Whenver we change presence, send the new presence to the room, including
+        /// caps etc.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="pres"></param>
+        private void m_stream_OnAfterPresenceOut(object sender, Presence pres)
+        {
+            Presence p = (Presence)pres.CloneNode(true);
+            p.To = m_room;
+            m_stream.Write(p);
+        }
+
         private void m_stream_OnProtocol(object sender, System.Xml.XmlElement rp)
         {
             JID from = (JID)rp.GetAttribute("from");
-            if (from.Bare != m_room)
+            if (from.Bare != (string)m_room)
                 return;  // not for this room.
 
             Presence p = rp as Presence;
@@ -191,19 +233,22 @@ namespace jabber.connection
                     return;
                 }
 
-                if (m_state == STATE.join)
+                switch (m_state)
                 {
-                    UserX x = p["x", URI.MUC_USER] as UserX;
-                    if (x == null)
-                    {
-                        // Old server.  Hope for the best.
-                        m_state = STATE.running;
-                    }
-                    else
-                    {
+                case STATE.join:
+                    OnJoinPresence(p);
+                    break;
+                case STATE.leaving:
+                    OnLeavePresence(p);
+                    break;
+                }
+            }
+        }
+
+        private void OnJoinPresence(Presence p)
+        {
 /*
 <presence
-    from='darkcave@macbeth.shakespeare.lit/firstwitch'
     to='crone1@shakespeare.lit/desktop'>
   <x xmlns='http://jabber.org/protocol/muc#user'>
     <item affiliation='owner'
@@ -212,20 +257,56 @@ namespace jabber.connection
   </x>
 </presence>
  */
-                        if (x.HasStatus(RoomStatus.CREATED))
-                        {
-                            // room was created.  this must be me.
-                            Configure();
-                        }
-                        else if (x.HasStatus(RoomStatus.SELF))
-                        {
-                            // if it wasn't created, and this is mine, we must be running.
-                            m_state = STATE.running;
-                        }
-                    }
-                }
+            UserX x = p["x", URI.MUC_USER] as UserX;
+            if (x == null)
+            {
+                // Old server.  Hope for the best.
+                m_state = STATE.running;
+                return;
             }
 
+            if (x.HasStatus(RoomStatus.CREATED))
+            {
+                // room was created.  this must be me.
+                Configure();
+            }
+            else if (x.HasStatus(RoomStatus.SELF))
+            {
+                // if it wasn't created, and this is mine, we must be running.
+                m_state = STATE.running;
+            }
+        }
+
+        private void OnLeavePresence(Presence p)
+        {
+/*
+<presence
+    to='hag66@shakespeare.lit/pda'
+    type='unavailable'>
+  <x xmlns='http://jabber.org/protocol/muc#user'>
+    <item affiliation='member' role='none'/>
+    <status code='110'/>
+  </x>
+</presence>
+ */
+            // race.  someone entered just after we tried to leave.
+            if (p.Type != PresenceType.unavailable)
+                return;
+
+            // if this is an old server, the first unavail we get
+            // is the ack.  Otherwise, wait for our own.
+            UserX x = p["x", URI.MUC_USER] as UserX;
+            if (x != null)
+            {
+                if (!x.HasStatus(RoomStatus.SELF))
+                    return;
+            }
+
+            m_stream.OnProtocol -= new jabber.protocol.ProtocolHandler(m_stream_OnProtocol);
+            jabber.client.JabberClient jc = m_stream as jabber.client.JabberClient;
+            if (jc != null)
+                jc.OnAfterPresenceOut -= new jabber.client.PresenceHandler(m_stream_OnAfterPresenceOut);
+            m_manager.RemoveRoom(m_jid); // should cause this object to GC.
         }
 
         /// <summary>
@@ -237,8 +318,7 @@ namespace jabber.connection
             if (m_default)
             { // "Instant" room.  take the default config
 /*
-<iq from='crone1@shakespeare.lit/desktop'
-    id='create1'
+<iq id='create1'
     to='darkcave@macbeth.shakespeare.lit'
     type='set'>
   <query xmlns='http://jabber.org/protocol/muc#owner'>
@@ -257,8 +337,7 @@ namespace jabber.connection
             else
             { // "Reserved" room.  Get the config form.
 /*
-<iq from='crone1@shakespeare.lit/desktop'
-    id='create1'
+<iq id='create1'
     to='darkcave@macbeth.shakespeare.lit'
     type='get'>
   <query xmlns='http://jabber.org/protocol/muc#owner'/>
@@ -315,6 +394,75 @@ namespace jabber.connection
             }
             RoomPresence pres = new RoomPresence(m_stream.Document, m_jid);
             m_stream.Write(pres);
+        }
+
+        /// <summary>
+        /// Exit the room.  This cleans up the entry in the ConferenceManager, as well.
+        /// </summary>
+        /// <param name="reason">Reason for leaving the room.  May be null for no reason.</param>
+        public void Leave(string reason)
+        {
+            m_state = STATE.leaving;
+
+/*
+<presence
+    to='darkcave@macbeth.shakespeare.lit/oldhag'
+    type='unavailable'>
+  <status>gone where the goblins go</status>
+</presence>
+ */
+            Presence p = new Presence(m_stream.Document);
+            p.To = m_jid;
+            p.Type = PresenceType.unavailable;
+            if (reason != null)
+                p.Status = reason;
+            m_stream.Write(p);
+
+
+            // cleanup done when unavailable/110 received.
+        }
+
+        /// <summary>
+        /// Send a message to everyone currently in the room.
+        /// </summary>
+        /// <param name="body">The message text to send.</param>
+        public void PublicMessage(string body)
+        {
+/*
+<message
+    to='darkcave@macbeth.shakespeare.lit'
+    type='groupchat'>
+  <body>Harpier cries: 'tis time, 'tis time.</body>
+</message>
+ */
+            if (body == null)
+                throw new ArgumentNullException("body");
+            Message m = new Message(m_stream.Document);
+            m.To = m_room;
+            m.Type = MessageType.groupchat;
+            m.Body = body;
+            m_stream.Write(m);
+        }
+
+        public void PrivateMessage(string nick, string body)
+        {
+/*
+<message
+    to='darkcave@macbeth.shakespeare.lit/firstwitch'
+    type='chat'>
+  <body>I'll give thee a wind.</body>
+</message>
+ */
+            if (nick == null)
+                throw new ArgumentNullException("nick");
+            if (body == null)
+                throw new ArgumentNullException("body");
+
+            Message m = new Message(m_stream.Document);
+            m.To = new JID(m_room.User, m_room.Server, nick);
+            m.Type = MessageType.chat;
+            m.Body = body;
+            m_stream.Write(m);
         }
     }
 }
