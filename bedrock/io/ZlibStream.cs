@@ -168,11 +168,11 @@ namespace bedrock.io
             if (count <= 0)
                 throw new ArgumentException("Can't read 0 bytes", "count");
 
+            m_in.next_out = buffer;
+            m_in.next_out_index = offset;
+            m_in.avail_out = count;
             if (m_in.avail_in == 0)
             {
-                m_in.next_out = buffer;
-                m_in.next_out_index = offset;
-                m_in.avail_out = count;
                 m_in.next_in_index = 0;
                 return m_stream.BeginRead(m_inbuf, 0, bufsize, callback, state);
             }
@@ -397,7 +397,10 @@ namespace bedrock.io
 
             public System.Threading.WaitHandle AsyncWaitHandle
             {
-                get { throw new Exception("The method or operation is not implemented."); }
+                get 
+                { 
+                    throw new Exception("The method or operation is not implemented."); 
+                }
             }
 
             public bool CompletedSynchronously
