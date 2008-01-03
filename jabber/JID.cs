@@ -300,6 +300,8 @@ namespace jabber
         /// <returns></returns>
         public static implicit operator JID(string jid)
         {
+            if (jid == null)
+                return null;
             return new JID(jid);
         }
 
@@ -310,6 +312,8 @@ namespace jabber
         /// <returns></returns>
         public static implicit operator string(JID jid)
         {
+            if (jid == null)
+                return null;
             return jid.m_JID;
         }
 
