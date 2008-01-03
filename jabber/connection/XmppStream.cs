@@ -503,7 +503,18 @@ namespace jabber.connection
         public JID JID
         {
             // Make sure to set this option in subclasses.
-            get { return new JID((string)this[Options.JID]); }
+            get 
+            { 
+                object j = this[Options.JID];
+                if (j == null)
+                    return null;
+                if (j is JID)
+                    return (JID)j;
+                if (j is string)
+                    return new JID((string)j);
+                Debug.Assert(false, "Unknown JID type", j.GetType().ToString());
+                return null;
+            }
         }
 
         /// <summary>
