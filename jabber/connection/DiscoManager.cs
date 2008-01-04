@@ -319,6 +319,24 @@ namespace jabber.connection
         }
 
         /// <summary>
+        /// Does this node have the given category/type among its identities?
+        /// </summary>
+        /// <param name="category"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public bool HasIdentity(string category, string type)
+        {
+            if (Identity == null)
+                return false;
+            foreach (Ident i in Identity)
+            {
+                if ((i.category == category) && (i.type == type))
+                    return true;
+            }
+            return false;
+        }
+
+        /// <summary>
         /// The x:data extensions of the disco information.
         /// </summary>
         public jabber.protocol.x.Data Extensions
