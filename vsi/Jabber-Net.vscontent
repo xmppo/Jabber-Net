@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<VSContent xmlns="http://schemas.microsoft.com/developer/vscontent/2005"> 
+    <Content>
+        <FileName>Jabber-Net\jabber-net.dll</FileName>
+        <FileName>Jabber-Net\zlib.net.dll</FileName>
+        <DisplayName>Jabber-Net</DisplayName>
+        <Description>XMPP client library.</Description>
+        <FileContentType>Toolbox Control</FileContentType>
+        <ContentVersion>1.0</ContentVersion>
+    </Content>
+    <Content>
+        <FileName>Jabber-Net\muzzle.dll</FileName>
+        <DisplayName>Muzzle</DisplayName>
+        <Description>GUI toolbox that uses Jabber .Net.</Description>
+        <FileContentType>Toolbox Control</FileContentType>
+        <ContentVersion>1.0</ContentVersion>
+    </Content>
+</VSContent>
+
