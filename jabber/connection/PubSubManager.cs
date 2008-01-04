@@ -281,7 +281,11 @@ namespace jabber.connection
         /// <summary>
         /// Delete a node
         /// </summary>
-        DELETE
+        DELETE,
+        /// <summary>
+        /// Delete an item from the node
+        /// </summary>
+        DELETE_ITEM,
     }
 
     /// <summary>
@@ -326,7 +330,7 @@ namespace jabber.connection
     /// A node to be subscribed to.  Will keep a maximum number of items.
     /// </summary>
     [SVN(@"$Id$")]
-    public class PubSubNode
+    public class PubSubNode : IEnumerable
     {
         private enum STATE
         {
@@ -531,6 +535,7 @@ namespace jabber.connection
                 m_node = c.Node;
             }
 
+            this[Op.CREATE] = STATE.Running;
             SubscribeIfPending();
         }
 
@@ -639,6 +644,7 @@ namespace jabber.connection
                 return;
             }
 
+            this[Op.SUBSCRIBE] = STATE.Running;
             GetItemsIfPending();
         }
 
@@ -813,7 +819,24 @@ namespace jabber.connection
 
         private void OnDeleteNode(object sender, IQ iq, object data)
         {
-            //TODO: Report back error
+            if (iq.Type != IQType.result)
+            {
+                string msg = string.Format("Error deleting pubsub item: {0}", iq.Error.Condition);
+                Debug.WriteLine(msg);
+
+                if (OnError != null)
+                    OnError(this, new PubSubException(Op.DELETE_ITEM, msg, iq));
+                return;
+            }
         }
+
+        #region IEnumerable Members
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return m_items.GetEnumerator();
+        }
+
+        #endregion
     }
 }
