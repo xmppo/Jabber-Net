@@ -211,8 +211,8 @@ namespace jabber.connection
                 return i;
             }
 
-            RemoveId(id);
-            if (Count == Capacity)
+            // RemoveId(id);
+            if (!m_index.Contains(id) && (Count == Capacity))
                 RemoveAt(0);
 
             i = base.Add(value);
@@ -286,6 +286,10 @@ namespace jabber.connection
         /// Delete an item from the node
         /// </summary>
         DELETE_ITEM,
+        /// <summary>
+        /// Publish an item to a node
+        /// </summary>
+        PUBLISH_ITEM,
     }
 
     /// <summary>
@@ -397,12 +401,13 @@ namespace jabber.connection
 
         /// <summary>
         /// An item has been added to the node, either on initial get or by notification.
+        /// Note: this may fire for the same item more than once.
         /// </summary>
         public event ItemCB OnItemAdd;
 
         /// <summary>
-        /// An item has been deleted from the node, either by notification, the 
-        /// list is full, or when a new item replaces an old one with the same ID.
+        /// An item has been deleted from the node, either by notification or the 
+        /// list being full.
         /// </summary>
         public event ItemCB OnItemRemove;
 
@@ -826,6 +831,36 @@ namespace jabber.connection
 
                 if (OnError != null)
                     OnError(this, new PubSubException(Op.DELETE_ITEM, msg, iq));
+                return;
+            }
+        }
+
+        /// <summary>
+        /// Publish an item to the node.
+        /// </summary>
+        /// <param name="id">If null, the server will assign an item ID</param>
+        /// <param name="contents">The XML inside the item.  Should be in a new namespace.</param>
+        public void PublishItem(string id, XmlElement contents)
+        {
+            PubSubIQ iq = createCommand(PubSubCommandType.publish);
+            Publish pub = (Publish)iq.Command;
+            PubSubItem item = new PubSubItem(m_stream.Document);
+            if (id != null)
+                item.ID = id;
+            item.AddChild(contents);
+            pub.AddChild(item);
+            m_stream.Tracker.BeginIQ(iq, new IqCB(OnPublished), null);
+        }
+
+        private void OnPublished(object sender, IQ iq, object data)
+        {
+            if (iq.Type != IQType.result)
+            {
+                string msg = string.Format("Error publishing pubsub item: {0}", iq.Error.Condition);
+                Debug.WriteLine(msg);
+
+                if (OnError != null)
+                    OnError(this, new PubSubException(Op.PUBLISH_ITEM, msg, iq));
                 return;
             }
         }

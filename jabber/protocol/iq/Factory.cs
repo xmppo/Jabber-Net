@@ -63,6 +63,7 @@ namespace jabber.protocol.iq
             new QnameType("affiliations",  URI.PUBSUB, typeof(jabber.protocol.iq.Affiliations)),
             new QnameType("create",        URI.PUBSUB, typeof(jabber.protocol.iq.Create)),
             new QnameType("items",         URI.PUBSUB, typeof(jabber.protocol.iq.Items)),
+            new QnameType("items",         URI.PUBSUB_EVENT, typeof(jabber.protocol.iq.Items)),
             new QnameType("publish",       URI.PUBSUB, typeof(jabber.protocol.iq.Publish)),
             new QnameType("retract",       URI.PUBSUB, typeof(jabber.protocol.iq.Retract)),
             new QnameType("subscribe",     URI.PUBSUB, typeof(jabber.protocol.iq.Subscribe)),
@@ -73,6 +74,7 @@ namespace jabber.protocol.iq
             new QnameType("options",       URI.PUBSUB, typeof(jabber.protocol.iq.PubSubOptions)),
             new QnameType("affiliation",   URI.PUBSUB, typeof(jabber.protocol.iq.Affiliation)),
             new QnameType("item",          URI.PUBSUB, typeof(jabber.protocol.iq.PubSubItem)),
+            new QnameType("item",          URI.PUBSUB_EVENT, typeof(jabber.protocol.iq.PubSubItem)),
             new QnameType("subscription",  URI.PUBSUB, typeof(jabber.protocol.iq.PubSubSubscription)),
 
             new QnameType("event", URI.PUBSUB_EVENT, typeof(jabber.protocol.iq.PubSubEvent)),
