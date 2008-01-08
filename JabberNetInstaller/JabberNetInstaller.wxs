@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="524aa976-70d8-4992-a803-291f5ab2b95b" Name="Jabber-Net" Language="1033" 
+           Version="2.0.0.0" Manufacturer="Jabber, Inc."
+           UpgradeCode="a9b118d3-9edc-4835-8213-c3acc9f2274f">
+		<Package InstallerVersion="200" Compressed="yes"
+             Description="Jabber's Jabber-Net Installer"
+             Manufacturer="Jabber, Inc."
+             />
+    <Condition Message="Must be Windows 2000 or newer">VersionNT = 500 OR VersionNT = 501 OR VersionNT = 502 OR VersionNT = 600</Condition>
+		<Media Id="1" Cabinet="JabberNetInstaller.cab" EmbedCab="yes" />
+
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLLOCATION" Name="Jabber-Net">
+
+					<Component Id="ProductComponent" Guid="78fd8e6f-9eeb-4fb2-adf5-85e86b24de86">
+            <File Id="JabberNetDll" Name="$(var.2005-jabber-net.TargetFileName)"
+                  Source="$(var.2005-jabber-net.TargetPath)" DiskId="1"></File>
+            <File Id="MuzzleDll" Name="$(var.2005-muzzle.TargetFileName)"
+                  Source="$(var.2005-muzzle.TargetPath)" DiskId="1"></File>
+            <File Id="Example" Name="$(var.2005-Example.TargetFileName)"
+                  Source="$(var.2005-Example.TargetPath)" DiskId="1"></File>
+            <File Id="ConsoleClient" Name="$(var.2005-ConsoleClient.TargetFileName)"
+                  Source="$(var.2005-ConsoleClient.TargetPath)" DiskId="1"></File>
+            <File Id="VBExample" Name="$(var.2005-VB.Example.TargetFileName)"
+                  Source="$(var.2005-VB.Example.TargetPath)" DiskId="1"></File>
+					</Component>
+
+          <!--Guid="11015458-BAEE-11DC-8C6A-D5BF55D89593"-->
+          <Directory Id="HELPFILES" Name="Help">
+
+            <Component Id="HelpFiles" Guid="11015458-baee-11dc-8c6a-d5bf55d89593">
+              <File Id="Manual" Name="jabber-net.chm" DiskId="1" Source="..\Help\jabber-net.chm"/>
+            </Component>
+            
+          </Directory>
+
+				</Directory>
+			</Directory>
+		</Directory>
+
+		<Feature Id="ProductFeature" Title="Jabber-Net" Description="XMPP Client Library" Level="1"
+             Display="expand" ConfigurableDirectory="INSTALLLOCATION">
+      <Feature Id="Dlls" Title="Jabber-Net libraries" Description="XMPP Client Libraries" Level="1">
+        <ComponentRef Id="ProductComponent" />
+      </Feature>
+      <Feature Id="Documentation" Title="Help Files" Description="Jabber-Net Help Files" Level="1000">
+        <ComponentRef Id="HelpFiles"/>
+      </Feature>
+		</Feature>
+
+    <UIRef Id="WixUI_Mondo"/>
+    <UIRef Id="WixUI_ErrorProgressText"/>
+
+    <Property Id="ARPPRODUCTICON" Value="Setup.ico"/>
+    <Icon Id="Setup.ico" SourceFile="Setup.ico"/>
+
+    <WixVariable Id="WixUILicenseRtf" Value="License.rtf"/>
+
+    <Binary Id="ToolboxInstaller" SourceFile="Toolbox.exe"/>
+    
+    <CustomAction Id="RunJabberNetInstaller" BinaryKey="ToolboxInstaller"
+                  ExeCommand='/installdesktop "[#JabberNetDll]" "Jabber-Net"'/>
+    <CustomAction Id="RunJabberNetUninstaller" BinaryKey="ToolboxInstaller"
+                  ExeCommand='/uninstall "Jabber-Net"'/>
+
+    <CustomAction Id="RunMuzzleInstaller" BinaryKey="ToolboxInstaller"
+                  ExeCommand='/installdesktop "[#MuzzleDll]" "Muzzle"'/>
+    <CustomAction Id="RunMuzzleUninstaller" BinaryKey="ToolboxInstaller"
+                  ExeCommand='/uninstall "Muzzle"'/>
+    
+    <InstallExecuteSequence>
+      <Custom Action="RunJabberNetInstaller" After="InstallFinalize">$ProductComponent&gt;2</Custom>
+      <Custom Action="RunMuzzleInstaller" After="InstallFinalize">$ProductComponent&gt;2</Custom>
+      
+      <Custom Action="RunJabberNetUninstaller" After="MsiUnpublishAssemblies">$ProductComponent=2</Custom>
+      <Custom Action="RunMuzzleUninstaller" After="MsiUnpublishAssemblies">$ProductComponent=2</Custom>
+    </InstallExecuteSequence>
+    
+	</Product>
+</Wix>
