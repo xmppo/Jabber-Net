@@ -82,7 +82,7 @@
   </Target>
 
   <ItemGroup>
-    <TestAssembly Include="test\bin5\Release\test.dll"/>
+    <TestAssembly Include="test\bin5\Debug\test.dll"/>
   </ItemGroup>
 
   <Target Name="NUnit2005" DependsOnTargets="Compile2005">
