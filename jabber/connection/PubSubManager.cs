@@ -526,18 +526,12 @@ namespace jabber.connection
             else
             {
                 PubSub ps = iq.Query as PubSub;
-                if (ps == null)
+                if (ps != null)
                 {
-                    FireError(Op.CREATE, "Invalid protocol", iq);
-                    return;
+                    Create c = ps["create", URI.PUBSUB] as Create;
+                    if (c != null)
+                        m_node = c.Node;
                 }
-                Create c = ps["create", URI.PUBSUB] as Create;
-                if (c == null)
-                {
-                    FireError(Op.CREATE, "Invalid protocol", iq);
-                    return;
-                }
-                m_node = c.Node;
             }
 
             this[Op.CREATE] = STATE.Running;
