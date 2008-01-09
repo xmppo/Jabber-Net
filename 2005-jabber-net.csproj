@@ -1,5 +1,5 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup>
+  <PropertyGroup Condition="'$(BuildMono)'==''">
     <ProjectType>Local</ProjectType>
     <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
@@ -28,7 +28,7 @@
     </UpgradeBackupLocation>
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' AND '$(BuildMono)'==''">
     <OutputPath>bin5\Debug\</OutputPath>
     <BaseIntermediateOutputPath>obj5\</BaseIntermediateOutputPath>
     <IntermediateOutputPath>obj5\Debug\</IntermediateOutputPath>
@@ -52,7 +52,7 @@
     <DebugType>full</DebugType>
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' AND '$(BuildMono)'==''">
     <OutputPath>bin5\Release\</OutputPath>
     <BaseIntermediateOutputPath>obj5\</BaseIntermediateOutputPath>
     <IntermediateOutputPath>obj5\Debug\</IntermediateOutputPath>
@@ -76,7 +76,7 @@
     <DebugType>none</DebugType>
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
-  <ItemGroup>
+  <ItemGroup Condition="'$(BuildMono)'==''">
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -443,7 +443,7 @@
   <ItemGroup>
     <EmbeddedResource Include="jabber\connection\ConferenceManager.bmp" />
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Condition="'$(BuildMono)'==''" Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
