@@ -27,10 +27,6 @@
     <DefaultExclude Include="**\*.txt" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ZipFiles Include="mono\Release\*.*" Exclude="@(DefaultExclude)" />
-  </ItemGroup>
-
   <Target Name="Compile" DependsOnTargets="Version">
     <Exec Command="&quot;C:\Program Files\Microsoft Visual Studio .NET 2003\Common7\IDE\devenv&quot; 2003-jabber-net.sln /Build Debug /Project Setup" />
   </Target>
@@ -45,7 +41,9 @@
 
   <Target Name="CompileMono" DependsOnTargets="Version">
     <MSBuild Projects="mono-jabber-net.csproj"
-      Properties="TargetFrameworkVersion=Mono v2.0" />
+      Properties="TargetFrameworkVersion=Mono v2.0">
+      <Output ItemName="MonoFiles" TaskParameter="TargetOutputs"/>
+    </MSBuild>
   </Target>
 
   <Target Name="Version">
@@ -74,11 +72,11 @@
   </Target>
 
   <Target Name="Zip" DependsOnTargets="CompileMono">
-    <MakeDir Directories="$(MonoOutput)" Condition="!Exists('$(MonoOutput)')">
-      <Output ItemName="OutputDirectory" TaskParameter="DirectoriesCreated"/>
-    </MakeDir>
-    <Zip Files="@(ZipFiles)"
-      ZipFileName="@(OutputDirectory)\Jabber-Net.Mono.v$(Major).$(Minor).$(Build).$(Revision).zip" />
+    <MakeDir Directories="$(MonoOutput)"
+      Condition="!Exists('$(MonoOutput)')"/>
+    <Zip Files="@(MonoFiles)"
+      WorkingDirectory="@(MonoFiles->'%(rootdir)%(directory)')"
+      ZipFileName="$(MonoOutput)\Jabber-Net.Mono.v$(Major).$(Minor).$(Build).$(Revision).zip" />
   </Target>
 
   <ItemGroup>
