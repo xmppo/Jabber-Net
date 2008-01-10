@@ -444,6 +444,11 @@ namespace jabber.connection
             m_stream.Write(m);
         }
 
+        /// <summary>
+        /// Send a private message to a single user in the room.
+        /// </summary>
+        /// <param name="nick">The nickname of the user to private message</param>
+        /// <param name="body">The message body to send</param>
         public void PrivateMessage(string nick, string body)
         {
 /*
