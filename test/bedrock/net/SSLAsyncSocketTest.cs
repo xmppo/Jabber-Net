@@ -211,6 +211,18 @@ namespace test.bedrock.net
         {
             return this;
         }
+
+#if NET20
+        public bool OnInvalidCertificate(BaseSocket sock,
+            System.Security.Cryptography.X509Certificates.X509Certificate certificate,
+            System.Security.Cryptography.X509Certificates.X509Chain chain,
+            System.Net.Security.SslPolicyErrors sslPolicyErrors)
+        {
+            return false;
+        }
+
+#endif
+
         #endregion
 
         private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
