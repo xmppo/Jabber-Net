@@ -22,7 +22,6 @@ using System.Threading;
 using System.Security.Cryptography;
 using System.Xml;
 using bedrock.util;
-//using bedrock.net;
 
 using jabber.protocol;
 using jabber.protocol.stream;
@@ -68,6 +67,10 @@ namespace jabber.connection
         /// How often to do keep-alive spaces (seconds).
         /// </summary>
         public const string KEEP_ALIVE   = "keep_alive";
+        /// <summary>
+        /// Don't start keep-alives until we're fully authenticated.  This is what the SocketStanzaStream actually checks.
+        /// </summary>
+        public const string CURRENT_KEEP_ALIVE = "current_keep_alive";
         /// <summary>
         /// Port number to connect to or listen on.
         /// </summary>
@@ -203,7 +206,8 @@ namespace jabber.connection
     {
         private static readonly object[][] DEFAULTS = new object[][] {
             new object[] {Options.TO, "jabber.com"},
-            new object[] {Options.KEEP_ALIVE, 20000},
+            new object[] {Options.KEEP_ALIVE, 30000},
+            new object[] {Options.CURRENT_KEEP_ALIVE, -1},
             new object[] {Options.PORT, 5222},
             new object[] {Options.RECONNECT_TIMEOUT, 30000},
             new object[] {Options.PROXY_PORT, 1080},
@@ -426,6 +430,13 @@ namespace jabber.connection
         /// </summary>
         [Category("Stream")]
         public event bedrock.ObjectHandler OnDisconnect;
+
+        /// <summary>
+        /// An invalid cert was received from the other side.  Set this event and return true to 
+        /// use the cert anyway.  If the event is not set, an ugly user interface will be displayed.
+        /// </summary>
+        [Category("Stream")]
+        public event System.Net.Security.RemoteCertificateValidationCallback OnInvalidCertificate;
 
         /// <summary>
         /// Let's track IQ packets.
@@ -876,6 +887,7 @@ namespace jabber.connection
                     else
                         OnAuthenticate(this);
                 }
+                this[Options.CURRENT_KEEP_ALIVE] = this[Options.KEEP_ALIVE];
             }
         }
 
@@ -941,6 +953,7 @@ namespace jabber.connection
         /// </summary>
         public virtual void Connect()
         {
+            this[Options.CURRENT_KEEP_ALIVE] = -1;
             m_stanzas = StanzaStream.Create(this.Connection, this);
             lock (StateLock)
             {
@@ -1741,6 +1754,46 @@ namespace jabber.connection
             // more easily overriden by subclasses.
                 OnElement(m_stanzas, elem);
         }
+
+#if NET20
+        private bool ShowCertificatePrompt(object sender,
+            System.Security.Cryptography.X509Certificates.X509Certificate certificate,
+            System.Security.Cryptography.X509Certificates.X509Chain chain,
+            System.Net.Security.SslPolicyErrors sslPolicyErrors)
+        {
+            CertificatePrompt cp = new CertificatePrompt((X509Certificate2)certificate, chain, sslPolicyErrors);
+            return (cp.ShowDialog() == System.Windows.Forms.DialogResult.OK);
+        }
+
+        bool IStanzaEventListener.OnInvalidCertificate(bedrock.net.BaseSocket sock,
+            System.Security.Cryptography.X509Certificates.X509Certificate certificate,
+            System.Security.Cryptography.X509Certificates.X509Chain chain,
+            System.Net.Security.SslPolicyErrors sslPolicyErrors)
+        {
+            Debug.Assert(m_invoker != null, "Check for this.InvokeControl == null before calling Connect");
+
+            if (OnInvalidCertificate != null)
+            {
+                // Note: can't use CheckedInvoke here, since we need the return value.  We'll wait for the response.
+                if (!m_invoker.InvokeRequired)
+                    return OnInvalidCertificate(sock, certificate, chain, sslPolicyErrors);
+                try
+                {
+                    return (bool)m_invoker.Invoke(OnInvalidCertificate, new object[] { sock, certificate, chain, sslPolicyErrors });
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine("Exception passed along by XmppStream: " + e.ToString());
+                    return false;
+                }
+            }
+
+            if (!m_invoker.InvokeRequired)
+                return ShowCertificatePrompt(sock, certificate, chain, sslPolicyErrors);
+
+            return (bool)m_invoker.Invoke(new System.Net.Security.RemoteCertificateValidationCallback(ShowCertificatePrompt), new object[]{ sock, certificate, chain, sslPolicyErrors });
+        }
+#endif
 
         #endregion
     }

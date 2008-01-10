@@ -333,11 +333,10 @@ namespace jabber.connection
         /// <param name="str"></param>
         public override void Write(string str)
         {
-            int keep = (int)m_listener[Options.KEEP_ALIVE];
+            int keep = (int)m_listener[Options.CURRENT_KEEP_ALIVE];
             if (keep > 0)
                 m_timer.Change(keep, keep);
             m_sock.Write(ENC.GetBytes(str));
-
         }
 
         /// <summary>
@@ -371,7 +370,7 @@ namespace jabber.connection
 
         private void DoKeepAlive(object state)
         {
-            if ((m_sock != null) && this.Connected)
+            if ((m_sock != null) && this.Connected && ((int)m_listener[Options.CURRENT_KEEP_ALIVE] > 0))
                 m_sock.Write(new byte[] { 32 });
         }
 
@@ -505,6 +504,23 @@ namespace jabber.connection
             m_listener.BytesWritten(buf, offset, length);
         }
 
+#if NET20
+        /// <summary>
+        /// An invalid peer certificate was sent during SSL/TLS neogtiation.
+        /// </summary>
+        /// <param name="sock">The socket that experienced the error</param>
+        /// <param name="certificate">The bad certificate</param>
+        /// <param name="chain">The chain of CAs for the cert</param>
+        /// <param name="sslPolicyErrors">A bitfield for the erorrs in the certificate.</param>
+        /// <returns>True if the cert should be accepted anyway.</returns>
+        bool ISocketEventListener.OnInvalidCertificate(BaseSocket sock,
+            System.Security.Cryptography.X509Certificates.X509Certificate certificate,
+            System.Security.Cryptography.X509Certificates.X509Chain chain,
+            System.Net.Security.SslPolicyErrors sslPolicyErrors)
+        {
+            return m_listener.OnInvalidCertificate(sock, certificate, chain, sslPolicyErrors);
+        }
+#endif
         #endregion
     }
 }

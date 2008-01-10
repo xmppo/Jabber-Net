@@ -81,6 +81,20 @@ namespace bedrock.net
         /// <param name="offset">Offset into the buffer to start at</param>
         /// <param name="length">Number of bytes to use out of the buffer</param>
         void OnWrite(BaseSocket sock, byte[] buf, int offset, int length);
+#if NET20
+        /// <summary>
+        /// An invalid peer certificate was sent during SSL/TLS neogtiation.
+        /// </summary>
+        /// <param name="sock">The socket that experienced the error</param>
+        /// <param name="certificate">The bad certificate</param>
+        /// <param name="chain">The chain of CAs for the cert</param>
+        /// <param name="sslPolicyErrors">A bitfield for the erorrs in the certificate.</param>
+        /// <returns>True if the cert should be accepted anyway.</returns>
+        bool OnInvalidCertificate(BaseSocket sock, 
+            System.Security.Cryptography.X509Certificates.X509Certificate certificate, 
+            System.Security.Cryptography.X509Certificates.X509Chain chain, 
+            System.Net.Security.SslPolicyErrors sslPolicyErrors);
+#endif
     }
     /// <summary>
     /// Default, empty implementation of ISocketEventListener
@@ -169,6 +183,24 @@ namespace bedrock.net
         public virtual void OnWrite(BaseSocket sock, byte[] buf, int offset, int length)
         {
         }
+
+#if NET20
+        /// <summary>
+        /// An invalid peer certificate was sent during SSL/TLS neogtiation.
+        /// </summary>
+        /// <param name="sock">The socket that experienced the error</param>
+        /// <param name="certificate">The bad certificate</param>
+        /// <param name="chain">The chain of CAs for the cert</param>
+        /// <param name="sslPolicyErrors">A bitfield for the erorrs in the certificate.</param>
+        /// <returns>True if the cert should be accepted anyway.</returns>
+        public virtual bool OnInvalidCertificate(BaseSocket sock,
+            System.Security.Cryptography.X509Certificates.X509Certificate certificate,
+            System.Security.Cryptography.X509Certificates.X509Chain chain,
+            System.Net.Security.SslPolicyErrors sslPolicyErrors)
+        {
+            return false;
+        }
+#endif
         #endregion
     }
 }

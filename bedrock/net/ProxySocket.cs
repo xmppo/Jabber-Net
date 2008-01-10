@@ -282,6 +282,22 @@ namespace bedrock.net
             m_listener.OnWrite(sock, buf, offset, length);
         }
 
+        /// <summary>
+        /// An invalid peer certificate was sent during SSL/TLS neogtiation.
+        /// </summary>
+        /// <param name="sock">The socket that experienced the error</param>
+        /// <param name="certificate">The bad certificate</param>
+        /// <param name="chain">The chain of CAs for the cert</param>
+        /// <param name="sslPolicyErrors">A bitfield for the erorrs in the certificate.</param>
+        /// <returns>True if the cert should be accepted anyway.</returns>
+        public virtual bool OnInvalidCertificate(BaseSocket sock,
+            System.Security.Cryptography.X509Certificates.X509Certificate certificate,
+            System.Security.Cryptography.X509Certificates.X509Chain chain,
+            System.Net.Security.SslPolicyErrors sslPolicyErrors)
+        {
+            return m_listener.OnInvalidCertificate(sock, certificate, chain, sslPolicyErrors);
+        }
+
         #endregion
 
         /// <summary>

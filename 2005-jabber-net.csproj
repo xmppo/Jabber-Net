@@ -81,7 +81,9 @@
       <Name>System</Name>
     </Reference>
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
@@ -181,6 +183,9 @@
     </Compile>
     <Compile Include="jabber\connection\CapsManager.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="jabber\connection\CertificatePrompt.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="jabber\connection\ConferenceManager.cs">
       <SubType>Component</SubType>
@@ -441,6 +446,10 @@
     <EmbeddedResource Include="jabber\connection\PubSubManager.bmp" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="jabber\connection\CertificatePrompt.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>CertificatePrompt.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="jabber\connection\ConferenceManager.bmp" />
   </ItemGroup>
   <Import Condition="'$(BuildMono)'==''" Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

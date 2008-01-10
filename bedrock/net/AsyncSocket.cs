@@ -359,6 +359,7 @@ namespace bedrock.net
                 SslStream str = m_stream as SslStream;
                 if (str == null)
                     return null;
+                
                 return str.RemoteCertificate;
             }
         }
@@ -966,11 +967,14 @@ namespace bedrock.net
                 return true;
             }
 
-            throw new CertificateException(certificate, chain, sslPolicyErrors);
-            //Debug.WriteLine("Certificate error: {0}", sslPolicyErrors.ToString());
+            if (m_listener.OnInvalidCertificate(this, certificate, chain, sslPolicyErrors))
+                return true;
+
+            //throw new CertificateException(certificate, chain, sslPolicyErrors);
+            Debug.WriteLine("Certificate error: {0}", sslPolicyErrors.ToString());
 
             // Do not allow this client to communicate with unauthenticated servers.
-            //return false;
+            return false;
         }
 
         /// <summary>
@@ -984,7 +988,7 @@ namespace bedrock.net
                 m_secureProtocol = SslProtocols.Tls;
 
             m_stream = new SslStream(m_stream, false, ValidateServerCertificate, ChooseClientCertificate);
-
+            
             if (m_server)
             {
                 if (m_cert == null)
@@ -1011,11 +1015,11 @@ namespace bedrock.net
                 {
                     ((SslStream)m_stream).AuthenticateAsClient(m_hostid, certs, m_secureProtocol, false);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    // FireError(ex);
-                    Close();
-                    throw;
+                    FireError(ex);
+                    //Close();
+                    //throw;
                 }
             }
         }
