@@ -42,7 +42,13 @@ namespace jabber.connection
         private Panel panel2;
 
         private X509Certificate2 m_cert;
-
+        
+        /// <summary>
+        /// Create an ugly form to prompt the user about an invalid certificate.
+        /// </summary>
+        /// <param name="cert">The invalid certificate</param>
+        /// <param name="chain">The CA chain for the cert</param>
+        /// <param name="errors">The errors associated with the certificate</param>
         public CertificatePrompt(X509Certificate2 cert, X509Chain chain, SslPolicyErrors errors)
 		{
             m_cert = cert;
@@ -65,6 +71,14 @@ namespace jabber.connection
                 components.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        private void btnShow_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Debug.Assert(!this.InvokeRequired);
+            X509Certificate2UI.DisplayCertificate(m_cert);
+            if (m_cert.Verify())
+                this.DialogResult = DialogResult.OK;
         }
 
         #region Windows Form Designer generated code
@@ -211,13 +225,6 @@ namespace jabber.connection
 
         #endregion
 
-        private void btnShow_Click(object sender, EventArgs e)
-        {
-            System.Diagnostics.Debug.Assert(!this.InvokeRequired);
-            X509Certificate2UI.DisplayCertificate(m_cert);
-            if (m_cert.Verify())
-                this.DialogResult = DialogResult.OK;
-        }
 	}
 #endif
 }

@@ -172,6 +172,7 @@ namespace bedrock.net
 #if NET20
         /// <summary> The set of allowable errors in SSL certificates
         /// if UntrustedRootOK is set to true.  </summary>
+        [Obsolete("Catch OnInvalidCertificate, instead")]
         public const SslPolicyErrors DefaultUntrustedPolicy =
                  SslPolicyErrors.RemoteCertificateChainErrors;
 
@@ -179,6 +180,7 @@ namespace bedrock.net
         /// modify UntrustedRootOK to true, the side effect will be to
         /// set this to DefaultUntrustedPolicy.  False, the default,
         /// sets this to None.  </summary>
+        [Obsolete("Catch OnInvalidCertificate, instead")]
         public static SslPolicyErrors AllowedSSLErrors = SslPolicyErrors.None;
     
         /// <summary>
