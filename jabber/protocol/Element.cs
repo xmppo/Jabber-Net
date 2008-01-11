@@ -596,7 +596,7 @@ namespace jabber.protocol
             {
                 Debug.WriteLine("Bad type: " + ci.DeclaringType.ToString());
             }
-            XmlElement el = (Element)ci.Invoke(new object[] { this.Prefix, new XmlQualifiedName(this.Name, this.NamespaceURI), doc });
+            XmlElement el = (Element)ci.Invoke(new object[] { this.Prefix, new XmlQualifiedName(this.LocalName, this.NamespaceURI), doc });
             if (el.GetType() != this.GetType())
             {
                 Debug.Assert(el.GetType() == this.GetType());
