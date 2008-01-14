@@ -76,6 +76,9 @@
     <DebugType>none</DebugType>
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DefineConstants>TRACE;DEBUG;NET20</DefineConstants>
+  </PropertyGroup>
   <ItemGroup Condition="'$(BuildMono)'==''">
     <Reference Include="System">
       <Name>System</Name>
@@ -451,6 +454,12 @@
       <DependentUpon>CertificatePrompt.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="jabber\connection\ConferenceManager.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="netlib.Dns\netlib.Dns.csproj">
+      <Project>{40AC7A7C-D3E5-46DF-B740-06BD9D2A00E1}</Project>
+      <Name>netlib.Dns</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Condition="'$(BuildMono)'==''" Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

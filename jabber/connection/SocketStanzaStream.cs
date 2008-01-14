@@ -19,10 +19,8 @@ using System.Xml;
 using bedrock.net;
 using bedrock.util;
 using jabber.protocol;
-
-#if NET20 && !NO_SRV
-using Wrappers;
-#endif
+using netlib.Dns;
+using netlib.Dns.Records;
 
 namespace jabber.connection
 {
@@ -140,11 +138,10 @@ namespace jabber.connection
 
         }
 
-#if NET20 && !NO_SRV
         private static SRVRecord PickSRV(SRVRecord[] srv)
         {
             if ((srv == null) || (srv.Length == 0))
-                return null;
+                throw new ArgumentException();
             if (srv.Length == 1)
                 return srv[0];
 
@@ -186,12 +183,9 @@ namespace jabber.connection
                     }
                 }
             }
-            // Shouldn't be able to get here, I hope.
-            Debug.Assert(false);
-            return null;
+
+            throw new Exception();
         }
-        
-#endif
 
         /// <summary>
         /// Connect the socket, outbound.
@@ -272,24 +266,19 @@ namespace jabber.connection
             string host = (string)m_listener[Options.NETWORK_HOST];
             if ((host == null) || (host == ""))
             {
-#if NET20 && !NO_SRV
-                // Hang on!  We're going for an SRV ride.
-                // See: http://en.wikipedia.org/wiki/SRV_Records
-                SRVRecord[] srv = Wrappers.DNS.SRVLookup(m_listener[Options.SRV_PREFIX] + to);
-                SRVRecord rec = PickSRV(srv);
-                if (rec == null)
+                DnsRequest request = new DnsRequest(m_listener[Options.SRV_PREFIX] + to);
+                DnsResponse response = request.GetResponse();
+
+                try
+                {
+                    SRVRecord record = PickSRV(response.SRVRecords);
+                    host = record.NameNext;
+                    port = record.Port;
+                }
+                catch (Exception)
                 {
                     host = to;
                 }
-                else
-                {
-                    host = rec.Target;
-                    port = rec.Port;
-                }
-                Debug.Assert(host != null);
-#else
-                host = to;
-#endif
             }
 
             Address addr = new Address(host, port);

@@ -25,6 +25,8 @@
                   Source="$(var.2005-ConsoleClient.TargetPath)" DiskId="1"></File>
             <File Id="VBExample" Name="$(var.2005-VB.Example.TargetFileName)"
                   Source="$(var.2005-VB.Example.TargetPath)" DiskId="1"></File>
+            <File Id="NETLIB" Name="$(var.netlib.Dns.TargetFileName)"
+                  Source="$(var.netlib.Dns.TargetPath)" DiskId="1"></File>
 					</Component>
 
           <!--Guid="11015458-BAEE-11DC-8C6A-D5BF55D89593"-->

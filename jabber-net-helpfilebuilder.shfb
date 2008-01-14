@@ -2,6 +2,7 @@
     <assemblies>
         <assembly assemblyPath=".\bin5\Debug\jabber-net.dll" xmlCommentsPath=".\bin5\Debug\2005-jabber-net.xml" commentsOnly="False" />
         <assembly assemblyPath=".\muzzle\bin5\Debug\muzzle.dll" xmlCommentsPath=".\muzzle\bin5\Debug\muzzle.xml" commentsOnly="False" />
+        <assembly assemblyPath=".\netlib.Dns\bin\Debug\netlib.Dns.dll" xmlCommentsPath=".\netlib.Dns\bin\Debug\netlib.Dns.XML" commentsOnly="False" />
     </assemblies>
     <namespaceSummaries>
         <namespaceSummaryItem name="" isDocumented="False" />
@@ -32,6 +33,7 @@
     </additionalContent>
     <dependencies>
         <dependencyItem depPath=".\lib20\*.*" />
+        <dependencyItem depPath=".\bin5\Debug\*.*" />
     </dependencies>
     <ProjectSummary />
     <MissingTags>Summary, Parameter, Returns, AutoDocumentCtors, Namespace</MissingTags>
@@ -39,7 +41,7 @@
     <HtmlHelp1xCompilerPath path="" />
     <HtmlHelp2xCompilerPath path="" />
     <OutputPath>.\Help\</OutputPath>
-    <SandcastlePath path="..\..\..\..\..\Program Files\Sandcastle\" />
+    <SandcastlePath path="C:\Program Files\Sandcastle\" />
     <WorkingPath path="" />
     <CleanIntermediates>True</CleanIntermediates>
     <KeepLogFile>True</KeepLogFile>

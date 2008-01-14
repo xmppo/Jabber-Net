@@ -62,7 +62,7 @@
     <Compile Include="JabberNetInstaller.wxs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Jabber-Net-Proj\2005-jabber-net.csproj">
+    <ProjectReference Include="..\..\jabber-net\2005-jabber-net.csproj">
       <Name>2005-jabber-net</Name>
       <Project>{6cae854a-f202-4d2b-b10e-e8d8e81e5ef5}</Project>
       <Private>True</Private>
@@ -80,6 +80,11 @@
     <ProjectReference Include="..\muzzle\2005-muzzle.csproj">
       <Name>2005-muzzle</Name>
       <Project>{071a79a9-e23f-418f-a6b7-63d3a3e59eeb}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\netlib.Dns\netlib.Dns.csproj">
+      <Name>netlib.Dns</Name>
+      <Project>{40ac7a7c-d3e5-46df-b740-06bd9d2a00e1}</Project>
       <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\VB.Example\2005-VB.Example.vbproj">
