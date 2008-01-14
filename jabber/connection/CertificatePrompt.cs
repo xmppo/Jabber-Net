@@ -11,17 +11,18 @@
  * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
-#if NET20
-
-using System;
-using System.Security.Cryptography.X509Certificates;
-using System.Net.Security;
-using System.Windows.Forms;
-using System.Drawing;
-using bedrock.util;
 
 namespace jabber.connection
 {
+#if NET20
+
+    using System;
+    using System.Security.Cryptography.X509Certificates;
+    using System.Net.Security;
+    using System.Windows.Forms;
+    using System.Drawing;
+    using bedrock.util;
+
     /// <summary>
     /// Intentionally-ugly form to deal with bad certificates.  Because you don't like it, you should catch XmppStream.OnInvalidCertificate, 
     /// and do something better.
@@ -224,7 +225,7 @@ namespace jabber.connection
         }
 
         #endregion
-
-	}
 #endif
+
+    }
 }
