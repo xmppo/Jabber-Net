@@ -267,13 +267,14 @@ namespace jabber.connection
             if ((host == null) || (host == ""))
             {
                 DnsRequest request = new DnsRequest(m_listener[Options.SRV_PREFIX] + to);
-                DnsResponse response = request.GetResponse();
+                DnsResponse response = request.GetResponse(DnsRecordType.SRV);
 
                 try
                 {
                     SRVRecord record = PickSRV(response.SRVRecords);
                     host = record.NameNext;
                     port = record.Port;
+                    Debug.WriteLine(string.Format("SRV found: {0}:{1}", host, port));
                 }
                 catch (Exception)
                 {

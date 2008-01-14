@@ -2010,7 +2010,7 @@ namespace netlib.Dns
 		/// exceptions area, the most common of which is the
 		/// <see cref="DnsException"/>.
 		/// </remarks>
-		public DnsResponse GetResponse()
+        public DnsResponse GetResponse(DnsRecordType dnstype)
 		{
 			if (Environment.OSVersion.Platform != PlatformID.Win32NT)
 				throw new NotSupportedException("This API is found only on Windows NT or better.");
@@ -2019,7 +2019,6 @@ namespace netlib.Dns
 				throw new ArgumentNullException();
 
 			string strDomain = _domain;
-			DnsRecordType dnstype = DnsRecordType.ALL;
 			DnsQueryType querytype = QueryType;
 			
 			object Data = new object();
@@ -2069,9 +2068,10 @@ namespace netlib.Dns
 					wrapper.RecordType = dnsrec.RecordType;
 					wrapper.RecordData = Data;
 
+                    // Note: this is *supposed* to return many records of the same type.  Don't check for uniqueness.
 					// Add wrapper to array
-					if (! resp.RawRecords.Contains(wrapper))
-						resp.RawRecords.Add( wrapper );
+					//if (! resp.RawRecords.Contains(wrapper))
+					resp.RawRecords.Add( wrapper );
 
 					ppQueryResultsSet = dnsrec.Next;
 				} while (ppQueryResultsSet != IntPtr.Zero);
