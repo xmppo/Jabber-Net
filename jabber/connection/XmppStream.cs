@@ -407,6 +407,11 @@ namespace jabber.connection
         protected event FeaturesHandler OnSASLEnd;
 
         /// <summary>
+        /// Get notified when SASL login fails.
+        /// </summary>
+        protected event ProtocolHandler OnSASLError;
+
+        /// <summary>
         /// We received a stream:error packet.
         /// </summary>
         [Category("Stream")]
@@ -1300,7 +1305,13 @@ namespace jabber.connection
                     // TODO: Add an OnSASLAuthFailure
                     SASLFailure sf = tag as SASLFailure;
                     // TODO: I18N
-                    FireOnError(new SASLException("SASL failure: " + sf.InnerXml));
+                    if (OnSASLError != null)
+                    {
+                        m_reconnect = false;
+                        OnSASLError(this, sf);
+                    }
+                    else
+                        FireOnError(new SASLException("SASL failure: " + sf.InnerXml));
                     return;
                 }
                 else if (tag is Step)
@@ -1424,26 +1435,6 @@ namespace jabber.connection
             }
             m_compressionOn = true;
             return true;
-        }
-
-        /// <summary>
-        /// The SASLClient is reporting an exception
-        /// </summary>
-        /// <param name="e"></param>
-        public void OnSASLException(ApplicationException e)
-        {
-            // lets throw the exception
-            FireOnError(e);
-        }
-
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="message"></param>
-        public void OnSASLException(string message)
-        {
-            // lets throw it!
-            FireOnError(new ApplicationException(message));
         }
 
         /// <summary>

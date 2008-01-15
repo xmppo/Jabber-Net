@@ -266,11 +266,11 @@ namespace jabber.connection
             string host = (string)m_listener[Options.NETWORK_HOST];
             if ((host == null) || (host == ""))
             {
-                DnsRequest request = new DnsRequest(m_listener[Options.SRV_PREFIX] + to);
-                DnsResponse response = request.GetResponse(DnsRecordType.SRV);
-
                 try
                 {
+                    DnsRequest request = new DnsRequest(m_listener[Options.SRV_PREFIX] + to);
+                    DnsResponse response = request.GetResponse(DnsRecordType.SRV);
+
                     SRVRecord record = PickSRV(response.SRVRecords);
                     host = record.NameNext;
                     port = record.Port;
