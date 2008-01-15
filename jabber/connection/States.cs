@@ -188,6 +188,17 @@ namespace jabber.connection
         public static readonly BaseState Instance = new SASLAuthedState();
     }
     /// <summary>
+    /// SASL Authentication failed.  On some servers you can re-try, or register.
+    /// </summary>
+    [SVN(@"$Id$")]
+    public class SASLFailedState : BaseState
+    {
+        /// <summary>
+        /// The instance that is always used.
+        /// </summary>
+        public static readonly BaseState Instance = new SASLFailedState();
+    }
+    /// <summary>
     /// Binding session
     /// </summary>
     [SVN(@"$Id$")]

@@ -845,7 +845,9 @@ namespace jabber.connection
         protected virtual BaseState State
         {
             get { return m_state; }
-            set { m_state = value; }
+            set { m_state = value;
+            Debug.WriteLine("New state: " + m_state.ToString());
+            }
         }
 
         /// <summary>
@@ -868,7 +870,7 @@ namespace jabber.connection
             {
                 lock (StateLock)
                 {
-                    return (m_state == RunningState.Instance);
+                    return (State == RunningState.Instance);
                 }
             }
             set
@@ -878,7 +880,7 @@ namespace jabber.connection
                 {
                     if (value)
                     {
-                        m_state = RunningState.Instance;
+                        State = RunningState.Instance;
                     }
                     else
                         close = true;
@@ -962,7 +964,7 @@ namespace jabber.connection
             m_stanzas = StanzaStream.Create(this.Connection, this);
             lock (StateLock)
             {
-                m_state = ConnectingState.Instance;
+                State = ConnectingState.Instance;
                 m_reconnect = ((int)this[Options.RECONNECT_TIMEOUT] >= 0);
             }
             m_stanzas.Connect();
@@ -1021,14 +1023,14 @@ namespace jabber.connection
 
             lock (StateLock)
             {
-                if ((m_state == RunningState.Instance) && (clean))
+                if ((State == RunningState.Instance) && (clean))
                 {
                     m_reconnect = false;
                     doStream = true;
                 }
                 if (m_state != ClosedState.Instance)
                 {
-                    m_state = ClosingState.Instance;
+                    State = ClosingState.Instance;
                     doClose = true;
                 }
             }
@@ -1101,18 +1103,18 @@ namespace jabber.connection
                 {
                     lock (m_stateLock)
                     {
-                        if (m_state == SASLState.Instance)
+                        if (State == SASLState.Instance)
                             // already authed.  last stream restart.
-                            m_state = SASLAuthedState.Instance;
+                            State = SASLAuthedState.Instance;
                         else
-                            m_state = jabber.connection.ServerFeaturesState.Instance;
+                            State = jabber.connection.ServerFeaturesState.Instance;
                     }
                 }
                 else
                 {
                     lock (m_stateLock)
                     {
-                        m_state = NonSASLAuthState.Instance;
+                        State = NonSASLAuthState.Instance;
                     }
                     hack = true;
                 }
@@ -1159,7 +1161,7 @@ namespace jabber.connection
                 {
                     if (m_state != ClosedState.Instance)
                     {
-                        m_state = ClosingState.Instance;
+                        State = ClosingState.Instance;
                     }
                     else if (m_reconnectTimer != null)
                     {
@@ -1178,7 +1180,7 @@ namespace jabber.connection
                 return;
             }
 
-            if (m_state == ServerFeaturesState.Instance)
+            if (State == ServerFeaturesState.Instance)
             {
                 Features f = tag as Features;
                 if (f == null)
@@ -1199,7 +1201,7 @@ namespace jabber.connection
                     // start-tls
                     lock (m_stateLock)
                     {
-                        m_state = StartTLSState.Instance;
+                        State = StartTLSState.Instance;
                     }
                     this.Write(new StartTLS(m_doc));
                     return;
@@ -1217,7 +1219,7 @@ namespace jabber.connection
                     // start-tls
                     lock (m_stateLock)
                     {
-                        m_state = CompressionState.Instance;
+                        State = CompressionState.Instance;
                     }
                     Compress c = new Compress(m_doc);
                     c.Method = "zlib";
@@ -1251,7 +1253,7 @@ namespace jabber.connection
                     {
                         lock (m_stateLock)
                         {
-                            m_state = SASLState.Instance;
+                            State = SASLState.Instance;
                         }
                         m_saslProc = SASLProcessor.createProcessor(types, m_sslOn || (bool)this[Options.PLAINTEXT]);
                         if (m_saslProc == null)
@@ -1285,14 +1287,14 @@ namespace jabber.connection
                         }
                         lock (m_stateLock)
                         {
-                            m_state = NonSASLAuthState.Instance;
+                            State = NonSASLAuthState.Instance;
                         }
                         if (OnSASLStart != null)
                             OnSASLStart(this, null); // HACK: old-style auth for jabberclient.
                     }
                 }
             }
-            else if (m_state == SASLState.Instance)
+            else if (State == SASLState.Instance)
             {
                 if (tag is Success)
                 {
@@ -1302,7 +1304,11 @@ namespace jabber.connection
                 else if (tag is SASLFailure)
                 {
                     m_saslProc = null;
-                    // TODO: Add an OnSASLAuthFailure
+
+                    lock (m_stateLock)
+                    {
+                        State = SASLFailedState.Instance;
+                    }
                     SASLFailure sf = tag as SASLFailure;
                     // TODO: I18N
                     if (OnSASLError != null)
@@ -1336,7 +1342,7 @@ namespace jabber.connection
                 }
             }
 #if !NO_SSL || NET20 || __MonoCS__
-            else if (m_state == StartTLSState.Instance)
+            else if (State == StartTLSState.Instance)
             {
                 switch (tag.Name)
                 {
@@ -1353,7 +1359,7 @@ namespace jabber.connection
 #endif
 
 #if !NO_COMPRESSION
-            else if (m_state == CompressionState.Instance)
+            else if (State == CompressionState.Instance)
             {
                 switch (tag.Name)
                 {
@@ -1370,7 +1376,7 @@ namespace jabber.connection
 
             }
 #endif
-            else if (m_state == SASLAuthedState.Instance)
+            else if (State == SASLAuthedState.Instance)
             {
                 Features f = tag as Features;
                 if (f == null)
@@ -1677,7 +1683,7 @@ namespace jabber.connection
 
             lock (m_stateLock)
             {
-                m_state = ClosedState.Instance;
+                State = ClosedState.Instance;
                 if ((m_stanzas != null) && (!m_stanzas.Acceptable))
                     m_stanzas = null;
             }
@@ -1699,7 +1705,7 @@ namespace jabber.connection
         {
             lock (StateLock)
             {
-                m_state = ClosedState.Instance;
+                State = ClosedState.Instance;
                 if ((m_stanzas != null) && (!m_stanzas.Acceptable))
                     m_stanzas = null;
                 m_sslOn = false;
@@ -1728,7 +1734,7 @@ namespace jabber.connection
         {
             lock (StateLock)
             {
-                m_state = ClosingState.Instance;
+                State = ClosingState.Instance;
                 // TODO: Validate this, with current parser:
 
                 // No need to close stream any more.  AElfred does this for us, even though

@@ -347,7 +347,7 @@ Public Class MainForm
         debug.AppendMaybeScroll(vbCrLf)
     End Sub
 
-    Private Sub jc_OnAuthError(ByVal sender As Object, ByVal iq As jabber.protocol.client.IQ) Handles jc.OnAuthError
+    Private Sub jc_OnAuthError(ByVal sender As Object, ByVal iq As XmlElement) Handles jc.OnAuthError
         If (MessageBox.Show(Me, "Create new account?", _
             "Authentication error", MessageBoxButtons.OKCancel) = Windows.Forms.DialogResult.OK) Then
             jc.Register(New JID(jc.User, jc.Server, Nothing))

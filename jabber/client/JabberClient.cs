@@ -67,6 +67,7 @@ namespace jabber.client
 
             this.OnSASLStart += new jabber.connection.sasl.SASLProcessorHandler(JabberClient_OnSASLStart);
             this.OnSASLEnd += new jabber.protocol.stream.FeaturesHandler(JabberClient_OnSASLEnd);
+            this.OnSASLError += new ProtocolHandler(JabberClient_OnSASLError);
             this.OnStreamInit += new StreamHandler(JabberClient_OnStreamInit);
         }
 
@@ -127,8 +128,7 @@ namespace jabber.client
         /// </summary>
         [Category("Protocol")]
         [Description("Authentication failed.")]
-        public event IQHandler OnAuthError;
-
+        public event ProtocolHandler OnAuthError;
 
         /// <summary>
         /// Presence is about to be sent.  This gives a chance to modify outbound presence (e.g. entity caps)
@@ -746,17 +746,28 @@ namespace jabber.client
         /// can fire errors using the same events.
         /// </summary>
         /// <param name="i"></param>
-        public void FireAuthError(IQ i)
+        public void FireAuthError(XmlElement i)
         {
             if (OnAuthError != null)
             {
                 if (InvokeRequired)
-                    CheckedInvoke(OnAuthError, new object[] {this, i});
+                    CheckedInvoke(OnAuthError, new object[] { this, i });
                 else
                     OnAuthError(this, i);
             }
             else
-                FireOnError(new ProtocolException(i));
+            {
+                IQ iq = i as IQ;
+                if (iq != null)
+                    FireOnError(new ProtocolException(iq));
+                else
+                    FireOnError(new AuthenticationFailedException(i.OuterXml));
+            }
+        }
+
+        void JabberClient_OnSASLError(object sender, XmlElement rp)
+        {
+            FireAuthError(rp);
         }
 
         private void JabberClient_OnSASLStart(Object sender, jabber.connection.sasl.SASLProcessor proc)

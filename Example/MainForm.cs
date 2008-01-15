@@ -78,6 +78,7 @@ namespace Example
         private ToolStripMenuItem joinConferenceToolStripMenuItem;
 
         private bool m_err = false;
+        private bool m_connected = false;
 
         #endregion
 
@@ -282,7 +283,7 @@ namespace Example
             this.jc.OnMessage += new jabber.client.MessageHandler(this.jc_OnMessage);
             this.jc.OnConnect += new jabber.connection.StanzaStreamHandler(this.jc_OnConnect);
             this.jc.OnAuthenticate += new bedrock.ObjectHandler(this.jc_OnAuthenticate);
-            this.jc.OnAuthError += new jabber.client.IQHandler(this.jc_OnAuthError);
+            this.jc.OnAuthError += new jabber.protocol.ProtocolHandler(this.jc_OnAuthError);
             this.jc.OnDisconnect += new bedrock.ObjectHandler(this.jc_OnDisconnect);
             this.jc.OnStreamError += new jabber.protocol.ProtocolHandler(this.jc_OnStreamError);
             this.jc.OnError += new bedrock.ExceptionHandler(this.jc_OnError);
@@ -639,6 +640,7 @@ namespace Example
 
         private void jc_OnDisconnect(object sender)
         {
+            m_connected = false;
             mnuAway.Enabled = mnuAvailable.Enabled = false;
             idler.Enabled = false;
             pnlPresence.Text = "Offline";
@@ -652,6 +654,7 @@ namespace Example
 
         private void jc_OnError(object sender, Exception ex)
         {
+            m_connected = false;
             mnuAway.Enabled = mnuAvailable.Enabled = false;
             connectToolStripMenuItem.Text = "&Connect";
             idler.Enabled = false;
@@ -664,13 +667,19 @@ namespace Example
             pnlCon.Text = "Error: " + ex.Message;
         }
 
-        private void jc_OnAuthError(object sender, IQ iq)
+        private void jc_OnAuthError(object sender, XmlElement elem)
         {
             if (MessageBox.Show(this,
                 "Create new account?",
                 "Authentication error",
-                MessageBoxButtons.OKCancel) == DialogResult.OK)
+                MessageBoxButtons.OKCancel, 
+                MessageBoxIcon.Warning) == DialogResult.OK)
             {
+                if (!m_connected)
+                {
+                    MessageBox.Show("You have been disconnected by the server.  Registration is not enabled.", "Disconnected", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
                 jc.Register(new JID(jc.User, jc.Server, null));
             }
             else
@@ -690,9 +699,20 @@ namespace Example
 
         private void jc_OnRegisterInfo(object sender, IQ iq)
         {
+            // Note: no UI is allowed here, since we're not likely
+            // to be in the UI thread.
+            // TODO: when this restriction is lifted, pop up the x:data form
             Register r = iq.Query as Register;
-            Debug.Assert(r != null);
             r.Password = jc.Password;
+            jabber.protocol.x.Data data = r["x", URI.XDATA] as jabber.protocol.x.Data;
+            if (data == null)
+                return;
+            jabber.protocol.x.Field f = data.GetField("username");
+            if (f != null)
+                f.Val = jc.User;
+            f = data.GetField("password");
+            if (f != null)
+                f.Val = jc.Password;
         }
 
         private void jc_OnMessage(object sender, jabber.protocol.client.Message msg)
@@ -813,6 +833,7 @@ namespace Example
         void jc_OnConnect(object sender, StanzaStream stream)
         {
             m_err = false;
+            m_connected = true;
         }
 
         private void jc_OnStreamError(object sender, XmlElement rp)
