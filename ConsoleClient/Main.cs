@@ -113,7 +113,7 @@ namespace ConsoleClient
                 jc.AutoLogin = false;
                 jc.OnLoginRequired +=
                     new bedrock.ObjectHandler(jc_OnLoginRequired);
-                jc.OnRegisterInfo += new IQHandler(this.jc_OnRegisterInfo);
+                jc.OnRegisterInfo += new RegisterInfoHandler(this.jc_OnRegisterInfo);
                 jc.OnRegistered += new IQHandler(jc_OnRegistered);
             }
             jc.Connect();
@@ -202,11 +202,9 @@ namespace ConsoleClient
                 jc.Login();
         }
         
-        private void jc_OnRegisterInfo(object sender, IQ iq)
+        private bool jc_OnRegisterInfo(object sender, Register r)
         {
-            JabberClient jc = (JabberClient) sender;
-            Register r = iq.Query as Register;
-            r.Password = jc.Password;
+            return true;
         }
     }
 }

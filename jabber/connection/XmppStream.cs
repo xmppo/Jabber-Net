@@ -846,7 +846,7 @@ namespace jabber.connection
         {
             get { return m_state; }
             set { m_state = value;
-            Debug.WriteLine("New state: " + m_state.ToString());
+            // Debug.WriteLine("New state: " + m_state.ToString());
             }
         }
 

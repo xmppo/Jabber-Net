@@ -41,6 +41,10 @@ namespace jabber.client
     /// Received an IQ
     /// </summary>
     public delegate void IQHandler(Object sender, IQ iq);
+    /// <summary>
+    /// Need more infor for registration.  Return false to cancel.
+    /// </summary>
+    public delegate bool RegisterInfoHandler(Object sender, Register register);
 
     /// <summary>
     /// A component for clients to use to access the Jabber server.
@@ -164,17 +168,15 @@ namespace jabber.client
 
         /// <summary>
         /// After calling Register, information about the user is required.  Fill in the given IQ
-        /// with the requested information.
+        /// with the requested information.  Return false to cancel.
         ///
-        /// WARNING: do not perform GUI actions in this callback, since even if your InvokeControl is set,
-        /// this is not guaranteed to be called in the GUI thread.  The IQ modification side-effect is used when
-        /// your event handler returns, so if you need to hop over to the GUI thread, pause the thread where
-        /// you are called back, then join with it when you are done.
+        /// WARNING: make sure you do not return from this handler until the IQ is filled in.  
+        /// It is now safe to call UI elements, since this callback is now on the GUI thread if
+        /// the InvokeControl is set.
         /// </summary>
         [Category("Protocol")]
         [Description("After calling Register, information about the user is required.")]
-        public event IQHandler OnRegisterInfo;
-
+        public event RegisterInfoHandler OnRegisterInfo;
 
         /// <summary>
         /// The username to connect as.
@@ -586,22 +588,63 @@ namespace jabber.client
             }
             else if (iq.Type == IQType.result)
             {
-                if (OnRegisterInfo == null)
-                    throw new InvalidOperationException("Please set OnRegisterInfo if you are going to use Register()");
-
                 JID jid = (JID) data;
                 iq.Type = IQType.set;
                 iq.From = null;
                 iq.To = jid.Server;
                 iq.ID = Element.NextID();
                 Register r = iq.Query as Register;
-                Debug.Assert(r != null);
-                r.Username = jid.User;
+                if (r == null)
+                    throw new BadProtocolException(iq, "Expected a register response");
 
-                // Note: Don't do a CheckedInvoke, since we need the result back here synchronously.
-                // Side effect:  OnRegisterInfo can't do GUI actions.
-                OnRegisterInfo(this, iq);
+                jabber.protocol.x.Data xdata = r["x", URI.XDATA] as jabber.protocol.x.Data;
+                jabber.protocol.x.Field f;
+                if (data != null)
+                {
+                    f = xdata.GetField("username");
+                    if (f != null)
+                        f.Val = jid.User;
+                    f = xdata.GetField("password");
+                    if (f != null)
+                        f.Val = this.Password;
+                }
+                else
+                {
+                    r.Username = jid.User;
+                    r.Password = this.Password;
+                }
 
+                bool res = true;
+                if (OnRegisterInfo != null)
+                {
+                    if (InvokeRequired)
+                        // Don't use CheckedInvoke, since we want this to be synchronous
+                        res = (bool)this.InvokeControl.Invoke(OnRegisterInfo, new object[] { this, r });
+                    else
+                        res = OnRegisterInfo(this, r);
+                    if (xdata != null)
+                    {
+                        f = xdata.GetField("username");
+                        if (f != null)
+                        {
+                            this.User = f.Val;
+                        }
+                        f = xdata.GetField("password");
+                        if (f != null)
+                            this.Password = f.Val;
+                    }
+                    else
+                    {
+                        this.User = r.Username;
+                        this.Password = r.Password;
+                    }
+                }
+                if (!res)
+                {
+                    this.Close();
+                    return;
+                }
+                xdata.Type = jabber.protocol.x.XDataType.result;
                 Tracker.BeginIQ(iq, new IqCB(OnSetRegister), jid);
             }
         }
@@ -759,7 +802,7 @@ namespace jabber.client
             {
                 IQ iq = i as IQ;
                 if (iq != null)
-                    FireOnError(new ProtocolException(iq));
+                    FireOnError(new IQException(iq));
                 else
                     FireOnError(new AuthenticationFailedException(i.OuterXml));
             }

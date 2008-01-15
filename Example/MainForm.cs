@@ -287,7 +287,7 @@ namespace Example
             this.jc.OnDisconnect += new bedrock.ObjectHandler(this.jc_OnDisconnect);
             this.jc.OnStreamError += new jabber.protocol.ProtocolHandler(this.jc_OnStreamError);
             this.jc.OnError += new bedrock.ExceptionHandler(this.jc_OnError);
-            this.jc.OnRegisterInfo += new jabber.client.IQHandler(this.jc_OnRegisterInfo);
+            this.jc.OnRegisterInfo += new jabber.client.RegisterInfoHandler(this.jc_OnRegisterInfo);
             this.jc.OnRegistered += new jabber.client.IQHandler(this.jc_OnRegistered);
             this.jc.OnIQ += new jabber.client.IQHandler(this.jc_OnIQ);
             // 
@@ -697,22 +697,15 @@ namespace Example
                 pnlCon.Text = "Registration error";
         }
 
-        private void jc_OnRegisterInfo(object sender, IQ iq)
+        private bool jc_OnRegisterInfo(object sender, Register r)
         {
-            // Note: no UI is allowed here, since we're not likely
-            // to be in the UI thread.
-            // TODO: when this restriction is lifted, pop up the x:data form
-            Register r = iq.Query as Register;
-            r.Password = jc.Password;
-            jabber.protocol.x.Data data = r["x", URI.XDATA] as jabber.protocol.x.Data;
-            if (data == null)
-                return;
-            jabber.protocol.x.Field f = data.GetField("username");
-            if (f != null)
-                f.Val = jc.User;
-            f = data.GetField("password");
-            if (f != null)
-                f.Val = jc.Password;
+            if (r.Form == null)
+                return true;
+            muzzle.XDataForm f = new muzzle.XDataForm(r.Form);
+            if (f.ShowDialog() != DialogResult.OK)
+                return false;
+            f.FillInResponse(r.Form);
+            return true;
         }
 
         private void jc_OnMessage(object sender, jabber.protocol.client.Message msg)

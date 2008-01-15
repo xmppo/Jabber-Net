@@ -266,5 +266,14 @@ namespace jabber.protocol.iq
                 }
             }
         }
+
+        /// <summary>
+        /// The x:data form for the registration request.  Null if none specified.
+        /// </summary>
+        public jabber.protocol.x.Data Form
+        {
+            get { return this["x", URI.XDATA] as jabber.protocol.x.Data; }
+            set { ReplaceChild(value); }
+        }
     }
 }

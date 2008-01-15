@@ -338,6 +338,16 @@ namespace muzzle
             return m_parent;
         }
 
+        public void FillInResponse(Data x)
+        {
+            x.RemoveAll();
+            x.Type = XDataType.result;
+            foreach (FormField f in m_fields)
+            {
+                f.AppendField(x);
+            }
+        }
+
         private class FormField
         {
             private FieldType m_type;

@@ -12,16 +12,51 @@
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
+using System.Xml;
 
 using bedrock.util;
 
 namespace jabber.protocol.client
 {
     /// <summary>
+    /// Invalid protocol received.
+    /// </summary>
+    [SVN(@"$Id$")]
+    public class BadProtocolException : Exception
+    {
+        private XmlElement m_proto = null;
+        private string m_msg = null;
+
+        /// <summary>
+        /// Create a protocol exception
+        /// </summary>
+        /// <param name="badProtocol">The protocol that was bad.  Typically the top-most (stanza) element.</param>
+        /// <param name="message">An optional message.  May be null.</param>
+        public BadProtocolException(XmlElement badProtocol, string message)
+        {
+            m_proto = badProtocol;
+            m_msg = message;
+        }
+
+        /// <summary>
+        /// Gets a message that describes the current exception.
+        /// </summary>
+        public override string Message
+        {
+            get
+            {
+                if (m_msg == null)
+                    return string.Format("Invalid protocol: {0}", m_proto.OuterXml);
+                return string.Format("Invalid protocol ({0}): {1}", m_proto.OuterXml, m_msg);
+            }
+        }
+    }
+
+    /// <summary>
     /// A jabber error, in an IQ.
     /// </summary>
     [SVN(@"$Id$")]
-    public class ProtocolException : Exception
+    public class IQException : Exception
     {
         // TODO: fix this up for new error codes.
         private int m_code;
@@ -33,7 +68,7 @@ namespace jabber.protocol.client
         /// TODO: understand v1 errors
         /// </summary>
         /// <param name="iq"></param>
-        public ProtocolException(IQ iq)
+        public IQException(IQ iq)
         {
             if (iq == null)
             {

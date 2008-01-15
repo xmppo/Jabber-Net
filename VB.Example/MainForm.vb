@@ -126,21 +126,25 @@ Public Class MainForm
         'pnlCon
         '
         Me.pnlCon.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Spring
+        Me.pnlCon.Name = "pnlCon"
         Me.pnlCon.Text = "Click on ""Offline"", and select a presence to log in."
-        Me.pnlCon.Width = 568
+        Me.pnlCon.Width = 569
         '
         'pnlPresence
         '
         Me.pnlPresence.Alignment = System.Windows.Forms.HorizontalAlignment.Right
         Me.pnlPresence.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Contents
+        Me.pnlPresence.Name = "pnlPresence"
         Me.pnlPresence.Text = "Offline"
         Me.pnlPresence.Width = 47
         '
         'jc
         '
         Me.jc.AutoReconnect = 3.0!
+        Me.jc.AutoStartCompression = True
         Me.jc.AutoStartTLS = True
         Me.jc.InvokeControl = Me
+        Me.jc.KeepAlive = 30.0!
         Me.jc.LocalCertificate = Nothing
         Me.jc.Password = Nothing
         Me.jc.User = Nothing
@@ -157,6 +161,8 @@ Public Class MainForm
         '
         Me.ilPresence.ImageStream = CType(resources.GetObject("ilPresence.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.ilPresence.TransparentColor = System.Drawing.Color.Transparent
+        Me.ilPresence.Images.SetKeyName(0, "")
+        Me.ilPresence.Images.SetKeyName(1, "")
         '
         'mnuPresence
         '
@@ -207,8 +213,10 @@ Public Class MainForm
         '
         'roster
         '
+        Me.roster.AllowDrop = True
         Me.roster.Client = Me.jc
         Me.roster.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.roster.DrawMode = System.Windows.Forms.TreeViewDrawMode.OwnerDrawText
         Me.roster.ImageIndex = 1
         Me.roster.Location = New System.Drawing.Point(0, 0)
         Me.roster.Name = "roster"
@@ -219,6 +227,7 @@ Public Class MainForm
         Me.roster.ShowRootLines = False
         Me.roster.Size = New System.Drawing.Size(624, 218)
         Me.roster.Sorted = True
+        Me.roster.StatusColor = System.Drawing.Color.Teal
         Me.roster.TabIndex = 0
         '
         'tpDebug
@@ -357,6 +366,18 @@ Public Class MainForm
         End If
     End Sub
 
+    Private Function jc_OnRegisterInfo(ByVal sender As System.Object, ByVal register As jabber.protocol.iq.Register) As System.Boolean Handles jc.OnRegisterInfo
+        Dim data As jabber.protocol.x.Data = register.Form
+        If (data Is Nothing) Then Return True
+
+        Dim form As muzzle.XDataForm = New muzzle.XDataForm(data)
+
+        If (form.ShowDialog() <> Windows.Forms.DialogResult.OK) Then Return False
+        form.FillInResponse(data)
+
+        Return True
+    End Function
+
 
     Private Sub jc_OnRegistered(ByVal sender As Object, ByVal iq As jabber.protocol.client.IQ) Handles jc.OnRegistered
         If (iq.Type = jabber.protocol.client.IQType.result) Then
@@ -364,11 +385,6 @@ Public Class MainForm
         Else
             pnlCon.Text = "Registration error"
         End If
-    End Sub
-
-    Private Sub jc_OnRegisterInfo(ByVal sender As Object, ByVal iq As jabber.protocol.client.IQ) Handles jc.OnRegisterInfo
-        Dim r As Register = DirectCast(iq.Query, Register)
-        r.Password = jc.Password
     End Sub
 
     Private Sub jc_OnMessage(ByVal sender As Object, ByVal msg As jabber.protocol.client.Message) Handles jc.OnMessage
