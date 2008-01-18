@@ -49,7 +49,7 @@ namespace bedrock.collections
         private IDictionary m_dict;
 
         /// <summary>
-        /// Create a new, empty Set backed into a hash table.
+        /// Creates a new, empty Set backed into a hash table.
         /// </summary>
         public Set()
         {
@@ -57,7 +57,7 @@ namespace bedrock.collections
         }
 
         /// <summary>
-        /// Create a set with the given back-end implementation.
+        /// Creates a set with the given back-end implementation.
         /// </summary>
         /// <param name="impl">How to implement the set.</param>
         public Set(SetImplementation impl)
@@ -100,7 +100,7 @@ namespace bedrock.collections
         }
 
         /// <summary>
-        /// Remove all items from the set.
+        /// Removes all items from the set.
         /// </summary>
         public void Clear()
         {
@@ -140,8 +140,8 @@ namespace bedrock.collections
         /// <summary>
         /// Copies the elements of the ICollection to an Array, starting at a particular Array index.
         /// </summary>
-        /// <param name="array">The array to copy</param>
-        /// <param name="index">The index to start at</param>
+        /// <param name="array">The array to copy.</param>
+        /// <param name="index">The index to start at.</param>
         public void CopyTo(System.Array array, int index)
         {
             int count = index;

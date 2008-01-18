@@ -37,7 +37,7 @@ namespace jabber.connection
         private Hashtable m_rooms = new Hashtable();
 
         /// <summary>
-        /// Create a manager
+        /// Creates a manager.
         /// </summary>
         public ConferenceManager()
         {

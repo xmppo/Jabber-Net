@@ -28,14 +28,14 @@ namespace bedrock.collections
         private int  m_maxResults = 100;
 
         /// <summary>
-        ///
+        /// Creates the indexed trie.
         /// </summary>
         public IndexedTrie()  {}
 
         /// <summary>
-        ///
+        /// Creates the indexed trie and sets the maximum number of query results returned.
         /// </summary>
-        /// <param name="maxResults"></param>
+        /// <param name="maxResults">Maximum number of query results returned.</param>
         public IndexedTrie(int maxResults)
         {
             m_maxResults = maxResults;
@@ -56,7 +56,7 @@ namespace bedrock.collections
             }
         }
         /// <summary>
-        /// Find the index for the given byte.
+        /// Finds the index for the given byte.
         /// </summary>
         protected ArrayList this[byte b]
         {
@@ -79,7 +79,7 @@ namespace bedrock.collections
             return true;
         }
         /// <summary>
-        /// Compute the index.
+        /// Computes the index.
         /// </summary>
         public void Index()
         {

@@ -21,13 +21,13 @@ using bedrock.util;
 namespace jabber
 {
     /// <summary>
-    /// An attempt was made to parse a badly-formatted JID.
+    /// Informs the client that an invalid JID was entered.
     /// </summary>
     [SVN(@"$Id$")]
     public class JIDFormatException : ApplicationException
     {
         /// <summary>
-        /// Bad JID.
+        /// Creates a new exception for an invalid JID.
         /// </summary>
         /// <param name="badJid">The invalid JID</param>
         public JIDFormatException(string badJid) : base("Bad JID: (" + badJid + ")")
@@ -35,17 +35,17 @@ namespace jabber
         }
 
         /// <summary>
-        /// Create a new exception instance.
+        /// Creates a new exception instance.
         /// </summary>
         public JIDFormatException() : base()
         {
         }
 
         /// <summary>
-        /// Create a new exception instance, wrapping another exception.
+        /// Creates a new exception instance, wrapping another exception.
         /// </summary>
-        /// <param name="badJid">Ill-formatted JID</param>
-        /// <param name="e">Inner exception</param>
+        /// <param name="badJid">Invalid JID.</param>
+        /// <param name="e">Inner exception.</param>
         public JIDFormatException(string badJid, Exception e) : base("Bad JID: (" + badJid + ")", e)
         {
         }
@@ -63,8 +63,7 @@ namespace jabber
     }
 
     /// <summary>
-    /// Simple JID management.  There should be more, here, particularly
-    /// with respect to interning.
+    /// Provides simple JID management.
     /// </summary>
     [SVN(@"$Id$")]
     public class JID : IComparable
@@ -81,7 +80,8 @@ namespace jabber
         private string m_JID      = null;
 
         /// <summary>
-        /// Create a JID from a string.  This will parse and stringprep.
+        /// Creates a JID from a string.
+        /// This will parse and perform the stringprep (RFC 3454) process.
         /// </summary>
         /// <param name="jid">Jabber ID, in string form</param>
         public JID(string jid)
@@ -92,11 +92,12 @@ namespace jabber
         }
 
         /// <summary>
-        /// Build a new JID from the given components.
+        /// Builds a new JID from the given components.
+        /// This will parse and perform the stringprep (RFC 3454) process.
         /// </summary>
-        /// <param name="user">The username</param>
-        /// <param name="server">The server</param>
-        /// <param name="resource">The current resource</param>
+        /// <param name="user">The username value.</param>
+        /// <param name="server">The XMPP server domain value.</param>
+        /// <param name="resource">The current resource value.</param>
         public JID(string user, string server, string resource)
         {
             Debug.Assert(server != null, "server must be non-null");
@@ -207,18 +208,18 @@ namespace jabber
         }
 
         /// <summary>
-        /// Hash the string version of the JID.
+        /// Gets the hash code on the string version of the JID.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Hash code.</returns>
         public override int GetHashCode()
         {
             return m_JID.GetHashCode();
         }
 
         /// <summary>
-        /// Return the string representation.
+        /// Returns the string representation.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>String in the form of "[user]@[server]/[resource]</returns>
         public override string ToString()
         {
             return m_JID;
@@ -242,11 +243,11 @@ namespace jabber
         }
 
         /// <summary>
-        /// Two jids are equal?
+        /// Determines whether two JIDs have the same value.
         /// </summary>
-        /// <param name="one"></param>
-        /// <param name="two"></param>
-        /// <returns></returns>
+        /// <param name="one">A JID to compare.</param>
+        /// <param name="two">Another JID to compare to the first one.</param>
+        /// <returns>True if everything (user, host and resource) are the same; otherwise false.</returns>
         public static bool operator==(JID one, JID two)
         {
             if ((object)one == null)
@@ -255,11 +256,11 @@ namespace jabber
         }
 
         /// <summary>
-        /// Is this string equal to that jid?
+        /// Determines whether the string representation of the specified JID is equal to the current JID.
         /// </summary>
-        /// <param name="one"></param>
-        /// <param name="two"></param>
-        /// <returns></returns>
+        /// <param name="one">This string is converted to a JID than compared to the second parameter.</param>
+        /// <param name="two">JID to compare to the first one.</param>
+        /// <returns>True if everything (user, host and resource) are the same; otherwise false.</returns>
         public static bool operator==(string one, JID two)
         {
             if ((object)two == null)
@@ -268,11 +269,11 @@ namespace jabber
         }
 
         /// <summary>
-        /// Is this string not equal to that jid?
+        /// Determines whether the string representation of the specified JID is not equal to the current JID.
         /// </summary>
-        /// <param name="one"></param>
-        /// <param name="two"></param>
-        /// <returns></returns>
+        /// <param name="one">This string is converted to a JID than compared to the second parameter.</param>
+        /// <param name="two">JID to compare to the first one.</param>
+        /// <returns>True if one thing (user, host or resource) is different; otherwise false.</returns>
         public static bool operator!=(string one, JID two)
         {
             if ((object)two == null)
@@ -281,11 +282,11 @@ namespace jabber
         }
 
         /// <summary>
-        /// Two jids are unequal?
+        /// Determines whether two JIDs have different values.
         /// </summary>
-        /// <param name="one"></param>
-        /// <param name="two"></param>
-        /// <returns></returns>
+        /// <param name="one">A JID to compare.</param>
+        /// <param name="two">Another JID to compare to the first one.</param>
+        /// <returns>True if one thing (user, host and resource) is different; otherwise false.</returns>
         public static bool operator!=(JID one, JID two)
         {
             if ((object)one == null)
@@ -294,10 +295,10 @@ namespace jabber
         }
 
         /// <summary>
-        /// Convert string to JID implicitly (no cast needed).
+        /// Converts a string to a JID implicitly (no cast needed).
         /// </summary>
-        /// <param name="jid"></param>
-        /// <returns></returns>
+        /// <param name="jid">String containing a JID.</param>
+        /// <returns>JID object representing the string passed in.</returns>
         public static implicit operator JID(string jid)
         {
             if (jid == null)
@@ -306,10 +307,10 @@ namespace jabber
         }
 
         /// <summary>
-        /// Convert string to JID implicitly (no cast needed).
+        /// Converts a JID to a string implicitly (no cast needed).
         /// </summary>
-        /// <param name="jid"></param>
-        /// <returns></returns>
+        /// <param name="jid">JID whos string representation we want.</param>
+        /// <returns>String version of the jid.</returns>
         public static implicit operator string(JID jid)
         {
             if (jid == null)
@@ -318,51 +319,51 @@ namespace jabber
         }
 
         /// <summary>
-        /// Less than
+        /// Compares two JIDs.
         /// </summary>
-        /// <param name="left"></param>
-        /// <param name="right"></param>
-        /// <returns></returns>
+        /// <param name="left">First JID.</param>
+        /// <param name="right">Second JID.</param>
+        /// <returns>True if the first JID is less to the second; otherwise false.</returns>
         public static bool operator<(JID left, JID right)
         {
             return left.CompareTo(right) == -1;
         }
 
         /// <summary>
-        /// Greater than
+        /// Compares two JIDs.
         /// </summary>
-        /// <param name="left"></param>
-        /// <param name="right"></param>
-        /// <returns></returns>
+        /// <param name="left">First JID.</param>
+        /// <param name="right">Second JID.</param>
+        /// <returns>True if the first JID is greater than the second; otherwise false.</returns>
         public static bool operator>(JID left, JID right)
         {
             return left.CompareTo(right) == 1;
         }
 
         /// <summary>
-        /// Less than or equal
+        /// Compares two JIDs.
         /// </summary>
-        /// <param name="left"></param>
-        /// <param name="right"></param>
-        /// <returns></returns>
+        /// <param name="left">First JID.</param>
+        /// <param name="right">Second JID.</param>
+        /// <returns>True if the first JID is less than or equal to the second; otherwise false.</returns>
         public static bool operator<=(JID left, JID right)
         {
             return left.CompareTo(right) != 1;
         }
 
         /// <summary>
-        /// Greater than or equal
+        /// Compares two JIDs.
         /// </summary>
-        /// <param name="left"></param>
-        /// <param name="right"></param>
-        /// <returns></returns>
+        /// <param name="left">First JID.</param>
+        /// <param name="right">Second JID.</param>
+        /// <returns>True if the first JID is greater than or equal to the second; otherwise false.</returns>
         public static bool operator>=(JID left, JID right)
         {
             return left.CompareTo(right) != -1;
         }
 
         /// <summary>
-        /// Just the user field.  NULL if none.
+        /// Gets and sets the username value of the JID, and returns null if it does not exist.
         /// </summary>
         public string User
         {
@@ -380,7 +381,7 @@ namespace jabber
         }
 
         /// <summary>
-        /// Just the server field.
+        /// Gets and sets the XMPP server domain value.
         /// </summary>
         public string Server
         {
@@ -398,7 +399,7 @@ namespace jabber
         }
 
         /// <summary>
-        /// Just the resource field.  NULL if none.
+        /// Gets and sets the resource value and returns null if it does not exist.
         /// </summary>
         public string Resource
         {
@@ -416,7 +417,7 @@ namespace jabber
         }
 
         /// <summary>
-        /// User@host.
+        /// Gets the username and XMPP server domain values of the JID. For example: user@example.com
         /// </summary>
         public string Bare
         {

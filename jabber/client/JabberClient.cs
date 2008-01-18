@@ -30,15 +30,15 @@ using jabber.connection.sasl;
 namespace jabber.client
 {
     /// <summary>
-    /// Received a presence packet
+    /// Informs the client that a presence packet has been received.
     /// </summary>
     public delegate void PresenceHandler(Object sender, Presence pres);
     /// <summary>
-    /// Received a message
+    /// Informst the client that a message has been received.
     /// </summary>
     public delegate void MessageHandler(Object sender, Message msg);
     /// <summary>
-    /// Received an IQ
+    /// Informs the client that an IQ has been received.
     /// </summary>
     public delegate void IQHandler(Object sender, IQ iq);
     /// <summary>
@@ -47,9 +47,9 @@ namespace jabber.client
     public delegate bool RegisterInfoHandler(Object sender, Register register);
 
     /// <summary>
-    /// A component for clients to use to access the Jabber server.
-    /// Install this in your Toolbox, drop onto a form, a service,
-    /// etc.  Hook into the OnProtocol event.  Call Connect().
+    /// Provides a component for clients to use to access the XMPP server.
+    /// You can install this in your Toolbox, drop onto a form, a service, and so on.
+    /// This class hooks into the OnProtocol event and calls the Connect() method.
     /// </summary>
     [SVN(@"$Id$")]
     public class JabberClient : XmppStream
@@ -76,6 +76,7 @@ namespace jabber.client
         }
 
         /// <summary>
+        /// Creates a new Jabber client and associates it with the parent window.
         /// Required for Windows.Forms Class Composition Designer support
         /// </summary>
         /// <param name="container"></param>
@@ -86,7 +87,8 @@ namespace jabber.client
         }
 
         /// <summary>
-        /// Required for Windows.Forms Class Composition Designer support
+        /// Creates a new JabberClient.
+        /// Required for Windows.Forms Class Composition Designer support.
         /// </summary>
         public JabberClient() : base()
         {
@@ -105,21 +107,21 @@ namespace jabber.client
         */
 
         /// <summary>
-        /// We received a presence packet.
+        /// Informs the client that it received a presence packet.
         /// </summary>
         [Category("Protocol")]
         [Description("We received a presence packet.")]
         public event PresenceHandler OnPresence;
 
         /// <summary>
-        /// We received a message packet.
+        /// Informs the client that it received a message packet.
         /// </summary>
         [Category("Protocol")]
         [Description("We received a message packet.")]
         public event MessageHandler OnMessage;
 
         /// <summary>
-        /// We received an IQ packet.
+        /// Informs the client that it received an IQ packet.
         /// </summary>
         [Category("Protocol")]
         [Description("We received an IQ packet.")]
@@ -142,25 +144,26 @@ namespace jabber.client
         public event PresenceHandler OnBeforePresenceOut;
 
         /// <summary>
-        /// Presence has been sent.  This gives a chance to send presence to other things, such as chat rooms.
+        /// Informs the client that the presence has been sent.
+        /// This gives a chance to send presence to other things, such as chat rooms.
         /// </summary>
         [Category("Protocol")]
-        [Description("Presence has been sent.  This gives a chance to send presence to other things, such as chat rooms.")]
+        [Description("Informs the client that the presence has been sent.  This gives a chance to send presence to other things, such as chat rooms.")]
         public event PresenceHandler OnAfterPresenceOut;
 
         /// <summary>
-        /// AutoLogin is false, and it's time to log in.
+        /// Determines if SutoLogin is false, and if it is time to log in.
         /// This callback will receive the results of the IQ type=get
-        /// in the jabber:iq:auth namespace.  When login is complete,
-        /// set IsConnected to true.  If there is a login error, call
-        /// FireAuthError().
+        /// in the jabber:iq:auth namespace.  When login is completed,
+        /// IsConnected property is set to true.  If there is a login error, the
+        /// FireAuthError() method is called.
         /// </summary>
         [Category("Protocol")]
         [Description("AutoLogin is false, and it's time to log in.")]
         public event bedrock.ObjectHandler OnLoginRequired;
 
         /// <summary>
-        /// After calling Register(), the registration succeeded or failed.
+        /// Informs the client if the registration succeeded or failed.
         /// </summary>
         [Category("Protocol")]
         [Description("After calling Register(), the registration succeeded or failed.")]
@@ -190,7 +193,7 @@ namespace jabber.client
         }
 
         /// <summary>
-        /// Priority for this connection.
+        /// Gets the priority for this connection.
         /// </summary>
         [Description("Priority for this connection.")]
         [Category("Jabber")]
@@ -221,7 +224,7 @@ namespace jabber.client
         }
 
         /// <summary>
-        /// Automatically log in on connection.
+        /// Allows auto-login to be used for the connection to the XMPP server if set to true.
         /// </summary>
         [Description("Automatically log in on connection.")]
         [DefaultValue(true)]
@@ -314,9 +317,9 @@ namespace jabber.client
         }
 
         /// <summary>
-        /// Connect to the server.  This happens asynchronously, and
+        /// Connects to the XMPP server.  This happens asynchronously, and
         /// could take a couple of seconds to get the full handshake
-        /// completed.  This will auth, send presence, and request
+        /// completed.  This will authenticate, send presence, and request
         /// roster info, if the Auto* properties are set.
         /// </summary>
         public override void Connect()
@@ -340,7 +343,7 @@ namespace jabber.client
         }
 
         /// <summary>
-        /// Initiate the auth process.
+        /// Initiates the authentication process.
         /// </summary>
         public void Login()
         {
@@ -407,11 +410,11 @@ namespace jabber.client
         }
 
         /// <summary>
-        /// Send a message packet to another user
+        /// Sends a message packet to another user.
         /// </summary>
-        /// <param name="t">What kind?</param>
-        /// <param name="to">Who to send it to?</param>
-        /// <param name="body">The message.</param>
+        /// <param name="t">The type of message.</param>
+        /// <param name="to">The JID to send the message to.</param>
+        /// <param name="body">The body of the message.</param>
         public void Message(MessageType t,
             string to,
             string body)
@@ -431,10 +434,10 @@ namespace jabber.client
         }
 
         /// <summary>
-        /// Send a message packet to another user
+        /// Sends a message packet to another user
         /// </summary>
-        /// <param name="to">Who to send it to?</param>
-        /// <param name="body">The message.</param>
+        /// <param name="to">The JID to send the message to.</param>
+        /// <param name="body">The body of the message.</param>
         public void Message(
             string to,
             string body)
@@ -443,7 +446,7 @@ namespace jabber.client
         }
 
         /// <summary>
-        /// Request a new copy of the roster.
+        /// Requests a new copy of the roster.
         /// </summary>
         public void GetRoster()
         {
@@ -491,8 +494,8 @@ namespace jabber.client
         }
 
         /// <summary>
-        /// Remove an item from the roster.  
-        /// This will have the side-effect of bi-directionally unsubscribing to/from the user.
+        /// Removes a contact from the roster.  
+        /// This will also remove the subscription for that contact being removed.
         /// </summary>
         /// <param name="to">The JID to remove</param>
         public void RemoveRosterItem(JID to)
@@ -516,7 +519,7 @@ namespace jabber.client
         }
 
         /// <summary>
-        /// Request a list of agents from the server
+        /// Requests a list of agents from the XMPP server.
         /// </summary>
         public void GetAgents()
         {
@@ -952,37 +955,38 @@ namespace jabber.client
     }
 
     /// <summary>
-    /// Getting authorization information
+    /// Contains the "Getting authorization" information.
     /// </summary>
     [SVN(@"$Id$")]
     public class GetAuthState : jabber.connection.BaseState
     {
         /// <summary>
-        /// The instance that is always used.
+        /// Gets the instance that is always used.
         /// </summary>
         public static readonly jabber.connection.BaseState Instance = new GetAuthState();
     }
 
     /// <summary>
-    /// Setting authorization information
+    /// Contains the "Setting authorization" information.
     /// </summary>
     [SVN(@"$Id$")]
     public class SetAuthState : jabber.connection.BaseState
     {
         /// <summary>
-        /// The instance that is always used.
+        /// Gets the instance that is always used.
         /// </summary>
         public static readonly jabber.connection.BaseState Instance = new SetAuthState();
     }
 
     /// <summary>
-    /// Waiting for manual login.
+    /// Informs the client that the JabberClient is in
+    /// the "Waiting for manual login" state.
     /// </summary>
     [SVN(@"$Id$")]
     public class ManualLoginState : jabber.connection.BaseState
     {
         /// <summary>
-        /// The instance that is always used.
+        /// Gets the instance that is always used.
         /// </summary>
         public static readonly jabber.connection.BaseState Instance = new ManualLoginState();
     }

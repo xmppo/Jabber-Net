@@ -48,10 +48,10 @@ namespace bedrock.collections
         }
 
         /// <summary>
-        /// Add a child to this node
+        /// Adds a child to this node.
         /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
+        /// <param name="key">The key for the child.</param>
+        /// <returns>The child noded added to this node.</returns>
         public virtual TrieNode Add(byte key)
         {
             TrieNode e = new TrieNode(this, key);
@@ -87,7 +87,7 @@ namespace bedrock.collections
             }
         }
         /// <summary>
-        /// Get the byte associated with this node
+        /// Gets the byte associated with this node.
         /// </summary>
         public byte Byte
         {
@@ -131,7 +131,7 @@ namespace bedrock.collections
             }
         }
         /// <summary>
-        /// Get the child associated with the given byte, or null if one doesn't exist.
+        /// Gets the child associated with the specified byte, or null if one does not exist.
         /// </summary>
         public TrieNode this[byte key]
         {
@@ -145,7 +145,7 @@ namespace bedrock.collections
             }
         }
         /// <summary>
-        /// Get the child associated with the given byte, or null if one doesn't exist.
+        /// Gets the child associated with the specified byte, or null if one does not exist.
         /// If create is true, a node will be added with a null value
         /// if a node does not already exist, so that this can be used
         /// as an lvalue.
@@ -188,7 +188,7 @@ namespace bedrock.collections
         /// Returns <tt>true</tt> if the given object is also a map entry and
         /// the two entries represent the same mapping.  More formally, two
         /// entries <tt>e1</tt> and <tt>e2</tt> represent the same mapping
-        /// if<pre>
+        /// if:<pre>
         ///     (e1.getKey()==null ?
         ///      e2.getKey()==null : e1.getKey().equals(e2.getKey()))  &amp;&amp;
         ///     (e1.getValue()==null ?
@@ -197,9 +197,9 @@ namespace bedrock.collections
         /// This ensures that the <tt>equals</tt> method works properly across
         /// different implementations of the <tt>Map.Entry</tt> interface.
         /// </summary>
-        /// <param name="o">object to be compared for equality with this map entry</param>
-        /// <returns><tt>true</tt> if the specified object is equal to this map
-        ///         entry.</returns>
+        /// <param name="o">Object to be compared for equality with this map entry.</param>
+        /// <returns><tt>True</tt> if the specified object is equal to this map
+        ///         entry; otherwise false.</returns>
         public override bool Equals(Object o)
         {
             if (o == null)
@@ -217,7 +217,7 @@ namespace bedrock.collections
         /// <summary>
         /// Returns the hash code value for this map entry.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Hash code.</returns>
         public override int GetHashCode()
         {
             return ((Key==null)    ? 0 : Key.GetHashCode()) ^
@@ -225,9 +225,9 @@ namespace bedrock.collections
         }
         #region Implementation of IEnumerable
         /// <summary>
-        /// Iterate over the children
+        /// Iterates over the child nodes.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>An IEnumerator to parse over the child nodes.</returns>
         public System.Collections.IEnumerator GetEnumerator()
         {
             return new TrieNodeEnumerator(this);

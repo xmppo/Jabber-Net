@@ -33,7 +33,7 @@ namespace bedrock.collections
         private bool      m_readOnly   = false;
         private bool      m_synch      = false;
         /// <summary>
-        /// Create an empty list
+        /// Creates an empty list.
         /// </summary>
         public LinkedList()
         {
@@ -74,7 +74,7 @@ namespace bedrock.collections
         }
 
         /// <summary>
-        /// Is the list read-only?
+        /// Determines if the list is read-only (Can the user add or remove an item from this list).
         /// </summary>
         public bool IsReadOnly
         {
@@ -132,7 +132,7 @@ namespace bedrock.collections
         #endregion
         #region IList
         /// <summary>
-        /// Walk the list to get the index'th element
+        /// Gets the indexth element by walking the list.
         /// </summary>
         public object this[int index]
         {
@@ -178,7 +178,7 @@ namespace bedrock.collections
         }
 
         /// <summary>
-        /// Where is the given object?
+        /// Determines where in the index the specified object exists.
         /// </summary>
         /// <param name="value">The object to find</param>
         /// <returns>The position of the object in the list, or -1 if not found</returns>
@@ -207,7 +207,7 @@ namespace bedrock.collections
         }
 
         /// <summary>
-        /// Insert an item into the list at the given index
+        /// Inserts an item into the list at the given index.
         /// </summary>
         /// <param name="index">The position to insert before</param>
         /// <param name="value">The object to insert</param>
@@ -266,7 +266,7 @@ namespace bedrock.collections
         }
 
         /// <summary>
-        /// Remove the index'th element from the list
+        /// Removes the indexth element from the list.
         /// </summary>
         /// <param name="index">The index of the element to delete</param>
         public void RemoveAt(int index)
@@ -278,9 +278,9 @@ namespace bedrock.collections
 
         #region Queue
         /// <summary>
-        /// Insert an element at the end of the list
+        /// Inserts an element at the end of the list.
         /// </summary>
-        /// <param name="value"></param>
+        /// <param name="value">Element to insert.</param>
         public void Enqueue(object value)
         {
             AddBefore(value, m_header);
@@ -353,7 +353,7 @@ namespace bedrock.collections
         {
             if (m_readOnly)
             {
-                throw new InvalidOperationException("Can not add to read-only list");
+                throw new InvalidOperationException("Cannot add to a read-only list");
             }
 
             if (m_synch)
@@ -385,7 +385,7 @@ namespace bedrock.collections
                 throw new InvalidOperationException("Deleting from an empty list");
             if (m_readOnly)
             {
-                throw new InvalidOperationException("Can not add to read-only list");
+                throw new InvalidOperationException("Cannot remove from a read-only list");
             }
 
             if (m_synch)
@@ -439,9 +439,10 @@ namespace bedrock.collections
         #endregion
         #region newstuff
         /// <summary>
-        /// Insert in order.  Returns the position of the insertion point.
+        /// Insert in order.
         /// </summary>
-        /// <param name="value"> </param>
+        /// <param name="value">Value to insert.</param>
+        /// <returns>The position of the insertion point.</returns>
         public int Insert(object value)
         {
             if (m_comparator == null)
@@ -495,12 +496,10 @@ namespace bedrock.collections
         }
 
         /// <summary>
-        /// Return a read-only linked list from the given enumeration.
-        /// This doesn't seem all that useful to me.  An array might be
-        /// a better choice.
+        /// Returns a read-only linked list from the given enumeration.
         /// </summary>
-        /// <param name="e"></param>
-        /// <returns></returns>
+        /// <param name="e">Collection to be copied over to the read-only list.</param>
+        /// <returns>The new read-only list.</returns>
         public static LinkedList ReadOnly(IEnumerable e)
         {
             LinkedList ll = new LinkedList(e);

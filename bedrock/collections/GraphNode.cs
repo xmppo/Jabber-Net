@@ -29,7 +29,7 @@ namespace bedrock.collections
         private IDictionary m_children = null;
         private bool        m_sorted   = true;
         /// <summary>
-        /// Create a new node, with key and data
+        /// Creates a new node, with key and data.
         /// </summary>
         /// <param name="key">The key used to retrieve the data</param>
         /// <param name="data">The data in the node</param>
@@ -37,7 +37,7 @@ namespace bedrock.collections
         {
         }
         /// <summary>
-        /// Create a new node, with key and data, possibly having sorted children.
+        /// Creates a new node, with key and data, possibly having sorted children.
         /// </summary>
         /// <param name="key">The key used to retrieve the data</param>
         /// <param name="data">The data in the node</param>
@@ -57,11 +57,11 @@ namespace bedrock.collections
             }
         }
         /// <summary>
-        /// Add a new child node
+        /// Adds a new child node
         /// </summary>
         /// <param name="key">The key for the child</param>
         /// <param name="data">The data for the child</param>
-        /// <returns></returns>
+        /// <returns>The child node added to the graph.</returns>
         public GraphNode Add(object key, object data)
         {
             GraphNode n = new GraphNode(key, data, m_sorted);
@@ -70,7 +70,7 @@ namespace bedrock.collections
             return n;
         }
         /// <summary>
-        /// Retrieve a child node, based on the key.
+        /// Retrieves a child node, based on the key.
         /// </summary>
         public object this[object key]
         {
@@ -80,7 +80,7 @@ namespace bedrock.collections
             }
         }
         /// <summary>
-        /// Is this the root node?
+        /// Determines whether this is a root node.
         /// </summary>
         public bool IsRoot
         {

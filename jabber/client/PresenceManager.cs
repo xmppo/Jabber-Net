@@ -27,14 +27,14 @@ namespace jabber.client
 {
 
     /// <summary>
-    /// A change of derived primary session for a user
+    /// Informs the client of a change of derived primary session for a user.
     /// </summary>
     /// <param name="sender">The PresenceManager object that sent the update</param>
     /// <param name="bare">The bare JID (node@domain) of the user whose presence changed</param>
     public delegate void PrimarySessionHandler(object sender, JID bare);
 
     /// <summary>
-    /// Presence proxy database.
+    /// Manages the presence proxy database.
     /// </summary>
     [SVN(@"$Id$")]
     public class PresenceManager : jabber.connection.StreamComponent, IEnumerable
@@ -46,16 +46,16 @@ namespace jabber.client
         private Tree m_items = new Tree();
 
         /// <summary>
-        /// Construct a PresenceManager object.
+        /// Constructs a PresenceManager object and adds it to a container.
         /// </summary>
-        /// <param name="container"></param>
+        /// <param name="container">Parent container.</param>
         public PresenceManager(System.ComponentModel.IContainer container) : this()
         {
             container.Add(this);
         }
 
         /// <summary>
-        /// Construct a PresenceManager object.
+        /// Constructs a PresenceManager object.
         /// </summary>
         public PresenceManager()
         {
@@ -89,16 +89,16 @@ namespace jabber.client
         }
 
         /// <summary>
-        /// Get the current presence state as a string.
+        /// Gets the current presence state as a string.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>string in the format '{bare JID}={list of presence stanzas}, ...'</returns>
         public override string ToString()
         {
             return m_items.ToString();
         }
 
         /// <summary>
-        /// The primary session has changed for a user.
+        /// Informs the client that the primary session has changed for a user.
         /// </summary>
         public event PrimarySessionHandler OnPrimarySessionChange;
 
@@ -109,9 +109,9 @@ namespace jabber.client
         }
 
         /// <summary>
-        /// Add a new available or unavailable presence packet to the database.
+        /// Adds a new available or unavailable presence packet to the database.
         /// </summary>
-        /// <param name="p"></param>
+        /// <param name="p">Presence stanza to add.</param>
         public void AddPresence(Presence p)
         {
             // can't use .From, since that will cause a JID parse.
@@ -163,11 +163,11 @@ namespace jabber.client
         }
 
         /// <summary>
-        /// Is this user online with any resource?  This performs better than retrieving
-        /// the particular associated presence packet.
+        /// Determines if a specified JID is online with any resources.
+        /// This performs better than retrieving the particular associated presence packet.
         /// </summary>
         /// <param name="jid">The JID to look up.</param>
-        /// <returns></returns>
+        /// <returns>If true, the user is online; otherwise the user is offline</returns>
         public bool IsAvailable(JID jid)
         {
             lock (this)
@@ -177,8 +177,8 @@ namespace jabber.client
         }
 
         /// <summary>
-        /// If given a bare JID, get the primary presence.
-        /// If given a FQJ, return the associated presence.
+        /// Gets the primary presence if given a bare JID.
+        /// If given a FQJ, returns the associated presence.
         /// </summary>
         public Presence this[JID jid]
         {
@@ -195,10 +195,10 @@ namespace jabber.client
         }
 
         /// <summary>
-        /// Get all of the current presence stanzas for the given user.
+        /// Gets all of the current presence stanzas for the given user.
         /// </summary>
-        /// <param name="jid"></param>
-        /// <returns></returns>
+        /// <param name="jid">User who's presence stanzas you want.</param>
+        /// <returns>Array of presence stanzas for the given user.</returns>
         public Presence[] GetAll(JID jid)
         {
             UserPresenceManager upm = (UserPresenceManager)m_items[jid.Bare];

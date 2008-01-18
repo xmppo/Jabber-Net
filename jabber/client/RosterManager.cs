@@ -27,20 +27,20 @@ using jabber.protocol.iq;
 namespace jabber.client
 {
     /// <summary>
-    /// Delegate for receiving roster items.
+    /// Informs the client of roster items.
     /// </summary>
     public delegate void RosterItemHandler(object sender, Item ri);
 
     /// <summary>
-    /// Delegate for subscription requests
+    /// Informs the client of a subscription requests.
     /// </summary>
     /// <param name="manager">The RosterManager than detected the subscription</param>
-    /// <param name="ri">The affected roster item, in its current state.  Null if not found (which I think should be rare)</param>
+    /// <param name="ri">The affected roster item, in its current state.  Null if not found.</param>
     /// <param name="pres">The inbound presence stanza</param>
     public delegate void SubscriptionHandler(RosterManager manager, Item ri, Presence pres);
 
     /// <summary>
-    /// Delegate for unsubscription notifications
+    /// Informs the client of an unsubscription notifications.
     /// </summary>
     /// <param name="manager">The RosterManager than detected the subscription</param>
     /// <param name="remove">Set this to false to prevent the user being removed from the roster.</param>
@@ -48,15 +48,12 @@ namespace jabber.client
     public delegate void UnsubscriptionHandler(RosterManager manager, Presence pres, ref bool remove);
 
     /// <summary>
-    /// How should a RosterManager deal with incoming subscriptions?
-    /// Two axes: 
-    ///  1) should we allow automatically? (yes, no, only if we're subscribed or subscribing to them)
-    ///  2) should we subscribe automatically? (yes, no).  This one we'll just put in an orthogonal boolean.
+    /// Determines how the RosterManager deals with incoming subscriptions. 
     /// </summary>
     public enum AutoSubscriptionHanding
     {
         /// <summary>
-        /// Don't do any automatic processing
+        /// Do not do any automatic processing
         /// </summary>
         NONE = 0,
         /// <summary>
@@ -68,14 +65,15 @@ namespace jabber.client
         /// </summary>
         DenyAll,
         /// <summary>
-        /// If we're either subscribed or trying to subscribe to them, allow their subscription.
+        /// If the user is either subscribed or trying to subscribe to another user,
+        /// allow the other user's subscription.
         /// Otherwise, treat as NONE, and fire the OnSubscribe event.
         /// </summary>
         AllowIfSubscribed,
     }
 
     /// <summary>
-    /// Summary description for RosterManager.
+    /// Manages the roster of the client.
     /// </summary>
     [SVN(@"$Id$")]
     public class RosterManager : jabber.connection.StreamComponent
@@ -89,9 +87,9 @@ namespace jabber.client
         private bool m_autoSubscribe = false;
 
         /// <summary>
-        /// Create a roster manager inside a container
+        /// Creates a roster manager inside a container.
         /// </summary>
-        /// <param name="container"></param>
+        /// <param name="container">Parent container</param>
         public RosterManager(System.ComponentModel.IContainer container) : this()
         {
             // Required for Windows.Forms Class Composition Designer support
@@ -99,7 +97,7 @@ namespace jabber.client
         }
 
         /// <summary>
-        /// Create a roster manager
+        /// Creates a roster manager.
         /// </summary>
         public RosterManager()
         {
@@ -120,7 +118,7 @@ namespace jabber.client
 
 
         /// <summary>
-        /// The JabberClient to hook up to.
+        /// Gets or sets the Jabber client associated with the Roster Manager.
         /// </summary>
         [Description("The JabberClient to hook up to.")]
         [Category("Jabber")]
@@ -134,7 +132,7 @@ namespace jabber.client
         }
 
         /// <summary>
-        /// How to handle inbound subscriptions
+        /// Gets the AutoSubscription Handling value for inbound subscriptions.
         /// </summary>
         [Description("How to handle inbound subscriptions")]
         [Category("Jabber")]
@@ -146,7 +144,7 @@ namespace jabber.client
         }
 
         /// <summary>
-        /// Should we subscribe to a user whenever we allow a subscription from them?
+        /// Determines whether auto-subscribe is enabled or disabled for a user.
         /// </summary>
         [Description("Should we subscribe to a user whenever we allow a subscription from them?")]
         [Category("Jabber")]
@@ -158,7 +156,7 @@ namespace jabber.client
         }
 
         /// <summary>
-        /// Convenience event for new roster items.
+        /// Informs the client that is has new roster items.
         /// </summary>
         [Description("Convenience event for new roster items.")]
         [Category("Jabber")]
@@ -173,23 +171,23 @@ namespace jabber.client
         public event bedrock.ObjectHandler OnRosterBegin;
 
         /// <summary>
-        /// Fired when a roster result is completed being processed.
+        /// Informs the client that the roster has been retrieved from the XMPP server.
         /// </summary>
         [Description("Roster result finished being processed.")]
         [Category("Jabber")]
         public event bedrock.ObjectHandler OnRosterEnd;
 
         /// <summary>
-        /// Subscription request received that cannot be auto-handled
+        /// Informs the client that a subscription request was received that cannot be auto-handled.
         /// </summary>
         [Description("Subscription request received that cannot be auto-handled")]
         [Category("Jabber")]
         public event SubscriptionHandler OnSubscription;
 
         /// <summary>
-        /// Unsubscribe/Unsubscribed notification from other user.  By default,
-        /// the user will be removed from the roster after this event fires.  Set the 
-        /// remove property to false to prevent this.
+        /// Informs the client that an Unsubscribe/Unsubscribed notification from another
+        /// user. By default, the user will be removed from the roster after this event
+        /// fires. To prevent this, you need to set the remove property to false.
         /// </summary>
         [Description("Unsubscribe/Unsubscribed notification from other user")]
         [Category("Jabber")]
@@ -205,7 +203,7 @@ namespace jabber.client
         }
 
         /// <summary>
-        /// Get the currently-known version of a roster item for this jid.
+        /// Gets the currently-known version of a roster item for this JID.
         /// </summary>
         public Item this[JID jid]
         {
@@ -217,7 +215,7 @@ namespace jabber.client
         }
 
         /// <summary>
-        /// Get the number of items currently in the roster.
+        /// Gets the number of items currently in the roster.
         /// </summary>
         public int Count
         {
@@ -303,7 +301,7 @@ namespace jabber.client
         }
 
         /// <summary>
-        /// Add a new roster item to the database.
+        /// Adds a new roster item to the database.
         /// </summary>
         /// <param name="iq">An IQ containing a roster query.</param>
         public void AddRoster(IQ iq)

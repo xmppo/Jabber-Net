@@ -38,7 +38,7 @@ namespace bedrock.collections
         void Remove(object o);
 
         /// <summary>
-        /// Remove all items from the set.
+        /// Removes all items from the set.
         /// </summary>
         void Clear();
 
@@ -50,9 +50,11 @@ namespace bedrock.collections
         bool Contains(object o);
 
         /// <summary>
-        /// Return a new collection that contains all of the items that
+        /// Returns a new collection that contains all of the items that
         /// are in this set or the other set.
         /// </summary>
+        /// <param name="other">Second set to combine with this one.</param>
+        /// <returns>Combined set.</returns>
         ISet Union(ISet other);
 
         /// <summary>

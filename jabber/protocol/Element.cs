@@ -117,11 +117,12 @@ namespace jabber.protocol
             return e.InnerText;
         }
         /// <summary>
-        /// Set the text contents of a sub-element.
-        /// Note: don't use this if you want the sub-element to have a type that isn't XmlElement.
+        /// Sets the text contents of a sub-element.
+        /// Note: Do not use this if you want the sub-element to have a type that is not XmlElement.
+        /// Instead use <see cref="SetElem(string,string,Type)"/>
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
+        /// <param name="name">The element tag.</param>
+        /// <param name="value">The inner text of the element.</param>
         protected void SetElem(string name, string value)
         {
             XmlElement e = GetOrCreateElement(name, null, null);
@@ -132,10 +133,10 @@ namespace jabber.protocol
         }
 
         /// <summary>
-        /// Set the text contents of a sub-element.
+        /// Sets the text contents of a sub-element.
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
+        /// <param name="name">The element tag.</param>
+        /// <param name="value">The inner text of the element.</param>
         /// <param name="typeToCreate">If the element doesn't exist, create it with this type.  If null, then just use an XmlElement.</param>
         protected void SetElem(string name, string value, Type typeToCreate)
         {
@@ -185,8 +186,8 @@ namespace jabber.protocol
         }
 
         /// <summary>
-        /// Replace this first element of the same name
-        /// as the given element with the given element.
+        /// Replaces the first element that has the same name
+        /// with the passed in element.
         /// </summary>
         /// <param name="elem">The new element</param>
         /// <returns>The replaced element</returns>
@@ -215,7 +216,7 @@ namespace jabber.protocol
             return e;
         }
         /// <summary>
-        /// Remove all of the matching elements from this element.
+        /// Removes all of the matching elements from this element.
         /// </summary>
         /// <param name="name">Element local name</param>
         protected void RemoveElems(string name)
@@ -230,7 +231,7 @@ namespace jabber.protocol
             }
         }
         /// <summary>
-        /// Remove all of the matching elements from this element.
+        /// Removes all of the matching elements from this element.
         /// </summary>
         /// <param name="name">Element local name</param>
         /// <param name="namespaceURI">Element namespace URI.</param>

@@ -147,7 +147,7 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
-        /// Zero-k token
+        /// Gets the zero-k token.
         /// </summary>
         public string Token
         {

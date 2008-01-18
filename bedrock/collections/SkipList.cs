@@ -55,7 +55,7 @@ namespace bedrock.collections
         private int          m_count = 0;
 
         /// <summary>
-        /// Create a skiplist with the default probability (0.25).
+        /// Creates a skiplist with the default probability (0.25).
         /// </summary>
         public SkipList() : this(DEFAULT_PROBABILITY, DEFAULT_MAX_LEVEL)
         {
@@ -82,7 +82,7 @@ namespace bedrock.collections
         }
 
         /// <summary>
-        /// The current number of elements in the list.
+        /// Gets the current number of elements in the list.
         /// </summary>
         public int Count
         {
@@ -160,7 +160,7 @@ namespace bedrock.collections
         }
 
         /// <summary>
-        /// Lookup the key, and return the corresponding value, or null if not found.
+        /// Looks up the key, and returns the corresponding value, or null if not found.
         /// </summary>
         public object this[object key]
         {
@@ -187,7 +187,7 @@ namespace bedrock.collections
         }
 
         /// <summary>
-        /// Remove the item associated with this key from the list.
+        /// Removes the item associated with this key from the list.
         /// </summary>
         /// <param name="key">Object that implements IComparable</param>
         public void Remove(object key)
@@ -231,7 +231,7 @@ namespace bedrock.collections
         }
 
         /// <summary>
-        /// Returns false, for now.
+        /// Returns true if the list will not accept more items than constructed with.
         /// </summary>
         public bool IsFixedSize
         {
@@ -242,7 +242,7 @@ namespace bedrock.collections
         }
 
         /// <summary>
-        /// Returns false, for now.
+        /// Returns true if one is unable to add or removed an item from this list.
         /// </summary>
         public bool IsReadOnly
         {
@@ -253,7 +253,7 @@ namespace bedrock.collections
         }
 
         /// <summary>
-        /// All of the keys of the list.
+        /// Gets all of the keys in the list.
         /// </summary>
         public System.Collections.ICollection Keys
         {
@@ -270,7 +270,7 @@ namespace bedrock.collections
         }
 
         /// <summary>
-        /// All of the values of the list.
+        /// Gets all of the values in the list.
         /// </summary>
         public System.Collections.ICollection Values
         {
@@ -339,8 +339,9 @@ namespace bedrock.collections
         }
 
         /// <summary>
-        /// Not implemented, yet.
+        /// Gets an object that can be used to synchronize access to ICollection.
         /// </summary>
+        /// <exception cref="NotImplementedException">Currently this Property is not implemented.</exception>
         public object SyncRoot
         {
             get

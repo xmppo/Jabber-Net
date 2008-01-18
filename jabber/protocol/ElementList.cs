@@ -101,7 +101,7 @@ namespace jabber.protocol
         }
 
         /// <summary>
-        /// Number of matching children.
+        /// Gets the number of matching children.
         /// </summary>
         public override int Count
         {

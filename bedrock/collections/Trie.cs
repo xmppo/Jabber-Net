@@ -19,11 +19,11 @@ using bedrock.util;
 namespace bedrock.collections
 {
     /// <summary>
-    /// A method to get called for each key in the trie
+    /// The method signature used by <see cref="Trie.Traverse(TrieKeyWalker,object,TrieNode,ByteStack)"/> when it encounters a key.
     /// </summary>
     public delegate bool TrieKeyWalker(TrieNode e, object data, ByteStack key);
     /// <summary>
-    /// A method to get called for each node in the tree
+    /// The method signature used by <see cref="Trie.Traverse(TrieWalker,object,TrieNode)"/> when it encounters a node.
     /// </summary>
     public delegate bool TrieWalker(TrieNode e, object data);
     /// <summary>
@@ -46,7 +46,7 @@ namespace bedrock.collections
         private int      m_count = 0;
 
         /// <summary>
-        /// Create an empty trie
+        /// Creates an empty trie.
         /// </summary>
         public Trie() {}
 
@@ -56,16 +56,18 @@ namespace bedrock.collections
         /// <param name="key">The bytes to search for, where key[0] corresponds to a child
         /// node of the root.</param>
         /// <param name="create">Create nodes that don't exist, while searching.</param>
+        /// <returns>The node if found. If the node doesn't exist and <see cref="create"/> is true, the node created; otherwise null.</returns>
         protected virtual TrieNode FindNode(byte[] key, bool create)
         {
             return FindNode(key, m_root, create);
         }
         /// <summary>
-        /// Find a node in the given sub-tree.
+        /// Finds a node in the given sub-tree.
         /// </summary>
         /// <param name="key">The key to search on, where key[0] corresponds to a child of startAt.</param>
         /// <param name="startAt">The node to search under</param>
         /// <param name="create">Create nodes that don't exist, while searching.</param>
+        /// <returns>The node if found. If the node doesn't exist and <see cref="create"/> is true, the node created; otherwise null.</returns>
         protected virtual TrieNode FindNode(byte[] key, TrieNode startAt, bool create)
         {
             TrieNode current = startAt;
@@ -111,7 +113,7 @@ namespace bedrock.collections
             }
         }
         /// <summary>
-        /// Perform the given function on every element of the trie.  Perl's map() operator.
+        /// Performs the given function on every element of the trie. This is equivalent to Perl's map() operator.
         /// </summary>
         /// <param name="w">The function to call</param>
         /// <param name="data">Extra data to pass along to the function.</param>
@@ -228,7 +230,7 @@ namespace bedrock.collections
         }
 
         /// <summary>
-        /// Return a collection containing all of the values.
+        /// Returns a collection containing all of the values.
         /// </summary>
         public ICollection Values
         {
@@ -240,9 +242,9 @@ namespace bedrock.collections
         }
 
         /// <summary>
-        /// Remove the node associated with the given key, along with all newly empty ancestors.
+        /// Removes the node associated with the given key, along with all newly empty ancestors.
         /// </summary>
-        /// <param name="key"> </param>
+        /// <param name="key">Key to remove.</param>
         public void Remove(object key)
         {
             TrieNode current = FindNode(KeyBytes(key), false);
@@ -284,7 +286,7 @@ namespace bedrock.collections
         }
 
         /// <summary>
-        /// Delete all nodes.
+        /// Deletes all nodes.
         /// </summary>
         public void Clear()
         {
@@ -350,7 +352,8 @@ namespace bedrock.collections
         }
 
         /// <summary>
-        /// Always "false" for now
+        /// Gets a value indicating whether access to the trie is synchronized in thread-safe mode.
+        /// Only returns false now.
         /// </summary>
         public bool IsSynchronized
         {

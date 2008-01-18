@@ -31,7 +31,7 @@ namespace bedrock.collections
         private int    m_capacity = 0;
         private byte[] m_buffer;
         /// <summary>
-        /// Create an instance with the default initial capacity.
+        /// Creates an instance with the default initial capacity.
         /// </summary>
         public ByteStack() : this(DEFAULT_SIZE)
         {
@@ -77,7 +77,7 @@ namespace bedrock.collections
             m_buffer = newBuf;
         }
         /// <summary>
-        /// How may bytes are currently on the stack?
+        /// Gets the number of bytes that are currently in the stack.
         /// </summary>
         public int Count
         {
@@ -87,7 +87,7 @@ namespace bedrock.collections
             }
         }
         /// <summary>
-        /// How many bytes can the stack currently hold?
+        /// Gets the number of bytes that the stack can hold.
         /// </summary>
         public int Capacity
         {
@@ -134,9 +134,10 @@ namespace bedrock.collections
             return m_buffer[m_count - 1];
         }
         /// <summary>
-        /// Convert to byte[] by making a trimmed copy.
+        /// Converts to byte[] by making a trimmed copy.
         /// </summary>
-        /// <param name="bs"> </param>
+        /// <param name="bs">The ByteStack to convert to a byte array.</param>
+        /// <returns>The byte array containing a copy of the passed in ByteStack.</returns>
         public static implicit operator byte[](ByteStack bs)
         {
             if (bs.m_count == 0)

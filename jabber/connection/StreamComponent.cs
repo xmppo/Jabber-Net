@@ -63,12 +63,13 @@ namespace jabber.connection
         protected XmppStream m_stream = null;
 
         /// <summary>
-        /// The XmppStream was changed.  Often at design time.  The object will be this StreamControl.
+        /// Informs the client that the XmppStream was changed.
+        /// Often at design time, the object will be this StreamControl.
         /// </summary>
         public event bedrock.ObjectHandler OnStreamChanged;
 
         /// <summary>
-        /// The JabberClient or JabberService to hook up to.
+        /// Gets and sets the JabberClient or JabberService XMPP stream value.
         /// </summary>
         [Description("The JabberClient or JabberService to hook up to.")]
         [Category("Jabber")]

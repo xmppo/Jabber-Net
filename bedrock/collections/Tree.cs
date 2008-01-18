@@ -18,10 +18,7 @@ using bedrock.util;
 namespace bedrock.collections
 {
     /// <summary>
-    /// A basic balanced tree implementation.  Yes, it seems like
-    /// this might have been something nice to have been in
-    /// System.Collections.  Not yet complete, but the algorithmic
-    /// stuff is here.
+    /// A basic balanced tree implementation.
     /// </summary>
     [SVN(@"$Id$")]
     public class Tree : IEnumerable, IDictionary
@@ -64,7 +61,8 @@ namespace bedrock.collections
         }
 
         /// <summary>
-        /// Is the tree synchronized.  Always false for now.
+        /// Gets a value indicating whether access to the tree is synchronized in thread-safe mode.
+        /// Currently, it only returns false.
         /// </summary>
         public bool IsSynchronized
         {
@@ -75,7 +73,7 @@ namespace bedrock.collections
         }
 
         /// <summary>
-        ///  Copy the values from the tree to the specified array in the order of the keys.
+        ///  Copies the values from the tree to the specified array in the order of the keys.
         /// </summary>
         /// <param name="array">The array to copy into</param>
         /// <param name="index">The index to start at</param>
@@ -89,7 +87,7 @@ namespace bedrock.collections
         }
 
         /// <summary>
-        /// An object to synch on.  Always returns null for now.
+        /// Gets an object that can be used to sychronize access to the tree. For now, it returns null.
         /// </summary>
         public object SyncRoot
         {
@@ -173,19 +171,19 @@ namespace bedrock.collections
         }
 
         /// <summary>
-        /// Is the given key found in the tree?
+        /// Determines if the specified key exists in the tree.
         /// </summary>
         /// <param name="key">The key to search for</param>
-        /// <returns></returns>
+        /// <returns>True if the key exists in the tree; otherwise false.</returns>
         public bool Contains(object key)
         {
             return getNode(key) != null;
         }
 
         /// <summary>
-        /// Return a dictionary enumerator.
+        /// Returns a dictionary enumerator.
         /// </summary>
-        /// <returns>a dictionary enumerator</returns>
+        /// <returns>A dictionary enumerator</returns>
         public IDictionaryEnumerator GetEnumerator()
         {
             return new TreeEnumerator(this);
@@ -254,7 +252,7 @@ namespace bedrock.collections
         }
 
         /// <summary>
-        /// Retrieve the value associated with the given key.
+        /// Retrieves the value associated with the given key.
         /// </summary>
         public object this[object key]
         {
@@ -293,7 +291,7 @@ namespace bedrock.collections
         }
 
         /// <summary>
-        /// Retrieve a list of values.
+        /// Retrieves a list of values.
         /// </summary>
         public ICollection Values
         {
@@ -335,9 +333,9 @@ namespace bedrock.collections
         #endregion
         #region Object
         /// <summary>
-        /// Retrieve a string representation of the tree
+        /// Retrieves a string representation of the tree.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>string in the format '{key1}={value1}, {key2}={value2}, ...'</returns>
         public override string ToString()
         {
             System.Text.StringBuilder sb = new System.Text.StringBuilder();

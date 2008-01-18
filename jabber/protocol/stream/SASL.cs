@@ -180,7 +180,7 @@ namespace jabber.protocol.stream
     }
 
     /// <summary>
-    /// SASL mechanisms in stream features.
+    /// Stores SASL mechanisms in stream features.
     /// </summary>
     [SVN(@"$Id$")]
     public class Mechanism : Element
