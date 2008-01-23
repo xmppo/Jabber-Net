@@ -83,10 +83,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>nunit\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.mocks, Version=2.2.10.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL" />
-    <Reference Include="Rhino.Mocks, Version=3.3.0.1091, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+    <Reference Include="Rhino.Mocks, Version=3.3.0.906, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\rhino\rhino-mocks\Rhino.Mocks\bin\debug\Rhino.Mocks.dll</HintPath>
+      <HintPath>..\Rhino.Mocks\Rhino.Mocks.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
