@@ -43,11 +43,33 @@ namespace jabber.connection
         }
     }
 
+    ///<summary>
+    /// Interface for tracking an IQ packet.
+    ///</summary>
+    public interface IIQTracker
+    {
+        ///<summary>
+        /// Does an asynchronous IQ call.
+        ///</summary>
+        ///<param name="iq">IQ packet to send.</param>
+        ///<param name="cb">Callback to execute when the result comes back.</param>
+        ///<param name="cbArg">Arguments to pass to the callback.</param>
+        void BeginIQ(IQ iq, IqCB cb, object cbArg);
+
+        ///<summary>
+        /// Does a synchronous IQ call.
+        ///</summary>
+        ///<param name="iqp">IQ packet to send.</param>
+        ///<param name="millisecondsTimeout">Time, in milliseconds, to wait for the response.</param>
+        ///<returns>The IQ packet that was sent back.</returns>
+        IQ IQ(IQ iqp, int millisecondsTimeout);
+    }
+
     /// <summary>
     /// Track outstanding IQ requests.
     /// </summary>
     [SVN(@"$Id$")]
-    public class IQTracker
+    public class IQTracker: IIQTracker
     {
         private Hashtable  m_pending = new Hashtable();
         private XmppStream m_cli     = null;

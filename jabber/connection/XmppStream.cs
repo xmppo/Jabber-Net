@@ -447,7 +447,7 @@ namespace jabber.connection
         /// Let's track IQ packets.
         /// </summary>
         [Browsable(false)]
-        public IQTracker Tracker
+        public IIQTracker Tracker
         {
             get { return m_tracker; }
         }
@@ -939,7 +939,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Send the given packet to the server.
+        /// Sends the given packet to the server.
         /// </summary>
         /// <param name="elem"></param>
         public virtual void Write(XmlElement elem)
@@ -948,7 +948,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Send raw string.
+        /// Sends a raw string.
         /// </summary>
         public void Write(string str)
         {
