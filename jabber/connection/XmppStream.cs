@@ -1767,15 +1767,13 @@ namespace jabber.connection
             System.Security.Cryptography.X509Certificates.X509Chain chain,
             System.Net.Security.SslPolicyErrors sslPolicyErrors)
         {
-            Debug.Assert(m_invoker != null, "Check for this.InvokeControl == null before calling Connect");
-
             if (OnInvalidCertificate != null)
             {
-                // Note: can't use CheckedInvoke here, since we need the return value.  We'll wait for the response.
-                if (!m_invoker.InvokeRequired)
+                if ((m_invoker == null) || (!m_invoker.InvokeRequired))
                     return OnInvalidCertificate(sock, certificate, chain, sslPolicyErrors);
                 try
                 {
+                    // Note: can't use CheckedInvoke here, since we need the return value.  We'll wait for the response.
                     return (bool)m_invoker.Invoke(OnInvalidCertificate, new object[] { sock, certificate, chain, sslPolicyErrors });
                 }
                 catch (Exception e)
@@ -1784,8 +1782,7 @@ namespace jabber.connection
                     return false;
                 }
             }
-
-            if (!m_invoker.InvokeRequired)
+            if ((m_invoker == null) || (!m_invoker.InvokeRequired))
                 return ShowCertificatePrompt(sock, certificate, chain, sslPolicyErrors);
 
             return (bool)m_invoker.Invoke(new System.Net.Security.RemoteCertificateValidationCallback(ShowCertificatePrompt), new object[]{ sock, certificate, chain, sslPolicyErrors });
