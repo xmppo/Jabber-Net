@@ -77,7 +77,7 @@ namespace jabber.protocol.iq
         /// <returns></returns>
         public Item[] GetItems()
         {
-            XmlNodeList nl = GetElementsByTagName("item", URI.ROSTER);
+            XmlNodeList nl = GetElementsByTagName("item");
             Item[] items = new Item[nl.Count];
             int i=0;
             foreach (XmlNode n in nl)
