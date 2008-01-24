@@ -602,7 +602,7 @@ namespace jabber.client
 
                 jabber.protocol.x.Data xdata = r["x", URI.XDATA] as jabber.protocol.x.Data;
                 jabber.protocol.x.Field f;
-                if (data != null)
+                if (xdata != null)
                 {
                     f = xdata.GetField("username");
                     if (f != null)
