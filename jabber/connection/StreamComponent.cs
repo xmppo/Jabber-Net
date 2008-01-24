@@ -23,7 +23,7 @@ namespace jabber.connection
     /// A component that references an XmppStream.
     /// </summary>
     [SVN(@"$Id$")]
-    public class StreamComponent : System.ComponentModel.Component
+    public abstract class StreamComponent : System.ComponentModel.Component
 	{
         /// <summary>
         /// Look into the VisualStudio environment at runtime to find the first component that subclasses XmppStream.
