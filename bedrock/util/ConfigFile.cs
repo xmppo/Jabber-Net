@@ -29,6 +29,8 @@ namespace bedrock.util
         private string m_file;
         private XmlDocument m_doc;
         private static Hashtable s_instances = new Hashtable();
+        private FileSystemWatcher m_watcher;
+
         /// <summary>
         /// Singleton factory
         /// </summary>
@@ -50,6 +52,9 @@ namespace bedrock.util
             }
             return inst;
         }
+
+        public event FileSystemEventHandler OnFileChange;
+
         private ConfigFile(string name)
         {
             // Don't call Tracer from here!
@@ -61,8 +66,7 @@ namespace bedrock.util
                 FileInfo fi = new FileInfo(Path.Combine(d, name));
                 if (fi.Exists)
                 {
-                    m_file = fi.FullName;
-                    m_doc.Load(m_file);
+                    Load(fi);
                     return;
                 }
                 p = fi.Directory.Parent;
@@ -72,6 +76,24 @@ namespace bedrock.util
             }
 
             throw new FileNotFoundException(name);
+        }
+
+        private void Load(FileInfo info)
+        {
+            m_file = info.FullName;
+            m_doc.Load(m_file);
+            m_watcher = new FileSystemWatcher(info.DirectoryName, info.Name);
+            m_watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size | NotifyFilters.CreationTime;
+            m_watcher.Changed += new FileSystemEventHandler(m_watcher_Changed);
+            m_watcher.EnableRaisingEvents = true;
+        }
+
+        private void m_watcher_Changed(object sender, FileSystemEventArgs e)
+        {
+            m_doc = new XmlDocument();
+            m_doc.Load(m_file);
+            if (OnFileChange != null)
+                OnFileChange(this, e);
         }
 
         /// <summary>
