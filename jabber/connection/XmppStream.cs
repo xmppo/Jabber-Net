@@ -1752,16 +1752,20 @@ namespace jabber.connection
                 OnElement(m_stanzas, elem);
         }
 
-#if NET20
+#if NET20 || __MonoCS__
         private bool ShowCertificatePrompt(object sender,
             System.Security.Cryptography.X509Certificates.X509Certificate certificate,
             System.Security.Cryptography.X509Certificates.X509Chain chain,
             System.Net.Security.SslPolicyErrors sslPolicyErrors)
         {
+#if NET20
             CertificatePrompt cp = new CertificatePrompt((X509Certificate2)certificate, chain, sslPolicyErrors);
             return (cp.ShowDialog() == System.Windows.Forms.DialogResult.OK);
+#else
+            return false;
+#endif
         }
-
+     
         bool IStanzaEventListener.OnInvalidCertificate(bedrock.net.BaseSocket sock,
             System.Security.Cryptography.X509Certificates.X509Certificate certificate,
             System.Security.Cryptography.X509Certificates.X509Chain chain,

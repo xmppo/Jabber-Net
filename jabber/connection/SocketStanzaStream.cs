@@ -502,7 +502,7 @@ namespace jabber.connection
             m_listener.BytesWritten(buf, offset, length);
         }
 
-#if NET20
+#if NET20 || __MonoCS__
         /// <summary>
         /// An invalid peer certificate was sent during SSL/TLS neogtiation.
         /// </summary>

@@ -282,6 +282,7 @@ namespace bedrock.net
             m_listener.OnWrite(sock, buf, offset, length);
         }
 
+#if NET20 || __MonoCS__
         /// <summary>
         /// An invalid peer certificate was sent during SSL/TLS neogtiation.
         /// </summary>
@@ -297,7 +298,7 @@ namespace bedrock.net
         {
             return m_listener.OnInvalidCertificate(sock, certificate, chain, sslPolicyErrors);
         }
-
+#endif
         #endregion
 
         /// <summary>

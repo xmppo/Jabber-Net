@@ -65,7 +65,8 @@ namespace ConsoleClient
             jc.OnReadText += new bedrock.TextHandler(jc_OnReadText);
             jc.OnWriteText += new bedrock.TextHandler(jc_OnWriteText);
             jc.OnError +=new bedrock.ExceptionHandler(jc_OnError);
-            //            jc.AutoStartTLS = false;
+            jc.OnStreamError += new jabber.protocol.ProtocolHandler(jc_OnStreamError);
+            
             jc.AutoReconnect = 3f;
 
             GetOpt go = new GetOpt(this);
@@ -80,15 +81,7 @@ namespace ConsoleClient
 
             if (untrustedOK)
             {
-#if __MonoCS__
-                bedrock.net.AsyncSocket.AllowedSSLErrors = new int[]
-                    { bedrock.net.AsyncSocket.CERT_E_UNTRUSTEDROOT,
-                      bedrock.net.AsyncSocket.CERT_E_CHAINING,
-                      bedrock.net.AsyncSocket.CERT_E_PURPOSE };
-#else
-                //bedrock.net.AsyncSocket.AllowedSSLErrors = System.Net.Security.SslPolicyErrors.RemoteCertificateChainErrors | System.Net.Security.SslPolicyErrors.RemoteCertificateNameMismatch;
                 jc.OnInvalidCertificate += new System.Net.Security.RemoteCertificateValidationCallback(jc_OnInvalidCertificate);
-#endif
             }
             
 
@@ -116,7 +109,9 @@ namespace ConsoleClient
                 jc.OnRegisterInfo += new RegisterInfoHandler(this.jc_OnRegisterInfo);
                 jc.OnRegistered += new IQHandler(jc_OnRegistered);
             }
+            Console.WriteLine("Connecting");
             jc.Connect();
+            Console.WriteLine("Connected");
 
             string line;
             while ((line = Console.ReadLine()) != null)
@@ -160,7 +155,7 @@ namespace ConsoleClient
             }
         }
 
-#if NET20
+#if NET20 || __MonoCS__
         bool jc_OnInvalidCertificate(object sender, System.Security.Cryptography.X509Certificates.X509Certificate certificate, System.Security.Cryptography.X509Certificates.X509Chain chain, System.Net.Security.SslPolicyErrors sslPolicyErrors)
         {
             Console.WriteLine("Invalid certificate ({0}):\n{1}", sslPolicyErrors.ToString(), certificate.ToString(true));
@@ -192,6 +187,12 @@ namespace ConsoleClient
         private void jc_OnError(object sender, Exception ex)
         {
             Console.WriteLine("ERROR: " + ex.ToString());
+            Environment.Exit(1);
+        }
+        
+        private void jc_OnStreamError(object sender, System.Xml.XmlElement rp)
+        {
+            Console.WriteLine("Stream ERROR: " + rp.OuterXml);
             Environment.Exit(1);
         }
 

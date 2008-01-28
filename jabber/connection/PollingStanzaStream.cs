@@ -127,7 +127,7 @@ namespace jabber.connection
         public override void Accept()
         {
             m_sock = new AsyncSocket(null, this, (bool)m_listener[Options.SSL], false);
-#if NET20
+#if NET20 || __MonoCS__
             ((AsyncSocket)m_sock).LocalCertificate = m_listener[Options.LOCAL_CERTIFICATE] as
                 System.Security.Cryptography.X509Certificates.X509Certificate2;
 #endif
@@ -285,6 +285,7 @@ namespace jabber.connection
             m_listener.BytesWritten(buf, offset, length);
         }
 
+#if NET20 || __MonoCS__
         /// <summary>
         /// An invalid peer certificate was sent during SSL/TLS neogtiation.
         /// </summary>
@@ -300,7 +301,7 @@ namespace jabber.connection
         {
             return m_listener.OnInvalidCertificate(sock, certificate, chain, sslPolicyErrors);
         }
-
+#endif
         #endregion
     }
 }

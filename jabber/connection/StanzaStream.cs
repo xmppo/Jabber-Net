@@ -121,7 +121,7 @@ namespace jabber.connection
         /// <param name="elem"></param>
         void StanzaReceived(XmlElement elem);
 
-#if NET20
+#if NET20 || __MonoCS__
         /// <summary>
         /// An invalid peer certificate was sent during SSL/TLS neogtiation.
         /// </summary>

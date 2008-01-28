@@ -310,7 +310,7 @@ namespace bedrock.net
             m_curKey = m_numKeys - 1;
         }
 
-#if NET20
+#if NET20 || __MonoCS__
 
         private bool ValidateRemoteCertificate(Object sender,
                                                X509Certificate certificate,
@@ -413,7 +413,7 @@ namespace bedrock.net
                 resp = null;
                 try
                 {
-#if NET20
+#if NET20  || __MonoCS__
                     ServicePointManager.ServerCertificateValidationCallback =
                         new System.Net.Security.RemoteCertificateValidationCallback(ValidateRemoteCertificate);
 #else

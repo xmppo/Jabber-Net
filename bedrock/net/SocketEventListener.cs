@@ -81,7 +81,7 @@ namespace bedrock.net
         /// <param name="offset">Offset into the buffer to start at</param>
         /// <param name="length">Number of bytes to use out of the buffer</param>
         void OnWrite(BaseSocket sock, byte[] buf, int offset, int length);
-#if NET20
+#if NET20 || __MonoCS__
         /// <summary>
         /// An invalid peer certificate was sent during SSL/TLS neogtiation.
         /// </summary>
@@ -184,7 +184,7 @@ namespace bedrock.net
         {
         }
 
-#if NET20
+#if NET20 || __MonoCS__
         /// <summary>
         /// An invalid peer certificate was sent during SSL/TLS neogtiation.
         /// </summary>
