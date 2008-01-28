@@ -8,126 +8,6 @@ using netlib.Dns.Records;
 
 namespace netlib.Dns
 {
-    /// <summary>
-	/// Represents an IPv6 IP Address
-	/// </summary>
-	/// <remarks>
-	/// This struct is used by various classes in
-	/// the <see cref="netlib.Dns.Records"/> namespace to represent
-	/// IPv6 addresses.
-	/// </remarks>
-	public struct IP6Address
-	{
-		/// <summary>
-		/// IP fragment 1
-		/// </summary>
-		/// <remarks>
-		/// IP fragment 1
-		/// </remarks>
-		public uint IPFrag1;
-
-		/// <summary>
-		/// IP fragment 2
-		/// </summary>
-		/// <remarks>
-		/// IP fragment 2
-		/// </remarks>
-		public uint IPFrag2;
-
-		/// <summary>
-		/// IP fragment 3
-		/// </summary>
-		/// <remarks>
-		/// IP fragment 3
-		/// </remarks>
-		public uint IPFrag3;
-
-		/// <summary>
-		/// IP fragment 4
-		/// </summary>
-		/// <remarks>
-		/// IP fragment 4
-		/// </remarks>
-		public uint IPFrag4;
-
-		/// <summary>
-		/// IP fragment 5
-		/// </summary>
-		/// <remarks>
-		/// IP fragment 5
-		/// </remarks>
-		public uint IPFrag5;
-
-		/// <summary>
-		/// IP fragment 6
-		/// </summary>
-		/// <remarks>
-		/// IP fragment 6
-		/// </remarks>
-		public uint IPFrag6;
-
-		/// <summary>
-		/// IP fragment 7
-		/// </summary>
-		/// <remarks>
-		/// IP fragment 7
-		/// </remarks>
-		public uint IPFrag7;
-
-		/// <summary>
-		/// IP fragment 8
-		/// </summary>
-		/// <remarks>
-		/// IP fragment 8
-		/// </remarks>
-		public uint IPFrag8;
-
-		/// <summary>
-		/// returns a string representation of the IP address v6
-		/// </summary>
-		/// <returns>a human readable ipv6 address</returns>
-		/// <remarks>
-		/// Used to display a human readable IPv6 address.
-		/// </remarks>
-		public override string ToString()
-		{
-			return String.Format(
-				"{0}:{1}:{2}:{3}:{4}:{5}:{6}:{7}",
-				IPFrag1.ToString("x"), 
-				IPFrag2.ToString("x"),
-				IPFrag3.ToString("x"), 
-				IPFrag4.ToString("x"),
-				IPFrag5.ToString("x"), 
-				IPFrag6.ToString("x"),
-				IPFrag7.ToString("x"), 
-				IPFrag8.ToString("x")
-				);
-		}
-	}
-
-	/// <summary>
-	/// Represents an array of IP addresses
-	/// </summary>
-	/// <remarks>
-	/// This struct is used by the DnsQuery API to hold the selected
-	/// DNS servers to query.
-	/// </remarks>
-	[StructLayout(LayoutKind.Sequential)]
-	struct IP4_Array
-	{
-		/// <summary>
-		/// Gets or sets the number of element in the 
-		/// <see cref="AddrArray"/> array.
-		/// </summary>
-		public int AddrCount;
-
-		/// <summary>
-		/// Gets or sets the array of IP addresses
-		/// </summary>
-		[MarshalAs(UnmanagedType.ByValArray)]
-		public int[] AddrArray;
-	}
-
 	/// <summary>
 	/// Represents a complete DNS record (DNS_RECORD)
 	/// </summary>
@@ -618,23 +498,6 @@ namespace netlib.Dns
 		A          = 0x0001,      //  1
 
 		/// <summary>
-		/// Name Server record
-		/// </summary>
-		NS         = 0x0002,      //  2
-
-		/// <summary>
-		/// Obsolete
-		/// </summary>
-		[Obsolete]
-		MD         = 0x0003,      //  3
-
-		/// <summary>
-		/// Obsolete
-		/// </summary>
-		[Obsolete]
-		MF         = 0x0004,      //  4
-
-		/// <summary>
 		/// Canonical Name record
 		/// </summary>
 		CNAME      = 0x0005,      //  5
@@ -645,44 +508,9 @@ namespace netlib.Dns
 		SOA        = 0x0006,      //  6
 
 		/// <summary>
-		/// Mailbox record
-		/// </summary>
-		MB         = 0x0007,      //  7
-
-		/// <summary>
-		/// Reserved.
-		/// </summary>
-		MG         = 0x0008,      //  8
-
-		/// <summary>
-		/// Reserved.
-		/// </summary>
-		MR         = 0x0009,      //  9
-
-		/// <summary>
-		/// NULL data for a DNS resource record.
-		/// </summary>
-		NULL       = 0x000a,      //  10
-
-		/// <summary>
-		/// Well-Known Service record
-		/// </summary>
-		WKS        = 0x000b,      //  11
-
-		/// <summary>
 		/// Pointer record
 		/// </summary>
 		PTR        = 0x000c,      //  12
-
-		/// <summary>
-		/// Host Information record
-		/// </summary>
-		HINFO      = 0x000d,      //  13
-
-		/// <summary>
-		/// mail information (MINFO) record
-		/// </summary>
-		MINFO      = 0x000e,      //  14
 
 		/// <summary>
 		/// Mail Exchange record
@@ -693,120 +521,12 @@ namespace netlib.Dns
 		/// Text record
 		/// </summary>
 		TEXT       = 0x0010,      //  16
-		//  RFC 1183
-
-		/// <summary>
-		/// Responsible Person record
-		/// </summary>
-		RP         = 0x0011,      //  17
-
-		/// <summary>
-		/// AFS Data Base location record
-		/// </summary>
-		AFSDB      = 0x0012,      //  18
-
-		/// <summary>
-		/// X25
-		/// </summary>
-		X25        = 0x0013,      //  19
-
-		/// <summary>
-		/// ISDN
-		/// </summary>
-		ISDN       = 0x0014,      //  20
-
-		/// <summary>
-		/// Route Through
-		/// </summary>
-		RT         = 0x0015,      //  21
-
-		/// <summary>
-		/// Network service access point address record
-		/// </summary>
-		NSAP       = 0x0016,      //  22
-
-		/// <summary>
-		/// Obsolete
-		/// </summary>
-		[Obsolete]
-		NSAPPTR    = 0x0017,      //  23
-
-		/// <summary>
-		/// Cryptographic signature record
-		/// </summary>
-		SIG        = 0x0018,      //  24
-
-		/// <summary>
-		/// Public key record
-		/// </summary>
-		KEY        = 0x0019,      //  25
-
-		/// <summary>
-		/// Pointer to X.400/RFC822 information record
-		/// </summary>
-		PX         = 0x001a,      //  26
-
-		/// <summary>
-		/// Geographical position record
-		/// </summary>
-		[Obsolete]
-		GPOS       = 0x001b,      //  27
-
-		/// <summary>
-		/// IPv6 address record
-		/// </summary>
-		AAAA       = 0x001c,      //  28
-
-		/// <summary>
-		/// Location record
-		/// </summary>
-		LOC        = 0x001d,      //  29
-
-		/// <summary>
-		/// Next record
-		/// </summary>
-		NXT        = 0x001e,      //  30
 
 		//  RFC 2052    (Service location)
 		/// <summary>
 		/// Server record
 		/// </summary>
 		SRV        = 0x0021,      //  33
-
-		/// <summary>
-		/// ATM address (ATMA) record
-		/// </summary>
-		ATMA       = 0x0022,      //  34
-
-		/// <summary>
-		/// TKEY resource record
-		/// </summary>
-		TKEY       = 0x00f9,      //  249
-
-		/// <summary>
-		/// secret key transaction authentication (TSIG) record
-		/// </summary>
-		TSIG       = 0x00fa,      //  250
-
-		/// <summary>
-		/// Reserved.
-		/// </summary>
-		IXFR       = 0x00fb,      //  251
-
-		/// <summary>
-		/// Reserved.
-		/// </summary>
-		AXFR       = 0x00fc,      //  252
-
-		/// <summary>
-		/// Reserved.
-		/// </summary>
-		MAILB      = 0x00fd,      //  253
-
-		/// <summary>
-		/// Reserved.
-		/// </summary>
-		MAILA      = 0x00fe,      //  254
 
 		/// <summary>
 		/// All records
@@ -817,124 +537,6 @@ namespace netlib.Dns
 		/// Any records
 		/// </summary>
 		ANY        = 0x00ff,      //  255
-
-		/// <summary>
-		/// WINS record
-		/// </summary>
-		WINS       = 0xff01,      //  64K - 255
-
-		/// <summary>
-		/// Windows Internet Name Service reverse-lookup record
-		/// </summary>
-		WINSR      = 0xff02,      //  64K - 254
-
-		/// <summary>
-		/// Windows Internet Name Service reverse-lookup record
-		/// </summary>
-		NBSTAT     = WINSR
-	}
-
-	/// <summary>
-	/// Represents a collection of servers by hostname or ip address.
-	/// </summary>
-	/// <remarks>
-	/// Represents a collection of DNS servers that were specified as
-	/// hostnames or ip addresses. Regardless of the way the server
-	/// was entered, it is resolved to an <see cref="IPAddress"/> object
-	/// internally.
-	/// </remarks>
-	public class DnsServerCollection: CollectionBase, IEnumerable
-	{
-		internal IP4_Array ToIP4_Array()
-		{
-			ArrayList arr = new ArrayList();
-			foreach(IPAddress ip in InnerList)
-			{
-				int ipaddr = (int) ip.Address;
-				arr.Add(ipaddr);
-			}
-
-			int[] addresses = (int[]) arr.ToArray(typeof(int));
-
-			IP4_Array ip4 = new IP4_Array();
-			ip4.AddrArray = addresses;
-			ip4.AddrCount = addresses.Length;
-			return ip4;
-		}
-
-	    /// <summary>
-		/// Adds a new hostname or ip address representing a DNS server
-		/// to the collection.
-		/// </summary>
-		/// <param name="host">The ip address or hostname of a DNS server
-		/// to add to the collection</param>
-		/// <remarks>
-		/// Adds a DNS server to the collection. The hostname or ip address
-		/// is first resolved to one or more <see cref="IPAddress"/> instances
-		/// and then added to the collection. If a given hostname resolves
-		/// to 10 ip addresses, those 10 addresses will be added to the collection.
-		/// </remarks>
-		public void Add(string host)
-		{
-			IPHostEntry iphost = System.Net.Dns.Resolve(host);
-			IPAddress[] ips = iphost.AddressList;
-			InnerList.AddRange(ips);
-		}
-
-		/// <summary>
-		/// Gets the <see cref="IPAddress"/> instance found at the current
-		/// index of the collection.
-		/// </summary>
-		/// <remarks>
-		/// Gets the <see cref="IPAddress"/> at the specified index of the
-		/// collection.
-		/// </remarks>
-		/// <param name="idx">The index of the <see cref="IPAddress"/> to 
-		/// retrieve from the collection.</param>
-		/// <value>The <see cref="IPAddress"/> at the specified index.</value>
-		public IPAddress this[int idx]
-		{
-			get
-			{
-				return (IPAddress) InnerList[idx];
-			}
-		}
-
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return new DnsServerCollectionEnumerator(this);
-		}
-
-		class DnsServerCollectionEnumerator: IEnumerator
-		{
-			private int idx = -1;
-			private readonly DnsServerCollection coll;
-
-			public DnsServerCollectionEnumerator(DnsServerCollection coll)
-			{
-				this.coll=coll;
-			}
-
-			void IEnumerator.Reset()
-			{
-				idx = -1;
-			}
-
-			bool IEnumerator.MoveNext()
-			{
-				idx ++;
-
-				return idx < coll.Count;
-			}
-
-			object IEnumerator.Current
-			{
-				get
-				{
-					return coll[idx];
-				}
-			}
-		}
 	}
 
 	/// <summary>
@@ -959,156 +561,24 @@ namespace netlib.Dns
     ///			<description><see cref="netlib.Dns.Records.PTRRecord"/></description>
 	///		</item>
 	///		<item>
-	///			<term>MB</term>
-    ///			<description><see cref="netlib.Dns.Records.PTRRecord"/></description>
-	///		</item>
-	///		<item>
-	///			<term>MD</term>
-    ///			<description><see cref="netlib.Dns.Records.PTRRecord"/></description>
-	///		</item>
-	///		<item>
-	///			<term>MF</term>
-    ///			<description><see cref="netlib.Dns.Records.PTRRecord"/></description>
-	///		</item>
-	///		<item>
-	///			<term>MG</term>
-    ///			<description><see cref="netlib.Dns.Records.PTRRecord"/></description>
-	///		</item>
-	///		<item>
-	///			<term>MR</term>
-    ///			<description><see cref="netlib.Dns.Records.PTRRecord"/></description>
-	///		</item>
-	///		<item>
-	///			<term>NS</term>
-    ///			<description><see cref="netlib.Dns.Records.PTRRecord"/></description>
-	///		</item>
-	///		<item>
 	///			<term>PTR</term>
     ///			<description><see cref="netlib.Dns.Records.PTRRecord"/></description>
-	///		</item>
-	///		<item>
-	///			<term>HINFO</term>
-    ///			<description><see cref="netlib.Dns.Records.TXTRecord"/></description>
-	///		</item>
-	///		<item>
-	///			<term>ISDN</term>
-    ///			<description><see cref="netlib.Dns.Records.TXTRecord"/></description>
-	///		</item>
-	///		<item>
-	///			<term>X25</term>
-    ///			<description><see cref="netlib.Dns.Records.TXTRecord"/></description>
-	///		</item>
-	///		<item>
-	///			<term>MINFO</term>
-    ///			<description><see cref="netlib.Dns.Records.MINFORecord"/></description>
-	///		</item>
-	///		<item>
-	///			<term>RP</term>
-    ///			<description><see cref="netlib.Dns.Records.MINFORecord"/></description>
 	///		</item>
 	///		<item>
 	///			<term>MX</term>
     ///			<description><see cref="netlib.Dns.Records.MXRecord"/></description>
 	///		</item>
 	///		<item>
-	///			<term>AFSDB</term>
-    ///			<description><see cref="netlib.Dns.Records.MXRecord"/></description>
-	///		</item>
-	///		<item>
-	///			<term>RT</term>
-    ///			<description><see cref="netlib.Dns.Records.MXRecord"/></description>
-	///		</item>
-	///		<item>
-	///			<term>NULL</term>
-    ///			<description><see cref="netlib.Dns.Records.NULLRecord"/></description>
-	///		</item>
-	///		<item>
 	///			<term>SOA</term>
     ///			<description><see cref="netlib.Dns.Records.SOARecord"/></description>
-	///		</item>
-	///		<item>
-	///			<term>WKS</term>
-    ///			<description><see cref="netlib.Dns.Records.WKSRecord"/></description>
-	///		</item>
-	///		<item>
-	///			<term>AAAA</term>
-    ///			<description><see cref="netlib.Dns.Records.AAAARecord"/></description>
-	///		</item>
-	///		<item>
-	///			<term>ATMA</term>
-    ///			<description><see cref="netlib.Dns.Records.ATMARecord"/></description>
-	///		</item>
-	///		<item>
-	///			<term>NBSTAT</term>
-    ///			<description><see cref="netlib.Dns.Records.WINSRRecord"/></description>
 	///		</item>
 	///		<item>
 	///			<term>SRV</term>
     ///			<description><see cref="netlib.Dns.Records.SRVRecord"/></description>
 	///		</item>
 	///		<item>
-	///			<term>TKEY</term>
-    ///			<description><see cref="netlib.Dns.Records.TKEYRecord"/></description>
-	///		</item>
-	///		<item>
-	///			<term>TSIG</term>
-    ///			<description><see cref="netlib.Dns.Records.TSIGRecord"/></description>
-	///		</item>
-	///		<item>
-	///			<term>WINS</term>
-    ///			<description><see cref="netlib.Dns.Records.WINSRecord"/></description>
-	///		</item>
-	///		<item>
-	///			<term>LOC</term>
-    ///			<description><see cref="netlib.Dns.Records.LOCRecord"/></description>
-	///		</item>
-	///		<item>
-	///			<term>AXFR</term>
-	///			<description>null</description>
-	///		</item>
-	///		<item>
-	///			<term>GPOS</term>
-	///			<description>null</description>
-	///		</item>
-	///		<item>
-	///			<term>IXFR</term>
-	///			<description>null</description>
-	///		</item>
-	///		<item>
-	///			<term>KEY</term>
-	///			<description>null</description>
-	///		</item>
-	///		<item>
-	///			<term>MAILA</term>
-	///			<description>null</description>
-	///		</item>
-	///		<item>
-	///			<term>MAILB</term>
-	///			<description>null</description>
-	///		</item>
-	///		<item>
-	///			<term>NSAP</term>
-	///			<description>null</description>
-	///		</item>
-	///		<item>
-	///			<term>NSAPPTR</term>
-	///			<description>null</description>
-	///		</item>
-	///		<item>
-	///			<term>NXT</term>
-	///			<description>null</description>
-	///		</item>
-	///		<item>
-	///			<term>PX</term>
-	///			<description>null</description>
-	///		</item>
-	///		<item>
-	///			<term>SIG</term>
-	///			<description>null</description>
-	///		</item>
-	///		<item>
 	///			<term>TEXT</term>
-	///			<description>null</description>
+    ///			<description><see cref="netlib.Dns.Records.TXTRecord"/></description>
 	///		</item>
 	/// </list>
 	/// </remarks>
@@ -1600,28 +1070,6 @@ namespace netlib.Dns
 
 		private DnsQueryType QueryType;
 		private string _Domain;
-		private DnsServerCollection servers;
-
-		/// <summary>
-		/// Gets a collection of DNS servers to use for the current request.
-		/// If the collection contains no items, the local DNS servers are used.
-		/// </summary>
-		/// <remarks>
-		/// If the collection contains 0 <see cref="System.Net.IPAddress"/> references,
-		/// the default DNS servers are used. Otherwise, servers are used in a 
-		/// decending order from their ordinal position in the collection.
-		/// You can add as many DNS Servers as you need to the collection by
-		/// host name or IP address.
-		/// </remarks>
-		/// <value>A <see cref="DnsServerCollection"/> that can be used to 
-		/// manage the DNS servers that will be used for the query.</value>
-		public DnsServerCollection Servers
-		{
-			get
-			{
-				return servers;
-			}
-		}
 
 		/// <summary>
 		/// Gets or sets whether or not to use TCP only for the query.
@@ -1691,13 +1139,8 @@ namespace netlib.Dns
 
 		/// <summary>
 		/// Gets or sets whether or not to bypass the resolver cache 
-		/// on the lookup. This must be set to true if you specified
-		/// a server in the <see cref="Servers"/> collection.
+		/// on the lookup. 
 		/// </summary>
-		/// <value>Boolean indicating whether or not to bypass the cache
-		/// and use the list of servers in the <see cref="Servers"/>
-		/// collection.
-		/// </value>
 		/// <remarks>
 		/// Setting this to true allows you to specify one or more DNS servers
 		/// to query instead of querying the local DNS cache and server.
@@ -1982,7 +1425,6 @@ namespace netlib.Dns
 
 		private void Initialize(string domain)
 		{
-			servers = new DnsServerCollection();
 			_domain=domain;
 			QueryType = DnsQueryType.STANDARD|DnsQueryType.TREAT_AS_FQDN;
 		}
@@ -2023,29 +1465,10 @@ namespace netlib.Dns
 			
 			object Data = new object();
 
-			IntPtr pServers = IntPtr.Zero;
 			IntPtr ppQueryResultsSet = IntPtr.Zero;
 			try
 			{
-				if (servers.Count > 0)
-				{
-					IP4_Array ip4 = servers.ToIP4_Array();
-					//allocate memory:
-					//just trying to put the IP4_Array object into
-					//memory doesn't work because SizeOf bitches
-					//therefore, we just bypass that and sum the
-					//size of the fields of the IP4_Array struct.
-					//IP4_Array consists of an int plus an array of
-					//ints representing IP addresses - therefore, you
-					//take the (size of the array x 4 bytes) + 4 bytes
-					//and you've got the size of the struct.
-					int intsize = Marshal.SizeOf(typeof(int));
-					int size = intsize + (intsize * ip4.AddrCount);
-					pServers = Marshal.AllocCoTaskMem(size);
-					Marshal.StructureToPtr(ip4, pServers, false);
-				}
-
-				uint ret = DnsQuery(strDomain, dnstype, querytype, pServers, ref ppQueryResultsSet, IntPtr.Zero);
+				uint ret = DnsQuery(strDomain, dnstype, querytype, IntPtr.Zero, ref ppQueryResultsSet, IntPtr.Zero);
 				if (ret != 0)
 					throw new DnsException("DNS query fails", ret);
 
@@ -2092,10 +1515,6 @@ namespace netlib.Dns
 
 				//free pointer to DNS record block
 				DnsRecordListFree(ppQueryResultsSet, DnsFreeType.FreeRecordList);
-
-				//free memory if any DNS servers were specified.
-				if (pServers != IntPtr.Zero)
-					Marshal.FreeCoTaskMem(pServers);
 			}
 		}
 
@@ -2110,86 +1529,26 @@ namespace netlib.Dns
 					break;
 
 				case DnsRecordType.CNAME:
-				case DnsRecordType.MB:
-				case DnsRecordType.MG:
-				case DnsRecordType.MR: 
-				case DnsRecordType.NS:
 				case DnsRecordType.PTR:
 					Data = (PTRRecord)Marshal.PtrToStructure( ptr, typeof(PTRRecord) );
 					break;
 
-				case DnsRecordType.HINFO:
-				case DnsRecordType.ISDN:
-				case DnsRecordType.X25:
-					Data = (TXTRecord)Marshal.PtrToStructure( ptr, typeof(TXTRecord) );
-					break;
-
-				case DnsRecordType.MINFO:
-				case DnsRecordType.RP:
-					Data = (MINFORecord)Marshal.PtrToStructure( ptr, typeof(MINFORecord) );
-					break;
-
 				case DnsRecordType.MX:
-				case DnsRecordType.AFSDB:
-				case DnsRecordType.RT:
 					Data = (MXRecord)Marshal.PtrToStructure( ptr, typeof(MXRecord) );
-					break;
-
-				case DnsRecordType.NULL:
-					Data = (NULLRecord)Marshal.PtrToStructure( ptr, typeof(NULLRecord) );
 					break;
 
 				case DnsRecordType.SOA:
 					Data = (SOARecord)Marshal.PtrToStructure( ptr, typeof(SOARecord) );
 					break;
 
-				case DnsRecordType.WKS:
-					Data = (WKSRecord)Marshal.PtrToStructure( ptr, typeof(WKSRecord) );
-					break;
-
-				case DnsRecordType.AAAA:
-					Data = (AAAARecord)Marshal.PtrToStructure( ptr, typeof(AAAARecord) );
-					break;
-
-				case DnsRecordType.ATMA:
-					Data = (ATMARecord)Marshal.PtrToStructure( ptr, typeof(ATMARecord) );
-					break;
-
-				case DnsRecordType.NBSTAT:
-					//case WINSR:
-					Data = (WINSRRecord)Marshal.PtrToStructure( ptr, typeof(WINSRRecord) );
-					break;
-
 				case DnsRecordType.SRV:
 					Data = (SRVRecord)Marshal.PtrToStructure( ptr, typeof(SRVRecord) );
 					break;
 
-				case DnsRecordType.TKEY:
-					Data = (TKEYRecord)Marshal.PtrToStructure( ptr, typeof(TKEYRecord) );
-					break;
-
-				case DnsRecordType.TSIG:
-					Data = (TSIGRecord)Marshal.PtrToStructure( ptr, typeof(TSIGRecord) );
-					break;
-
-				case DnsRecordType.WINS:
-					Data = (WINSRecord)Marshal.PtrToStructure( ptr, typeof(WINSRecord) );
-					break;
-
-				case DnsRecordType.LOC:
-					Data = (LOCRecord)Marshal.PtrToStructure( ptr, typeof(LOCRecord) );
-					break;
-
-				case DnsRecordType.AXFR:
-				case DnsRecordType.IXFR:
-				case DnsRecordType.KEY:
-				case DnsRecordType.MAILA:
-				case DnsRecordType.MAILB:
-				case DnsRecordType.NSAP:
-				case DnsRecordType.NXT:
-				case DnsRecordType.PX:
-				case DnsRecordType.SIG:
 				case DnsRecordType.TEXT:
+                    Data = (TXTRecord)Marshal.PtrToStructure(ptr, typeof(TXTRecord));
+                    break;
+
 				default:
 					Data = null;
 					break;
@@ -2224,9 +1583,7 @@ namespace netlib.Dns
 		/// <remarks>
 		/// Returns all of the DNS records retrieved about the domain
 		/// as a <see cref="DnsWrapperCollection"/>. This property
-		/// is wrapped by the <see cref="GetRecords"/> method, the
-		/// <see cref="ARecords"/>, <see cref="MXRecords"/>, and
-		/// <see cref="NSRecords"/> properties.
+		/// is wrapped by the <see cref="GetRecords"/> method.
 		/// </remarks>
 		/// <value>Gets a collection of <see cref="DnsWrapper"/> objects.</value>
 		public DnsWrapperCollection RawRecords
@@ -2278,156 +1635,20 @@ namespace netlib.Dns
         ///			<description><see cref="netlib.Dns.Records.PTRRecord"/></description>
 		///		</item>
 		///		<item>
-		///			<term>MB</term>
-        ///			<description><see cref="netlib.Dns.Records.PTRRecord"/></description>
-		///		</item>
-		///		<item>
-		///			<term>MD</term>
-        ///			<description><see cref="netlib.Dns.Records.PTRRecord"/></description>
-		///		</item>
-		///		<item>
-		///			<term>MF</term>
-        ///			<description><see cref="netlib.Dns.Records.PTRRecord"/></description>
-		///		</item>
-		///		<item>
-		///			<term>MG</term>
-        ///			<description><see cref="netlib.Dns.Records.PTRRecord"/></description>
-		///		</item>
-		///		<item>
-		///			<term>MR</term>
-        ///			<description><see cref="netlib.Dns.Records.PTRRecord"/></description>
-		///		</item>
-		///		<item>
-		///			<term>NS</term>
-        ///			<description><see cref="netlib.Dns.Records.PTRRecord"/></description>
-		///		</item>
-		///		<item>
 		///			<term>PTR</term>
         ///			<description><see cref="netlib.Dns.Records.PTRRecord"/></description>
-		///		</item>
-		///		<item>
-		///			<term>HINFO</term>
-        ///			<description><see cref="netlib.Dns.Records.TXTRecord"/></description>
-		///		</item>
-		///		<item>
-		///			<term>ISDN</term>
-        ///			<description><see cref="netlib.Dns.Records.TXTRecord"/></description>
-		///		</item>
-		///		<item>
-		///			<term>X25</term>
-        ///			<description><see cref="netlib.Dns.Records.TXTRecord"/></description>
-		///		</item>
-		///		<item>
-		///			<term>MINFO</term>
-        ///			<description><see cref="netlib.Dns.Records.MINFORecord"/></description>
-		///		</item>
-		///		<item>
-		///			<term>RP</term>
-        ///			<description><see cref="netlib.Dns.Records.MINFORecord"/></description>
 		///		</item>
 		///		<item>
 		///			<term>MX</term>
         ///			<description><see cref="netlib.Dns.Records.MXRecord"/></description>
 		///		</item>
 		///		<item>
-		///			<term>AFSDB</term>
-        ///			<description><see cref="netlib.Dns.Records.MXRecord"/></description>
-		///		</item>
-		///		<item>
-		///			<term>RT</term>
-        ///			<description><see cref="netlib.Dns.Records.MXRecord"/></description>
-		///		</item>
-		///		<item>
-		///			<term>NULL</term>
-        ///			<description><see cref="netlib.Dns.Records.NULLRecord"/></description>
-		///		</item>
-		///		<item>
-		///			<term>SOA</term>
-        ///			<description><see cref="netlib.Dns.Records.SOARecord"/></description>
-		///		</item>
-		///		<item>
-		///			<term>WKS</term>
-        ///			<description><see cref="netlib.Dns.Records.WKSRecord"/></description>
-		///		</item>
-		///		<item>
-		///			<term>AAAA</term>
-        ///			<description><see cref="netlib.Dns.Records.AAAARecord"/></description>
-		///		</item>
-		///		<item>
-		///			<term>ATMA</term>
-        ///			<description><see cref="netlib.Dns.Records.ATMARecord"/></description>
-		///		</item>
-		///		<item>
-		///			<term>NBSTAT</term>
-        ///			<description><see cref="netlib.Dns.Records.WINSRRecord"/></description>
-		///		</item>
-		///		<item>
 		///			<term>SRV</term>
         ///			<description><see cref="netlib.Dns.Records.SRVRecord"/></description>
 		///		</item>
 		///		<item>
-		///			<term>TKEY</term>
-        ///			<description><see cref="netlib.Dns.Records.TKEYRecord"/></description>
-		///		</item>
-		///		<item>
-		///			<term>TSIG</term>
-        ///			<description><see cref="netlib.Dns.Records.TSIGRecord"/></description>
-		///		</item>
-		///		<item>
-		///			<term>WINS</term>
-        ///			<description><see cref="netlib.Dns.Records.WINSRecord"/></description>
-		///		</item>
-		///		<item>
-		///			<term>LOC</term>
-        ///			<description><see cref="netlib.Dns.Records.LOCRecord"/></description>
-		///		</item>
-		///		<item>
-		///			<term>AXFR</term>
-		///			<description>null</description>
-		///		</item>
-		///		<item>
-		///			<term>GPOS</term>
-		///			<description>null</description>
-		///		</item>
-		///		<item>
-		///			<term>IXFR</term>
-		///			<description>null</description>
-		///		</item>
-		///		<item>
-		///			<term>KEY</term>
-		///			<description>null</description>
-		///		</item>
-		///		<item>
-		///			<term>MAILA</term>
-		///			<description>null</description>
-		///		</item>
-		///		<item>
-		///			<term>MAILB</term>
-		///			<description>null</description>
-		///		</item>
-		///		<item>
-		///			<term>NSAP</term>
-		///			<description>null</description>
-		///		</item>
-		///		<item>
-		///			<term>NSAPPTR</term>
-		///			<description>null</description>
-		///		</item>
-		///		<item>
-		///			<term>NXT</term>
-		///			<description>null</description>
-		///		</item>
-		///		<item>
-		///			<term>PX</term>
-		///			<description>null</description>
-		///		</item>
-		///		<item>
-		///			<term>SIG</term>
-		///			<description>null</description>
-		///		</item>
-		///		<item>
 		///			<term>TEXT</term>
-		///			<description>null</description>
+        ///			<description><see cref="netlib.Dns.Records.TXTRecord"/></description>
 		///		</item>
 		/// </list>
 		/// </remarks>
@@ -2439,24 +1660,6 @@ namespace netlib.Dns
 					arr.Add(dnsentry.RecordData);
 
 			return arr;
-		}
-
-		/// <summary>
-		/// Gets all the <see cref="ARecord"/> for the queried domain.
-		/// </summary>
-		/// <remarks>
-		/// Uses the <see cref="GetRecords"/> method to retrieve an
-		/// array of <see cref="ARecord"/>s representing all the Address
-		/// records for the domain.
-		/// </remarks>
-		/// <value>An array of <see cref="ARecord"/> objects.</value>
-		public ARecord[] ARecords
-		{
-			get
-			{
-				ArrayList arr = GetRecords(DnsRecordType.A);
-				return (ARecord[]) arr.ToArray(typeof(ARecord));
-			}
 		}
 
         /// <summary>
@@ -2494,247 +1697,10 @@ namespace netlib.Dns
 				return (MXRecord[]) arr.ToArray(typeof(MXRecord));
 			}
 		}
-
-		/// <summary>
-		/// Gets all the DNS name servers for the queried domain as an
-		/// array of <see cref="PTRRecord"/>s.
-		/// </summary>
-		/// <remarks>
-		/// Uses the <see cref="GetRecords"/> method to retrieve an
-		/// array of <see cref="PTRRecord"/>s representing all the Name Server
-		/// records for the domain.
-		/// </remarks>
-		/// <value>An array of <see cref="PTRRecord"/> objects.</value>
-		public PTRRecord[] NSRecords
-		{
-			get
-			{
-				ArrayList arr = GetRecords(DnsRecordType.NS);
-				return (PTRRecord[]) arr.ToArray(typeof(PTRRecord));
-			}
-		}
 	}
 
 	namespace Records
 	{
-		/// <summary>
-		/// Represents a DNS Well Known Service record (DNS_WKS_DATA)
-		/// </summary>
-		/// <remarks>
-		/// The WKSRecord structure is used in conjunction with 
-		/// the <see cref="DnsRequest"/> and <see cref="DnsResponse"/> 
-		/// classes to programmatically manage DNS entries.
-		/// </remarks>
-		[StructLayout(LayoutKind.Sequential)]
-		public struct WKSRecord
-		{
-			/// <summary>
-			/// Gets or sets the IP address
-			/// </summary>
-			/// <remarks>
-			/// IP address, in the form of an IP4_ADDRESS structure. 
-			/// </remarks>
-			public uint IpAddress;
-
-			/// <summary>
-			/// Gets or sets the protocol
-			/// </summary>
-			/// <remarks>
-			/// IP protocol for this record. Valid values are UDP or TCP. 
-			/// </remarks>
-			public char Protocol;
-
-			/// <summary>
-			/// Gets or sets the bitmask
-			/// </summary>
-			/// <remarks>
-			/// Mask representing well known service being represented in the RR. 
-			/// </remarks>
-			public byte BitMask;			
-
-			/// <summary>
-			/// Returns a string representation of the service record
-			/// </summary>
-			/// <returns></returns>
-			/// <remarks>
-			/// The string returned looks like:
-			/// <code>
-			/// IP Address: [IPADDR] Protocol: [PROTO] BitMask: [BITMASK]
-			/// where [IPADDR] = string representation of <see cref="IpAddress"/> as specified here <see cref="System.Net.IPAddress.ToString()"/>
-			/// and   [PROTO] = string representation of <see cref="Protocol"/>
-			/// and   [BITMASK] = hexadecimal representation of <see cref="BitMask"/>
-			/// </code>
-			/// </remarks>
-			public override string ToString()
-			{
-				return String.Format("IP Address: {0} Protocol: {1} BitMask: {2}",
-					new IPAddress(IpAddress),
-					Protocol,
-					BitMask.ToString("x")
-					);
-			}
-		}
-
-		/// <summary>
-		/// Represents a DNS Windows Internet Name Service reverse-lookup 
-		/// (WINSR) record (DNS_WINSR_DATA)
-		/// </summary>
-		/// <remarks>
-		/// The WINSRRecord structure is used in conjunction with 
-		/// the <see cref="DnsRequest"/> and <see cref="DnsResponse"/> 
-		/// classes to programmatically manage DNS entries.
-		/// </remarks>
-		[StructLayout(LayoutKind.Sequential)]
-		public struct WINSRRecord
-		{
-			/// <summary>
-			/// Gets or sets the mapping flag
-			/// </summary>
-			/// <remarks>
-			/// WINS mapping flag that specifies whether the record must be included 
-			/// into the zone replication. It may have only two values: 0x80000000 
-			/// and 0x00010000 corresponding to the replication and no-replication 
-			/// (local record) flags, respectively. 
-			/// </remarks>
-			public uint	MappingFlag;
-
-			/// <summary>
-			/// Gets or sets the lookup timeout
-			/// </summary>
-			/// <remarks>
-			/// Time, in seconds, that a DNS Server attempts resolution using WINS 
-			/// lookup. 
-			/// </remarks>
-			public uint	LookupTimeout;
-
-			/// <summary>
-			/// Gets or sets the cache timeout
-			/// </summary>
-			/// <remarks>
-			/// Time, in seconds, that a DNS Server using WINS lookup may cache the 
-			/// WINS Server's response. 
-			/// </remarks>
-			public uint	CacheTimeout;
-
-			/// <summary>
-			/// Gets or sets the result domain name
-			/// </summary>
-			/// <remarks>
-			/// Pointer to a string representing the domain name to append to the 
-			/// returned NetBIOS name. 
-			/// </remarks>
-			public string ResultDomain;
-
-			/// <summary>
-			/// Returns a string representation of this record.
-			/// </summary>
-			/// <returns></returns>
-			/// <remarks>
-			/// The string returned looks like:
-			/// <code>
-			/// mapping flag: [FLAG] lookup timeout: [LOOKUP] cache timeout: [CACHE] result domain: [DOMAIN]
-			/// where [FLAG] = string representation of <see cref="MappingFlag"/>
-			/// and   [LOOKUP] = string representation of <see cref="LookupTimeout"/>
-			/// and   [CACHE] = string representation of <see cref="CacheTimeout"/>
-			/// and   [DOMAIN] = hexadecimal representation of <see cref="ResultDomain"/>
-			/// </code>
-			/// </remarks>
-			public override string ToString()
-			{
-				return String.Format(
-					"mapping flag: {0} lookup timeout: {1} cache timeout: {2} result domain: {3}",
-					MappingFlag,
-					LookupTimeout,
-					CacheTimeout,
-					ResultDomain
-					);
-			}
-		}
-
-		/// <summary>
-		/// Represents a DNS Windows Internet Name Service (WINS) record (DNS_WINS_DATA)
-		/// </summary>
-		/// <remarks>
-		/// The WINSRecord structure is used in conjunction with 
-		/// the <see cref="DnsRequest"/> and <see cref="DnsResponse"/> 
-		/// classes to programmatically manage DNS entries.
-		/// </remarks>
-		[StructLayout(LayoutKind.Sequential)]
-		public struct WINSRecord
-		{
-			/// <summary>
-			/// Gets or sets the mapping flag
-			/// </summary>
-			/// <remarks>
-			/// WINS mapping flag that specifies whether the record must be 
-			/// included into the zone replication. It may have only two values: 
-			/// 0x80000000 and 0x00010000 corresponding to the replication and 
-			/// no-replication (local record) flags, respectively. 
-			/// </remarks>
-			public uint	MappingFlag;
-
-			/// <summary>
-			/// Gets or sets the lookup timeout
-			/// </summary>
-			/// <remarks>
-			/// Time, in seconds, that a DNS Server attempts resolution using 
-			/// WINS lookup. 
-			/// </remarks>
-			public uint	LookupTimeout;
-
-			/// <summary>
-			/// Gets or sets the cache timeout
-			/// </summary>
-			/// <remarks>
-			/// Time, in seconds, that a DNS Server using WINS lookup may cache 
-			/// the WINS Server's response. 
-			/// </remarks>
-			public uint	CacheTimeout;
-
-			/// <summary>
-			/// Gets or sets the count of WINS servers
-			/// </summary>
-			/// <remarks>
-			/// Number of WINS Servers listed in the WinsServers member. 
-			/// </remarks>
-			public uint	ServerCount;
-
-			/// <summary>
-			/// Gets or sets the WINS server array pointer
-			/// </summary>
-			/// <remarks>
-			/// Array of WINS Servers, each of type int . 
-			/// </remarks>
-			public IntPtr WinsServers;
-
-			/// <summary>
-			/// Returns a string representation of this record.
-			/// </summary>
-			/// <returns></returns>
-			/// <remarks>
-			/// The string returned looks like:
-			/// <code>
-			/// mapping flag: [FLAG] lookup timeout: [LOOKUP] cache timeout: [CACHE] server count: [SERVERCT] server ptr: [SERVERS]
-			/// where [FLAG] = string representation of <see cref="MappingFlag"/>
-			/// and   [LOOKUP] = string representation of <see cref="LookupTimeout"/>
-			/// and   [CACHE] = string representation of <see cref="CacheTimeout"/>
-			/// and   [SERVERCT] = string representation of <see cref="ServerCount"/>
-			/// and   [SERVERS] = string representation of <see cref="WinsServers"/>
-			/// </code>
-			/// </remarks>
-			public override string ToString()
-			{
-				return String.Format(
-					"mapping flag: {0} lookup timeout: {1} cache timeout: {2} server count: {3} server ptr: {4}",
-					MappingFlag,
-					LookupTimeout,
-					CacheTimeout,
-					ServerCount,
-					WinsServers
-					);
-			}
-		}
-
 		/// <summary>
 		/// Represents a DNS Text record (DNS_TXT_DATA)
 		/// </summary>
@@ -2783,229 +1749,6 @@ namespace netlib.Dns
 					StringArray
 					);
 			}
-		}
-
-		/// <summary>
-		/// represents a secret key transaction authentication (TSIG) record (DNS_TSIG_DATA)
-		/// </summary>
-		/// <remarks>
-		/// The TSIGRecord structure is used in conjunction with 
-		/// the <see cref="DnsRequest"/> and <see cref="DnsResponse"/> 
-		/// classes to programmatically manage DNS entries.
-		/// </remarks>
-		[StructLayout(LayoutKind.Sequential)]
-		public struct TSIGRecord
-		{
-			/// <summary>
-			/// Gets or sets the name algorithm
-			/// </summary>
-			/// <remarks>
-			/// Name of the key used in the domain name syntax. 
-			/// </remarks>
-			public string Algorithm;
-
-			/// <summary>
-			/// Gets or sets the algorithm packet
-			/// </summary>
-			/// <remarks>
-			/// Pointer to the packet containing the algorithm. 
-			/// </remarks>
-			public IntPtr AlgorithmPacket;
-
-			/// <summary>
-			/// Gets or sets the key
-			/// </summary>
-			/// <remarks>
-			/// Pointer to the signature. 
-			/// </remarks>
-			public IntPtr Key;
-
-			/// <summary>
-			/// Gets or sets the other data
-			/// </summary>
-			/// <remarks>
-			/// Pointer to other data. This member is empty unless a BADTIME error is returned.
-			/// </remarks>
-			public IntPtr OtherData;
-
-			/// <summary>
-			/// Gets or sets the create time
-			/// </summary>
-			/// <remarks>
-			/// Time the key transaction authentication was created, expressed in seconds since the beginning of January 1, 1970, Greenwich Mean Time (GMT), excluding leap seconds. 
-			/// </remarks>
-			public long CreateTime;
-
-			/// <summary>
-			/// Gets or sets the fudge time
-			/// </summary>
-			/// <remarks>
-			/// Time, in seconds, from which the i64CreateTime may be in error. 
-			/// </remarks>
-			public ushort FudgeTime;
-
-			/// <summary>
-			/// Gets or sets the original XID
-			/// </summary>
-			/// <remarks>
-			/// Original message identifier. 
-			/// </remarks>
-			public ushort OriginalXid;
-
-			/// <summary>
-			/// Gets or sets the error
-			/// </summary>
-			/// <remarks>
-			/// Error, expressed in expanded RCODE that covers TSIG processing. See Remarks for more information about the TSIG resource record. 
-			/// </remarks>
-			public ushort Error;
-
-			/// <summary>
-			/// Gets or sets the key length
-			/// </summary>
-			/// <remarks>
-			/// Length, in bytes, of the pSignature member. 
-			/// </remarks>
-			public ushort KeyLength;
-
-			/// <summary>
-			/// Gets or sets the other length
-			/// </summary>
-			/// <remarks>
-			/// Length, in bytes, of the pOtherData member. 
-			/// </remarks>
-			public ushort OtherLength;
-
-			/// <summary>
-			/// Gets or sets the algorithm length
-			/// </summary>
-			/// <remarks>
-			/// Length, in bytes, of the pNameAlgorithm member. 
-			/// </remarks>
-			public char AlgNameLength;
-
-			/// <summary>
-			/// Gets or sets whether or not to use packet pointers
-			/// </summary>
-			/// <remarks>
-			/// Reserved for future use. 
-			/// </remarks>
-			public bool PacketPointers;
-		}
-
-		/// <summary>
-		///  Represents a DNS TKEY resource record, used to 
-		///  establish and delete shared-secret keys between 
-		///  a DNS resolver and server. (DNS_TKEY_DATA)
-		/// </summary>
-		/// <remarks>
-		/// The TKEYRecord structure is used in conjunction with 
-		/// the <see cref="DnsRequest"/> and <see cref="DnsResponse"/> 
-		/// classes to programmatically manage DNS entries.
-		/// </remarks>
-		[StructLayout(LayoutKind.Sequential)]
-		public struct TKEYRecord
-		{
-			/// <summary>
-			/// Gets or sets the name algorithm
-			/// </summary>
-			/// <remarks>
-			/// Pointer to a string representing the name of the algorithm 
-			/// used with the key. 
-			/// </remarks>
-			public string Algorithm;
-
-			/// <summary>
-			/// Gets or sets the algorithm packet.
-			/// </summary>
-			/// <remarks>
-			/// Pointer to the packet containing the algorithm. 
-			/// </remarks>
-			public IntPtr AlgorithmPacket;
-
-			/// <summary>
-			/// Gets or sets the key
-			/// </summary>
-			/// <remarks>
-			/// Pointer to the key. 
-			/// </remarks>
-			public IntPtr Key;
-
-			/// <summary>
-			/// Gets or sets the other data
-			/// </summary>
-			/// <remarks>
-			/// Reserved for future use. 
-			/// </remarks>
-			public IntPtr OtherData;
-
-			/// <summary>
-			/// Gets or sets the create time
-			/// </summary>
-			/// <remarks>
-			/// Date and time at which the key was created, expressed in seconds 
-			/// since the beginning of January 1, 1970, Greenwich Mean Time (GMT), 
-			/// excluding leap seconds. 
-			/// </remarks>
-			public uint CreateTime;
-
-			/// <summary>
-			/// Gets or sets the expire time
-			/// </summary>
-			/// <remarks>
-			/// Expiration date of the key, expressed in seconds since the beginning 
-			/// of January 1, 1970, Greenwich Mean Time (GMT), excluding leap seconds. 
-			/// </remarks>
-			public uint ExpireTime;
-
-			/// <summary>
-			/// Gets or sets the mode
-			/// </summary>
-			/// <remarks>
-			/// Scheme used for key agreement or the purpose of the TKEY DNS Message. 
-			/// </remarks>
-			public ushort Mode;
-
-			/// <summary>
-			/// Gets or sets the error
-			/// </summary>
-			/// <remarks>
-			/// Error, expressed in expanded RCODE that covers TSIG processing and 
-			/// TKEY processing. See Remarks. 
-			/// </remarks>
-			public ushort Error;
-
-			/// <summary>
-			/// Gets or sets the key length
-			/// </summary>
-			/// <remarks>
-			/// Length, in bytes, of the pSignature member. 
-			/// </remarks>
-			public ushort KeyLength;
-
-			/// <summary>
-			/// Gets or sets the other length
-			/// </summary>
-			/// <remarks>
-			/// Length, in bytes, of the pOtherData member. 
-			/// </remarks>
-			public ushort OtherLength;
-
-			/// <summary>
-			/// Gets or sets the name algorithm's length
-			/// </summary>
-			/// <remarks>
-			/// Length, in bytes, of the pNameAlgorithm member. 
-			/// </remarks>
-			public char AlgNameLength;
-
-			/// <summary>
-			/// Gets or sets whether or not to use packet pointers
-			/// </summary>
-			/// <remarks>
-			/// Reserved for future use. 
-			/// </remarks>
-			public bool PacketPointers;
 		}
 
 		/// <summary>
@@ -3189,122 +1932,6 @@ namespace netlib.Dns
 		}
 
 		/// <summary>
-		/// Represents a DNS Cryptographic signature record. (DNS_SIG_DATA)
-		/// </summary>
-		/// <remarks>
-		/// The SIGRecord structure is used in conjunction with 
-		/// the <see cref="DnsRequest"/> and <see cref="DnsResponse"/> 
-		/// classes to programmatically manage DNS entries.
-		/// </remarks>
-		[StructLayout(LayoutKind.Sequential)]
-		public struct SIGRecord
-		{
-			/// <summary>
-			/// Gets or sets the signer.
-			/// </summary>
-			/// <remarks>
-			/// Pointer to a string representing the name of the signer that 
-			/// generated the record 
-			/// </remarks>
-			public string Signer;
-
-			/// <summary>
-			/// Gets or sets the type covered
-			/// </summary>
-			/// <remarks>
-			/// Type of RR covered by the signature 
-			/// </remarks>
-			public ushort	TypeCovered;
-
-			/// <summary>
-			/// Gets or sets the algorithm
-			/// </summary>
-			/// <remarks>
-			/// Algorithm used with the key specified in the RR. The assigned values are shown in the following table. 
-			/// 
-			/// <list type="table">
-			///		<listheader>
-			///			<term>Value</term>
-			///			<term>Meaning</term>
-			///		</listheader>
-			///		<item>
-			///			<term>1</term>
-			///			<description>RSA/MD5 (RFC 2537)</description>
-			///		</item>
-			///		<item>
-			///			<term>2</term>
-			///			<description>Diffie-Hellman (RFC 2539)</description>
-			///		</item>
-			///		<item>
-			///			<term>3</term>
-			///			<description>DSA (RFC 2536)</description>
-			///		</item>
-			///		<item>
-			///			<term>4</term>
-			///			<description>Elliptic curve cryptography</description>
-			///		</item>
-			/// </list>
-			/// </remarks>
-			public byte	Algorithm;
-
-			/// <summary>
-			/// Gets or sets the label count
-			/// </summary>
-			/// <remarks>
-			/// Number of labels in the original signature RR owner name. The count does not include the NULL label for the root, nor any initial wildcards. 
-			/// </remarks>
-			public byte	LabelCount;
-
-			/// <summary>
-			/// Gets or sets the original ttl
-			/// </summary>
-			/// <remarks>
-			/// TTL value of the RR set signed by the signature RR. 
-			/// </remarks>
-			public uint	OriginalTtl;
-
-			/// <summary>
-			/// Gets or sets the expiration
-			/// </summary>
-			/// <remarks>
-			/// Expiration date, expressed in seconds since the beginning of January 1, 1970, Greenwich Mean Time (GMT), excluding leap seconds. 
-			/// </remarks>
-			public uint	Expiration;
-
-			/// <summary>
-			/// Gets or sets the time signed
-			/// </summary>
-			/// <remarks>
-			/// Date and time at which the signature becomes valid, expressed in seconds since the beginning of January 1, 1970, Greenwich Mean Time (GMT), excluding leap seconds. 
-			/// </remarks>
-			public uint	TimeSigned;
-
-			/// <summary>
-			/// Gets or sets the key tag
-			/// </summary>
-			/// <remarks>
-			/// Method used to choose a key that verifies a signature. See RFC 2535, Appendix C for the method used to calculate a KeyTag.
-			/// </remarks>
-			public ushort	KeyTag;
-
-			/// <summary>
-			/// Reserved.
-			/// </summary>
-			/// <remarks>
-			/// Reserved. Used to keep byte field aligned. 
-			/// </remarks>
-			public ushort	Pad;            // keep byte field aligned
-
-			/// <summary>
-			/// Gets or sets the signature
-			/// </summary>
-			/// <remarks>
-			/// Signature, represented in base 64, formatted as defined in RFC 2535, Appendix A. 
-			/// </remarks>
-			public byte	Signature;
-		}
-
-		/// <summary>
 		/// Represents the DNS pointer record (DNS_PTR_DATA)
 		/// </summary>
 		/// <remarks>
@@ -3337,104 +1964,6 @@ namespace netlib.Dns
 			public override string ToString()
 			{
 				return String.Format("Hostname: {0}", HostName);
-			}
-		}
-
-		/// <summary>
-		/// Represents the DNS Next record. (DNS_NXT_DATA)
-		/// </summary>
-		/// <remarks>
-		/// The NXTRecord structure is used in conjunction with 
-		/// the <see cref="DnsRequest"/> and <see cref="DnsResponse"/> 
-		/// classes to programmatically manage DNS entries.
-		/// </remarks>
-		[StructLayout(LayoutKind.Sequential)]
-		public struct NXTRecord
-		{
-			/// <summary>
-			/// Gets or sets the name.
-			/// </summary>
-			/// <remarks>
-			/// Pointer to a string representing the name of the next domain. 
-			/// </remarks>
-			public string NameNext;
-
-			/// <summary>
-			/// Gets or sets the type bit map
-			/// </summary>
-			/// <remarks>
-			/// Number of elements in the wTypes array. 
-			/// </remarks>
-			public byte TypeBitMap;
-
-			/// <summary>
-			/// Returns a string representation of this record.
-			/// </summary>
-			/// <returns></returns>
-			/// <remarks>
-			/// The string returned looks like:
-			/// <code>
-			/// next: [NAME] type bitmap: [BITMAP]
-			/// where [NAME] = string representation of <see cref="NameNext"/>
-			/// and   [BITMAP] = hexadecimal representation of <see cref="TypeBitMap"/>
-			/// </code>
-			/// </remarks>
-			public override string ToString()
-			{
-				return String.Format(
-					"next: {0} type bitmap: {1}",
-					NameNext,
-					TypeBitMap.ToString("x")
-					);
-			}
-		}
-
-		/// <summary>
-		/// Represents NULL data for a DNS resource record. (DNS_NULL_DATA)
-		/// </summary>
-		/// <remarks>
-		/// The NULLRecord structure is used in conjunction with 
-		/// the <see cref="DnsRequest"/> and <see cref="DnsResponse"/> 
-		/// classes to programmatically manage DNS entries.
-		/// </remarks>
-		[StructLayout(LayoutKind.Sequential)]
-		public struct NULLRecord
-		{
-			/// <summary>
-			/// Gets or sets the byte count.
-			/// </summary>
-			/// <remarks>
-			/// Number of bytes represented in Data. 
-			/// </remarks>
-			public uint ByteCount;
-
-			/// <summary>
-			/// Gets or sets the data.
-			/// </summary>
-			/// <remarks>
-			/// Null data.
-			/// </remarks>
-			public string Data;
-											   
-			/// <summary>
-			/// Returns a string representation of this record.
-			/// </summary>
-			/// <returns></returns>
-			/// <remarks>
-			/// The string returned looks like:
-			/// <code>
-			/// byte count: [BYTECT] data: [DATA]
-			/// where [BYTECT] = string representation of <see cref="ByteCount"/>
-			/// and   [DATA] = hexadecimal representation of <see cref="Data"/>
-			/// </code>
-			/// </remarks>
-			public override string ToString()
-			{
-				return String.Format(
-					"byte count: {0} data: {1}",
-					ByteCount,
-					Data
-					);
 			}
 		}
 
@@ -3497,413 +2026,45 @@ namespace netlib.Dns
 			}
 		}
 
-		/// <summary>
-		/// Represents a DNS mail information (MINFO) record (DNS_MINFO_DATA)
-		/// </summary>
-		/// <remarks>
-		/// The MINFORecord structure is used in conjunction with 
-		/// the <see cref="DnsRequest"/> and <see cref="DnsResponse"/> 
-		/// classes to programmatically manage DNS entries.
-		/// </remarks>
-		[StructLayout(LayoutKind.Sequential)]
-		public struct MINFORecord
-		{
-			/// <summary>
-			/// Gets or sets the mailbox name
-			/// </summary>
-			/// <remarks>
-			/// Pointer to a string representing the fully qualified domain name 
-			/// (FQDN) of the mailbox responsible for the mailing list or mailbox 
-			/// specified in the record's owner name. 
-			/// </remarks>
-			public string Mailbox;
+        /// <summary>
+        /// Represents a DNS Address record (DNS_A_DATA)
+        /// </summary>
+        /// <remarks>
+        /// The ARecord structure is used in conjunction with 
+        /// the <see cref="DnsRequest"/> and <see cref="DnsResponse"/> 
+        /// classes to programmatically manage DNS entries.
+        /// </remarks>
+        [StructLayout(LayoutKind.Sequential)]
+        public struct ARecord
+        {
+            /// <summary>
+            /// Gets or sets the ip address.
+            /// </summary>
+            /// <remarks>
+            /// IPv4 address, in the form of an uint datatype. 
+            /// <see cref="System.Net.IPAddress"/> could be 
+            /// used to fill this property.
+            /// </remarks>
+            public uint Address;
 
-			/// <summary>
-			/// Gets or sets the error mailbox name
-			/// </summary>
-			/// <remarks>
-			/// Pointer to a string representing the FQDN of the mailbox to receive 
-			/// error messages related to the mailing list. 
-			/// </remarks>
-			public string ErrorsMailbox;
-
-			/// <summary>
-			/// Returns a string representation of this record.
-			/// </summary>
-			/// <returns></returns>
-			/// <remarks>
-			/// The string returned looks like:
-			/// <code>
-			/// mailbox: [MAILBOX] error mailbox: [ERRMAILBOX]
-			/// where [MAILBOX] = string representation of <see cref="Mailbox"/>
-			/// and   [ERRMAILBOX] = hexadecimal representation of <see cref="ErrorsMailbox"/>
-			/// </code>
-			/// </remarks>
-			public override string ToString()
-			{
-				return String.Format(
-					"mailbox: {0} error mailbox: {1}",
-					Mailbox,
-					ErrorsMailbox
-					);
-			}
-		}
-
-		/// <summary>
-		/// Represents a DNS Location record (DNS_LOC_DATA)
-		/// </summary>
-		/// <remarks>
-		/// <para>
-		/// The LOCRecord structure is used in conjunction with 
-		/// the <see cref="DnsRequest"/> and <see cref="DnsResponse"/> 
-		/// classes to programmatically manage DNS entries.
-		/// </para>
-		/// <para>
-		/// For <see cref="LOCRecord.Altitude"/>, altitude above or 
-		/// below sea level may be used as an approximation of altitude 
-		/// relative to the [WGS 84] spheroid, however, there will be 
-		/// differences due to the Earth's surface not being a perfect 
-		/// spheroid. For example, the geoid (which sea level approximates) 
-		/// for the continental US ranges from 10 meters to 50 meters below 
-		/// the [WGS 84] spheroid. Adjustments to <see cref="LOCRecord.Altitude"/> 
-		/// and/or <see cref="LOCRecord.VerPrec"/> will be necessary in most cases. 
-		/// The Defense Mapping Agency publishes geoid height values relative 
-		/// to the [WGS 84] ellipsoid.
-		/// </para>
-		/// <para>
-		/// For more information about the LOC RR, see RFC 1876.
-		/// </para>
-		/// </remarks>
-		[StructLayout(LayoutKind.Sequential)]
-		public struct LOCRecord
-		{
-			/// <summary>
-			/// Gets or sets the version
-			/// </summary>
-			/// <remarks>
-			/// Version number of the representation. Must be zero. 
-			/// </remarks>
-			public ushort Version;
-
-			/// <summary>
-			/// Gets or sets the size
-			/// </summary>
-			/// <remarks>
-			/// Diameter of a sphere enclosing the described entity, in centimeters, 
-			/// expressed as a pair of four-bit unsigned integers, each ranging from 
-			/// zero to nine, with the most significant four bits representing the base 
-			/// and the second number representing the power of ten by which to multiply 
-			/// the base. This format allows sizes from 0e0 (&lt;1cm) to 9e9 (90,000km) 
-			/// to be expressed. 
-			/// </remarks>
-			public ushort Size;
-
-			/// <summary>
-			/// Gets or sets the horizontal precision
-			/// </summary>
-			/// <remarks>
-			/// Horizontal precision of the data, in centimeters, expressed using the 
-			/// same representation as wSize. This is the diameter of the horizontal 
-			/// circle of error, rather than a plus or minus value. Matches the 
-			/// interpretation of wSize; to get a plus or minus value, divide by 2. 
-			/// </remarks>
-			public ushort HorPrec;
-
-			/// <summary>
-			/// Gets or sets the vertical precision
-			/// </summary>
-			/// <remarks>
-			/// Vertical precision of the data, in centimeters, expressed using the 
-			/// same representation as wSize. This value represents the total potential 
-			/// vertical error, rather than a plus or minus value. Matches the 
-			/// interpretation of wSize; to get a plus or minus value, divide by 2. 
-			/// If altitude above or below sea level is used as an approximation for 
-			/// altitude relative to the [WGS 84] ellipsoid, the precision value should 
-			/// be adjusted.
-			/// </remarks>
-			public ushort VerPrec;
-
-			/// <summary>
-			/// Gets or sets the latitude of the location
-			/// </summary>
-			/// <remarks>
-			/// Latitude of the center of the sphere described by wSize, expressed as a 
-			/// 32-bit integer, with the most significant octet first (network standard 
-			/// byte order), in thousandths of a second of arc. 2^31 represents the 
-			/// equator, larger numbers are north latitude. 
-			/// </remarks>
-			public uint	Latitude;
-
-			/// <summary>
-			/// Gets or sets the longitude of the location
-			/// </summary>
-			/// <remarks>
-			/// Longitude of the center of the sphere described by wSize, expressed as a 
-			/// 32-bit integer, most significant octet first (network standard byte order),
-			/// in thousandths of a second of arc, rounded away from the prime meridian. 
-			/// 2^31 represents the prime meridian, larger numbers are east longitude.. 
-			/// </remarks>
-			public uint	Longitude;
-
-			/// <summary>
-			/// Gets or sets the altitude of the location
-			/// </summary>
-			/// <remarks>
-			/// Altitude of the center of the sphere described by wSize, expressed as a 
-			/// 32-bit integer, most significant octet first (network standard byte order),
-			/// in centimeters, from a base of 100,000m below the [WGS 84] reference 
-			/// spheroid used by GPS (semimajor axis a=6378137.0, reciprocal flattening 
-			/// rf=298.257223563). See Remarks for more information. 
-			/// </remarks>
-			public uint	Altitude;
-		}
-
-		/// <summary>
-		/// Represents a Public key DNS record (DNS_KEY_DATA)
-		/// </summary>
-		/// <remarks>
-		/// The KEYRecord structure is used in conjunction with 
-		/// the <see cref="DnsRequest"/> and <see cref="DnsResponse"/> 
-		/// classes to programmatically manage DNS entries.
-		/// </remarks>
-		[StructLayout(LayoutKind.Sequential)]
-		public struct KEYRecord
-		{
-			/// <summary>
-			/// Gets or sets the flags
-			/// </summary>
-			/// <remarks>
-			/// Flags used to specify mapping, as described in IETF RFC 2535. 
-			/// </remarks>
-			public ushort Flags;
-
-			/// <summary>
-			/// Gets or sets the protocol
-			/// </summary>
-			/// <remarks>
-			/// Protocol for which the key specified in the resource record can be used. The assigned values are shown in the following table. 
-			/// 
-			/// <list type="table">
-			///		<listheader>
-			///			<term>Value</term>
-			///			<term>Meaning</term>
-			///		</listheader>
-			///		<item>
-			///			<term>1</term>
-			///			<description>TLS</description>
-			///		</item>
-			///		<item>
-			///			<term>2</term>
-			///			<description>E-Mail</description>
-			///		</item>
-			///		<item>
-			///			<term>3</term>
-			///			<description>DNSSEC</description>
-			///		</item>
-			///		<item>
-			///			<term>4</term>
-			///			<description>IPSec</description>
-			///		</item>
-			///		<item>
-			///			<term>255</term>
-			///			<description>All protocols</description>
-			///		</item>
-			/// </list>
-			/// </remarks>
-			public byte	Protocol;
-
-			/// <summary>
-			/// Gets or sets the algorithm
-			/// </summary>
-			/// <remarks>
-			/// Algorithm used with the key specified in the resource record. The assigned values are shown in the following table. 
-			/// 
-			/// <list type="table">
-			///		<listheader>
-			///			<term>Value</term>
-			///			<term>Meaning</term>
-			///		</listheader>
-			///		<item>
-			///			<term>1</term>
-			///			<description>RSA/MD5 (RFC 2537)</description>
-			///		</item>
-			///		<item>
-			///			<term>2</term>
-			///			<description>Diffie-Hellman (RFC 2539)</description>
-			///		</item>
-			///		<item>
-			///			<term>3</term>
-			///			<description>DSA (RFC 2536)</description>
-			///		</item>
-			///		<item>
-			///			<term>4</term>
-			///			<description>Elliptic curve cryptography</description>
-			///		</item>
-			/// </list>
-			/// </remarks>
-			public byte	Algorithm;
-
-			/// <summary>
-			/// Gets or sets the key
-			/// </summary>
-			/// <remarks>
-			/// Public key, represented in base 64 as described in Appendix A of RFC 2535.
-			/// </remarks>
-			public byte	Key;
-
-			/// <summary>
-			/// Returns a string representation of this record.
-			/// </summary>
-			/// <returns></returns>
-			/// <remarks>
-			/// The string returned looks like:
-			/// <code>
-			/// flags: [FLAGS] protocol: [PROTO] algorithm: [ALGOR] key: [KEY]
-			/// where [FLAGS] = string representation of <see cref="Flags"/>
-			/// and   [PROTO] = hexadecimal representation of <see cref="Protocol"/>
-			/// and   [ALGOR] = string representation of <see cref="Algorithm"/>
-			/// and   [KEY] = hexadecimal representation of <see cref="Key"/>
-			/// </code>
-			/// </remarks>
-			public override string ToString()
-			{
-				return String.Format(
-					"flags: {0} protocol: {1} algorithm: {2} key: {3}",
-					Flags,
-					Protocol.ToString("x"),
-					Algorithm,
-					Key.ToString("x")
-					);
-			}
-		}
-
-		/// <summary>
-		/// Represents a DNS Address record (DNS_A_DATA)
-		/// </summary>
-		/// <remarks>
-		/// The ARecord structure is used in conjunction with 
-		/// the <see cref="DnsRequest"/> and <see cref="DnsResponse"/> 
-		/// classes to programmatically manage DNS entries.
-		/// </remarks>
-		[StructLayout(LayoutKind.Sequential)]
-		public struct ARecord
-		{
-			/// <summary>
-			/// Gets or sets the ip address.
-			/// </summary>
-			/// <remarks>
-			/// IPv4 address, in the form of an uint datatype. 
-			/// <see cref="System.Net.IPAddress"/> could be 
-			/// used to fill this property.
-			/// </remarks>
-			public uint Address;
-
-			/// <summary>
-			/// Returns a string representation of the A Record
-			/// </summary>
-			/// <returns></returns>
-			/// <remarks>
-			/// The string returned looks like:
-			/// <code>
-			/// ip address: [ADDRESS]
-			/// where [ADDRESS] = <see cref="System.Net.IPAddress.ToString()"/>
-			/// </code>
-			/// </remarks>
-			public override string ToString()
-			{
-				return String.Format(
-					"ip address: {0}", 
-					new IPAddress(Address)
-					);
-			}
-		}
-
-		/// <summary>
-		/// Represents a IPv6 Address record (DNS_AAAA_DATA)
-		/// </summary>
-		/// <remarks>
-		/// The AAAARecord structure is used in conjunction with 
-		/// the <see cref="DnsRequest"/> and <see cref="DnsResponse"/> 
-		/// classes to programmatically manage DNS entries.
-		/// </remarks>
-		[StructLayout(LayoutKind.Sequential)]
-		public struct AAAARecord
-		{
-			/// <summary>
-			/// Gets or sets the ip6 address
-			/// </summary>
-			/// <remarks>
-			/// IPv6 address, in the form of an <see cref="IP6Address"/> structure. 
-			/// </remarks>
-			public IP6Address Address;
-
-			/// <summary>
-			/// returns a string representation of this AAAA record.
-			/// </summary>
-			/// <returns></returns>
-			/// <remarks>
-			/// The string returned looks like:
-			/// <code>
-			/// Address: [ADDRESS]
-			/// where [ADDRESS] = <see cref="netlib.Dns.IP6Address.ToString"/>
-			/// </code>
-			/// </remarks>
-			public override string ToString()
-			{
-				return String.Format(
-					"Address: {0}",
-					Address
-					);
-			}
-		}
-
-		/// <summary>
-		/// Represents a DNS ATM address (ATMA) record (DNS_ATMA_DATA)
-		/// </summary>
-		/// <remarks>
-		/// The ATMARecord structure is used in conjunction with 
-		/// the <see cref="DnsRequest"/> and <see cref="DnsResponse"/> 
-		/// classes to programmatically manage DNS entries.
-		/// </remarks>
-		[StructLayout(LayoutKind.Sequential)]
-		public struct ATMARecord
-		{
-			/// <summary>
-			/// Gets or sets the address type
-			/// </summary>
-			/// <remarks>
-			/// ATM address format. Two possible values are DNS_ATMA_FORMAT_E164 or DNS_ATMA_FORMAT_AESA. 
-			/// </remarks>
-			public byte AddressType;
-
-			/// <summary>
-			/// Gets or sets the address
-			/// </summary>
-			/// <remarks>
-			/// ATM address. For E164, represents a NULL-terminated string of less than DNS_ATMA_MAX_ADDR_LENGTH. For AESA, its length is exactly DNS_ATMA_AESA_ADDR_LENGTH. 
-			/// </remarks>
-			public string Address;
-
-			/// <summary>
-			/// Returns a string representation of this record.
-			/// </summary>
-			/// <returns></returns>
-			/// <remarks>
-			/// The string returned looks like:
-			/// <code>
-			/// address type: [TYPE] address: [ADDRESS]
-			/// where [TYPE] = hexadecimal representation of <see cref="AddressType"/>
-			/// and   [ADDRESS] = string representation of <see cref="Address"/>
-			/// </code>
-			/// </remarks>
-			public override string ToString()
-			{
-				return String.Format(
-					"address type: {0} address: {1}",
-					AddressType.ToString("x"),
-					Address
-					);
-			}
-		}
+            /// <summary>
+            /// Returns a string representation of the A Record
+            /// </summary>
+            /// <returns></returns>
+            /// <remarks>
+            /// The string returned looks like:
+            /// <code>
+            /// ip address: [ADDRESS]
+            /// where [ADDRESS] = <see cref="System.Net.IPAddress.ToString()"/>
+            /// </code>
+            /// </remarks>
+            public override string ToString()
+            {
+                return String.Format(
+                    "ip address: {0}",
+                    new IPAddress(Address)
+                    );
+            }
+        }
 	}
 }
