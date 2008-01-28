@@ -190,7 +190,7 @@ namespace bedrock.net
                 return;
             }
             Debug.Assert(m_hostname != null, "Must set hostname first");
-#if NET20
+#if NET20 || __MonoCS__
             IPHostEntry iph = Dns.GetHostEntry(m_hostname);
 #else
             IPHostEntry iph = Dns.Resolve(m_hostname);
@@ -206,7 +206,7 @@ namespace bedrock.net
         {
             try
             {
-#if NET20
+#if NET20 || __MonoCS__
                 IPHostEntry ent = Dns.EndGetHostEntry(ar);
 #else
                 IPHostEntry ent = Dns.EndResolve(ar);
@@ -223,7 +223,7 @@ namespace bedrock.net
                     m_ip = ent.AddressList[0];
                 }
             }
-            catch (SocketException e)
+            catch (Exception e)
             {
                 Debug.WriteLine(e.ToString());
                 m_ip = null;
