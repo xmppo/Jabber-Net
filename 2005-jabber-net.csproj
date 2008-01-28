@@ -148,9 +148,6 @@
     <Compile Include="bedrock\net\BaseSocket.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="bedrock\net\CertUtil.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="bedrock\net\Exceptions.cs" />
     <Compile Include="bedrock\net\ProxySocket.cs">
       <SubType>Code</SubType>
