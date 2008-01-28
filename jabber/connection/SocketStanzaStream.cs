@@ -19,8 +19,10 @@ using System.Xml;
 using bedrock.net;
 using bedrock.util;
 using jabber.protocol;
+#if NET20
 using netlib.Dns;
 using netlib.Dns.Records;
+#endif
 
 namespace jabber.connection
 {
@@ -138,6 +140,7 @@ namespace jabber.connection
 
         }
 
+#if NET20
         private static SRVRecord PickSRV(SRVRecord[] srv)
         {
             if ((srv == null) || (srv.Length == 0))
@@ -186,7 +189,8 @@ namespace jabber.connection
 
             throw new Exception();
         }
-
+#endif
+    
         /// <summary>
         /// Connect the socket, outbound.
         /// </summary>
@@ -266,6 +270,7 @@ namespace jabber.connection
             string host = (string)m_listener[Options.NETWORK_HOST];
             if ((host == null) || (host == ""))
             {
+#if NET20
                 try
                 {
                     DnsRequest request = new DnsRequest(m_listener[Options.SRV_PREFIX] + to);
@@ -280,6 +285,9 @@ namespace jabber.connection
                 {
                     host = to;
                 }
+ #else
+     host = to;
+ #endif
             }
 
             Address addr = new Address(host, port);
