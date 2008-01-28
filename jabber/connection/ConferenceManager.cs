@@ -39,7 +39,8 @@ namespace jabber.connection
     /// </summary>
     /// <param name="room"></param>
     /// <param name="parent">Contains an x:data child with the form.</param>
-    public delegate void ConfigureRoom(Room room, IQ parent);
+    /// <returns>null to take the defaults, otherwise the IQ response</returns>
+    public delegate IQ ConfigureRoom(Room room, IQ parent);
 
     /// <summary>
     /// An event, like join or leave, has happened to a room.
@@ -632,8 +633,9 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Configure the room.  OnRoomConfig MUST be set first.  When you are done with configuration (popping up UI, etc.),
-        /// you MUST call FinishConfig with the IQ for the response.  Otherwise the room will never get into the running state.
+        /// Configure the room.  OnRoomConfig MUST be set first.  OnRoomConfig will be called back in the GUI
+        /// thread if there is an InvokeControl on your XmppStream.  Make sure that OnRoomConfig does not
+        /// return until it has the answer, typically by popping up a modal dialog with the x:data form.
         /// </summary>
         public void Configure()
         {
@@ -656,19 +658,22 @@ namespace jabber.connection
 
         private void ConfigForm(object sender, IQ iq, object context)
         {
-            OnRoomConfig(this, iq);
-            //TODO: invoke the callback sync like register.
-        }
+            // We should always be on the GUI thread.  
+            // XmppStream should invoke before calling OnProtocol in the Tracker.
+            Debug.Assert((m_stream.InvokeControl == null) || (!m_stream.InvokeControl.InvokeRequired));
 
-        /// <summary>
-        /// Finish up configuration given an IQ that contains the result to the configuration
-        /// form.
-        /// </summary>
-        /// <param name="iq"></param>
-        public void FinishConfig(IQ iq)
-        {
+            IQ resp = OnRoomConfig(this, iq);
+            if (resp == null)
+            {
+                FinishConfigDefault();
+                return;
+            }
+
             m_state = STATE.configSet;
-            m_stream.Tracker.BeginIQ(iq, new IqCB(Configured), null);
+            resp.To = m_room;
+            resp.Type = IQType.set;
+            resp.From = null;
+            m_stream.Tracker.BeginIQ(resp, new IqCB(Configured), null);
         }
 
         private void Configured(object sender, IQ iq, object context)
@@ -694,7 +699,7 @@ namespace jabber.connection
         /// an "Instant Room".  Suitable for use if the user cancels the configuration
         /// request, perhaps.
         /// </summary>
-        public void FinishConfigDefault()
+        private void FinishConfigDefault()
         {
 /*
 <iq from='crone1@shakespeare.lit/desktop'

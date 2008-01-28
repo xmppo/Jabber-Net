@@ -515,6 +515,8 @@ namespace Example
             // muc
             // 
             this.muc.Stream = this.jc;
+            this.muc.OnPresenceError += new RoomPresenceHandler(muc_OnPresenceError);
+            this.muc.OnRoomConfig += new ConfigureRoom(muc_OnRoomConfig);
             // 
             // joinConferenceToolStripMenuItem
             // 
@@ -1051,27 +1053,22 @@ namespace Example
             if (cf.ShowDialog() != DialogResult.OK)
                 return;
 
-            Room room = muc.GetRoom(cf.RoomAndNick);
-            room.OnPresenceError += new RoomPresenceError(room_OnPresenceError);
-            room.OnRoomConfig += new ConfigureRoom(room_OnRoomConfig);
-            //room.DefaultConfig = true;
-            room.Join();
+            muc.GetRoom(cf.RoomAndNick).Join();
         }
 
-        private void room_OnRoomConfig(Room room, IQ parent)
+        private IQ muc_OnRoomConfig(Room room, IQ parent)
         {
             muzzle.XDataForm form = new muzzle.XDataForm(parent);
             if (form.ShowDialog() != DialogResult.OK)
-            {
-                // TODO: send default?
-                return;
-            }
-            room.FinishConfig((IQ)form.GetResponse());
+                return null;
+
+            return (IQ)form.GetResponse();
         }
 
-        private void room_OnPresenceError(Room room, Presence pres)
+        private void muc_OnPresenceError(Room room, Presence pres)
         {
-            throw new Exception("The method or operation is not implemented.");
+            m_err = true;
+            pnlCon.Text = "Groupchat error: " + pres.Error.OuterXml;
         }
     }
 }
