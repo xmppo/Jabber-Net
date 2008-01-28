@@ -56,9 +56,10 @@ namespace jabber.connection
     public delegate void RoomStateEvent(Room room, object state);
 
     /// <summary>
-    /// An event, like join or leave, has happened to a room.
+    /// A participant-related callback.
     /// </summary>
     /// <param name="room">The room the event is for</param>
+    /// <param name="participants">The participants in the response</param>
     /// <param name="state">State passed in by the caller, or null if none.</param>
     public delegate void RoomParticipantsEvent(Room room, ParticipantCollection participants, object state);
 
@@ -258,10 +259,15 @@ namespace jabber.connection
         /// object for that room with the given nick.  You'll be called back on
         /// "callback" when complete; the Room will be null if there was an error
         /// or timeout.
+        /// 
+        /// Note: the server should implement the feature http://jabber.org/protocol/muc#unique,
+        /// or this will return an error.  To work around, just create a room with a Guid for
+        /// a name.
         /// </summary>
-        /// <param name="server"></param>
-        /// <param name="nick"></param>
-        /// <param name="callback"></param>
+        /// <param name="server">The server to send the request to</param>
+        /// <param name="nick">The nickname desired in the new room</param>
+        /// <param name="callback">A callback to be called when the room is created</param>
+        /// <param name="state">State object to be passed back when the callback fires</param>
         public void GetUniqueRoom(string server, string nick, RoomStateEvent callback, object state)
         {
             if (server == null)

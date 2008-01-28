@@ -53,6 +53,9 @@ namespace bedrock.util
             return inst;
         }
 
+        /// <summary>
+        /// The config file has been modified, and reloaded.
+        /// </summary>
         public event FileSystemEventHandler OnFileChange;
 
         private ConfigFile(string name)

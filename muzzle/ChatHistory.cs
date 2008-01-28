@@ -71,6 +71,10 @@ namespace muzzle
             AppendMaybeScroll(m_recvColor, nick + ":", body);
         }
 
+        /// <summary>
+        /// We sent some text; insert it.
+        /// </summary>
+        /// <param name="text"></param>
         public void InsertSend(string text)
         {
             AppendMaybeScroll(m_sendColor, "Me:", text);

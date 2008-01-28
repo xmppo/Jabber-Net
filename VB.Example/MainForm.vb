@@ -428,10 +428,6 @@ Public Class MainForm
         stream.AddFactory(New FooFactory)
     End Sub
 
-    Private Sub MainForm_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        bedrock.net.AsyncSocket.UntrustedRootOK = True
-    End Sub
-
     Private Sub mnuPresence_Popup(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnuPresence.Popup
 
     End Sub

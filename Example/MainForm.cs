@@ -84,8 +84,6 @@ namespace Example
 
         public MainForm()
         {
-            bedrock.net.AsyncSocket.UntrustedRootOK = true;
-
             //
             // Required for Windows Form Designer support
             //

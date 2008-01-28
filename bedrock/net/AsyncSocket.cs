@@ -180,8 +180,7 @@ namespace bedrock.net
         /// modify UntrustedRootOK to true, the side effect will be to
         /// set this to DefaultUntrustedPolicy.  False, the default,
         /// sets this to None.  </summary>
-        [Obsolete("Catch OnInvalidCertificate, instead")]
-        public static SslPolicyErrors AllowedSSLErrors = SslPolicyErrors.None;
+        private static SslPolicyErrors AllowedSSLErrors = SslPolicyErrors.None;
     
         /// <summary>
         /// Are untrusted root certificates OK when connecting using
@@ -192,6 +191,7 @@ namespace bedrock.net
         /// Setting this modifies AllowedSSLErrors by side-effect.
         /// </summary>
         [DefaultValue(false)]
+        [Obsolete("Catch OnInvalidCertificate, instead")]
         public static bool UntrustedRootOK
         {
             get

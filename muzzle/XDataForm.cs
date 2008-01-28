@@ -338,6 +338,10 @@ namespace muzzle
             return m_parent;
         }
 
+        /// <summary>
+        /// Modify the given x:data element to contain the response data.
+        /// </summary>
+        /// <param name="x"></param>
         public void FillInResponse(Data x)
         {
             x.RemoveAll();

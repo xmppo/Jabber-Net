@@ -56,7 +56,7 @@ namespace bedrock.collections
         /// <param name="key">The bytes to search for, where key[0] corresponds to a child
         /// node of the root.</param>
         /// <param name="create">Create nodes that don't exist, while searching.</param>
-        /// <returns>The node if found. If the node doesn't exist and <see cref="create"/> is true, the node created; otherwise null.</returns>
+        /// <returns>The node if found. If the node doesn't exist and create is true, the node created; otherwise null.</returns>
         protected virtual TrieNode FindNode(byte[] key, bool create)
         {
             return FindNode(key, m_root, create);
@@ -67,7 +67,7 @@ namespace bedrock.collections
         /// <param name="key">The key to search on, where key[0] corresponds to a child of startAt.</param>
         /// <param name="startAt">The node to search under</param>
         /// <param name="create">Create nodes that don't exist, while searching.</param>
-        /// <returns>The node if found. If the node doesn't exist and <see cref="create"/> is true, the node created; otherwise null.</returns>
+        /// <returns>The node if found. If the node doesn't exist and create is true, the node created; otherwise null.</returns>
         protected virtual TrieNode FindNode(byte[] key, TrieNode startAt, bool create)
         {
             TrieNode current = startAt;
