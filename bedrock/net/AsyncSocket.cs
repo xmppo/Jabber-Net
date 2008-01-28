@@ -238,16 +238,16 @@ namespace bedrock.net
         private bool                 m_writing        = false;
         private bool                 m_server         = false;
 #elif !NO_SSL
-		/// <summary>
-		/// Are untrusted root certificates OK when connecting using
-		/// SSL?  Setting this to true is insecure, but it's unlikely
-		/// that you trust jabbber.org or jabber.com's relatively
-		/// bogus certificate roots.
-		///
-		/// Setting this modifies AllowedSSLErrors by side-effect.
-		/// </summary>
-		[DefaultValue(false)]
-		public static bool UntrustedRootOK = false;
+        /// <summary>
+        /// Are untrusted root certificates OK when connecting using
+        /// SSL?  Setting this to true is insecure, but it's unlikely
+        /// that you trust jabbber.org or jabber.com's relatively
+        /// bogus certificate roots.
+        ///
+        /// Setting this modifies AllowedSSLErrors by side-effect.
+        /// </summary>
+        [DefaultValue(false)]
+        public static bool UntrustedRootOK = false;
 
         /// <summary>
         /// The types of SSL to support.  SSL3 and TLS1 by default.
@@ -500,7 +500,7 @@ namespace bedrock.net
         /// </summary>
         public Certificate RemoteCertificate
         {
-			get { return m_sock.RemoteCertificate; }
+            get { return m_sock.RemoteCertificate; }
         }
 
         /// <summary>
@@ -1167,14 +1167,14 @@ namespace bedrock.net
             SecurityOptions options = new SecurityOptions(SSLProtocols, null, m_credUse, CredentialVerification.Manual, new CertVerifyEventHandler(OnVerify), m_hostid, SecurityFlags.Default, SslAlgorithms.ALL, null);
             m_sock.ChangeSecurityProtocol(options);
 
-			// sweet holy race condition, batman.  Just move to 2k5 if you want to complain about this.
-			int count = 0;
-			while (m_sock.ActiveEncryption == SslAlgorithms.NONE)
-			{
-				if (count++ > 1000)
-					throw new Org.Mentalis.Security.SecurityException("Timeout negotiating SSL/TLS");
-				Thread.Sleep(100);
-			}
+            // sweet holy race condition, batman.  Just move to 2k5 if you want to complain about this.
+            int count = 0;
+            while (m_sock.ActiveEncryption == SslAlgorithms.NONE)
+            {
+                if (count++ > 1000)
+                    throw new Org.Mentalis.Security.SecurityException("Timeout negotiating SSL/TLS");
+                Thread.Sleep(100);
+            }
         }
 #endif
 
@@ -1184,10 +1184,7 @@ namespace bedrock.net
         /// </summary>
         public override void StartCompression()
         {
-#if NET20
-            Debug.WriteLine("Start Compression");
             m_stream = new bedrock.io.ZlibStream(m_stream, ComponentAce.Compression.Libs.zlib.zlibConst.Z_FULL_FLUSH);
-#endif
         }
 #endif
 
