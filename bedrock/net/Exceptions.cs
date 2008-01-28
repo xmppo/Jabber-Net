@@ -16,65 +16,6 @@ using bedrock.util;
 
 namespace bedrock.net
 {
-#if NET20
-    using System.Security.Cryptography.X509Certificates;
-    using System.Net.Security;
-
-    /// <summary>
-    /// Error connecting with certificate.
-    /// </summary>
-    [SVN(@"$Id$")]
-    public class CertificateException : System.Exception
-    {
-        /// <summary>
-        /// The certificate of the remote side.
-        /// </summary>
-        public string Certificate;
-        /// <summary>
-        /// The chain of certs that signed the remote cert.
-        /// </summary>
-        public string CertificateChain;
-        /// <summary>
-        /// The policies that were violated.
-        /// </summary>
-        public SslPolicyErrors PolicyErrors;
-
-        /// <summary>
-        /// Create a certificate exception.
-        /// </summary>
-        /// <param name="cert"></param>
-        /// <param name="chain"></param>
-        /// <param name="errors"></param>
-        public CertificateException(X509Certificate cert, X509Chain chain, SslPolicyErrors errors)
-            : base("Certificate does not comply with policy.")
-        {
-            Certificate = cert.ToString(true);
-            CertificateChain = "";
-
-            int count = 0;
-            foreach (X509ChainElement c in chain.ChainElements)
-            {
-                CertificateChain += "------ Chain Cert " + count + "------\r\n" + c.Certificate.ToString(true) + "\r\n";
-                count++;
-            }
-            PolicyErrors = errors;
-        }
-
-        /// <summary>
-        /// More information in the stringified version.
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-        {
-            return
-                "Certificate: " + Certificate + "\r\n" +
-                "Chain: " + CertificateChain + "\r\n" +
-                "Errors: " + PolicyErrors + "\r\n" +
-                base.ToString();
-        }
-    }
-#endif
-
     /// <summary>
     /// Lame exception, since I couldn't find one I liked.
     /// </summary>

@@ -761,7 +761,7 @@ namespace bedrock.net
         /// <param name="addr"></param>
         public override void Connect(Address addr)
         {
-            Debug.WriteLine("starting connect to " + addr.ToString());
+            // Debug.WriteLine("starting connect to " + addr.ToString());
             State = SocketState.Resolving;
             if (m_synch)
             {
@@ -780,7 +780,7 @@ namespace bedrock.net
         /// <param name="addr"></param>
         private void OnConnectResolved(Address addr)
         {
-            Debug.WriteLine("connectresolved: " + addr.ToString());
+            // Debug.WriteLine("connectresolved: " + addr.ToString());
             lock (this)
             {
                 if (State != SocketState.Resolving)
@@ -804,14 +804,14 @@ namespace bedrock.net
 #if NET20
                 if (Socket.OSSupportsIPv6 && (m_addr.Endpoint.AddressFamily == AddressFamily.InterNetworkV6))
                 {
-                    Debug.WriteLine("ipv6");
+                    // Debug.WriteLine("ipv6");
                     m_sock = new Socket(AddressFamily.InterNetworkV6,
                         SocketType.Stream,
                         ProtocolType.Tcp);
                 }
                 else
                 {
-                    Debug.WriteLine("ipv4");
+                    // Debug.WriteLine("ipv4");
                     m_sock = new Socket(AddressFamily.InterNetwork,
                         SocketType.Stream,
                         ProtocolType.Tcp);
@@ -819,14 +819,14 @@ namespace bedrock.net
 #elif __MonoCS__
                 if (Socket.SupportsIPv6 && (m_addr.Endpoint.AddressFamily == AddressFamily.InterNetworkV6))
                 {
-                    Debug.WriteLine("ipv6");
+                    // Debug.WriteLine("ipv6");
                     m_sock = new Socket(AddressFamily.InterNetworkV6,
                         SocketType.Stream,
                         ProtocolType.Tcp);
                 }
                 else
                 {
-                    Debug.WriteLine("ipv4");
+                    // Debug.WriteLine("ipv4");
                     m_sock = new Socket(AddressFamily.InterNetwork,
                         SocketType.Stream,
                         ProtocolType.Tcp);
@@ -847,7 +847,7 @@ namespace bedrock.net
                     (m_addr.Endpoint.AddressFamily ==
                      AddressFamily.InterNetworkV6))
                 {
-                    Debug.WriteLine("ipv6");
+                    // Debug.WriteLine("ipv6");
                     m_sock = new SecureSocket(AddressFamily.InterNetworkV6,
                         SocketType.Stream,
                         ProtocolType.Tcp,
@@ -855,7 +855,7 @@ namespace bedrock.net
                 }
                 else
                 {
-                    Debug.WriteLine("ipv4");
+                    // Debug.WriteLine("ipv4");
                     m_sock = new SecureSocket(AddressFamily.InterNetwork,
                         SocketType.Stream,
                         ProtocolType.Tcp,
@@ -864,7 +864,7 @@ namespace bedrock.net
 #elif !OLD_CLR
                 if (Socket.SupportsIPv6 && (m_addr.Endpoint.AddressFamily == AddressFamily.InterNetworkV6))
                 {
-                    Debug.WriteLine("ipv6");
+                    // Debug.WriteLine("ipv6");
                     m_sock = new Socket(AddressFamily.InterNetworkV6,
                         SocketType.Stream,
                         ProtocolType.Tcp);
@@ -872,7 +872,7 @@ namespace bedrock.net
                 else
 #else
                 {
-                    Debug.WriteLine("ipv4");
+                    // Debug.WriteLine("ipv4");
                     m_sock = new Socket(AddressFamily.InterNetwork,
                         SocketType.Stream,
                         ProtocolType.Tcp);
@@ -890,7 +890,6 @@ namespace bedrock.net
             {
                 try
                 {
-                    Debug.WriteLine("synch connect");
                     m_sock.Connect(m_addr.Endpoint);
                 }
                 catch (SocketException ex)
@@ -929,8 +928,6 @@ namespace bedrock.net
 #if __MonoCS__
                 m_sock.Blocking = false;
 #endif
-                Debug.WriteLine("begin connect: " +
-                                m_addr.Endpoint.ToString());
                 m_sock.BeginConnect(m_addr.Endpoint, new AsyncCallback(ExecuteConnect), null);
             }
         }
@@ -938,10 +935,9 @@ namespace bedrock.net
 #if NET20
         /// <summary>
         /// Validate the server cert.  SSLPolicyErrors will be
-        /// pre-filled with the errors you got.  Chances are, you want
-        /// to set UntrustedRootOK in the real world still.
-        /// TODO: add a listener method to override this behavior,
-        /// that only gets called if there is an error.
+        /// pre-filled with the errors you got.  
+        /// 
+        /// If there is an error in the cert, OnIvalidCertificate will be called.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="certificate"></param>
@@ -953,7 +949,6 @@ namespace bedrock.net
                                                  X509Chain chain,
                                                  SslPolicyErrors sslPolicyErrors)
         {
-            // TODO: add a new ISocketEventListener to validate cert.
             // Note: Don't write servers with Jabber-Net, please.  :)
             if (m_server)
             {
@@ -972,7 +967,6 @@ namespace bedrock.net
             if (m_listener.OnInvalidCertificate(this, certificate, chain, sslPolicyErrors))
                 return true;
 
-            //throw new CertificateException(certificate, chain, sslPolicyErrors);
             Debug.WriteLine("Certificate error: {0}", sslPolicyErrors.ToString());
 
             // Do not allow this client to communicate with unauthenticated servers.
@@ -984,7 +978,6 @@ namespace bedrock.net
         /// </summary>
         public override void StartTLS()
         {
-            Debug.WriteLine("StartTLS");
             // we're really doing start-tls.
             if (m_secureProtocol == SslProtocols.None)
                 m_secureProtocol = SslProtocols.Tls;
@@ -1328,9 +1321,6 @@ namespace bedrock.net
             {
                 Close();
 
-                // TODO: re-learn what these error codes were for.
-                // I think they had to do with certain states on
-                // shutdown, and recovering gracefully from those states.
                 // 10053 = An established connection was aborted by the
                 //         software in your host machine.
                 // 10054 = An existing connection was forcibly closed
