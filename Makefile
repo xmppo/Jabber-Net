@@ -36,7 +36,6 @@ $(BASEDIR)/bedrock/io/ZlibStream.cs \
 $(BASEDIR)/bedrock/net/Address.cs \
 $(BASEDIR)/bedrock/net/AsyncSocket.cs \
 $(BASEDIR)/bedrock/net/BaseSocket.cs \
-$(BASEDIR)/bedrock/net/CertUtil.cs \
 $(BASEDIR)/bedrock/net/Exceptions.cs \
 $(BASEDIR)/bedrock/net/XEP25Socket.cs \
 $(BASEDIR)/bedrock/net/XEP124Socket.cs \
