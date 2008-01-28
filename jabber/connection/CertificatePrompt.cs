@@ -14,8 +14,6 @@
 
 namespace jabber.connection
 {
-#if NET20
-
     using System;
     using System.Security.Cryptography.X509Certificates;
     using System.Net.Security;
@@ -29,7 +27,8 @@ namespace jabber.connection
     /// </summary>
     [SVN(@"$Id$")]
     public class CertificatePrompt : Form
-	{
+    {
+#if NET20
         /// <summary>
         /// Required designer variable.
         /// </summary>
