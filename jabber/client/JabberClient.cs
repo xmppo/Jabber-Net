@@ -647,7 +647,8 @@ namespace jabber.client
                     this.Close();
                     return;
                 }
-                xdata.Type = jabber.protocol.x.XDataType.result;
+                if (xdata != null)
+                    xdata.Type = jabber.protocol.x.XDataType.result;
                 Tracker.BeginIQ(iq, new IqCB(OnSetRegister), jid);
             }
         }
