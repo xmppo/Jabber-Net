@@ -21,12 +21,9 @@ using System.Net.Sockets;
 using System.Threading;
 using bedrock.util;
 
-#if NET20
+#if NET20 || __MonoCS__
 using System.Security.Authentication;
 using System.Net.Security;
-using System.Security.Cryptography.X509Certificates;
-#elif __MonoCS__
-using Mono.Security.Protocol.Tls;
 using System.Security.Cryptography.X509Certificates;
 #elif !NO_SSL
 using Org.Mentalis.Security.Ssl;
@@ -89,87 +86,7 @@ namespace bedrock.net
 
         private const int BUFSIZE = 4096;
 
-#if __MonoCS__
-        // gr.  Thanks Mono, these should be constants in your
-        // interface so that I don't have to surface them.  EVEN
-        // BETTER, this should be an enum.  If that was too hard, the
-        // interface should take unsigned ints, so that the hex
-        // constants could be used.
-
-        public const int CERT_E_CHAINING              = -2146762486;
-        public const int CERT_E_CN_NO_MATCH           = -2146762481;
-        public const int CERT_E_EXPIRED               = -2146762495;
-        public const int CERT_E_PURPOSE               = -2146762490;
-        public const int CERT_E_UNTRUSTEDROOT         = -2146762487;
-        public const int CERT_E_VALIDITYPERIODNESTING = -2146762494;
-        public const int TRUST_E_BAD_DIGEST           = -2146869232;
-        public const int TRUST_E_BASIC_CONSTRAINTS    = -2146869223;
-
-        public string CertErrorString(int err)
-        {
-            switch (err)
-            {
-            case CERT_E_CHAINING:
-                return "CERT_E_CHAINING";
-            case CERT_E_CN_NO_MATCH:
-                return "CERT_E_CN_NO_MATCH";
-            case CERT_E_EXPIRED:
-                return "CERT_E_EXPIRED";
-            case CERT_E_PURPOSE:
-                return "CERT_E_PURPOSE";
-            case CERT_E_UNTRUSTEDROOT:
-                return "CERT_E_UNTRUSTEDROOT";
-            case CERT_E_VALIDITYPERIODNESTING:
-                return "CERT_E_VALIDITYPERIODNESTING";
-            case TRUST_E_BAD_DIGEST:
-                return "TRUST_E_BAD_DIGEST";
-            case TRUST_E_BASIC_CONSTRAINTS:
-                return "TRUST_E_BASIC_CONSTRAINTS";
-            }
-            return "Unknown error: " + err.ToString();
-        }
-        
-        /// <summary> The set of allowable errors in SSL certificates
-        /// if UntrustedRootOK is set to true.  </summary>
-        public static int[] DefaultUntrustedPolicy =
-            new int[] { CERT_E_UNTRUSTEDROOT, CERT_E_CHAINING};
-
-        /// <summary> The allowable SSL certificate errors.  If you
-        /// modify UntrustedRootOK to true, the side effect will be to
-        /// set this to DefaultUntrustedPolicy.  False, the default,
-        /// sets this to None.  </summary>
-        public static int[] AllowedSSLErrors = new int[] {};
-
-        /// <summary>
-        /// Are untrusted root certificates OK when connecting using
-        /// SSL?  Setting this to true is insecure, but it's unlikely
-        /// that you trust jabbber.org or jabber.com's relatively
-        /// bogus certificate roots.
-        ///
-        /// Setting this modifies AllowedSSLErrors by side-effect.
-        /// </summary>
-        [DefaultValue(false)]
-        public static bool UntrustedRootOK
-        {
-            get
-            {
-                return (AllowedSSLErrors.Length != 0);
-            }
-            set
-            {
-                if (value)
-                {
-                    AllowedSSLErrors = DefaultUntrustedPolicy;
-                }
-                else
-                {
-                    AllowedSSLErrors = new int[] {};
-                }
-            }
-        }
-#endif
-
-#if NET20
+#if NET20 || __MonoCS__
         /// <summary> The set of allowable errors in SSL certificates
         /// if UntrustedRootOK is set to true.  </summary>
         [Obsolete("Catch OnInvalidCertificate, instead")]
@@ -228,15 +145,6 @@ namespace bedrock.net
         private bool                 m_cert_gui          = true;
         private bool                 m_server         = false;
 
-#elif __MonoCS__
-        public static Mono.Security.Protocol.Tls.SecurityProtocolType SSLProtocols     = Mono.Security.Protocol.Tls.SecurityProtocolType.Ssl3 | Mono.Security.Protocol.Tls.SecurityProtocolType.Tls;
-        private Mono.Security.Protocol.Tls.SecurityProtocolType m_secureProtocol = 0;
-        private Socket               m_sock           = null;
-        private X509Certificate      m_cert           = null;
-        private Stream               m_stream         = null;
-        private MemoryStream         m_pending        = new MemoryStream();
-        private bool                 m_writing        = false;
-        private bool                 m_server         = false;
 #elif !NO_SSL
         /// <summary>
         /// Are untrusted root certificates OK when connecting using
@@ -350,7 +258,7 @@ namespace bedrock.net
             }
         }
 
-#if NET20
+#if NET20 || __MonoCS__
         /// <summary>
         /// Get the certificate of the remote endpoint of the socket.
         /// </summary>
@@ -417,6 +325,9 @@ namespace bedrock.net
                     m_cert = coll[0];
                     return;
                 default:
+                    #if __MonoCS__
+                        m_cert = null;
+                    #else
                     X509Certificate2Collection certs = X509Certificate2UI.SelectFromCollection(
                         coll,
                         "Select certificate",
@@ -424,6 +335,7 @@ namespace bedrock.net
                         X509SelectionFlag.SingleSelection);
                     if (certs.Count > 0)
                         m_cert = certs[0];
+                    #endif
                     break;
             }
         }
@@ -470,29 +382,6 @@ namespace bedrock.net
             get { return m_cert; }
             set { m_cert = value; }
         }
-#elif __MonoCS__
-        /// <summary>
-        /// Get the certificate of the remote endpoint of the socket.
-        /// </summary>
-        public X509Certificate RemoteCertificate
-        {
-            get
-            {
-                SslClientStream str = m_stream as SslClientStream;
-                if (str == null)
-                    return null;
-                return str.ServerCertificate;
-            }
-        }
-
-        /// <summary>
-        /// The local certificate of the socket.
-        /// </summary>
-        public X509Certificate LocalCertificate
-        {
-            get { return m_cert; }
-            set { m_cert = value; }
-        }
 
 #elif !NO_SSL
         /// <summary>
@@ -518,21 +407,13 @@ namespace bedrock.net
         /// </summary>
         public bool SSL
         {
-#if NET20
+#if NET20 || __MonoCS__
             get
             {
                 SslStream str = m_stream as SslStream;
                 if (str == null)
                     return false;
                 return str.IsEncrypted;
-            }
-#elif __MonoCS__
-            get
-            {
-                SslClientStream str = m_stream as SslClientStream;
-                if (str == null)
-                    return false;
-                return (str.SecurityProtocol != 0);
             }
 #elif !NO_SSL
             get { return (m_secureProtocol != SecureProtocol.None); }
@@ -694,17 +575,11 @@ namespace bedrock.net
             cliCon.Address.IP = ((IPEndPoint) cliCon.m_sock.RemoteEndPoint).Address;
             cliCon.State = SocketState.Connected;
 
-#if NET20
+#if NET20 || __MonoCS__
             cliCon.m_stream = new NetworkStream(cliCon.m_sock);
             cliCon.m_server = true;
             cliCon.LocalCertificate = m_cert;
             cliCon.RequireClientCert = m_requireClientCert;
-#elif __MonoCS__
-            cliCon.m_sock.Blocking = true;
-            cliCon.m_stream = new NetworkStream(cliCon.m_sock);
-            cliCon.m_sock.Blocking = false;
-            cliCon.m_server = true;
-            cliCon.LocalCertificate = m_cert;
 #elif !NO_SSL
             cliCon.m_credUse = ConnectionEnd.Server;
 #endif
@@ -740,11 +615,8 @@ namespace bedrock.net
                 m_watcher.PendingAccept(this);
                 return;
             }
-#if NET20
+#if NET20 || __MonoCS__
             if (m_secureProtocol != SslProtocols.None)
-                cliCon.StartTLS();
-#elif __MonoCS__
-            if (m_secureProtocol != 0)
                 cliCon.StartTLS();
 #endif
             if (l.OnAccept(cliCon))
@@ -801,7 +673,7 @@ namespace bedrock.net
                 m_addr = addr;
                 State = SocketState.Connecting;
 
-#if NET20
+#if NET20 || __MonoCS__
                 if (Socket.OSSupportsIPv6 && (m_addr.Endpoint.AddressFamily == AddressFamily.InterNetworkV6))
                 {
                     // Debug.WriteLine("ipv6");
@@ -816,22 +688,7 @@ namespace bedrock.net
                         SocketType.Stream,
                         ProtocolType.Tcp);
                 }
-#elif __MonoCS__
-                if (Socket.SupportsIPv6 && (m_addr.Endpoint.AddressFamily == AddressFamily.InterNetworkV6))
-                {
-                    // Debug.WriteLine("ipv6");
-                    m_sock = new Socket(AddressFamily.InterNetworkV6,
-                        SocketType.Stream,
-                        ProtocolType.Tcp);
-                }
-                else
-                {
-                    // Debug.WriteLine("ipv4");
-                    m_sock = new Socket(AddressFamily.InterNetwork,
-                        SocketType.Stream,
-                        ProtocolType.Tcp);
-                }
-
+ 
 #elif !NO_SSL
                 SecurityOptions options =
                     new SecurityOptions(m_secureProtocol,
@@ -908,7 +765,7 @@ namespace bedrock.net
                     m_sock.Blocking = true;
                     m_stream = new NetworkStream(m_sock);
                     m_sock.Blocking = false;
-                    if (m_secureProtocol != 0)
+                    if (m_secureProtocol != SslProtocols.None)
                         StartTLS();
 #endif
                     lock(this)
@@ -932,7 +789,7 @@ namespace bedrock.net
             }
         }
 
-#if NET20
+#if NET20  || __MonoCS__
         /// <summary>
         /// Validate the server cert.  SSLPolicyErrors will be
         /// pre-filled with the errors you got.  
@@ -1037,97 +894,6 @@ namespace bedrock.net
         {
             get { return m_requireClientCert; }
             set { m_requireClientCert = value; }
-        }
-
-#elif __MonoCS__
-        private bool ValidateServerCertificate(X509Certificate certificate,
-                                               int[] certificateErrors)
-        {
-            // huh.  Well, I'm not sure what to do with client certs.
-            if (m_server)
-                return true;
-
-            if (certificateErrors.Length == 0)
-                return true;
-
-            bool ok = true;
-            foreach (int i in certificateErrors)
-            {
-                bool eok = false;
-                foreach (int j in AllowedSSLErrors)
-                {
-                    if (i == j)
-                    {
-                        eok = true;
-                        break;
-                    }
-                }
-                if (! eok)
-                {
-                    Console.WriteLine("Error: " + CertErrorString(i));
-                    ok = false;
-                }
-            }
-
-            if (!ok)
-            {
-                Console.WriteLine(certificate.ToString(true));
-            }
-
-            return ok;
-        }
-
-        /// <summary>
-        /// Start TLS processing on an open socket.
-        /// </summary>
-        public override void StartTLS()
-        {
-            Debug.WriteLine("StartTLS");
-
-            // we're really doing start-tls.
-            if (m_secureProtocol == 0)
-                m_secureProtocol =
-                    Mono.Security.Protocol.Tls.SecurityProtocolType.Ssl3;
-
-            try
-            {
-                if (m_server)
-                {
-                    if (m_cert == null)
-                    {
-                        FireError(new InvalidOperationException("Must set Certificate for server SSL"));
-                        Close();
-                        return;
-                    }
-                    SslServerStream s = new SslServerStream(m_stream,
-                                                            m_cert,
-                                                            false,
-                                                            true,
-                                                            m_secureProtocol);
-                    m_stream = s;
-                }
-                else
-                {
-                    X509CertificateCollection certs = null;
-                    if (m_cert != null)
-                    {
-                        certs = new X509CertificateCollection();
-                        certs.Add(m_cert);
-                    }
-                    SslClientStream s = new SslClientStream(m_stream,
-                                                            m_hostid,
-                                                            true,
-                                                            m_secureProtocol,
-                                                            certs);
-                    s.ServerCertValidationDelegate =
-                        new CertificateValidationCallback(ValidateServerCertificate);
-                    m_stream = s;
-                }
-            }
-            catch (Exception e)
-            {
-                FireError(e);
-            }
         }
 
 #elif !NO_SSL
@@ -1307,7 +1073,7 @@ namespace bedrock.net
                     SocketFlags.None, new AsyncCallback(GotData), null);
 #endif
             }
-#if NET20
+#if NET20  || __MonoCS__
             catch (AuthenticationException)
             {
                 Close();
