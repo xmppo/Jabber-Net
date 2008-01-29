@@ -52,7 +52,7 @@ namespace jabber.connection
 
 
     /// <summary>
-    /// "Standard" XMPP socket, connecting outward.
+    /// "Standard" XMPP socket for outbound connections.
     /// </summary>
     [SVN(@"$Id$")]
     public class SocketStanzaStream : StanzaStream, ISocketEventListener
@@ -72,7 +72,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Is the socket connected?
+        /// Determines if the socket is connected.
         /// </summary>
         public override bool Connected
         {
@@ -95,7 +95,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// If !NO_COMPRESSION, we support compression.
+        /// Determines if Jabber-Net supports compression.
         /// </summary>
         public override bool SupportsCompression
         {
@@ -315,7 +315,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Can Accept() be called npw?
+        /// Determines if the method Accept() can be called now.
         /// </summary>
         public override bool Acceptable
         {
@@ -338,9 +338,9 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Write a stream:stream
+        /// Writes a stream:stream.
         /// </summary>
-        /// <param name="stream"></param>
+        /// <param name="stream">Stream containing the stream:stream packet to send.</param>
         public override void WriteStartTag(jabber.protocol.stream.Stream stream)
         {
             Write(stream.StartTag());

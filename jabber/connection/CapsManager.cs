@@ -81,7 +81,7 @@ namespace jabber.connection
 
 
         /// <summary>
-        /// The base features of this client, associated with Node#Version.
+        /// Gets the base features of this client associated with Node#Version.
         /// </summary>
         [Category("Capabilities")]
         public FeatureSet BaseFeatures
@@ -90,7 +90,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// The features associated with an extension.
+        /// Contains the features associated with an extension.
         /// </summary>
         /// <param name="ext"></param>
         /// <returns></returns>
@@ -134,7 +134,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// The list of extensions that are currently turned on.
+        /// Gets the list of extensions that are currently enabled.
         /// </summary>
         [Category("Capabilities")]
         public string[] Extensions
@@ -159,10 +159,10 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Is this a capabilities request?
+        /// Determines if this is a capabilities request.
         /// </summary>
-        /// <param name="iq"></param>
-        /// <returns></returns>
+        /// <param name="iq">XML to look through for capabilities.</param>
+        /// <returns>True if this is a capabilities request.</returns>
         public bool IsCaps(IQ iq)
         {
             if (iq.Type != IQType.get)

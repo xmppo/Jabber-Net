@@ -34,7 +34,7 @@ namespace jabber.client
     public delegate void PrimarySessionHandler(object sender, JID bare);
 
     /// <summary>
-    /// Manages the presence proxy database.
+    /// Specifies the presence proxy database.
     /// </summary>
     [SVN(@"$Id$")]
     public class PresenceManager : jabber.connection.StreamComponent, IEnumerable
@@ -55,7 +55,7 @@ namespace jabber.client
         }
 
         /// <summary>
-        /// Constructs a PresenceManager object.
+        /// Constructs a new PresenceManager object.
         /// </summary>
         public PresenceManager()
         {
@@ -75,9 +75,9 @@ namespace jabber.client
         }
 
         /// <summary>
-        /// The JabberClient to hook up to.
+        /// Gets or sets the JabberClient associated with the Presence Manager.
         /// </summary>
-        [Description("The JabberClient to hook up to.")]
+        [Description("Gets or sets the JabberClient associated with the Presence Manager.")]
         [Category("Jabber")]
         [Browsable(false)]
         [Obsolete("Use the Stream property instead")]

@@ -26,26 +26,26 @@ namespace jabber.connection
     }
 
     /// <summary>
-    /// Up and running.  If subclasses change the state transition
-    /// approach, they should end at the RunningState state.
+    /// Specifies the state is up and running.  If subclasses change the
+    /// state transition approach, they should end at the RunningState state.
     /// </summary>
     [SVN(@"$Id$")]
     public class RunningState : BaseState
     {
         /// <summary>
-        /// The instance that is always used.
+        /// Returns the instance of the running state.
         /// </summary>
         public static readonly BaseState Instance = new RunningState();
     }
 
     /// <summary>
-    /// Not connected.
+    /// Specifies the state is not connected.
     /// </summary>
     [SVN(@"$Id$")]
     public class ClosedState : BaseState
     {
         /// <summary>
-        /// The instance that is always used.
+        /// Returns the instance of the closed state.
         /// </summary>
         public static readonly BaseState Instance = new ClosedState();
     }
@@ -57,7 +57,7 @@ namespace jabber.connection
     public class ConnectingState : BaseState
     {
         /// <summary>
-        /// The instance that is always used.
+        /// Returns the instance of the connecting state.
         /// </summary>
         public static readonly BaseState Instance = new ConnectingState();
     }
@@ -75,37 +75,38 @@ namespace jabber.connection
     }
 
     /// <summary>
-    /// Got the stream:stream.
+    /// Specifies the state is in the "stream:stream has been received" state.
     /// </summary>
     [SVN(@"$Id$")]
     public class StreamState : BaseState
     {
         /// <summary>
-        /// The instance that is always used.
+        /// Returns the instance of the XMPP stream state.
         /// </summary>
         public static readonly BaseState Instance = new StreamState();
     }
 
     /// <summary>
+    /// Specifies the state is in a closing state.
     /// A close was requested, but hasn't yet finalized.
     /// </summary>
     [SVN(@"$Id$")]
     public class ClosingState : BaseState
     {
         /// <summary>
-        /// The instance that is always used.
+        /// Returns the instance for the closing state.
         /// </summary>
         public static readonly BaseState Instance = new ClosingState();
     }
 
     /// <summary>
-    /// Paused, waiting for reconnect timeout.
+    /// Specifies the state is in a paused state waiting for reconnect timeout.
     /// </summary>
     [SVN(@"$Id$")]
     public class ReconnectingState : BaseState
     {
         /// <summary>
-        /// The instance that is always used.
+        /// Returns the instance of the reconnecting state.
         /// </summary>
         public static readonly BaseState Instance = new ReconnectingState();
     }
@@ -117,45 +118,45 @@ namespace jabber.connection
     public class AcceptingState : BaseState
     {
         /// <summary>
-        /// The instance that is always used.
+        /// Returns the instance of the accepting state.
         /// </summary>
         public static readonly BaseState Instance = new AcceptingState();
     }
     /// <summary>
-    /// Old-style auth, iq:auth or handshake.
+    /// Specifies the state is in Old-style auth, iq:auth or handshake.
     /// </summary>
     [SVN(@"$Id$")]
     public class NonSASLAuthState : BaseState
     {
         /// <summary>
-        /// The instance that is always used.
+        /// Returns the instance of the non SASL authentication state.
         /// </summary>
         public static readonly BaseState Instance = new NonSASLAuthState();
     }
     /// <summary>
-    /// Waiting for the server to send the features element
+    /// Specifies the state is in waiting for the server to send the features element.
     /// </summary>
     [SVN(@"$Id$")]
     public class ServerFeaturesState : BaseState
     {
         /// <summary>
-        /// The instance that is always used.
+        /// Returns the instance of the server features state.
         /// </summary>
         public static readonly BaseState Instance = new ServerFeaturesState();
     }
     /// <summary>
-    /// Start-TLS is starting to TLS.
+    /// Specifies the state is in Start-TLS.
     /// </summary>
     [SVN(@"$Id$")]
     public class StartTLSState : BaseState
     {
         /// <summary>
-        /// The instance that is always used.
+        /// Returns the instance of the Start-TLS state.
         /// </summary>
         public static readonly BaseState Instance = new StartTLSState();
     }
     /// <summary>
-    /// Compression is starting to compress.
+    /// Specifies the state is in compression state.
     /// </summary>
     [SVN(@"$Id$")]
     public class CompressionState : BaseState
@@ -166,24 +167,25 @@ namespace jabber.connection
         public static readonly BaseState Instance = new CompressionState();
     }
     /// <summary>
-    /// SASL Authentication in process
+    /// Specifies the state is in SASL Authentication.
     /// </summary>
     [SVN(@"$Id$")]
     public class SASLState : BaseState
     {
         /// <summary>
-        /// The instance that is always used.
+        /// Returns the instance of the SASL state.
         /// </summary>
         public static readonly BaseState Instance = new SASLState();
     }
     /// <summary>
-    /// SASL Authentication finished.  Restarting the stream for the last time.
+    /// Specifies the state is in the SASL Authentication has finished state.
+    /// Restarting the stream for the last time.
     /// </summary>
     [SVN(@"$Id$")]
     public class SASLAuthedState : BaseState
     {
         /// <summary>
-        /// The instance that is always used.
+        /// Returns the instance for the SASL authentication state.
         /// </summary>
         public static readonly BaseState Instance = new SASLAuthedState();
     }

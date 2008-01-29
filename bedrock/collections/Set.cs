@@ -80,7 +80,7 @@ namespace bedrock.collections
 
         #region Implementation of ISet
         /// <summary>
-        /// Add an object to the set
+        /// Adds an object to the set.
         /// </summary>
         /// <param name="o">The object to add</param>
         /// <exception cref="ArgumentException">object was already in the set.</exception>
@@ -91,7 +91,8 @@ namespace bedrock.collections
         }
 
         /// <summary>
-        /// Remove the given object from the set.  If the object is not in the set, this is a no-op.
+        /// Removes the given object from the set.
+        /// There is no exception thrown if the object is not in the set.
         /// </summary>
         /// <param name="o">The object to remove.</param>
         public void Remove(object o)
@@ -108,7 +109,7 @@ namespace bedrock.collections
         }
 
         /// <summary>
-        /// Is the given object in the set?
+        /// Determines if the given object is in the set.
         /// </summary>
         /// <param name="o">The object to search for.</param>
         /// <returns>True if the object is in the set.</returns>
@@ -127,9 +128,13 @@ namespace bedrock.collections
         }
 
         /// <summary>
-        /// Return a new collection that contains all of the items that
+        /// Returns a new collection that contains all of the items that
         /// are in this list *and* the other set.
         /// </summary>
+        /// <param name="other">
+        /// Other set to intersect with.
+        /// </param>
+        /// <returns>Combined set.</returns>
         public bedrock.collections.ISet Intersection(bedrock.collections.ISet other)
         {
             throw new NotImplementedException();
@@ -161,7 +166,7 @@ namespace bedrock.collections
         }
 
         /// <summary>
-        /// Get the number of items in the set.
+        /// Gets the number of items in the set.
         /// </summary>
         public int Count
         {
@@ -179,9 +184,9 @@ namespace bedrock.collections
 
         #region Implementation of IEnumerable
         /// <summary>
-        /// Enumerate over all items in the set.
+        /// Returns an enumerator that iterates through all items in the set.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>An IEnumerator for the entire set.</returns>
         public System.Collections.IEnumerator GetEnumerator()
         {
             return new TreeSetEnumerator(m_dict);

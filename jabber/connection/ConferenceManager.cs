@@ -35,9 +35,9 @@ namespace jabber.connection
     public delegate void RoomPresenceHandler(Room room, Presence pres);
 
     /// <summary>
-    /// A room configuration form has been received.
+    /// Notifies the client that a room configuration form has been received.
     /// </summary>
-    /// <param name="room"></param>
+    /// <param name="room">Room associated with the configuration.</param>
     /// <param name="parent">Contains an x:data child with the form.</param>
     /// <returns>null to take the defaults, otherwise the IQ response</returns>
     public delegate IQ ConfigureRoom(Room room, IQ parent);
@@ -64,7 +64,7 @@ namespace jabber.connection
     public delegate void RoomParticipantsEvent(Room room, ParticipantCollection participants, object state);
 
     /// <summary>
-    /// Manage a set of conference rooms
+    /// Manages a set of conference rooms
     /// </summary>
     [SVN(@"$Id$")]
     public class ConferenceManager : StreamComponent
@@ -95,9 +95,9 @@ namespace jabber.connection
 		}
 
         /// <summary> 
-        /// Clean up any resources being used.
+        /// Performs tasks associated with freeing, releasing, or resetting resources.
         /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        /// <param name="disposing">True if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -186,12 +186,13 @@ namespace jabber.connection
         public event MessageHandler OnSubjectChange;
 
         /// <summary>
-        /// Join a chat room.
-        /// If we are already joined, the existing room will be returned.
-        /// If not, a Room object will be returned in the joining state.
+        /// Joins a conference room.
         /// </summary>
         /// <param name="roomAndNick">room@conference/nick, where "nick" is the desred nickname in the room.</param>
-        /// <returns></returns>
+        /// <returns>
+        /// If already joined, the existing room will be returned.
+        /// If not, a Room object will be returned in the joining state.
+        /// </returns>
         public Room GetRoom(JID roomAndNick)
         {
             if (roomAndNick == null)
@@ -230,11 +231,11 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Remove the room from the list.
-        /// Should most often be called by Room.Leave()
+        /// Removes the room from the list.
+        /// Should most often be called by the Room.Leave() method.
         /// If the room does not exist, no exception is thrown.
         /// </summary>
-        /// <param name="roomAndNick"></param>
+        /// <param name="roomAndNick">Room to remove.</param>
         public void RemoveRoom(JID roomAndNick)
         {
             m_rooms.Remove(roomAndNick);
@@ -376,12 +377,14 @@ namespace jabber.connection
         public event RoomPresenceHandler OnLeave;
 
         /// <summary>
-        /// Error in response to a room join, nick change, or presence update.
+        /// Informs the client that an error in response to a room join,
+        /// nick change, or presence update has occurred.
         /// </summary>
         public event RoomPresenceHandler OnPresenceError;
 
         /// <summary>
-        /// Room configuration form received.  It is up to the listener call FinishConfig().
+        /// Informs the client that the room configuration form was received.
+        /// It is up to the listener to call the FinishConfig() method.
         /// The IQ in the callback is the parent of the x:data element.
         /// </summary>
         public event ConfigureRoom OnRoomConfig;
@@ -413,8 +416,8 @@ namespace jabber.connection
         public event MessageHandler OnSubjectChange;
 
         /// <summary>
-        /// When we configure, should we just use the default config, or should we 
-        /// retrieve the configuration form.
+        /// Determines whether to use the default conference room configuration
+        /// or to retrieve the configuration form from the XMPP server.
         /// </summary>
         [DefaultValue(false)]
         public bool DefaultConfig
@@ -639,9 +642,11 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Configure the room.  OnRoomConfig MUST be set first.  OnRoomConfig will be called back in the GUI
-        /// thread if there is an InvokeControl on your XmppStream.  Make sure that OnRoomConfig does not
-        /// return until it has the answer, typically by popping up a modal dialog with the x:data form.
+        /// Configures the room. OnRoomConfig MUST be set first. 
+        /// OnRoomConfig will be called back in the GUI thread if there is an
+        /// InvokeControl on your XmppStream.  Make sure that OnRoomConfig does not
+        /// return until it has the answer, typically by popping up a modal dialog
+        /// with the x:data form.
         /// </summary>
         public void Configure()
         {
@@ -728,7 +733,8 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Join the room.  If the room is created, Configure() will be called automatically.
+        /// Joins the room.  If the room is created, Configure() will
+        /// be called automatically.
         /// </summary>
         public void Join()
         {
@@ -741,7 +747,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Exit the room.  This cleans up the entry in the ConferenceManager, as well.
+        /// Exits the room.  This cleans up the entry in the ConferenceManager, as well.
         /// </summary>
         /// <param name="reason">Reason for leaving the room.  May be null for no reason.</param>
         public void Leave(string reason)
@@ -767,7 +773,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Send a message to everyone currently in the room.
+        /// Sends a message to everyone currently in the room.
         /// </summary>
         /// <param name="body">The message text to send.</param>
         public void PublicMessage(string body)
@@ -791,10 +797,10 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Send a private message to a single user in the room.
+        /// Sends a private message to a single user in the room.
         /// </summary>
-        /// <param name="nick">The nickname of the user to private message</param>
-        /// <param name="body">The message body to send</param>
+        /// <param name="nick">The nickname of the user to send a private message to.</param>
+        /// <param name="body">The message body to send.</param>
         public void PrivateMessage(string nick, string body)
         {
             if (m_state != STATE.running)

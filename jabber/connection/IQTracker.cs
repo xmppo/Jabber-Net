@@ -75,7 +75,7 @@ namespace jabber.connection
         private XmppStream m_cli     = null;
 
         /// <summary>
-        /// Create a new IQ tracker
+        /// Creates a new IQ tracker.
         /// </summary>
         /// <param name="stream">The client to send/receive on</param>
         public IQTracker(XmppStream stream)
@@ -110,8 +110,11 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Start an IQ request.
+        /// Starts an IQ request.
         /// </summary>
+        /// <param name="iq">IQ to send.</param>
+        /// <param name="cb">Callback to use when a response comes back.</param>
+        /// <param name="cbArg">Arguments to the callback.</param>
         public void BeginIQ(IQ iq, IqCB cb, object cbArg)
         {
             // if no callback, ignore response.
@@ -129,10 +132,11 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Do a synchronous IQ request, which waits for a response.
+        /// Sends an IQ request and waits for the response.
         /// </summary>
         /// <param name="iqp">An IQ packet to send, and wait for.</param>
         /// <param name="millisecondsTimeout">Time to wait for response, in milliseconds</param>
+        /// <returns>An IQ in reponse to the sent IQ.</returns>
         public IQ IQ(IQ iqp, int millisecondsTimeout)
         {
             TrackerData td = new TrackerData();

@@ -42,7 +42,7 @@ namespace jabber.client
     /// </summary>
     public delegate void IQHandler(Object sender, IQ iq);
     /// <summary>
-    /// Need more infor for registration.  Return false to cancel.
+    /// Need more information for registration.  Return false to cancel.
     /// </summary>
     public delegate bool RegisterInfoHandler(Object sender, Register register);
 
@@ -79,7 +79,7 @@ namespace jabber.client
         /// Creates a new Jabber client and associates it with the parent window.
         /// Required for Windows.Forms Class Composition Designer support
         /// </summary>
-        /// <param name="container"></param>
+        /// <param name="container">Parent container.</param>
         public JabberClient(System.ComponentModel.IContainer container) :
             base(container)
         {
@@ -128,8 +128,8 @@ namespace jabber.client
         public event IQHandler OnIQ;
 
         /// <summary>
-        /// Authentication failed.  The connection is not
-        /// terminated if there is an auth error and there
+        /// Informs the client that the authentication has failed. The connection is not
+        /// terminated if there is an authentication error, and there
         /// is at least one event handler for this event.
         /// </summary>
         [Category("Protocol")]
@@ -137,7 +137,8 @@ namespace jabber.client
         public event ProtocolHandler OnAuthError;
 
         /// <summary>
-        /// Presence is about to be sent.  This gives a chance to modify outbound presence (e.g. entity caps)
+        /// Informs the client that the presence is about to be sent.
+        /// This gives a chance to modify outbound presence (fore example, entity caps).
         /// </summary>
         [Category("Protocol")]
         [Description("Presence is about to be sent.  This gives a chance to modify outbound presence (e.g. entity caps)")]
@@ -170,10 +171,9 @@ namespace jabber.client
         public event IQHandler OnRegistered;
 
         /// <summary>
-        /// After calling Register, information about the user is required.  Fill in the given IQ
-        /// with the requested information.  Return false to cancel.
+        /// Allows the user to enter registration requested information before sending to the XMPP server.
         ///
-        /// WARNING: make sure you do not return from this handler until the IQ is filled in.  
+        /// WARNING: Make sure you do not return from this handler until the IQ is filled in.  
         /// It is now safe to call UI elements, since this callback is now on the GUI thread if
         /// the InvokeControl is set.
         /// </summary>
@@ -182,7 +182,7 @@ namespace jabber.client
         public event RegisterInfoHandler OnRegisterInfo;
 
         /// <summary>
-        /// The username to connect as.
+        /// Retrieves/Sets the username to connect as.
         /// </summary>
         [Description("The username to connect as.")]
         [Category("Jabber")]
@@ -205,9 +205,9 @@ namespace jabber.client
         }
 
         /// <summary>
-        /// The password to use for connecting.
-        /// This may be sent across the wire plaintext, if the
-        /// server doesn't support digest and PlaintextAuth is true.
+        /// Gets or sets the password to use for connecting to the XMPP server.
+        /// This may be sent across the wire plaintext if the XMPP
+        /// server doesn't support digest and PlaintextAuth is set to true.
         /// </summary>
         [Description("The password to use for connecting.  " +
              "This may be sent across the wire plaintext, " +
@@ -236,9 +236,9 @@ namespace jabber.client
         }
 
         /// <summary>
-        /// Automatically retrieve roster on connection.
+        /// Retrieves the roster on connection.
         /// </summary>
-        [Description("Automatically retrieve roster on connection.")]
+        [Description("Retrieves the roster on connection.")]
         [DefaultValue(true)]
         [Category("Automation")]
         public bool AutoRoster
@@ -248,7 +248,8 @@ namespace jabber.client
         }
 
         /// <summary>
-        /// Automatically send back 501/feature-not-implemented to IQs that have not been handled.
+        /// Sends 501/feature-not-implemented back to the client when an IQ
+        /// has not been handled if set to true.
         /// </summary>
         [Description("Automatically send back 501/feature-not-implemented to IQs that have not been handled.")]
         [DefaultValue(true)]
@@ -260,7 +261,8 @@ namespace jabber.client
         }
 
         /// <summary>
-        /// Automatically send presence on connection.
+        /// Sends presence information when the connection has been established
+        /// if set to true.
         /// </summary>
         [Description("Automatically send presence on connection.")]
         [DefaultValue(true)]
@@ -272,10 +274,10 @@ namespace jabber.client
         }
 
         /// <summary>
-        /// The connecting resource.
+        /// Gets or sets the connecting resource.
         /// Used to identify a unique connection.
         /// </summary>
-        [Description("The connecting resource.  " +
+        [Description("Gets or sets the connecting resource.  " +
              "Used to identify a unique connection.")]
         [DefaultValue("Jabber.Net")]
         [Category("Jabber")]
@@ -286,7 +288,7 @@ namespace jabber.client
         }
 
         /// <summary>
-        /// The stream namespace for this connection.
+        /// Gets the stream namespace for this connection.
         /// </summary>
         [Browsable(false)]
         protected override string NS
@@ -329,7 +331,7 @@ namespace jabber.client
         }
 
         /// <summary>
-        /// Close down the connection, as gracefully as possible.
+        /// Closes down the connection.
         /// </summary>
         public override void Close()
         {
@@ -366,13 +368,13 @@ namespace jabber.client
         }
 
         /// <summary>
-        /// Send a presence packet to the server
+        /// Sends a presence packet to the XMPP server.
         /// </summary>
-        /// <param name="t">What kind?</param>
-        /// <param name="status">How to show us?</param>
-        /// <param name="show">away, dnd, etc.</param>
-        /// <param name="priority">How to prioritize this connection.
-        /// Higher number mean higher priority.  0 minumum, 127 max.  
+        /// <param name="t">The type of presence.</param>
+        /// <param name="status">Determines the status of the presence.</param>
+        /// <param name="show">Shows the available, away, dnd and so on status.</param>
+        /// <param name="priority">Prioritizes this connection.
+        /// Higher number mean higher priority. 0 minumum, 127 max.
         /// -1 means this is a presence-only connection.</param>
         public void Presence(PresenceType t,
             string status,
@@ -410,7 +412,7 @@ namespace jabber.client
         }
 
         /// <summary>
-        /// Sends a message packet to another user.
+        /// Sends a certain type of message packet to another user.
         /// </summary>
         /// <param name="t">The type of message.</param>
         /// <param name="to">The JID to send the message to.</param>
@@ -464,10 +466,11 @@ namespace jabber.client
 
 
         /// <summary>
-        /// Send a presence subscription request and update the roster for a new roster contact.
+        /// Sends a presence subscription request and updates the roster
+        /// for a new roster contact.
         /// </summary>
         /// <param name="to">The JID of the contact (required)</param>
-        /// <param name="nickname">The nickname to show for the user.</param>
+        /// <param name="nickname">The nickname to show for the contact.</param>
         /// <param name="groups">A list of groups to put the contact in.  May be null.  Hint: new string[] {"foo", "bar"}</param>
         public void Subscribe(JID to, string nickname, string[] groups)
         {
@@ -556,10 +559,12 @@ namespace jabber.client
 
 
         /// <summary>
-        /// Attempt to register a new user.  This will fire OnRegisterInfo to retrieve
-        /// information about the new user, and OnRegistered when the registration is complete or failed.
+        /// Attempts to register a new user.  This will fire
+        /// OnRegisterInfo to retrieve information about the
+        /// new user, and OnRegistered when the registration
+        /// is completed or failed.
         /// </summary>
-        /// <param name="jid">The user to register</param>
+        /// <param name="jid">The user to register.</param>
         public void Register(JID jid)
         {
             RegisterIQ iq = new RegisterIQ(Document);
@@ -725,11 +730,10 @@ namespace jabber.client
         }
 
         /// <summary>
-        /// An element was received.
-        /// Look for Presence, Message, and IQ.
+        /// Sorts the XML element looking for Presence, Message, and IQ packets.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="tag"></param>
+        /// <param name="sender">The object calling this method.</param>
+        /// <param name="tag">The XML element containing a stanza.</param>
         protected override void OnElement(object sender, System.Xml.XmlElement tag)
         {
             base.OnElement(sender, tag);
@@ -788,11 +792,11 @@ namespace jabber.client
         }
 
         /// <summary>
-        /// An error occurred authenticating.
+        /// Informs the client that an error occurred during authentication.
         /// This is public so that manual authenticators
         /// can fire errors using the same events.
         /// </summary>
-        /// <param name="i"></param>
+        /// <param name="i">Xml element containing the error message.</param>
         public void FireAuthError(XmlElement i)
         {
             if (OnAuthError != null)

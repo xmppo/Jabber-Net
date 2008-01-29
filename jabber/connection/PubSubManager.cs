@@ -45,7 +45,7 @@ namespace jabber.connection
         private Hashtable m_nodes = new Hashtable();
 
         /// <summary>
-        /// Create a manager
+        /// Creates a manager.
         /// </summary>
         public PubSubManager()
 		{
@@ -53,9 +53,9 @@ namespace jabber.connection
 		}
 
         /// <summary>
-        /// Create a manager in a container
+        /// Creates a manager in a container.
         /// </summary>
-        /// <param name="container"></param>
+        /// <param name="container">Parent container.</param>
 		public PubSubManager(IContainer container)
 		{
 			container.Add(this);
@@ -90,14 +90,16 @@ namespace jabber.connection
         #endregion
 
         /// <summary>
-        /// Subscribe to a pubsub node.  
-        /// If there is already a subscription, the existing node will be returned.
-        /// If not, the PubSubNode will be returned in a subscribing state.
+        /// Subscribes to a publish-subscribe node.  
         /// </summary>
-        /// <param name="service"></param>
-        /// <param name="node"></param>
+        /// <param name="service">Component that handles PubSub requests.</param>
+        /// <param name="node">The node on the component that the client wants to interact with.</param>
         /// <param name="maxItems">Maximum number of items to retain.  First one to call Subscribe gets their value, for now.</param>
-        /// <returns></returns>
+        /// <returns>
+        /// The existing node will be returned if there is already a subscription.
+        /// If the node does not exist, the PubSubNode object will be returned
+        /// in a subscribing state.
+        /// </returns>
         public PubSubNode GetNode(JID service, string node, int maxItems)
         {
             JIDNode jn = new JIDNode(service, node);
@@ -110,10 +112,18 @@ namespace jabber.connection
         }
 
         ///<summary>
+        /// Removes the publish-subscribe node from the manager and sends a delete
+        /// node to the XMPP server.
         ///</summary>
-        ///<param name="service"></param>
-        ///<param name="node"></param>
-        ///<param name="errorHandler"></param>
+        /// <param name="service">
+        /// Component that handles PubSub requests.
+        /// </param>
+        /// <param name="node">
+        /// The node on the component that the client wants to interact with.
+        /// </param>
+        /// <param name="errorHandler">
+        /// Callback for any errors with the publish-subscribe node deletion.
+        /// </param>
         public void RemoveNode(JID service, string node, bedrock.ExceptionHandler errorHandler)
         {
             JIDNode jn = new JIDNode(service, node);
@@ -152,20 +162,20 @@ namespace jabber.connection
         private PubSubNode m_node = null;
 
         /// <summary>
-        /// Create an item list, which will have at most some number of items.
+        /// Creates an item list, which will have at most some number of items.
         /// </summary>
-        /// <param name="node">The node to which this item list applies</param>
-        /// <param name="maxItems">Max size of the list.  Delete notifications will be sent if this size is exceeded.</param>
+        /// <param name="node">The node to which this item list applies.</param>
+        /// <param name="maxItems">Maximum size of the list.  Delete notifications will be sent if this size is exceeded.</param>
         public ItemList(PubSubNode node, int maxItems) : base(maxItems)
         {
             m_node = node;
         }
 
         /// <summary>
-        /// Makes sure that the underlying id index is in sync
+        /// Makes sure that the underlying ID index is in sync
         /// when an item is removed.
         /// </summary>
-        /// <param name="index"></param>
+        /// <param name="index">Index of PubSubItem to remove.</param>
         public override void RemoveAt(int index)
         {
             PubSubItem item = (PubSubItem)this[index];
@@ -188,11 +198,11 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Add to the end of the list, replacing any item with the same ID, 
+        /// Adds to the end of the list, replacing any item with the same ID, 
         /// or bumping the oldest item if the list is full.
         /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
+        /// <param name="value">PubSubItem to add to the list.</param>
+        /// <returns>Index where the PubSubItem was inserted.</returns>
         public override int Add(object value)
         {
             PubSubItem item = value as PubSubItem;
@@ -222,7 +232,8 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Remove the item with the given ID.  No-op if none found with that ID.
+        /// Removes the item with the given ID.
+        /// No exception is thrown if no item is found with that ID.
         /// </summary>
         /// <param name="id">ID of the item to remove</param>
         public void RemoveId(string id)
@@ -233,10 +244,10 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Return the contents of the specified item
+        /// Gets or sets the contents of the specified item.
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">Id of the PubSubItem.</param>
+        /// <returns>XmlElement representing the contents of the PubSubItem.</returns>
         public XmlElement this[string id]
         {
             get
@@ -293,26 +304,26 @@ namespace jabber.connection
     }
 
     /// <summary>
-    /// A pubsub error occurred.
+    /// Informs the client that a publish-subscribe error occurred.
     /// </summary>
     [SVN(@"$Id$")]
     public class PubSubException : Exception
     {
         /// <summary>
-        /// The stanza that caused the error.
+        /// Contains the stanza that caused the error.
         /// </summary>
         public XmlElement Protocol = null;
         /// <summary>
-        /// The operation that failed.
+        /// Contains the operation that failed.
         /// </summary>
         public Op Operation;
 
         /// <summary>
-        /// Create
+        /// Creates a new publish-subscribe exception.
         /// </summary>
-        /// <param name="op"></param>
-        /// <param name="error"></param>
-        /// <param name="elem"></param>
+        /// <param name="op">The operation that failed.</param>
+        /// <param name="error">A description of the error.</param>
+        /// <param name="elem">The stanza that caused the error.</param>
         public PubSubException(Op op, string error, XmlElement elem) : base(error)
         {
             Operation = op;
@@ -320,7 +331,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Get a better error string.
+        /// Gets the error string.
         /// </summary>
         public override string Message
         {
@@ -331,7 +342,7 @@ namespace jabber.connection
 
 
     /// <summary>
-    /// A node to be subscribed to.  Will keep a maximum number of items.
+    /// Manages a node to be subscribed to.  Will keep a maximum number of items.
     /// </summary>
     [SVN(@"$Id$")]
     public class PubSubNode : IEnumerable
@@ -354,6 +365,7 @@ namespace jabber.connection
         private ItemList    m_items = null;
 
         ///<summary>
+        /// The component that handles PubSub requests.
         ///</summary>
         public JID Jid
         {
@@ -361,6 +373,7 @@ namespace jabber.connection
         }
 
         ///<summary>
+        /// The node to interact with as defined by XEP-60.
         ///</summary>
         public string Node
         {
@@ -412,7 +425,7 @@ namespace jabber.connection
         public event ItemCB OnItemRemove;
 
         /// <summary>
-        /// An error occurred.
+        /// Notifies the client that an error occurred.
         /// </summary>
         public event bedrock.ExceptionHandler OnError;
 
@@ -433,10 +446,10 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Add a handler for the OnItemAdd event, and call the handler for any existing
+        /// Adds a handler for the OnItemAdd event, and calls the handler for any existing
         /// items.  To prevent races, use this rather than .OnItemAdd +=.
         /// </summary>
-        /// <param name="callback"></param>
+        /// <param name="callback">Callback to call with every item.</param>
         public void AddItemAddCallback(ItemCB callback)
         {
             if (callback == null)
@@ -450,8 +463,8 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Create the node, then subscribe if the creation succeeded or the node already existed,
-        /// then retrieve the items for the node.
+        /// Creates the node then subscribes. If the creation succeeded, or if the node 
+        /// already exists, retrieve the items for the node.
         /// 
         /// This is the typical starting point.  Please make sure to register callbacks before calling
         /// this function.
@@ -469,7 +482,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Create the node, with default configuration.  
+        /// Creates the node with default configuration.  
         /// </summary>
         public void Create()
         {
@@ -562,7 +575,8 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Send a subscription request.  Items request will be sent automatically on successful subscribe.
+        /// Sends a subscription request.
+        /// Items request will be sent automatically on successful subscribe.
         /// </summary>
         public void Subscribe()
         {
@@ -654,7 +668,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Get the items from the node
+        /// Gets the items from the node on the XMPP server.
         /// </summary>
         public void GetItems()
         {
@@ -705,9 +719,9 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Just for notifications.  Probably shouldn't be called except by ItemList.
+        /// Notifies the client that an item has been add to this PubSubNode.
         /// </summary>
-        /// <param name="item"></param>
+        /// <param name="item">Item that was added.</param>
         public void ItemAdded(PubSubItem item)
         {
             if (OnItemAdd != null)
@@ -715,9 +729,9 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Just for notifications.  Probably shouldn't be called except by ItemList.
+        /// Notifies the client that an item has been removed from this PubSubNode.
         /// </summary>
-        /// <param name="item"></param>
+        /// <param name="item">Item that was removed.</param>
         public void ItemRemoved(PubSubItem item)
         {
             if (OnItemRemove != null)
@@ -773,7 +787,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Unsubscribe from the node.
+        /// Unsubscribes from the node.
         /// </summary>
         public void Unsubscribe()
         {
@@ -787,7 +801,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Delete the node.
+        /// Deletes the node from the XMPP server.
         /// </summary>
         public void Delete()
         {
@@ -805,7 +819,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Delete a single item.
+        /// Deletes a single item from the XMPP server.
         /// </summary>
         /// <param name="id">Id of item.</param>
         public void DeleteItem(string id)
@@ -830,9 +844,9 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Publish an item to the node.
+        /// Publishes an item to the node.
         /// </summary>
-        /// <param name="id">If null, the server will assign an item ID</param>
+        /// <param name="id">If null, the server will assign an item ID.</param>
         /// <param name="contents">The XML inside the item.  Should be in a new namespace.</param>
         public void PublishItem(string id, XmlElement contents)
         {

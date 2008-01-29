@@ -23,21 +23,21 @@ using jabber.protocol;
 namespace jabber.connection
 {
     /// <summary>
-    /// How to connect?  Socket?  Polling?
+    /// Specifies the connection type, such as socket, polling, and so on.
     /// </summary>
     [SVN(@"$Id$")]
     public enum ConnectionType
     {
         /// <summary>
-        /// "Normal" XMPP socket
+        /// Uses "Normal" XMPP socket
         /// </summary>
         Socket,
         /// <summary>
-        /// HTTP Polling, as in http://www.xmpp.org/extensions/xep-0025.html
+        /// Uses HTTP Polling, as in http://www.xmpp.org/extensions/xep-0025.html
         /// </summary>
         HTTP_Polling,
         /// <summary>
-        /// HTTP Binding, as in http://www.xmpp.org/extensions/xep-0124.html
+        /// Uses HTTP Binding, as in http://www.xmpp.org/extensions/xep-0124.html
         /// </summary>
         HTTP_Binding
     }
@@ -60,24 +60,30 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// One of the properties has changed.
+        /// Notifies the user that one of the properties has changed.
         /// </summary>
         event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
-        /// We are connected to the server.  Time to send stream:stream.
+        /// Informs the client that the connection to the XMPP server has finished.
+        /// Time to send the stream:stream packet.
         /// </summary>
         void Connected();
 
         /// <summary>
-        /// We accepted a new connection from the server.  Wait for a stream:stream.
+        /// Informs the client that a new connection from the server has been accepted.
+        /// Wait for a stream:stream.
         /// </summary>
         void Accepted();
 
         /// <summary>
-        /// Text was read from the server.  Use for debugging only.
+        /// Informs the client that text was read from the XMPP server.
+        /// Use for debugging only.
         /// Will NOT be complete nodes at a time.
         /// </summary>
+        /// <param name="buf">Buffer containing the data read.</param>
+        /// <param name="offset">Where in the buffer the read data begins.</param>
+        /// <param name="len">Length of the data read.</param>
         void BytesRead(byte[] buf, int offset, int len);
 
         /// <summary>
@@ -87,8 +93,10 @@ namespace jabber.connection
         void BytesWritten(byte[] buf, int offset, int len);
 
         /// <summary>
-        /// A new stream was initialized.  Add your packet factories to it.
+        /// Informs the client that a new stream was initialized.
+        /// You can add your packet factories to it.
         /// </summary>
+        /// <param name="stream">The stream that was initialized.</param>
         void StreamInit(ElementStream stream);
 
         /// <summary>
@@ -103,22 +111,23 @@ namespace jabber.connection
         void Closed();
 
         /// <summary>
-        /// Received a doc start tag.  This may be "synthetic" for some backends.
+        /// Informs the client that a doc start tag has been received.
+        /// This may be "synthetic" for some backends.
         /// </summary>
-        /// <param name="elem"></param>
+        /// <param name="elem">XML element containing the start tag.</param>
         void DocumentStarted(XmlElement elem);
 
         /// <summary>
-        /// The closing stream:stream was received.  Probably mostly equivalent to Closed(), except
-        /// if the stream is still open, you should close it at this point.
+        /// Receives the closing stream:stream.  Probably mostly equivalent to Closed(),
+        /// except if the stream is still open, you should close it at this point.
         /// May not be called for some backends.
         /// </summary>
         void DocumentEnded();
 
         /// <summary>
-        /// We've gotten a full stanza, stream:features, etc.
+        /// Receives an XML element such as stream:features and so on.
         /// </summary>
-        /// <param name="elem"></param>
+        /// <param name="elem">The XML Element received.</param>
         void StanzaReceived(XmlElement elem);
 
 #if NET20 || __MonoCS__
@@ -207,7 +216,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Handshake TLS now.
+        /// Starts the TLS handshake.
         /// </summary>
         virtual public void StartTLS()
         {
@@ -249,8 +258,9 @@ namespace jabber.connection
         abstract public void Write(string str);
 
         /// <summary>
-        /// Close the stream.
+        /// Closes the stream.
         /// </summary>
+        /// <param name="clean">If true, send the stream:stream close packet.</param>
         abstract public void Close(bool clean);
 
         /// <summary>

@@ -26,9 +26,12 @@ namespace jabber.connection
     public abstract class StreamComponent : System.ComponentModel.Component
 	{
         /// <summary>
-        /// Look into the VisualStudio environment at runtime to find the first component that subclasses XmppStream.
+        /// Finds the first component that subclasses XmppStream in Visual Studio
+        /// during runtime.
         /// </summary>
-        /// <param name="host">Call GetService(typeof(IDesignerHost)) on your control to get this.</param>
+        /// <param name="host">
+        /// Calls GetService(typeof(IDesignerHost)) on your control to get this.
+        /// </param>
         /// <returns>Null if none found</returns>
         public static XmppStream GetStreamFromHost(IDesignerHost host)
         {
@@ -36,7 +39,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Look into the VisualStudio environment at runtime to find the first component that subclasses the given type.
+        /// Finds the first component that subclasses the given type at runtime.
         /// </summary>
         /// <param name="host">Call GetService(typeof(IDesignerHost)) on your control to get this.</param>
         /// <param name="type">The type to search for.</param>
@@ -58,7 +61,8 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// The XmppStream for this control.  Set at design time when a subclass control is dragged onto a form.
+        /// Retrieves the XmppStream for this control.
+        /// Set at design time when a subclass control is dragged onto a form.
         /// </summary>
         protected XmppStream m_stream = null;
 

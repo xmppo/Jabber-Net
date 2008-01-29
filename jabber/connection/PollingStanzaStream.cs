@@ -24,7 +24,7 @@ using System.Security.Cryptography;
 namespace jabber.connection
 {
     /// <summary>
-    /// Http Polling XMPP stream.
+    /// HTTP Polling XMPP stream.
     /// </summary>
     [SVN(@"$Id$")]
     public class PollingStanzaStream : StanzaStream, ISocketEventListener
@@ -42,7 +42,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Is the socket connected?
+        /// Determines if the client is connected to the XMPP server.
         /// </summary>
         public override bool Connected
         {
@@ -50,7 +50,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// If SSL is on, we support Start-TLS.
+        /// Supports Start-TLS if SSL is enabled.
         /// </summary>
         public override bool SupportsTLS
         {
@@ -63,7 +63,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Set up the element stream.  This is the place to add factories.
+        /// Sets up the element stream.  This is the place to add factories.
         /// </summary>
         public override void InitializeStream()
         {
@@ -147,9 +147,9 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Write a stream:stream
+        /// Writes a stream:stream
         /// </summary>
-        /// <param name="stream"></param>
+        /// <param name="stream">Stream containing the stream:stream packet to send.</param>
         public override void WriteStartTag(jabber.protocol.stream.Stream stream)
         {
             Write(stream.StartTag());
@@ -165,8 +165,9 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Close the socket
+        /// Closes the socket
         /// </summary>
+        /// <param name="clean">Sends the stream:stream close packet if true.</param>
         public override void Close(bool clean)
         {
             // Note: socket should still be connected, excepts for races.  Revist.

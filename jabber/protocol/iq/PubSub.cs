@@ -128,7 +128,7 @@ namespace jabber.protocol.iq
         /// <summary>
         /// Get the command from the pubsub element.
         /// </summary>
-        public XmlElement Command
+        public PubSubCommand Command
         {
             get
             {

@@ -35,20 +35,21 @@ namespace jabber.connection
     public class Ident
     {
         /// <summary>
-        /// Description of the entity.
+        /// Contains the description of the entity.
         /// </summary>
         public string name;
         /// <summary>
-        /// Category (server, client, gateway, directory, etc.) 
+        /// Contains the capabilities category, such as server,
+        /// client, gateway, directory and so on. 
         /// </summary>
         public string category;
         /// <summary>
-        /// Entity type.
+        /// Contains the entity type.
         /// </summary>
         public string type;
 
         /// <summary>
-        /// category/type
+        /// Retrieves the string representation of the Ident (category/type).
         /// </summary>
         /// <returns></returns>
         public string GetKey()
@@ -86,7 +87,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// The JID.
+        /// Gets the JID.
         /// </summary>
         [Category("Identity")]
         public JID JID
@@ -95,7 +96,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// The Node.
+        /// Gets the Node.
         /// </summary>
         [Category("Identity")]
         public string Node
@@ -117,7 +118,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// A JID/Node key for Hash lookup.
+        /// Gets the JID/Node key for Hash lookup.
         /// </summary>
         [Browsable(false)]
         public string Key
@@ -126,10 +127,10 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Are we equal to that other jid/node.
+        /// Determines if both the jid and the node are equal.
         /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
+        /// <param name="obj">JIDNode to compare to.</param>
+        /// <returns>True if both the jid and the node are equal.</returns>
         public override bool Equals(object obj)
         {
             JIDNode other = obj as JIDNode;
@@ -142,9 +143,11 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Hash the JID and node together, just in case.
+        /// Serves as a hash function to combine the JID and node together.
+        /// GetHashCode() is suitable for use in hashing algorithms and
+        /// data structures like a hash table.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The hash code of this JIDNode.</returns>
         public override int GetHashCode()
         {
             Debug.Assert(m_jid != null);
@@ -155,9 +158,9 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Returns JID/Node
+        /// Returns a string representing the JID/Node.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>String representing the JID/Node.</returns>
         public override string ToString()
         {
             return JID + "/" + Node;
@@ -178,15 +181,15 @@ namespace jabber.connection
         private static Tree m_items = new Tree();
 
         /// <summary>
-        /// Children of this node.
+        /// Contains the children of this node.
         /// </summary>
         public Set Children = null;
         /// <summary>
-        /// Features of this node.
+        /// Contains the Features of this node.
         /// </summary>
         public Set Features = null;
         /// <summary>
-        /// Identities of this node.
+        /// Contains the identities of this node.
         /// </summary>
         public Set Identity = null;
         private string m_name = null;
@@ -195,30 +198,30 @@ namespace jabber.connection
         private jabber.protocol.x.Data m_extensions;
 
         /// <summary>
-        /// Create a disco node.
+        /// Creates a disco node.
         /// </summary>
-        /// <param name="jid"></param>
-        /// <param name="node"></param>
+        /// <param name="jid">JID associated with this JIDNode.</param>
+        /// <param name="node">node associated with this JIDNode.</param>
         public DiscoNode(JID jid, string node)
             : base(jid, node)
         {
         }
 
         /// <summary>
-        /// Features are now available
+        /// Informs the client that features are now available from the XMPP server.
         /// </summary>
         public event DiscoNodeHandler OnFeatures;
         /// <summary>
-        /// New children are now available.
+        /// Informs the client that new children are now available.
         /// </summary>
         public event DiscoNodeHandler OnItems;
         /// <summary>
-        /// New identities are available.
+        /// Informs the client that new identities are available.
         /// </summary>
         public event DiscoNodeHandler OnIdentities;
 
         /// <summary>
-        /// The human-readable string from the first identity.
+        /// Gets or sets the string representation of the first identity.
         /// </summary>
         [Category("Info")]
         public string Name
@@ -245,7 +248,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Are we waiting on info to be returned?
+        /// Determines whether the disco#info packet has been sent.
         /// </summary>
         [Category("Status")]
         public bool PendingInfo
@@ -254,7 +257,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Are we waiting on items to be returned?
+        /// Determines whether the disco#items packet has been sent.
         /// </summary>
         [Category("Status")]
         public bool PendingItems
@@ -263,7 +266,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// The features associated with this node.
+        /// Retrieves the features associated with this node.
         /// </summary>
         [Category("Info")]
         public string[] FeatureNames
@@ -283,7 +286,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// The disco identities of the node.
+        /// Retrieves the disco identities of the node.
         /// </summary>
         [Category("Info")]
         public string[] Identities
@@ -303,10 +306,9 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Retrieve an identity object for each identity of the node.  
-        /// This should have been the default, but for whatever reason I didn't think we'd need it.
+        /// Retrieves an identity object for each identity of the node.  
         /// </summary>
-        /// <returns></returns>
+        /// <returns>List of identities associated with this node.</returns>
         public Ident[] GetIdentities()
         {
             Ident[] ret = new Ident[Identity.Count];
@@ -319,11 +321,11 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Does this node have the given category/type among its identities?
+        /// Determines if this node has the given category and type among its identities.
         /// </summary>
-        /// <param name="category"></param>
-        /// <param name="type"></param>
-        /// <returns></returns>
+        /// <param name="category">Category to look for.</param>
+        /// <param name="type">Type to look for.</param>
+        /// <returns>The node contains the category and the type if true.</returns>
         public bool HasIdentity(string category, string type)
         {
             if (Identity == null)
@@ -337,7 +339,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// The x:data extensions of the disco information.
+        /// Gets or sets the x:data extensions of the disco information.
         /// </summary>
         public jabber.protocol.x.Data Extensions
         {
@@ -352,11 +354,14 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Factory to create nodes and ensure that they are cached
+        /// Creates nodes and ensure that they are cached.
         /// </summary>
-        /// <param name="jid"></param>
-        /// <param name="node"></param>
-        /// <returns></returns>
+        /// <param name="jid">JID associated with DiscoNode.</param>
+        /// <param name="node">Node associated with DiscoNode.</param>
+        /// <returns>
+        /// If DiscoNode exists, returns the found node.
+        /// Otherwise it creates the node and return it.
+        /// </returns>
         public static DiscoNode GetNode(JID jid, string node)
         {
             lock (m_items)
@@ -373,17 +378,20 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Factory to create nodes, where the node is null, and only the JID is specified.
+        /// Creates nodes where only the JID is specified.
         /// </summary>
-        /// <param name="jid"></param>
-        /// <returns></returns>
+        /// <param name="jid">JID associated with DiscoNode.</param>
+        /// <returns>
+        /// If DiscoNode exists, returns the found node.
+        /// Otherwise it creates the node and return it.
+        /// </returns>
         public static DiscoNode GetNode(JID jid)
         {
             return GetNode(jid, null);
         }
 
         /// <summary>
-        /// Delete the cache.
+        /// Deletes the cache.
         /// </summary>
         public static void Clear()
         {
@@ -391,10 +399,10 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Does this node have the specified feature?
+        /// Determines if this node has the specified feature.
         /// </summary>
-        /// <param name="URI"></param>
-        /// <returns></returns>
+        /// <param name="URI">Feature to look for.</param>
+        /// <returns>The node has this feature if true.</returns>
         public bool HasFeature(string URI)
         {
             if (Features == null)
@@ -403,18 +411,17 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Add these features to the node. Fires OnFeatures.
+        /// Adds these features to the node. Calls the OnFeatures event.
         /// </summary>
-        /// <param name="features"></param>
+        /// <param name="features">Features to add to this node.</param>
         public void AddFeatures(DiscoFeature[] features)
         {
             if (Features == null)
                 Features = new Set();
-            if (features != null)
-            {
-                foreach (DiscoFeature f in features)
-                    Features.Add(f.Var);
-            }
+
+            foreach (DiscoFeature f in features)
+                Features.Add(f.Var);
+
             if (OnFeatures != null)
             {
                 OnFeatures(this);
@@ -423,24 +430,23 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Add these identities to the node.
+        /// Adds these identities to the node.
         /// </summary>
-        /// <param name="ids"></param>
+        /// <param name="ids">Identities to add.</param>
         public void AddIdentities(DiscoIdentity[] ids)
         {
             if (Identity == null)
                 Identity = new Set();
-            if (ids != null)
+
+            foreach (DiscoIdentity id in ids)
             {
-                foreach (DiscoIdentity id in ids)
-                {
-                    Ident i = new Ident();
-                    i.name = id.Named;
-                    i.category = id.Category;
-                    i.type = id.Type;
-                    Identity.Add(i);
-                }
+                Ident i = new Ident();
+                i.name = id.Named;
+                i.category = id.Category;
+                i.type = id.Type;
+                Identity.Add(i);
             }
+
             if (OnIdentities != null)
             {
                 OnIdentities(this);
@@ -458,18 +464,17 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Add the given items to the cache.
+        /// Adds the given items to the cache.
         /// </summary>
-        /// <param name="items"></param>
+        /// <param name="items">Items to add.</param>
         public void AddItems(DiscoItem[] items)
         {
             if (Children == null)
                 Children = new Set();
-            if (items != null)
-            {
-                foreach (DiscoItem di in items)
-                    AddItem(di);
-            }
+
+            foreach (DiscoItem di in items)
+                AddItem(di);
+
             if (OnItems != null)
             {
                 OnItems(this);
@@ -478,10 +483,10 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Create a disco#info IQ.
+        /// Creates a disco#info IQ packet.
         /// </summary>
-        /// <param name="doc"></param>
-        /// <returns></returns>
+        /// <param name="doc">XmlDocument to create the XML elements with.</param>
+        /// <returns>XML representing the disco#info request.</returns>
         public IQ InfoIQ(System.Xml.XmlDocument doc)
         {
             m_pendingInfo = true;
@@ -498,10 +503,10 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Create a disco#items IQ.
+        /// Creates a disco#items IQ packet.
         /// </summary>
-        /// <param name="doc"></param>
-        /// <returns></returns>
+        /// <param name="doc">XmlDocument used to create the XML Elements.</param>
+        /// <returns>XML element representing the disco#items request.</returns>
         public IQ ItemsIQ(System.Xml.XmlDocument doc)
         {
             m_pendingItems = true;
@@ -518,9 +523,9 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Get all items.
+        /// Gets all of the items.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Tree enumerator to loop over.</returns>
         public static IEnumerator EnumerateAll()
         {
             return m_items.GetEnumerator();
@@ -529,9 +534,9 @@ namespace jabber.connection
         #region IEnumerable Members
 
         /// <summary>
-        /// Get an enumerator across all items.
+        /// Gets an enumerator across all items.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Set enumerator to loop over.</returns>
         public IEnumerator GetEnumerator()
         {
             return Children.GetEnumerator();
@@ -581,9 +586,10 @@ namespace jabber.connection
 
 
         /// <summary>
-        /// The root node.  This is probably the server that you connected to.
-        /// If the Children property of this is null, we haven't received an answer to
-        /// our disco#items request; register on this node's OnFeatures callback.
+        /// Gets the root node.  This is probably the server that the client is
+        /// connected to. If the Children property of this root node is null,
+        /// the disco#items request has not returned an answer. Register on this
+        /// node's OnFeatures callback.
         /// </summary>
         public DiscoNode Root
         {
@@ -846,11 +852,12 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Make a call to get the child items of this node, and call back on handler.
-        /// If the information is in the cache, handler gets called right now.
+        /// Makes a call to get the child items of this node, and then calls
+        /// back on the handler. If the information is in the cache, handler gets
+        /// called right now.
         /// </summary>
-        /// <param name="node"></param>
-        /// <param name="handler"></param>
+        /// <param name="node">PubSub node.</param>
+        /// <param name="handler">Callback that gets called with the items.</param>
         public void BeginGetItems(DiscoNode node, DiscoNodeHandler handler)
         {
             if (node.Children != null)
@@ -867,12 +874,13 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Make a call to get the child items of this node, and call back on handler.
-        /// If the information is in the cache, handler gets called right now.
+        /// Makes a call to get the child items of this node and JID, and then calls
+        /// back on the handler. If the information is in the cache, handler gets
+        /// called right now.
         /// </summary>
-        /// <param name="jid"></param>
-        /// <param name="node"></param>
-        /// <param name="handler"></param>
+        /// <param name="jid">JID of PubSub handler.</param>
+        /// <param name="node">Node on the PubSub handler to interact with.</param>
+        /// <param name="handler">Callback that gets called with the items.</param>
         public void BeginGetItems(JID jid, string node, DiscoNodeHandler handler)
         {
             BeginGetItems(DiscoNode.GetNode(jid, node), handler);
@@ -921,12 +929,12 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Look for a component that implements a given feature, which is a child of the root.
+        /// Looks for a component that implements a given feature, which is a child of the root.
         /// This will call back on the first match.  It will call back with null if none 
         /// are found.
         /// </summary>
-        /// <param name="featureURI"></param>
-        /// <param name="handler"></param>
+        /// <param name="featureURI">Feature to look for.</param>
+        /// <param name="handler">Callback to use when finished.</param>
         public void BeginFindServiceWithFeature(string featureURI, DiscoNodeHandler handler)
         {
             if (handler == null)

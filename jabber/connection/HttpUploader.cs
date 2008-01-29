@@ -27,7 +27,7 @@ namespace jabber.connection
     public class HttpUploader
     {
         /// <summary>
-        /// An upload has finished.
+        /// Notifies the client that an upload has finished.
         /// </summary>
         public event bedrock.ObjectHandler OnUpload;
 

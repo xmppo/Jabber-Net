@@ -40,7 +40,7 @@ namespace jabber.client
     public delegate void SubscriptionHandler(RosterManager manager, Item ri, Presence pres);
 
     /// <summary>
-    /// Informs the client of an unsubscription notifications.
+    /// Manages unsubscription notifications.
     /// </summary>
     /// <param name="manager">The RosterManager than detected the subscription</param>
     /// <param name="remove">Set this to false to prevent the user being removed from the roster.</param>
@@ -87,7 +87,7 @@ namespace jabber.client
         private bool m_autoSubscribe = false;
 
         /// <summary>
-        /// Creates a roster manager inside a container.
+        /// Creates a new roster manager inside a container.
         /// </summary>
         /// <param name="container">Parent container</param>
         public RosterManager(System.ComponentModel.IContainer container) : this()
@@ -97,7 +97,7 @@ namespace jabber.client
         }
 
         /// <summary>
-        /// Creates a roster manager.
+        /// Creates a new roster manager.
         /// </summary>
         public RosterManager()
         {
@@ -163,8 +163,8 @@ namespace jabber.client
         public event RosterItemHandler OnRosterItem;
 
         /// <summary>
-        /// Fired when a roster result starts, before any OnRosterItem events fire.
-        /// This will not fire for type='set', which is probably what you want.
+        /// Informs the client when a roster result starts, before any OnRosterItem events fire.
+        /// This will not fire for type='set'.
         /// </summary>
         [Description("Roster result about to start being processed.")]
         [Category("Jabber")]
@@ -194,9 +194,8 @@ namespace jabber.client
         public event UnsubscriptionHandler OnUnsubscription;
 
         /// <summary>
-        /// String representation.
+        /// Returns a string that represents the current object.
         /// </summary>
-        /// <returns></returns>
         public override string ToString()
         {
             return m_items.ToString();
@@ -345,9 +344,11 @@ namespace jabber.client
         }
 
         /// <summary>
-        /// Reply to this presence subscription request, allowing it.
+        /// Allows the subscription request and sends a subscribed to the user.
         /// </summary>
-        /// <param name="pres"></param>
+        /// <param name="pres">
+        /// The presence packet containing the subscription request.
+        /// </param>
         public void ReplyAllow(Presence pres)
         {
             Debug.Assert(pres.Type == PresenceType.subscribe);
@@ -366,9 +367,11 @@ namespace jabber.client
         }
 
         /// <summary>
-        /// Reply to this presence subscription request, denying it.
+        /// Denies the subscription request.
         /// </summary>
-        /// <param name="pres"></param>
+        /// <param name="pres">
+        /// The presence packet containing the subscription request.
+        /// </param>
         public void ReplyDeny(Presence pres)
         {
             Debug.Assert(pres.Type == PresenceType.subscribe);
@@ -401,10 +404,11 @@ C: <iq from='juliet@example.com/balcony' type='set' id='delete_1'>
         }
 
         /// <summary>
-        /// Modify the item to look like the item given.  This does not modify the model,
-        /// but waits for roster pushes from the server.
+        /// Modifies the roster item to look like the given roster item.
+        /// This does not modify the model,
+        /// but waits for roster pushes from the XMPP server.
         /// </summary>
-        /// <param name="item"></param>
+        /// <param name="item">Roster item that will appear in the roster.</param>
         public void Modify(Item item)
         {
             RosterIQ iq = new RosterIQ(m_stream.Document);

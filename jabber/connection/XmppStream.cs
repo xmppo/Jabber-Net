@@ -47,24 +47,26 @@ namespace jabber.connection
     public abstract class Options
     {
         /// <summary>
-        /// Default namespace.
+        /// Contains the default namespace for this connection.
         /// </summary>
         public const string NAMESPACE = "namespace";
 
         /// <summary>
-        /// The IP or hostname of the machine to connect to.
+        /// Contains the network hostname or IP address of the XMPP server to connect to.
         /// </summary>
         public const string NETWORK_HOST = "network_host";
         /// <summary>
-        /// The identity of the thing we're connecting to.  For components, the component ID.
+        /// Contains the identity of the item that the client is connecting to.
+        /// For components, the component ID.
         /// </summary>
         public const string TO = "to";
         /// <summary>
-        /// The identity that we expect on the X.509 certificate on the other side.
+        /// Contains the server identity that is expected on the X.509 certificate
+        /// from the XMPP server.
         /// </summary>
         public const string SERVER_ID    = "tls.cn";
         /// <summary>
-        /// How often to do keep-alive spaces (seconds).
+        /// Determines the keep-alive interval in seconds.
         /// </summary>
         public const string KEEP_ALIVE   = "keep_alive";
         /// <summary>
@@ -72,126 +74,137 @@ namespace jabber.connection
         /// </summary>
         public const string CURRENT_KEEP_ALIVE = "current_keep_alive";
         /// <summary>
-        /// Port number to connect to or listen on.
+        /// Contains the port number to connect to or to listen on.
         /// </summary>
         public const string PORT         = "port";
         /// <summary>
-        /// Do SSL on connection?
+        /// Uses SSL on connection if set to true.
         /// </summary>
         public const string SSL          = "ssl";
         /// <summary>
-        /// Automatically negotiate TLS.
+        /// Uses Start-TLS on connection if set to true and
+        /// the server supports it.
         /// </summary>
         public const string AUTO_TLS     = "tls.auto";
         /// <summary>
-        /// Automatically negotiate XEP-138 compression.
+        /// Starts the XMPP stream compression (XEP-138) on connection
+        /// if set to true.
         /// </summary>
         public const string AUTO_COMPRESS = "compress.auto";
         /// <summary>
-        /// Allow plaintext logins.
+        /// Allows plaintext authentication for connecting to the XMPP server.
         /// </summary>
         public const string PLAINTEXT    = "plaintext";
         /// <summary>
-        /// Do SASL connection?
+        /// Attempts a SASL connection if set to true and the feature is available
+        /// from the XMPP server. If the server doesn't support SASL, the connection
+        /// will move to a fallback mechanism.
         /// </summary>
         public const string SASL = "sasl";
         /// <summary>
-        /// Only allow SASL authentication, but not old-style IQ/auth.
+        /// Requires SASL authentication on this connection if set to true.
+        /// There is no fallback mechanism. If the server doesn't support SASL,
+        /// the connection attempt will fail.
         /// </summary>
         public const string REQUIRE_SASL = "sasl.require";
         /// <summary>
-        /// SASL Mechanisms.
+        /// Contains the list of SASL Mechanisms such as Digest-MD5, Plain and so on.
         /// </summary>
         public const string SASL_MECHANISMS = "sasl.mechanisms";
 
         /// <summary>
-        /// The user to log in as.
+        /// Contains the username to connect as.
         /// </summary>
         public const string USER     = "user";
         /// <summary>
-        /// The password for the user, or secret for the component.
+        /// Contains the password for the user, or secret for the component.
         /// </summary>
         public const string PASSWORD = "password";
         /// <summary>
-        /// The resource to bind to.
+        /// Contains the connecting resource which is used to identify a unique connection.
         /// </summary>
         public const string RESOURCE = "resource";
         /// <summary>
-        /// Default priority for presence.
+        /// Contains the presence default priority for this connection.
         /// </summary>
         public const string PRIORITY = "priority";
         /// <summary>
-        /// DNS Service/Protocol to prepend to domain.  Example: _xmpp-client._tcp.
+        /// Contains the DNS Service/Protocol to prepend to domain.
+        /// Example: _xmpp-client._tcp.
         /// </summary>
         public const string SRV_PREFIX = "srv.prefix";
         /// <summary>
-        /// Automatically login.
+        /// Allows auto-login to be used for the connection to the XMPP server
+        /// if set to true.
         /// </summary>
         public const string AUTO_LOGIN    = "auto.login";
         /// <summary>
-        /// Automatically retrieve the roster.
+        /// Retrieves the roster items from the XMPP server on
+        /// connection if set to true.
         /// </summary>
         public const string AUTO_ROSTER   = "auto.roster";
         /// <summary>
-        /// Automatically send back 501/feature-not-implemented to IQs that have not been handled.
+        /// Sends back 501/feature-not-implemented to the XMPP server if
+        /// there are IQs that have not been handled if set to true.
         /// </summary>
         public const string AUTO_IQ_ERRORS   = "auto.iq_errors";
         /// <summary>
-        /// Automatically send presence.
+        /// Sends the presence on connection if set to true.
         /// </summary>
         public const string AUTO_PRESENCE = "auto.presence";
 
         /// <summary>
-        /// The certificate for our side of the SSL/TLS negotiation.
+        /// Contains the certificate for our side of the SSL/TLS negotiation.
         /// </summary>
         public const string LOCAL_CERTIFICATE   = "certificate.local";
         /// <summary>
-        /// The certificate that the other side sent us.
+        /// Contains the remote certificate that the XMPP server sent to the client.
         /// </summary>
         public const string REMOTE_CERTIFICATE  = "certificate.remote";
         /// <summary>
-        /// Enable x509 selection from dialog.
+        /// Uses x509 selection dialog box when a certificate is requested
+        /// if set to true.
         /// </summary>
         public const string CERTIFICATE_GUI = "certificate.gui";
         /// <summary>
-        /// How long to wait before reconnecting.
+        /// Contains the number of seconds to wait before attempting a reconnect.
         /// </summary>
         public const string RECONNECT_TIMEOUT   = "reconnect_timeout";
         /// <summary>
-        /// Do we use sockets, HTTP polling, or HTTP binding?
+        /// Determines the connection type (sockets, HTTP polling, or HTTP binding).
         /// </summary>
         public const string CONNECTION_TYPE     = "connection";
         /// <summary>
-        /// URL to poll on, or bind to.
+        /// Contains the URL to poll on, or bind to.
         /// </summary>
         public const string POLL_URL            = "poll.url";
         /// <summary>
-        /// Connect to the server or listen for connections.
+        /// Connects to the XMPP server or listen for connections.
         /// </summary>
         public const string COMPONENT_DIRECTION = "component.dir";
         /// <summary>
-        /// The logical JID associated with this connection.
+        /// Contains the logical JID associated with this connection.
         /// </summary>
         public const string JID = "jid";
 
         /// <summary>
-        /// Type of proxy
+        /// Contains the proxy type, such as none, SOCKS5 and so on.
         /// </summary>
         public const string PROXY_TYPE = "proxy.type";
         /// <summary>
-        /// Hostname or IP address of the proxy
+        /// Contains the hostname or IP address of the proxy.
         /// </summary>
         public const string PROXY_HOST = "proxy.host";
         /// <summary>
-        /// Port number for the proxy
+        /// Contains the port number for the proxy.
         /// </summary>
         public const string PROXY_PORT = "proxy.port";
         /// <summary>
-        /// User name for the proxy
+        /// Contains the username for the proxy server.
         /// </summary>
         public const string PROXY_USER = "proxy.user";
         /// <summary>
-        /// Password for the proxy
+        /// Contains the password for the proxy server.
         /// </summary>
         public const string PROXY_PW   = "proxy.password";
     }
@@ -259,18 +272,18 @@ namespace jabber.connection
         private System.ComponentModel.Container components = new System.ComponentModel.Container();
 
         /// <summary>
-        /// Required for Windows.Forms Class Composition Designer support
+        /// Creates a new XMPP stream and associates it with the parent control.
         /// </summary>
-        /// <param name="container"></param>
+        /// <param name="container">Parent control.</param>
         public XmppStream(System.ComponentModel.IContainer container) : this()
         {
             container.Add(this);
         }
 
         /// <summary>
-        /// Bulk set defaults.
+        /// Sets defaults in bulk.
         /// </summary>
-        /// <param name="defaults"></param>
+        /// <param name="defaults">Array of objects to replace to defaults with.</param>
         protected void SetDefaults(object[][] defaults)
         {
             foreach (object[] def in defaults)
@@ -280,7 +293,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Create a SocketElementStream
+        /// Creates a new SocketElementStream.
         /// </summary>
         public XmppStream()
         {
@@ -291,11 +304,11 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Set or retrieve a connection property.
+        /// Sets or retrieves a connection property.
         /// You have to know the type of the property based on the name.
         /// For example, PORT is an integer.
         /// </summary>
-        /// <param name="prop"></param>
+        /// <param name="prop">The property to get or set.</param>
         /// <returns></returns>
         public object this[string prop]
         {
@@ -316,7 +329,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// A property changed on the instance.
+        /// Informs the client that a property changed on the instance.
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -352,37 +365,39 @@ namespace jabber.connection
         */
 
         /// <summary>
-        /// Text was written to the server.  Use for debugging only.
+        /// Informs the client when text has been written to the XMPP server.
+        /// Use for debugging only.
         /// Will NOT be complete nodes at a time.
         /// </summary>
         [Category("Debug")]
         public event bedrock.TextHandler OnWriteText;
 
         /// <summary>
-        /// Text was read from the server.  Use for debugging only.
-        /// Will NOT be complete nodes at a time.
+        /// Informs the client that text was read from the server.
+        /// Use for debugging only. Will NOT be complete nodes at a time.
         /// </summary>
         [Category("Debug")]
         public event bedrock.TextHandler OnReadText;
 
         /// <summary>
-        /// A new stream was initialized.  Add your packet factories to it.
-        /// NOTE: you may NOT make calls to the GUI in this callback, unless you
-        /// call Invoke yourself.  Make sure you add your packet factories before
-        /// calling Invoke however.
+        /// Informs the client when a new stream has been inialized.
+        /// Add your packet factories to it.
+        /// NOTE: You may NOT make calls to the GUI in this callback, unless you
+        /// call Invoke.  Make sure you add your packet factories before
+        /// calling Invoke, however.
         /// </summary>
         [Category("Stream")]
         public event StreamHandler OnStreamInit;
 
         /// <summary>
-        /// Some error occurred when processing.
+        /// Informs the client that an error occurred when processing.
         /// The connection has been closed.
         /// </summary>
         [Category("Stream")]
         public event bedrock.ExceptionHandler OnError;
 
         /// <summary>
-        /// Get notified for every jabber packet.
+        /// Informs the client on every jabber packet.
         /// This is a union of OnPresence, OnMessage, and OnIQ.
         /// Use this *or* the others, but not both, as a matter of style.
         /// </summary>
@@ -390,48 +405,49 @@ namespace jabber.connection
         public event ProtocolHandler OnProtocol;
 
         /// <summary>
-        /// Get notified of the stream header, as a packet.  Can be called multiple
+        /// Gets notified of the stream header, as a packet.  Can be called multiple
         /// times for a single session, with XMPP.
         /// </summary>
         [Category("Stream")]
         public event ProtocolHandler OnStreamHeader;
 
         /// <summary>
-        /// Get notified of the start of a SASL handshake.
+        /// Gets notified of the start of a SASL handshake.
         /// </summary>
         protected event SASLProcessorHandler OnSASLStart;
 
         /// <summary>
-        /// Get notified of the end of a SASL handshake.
+        /// Gets notified of the end of a SASL handshake.
         /// </summary>
         protected event FeaturesHandler OnSASLEnd;
 
         /// <summary>
-        /// Get notified when SASL login fails.
+        /// Gets notified when SASL login fails.
         /// </summary>
         protected event ProtocolHandler OnSASLError;
 
         /// <summary>
-        /// We received a stream:error packet.
+        /// Informs the client that it received a stream:error packet.
         /// </summary>
         [Category("Stream")]
         [Description("We received stream:error packet.")]
         public event ProtocolHandler OnStreamError;
 
         /// <summary>
-        /// The connection is complete, and the user is authenticated.
+        /// Informs the client that the connection is complete and the user is authenticated.
         /// </summary>
         [Category("Stream")]
         public event bedrock.ObjectHandler OnAuthenticate;
 
         /// <summary>
-        /// The connection is connected, but no stream:stream has been sent, yet.
+        /// Informs the client that the connection is connected,
+        /// but no stream:stream has been sent yet.
         /// </summary>
         [Category("Stream")]
         public event StanzaStreamHandler OnConnect;
 
         /// <summary>
-        /// The connection is disconnected
+        /// Informs the client that the connection is disconnected.
         /// </summary>
         [Category("Stream")]
         public event bedrock.ObjectHandler OnDisconnect;
@@ -444,7 +460,7 @@ namespace jabber.connection
         public event System.Net.Security.RemoteCertificateValidationCallback OnInvalidCertificate;
 
         /// <summary>
-        /// Let's track IQ packets.
+        /// Gets the tracker for sending IQ packets.
         /// </summary>
         [Browsable(false)]
         public IIQTracker Tracker
@@ -453,9 +469,9 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// The name of the server to connect to.
+        /// Gets or sets the name of the XMPP server to connect to.
         /// </summary>
-        [Description("The name of the Jabber server.")]
+        [Description("Gets or sets the name of the XMPP server to connect to.")]
         [DefaultValue("jabber.com")]
         [Category("Jabber")]
         public virtual string Server
@@ -465,10 +481,10 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// The address to use on the "to" attribute of the stream:stream.
-        /// You can put the network hostname or IP address of the server to connect to.
-        /// If none is specified, the Server will be used.
-        /// Eventually, when SRV is supported, this will be deprecated.
+        /// Gets or sets the network host address to use on the "to" attribute
+        /// of the stream:stream. You can put the network hostname or IP address
+        /// of the XMPP server to connect to. If none is specified, the Server will
+        /// be used. Eventually, when SRV is supported, this will be deprecated.
         /// </summary>
         [Description("")]
         [DefaultValue(null)]
@@ -480,9 +496,9 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// The TCP port to connect to.
+        /// Specifies the TCP port to connect to.
         /// </summary>
-        [Description("The TCP port to connect to.")]
+        [Description("Specifies the TCP port to connect to.")]
         [DefaultValue(5222)]
         [Category("Jabber")]
         public int Port
@@ -492,7 +508,8 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Allow plaintext authentication?
+        /// Specifies whether plaintext authentication is used for connecting
+        /// to the XMPP server.
         /// </summary>
         [Description("Allow plaintext authentication?")]
         [DefaultValue(false)]
@@ -504,7 +521,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Is the current connection SSL/TLS protected?
+        /// Determines if the current connection is SSL/TLS protected.
         /// </summary>
         [Browsable(false)]
         public bool SSLon
@@ -513,7 +530,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// The JID from the connection
+        /// Gets the JID from the connection.
         /// </summary>
         [Browsable(false)]
         public JID JID
@@ -534,7 +551,8 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Is the current connection XEP-138 compressed?
+        /// Retrieves the state of the current connection in regards
+        /// to XEP-138 compression.
         /// </summary>
         [Browsable(false)]
         public bool CompressionOn
@@ -543,7 +561,8 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Do SSL3/TLS1 on startup.
+        /// Determines if SSL3/TLS1 authentication is used when a user
+        /// connects to the XMPP server.
         /// </summary>
         [Description("Do SSL3/TLS1 on startup.")]
         [DefaultValue(false)]
@@ -561,7 +580,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Allow Start-TLS on connection, if the server supports it
+        /// Allows Start-TLS on connection if the server supports it and if set to true.
         /// </summary>
         [Browsable(false)]
         public bool AutoStartTLS
@@ -571,7 +590,8 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Allow start compression on connection, if the server supports it
+        /// Allows start compression on connection if the server supports it and
+        /// is set to true.
         /// </summary>
         [Browsable(false)]
         public bool AutoStartCompression
@@ -582,7 +602,8 @@ namespace jabber.connection
 
 #if NET20 || __MonoCS__
         /// <summary>
-        /// The certificate to be used for the local side of sockets, with SSL on.
+        /// Gets or sets the certificate to be used for the local
+        /// side of sockets when SSL is turned on.
         /// </summary>
         [Browsable(false)]
         public X509Certificate LocalCertificate
@@ -592,8 +613,8 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Set the certificate to be used for accept sockets.  To
-        /// generate a test .pfx file using openssl, add this to
+        /// Sets the certificate to be used for accept sockets.  To
+        /// generate a test .pfx file using OpenSSL, add this to
         /// openssl.conf:
         ///   <blockquote>
         ///   [ serverex ]
@@ -608,10 +629,9 @@ namespace jabber.connection
         ///   </blockquote>
         /// If you leave the certificate null, and you are doing
         /// Accept, the SSL class will try to find a default server
-        /// cert on your box.  If you have IIS installed with a cert,
-        /// this might just go...
+        /// certificate on your box.
         /// </summary>
-        /// <param name="filename">A .pfx or .cer file</param>
+        /// <param name="filename">A .pfx or .cer file.</param>
         /// <param name="password">The password, if this is a .pfx
         /// file, null if .cer file.</param>
         public void SetCertificateFile(string filename,
@@ -690,7 +710,7 @@ namespace jabber.connection
 #endif
 
         /// <summary>
-        /// Invoke() all callbacks on this control.
+        /// Calls Invoke() for all callbacks on this control.
         /// </summary>
         [Description("Invoke all callbacks on this control")]
         [DefaultValue(null)]
@@ -722,9 +742,9 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Time, in seconds, between keep-alive spaces.
+        /// Gets or sets the keep-alive interval in seconds.
         /// </summary>
-        [Description("Time, in seconds, between keep-alive spaces.")]
+        [Description("Gets or sets the keep-alive interval in seconds")]
         [Category("Jabber")]
         [DefaultValue(20f)]
         public float KeepAlive
@@ -746,9 +766,9 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// the type of proxy... none, socks5
+        /// Gets or sets the proxy type, such as none, SOCKS5 and so on.
         /// </summary>
-        [Description("The type of proxy... none, socks5, etc.")]
+        [Description("Gets or sets the proxy type, such as none, SOCKS5 and so on.")]
         [DefaultValue(ProxyType.None)]
         [Category("Proxy")]
         public ProxyType Proxy
@@ -758,9 +778,9 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Connection type.  Socket, HTTP polling, etc.
+        /// Gets or sets the connection type, such as Socket, HTTP polling and so on.
         /// </summary>
-        [Description("The type of connection... Socket, HTTP polling, etc.")]
+        [Description("Gets or sets the connection type, such as Socket, HTTP polling and so on.")]
         [DefaultValue(ConnectionType.Socket)]
         [Category("Proxy")]
         public ConnectionType Connection
@@ -770,9 +790,9 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// the host running the proxy
+        /// Gets or sets the hostname running the proxy.
         /// </summary>
-        [Description("the host running the proxy")]
+        [Description("Gets or sets the hostname running the proxy.")]
         [DefaultValue(null)]
         [Category("Proxy")]
         public string ProxyHost
@@ -782,9 +802,9 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// the port to talk to the proxy host on
+        /// Gets or sets the port number of the proxy host.
         /// </summary>
-        [Description("the port to talk to the proxy host on")]
+        [Description("Gets or sets the port number of the proxy host.")]
         [DefaultValue(1080)]
         [Category("Proxy")]
         public int ProxyPort
@@ -794,9 +814,9 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// the auth username for the socks5 proxy
+        /// Gets or sets the authentication username for the SOCKS5 proxy.
         /// </summary>
-        [Description("the auth username for the socks5 proxy")]
+        [Description("Gets or sets the authentication username for the SOCKS5 proxy.")]
         [DefaultValue(null)]
         [Category("Proxy")]
         public string ProxyUsername
@@ -806,7 +826,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// the auth password for the socks5 proxy
+        /// Gets or sets the authentication password for the SOCKS5 proxy.
         /// </summary>
         [Description("the auth password for the socks5 proxy")]
         [DefaultValue(null)]
@@ -818,7 +838,8 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// The id attribute from the stream:stream element sent by the server.
+        /// Gets or sets the ID attribute from the
+        /// stream:stream element sent by the XMPP server.
         /// </summary>
         [Browsable(false)]
         [DefaultValue(null)]
@@ -829,7 +850,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// The outbound document.
+        /// Retrieves the outbound document.
         /// </summary>
         [Browsable(false)]
         public XmlDocument Document
@@ -838,7 +859,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// The current state of the connection.
+        /// Gets or sets the current state of the connection.
         /// Lock on StateLock before accessing.
         /// </summary>
         [Browsable(false)]
@@ -851,7 +872,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// A lock for the state info.
+        /// Gets the lock for the state information.
         /// </summary>
         [Browsable(false)]
         protected object StateLock
@@ -860,7 +881,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Have we authenticated?  Locks on StateLock
+        /// Gets or sets the state to authenticated.  Locks on StateLock
         /// </summary>
         [Browsable(false)]
         [DefaultValue(false)]
@@ -908,9 +929,9 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Is SASL required?  This will default to true in the future.
+        /// Determines if SASL is required for connecting to the XMPP server.
         /// </summary>
-        [Description("Is SASL required?  This will default to true in the future.")]
+        [Description("Determines if SASL is required for connecting to the XMPP server.")]
         [DefaultValue(false)]
         public bool RequiresSASL
         {
@@ -919,9 +940,9 @@ namespace jabber.connection
         }
 
         /// <summary>
-        ///
+        /// Gets the version number of the XMPP server.
         /// </summary>
-        [Description("The version string returned in the server's open stream element")]
+        [Description("Gets the version number of the XMPP server.")]
         [DefaultValue(null)]
         public string ServerVersion
         {
@@ -929,10 +950,10 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Write just the start tag of the given element.
+        /// Writes just the start tag of the given XML element.
         /// Typically only used for &lt;stream:stream&gt;.
         /// </summary>
-        /// <param name="elem"></param>
+        /// <param name="elem">&lt;stream:stream%gt; XML element.</param>
         public void WriteStartTag(jabber.protocol.stream.Stream elem)
         {
             m_stanzas.WriteStartTag(elem);
@@ -941,7 +962,7 @@ namespace jabber.connection
         /// <summary>
         /// Sends the given packet to the server.
         /// </summary>
-        /// <param name="elem"></param>
+        /// <param name="elem">The XML element to send.</param>
         public virtual void Write(XmlElement elem)
         {
             m_stanzas.Write(elem);
@@ -950,13 +971,14 @@ namespace jabber.connection
         /// <summary>
         /// Sends a raw string.
         /// </summary>
+        /// <param name="str">The string to send.</param>
         public void Write(string str)
         {
             m_stanzas.Write(str);
         }
 
         /// <summary>
-        /// Start connecting to the server.  This is async.
+        /// Starts connecting to the XMPP server.  This is done asyncronously.
         /// </summary>
         public virtual void Connect()
         {
@@ -971,7 +993,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// This is only for components, to listen for connections from the server.
+        /// Listens for connections from the XMPP server and is used for components only.
         /// </summary>
         protected virtual void Accept()
         {
@@ -1005,7 +1027,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Close down the connection, as gracefully as possible.
+        /// Closes down the connection with a clean shutdown.
         /// </summary>
         public virtual void Close()
         {
@@ -1013,9 +1035,9 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Close down the connection
+        /// Closes down the connection.
         /// </summary>
-        /// <param name="clean">true for graceful shutdown</param>
+        /// <param name="clean">True for graceful shutdown</param>
         public virtual void Close(bool clean)
         {
             bool doClose = false;
@@ -1044,8 +1066,8 @@ namespace jabber.connection
         /// <summary>
         /// Invokes the given method on the Invoker, and does some exception handling.
         /// </summary>
-        /// <param name="method"></param>
-        /// <param name="args"></param>
+        /// <param name="method">Method to call on the invoker thread.</param>
+        /// <param name="args">Arguments to pass to the method.</param>
         protected void CheckedInvoke(MulticastDelegate method, object[] args)
         {
             try
@@ -1068,10 +1090,12 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// To call callbacks, do we need to call Invoke to get onto the GUI thread?
-        /// Only if InvokeControl is set, and we aren't on the GUI thread already.
+        /// Determines if a callback needs to be on the GUI thread.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// True if the invoke control is set and the current thread
+        /// is not the GUI thread.
+        /// </returns>
         protected bool InvokeRequired
         {
             get
@@ -1083,10 +1107,10 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Document start received.
+        /// Informs the client that the first tag of the XML document has been received.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="elem"></param>
+        /// <param name="sender">Caller of this function.</param>
+        /// <param name="elem">The XML element that was received.</param>
         protected virtual void OnDocumentStart(object sender, System.Xml.XmlElement elem)
         {
             bool hack = false;
@@ -1144,10 +1168,11 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// We received an element.  Invoke the OnProtocol event.
+        /// Informs the client that an XML element was received and
+        /// invokes the OnProtocol event.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="tag"></param>
+        /// <param name="sender">The object that called this method.</param>
+        /// <param name="tag">XML element that contains the new tag.</param>
         protected virtual void OnElement(object sender, System.Xml.XmlElement tag)
         {
             //Debug.WriteLine(tag.OuterXml);
@@ -1402,8 +1427,9 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Begin the TLS handshake, either client- or server- side.
+        /// Begins the TLS handshake, either client-side or server-side.
         /// </summary>
+        /// <returns>True if StartTLS worked.</returns>
         protected bool StartTLS()
         {
             try
@@ -1424,9 +1450,9 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Begin compressing.
+        /// Begins compressing.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>If True, compression was successful, otherwise False.</returns>
         protected bool StartCompression()
         {
             try
@@ -1444,7 +1470,8 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Get ready for a new stream:stream by starting a new XML document.  Needed after start-tls or compression, for example.
+        /// Gets ready for a new stream:stream by starting a new XML document.
+        /// Needed after Start-TLS or compression, for example.
         /// </summary>
         protected void InitializeStream()
         {
@@ -1459,7 +1486,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Send a stream:stream
+        /// Sends a new XMPP stream header.
         /// </summary>
         protected void SendNewStreamHeader()
         {
@@ -1471,9 +1498,9 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Fire the OnError event.
+        /// Informs the client of XMPP stream errors through the OnError event.
         /// </summary>
-        /// <param name="e"></param>
+        /// <param name="e">Error that occurred.</param>
         protected void FireOnError(Exception e)
         {
             m_reconnect = false;
@@ -1503,7 +1530,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Register a callback, so that if a packet arrives that matches the given xpath expression,
+        /// Registers a callback, so that if a packet arrives that matches the given xpath expression,
         /// the callback fires.  Use <see cref="AddNamespace"/> to add namespace prefixes.
         /// </summary>
         /// <example>jc.AddCallback("self::iq[@type='result']/roster:query", new ProtocolHandler(GotRoster));</example>
@@ -1518,9 +1545,9 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Remove a callback added with <see cref="AddCallback"/>.
+        /// Removes a callback added with <see cref="AddCallback"/>.
         /// </summary>
-        /// <param name="guid"></param>
+        /// <param name="guid">GUID representing the callback to remove.</param>
         public void RemoveCallback(Guid guid)
         {
             int count = 0;
@@ -1537,10 +1564,11 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Add a namespace prefix, for use with callback xpath expressions added with <see cref="AddCallback"/>.
+        /// Adds a namespace prefix, for use with callback xpath expressions added
+        /// with <see cref="AddCallback"/>.
         /// </summary>
-        /// <param name="prefix">The prefix to use</param>
-        /// <param name="uri">The URI associated with the prefix</param>
+        /// <param name="prefix">The prefix to use.</param>
+        /// <param name="uri">The URI associated with the prefix.</param>
         public void AddNamespace(string prefix, string uri)
         {
             m_ns.AddNamespace(prefix, uri);
