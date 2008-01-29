@@ -38,7 +38,6 @@ namespace jabber.connection.sasl
             Debug.Assert(s == null);
             Auth a = new Auth(doc);
             a.Mechanism = MechanismType.EXTERNAL;
-            MemoryStream ms = new MemoryStream();
             return a;
         }
     }
