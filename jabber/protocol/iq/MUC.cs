@@ -421,7 +421,7 @@ namespace jabber.protocol.iq
         /// <summary>
         /// The associated item
         /// </summary>
-        public RoomItem Item
+        public RoomItem RoomItem
         {
             get { return GetOrCreateElement("item", null, typeof(RoomItem)) as RoomItem; }
             set { ReplaceChild(value); }

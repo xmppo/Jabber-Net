@@ -989,7 +989,7 @@ namespace jabber.connection
                 Presence pres = new Presence(m_stream.Document);
                 pres.From = new JID(m_jid.User, m_jid.Server, item.Nick);
                 UserX x = new UserX(m_stream.Document);
-                RoomItem xi = x.Item;
+                RoomItem xi = x.RoomItem;
                 xi.Role = item.Role;
                 xi.Affiliation = item.Affiliation;
                 xi.Nick = item.Nick;
@@ -1354,7 +1354,7 @@ namespace jabber.connection
                 UserX x = (UserX)m_presence["x", URI.MUC_USER];
                 if (x == null)
                     return null;
-                return x.Item;
+                return x.RoomItem;
             }
         }
 
