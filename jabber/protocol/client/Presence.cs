@@ -193,8 +193,9 @@ namespace jabber.protocol.client
         }
 
         /// <summary>
-        /// Compare two presences (from the same bare JID, but from different resources), 
-        /// to determine which is "more available".
+        /// Compare two presences (from the same bare JID, but from
+        /// different resources), to determine which is "more
+        /// available".
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
@@ -212,21 +213,23 @@ namespace jabber.protocol.client
             int fs = IntShow(first.Show);
             int ss = IntShow(second.Show);
 
-            if (fp < sp)
+            if (fs < ss)
                 return true;
-            if (fp > sp)
+            if (fs > ss)
                 return false;
 
-            // TODO: check times.  probably have to ensure that inbound presences get DateTime 
-            // stamped if they don't have one.
+            // TODO: check times.  probably have to ensure that
+            // inbound presences get DateTime stamped if they don't
+            // have one.
 
             // equal show
             return false;
         }
 
         /// <summary>
-        /// Compare two presences (from the same bare JID, but from different resources), 
-        /// to determine which is "more available".
+        /// Compare two presences (from the same bare JID, but from
+        /// different resources), to determine which is "more
+        /// available".
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
