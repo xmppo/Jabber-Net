@@ -66,7 +66,7 @@ namespace jabber.protocol.iq
     /// </summary>
     [SVN(@"$Id$")]
     public class PubSubIQ : jabber.protocol.client.IQ
-	{
+    {
         /// <summary>
         /// Create a pubsub IQ, with a single pubsub query element.
         /// </summary>
@@ -187,7 +187,6 @@ namespace jabber.protocol.iq
                 if (!this.HasChildNodes)
                     return null;
 
-                string[] commands = Enum.GetNames(typeof(PubSubCommandType));
                 foreach (XmlNode child in this.ChildNodes)
                 {
                     if (child is PubSubCommand)
