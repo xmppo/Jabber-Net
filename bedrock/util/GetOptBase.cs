@@ -36,7 +36,7 @@ namespace bedrock.util
         private object    m_obj   = null;
         private string[]  m_args  = null;
         private Hashtable m_flags =
-#if NET20
+#if NET20 || __MonoCS__
             new Hashtable(StringComparer.InvariantCultureIgnoreCase);
 #else
             new Hashtable(CaseInsensitiveHashCodeProvider.Default,
