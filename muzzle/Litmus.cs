@@ -62,8 +62,8 @@ namespace muzzle
         {
             // This call is required by the Windows.Forms Form Designer.
             InitializeComponent();
-            // TODO: Add any initialization after the InitForm call
         }
+
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
