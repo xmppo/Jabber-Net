@@ -463,5 +463,6 @@
     </PreBuildEvent>
     <PostBuildEvent>
     </PostBuildEvent>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
 </Project>

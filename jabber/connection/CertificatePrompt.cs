@@ -12,23 +12,33 @@
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 
+#if NET20 && !__MonoCS__
+    #define UI_OK
+#endif
+
 namespace jabber.connection
 {
     using System;
+    using bedrock.util;
+
+#if UI_OK
     using System.Security.Cryptography.X509Certificates;
     using System.Net.Security;
     using System.Windows.Forms;
     using System.Drawing;
-    using bedrock.util;
+#endif
 
     /// <summary>
     /// Intentionally-ugly form to deal with bad certificates.  Because you don't like it, you should catch XmppStream.OnInvalidCertificate, 
     /// and do something better.
     /// </summary>
     [SVN(@"$Id$")]
-    public class CertificatePrompt : Form
+    public class CertificatePrompt 
+#if UI_OK
+        : Form
+#endif
     {
-#if NET20
+#if UI_OK
         /// <summary>
         /// Required designer variable.
         /// </summary>

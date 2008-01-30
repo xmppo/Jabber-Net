@@ -193,7 +193,7 @@ namespace jabber.connection
             // whitespace and MUST set padding bits to zero). [19]
             HashAlgorithm hasher = GetHasher(m_hash);
             byte[] hash = hasher.ComputeHash(input, 0, input.Length);
-            m_ver = Convert.ToBase64String(hash, Base64FormattingOptions.None);
+            m_ver = Convert.ToBase64String(hash);
         }
 
         /// <summary>

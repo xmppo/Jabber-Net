@@ -11,6 +11,14 @@
  * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
+#if NET20 || __MonoCS__
+#define MODERN
+#define SSL
+#elif !NO_SSL
+#define MENTALIS
+#define SSL
+#endif
+
 using System;
 
 using System.Collections;
@@ -27,9 +35,9 @@ using jabber.protocol;
 using jabber.protocol.stream;
 using jabber.connection.sasl;
 
-#if NET20 || __MonoCS__
+#if MODERN
 using System.Security.Cryptography.X509Certificates;
-#elif !NO_SSL
+#elif MENTALIS
 using Org.Mentalis.Security.Certificates;
 #endif
 
@@ -452,12 +460,14 @@ namespace jabber.connection
         [Category("Stream")]
         public event bedrock.ObjectHandler OnDisconnect;
 
+#if MODERN
         /// <summary>
         /// An invalid cert was received from the other side.  Set this event and return true to 
         /// use the cert anyway.  If the event is not set, an ugly user interface will be displayed.
         /// </summary>
         [Category("Stream")]
         public event System.Net.Security.RemoteCertificateValidationCallback OnInvalidCertificate;
+#endif
 
         /// <summary>
         /// Gets the tracker for sending IQ packets.
@@ -600,7 +610,7 @@ namespace jabber.connection
             set { this[Options.AUTO_COMPRESS] = value; }
         }
 
-#if NET20 || __MonoCS__
+#if MODERN
         /// <summary>
         /// Gets or sets the certificate to be used for the local
         /// side of sockets when SSL is turned on.
@@ -654,7 +664,7 @@ namespace jabber.connection
 #endif
         }
 
-#elif !NO_SSL
+#elif MENTALIS
         /// <summary>
         /// The certificate to be used for the local side of sockets,
         /// with SSL on.
@@ -1214,7 +1224,7 @@ namespace jabber.connection
                     return;
                 }
 
-#if !NO_SSL || NET20 || __MonoCS__
+#if SSL
                 // don't do starttls if we're already on an SSL socket.
                 // bad server setup, but no skin off our teeth, we're already
                 // SSL'd.  Also, start-tls won't work when polling.
@@ -1366,7 +1376,7 @@ namespace jabber.connection
                     return;
                 }
             }
-#if !NO_SSL || NET20 || __MonoCS__
+#if SSL
             else if (State == StartTLSState.Instance)
             {
                 switch (tag.Name)
@@ -1780,13 +1790,13 @@ namespace jabber.connection
                 OnElement(m_stanzas, elem);
         }
 
-#if NET20 || __MonoCS__
+#if MODERN
         private bool ShowCertificatePrompt(object sender,
             System.Security.Cryptography.X509Certificates.X509Certificate certificate,
             System.Security.Cryptography.X509Certificates.X509Chain chain,
             System.Net.Security.SslPolicyErrors sslPolicyErrors)
         {
-#if NET20
+#if NET20 && !__MonoCS__
             CertificatePrompt cp = new CertificatePrompt((X509Certificate2)certificate, chain, sslPolicyErrors);
             return (cp.ShowDialog() == System.Windows.Forms.DialogResult.OK);
 #else
