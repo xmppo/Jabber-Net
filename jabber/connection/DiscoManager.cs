@@ -96,7 +96,6 @@ namespace jabber.connection
         /// Contains the capabilities category, such as server,
         /// client, gateway, directory and so on. 
         /// </summary>
-        /// </summary>
         [Category("Identity")]
         public string Category
         {
@@ -566,7 +565,7 @@ namespace jabber.connection
         /// <summary>
         /// Adds these identities to the node.
         /// </summary>
-        /// <param name="ids">Identities to add.</param>
+        /// <param name="id">Identities to add.</param>
         public void AddIdentity(Ident id)
         {
             if (Identity == null)
