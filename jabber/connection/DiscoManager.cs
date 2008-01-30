@@ -32,34 +32,145 @@ namespace jabber.connection
     /// <summary>
     /// A disco identity.  See XEP-0030.
     /// </summary>
-    public class Ident
+    public class Ident : IComparable
     {
+        private string m_name;
+        private string m_category;
+        private string m_type;
+        private string m_lang;
+
+        /// <summary>
+        /// Create a new identity from its constituent parts.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="category"></param>
+        /// <param name="type"></param>
+        /// <param name="lang"></param>
+        public Ident(string name, string category, string type, string lang)
+        {
+            m_category = (category == null) ? "" : category;
+            m_name = (name == null) ? "" : name;
+            m_type = (type == null) ? "" : type;
+            m_lang = (lang == null) ? "" : lang;
+        }
+
+        /// <summary>
+        /// Create a new, empty identity
+        /// </summary>
+        public Ident() : this("", "", "", "")
+        {
+        }
+
+        /// <summary>
+        /// Create an identity from protocol
+        /// </summary>
+        /// <param name="id"></param>
+        public Ident(DiscoIdentity id) : this(id.Named, id.Category, id.Type, id.Lang)
+        {
+        }
+
+        /// <summary>
+        /// Retrieves the string representation of the Ident (category/type/lang/name).
+        /// </summary>
+        /// <returns></returns>
+        [Category("Capabilities")]
+        public string Key
+        {
+            get
+            {
+                return string.Format("{0}/{1}/{2}/{3}", m_category, m_type, m_lang, m_name);
+            }
+        }
+
         /// <summary>
         /// Contains the description of the entity.
         /// </summary>
-        public string name;
+        [Category("Text")]
+        public string Name
+        {
+            get { return m_name; }
+            set { m_name = value; }
+        }
+
         /// <summary>
         /// Contains the capabilities category, such as server,
         /// client, gateway, directory and so on. 
         /// </summary>
-        public string category;
+        /// </summary>
+        [Category("Identity")]
+        public string Category
+        {
+            get { return m_category; }
+            set { m_category = value; }
+        }
+
         /// <summary>
         /// Contains the entity type.
         /// </summary>
-        public string type;
+        [Category("Identity")]
+        public string Type
+        {
+            get { return m_type; }
+            set { m_type = value; }
+        }
 
         /// <summary>
-        /// Retrieves the string representation of the Ident (category/type).
+        /// xml:lang language of this identity
+        /// </summary>
+        [Category("Text")]
+        public string Lang
+        {
+            get { return m_lang; }
+            set { m_lang = value; }
+        }
+
+        /// <summary>
+        /// Does this identity have the given category and type?
+        /// </summary>
+        /// <param name="category">The category to compare</param>
+        /// <param name="type">The type to compare</param>
+        /// <returns></returns>
+        public bool Matches(string category, string type)
+        {
+            return (m_category == category) && (m_type == type);
+        }
+
+        #region IComparable Members
+        /// <summary>
+        /// Compare to another identity, by comparing the string-ified versions
+        /// of each.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public int CompareTo(object obj)
+        {
+            if ((object)this == obj)
+                return 0;
+            Ident other = obj as Ident;
+            if (other == null)
+                return 1;
+            return Key.CompareTo(other.Key);
+        }
+        #endregion
+
+        /// <summary>
+        /// Is this identity equal to that one?  If two are the same except for
+        /// language, they are different by this method.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj)
+        {
+            return (this.CompareTo(obj) == 0);
+        }
+
+        /// <summary>
+        /// Hash over the string version of the identity.
         /// </summary>
         /// <returns></returns>
-        public string GetKey()
+        public override int GetHashCode()
         {
-            string key = "";
-            if (category != null)
-                key = category;
-            if (type != null)
-                key = key + "/" + type;
-            return key;
+            return Key.GetHashCode();
         }
     }
 
@@ -93,6 +204,7 @@ namespace jabber.connection
         public JID JID
         {
             get { return m_jid; }
+            set { m_jid = value; }
         }
 
         /// <summary>
@@ -102,10 +214,11 @@ namespace jabber.connection
         public string Node
         {
             get { return m_node; }
+            set { m_node = value; }
         }
 
         /// <summary>
-        /// Get a hash key that combines the jid and the node.
+        /// Gets the JID/Node key for Hashing.
         /// </summary>
         /// <param name="jid"></param>
         /// <param name="node"></param>
@@ -235,8 +348,8 @@ namespace jabber.connection
                 {
                     foreach (Ident id in Identity)
                     {
-                        if ((id.name != null) && (id.name != ""))
-                            m_name = id.name;
+                        if ((id.Name != null) && (id.Name != ""))
+                            m_name = id.Name;
                     }
                     return m_name;
                 }
@@ -276,11 +389,7 @@ namespace jabber.connection
                 if (Features == null)
                     return new string[0];
                 string[] names = new string[Features.Count];
-                int count = 0;
-                foreach (string s in Features)
-                {
-                    names[count++] = s;
-                }
+                Features.CopyTo(names, 0);
                 return names;
             }
         }
@@ -299,7 +408,7 @@ namespace jabber.connection
                 int count = 0;
                 foreach (Ident i in Identity)
                 {
-                    names[count++] = i.GetKey();
+                    names[count++] = i.Key;
                 }
                 return names;
             }
@@ -332,7 +441,7 @@ namespace jabber.connection
                 return false;
             foreach (Ident i in Identity)
             {
-                if ((i.category == category) && (i.type == type))
+                if (i.Matches(category, type))
                     return true;
             }
             return false;
@@ -411,6 +520,19 @@ namespace jabber.connection
         }
 
         /// <summary>
+        /// Add a single feature to the node.  
+        /// Does not fire OnFeatures, since this should mostly be used by 
+        /// things that are not querying externally.
+        /// </summary>
+        /// <param name="feature"></param>
+        public void AddFeature(string feature)
+        {
+            if (Features == null)
+                Features = new Set();
+            Features.Add(feature);
+        }
+
+        /// <summary>
         /// Adds these features to the node. Calls the OnFeatures event.
         /// </summary>
         /// <param name="features">Features to add to this node.</param>
@@ -419,8 +541,12 @@ namespace jabber.connection
             if (Features == null)
                 Features = new Set();
 
-            foreach (DiscoFeature f in features)
-                Features.Add(f.Var);
+            // features may be null when used from outside.
+            if (features != null)
+            {
+                foreach (DiscoFeature f in features)
+                    Features.Add(f.Var);
+            }
 
             if (OnFeatures != null)
             {
@@ -430,7 +556,27 @@ namespace jabber.connection
         }
 
         /// <summary>
+        /// Clear out any features already in the list.
+        /// </summary>
+        public void ClearFeatures()
+        {
+            Features = null;
+        }
+
+        /// <summary>
         /// Adds these identities to the node.
+        /// </summary>
+        /// <param name="ids">Identities to add.</param>
+        public void AddIdentity(Ident id)
+        {
+            if (Identity == null)
+                Identity = new Set();
+            Identity.Add(id);
+        }
+
+        /// <summary>
+        /// Add these identities to the node.
+        /// Fires OnIdentities
         /// </summary>
         /// <param name="ids">Identities to add.</param>
         public void AddIdentities(DiscoIdentity[] ids)
@@ -438,13 +584,11 @@ namespace jabber.connection
             if (Identity == null)
                 Identity = new Set();
 
-            foreach (DiscoIdentity id in ids)
+            // ids may be null when used from outside.
+            if (ids != null)
             {
-                Ident i = new Ident();
-                i.name = id.Named;
-                i.category = id.Category;
-                i.type = id.Type;
-                Identity.Add(i);
+                foreach (DiscoIdentity id in ids)
+                    Identity.Add(new Ident(id));
             }
 
             if (OnIdentities != null)
@@ -452,6 +596,14 @@ namespace jabber.connection
                 OnIdentities(this);
                 OnIdentities = null;
             }
+        }
+
+        /// <summary>
+        /// Clear out any identities already in the list.
+        /// </summary>
+        public void ClearIdentity()
+        {
+            Identity = null;
         }
 
         internal DiscoNode AddItem(DiscoItem di)
@@ -472,8 +624,12 @@ namespace jabber.connection
             if (Children == null)
                 Children = new Set();
 
-            foreach (DiscoItem di in items)
-                AddItem(di);
+            // items may be null when used from outside.
+            if (items != null)
+            {
+                foreach (DiscoItem di in items)
+                    AddItem(di);
+            }
 
             if (OnItems != null)
             {
@@ -532,7 +688,6 @@ namespace jabber.connection
         }
 
         #region IEnumerable Members
-
         /// <summary>
         /// Gets an enumerator across all items.
         /// </summary>
@@ -541,7 +696,6 @@ namespace jabber.connection
         {
             return Children.GetEnumerator();
         }
-
         #endregion
     }
 
@@ -764,17 +918,17 @@ namespace jabber.connection
                     child.Identity = new Set();
 
                 Ident id = new Ident();
-                id.name = agent.Description;
+                id.Name = agent.Description;
                 switch (agent.Service)
                 {
                 case "groupchat":
-                    id.category = "conference";
-                    id.type = "text";
+                    id.Category = "conference";
+                    id.Type = "text";
                     child.Identity.Add(id);
                     break;
                 case "jud":
-                    id.category = "directory";
-                    id.type = "user";
+                    id.Category = "directory";
+                    id.Type = "user";
                     child.Identity.Add(id);
                     break;
                 case null:
@@ -782,8 +936,8 @@ namespace jabber.connection
                     break;
                 default:
                     // guess this is a transport
-                    id.category = "gateway";
-                    id.type = agent.Service;
+                    id.Category = "gateway";
+                    id.Type = agent.Service;
                     child.Identity.Add(id);
                     break;
                 }
@@ -796,11 +950,11 @@ namespace jabber.connection
                     child.Features.Add(URI.MUC);
                 if (agent.Transport)
                 {
-                    if (id.category != "gateway")
+                    if (id.Category != "gateway")
                     {
                         Ident tid = new Ident();
-                        tid.name = id.name;
-                        tid.category = "gateway";
+                        tid.Name = id.Name;
+                        tid.Category = "gateway";
                         child.Identity.Add(tid);
                     }
                 }
@@ -856,7 +1010,7 @@ namespace jabber.connection
         /// back on the handler. If the information is in the cache, handler gets
         /// called right now.
         /// </summary>
-        /// <param name="node">PubSub node.</param>
+        /// <param name="node">Disco node to search.</param>
         /// <param name="handler">Callback that gets called with the items.</param>
         public void BeginGetItems(DiscoNode node, DiscoNodeHandler handler)
         {
@@ -878,8 +1032,8 @@ namespace jabber.connection
         /// back on the handler. If the information is in the cache, handler gets
         /// called right now.
         /// </summary>
-        /// <param name="jid">JID of PubSub handler.</param>
-        /// <param name="node">Node on the PubSub handler to interact with.</param>
+        /// <param name="jid">JID of Service to query.</param>
+        /// <param name="node">Node on the service to interact with.</param>
         /// <param name="handler">Callback that gets called with the items.</param>
         public void BeginGetItems(JID jid, string node, DiscoNodeHandler handler)
         {

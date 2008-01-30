@@ -64,6 +64,27 @@ namespace jabber.protocol
             base("", localName, namespaceURI, doc)
         {
         }
+
+        /// <summary>
+        /// The xml:lang of this element.
+        /// </summary>
+        public string Lang
+        {
+            get 
+            { 
+                if (!HasAttribute("lang", URI.XML))
+                    return null;
+                return GetAttribute("lang", URI.XML);
+            }
+            set
+            {
+                if ((value == null) || (value == ""))
+                    RemoveAttribute("lang", URI.XML);
+                else
+                    SetAttribute("lang", URI.XML, value);
+            }
+        }
+
         /// <summary>
         /// Add a child element.  The element can be from a different document.
         /// </summary>

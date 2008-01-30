@@ -93,11 +93,10 @@ namespace Example
             jc.AutoStartTLS = false;  // Mentalis stopped working with XCP 5
 #endif
             services.ImageList = roster.ImageList;
-            cm.Version = System.Reflection.Assembly.GetCallingAssembly().GetName().Version.ToString();
-            cm.BaseFeatures.Add(URI.TIME);
-            cm.BaseFeatures.Add(URI.VERSION);
-            cm.BaseFeatures.Add(URI.LAST);
-            cm.BaseFeatures.Add(URI.DISCO_INFO);
+            cm.AddFeature(URI.TIME);
+            cm.AddFeature(URI.VERSION);
+            cm.AddFeature(URI.LAST);
+            cm.AddFeature(URI.DISCO_INFO);
 
             tabControl1.TabPages.Remove(tpServices);
             tabControl1.TabPages.Remove(tpDebug);
@@ -142,6 +141,7 @@ namespace Example
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            jabber.connection.Ident ident1 = new jabber.connection.Ident();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.sb = new System.Windows.Forms.StatusBar();
             this.pnlCon = new System.Windows.Forms.StatusBarPanel();
@@ -164,6 +164,7 @@ namespace Example
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.connectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.joinConferenceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -182,7 +183,6 @@ namespace Example
             this.psm = new jabber.connection.PubSubManager(this.components);
             this.idler = new bedrock.util.IdleTime();
             this.muc = new jabber.connection.ConferenceManager(this.components);
-            this.joinConferenceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pnlCon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pnlSSL)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pnlPresence)).BeginInit();
@@ -211,7 +211,7 @@ namespace Example
             this.pnlCon.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Spring;
             this.pnlCon.Name = "pnlCon";
             this.pnlCon.Text = "Click on \"Offline\", and select a presence to log in.";
-            this.pnlCon.Width = 538;
+            this.pnlCon.Width = 539;
             // 
             // pnlSSL
             // 
@@ -275,19 +275,20 @@ namespace Example
             this.jc.AutoStartCompression = true;
             this.jc.AutoStartTLS = true;
             this.jc.InvokeControl = this;
+            this.jc.KeepAlive = 30F;
             this.jc.LocalCertificate = null;
             this.jc.Password = null;
             this.jc.User = null;
-            this.jc.OnMessage += new jabber.client.MessageHandler(this.jc_OnMessage);
-            this.jc.OnConnect += new jabber.connection.StanzaStreamHandler(this.jc_OnConnect);
-            this.jc.OnAuthenticate += new bedrock.ObjectHandler(this.jc_OnAuthenticate);
-            this.jc.OnAuthError += new jabber.protocol.ProtocolHandler(this.jc_OnAuthError);
-            this.jc.OnDisconnect += new bedrock.ObjectHandler(this.jc_OnDisconnect);
-            this.jc.OnStreamError += new jabber.protocol.ProtocolHandler(this.jc_OnStreamError);
-            this.jc.OnError += new bedrock.ExceptionHandler(this.jc_OnError);
             this.jc.OnRegisterInfo += new jabber.client.RegisterInfoHandler(this.jc_OnRegisterInfo);
-            this.jc.OnRegistered += new jabber.client.IQHandler(this.jc_OnRegistered);
+            this.jc.OnError += new bedrock.ExceptionHandler(this.jc_OnError);
             this.jc.OnIQ += new jabber.client.IQHandler(this.jc_OnIQ);
+            this.jc.OnAuthenticate += new bedrock.ObjectHandler(this.jc_OnAuthenticate);
+            this.jc.OnStreamError += new jabber.protocol.ProtocolHandler(this.jc_OnStreamError);
+            this.jc.OnConnect += new jabber.connection.StanzaStreamHandler(this.jc_OnConnect);
+            this.jc.OnDisconnect += new bedrock.ObjectHandler(this.jc_OnDisconnect);
+            this.jc.OnAuthError += new jabber.protocol.ProtocolHandler(this.jc_OnAuthError);
+            this.jc.OnRegistered += new jabber.client.IQHandler(this.jc_OnRegistered);
+            this.jc.OnMessage += new jabber.client.MessageHandler(this.jc_OnMessage);
             // 
             // pm
             // 
@@ -298,8 +299,8 @@ namespace Example
             this.rm.AutoAllow = jabber.client.AutoSubscriptionHanding.AllowIfSubscribed;
             this.rm.AutoSubscribe = true;
             this.rm.Stream = this.jc;
-            this.rm.OnSubscription += new jabber.client.SubscriptionHandler(this.rm_OnSubscription);
             this.rm.OnRosterEnd += new bedrock.ObjectHandler(this.rm_OnRosterEnd);
+            this.rm.OnSubscription += new jabber.client.SubscriptionHandler(this.rm_OnSubscription);
             this.rm.OnUnsubscription += new jabber.client.UnsubscriptionHandler(this.rm_OnUnsubscription);
             // 
             // tpServices
@@ -392,7 +393,6 @@ namespace Example
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.connectToolStripMenuItem,
             this.joinConferenceToolStripMenuItem,
-            this.joinConferenceToolStripMenuItem,
             this.toolStripMenuItem1,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
@@ -403,20 +403,28 @@ namespace Example
             // 
             this.connectToolStripMenuItem.Name = "connectToolStripMenuItem";
             this.connectToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F9;
-            this.connectToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.connectToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
             this.connectToolStripMenuItem.Text = "&Connect";
             this.connectToolStripMenuItem.Click += new System.EventHandler(this.connectToolStripMenuItem_Click);
+            // 
+            // joinConferenceToolStripMenuItem
+            // 
+            this.joinConferenceToolStripMenuItem.Name = "joinConferenceToolStripMenuItem";
+            this.joinConferenceToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.J)));
+            this.joinConferenceToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
+            this.joinConferenceToolStripMenuItem.Text = "&Join Conference";
+            this.joinConferenceToolStripMenuItem.Click += new System.EventHandler(this.joinConferenceToolStripMenuItem_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(197, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -433,7 +441,7 @@ namespace Example
             // 
             this.servicesToolStripMenuItem.Name = "servicesToolStripMenuItem";
             this.servicesToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F8;
-            this.servicesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.servicesToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.servicesToolStripMenuItem.Text = "&Services";
             this.servicesToolStripMenuItem.Click += new System.EventHandler(this.servicesToolStripMenuItem_Click);
             // 
@@ -441,7 +449,7 @@ namespace Example
             // 
             this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
             this.debugToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F12;
-            this.debugToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.debugToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.debugToolStripMenuItem.Text = "&Debug";
             this.debugToolStripMenuItem.Click += new System.EventHandler(this.debugToolStripMenuItem_Click);
             // 
@@ -495,35 +503,6 @@ namespace Example
             this.closeTabToolStripMenuItem.Text = "&Close Tab";
             this.closeTabToolStripMenuItem.Click += new System.EventHandler(this.closeTabToolStripMenuItem_Click);
             // 
-            // cm
-            // 
-            this.cm.Node = "http://cursive.net/clients/csharp-example";
-            this.cm.Stream = this.jc;
-            // 
-            // psm
-            // 
-            this.psm.Stream = this.jc;
-            // 
-            // idler
-            // 
-            this.idler.InvokeControl = this;
-            this.idler.OnIdle += new bedrock.util.SpanEventHandler(this.idler_OnIdle);
-            this.idler.OnUnIdle += new bedrock.util.SpanEventHandler(this.idler_OnUnIdle);
-            // 
-            // muc
-            // 
-            this.muc.Stream = this.jc;
-            this.muc.OnPresenceError += new RoomPresenceHandler(muc_OnPresenceError);
-            this.muc.OnRoomConfig += new ConfigureRoom(muc_OnRoomConfig);
-            // 
-            // joinConferenceToolStripMenuItem
-            // 
-            this.joinConferenceToolStripMenuItem.Name = "joinConferenceToolStripMenuItem";
-            this.joinConferenceToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.J)));
-            this.joinConferenceToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
-            this.joinConferenceToolStripMenuItem.Text = "&Join Conference";
-            this.joinConferenceToolStripMenuItem.Click += new System.EventHandler(this.joinConferenceToolStripMenuItem_Click);
-            // 
             // pubSubToolStripMenuItem
             // 
             this.pubSubToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -551,6 +530,12 @@ namespace Example
             // 
             // cm
             // 
+            ident1.Category = "client";
+            ident1.Lang = "en";
+            ident1.Name = "Jabber-Net Test Client";
+            ident1.Type = "pc";
+            this.cm.Identities = new jabber.connection.Ident[] {
+        ident1};
             this.cm.Node = "http://cursive.net/clients/csharp-example";
             this.cm.Stream = this.jc;
             // 
@@ -563,6 +548,12 @@ namespace Example
             this.idler.InvokeControl = this;
             this.idler.OnIdle += new bedrock.util.SpanEventHandler(this.idler_OnIdle);
             this.idler.OnUnIdle += new bedrock.util.SpanEventHandler(this.idler_OnUnIdle);
+            // 
+            // muc
+            // 
+            this.muc.Stream = this.jc;
+            this.muc.OnRoomConfig += new jabber.connection.ConfigureRoom(this.muc_OnRoomConfig);
+            this.muc.OnPresenceError += new jabber.connection.RoomPresenceHandler(this.muc_OnPresenceError);
             // 
             // MainForm
             // 

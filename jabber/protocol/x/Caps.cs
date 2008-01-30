@@ -12,7 +12,7 @@ namespace jabber.protocol.x
     [SVN(@"$Id$")]
     public class Caps : Element
     {
-        private static readonly char[] SPLIT = new char[] { ' ' };
+        private static readonly char[] SPLIT = " ".ToCharArray();
 
         /// <summary>
         ///
@@ -50,6 +50,15 @@ namespace jabber.protocol.x
         {
             get { return GetAttribute("ver"); }
             set { SetAttribute("ver", value); }
+        }
+
+        /// <summary>
+        /// The hash type being used, or null for pre-v1.5 of XEP-115.
+        /// </summary>
+        public string Hash
+        {
+            get { return GetAttribute("hash"); }
+            set { SetAttribute("hash", value); }
         }
 
         /// <summary>

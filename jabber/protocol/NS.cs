@@ -28,8 +28,8 @@ namespace jabber.protocol
         public NS()
         {
             PushScope();
-            AddNamespace("xmlns", "http://www.w3.org/2000/xmlns/");
-            AddNamespace("xml", "http://www.w3.org/XML/1998/namespace");
+            AddNamespace("xmlns", URI.XMLNS);
+            AddNamespace("xml", URI.XML);
         }
 
         /// <summary>

@@ -329,17 +329,23 @@ namespace jabber.protocol.iq
             get { return GetAttribute("node"); }
             set { SetAttribute("node", value); }
         }
+
         /// <summary>
         /// Add an identity
         /// </summary>
+        /// <param name="category">The category of the identity.  Required.</param>
+        /// <param name="discoType">The sub-type</param>
+        /// <param name="name">A human-readable string</param>
+        /// <param name="language">The xml:lang, or null to take the requestor's default</param>
         /// <returns></returns>
-        public DiscoIdentity AddIdentity(string category, string discoType, string name)
+        public DiscoIdentity AddIdentity(string category, string discoType, string name, string language)
         {
             DiscoIdentity i = new DiscoIdentity(this.OwnerDocument);
             AddChild(i);
             i.Category = category;
             i.Type = discoType;
             i.Named = name;
+            i.Lang = language;
             return i;
         }
 

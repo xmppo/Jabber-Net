@@ -25,6 +25,14 @@ namespace jabber.protocol
     public class URI
     {
         /// <summary>
+        /// Namespace for the prefix "xmlns".
+        /// </summary>
+        public const string XMLNS = "http://www.w3.org/2000/xmlns/";
+        /// <summary>
+        /// Namespace for the prefix "xml", like xml:lang.
+        /// </summary>
+        public const string XML = "http://www.w3.org/XML/1998/namespace";
+        /// <summary>
         /// XHTML namespace, for &lt;body&gt; element
         /// </summary>
         public const string XHTML  = "http://www.w3.org/1999/xhtml";
