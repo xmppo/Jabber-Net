@@ -115,7 +115,7 @@ namespace test.jabber.connection
                 LastCall.Callback((Func<XmlElement, bool>)
                     delegate(XmlElement elem)
                     {
-                        onProtocol.Raise(new object[] { null, CreateJoinResponsePacket(elem) });
+                        onProtocol.Raise(new object[] { null, CreateJoinNeedConfigResponsePacket(elem) });
                         return true;
                     });
 
@@ -133,6 +133,7 @@ namespace test.jabber.connection
             {
                 Room testRoom = cm.GetRoom(jid);
                 testRoom.DefaultConfig = defaultConfig;
+                testRoom.OnRoomConfig += delegate { return null; };
                 testRoom.Join();
             }
         }
@@ -168,7 +169,19 @@ namespace test.jabber.connection
             LastCall.Callback(func);
         }
 
+        private XmlElement CreateJoinNeedConfigResponsePacket(XmlElement elem)
+        {
+            RoomStatus[] statuses = new RoomStatus[] { RoomStatus.CREATED, RoomStatus.SELF };
+
+            return CreateJoinPresence(elem, statuses);
+        }
+
         private XmlElement CreateJoinResponsePacket(XmlElement elem)
+        {
+            return CreateJoinPresence(elem, new RoomStatus[] { RoomStatus.SELF });
+        }
+
+        private XmlElement CreateJoinPresence(XmlElement elem, RoomStatus[] statuses)
         {
             XmlDocument myDoc = new XmlDocument();
 
@@ -179,7 +192,7 @@ namespace test.jabber.connection
             UserX xElem = new UserX(myDoc);
             presence.AppendChild(xElem);
 
-            xElem.Status = new RoomStatus[] { RoomStatus.CREATED, RoomStatus.SELF };
+            xElem.Status = statuses;
 
             return presence;
         }
@@ -192,6 +205,19 @@ namespace test.jabber.connection
             using (mocks.Record())
             {
                 Expect.Call(stream.Document).Return(doc);
+
+                stream.OnProtocol += null;
+                IEventRaiser onProtocol = LastCall.IgnoreArguments().GetEventRaiser();
+
+                stream.Write((XmlElement)null);
+                LastCall.Callback((Func<XmlElement, bool>)
+                    delegate(XmlElement elem)
+                    {
+                        onProtocol.Raise(new object[] { null, CreateJoinResponsePacket(elem) });
+                        return true;
+                    });
+
+                Expect.Call(stream.Document).Return(doc);
                 stream.Write((XmlElement)null);
                 LastCall.Callback((Func<XmlElement, bool>)
                     delegate(XmlElement elem)
@@ -200,13 +226,12 @@ namespace test.jabber.connection
                         string original = elem.OuterXml;
                         return original.Replace(" ", "") == GetRoomMessage(id).Replace(" ", "");
                     });
-                stream.OnProtocol += null;
-                LastCall.IgnoreArguments();
             }
 
             using (mocks.Playback())
             {
                 Room testRoom = cm.GetRoom(jid);
+                testRoom.Join();
                 testRoom.PublicMessage(MESSAGE);
             }
         }
@@ -219,6 +244,19 @@ namespace test.jabber.connection
             using (mocks.Record())
             {
                 Expect.Call(stream.Document).Return(doc);
+
+                stream.OnProtocol += null;
+                IEventRaiser onProtocol = LastCall.IgnoreArguments().GetEventRaiser();
+
+                stream.Write((XmlElement)null);
+                LastCall.Callback((Func<XmlElement, bool>)
+                    delegate(XmlElement elem)
+                    {
+                        onProtocol.Raise(new object[] { null, CreateJoinResponsePacket(elem) });
+                        return true;
+                    });
+
+                Expect.Call(stream.Document).Return(doc);
                 stream.Write((XmlElement)null);
                 LastCall.Callback((Func<XmlElement, bool>)
                     delegate(XmlElement elem)
@@ -228,13 +266,12 @@ namespace test.jabber.connection
                         return original.Replace(" ", "") ==
                             GetRoomPrivateMessage(id).Replace(" ", "");
                     });
-                stream.OnProtocol += null;
-                LastCall.IgnoreArguments();
             }
 
             using (mocks.Playback())
             {
                 Room testRoom = cm.GetRoom(jid);
+                testRoom.Join();
                 testRoom.PrivateMessage(TO_NICK, MESSAGE);
             }
         }
@@ -264,6 +301,51 @@ namespace test.jabber.connection
                 Room testRoom = cm.GetRoom(jid);
                 testRoom.Leave(REASON);
             }
+        }
+
+        [Test]
+        public void RoomFinishLeaveTest()
+        {
+            using (mocks.Record())
+            {
+                Expect.Call(stream.Document).Return(doc);
+
+                stream.OnProtocol += null;
+                IEventRaiser onProtocol = LastCall.IgnoreArguments().GetEventRaiser();
+
+                stream.Write((XmlElement)null);
+                LastCall.Callback((Func<XmlElement, bool>)
+                    delegate(XmlElement elem)
+                    {
+                        onProtocol.Raise(new object[] { null, CreateUnavailPacket(elem) });
+                        return true;
+                    });
+            }
+
+            using (mocks.Playback())
+            {
+                Room testRoom = cm.GetRoom(jid);
+                testRoom.Leave(REASON);
+            }
+
+            Assert.IsFalse(cm.HasRoom(jid));
+        }
+
+        private XmlElement CreateUnavailPacket(XmlElement elem)
+        {
+            XmlDocument myDoc = new XmlDocument();
+
+            RoomPresence presence = new RoomPresence(myDoc, jid);
+            presence.RemoveAll();
+            presence.Type = PresenceType.unavailable;
+            presence.From = elem.GetAttribute("to");
+
+            UserX xElem = new UserX(myDoc);
+            presence.AppendChild(xElem);
+
+            xElem.Status = new RoomStatus[] { RoomStatus.SELF };
+
+            return presence;
         }
 
         private string GetLeavePresence()
