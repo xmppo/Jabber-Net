@@ -22,7 +22,7 @@ using System.Collections;
 namespace jabber.connection
 {
     /// <summary>
-    /// An implementation of XEP-70, I suppose.F
+    /// Manages HTTP Requests via XMPP (XEP-70).
     /// </summary>
     public class HttpUploader
     {
@@ -30,13 +30,6 @@ namespace jabber.connection
         /// Notifies the client that an upload has finished.
         /// </summary>
         public event bedrock.ObjectHandler OnUpload;
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public HttpUploader()
-        {
-        }
 
         private void ResponseCallback(IAsyncResult result)
         {
@@ -47,11 +40,12 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Upload a file to a given URL, doing XEP-70 authentication.
+        /// Uploads a file to a given URL and verifies the HTTP request
+        /// through the XMPP server (XEP-0070).
         /// </summary>
-        /// <param name="uri"></param>
-        /// <param name="jid"></param>
-        /// <param name="filename"></param>
+        /// <param name="uri">URI to send the file to.</param>
+        /// <param name="jid">JID to send as.</param>
+        /// <param name="filename">File to send.</param>
         public void Upload(string uri, string jid, string filename)
         {
             //try

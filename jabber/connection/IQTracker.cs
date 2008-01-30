@@ -24,19 +24,19 @@ using jabber.protocol.client;
 namespace jabber.connection
 {
     /// <summary>
-    /// Received a response to an IQ request.
+    /// Informs the client that a response to an IQ request has been received.
     /// </summary>
     public delegate void IqCB(object sender, IQ iq, object data);
 
     /// <summary>
-    /// An IQ has timed out.
+    /// Informs the client that an IQ has timed out.
     /// </summary>
     public class IQTimeoutException : Exception
     {
         /// <summary>
-        /// Create a timeout exception
+        /// Creates a new timeout exception.
         /// </summary>
-        /// <param name="message"></param>
+        /// <param name="message">Description of the error.</param>
         public IQTimeoutException(string message)
             : base(message)
         {
@@ -44,7 +44,7 @@ namespace jabber.connection
     }
 
     ///<summary>
-    /// Interface for tracking an IQ packet.
+    /// Represents the interface for tracking an IQ packet.
     ///</summary>
     public interface IIQTracker
     {
@@ -66,7 +66,7 @@ namespace jabber.connection
     }
 
     /// <summary>
-    /// Track outstanding IQ requests.
+    /// Tracks outstanding IQ requests.
     /// </summary>
     [SVN(@"$Id$")]
     public class IQTracker: IIQTracker

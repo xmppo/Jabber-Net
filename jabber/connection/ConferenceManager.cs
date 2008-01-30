@@ -76,7 +76,7 @@ namespace jabber.connection
         private Hashtable m_rooms = new Hashtable();
 
         /// <summary>
-        /// Creates a manager.
+        /// Creates a new conference manager.
         /// </summary>
         public ConferenceManager()
         {
@@ -84,9 +84,9 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Create a manager in a container
+        /// Creates a new conference manager in a container
         /// </summary>
-        /// <param name="container"></param>
+        /// <param name="container">Parent container.</param>
         public ConferenceManager(IContainer container)
 		{
 			container.Add(this);
@@ -221,10 +221,11 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Is this room being managed by this manager?
+        /// Determines whether or not the conference room is being managed
+        /// by this ConferenceManager.
         /// </summary>
-        /// <param name="roomAndNick"></param>
-        /// <returns></returns>
+        /// <param name="roomAndNick">Room to look for.</param>
+        /// <returns>True if the room is being managed.</returns>
         public bool HasRoom(JID roomAndNick)
         {
             return m_rooms.ContainsKey(roomAndNick);
@@ -317,7 +318,7 @@ namespace jabber.connection
 	}
 
     /// <summary>
-    /// A multi-user chat room.  See XEP-0045 (http://www.xmpp.org/extensions/xep-0045.html).
+    /// Manages a multi-user conference room.  See XEP-0045 (http://www.xmpp.org/extensions/xep-0045.html).
     /// </summary>
     public class Room
     {

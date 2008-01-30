@@ -119,9 +119,11 @@ namespace bedrock.collections
         }
 
         /// <summary>
-        /// Return a new collection that contains all of the items that
+        /// Returns a new collection that contains all of the items that
         /// are in this set or the other set.
         /// </summary>
+        /// <param name="other">Second set to combine.</param>
+        /// <returns>Combined set.</returns>
         public bedrock.collections.ISet Union(bedrock.collections.ISet other)
         {
             throw new NotImplementedException();

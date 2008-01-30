@@ -25,7 +25,7 @@ using jabber.protocol.iq;
 namespace jabber.connection
 {
     /// <summary>
-    /// Manage a set of PubSub (<a href="http://www.xmpp.org/extensions/xep-0060.html">XEP-60</a>) subscriptions.
+    /// Manages a set of publish-subscribe (<a href="http://www.xmpp.org/extensions/xep-0060.html">XEP-60</a>) subscriptions.
     /// The goal is to have a list of jid/node combinations, each of which is a singleton.
     /// <example>
     /// PubSubNode node = ps.GetNode("infobroker.corp.jabber.com", "test/foo", 10);
@@ -64,9 +64,9 @@ namespace jabber.connection
 		}
 
         /// <summary> 
-        /// Clean up any resources being used.
+        /// Performs tasks associated with freeing, releasing, or resetting resources.
         /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        /// <param name="disposing">True if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -145,14 +145,12 @@ namespace jabber.connection
 	}
 
     /// <summary>
-    /// Notification about a PubSub item.
+    /// Notifies the client about a publish-subscribe item.
     /// </summary>
-    /// <param name="node"></param>
-    /// <param name="item"></param>
     public delegate void ItemCB(PubSubNode node, PubSubItem item);
 
     /// <summary>
-    /// A list of items with a maximum size.  Only one item with a given id will be in the 
+    /// Manages a list of items with a maximum size.  Only one item with a given ID will be in the 
     /// list at a given time.
     /// </summary>
     [SVN(@"$Id$")]
@@ -273,32 +271,32 @@ namespace jabber.connection
 
 
     /// <summary>
-    /// Different possible operations on a pubsub node.
+    /// Contains the different possible operations on a publish-subscribe node.
     /// </summary>
     public enum Op
     {
         /// <summary>
-        /// Create a node
+        /// Creates a node
         /// </summary>
         CREATE,
         /// <summary>
-        /// Subscribe to a node
+        /// Subscribes to a node
         /// </summary>
         SUBSCRIBE,
         /// <summary>
-        /// Get the current items in the node
+        /// Gets the current items in the node
         /// </summary>
         ITEMS,
         /// <summary>
-        /// Delete a node
+        /// Deletes a node
         /// </summary>
         DELETE,
         /// <summary>
-        /// Delete an item from the node
+        /// Deletes an item from the node
         /// </summary>
         DELETE_ITEM,
         /// <summary>
-        /// Publish an item to a node
+        /// Publishes an item to a node
         /// </summary>
         PUBLISH_ITEM,
     }
@@ -365,7 +363,7 @@ namespace jabber.connection
         private ItemList    m_items = null;
 
         ///<summary>
-        /// The component that handles PubSub requests.
+        /// Retrieves the component that handles publish-subscribe requests.
         ///</summary>
         public JID Jid
         {
@@ -373,7 +371,7 @@ namespace jabber.connection
         }
 
         ///<summary>
-        /// The node to interact with as defined by XEP-60.
+        /// Retrieves the node to interact with as defined by XEP-60.
         ///</summary>
         public string Node
         {
@@ -405,7 +403,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Is this node fully initialized?
+        /// Determines whether or not this node is fully initialized.
         /// </summary>
         public bool IsInitialized
         {
@@ -413,14 +411,15 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// An item has been added to the node, either on initial get or by notification.
-        /// Note: this may fire for the same item more than once.
+        /// Informs the client that an item has been added to the node,
+        /// either on initial get or by notification.
+        /// NOTE: This may fire for the same item more than once.
         /// </summary>
         public event ItemCB OnItemAdd;
 
         /// <summary>
-        /// An item has been deleted from the node, either by notification or the 
-        /// list being full.
+        /// Informs the client that an item has been deleted from the node,
+        /// either by notification or the list being full.
         /// </summary>
         public event ItemCB OnItemRemove;
 
@@ -739,10 +738,10 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Return the contents of the specified item
+        /// Returns the contents of the specified item
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">Index of the element to retrieve.</param>
+        /// <returns>XmlElement contents.</returns>
         public XmlElement this[string id]
         {
             get { return m_items[id]; }

@@ -20,7 +20,7 @@ using bedrock.util;
 namespace jabber.connection
 {
     /// <summary>
-    /// A component that references an XmppStream.
+    /// Manages the XmppStream as a component.
     /// </summary>
     [SVN(@"$Id$")]
     public abstract class StreamComponent : System.ComponentModel.Component

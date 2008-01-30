@@ -43,13 +43,13 @@ namespace jabber.connection
     }
 
     /// <summary>
-    /// Listen for stanza and connection events
+    /// Listens for stanza and connection events
     /// </summary>
     [SVN(@"$Id$")]
     public interface IStanzaEventListener
     {
         /// <summary>
-        /// Get or set properties on the listener.
+        /// Gets or sets properties on the listener.
         /// </summary>
         /// <param name="prop">Property name.  Look at the Options class for some ideas.</param>
         /// <returns></returns>
@@ -87,9 +87,12 @@ namespace jabber.connection
         void BytesRead(byte[] buf, int offset, int len);
 
         /// <summary>
-        /// Text was written to the server.  Use for debugging only.
-        /// Will NOT be complete nodes at a time.
+        /// Informs the client that text was written to the server.
+        /// Use for debugging only. Will NOT be complete nodes at a time.
         /// </summary>
+        /// <param name="buf">Bytes to write out.</param>
+        /// <param name="offset">The index in the buffer to start getting bytes.</param>
+        /// <param name="len">The amount of bytes to write out.</param>
         void BytesWritten(byte[] buf, int offset, int len);
 
         /// <summary>
@@ -100,13 +103,13 @@ namespace jabber.connection
         void StreamInit(ElementStream stream);
 
         /// <summary>
-        /// An error has occurred.
+        /// Notifies the client that an error has occurred.
         /// </summary>
-        /// <param name="e"></param>
+        /// <param name="e">The exception that caused the error.</param>
         void Errored(Exception e);
 
         /// <summary>
-        /// The stream has been closed.
+        /// Notifies the client that the session has been closed.
         /// </summary>
         void Closed();
 
@@ -147,7 +150,7 @@ namespace jabber.connection
     }
 
     /// <summary>
-    /// Base stream for reading and writing full stanzas.
+    /// Manages the base stream for reading and writing full stanzas.
     /// </summary>
     [SVN(@"$Id$")]
     public abstract class StanzaStream
@@ -158,16 +161,16 @@ namespace jabber.connection
         protected readonly Encoding ENC = Encoding.UTF8;
 
         /// <summary>
-        /// Where to fire events.
+        /// Notifies the client that an event has occurred.
         /// </summary>
         protected IStanzaEventListener m_listener = null;
 
         /// <summary>
-        /// Factory to create StanzaStream's.
+        /// Creates a StanzaStream.
         /// </summary>
-        /// <param name="kind">How to connect?  Socket?  Polling?</param>
-        /// <param name="listener">Connection event listeners</param>
-        /// <returns>StanzaStream used to connect to an XMPP server and send stanzas</returns>
+        /// <param name="kind">Connection type, such as socket, polling, and so on.</param>
+        /// <param name="listener">Connection event listeners.</param>
+        /// <returns>StanzaStream used to connect to an XMPP server and send stanzas.</returns>
         public static StanzaStream Create(ConnectionType kind, IStanzaEventListener listener)
         {
             switch (kind)
@@ -185,9 +188,9 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Create a new stanza stream.
+        /// Creates a new stanza stream.
         /// </summary>
-        /// <param name="listener"></param>
+        /// <param name="listener">Event listener associated with the new stanza stream.</param>
         protected StanzaStream(IStanzaEventListener listener)
         {
             Debug.Assert(listener != null);
@@ -195,12 +198,12 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Start the ball rolling.
+        /// Starts the outbound connection to the XMPP server.
         /// </summary>
         abstract public void Connect();
 
         /// <summary>
-        /// Listen for an inbound connection.  Only implemented by socket types for now.
+        /// Listens for an inbound connection.  Only implemented by socket types for now.
         /// </summary>
         virtual public void Accept()
         {
@@ -208,7 +211,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Is it legal to call Accept() at the moment?
+        /// Determines whether or not the client can call the Accept() method.
         /// </summary>
         virtual public bool Acceptable
         {
@@ -224,7 +227,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Handshake compression now.
+        /// Starts the compression on the connection.
         /// </summary>
         virtual public void StartCompression()
         {
@@ -232,39 +235,40 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// New stream:stream.
+        /// Initializes a new stream:stream.
         /// </summary>
         virtual public void InitializeStream()
         {
         }
 
         /// <summary>
-        /// Write a stream:stream.  Some underlying implementations will ignore this,
+        /// Writes a stream:stream start tag.
+        /// Some underlying implementations will ignore this,
         /// but may pull out pertinent data.
         /// </summary>
-        /// <param name="stream"></param>
+        /// <param name="stream">Stream containing the start tag.</param>
         abstract public void WriteStartTag(jabber.protocol.stream.Stream stream);
 
         /// <summary>
-        /// Write an entire element.
+        /// Writes an entire XML element.
         /// </summary>
-        /// <param name="elem"></param>
+        /// <param name="elem">XML element to write out.</param>
         abstract public void Write(XmlElement elem);
 
         /// <summary>
-        /// Write raw string.
+        /// Writes a raw string.
         /// </summary>
-        /// <param name="str"></param>
+        /// <param name="str">String to write out.</param>
         abstract public void Write(string str);
 
         /// <summary>
-        /// Closes the stream.
+        /// Closes the session with the XMPP server.
         /// </summary>
         /// <param name="clean">If true, send the stream:stream close packet.</param>
         abstract public void Close(bool clean);
 
         /// <summary>
-        /// Is the stream connected?  (for some loose value of "connected")
+        /// Determines whether or not the client is connected to the XMPP server.
         /// </summary>
         abstract public bool Connected
         {
@@ -272,7 +276,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Does this stream support start-tls?
+        /// Determines whether or not Jabber-Net supports TLS.
         /// </summary>
         virtual public bool SupportsTLS
         {
@@ -280,7 +284,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Does this stream support XEP-138 compression?
+        /// Determines whether or not this stream supports compression (XEP-0138).
         /// </summary>
         virtual public bool SupportsCompression
         {
@@ -289,9 +293,7 @@ namespace jabber.connection
     }
 
     /// <summary>
-    /// Something happened on a StanzaStream.
+    /// Informs the client that something happened on a StanzaStream.
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="stream"></param>
     public delegate void StanzaStreamHandler(object sender, StanzaStream stream);
 }

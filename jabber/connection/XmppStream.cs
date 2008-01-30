@@ -44,12 +44,12 @@ using Org.Mentalis.Security.Certificates;
 namespace jabber.connection
 {
     /// <summary>
-    /// A handler for events that happen on an ElementStream.
+    /// Informs the client about events that happen on an ElementStream.
     /// </summary>
     public delegate void StreamHandler(Object sender, ElementStream stream);
 
     /// <summary>
-    /// Option names.  These must be well-formed XML element names.
+    /// Manages option names.  These must be well-formed XML element names.
     /// </summary>
     [SVN(@"$Id$")]
     public abstract class Options
@@ -218,7 +218,7 @@ namespace jabber.connection
     }
 
     /// <summary>
-    /// Summary description for SocketElementStream.
+    /// Manages the XMPP stream of the connection.
     /// </summary>
     [SVN(@"$Id$")]
     abstract public class XmppStream :
@@ -246,7 +246,8 @@ namespace jabber.connection
         };
 
         /// <summary>
-        /// Character encoding.  UTF-8.
+        /// Contains the character encoding for the XMPP stream.
+        /// Currently, it is set to UTF-8.
         /// </summary>
         protected static readonly System.Text.Encoding ENC = System.Text.Encoding.UTF8;
 
@@ -388,8 +389,8 @@ namespace jabber.connection
         public event bedrock.TextHandler OnReadText;
 
         /// <summary>
-        /// Informs the client when a new stream has been inialized.
-        /// Add your packet factories to it.
+        /// Informs the client that a new stream has been inialized.
+        /// You can add your packet factories to the new stream.
         /// NOTE: You may NOT make calls to the GUI in this callback, unless you
         /// call Invoke.  Make sure you add your packet factories before
         /// calling Invoke, however.
@@ -405,22 +406,23 @@ namespace jabber.connection
         public event bedrock.ExceptionHandler OnError;
 
         /// <summary>
-        /// Informs the client on every jabber packet.
-        /// This is a union of OnPresence, OnMessage, and OnIQ.
-        /// Use this *or* the others, but not both, as a matter of style.
+        /// Notifies the client about every jabber packet.
+        /// This is a union of the OnPresence, OnMessage, and OnIQ methods.
+        /// Use this *or* the other 3 methods, but not both, as a matter of style.
         /// </summary>
         [Category("Stream")]
         public event ProtocolHandler OnProtocol;
 
         /// <summary>
-        /// Gets notified of the stream header, as a packet.  Can be called multiple
-        /// times for a single session, with XMPP.
+        /// Notifies the client that the stream header, as a packet,
+        /// has been received.  Can be called multiple  times for
+        /// a single session, with XMPP.
         /// </summary>
         [Category("Stream")]
         public event ProtocolHandler OnStreamHeader;
 
         /// <summary>
-        /// Gets notified of the start of a SASL handshake.
+        /// Notifies the client that the SASL handshake has started.
         /// </summary>
         protected event SASLProcessorHandler OnSASLStart;
 
@@ -531,7 +533,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Determines if the current connection is SSL/TLS protected.
+        /// Determines whether or not the current connection is secured with SSL/TLS.
         /// </summary>
         [Browsable(false)]
         public bool SSLon
@@ -561,8 +563,8 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Retrieves the state of the current connection in regards
-        /// to XEP-138 compression.
+        /// Determines whether or not the current connection uses
+        /// XMPP stream compression (XEP-138).
         /// </summary>
         [Browsable(false)]
         public bool CompressionOn
@@ -571,7 +573,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Determines if SSL3/TLS1 authentication is used when a user
+        /// Determines whether SSL3/TLS1 authentication is used when a user
         /// connects to the XMPP server.
         /// </summary>
         [Description("Do SSL3/TLS1 on startup.")]
@@ -613,7 +615,7 @@ namespace jabber.connection
 #if MODERN
         /// <summary>
         /// Gets or sets the certificate to be used for the local
-        /// side of sockets when SSL is turned on.
+        /// side of sockets when SSL is enabled.
         /// </summary>
         [Browsable(false)]
         public X509Certificate LocalCertificate
@@ -764,7 +766,9 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Seconds before automatically reconnecting if the connection drops.  -1 to disable, 0 for immediate.
+        /// Gets or sets the number of seconds before automatically
+        /// reconnecting if the connection drops.
+        /// -1 to disable, 0 for immediate.
         /// </summary>
         [Description("Automatically reconnect a connection.")]
         [DefaultValue(30)]
@@ -930,7 +934,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// The namespace for this connection.
+        /// Returns the namespace for this connection.
         /// </summary>
         [Browsable(false)]
         protected abstract string NS
@@ -939,7 +943,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Determines if SASL is required for connecting to the XMPP server.
+        /// Determines whether or not SASL is required for connecting to the XMPP server.
         /// </summary>
         [Description("Determines if SASL is required for connecting to the XMPP server.")]
         [DefaultValue(false)]
@@ -1037,7 +1041,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Closes down the connection with a clean shutdown.
+        /// Closes down the connection with the XMPP server with a clean shutdown.
         /// </summary>
         public virtual void Close()
         {
@@ -1100,7 +1104,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Determines if a callback needs to be on the GUI thread.
+        /// Determines whether or not a callback needs to be on the GUI thread.
         /// </summary>
         /// <returns>
         /// True if the invoke control is set and the current thread
@@ -1460,7 +1464,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Begins compressing.
+        /// Begins compressing the XMPP stream.
         /// </summary>
         /// <returns>If True, compression was successful, otherwise False.</returns>
         protected bool StartCompression()

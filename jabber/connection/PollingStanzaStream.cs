@@ -24,7 +24,7 @@ using System.Security.Cryptography;
 namespace jabber.connection
 {
     /// <summary>
-    /// HTTP Polling XMPP stream.
+    /// Manages the HTTP Polling XMPP stream.
     /// </summary>
     [SVN(@"$Id$")]
     public class PollingStanzaStream : StanzaStream, ISocketEventListener
@@ -42,7 +42,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Determines if the client is connected to the XMPP server.
+        /// Determines whether or not the client is connected to the XMPP server.
         /// </summary>
         public override bool Connected
         {
@@ -82,7 +82,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Connect the socket, outbound.
+        /// Connects the outbound socket.
         /// </summary>
         public override void Connect()
         {
@@ -122,7 +122,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Listen for an inbound connection.
+        /// Listens for an inbound connection.
         /// </summary>
         public override void Accept()
         {
@@ -136,9 +136,11 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Write a string to the stream.
+        /// Writes a string to the stream.
         /// </summary>
-        /// <param name="str">The string to write; this will be transcoded to UTF-8.</param>
+        /// <param name="str">
+        /// The string to write; this will be transcoded to UTF-8.
+        /// </param>
         public override void Write(string str)
         {
             //int keep = (int)m_listener[Options.KEEP_ALIVE];
@@ -147,7 +149,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Writes a stream:stream
+        /// Writes a stream:stream start tag.
         /// </summary>
         /// <param name="stream">Stream containing the stream:stream packet to send.</param>
         public override void WriteStartTag(jabber.protocol.stream.Stream stream)
@@ -156,16 +158,16 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Write a full stanza
+        /// Writes a full stanza.
         /// </summary>
-        /// <param name="elem"></param>
+        /// <param name="elem">The stanza to write out.</param>
         public override void Write(XmlElement elem)
         {
             Write(elem.OuterXml);
         }
 
         /// <summary>
-        /// Closes the socket
+        /// Closes the socket connection.
         /// </summary>
         /// <param name="clean">Sends the stream:stream close packet if true.</param>
         public override void Close(bool clean)
@@ -184,7 +186,7 @@ namespace jabber.connection
 
 #if !NO_SSL
         /// <summary>
-        /// Negotiate Start-TLS with the other endpoint.
+        /// Negotiates Start-TLS with the other endpoint.
         /// </summary>
         public override void StartTLS()
         {

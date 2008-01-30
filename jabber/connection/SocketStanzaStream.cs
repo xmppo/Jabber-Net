@@ -27,7 +27,7 @@ using netlib.Dns.Records;
 namespace jabber.connection
 {
     /// <summary>
-    /// The types of proxies we support.  This is only for socket connections.
+    /// Contains the types of proxies Jabber-Net supports.  This is only for socket connections.
     /// </summary>
     [SVN(@"$Id$")]
     public enum ProxyType
@@ -37,11 +37,11 @@ namespace jabber.connection
         /// </summary>
         None,
         /// <summary>
-        /// socks4 as in http://archive.socks.permeo.com/protocol/socks4.protocol
+        /// SOCKS4 as in http://archive.socks.permeo.com/protocol/socks4.protocol
         /// </summary>
         Socks4,
         /// <summary>
-        /// socks5 as in http://archive.socks.permeo.com/rfc/rfc1928.txt
+        /// SOCKS5 as in http://archive.socks.permeo.com/rfc/rfc1928.txt
         /// </summary>
         Socks5,
         /// <summary>
@@ -80,7 +80,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// If SSL is on, we support Start-TLS.
+        /// Determines whether or not Jabber-Net supports StartTLS.
         /// </summary>
         public override bool SupportsTLS
         {
@@ -95,7 +95,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Determines if Jabber-Net supports compression.
+        /// Determines whether or not Jabber-Net supports compression.
         /// </summary>
         public override bool SupportsCompression
         {
@@ -121,7 +121,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Set up the element stream.  This is the place to add factories.
+        /// Initializes the element stream.  This is the place to add factories.
         /// </summary>
         public override void InitializeStream()
         {
@@ -192,7 +192,7 @@ namespace jabber.connection
 #endif
     
         /// <summary>
-        /// Connect the socket, outbound.
+        /// Connects to the XMPP server.
         /// </summary>
         public override void Connect()
         {
@@ -295,7 +295,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Listen for an inbound connection.
+        /// Listens for an inbound connection.
         /// </summary>
         public override void Accept()
         {
@@ -326,9 +326,9 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Write the given string to the socket after UTF-8 encoding.
+        /// Writes the given string to the socket after UTF-8 encoding.
         /// </summary>
-        /// <param name="str"></param>
+        /// <param name="str">String to write out.</param>
         public override void Write(string str)
         {
             int keep = (int)m_listener[Options.CURRENT_KEEP_ALIVE];
@@ -347,17 +347,18 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Write a full stanza
+        /// Writes a full stanza.
         /// </summary>
-        /// <param name="elem"></param>
+        /// <param name="elem">XML stanza to write.</param>
         public override void Write(XmlElement elem)
         {
             Write(elem.OuterXml);
         }
 
         /// <summary>
-        /// Close the socket
+        /// Closes the session with the XMPP server.
         /// </summary>
+        /// <param name="clean">Sends the close stanza to the XMPP server if true.</param>
         public override void Close(bool clean)
         {
             // Note: socket should still be connected, excepts for races.  Revist.
@@ -374,7 +375,7 @@ namespace jabber.connection
 
 #if !NO_SSL
         /// <summary>
-        /// Negotiate Start-TLS with the other endpoint.
+        /// Negotiates Start-TLS with the other endpoint.
         /// </summary>
         public override void StartTLS()
         {
@@ -388,7 +389,7 @@ namespace jabber.connection
 
 #if !NO_COMPRESSION
         /// <summary>
-        /// Negotiate Start-TLS with the other endpoint.
+        /// Starts compressing outgoing traffic for this connection with the XMPP server.
         /// </summary>
         public override void StartCompression()
         {

@@ -27,13 +27,13 @@ using jabber.protocol.x;
 namespace jabber.connection
 {
     /// <summary>
-    /// Manage entity capabilities information, for the local connection as well as remote ones.
+    /// Manages the entity capabilities information for the local connection as well as remote ones.
     /// See XEP-0115, version 1.5 for details.
     /// </summary>
 	public class CapsManager: StreamComponent
 	{
         /// <summary>
-        /// The default hash function to use for calculating ver attributes.
+        /// Defines the default hash function to use for calculating ver attributes.
         /// </summary>
         public const string DEFAULT_HASH = "sha-1";
         private const string SEP = "<";
@@ -48,7 +48,7 @@ namespace jabber.connection
         private string m_ver = null;
 		
         /// <summary>
-        /// Constructor
+        /// Creates a new capability manager.
         /// </summary>
 		public CapsManager()
 		{
@@ -57,18 +57,20 @@ namespace jabber.connection
 		}
 
         /// <summary>
-        /// Constructor
+        /// Creates a new capability manager and associates it with a container.
         /// </summary>
-        /// <param name="container"></param>
+        /// <param name="container">Parent container.</param>
 		public CapsManager(IContainer container) : this()
 		{
 			container.Add(this);
 		}
 
         /// <summary> 
-        /// Clean up any resources being used.
+        /// Performs tasks associated with freeing, releasing, or resetting resources.
         /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        /// <param name="disposing">
+        /// True if managed resources should be disposed; otherwise, false.
+        /// </param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -79,7 +81,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Add a feature to the feature list
+        /// Adds a feature to the feature list
         /// </summary>
         /// <param name="feature"></param>
         public void AddFeature(string feature)
@@ -89,7 +91,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// The current features enabled by this entity.
+        /// Gets or sets the current features enabled by this entity.
         /// </summary>
         [Category("Capabilities")]
         [DefaultValue(null)]
@@ -132,7 +134,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// The hash algorithm to use.
+        /// Gets or sets the hash algorithm to use.
         /// </summary>
         [Category("Capabilities")]
         [DefaultValue(DEFAULT_HASH)]
@@ -197,7 +199,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// The calculated hash over all of the caps information.
+        /// Returns the calculated hash over all of the caps information.
         /// </summary>
         [Category("Capabilities")]
         public string Ver
@@ -211,7 +213,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Node URI for this client.
+        /// Gets or sets the node URI for this client.
         /// </summary>
         [Category("Capabilities")]
         [DefaultValue(null)]
@@ -222,7 +224,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// The node#ver to look for in queries.
+        /// Retrieves the node#ver to look for in queries.
         /// </summary>
         [Category("Capabilities")]
         public string NodeVer
@@ -231,7 +233,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Add a new identity.
+        /// Adds a new identity.
         /// </summary>
         /// <param name="category"></param>
         /// <param name="type"></param>
@@ -244,7 +246,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Add a new identity
+        /// Adds a new identity
         /// </summary>
         /// <param name="id"></param>
         public void AddIdentity(Ident id)
@@ -254,7 +256,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// All of the identities currently supported by this manager.
+        /// Gets or sets all of the identities currently supported by this manager.
         /// </summary>
         [Category("Capabilities")]
         [DefaultValue(null)]
@@ -289,9 +291,9 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Determines if this is a capabilities request.
-        /// Answers true for a bare no-node
-        /// disco request, as well as for requests to the correct hash.
+        /// Determines whether or not this is a capabilities request.
+        /// Answers true for a bare no-node disco request, as well as
+        /// for requests to the correct hash.
         /// </summary>
         /// <param name="iq">XML to look through for capabilities.</param>
         /// <returns>True if this is a capabilities request.</returns>

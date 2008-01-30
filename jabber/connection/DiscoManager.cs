@@ -30,7 +30,7 @@ using jabber.protocol.iq;
 namespace jabber.connection
 {
     /// <summary>
-    /// A disco identity.  See XEP-0030.
+    /// Manages a service discovery (disco) identity. See <a href="http://www.xmpp.org/extensions/xep-0030.html">XEP-0030</a> for more information. 
     /// </summary>
     public class Ident : IComparable
     {
@@ -174,7 +174,7 @@ namespace jabber.connection
     }
 
     /// <summary>
-    /// A JID/Node combination.
+    /// Manages a JID and Node combination.
     /// </summary>
     [SVN(@"$Id$")]
     public class JIDNode
@@ -183,10 +183,10 @@ namespace jabber.connection
         private string m_node = null;
 
         /// <summary>
-        /// A JID/Node combination.
+        /// Creates a new JID/Node combination.
         /// </summary>
-        /// <param name="jid"></param>
-        /// <param name="node"></param>
+        /// <param name="jid">JID to associate with JIDNode.</param>
+        /// <param name="node">Node to associate with JIDNode.</param>
         public JIDNode(JID jid, string node)
         {
             if (jid == null)
@@ -217,11 +217,11 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Gets the JID/Node key for Hashing.
+        /// Retrieves a hash key that combines the JID and the node.
         /// </summary>
-        /// <param name="jid"></param>
-        /// <param name="node"></param>
-        /// <returns></returns>
+        /// <param name="jid">JID to use in the hash code.</param>
+        /// <param name="node">Node to use in the hash code.</param>
+        /// <returns>The hash code.</returns>
         protected static string GetKey(string jid, string node)
         {
             if ((node == null) || (node == ""))
@@ -281,11 +281,9 @@ namespace jabber.connection
 
 
     /// <summary>
-    /// The info and children of a given JID/Node combination.
+    /// Manages the information and children of a given JID/Node combination.
     ///
-    /// Note: if you have multiple connections in the same process, they all share the same Disco cache.
-    /// This works fine in the real world today, since I don't know of any implementations that return different
-    /// disco for different requestors, but it is completely legal protocol to have done so.
+    /// NOTE: If you have multiple connections in the same process, they all share the same Disco cache.
     /// </summary>
     [SVN(@"$Id$")]
     public class DiscoNode : JIDNode, IEnumerable
@@ -360,7 +358,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Determines whether the disco#info packet has been sent.
+        /// Determines whether or not the disco#info packet has been sent.
         /// </summary>
         [Category("Status")]
         public bool PendingInfo
@@ -369,7 +367,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Determines whether the disco#items packet has been sent.
+        /// Determines whether or not the disco#items packet has been sent.
         /// </summary>
         [Category("Status")]
         public bool PendingItems
@@ -429,7 +427,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Determines if this node has the given category and type among its identities.
+        /// Determines whether or not this node has the given category and type among its identities.
         /// </summary>
         /// <param name="category">Category to look for.</param>
         /// <param name="type">Type to look for.</param>
@@ -699,17 +697,17 @@ namespace jabber.connection
     }
 
     /// <summary>
-    /// Callback with a new disco node.
+    /// Represents a callback with a new disco node.
     /// </summary>
     /// <param name="node"></param>
     public delegate void DiscoNodeHandler(DiscoNode node);
 
     /// <summary>
-    /// Disco database.
-    /// TODO: once etags are finished, make all of this information cached on disk.
-    /// TODO: cache XEP-115 client caps data to disk
-    /// TODO: add negative caching
+    /// Manages the discovery (disco) database.
     /// </summary>
+    // TODO: once etags are finished, make all of this information cached on disk.
+    // TODO: cache XEP-115 client caps data to disk
+    // TODO: add negative caching
     [SVN(@"$Id$")]
     public class DiscoManager : StreamComponent, IEnumerable
     {
@@ -720,16 +718,16 @@ namespace jabber.connection
         private DiscoNode m_root = null;
 
         /// <summary>
-        /// Construct a PresenceManager object.
+        /// Creates a new DiscoManager and associates it with a parent container.
         /// </summary>
-        /// <param name="container"></param>
+        /// <param name="container">Parent container.</param>
         public DiscoManager(System.ComponentModel.IContainer container) : this()
         {
             container.Add(this);
         }
 
         /// <summary>
-        /// Construct a PresenceManager object.
+        /// Creates a new DiscoManager.
         /// </summary>
         public DiscoManager()
         {
@@ -972,11 +970,12 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Make a call to get the feaures to this node, and call back on handler.
+        /// Retrieves the features associated with this node and
+        /// then calls back on the handler.
         /// If the information is in the cache, handler gets called right now.
         /// </summary>
-        /// <param name="node"></param>
-        /// <param name="handler"></param>
+        /// <param name="node">Node to look for.</param>
+        /// <param name="handler">Callback to use afterwards.</param>
         public void BeginGetFeatures(DiscoNode node, DiscoNodeHandler handler)
         {
             if (node.Features != null)
@@ -993,20 +992,22 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Make a call to get the feaures to this node, and call back on handler.
+        /// Retrieves the features associated with this JID and node and
+        /// then calls back on the handler.
         /// If the information is in the cache, handler gets called right now.
         /// </summary>
-        /// <param name="jid"></param>
-        /// <param name="node"></param>
-        /// <param name="handler"></param>
+        /// <param name="jid">JID to look for.</param>
+        /// <param name="node">Node to look for.</param>
+        /// <param name="handler">Callback to use afterwards.</param>
         public void BeginGetFeatures(JID jid, string node, DiscoNodeHandler handler)
         {
             BeginGetFeatures(DiscoNode.GetNode(jid, node), handler);
         }
 
         /// <summary>
-        /// Makes a call to get the child items of this node, and then calls
-        /// back on the handler. If the information is in the cache, handler gets
+        /// Retrieves the child items associated with this node,
+        /// and then calls back on the handler.
+        /// If the information is in the cache, handler gets
         /// called right now.
         /// </summary>
         /// <param name="node">Disco node to search.</param>
@@ -1027,8 +1028,9 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Makes a call to get the child items of this node and JID, and then calls
-        /// back on the handler. If the information is in the cache, handler gets
+        /// Retrieves the child items associated with this node and JID,
+        /// and then calls back on the handler.
+        /// If the information is in the cache, handler gets
         /// called right now.
         /// </summary>
         /// <param name="jid">JID of Service to query.</param>
@@ -1082,9 +1084,9 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Looks for a component that implements a given feature, which is a child of the root.
-        /// This will call back on the first match.  It will call back with null if none 
-        /// are found.
+        /// Finds a component that implements a given feature, which is a child of 
+        /// the root. This will call back on the first match.  It will call back
+        /// with null if none are found.
         /// </summary>
         /// <param name="featureURI">Feature to look for.</param>
         /// <param name="handler">Callback to use when finished.</param>

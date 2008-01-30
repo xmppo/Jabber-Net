@@ -18,7 +18,7 @@ using bedrock.util;
 namespace jabber.connection
 {
     /// <summary>
-    /// Base class for all states.
+    /// Represents the base class for all states.
     /// </summary>
     [SVN(@"$Id$")]
     public abstract class BaseState
@@ -51,7 +51,8 @@ namespace jabber.connection
     }
 
     /// <summary>
-    /// In the process of connecting.  DNS lookup, socket setup, etc.
+    /// Specifies the state is in the process of connecting such as
+    /// DNS lookup, socket setup, and so on.
     /// </summary>
     [SVN(@"$Id$")]
     public class ConnectingState : BaseState
@@ -63,7 +64,7 @@ namespace jabber.connection
     }
 
     /// <summary>
-    /// Have a connected socket.
+    /// Specifies the state is in the "connected socket" state.
     /// </summary>
     [SVN(@"$Id$")]
     public class ConnectedState : BaseState
@@ -112,7 +113,7 @@ namespace jabber.connection
     }
 
     /// <summary>
-    /// Accepting incoming socket connections.
+    /// Specifies the state is in the "Accepting incoming socket connections" state.
     /// </summary>
     [SVN(@"$Id$")]
     public class AcceptingState : BaseState
@@ -156,7 +157,7 @@ namespace jabber.connection
         public static readonly BaseState Instance = new StartTLSState();
     }
     /// <summary>
-    /// Specifies the state is in compression state.
+    /// Specifies the state is in the compression state.
     /// </summary>
     [SVN(@"$Id$")]
     public class CompressionState : BaseState
@@ -201,13 +202,13 @@ namespace jabber.connection
         public static readonly BaseState Instance = new SASLFailedState();
     }
     /// <summary>
-    /// Binding session
+    /// Specifies the state is in the "Binding session" state.
     /// </summary>
     [SVN(@"$Id$")]
     public class BindState : BaseState
     {
         /// <summary>
-        /// The instance that is always used.
+        /// Returns the instance for the Bind state.
         /// </summary>
         public static readonly BaseState Instance = new BindState();
     }
