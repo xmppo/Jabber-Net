@@ -263,16 +263,18 @@ namespace muzzle
         {
             get
             {
-                // If we are running in the designer, let's try to auto-hook a JabberClient
+                // If we are running in the designer, let's try to auto-hook a RosterManager
                 if ((m_roster == null) && DesignMode)
                 {
-                    IDesignerHost host = (IDesignerHost) base.GetService(typeof(IDesignerHost));
+                    IDesignerHost host = (IDesignerHost)base.GetService(typeof(IDesignerHost));
                     this.RosterManager = (RosterManager)jabber.connection.StreamComponent.GetComponentFromHost(host, typeof(RosterManager));
                 }
                 return m_roster;
             }
             set
             {
+                if ((object)m_roster == (object)value)
+                    return;
                 m_roster = value;
                 if (m_roster != null)
                 {
@@ -291,8 +293,8 @@ namespace muzzle
         {
             get
             {
-                // If we are running in the designer, let's try to auto-hook a JabberClient
-                if ((m_roster == null) && DesignMode)
+                // If we are running in the designer, let's try to auto-hook a PresenceManager
+                if ((m_pres == null) && DesignMode)
                 {
                     IDesignerHost host = (IDesignerHost) base.GetService(typeof(IDesignerHost));
                     this.PresenceManager = (PresenceManager)jabber.connection.StreamComponent.GetComponentFromHost(host, typeof(PresenceManager));
@@ -301,7 +303,11 @@ namespace muzzle
             }
             set
             {
+                if ((object)m_pres == (object)value)
+                    return;
                 m_pres = value;
+                if (m_pres != null)
+                    m_pres.OnPrimarySessionChange += new PrimarySessionHandler(m_pres_OnPrimarySessionChange);
             }
         }
 
@@ -323,12 +329,11 @@ namespace muzzle
             }
             set
             {
+                if ((object)m_client == (object)value)
+                    return;
                 m_client = value;
                 if (m_client != null)
-                {
                     m_client.OnDisconnect += new bedrock.ObjectHandler(m_client_OnDisconnect);
-                    m_client.OnPresence += new PresenceHandler(m_client_OnPresence);
-                }
             }
         }
 
@@ -529,13 +534,11 @@ namespace muzzle
             m_items.Clear();
         }
 
-        private void m_client_OnPresence(object sender, Presence pres)
-        {
-            if ((pres.Type != PresenceType.available) &&
-                (pres.Type != PresenceType.unavailable))
-                return;
 
-            LinkedList nodelist = (LinkedList) m_items[pres.From.Bare];
+        private void m_pres_OnPrimarySessionChange(object sender, JID bare)
+        {
+            Presence pres = m_pres[bare];
+            LinkedList nodelist = (LinkedList) m_items[bare.ToString()];
             if (nodelist == null)
                 return;
 

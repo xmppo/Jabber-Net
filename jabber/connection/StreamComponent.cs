@@ -16,6 +16,7 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 
 using bedrock.util;
+using System.Diagnostics;
 
 namespace jabber.connection
 {
@@ -48,13 +49,14 @@ namespace jabber.connection
         {
             if (host == null)
                 return null;
+            Debug.Assert(type != null);
             Component root = host.RootComponent as Component;
             if (root == null)
                 return null;
 
             foreach (Component c in root.Container.Components)
             {
-                if (c.GetType().IsSubclassOf(type))
+                if (type.IsAssignableFrom(c.GetType()))
                     return c;
             }
             return null;            
