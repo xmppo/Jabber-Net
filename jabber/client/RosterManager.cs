@@ -76,7 +76,7 @@ namespace jabber.client
     /// Manages the roster of the client.
     /// </summary>
     [SVN(@"$Id$")]
-    public class RosterManager : jabber.connection.StreamComponent
+    public class RosterManager : jabber.connection.StreamComponent, IEnumerable
     {
         /// <summary>
         /// Required designer variable.
@@ -427,6 +427,15 @@ C: <iq from='juliet@example.com/balcony' type='set' id='delete_1'>
         {
             components = new System.ComponentModel.Container();
         }
+        #endregion
+
+        #region IEnumerable Members
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return m_items.Keys.GetEnumerator();
+        }
+
         #endregion
     }
 }
