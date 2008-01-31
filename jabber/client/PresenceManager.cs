@@ -219,9 +219,47 @@ namespace jabber.client
         }
         #endregion
 
+        /// <summary>
+        /// Iterate over all of the JIDs we have not-unavilable presence from.
+        /// </summary>
+        /// <returns></returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return m_items.GetEnumerator();
+            return new UserPresenceManagerEnumerator(m_items.Values);
+        }
+
+        private class UserPresenceManagerEnumerator : IEnumerator
+        {
+            private IEnumerator m_enum;
+
+            public UserPresenceManagerEnumerator(ICollection values)
+            {
+                m_enum = values.GetEnumerator();
+            }
+
+            #region IEnumerator Members
+            public object Current
+            {
+                get 
+                {
+                    UserPresenceManager m = (UserPresenceManager)m_enum.Current;
+                    if (m == null)
+                        return null;
+                    return m.JID;
+                }
+            }
+
+            public bool MoveNext()
+            {
+                return m_enum.MoveNext();
+            }
+
+            public void Reset()
+            {
+                m_enum.Reset();
+            }
+
+            #endregion
         }
 
         /// <summary>
@@ -242,6 +280,11 @@ namespace jabber.client
             {
                 Debug.Assert(jid.Resource == null);
                 m_jid = jid;
+            }
+
+            public JID JID
+            {
+                get { return m_jid; }
             }
 
             public override string ToString()
