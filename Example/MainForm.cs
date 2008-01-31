@@ -595,13 +595,7 @@ namespace Example
 
         private void Connect()
         {
-            muzzle.ClientLogin log = new muzzle.ClientLogin(jc);
-            log.ReadFromFile("login.xml");
-            if (log.ShowDialog() == DialogResult.OK)
-            {
-                log.WriteToFile("login.xml");
-                jc.Connect();
-            }
+            muzzle.ClientLogin.Login(jc, "login.xml");
         }
 
         private void jc_OnAuthenticate(object sender)
