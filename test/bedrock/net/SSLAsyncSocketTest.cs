@@ -47,8 +47,6 @@ namespace test.bedrock.net
         [Test] public void Test_Write()
         {
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-            bool old_ok = AsyncSocket.UntrustedRootOK;
-            AsyncSocket.UntrustedRootOK = true;
             a.Resolve();
 
             lock(start)
@@ -73,7 +71,6 @@ namespace test.bedrock.net
             }
 
             Assert.AreEqual("5678901234", success);
-            AsyncSocket.UntrustedRootOK = old_ok;
         }
 
         private void Client()
@@ -218,7 +215,7 @@ namespace test.bedrock.net
             System.Security.Cryptography.X509Certificates.X509Chain chain,
             System.Net.Security.SslPolicyErrors sslPolicyErrors)
         {
-            return false;
+            return true;
         }
 
 #endif
