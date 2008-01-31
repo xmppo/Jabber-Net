@@ -78,10 +78,15 @@ namespace muzzle
             this.DragEnter += new DragEventHandler(RosterTree_DragEnter);
             this.DragOver += new DragEventHandler(RosterTree_DragOver);
             this.DragDrop += new DragEventHandler(RosterTree_DragDrop);
+            this.AfterSelect += new TreeViewEventHandler(RosterTree_AfterSelect);
 #if NET20
             this.DrawMode = TreeViewDrawMode.OwnerDrawText;
             this.DrawNode += new DrawTreeNodeEventHandler(RosterTree_DrawNode);
 #endif
+        }
+
+        private void RosterTree_AfterSelect(object sender, TreeViewEventArgs e)
+        {
         }
 
 
@@ -91,15 +96,14 @@ namespace muzzle
             GroupNode node = (GroupNode)e.Node;
             string counts = String.Format("({0}/{1})", node.Current, node.Total);
 
-            if ((e.State & TreeNodeStates.Selected) == TreeNodeStates.Selected)
+            if (node.IsSelected)
             {
                 string newText = node.GroupName + " " + counts;
+                e.DrawDefault = true;
                 if (node.Text != newText)
                     node.Text = newText;
-                e.DrawDefault = true;
                 return;
             }
-
             Graphics g = e.Graphics;
             Brush fg = new SolidBrush(this.ForeColor);
             Brush stat_fg = new SolidBrush(this.StatusColor);
@@ -114,19 +118,13 @@ namespace muzzle
 
         private void DrawItem(DrawTreeNodeEventArgs e)
         {
-            if ((e.State & TreeNodeStates.Selected) == TreeNodeStates.Selected)
+            ItemNode node = (ItemNode)e.Node;
+            if (node.IsSelected)
             {
                 e.DrawDefault = true;
-                /*
-                Brush sel = new SolidBrush(SystemColors.Highlight);
-                Brush sel_fg = new SolidBrush(SystemColors.HighlightText);
-                g.FillRectangle(sel, e.Bounds);
-                g.DrawString(node.Text, this.Font, sel_fg, new Point(e.Bounds.Left, e.Bounds.Top), StringFormat.GenericTypographic);
-                 */
                 return;
             }
 
-            ItemNode node = (ItemNode)e.Node;
             Graphics g = e.Graphics;
             Brush fg = new SolidBrush(this.ForeColor);
             Brush stat_fg = new SolidBrush(this.StatusColor);
