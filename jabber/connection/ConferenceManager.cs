@@ -501,7 +501,11 @@ namespace jabber.connection
 
         private void m_stream_OnProtocol(object sender, System.Xml.XmlElement rp)
         {
-            JID from = (JID)rp.GetAttribute("from");
+            // There isn't always a from address.  iq:roster, for example.
+            string af = rp.GetAttribute("from");
+            if (af == "")
+                return;
+            JID from = new JID(af);
             if (from.Bare != (string)m_room)
                 return;  // not for this room.
 
