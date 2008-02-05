@@ -417,6 +417,9 @@ namespace jabber.connection
         /// <returns>List of identities associated with this node.</returns>
         public Ident[] GetIdentities()
         {
+            if (Identity == null)
+                return new Ident[0]; 
+
             Ident[] ret = new Ident[Identity.Count];
             int count = 0;
             foreach (Ident i in Identity)
