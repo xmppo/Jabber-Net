@@ -59,6 +59,13 @@ namespace jabber.connection
     /// A participant-related callback.
     /// </summary>
     /// <param name="room">The room the event is for</param>
+    /// <param name="participant">The participant in the room</param>
+    public delegate void RoomParticipantEvent(Room room, RoomParticipant participant);
+
+    /// <summary>
+    /// A participantCollection-related callback.
+    /// </summary>
+    /// <param name="room">The room the event is for</param>
     /// <param name="participants">The participants in the response</param>
     /// <param name="state">State passed in by the caller, or null if none.</param>
     public delegate void RoomParticipantsEvent(Room room, ParticipantCollection participants, object state);
@@ -186,6 +193,27 @@ namespace jabber.connection
         public event MessageHandler OnSubjectChange;
 
         /// <summary>
+        /// A participant has joined the room.  This will not fire for yourself.
+        /// If set, will be added to each room created through the manager.
+        /// </summary>
+        [Category("Room")]
+        public event RoomParticipantEvent OnParticipantJoin;
+
+        /// <summary>
+        /// A participant has left the room.  This will not fire for yourself.
+        /// If set, will be added to each room created through the manager.
+        /// </summary>
+        [Category("Room")]
+        public event RoomParticipantEvent OnParticipantLeave;
+
+        /// <summary>
+        /// A participant has changed presence, without joining or leaving the room.  This will not fire for yourself.
+        /// If set, will be added to each room created through the manager.
+        /// </summary>
+        [Category("Room")]
+        public event RoomParticipantEvent OnParticipantPresenceChange;
+        
+        /// <summary>
         /// Joins a conference room.
         /// </summary>
         /// <param name="roomAndNick">room@conference/nick, where "nick" is the desred nickname in the room.</param>
@@ -216,6 +244,10 @@ namespace jabber.connection
             r.OnAdminMessage += OnAdminMessage;
             r.OnSelfMessage += OnSelfMessage;
             r.OnSubjectChange += OnSubjectChange;
+            r.OnParticipantJoin += OnParticipantJoin;
+            r.OnParticipantLeave += OnParticipantLeave;
+            r.OnParticipantPresenceChange += OnParticipantPresenceChange;
+
             m_rooms[roomAndNick] = r;
             return r;
         }
@@ -417,6 +449,24 @@ namespace jabber.connection
         public event MessageHandler OnSubjectChange;
 
         /// <summary>
+        /// A participant has joined the room.  This will not fire for yourself.
+        /// </summary>
+        [Category("Room")]
+        public event RoomParticipantEvent OnParticipantJoin;
+
+        /// <summary>
+        /// A participant has left the room.  This will not fire for yourself.
+        /// </summary>
+        [Category("Room")]
+        public event RoomParticipantEvent OnParticipantLeave;
+
+        /// <summary>
+        /// A participant has changed presence, without joining or leaving the room.  This will not fire for yourself.
+        /// </summary>
+        [Category("Room")]
+        public event RoomParticipantEvent OnParticipantPresenceChange;
+
+        /// <summary>
         /// Determines whether to use the default conference room configuration
         /// or to retrieve the configuration form from the XMPP server.
         /// </summary>
@@ -521,7 +571,8 @@ namespace jabber.connection
                     return;
                 }
 
-                m_participants.Modify(p);
+                ParticipantCollection.Modification mod = ParticipantCollection.Modification.NONE;
+                RoomParticipant party = m_participants.Modify(p, out mod);
 
                 // if this is ours
                 if (p.From == m_jid)
@@ -537,6 +588,24 @@ namespace jabber.connection
                     case STATE.running:
                         if (p.Type == PresenceType.unavailable)
                             OnLeavePresence(p);
+                        break;
+                    }
+                }
+                else
+                {
+                    switch (mod)
+                    {
+                    case ParticipantCollection.Modification.NONE:
+                        if (OnParticipantPresenceChange != null)
+                            OnParticipantPresenceChange(this, party);
+                        break;
+                    case ParticipantCollection.Modification.JOIN:
+                        if (OnParticipantJoin != null)
+                            OnParticipantJoin(this, party);
+                        break;
+                    case ParticipantCollection.Modification.LEAVE:
+                        if (OnParticipantLeave != null)
+                            OnParticipantLeave(this, party);
                         break;
                     }
                 }
@@ -995,6 +1064,7 @@ namespace jabber.connection
 */
             ParticipantCollection parties = new ParticipantCollection();
             AdminQuery query = (AdminQuery)iq.Query;
+            ParticipantCollection.Modification mod;
             foreach (AdminItem item in query.GetItems())
             {
                 Presence pres = new Presence(m_stream.Document);
@@ -1006,7 +1076,7 @@ namespace jabber.connection
                 xi.Nick = item.Nick;
                 xi.JID = item.JID;
                 pres.AppendChild(x);
-                parties.Modify(pres);
+                parties.Modify(pres, out mod);
             }
             rps.Callback(this, parties, rps.State);
         }
@@ -1231,6 +1301,13 @@ namespace jabber.connection
     {
         private Hashtable m_hash = new Hashtable();
 
+        internal enum Modification
+        {
+            NONE = -1,
+            JOIN,
+            LEAVE
+        }
+
         /// <summary>
         /// Get a participant by their room@service/nick JID.
         /// </summary>
@@ -1249,15 +1326,19 @@ namespace jabber.connection
         /// </summary>
         /// <param name="pres">The latest presence</param>
         /// <returns>The associated participant.</returns>
-        internal RoomParticipant Modify(Presence pres)
+        internal RoomParticipant Modify(Presence pres, out Modification mod)
         {
             JID from = pres.From;
+            mod = Modification.NONE;
             RoomParticipant party = (RoomParticipant)m_hash[from];
             if (party != null)
             {
                 party.Presence = pres;
                 if (pres.Type == PresenceType.unavailable)
+                {
                     m_hash.Remove(from);
+                    mod = Modification.LEAVE;
+                }
             }
             else
             {
@@ -1265,7 +1346,10 @@ namespace jabber.connection
                 // XCP will send unavails from registered users that 
                 // are not currently online.
                 if (pres.Type != PresenceType.unavailable)
+                {
                     m_hash[from] = party;
+                    mod = Modification.JOIN;
+                }
             }
             return party;
         }
