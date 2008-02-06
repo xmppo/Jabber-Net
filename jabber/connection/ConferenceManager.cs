@@ -503,6 +503,22 @@ namespace jabber.connection
         }
 
         /// <summary>
+        /// The bare JID of the room.  room@service
+        /// </summary>
+        public JID JID
+        {
+            get { return m_room; }
+        }
+
+        /// <summary>
+        /// Have we joined the room successfully?
+        /// </summary>
+        public bool IsParticipating
+        {
+            get { return m_state == STATE.running; }
+        }
+
+        /// <summary>
         /// The nickname that others in the room will see for you.
         /// Set has the side-effect of changing the nickname on the server.
         /// </summary>
