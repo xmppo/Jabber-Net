@@ -42,7 +42,7 @@
     </MSBuild>
   </Target>
 
-  <Target Name="Setup2005" DependsOnTargets="NUnit2005">
+  <Target Name="Setup2005" DependsOnTargets="NUnit2005;Doc">
     <MSBuild Projects="2005-jabber-net.sln" Targets="JabberNetInstaller" Properties="Configuration=Debug">
       <Output ItemName="JabberNetInstallerFiles" TaskParameter="TargetOutputs"/>
     </MSBuild>
