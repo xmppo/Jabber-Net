@@ -1,3 +1,4 @@
+using System;
 using System.Xml;
 using jabber;
 using jabber.connection;
@@ -71,22 +72,12 @@ namespace test.jabber.connection
         {
             using (mocks.Record())
             {
-                Expect.Call(stream.Document).Return(doc);
-                stream.Write((XmlElement)null);
-                LastCall.Callback((Func<XmlElement, bool>)
-                    delegate(XmlElement elem)
-                    {
-                        string original = elem.OuterXml;
-                        return original.Replace(" ", "") == GetJoinPresence().Replace(" ", "");
-                    });
-                stream.OnProtocol += null;
-                LastCall.IgnoreArguments();
+                CreateJoinExpected(CreateJoinResponsePacket);
             }
 
             using (mocks.Playback())
             {
-                Room testRoom = cm.GetRoom(jid);
-                testRoom.Join();
+                CreateJoinPlayback(delegate { return null; });
             }
         }
 
@@ -101,23 +92,12 @@ namespace test.jabber.connection
         {
             RoomConfigTest(false);
         }
-        
+
         private void RoomConfigTest(bool defaultConfig)
         {
             using (mocks.Record())
             {
-                Expect.Call(stream.Document).Return(doc);
-
-                stream.OnProtocol += null;
-                IEventRaiser onProtocol = LastCall.IgnoreArguments().GetEventRaiser();
-
-                stream.Write((XmlElement)null);
-                LastCall.Callback((Func<XmlElement, bool>)
-                    delegate(XmlElement elem)
-                    {
-                        onProtocol.Raise(new object[] { null, CreateJoinNeedConfigResponsePacket(elem) });
-                        return true;
-                    });
+                CreateJoinExpected(CreateJoinNeedConfigResponsePacket);
 
                 Expect.Call(stream.Document).Return(doc);
                 SetupTrackerBeginIq(delegate(IQ iq, IqCB cb, object cbArg)
@@ -131,10 +111,13 @@ namespace test.jabber.connection
 
             using (mocks.Playback())
             {
-                Room testRoom = cm.GetRoom(jid);
-                testRoom.DefaultConfig = defaultConfig;
-                testRoom.OnRoomConfig += delegate { return null; };
-                testRoom.Join();
+                CreateJoinPlayback(
+                    delegate(Room arg0)
+                    {
+                        arg0.DefaultConfig = defaultConfig;
+                        arg0.OnRoomConfig += delegate { return null; };
+                        return arg0;
+                    });
             }
         }
 
@@ -142,8 +125,8 @@ namespace test.jabber.connection
         {
             return
                 string.Format(
-                    "<iq id=\"{0}\" type=\"get\" to=\"{1}\">"+
-                        "<query xmlns=\"{2}\"/>"+
+                    "<iq id=\"{0}\" type=\"get\" to=\"{1}\">" +
+                        "<query xmlns=\"{2}\"/>" +
                     "</iq>",
                     id, jid.Bare, URI.MUC_OWNER);
         }
@@ -202,38 +185,67 @@ namespace test.jabber.connection
         [Test]
         public void RoomMessageTest()
         {
+            SendMessage(true);
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void RoomMessageNoJoinTest()
+        {
+            SendMessage(false);
+        }
+
+        private void SendMessage(bool shouldJoinRoom)
+        {
             using (mocks.Record())
             {
-                Expect.Call(stream.Document).Return(doc);
-
-                stream.OnProtocol += null;
-                IEventRaiser onProtocol = LastCall.IgnoreArguments().GetEventRaiser();
-
-                stream.Write((XmlElement)null);
-                LastCall.Callback((Func<XmlElement, bool>)
-                    delegate(XmlElement elem)
-                    {
-                        onProtocol.Raise(new object[] { null, CreateJoinResponsePacket(elem) });
-                        return true;
-                    });
+                CreateJoinExpected(CreateJoinResponsePacket);
 
                 Expect.Call(stream.Document).Return(doc);
                 stream.Write((XmlElement)null);
                 LastCall.Callback((Func<XmlElement, bool>)
-                    delegate(XmlElement elem)
-                    {
-                        string id = elem.GetAttribute("id");
-                        string original = elem.OuterXml;
-                        return original.Replace(" ", "") == GetRoomMessage(id).Replace(" ", "");
-                    });
+                                  delegate(XmlElement elem)
+                                  {
+                                      string id = elem.GetAttribute("id");
+                                      string original = elem.OuterXml;
+                                      return original.Replace(" ", "") == GetRoomMessage(id).Replace(" ", "");
+                                  });
             }
 
             using (mocks.Playback())
             {
-                Room testRoom = cm.GetRoom(jid);
-                testRoom.Join();
+                Room testRoom = shouldJoinRoom ?
+                    CreateJoinPlayback(delegate { return null; }) :
+                    cm.GetRoom(jid);
                 testRoom.PublicMessage(MESSAGE);
             }
+        }
+
+        private Room CreateJoinPlayback(Func<Room, Room> alterRoom)
+        {
+            Room testRoom = cm.GetRoom(jid);
+            alterRoom(testRoom);
+            testRoom.Join();
+            return testRoom;
+        }
+
+        private void CreateJoinExpected(Func<XmlElement, XmlElement> sendPresence)
+        {
+            Expect.Call(stream.Document).Return(doc);
+
+            stream.OnProtocol += null;
+            IEventRaiser onProtocol = LastCall.IgnoreArguments().GetEventRaiser();
+
+            stream.Write((XmlElement)null);
+            LastCall.Callback((Func<XmlElement, bool>)
+                              delegate(XmlElement elem)
+                              {
+                                  onProtocol.Raise(new object[] { null, sendPresence(elem) });
+
+                                  string original = elem.OuterXml;
+                                  return original.Replace(" ", "") ==
+                                         GetJoinPresence().Replace(" ", "");
+                              });
         }
 
         private const string TO_NICK = "TestNick";
@@ -241,37 +253,40 @@ namespace test.jabber.connection
         [Test]
         public void RoomPrivateMessageTest()
         {
+            SendPrivateMessage(true);
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void RoomPrivateMessageNoJoinTest()
+        {
+            SendPrivateMessage(false);
+        }
+
+        private void SendPrivateMessage(bool shouldJoin)
+        {
             using (mocks.Record())
             {
-                Expect.Call(stream.Document).Return(doc);
-
-                stream.OnProtocol += null;
-                IEventRaiser onProtocol = LastCall.IgnoreArguments().GetEventRaiser();
-
-                stream.Write((XmlElement)null);
-                LastCall.Callback((Func<XmlElement, bool>)
-                    delegate(XmlElement elem)
-                    {
-                        onProtocol.Raise(new object[] { null, CreateJoinResponsePacket(elem) });
-                        return true;
-                    });
+                CreateJoinExpected(CreateJoinResponsePacket);
 
                 Expect.Call(stream.Document).Return(doc);
                 stream.Write((XmlElement)null);
                 LastCall.Callback((Func<XmlElement, bool>)
-                    delegate(XmlElement elem)
-                    {
-                        string id = elem.GetAttribute("id");
-                        string original = elem.OuterXml;
-                        return original.Replace(" ", "") ==
-                            GetRoomPrivateMessage(id).Replace(" ", "");
-                    });
+                                  delegate(XmlElement elem)
+                                  {
+                                      string id = elem.GetAttribute("id");
+                                      string original = elem.OuterXml;
+                                      return original.Replace(" ", "") ==
+                                             GetRoomPrivateMessage(id).Replace(" ", "");
+                                  });
             }
 
             using (mocks.Playback())
             {
-                Room testRoom = cm.GetRoom(jid);
-                testRoom.Join();
+                Room testRoom = shouldJoin ?
+                    CreateJoinPlayback(delegate { return null; }) :
+                    cm.GetRoom(jid);
+
                 testRoom.PrivateMessage(TO_NICK, MESSAGE);
             }
         }

@@ -143,6 +143,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="jabber\connection\ConferenceManagerTest.cs" />
+    <Compile Include="jabber\connection\DiscoManagerTest.cs" />
     <Compile Include="jabber\connection\PubSubManagerTest.cs" />
     <Compile Include="jabber\JIDTest.cs">
       <SubType>Code</SubType>
@@ -171,6 +172,7 @@
     <Compile Include="jabber\protocol\iq\AuthTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="jabber\protocol\iq\PubSubTest.cs" />
     <Compile Include="jabber\protocol\iq\RegisterTest.cs">
       <SubType>Code</SubType>
     </Compile>
