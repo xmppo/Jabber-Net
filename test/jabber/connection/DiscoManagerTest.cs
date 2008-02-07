@@ -32,44 +32,18 @@ namespace test.jabber.connection
             doc = new XmlDocument();
         }
 
+        [TearDown]
+        public void cleanUp()
+        {
+            DiscoNode.Clear();
+        }
+
         private readonly JID jid = new JID("test.com");
         private readonly string NODE = "TEST_NODE";
         private readonly string FEATURE = "TEST_FEATURE";
 
         [Test]
         public void IntialDiscoTest()
-        {
-            IEventRaiser onAuth;
-
-            mocks.BackToRecordAll();
-            using (mocks.Record())
-            {
-                Expect.Call(stream.Server).Return(jid);
-                stream.OnAuthenticate += null;
-                onAuth = LastCall.IgnoreArguments().GetEventRaiser();
-
-                Expect.Call(stream.Document).Return(doc);
-                SetupTrackerBeginIq(
-                    delegate(IQ arg0, IqCB arg1, object arg2)
-                    {
-                        string id = arg0.GetAttribute("id");
-                        string original = arg0.OuterXml;
-                        return original.Replace(" ", "") ==
-                               GetInfoXml(id).Replace(" ", "");
-                    });
-            }
-
-            using (mocks.Playback())
-            {
-                dm = new DiscoManager();
-                dm.Stream = stream;
-
-                onAuth.Raise(new object[] { null });
-            }
-        }
-
-        [Test]
-        public void ContinueIntialDiscoTest()
         {
             IEventRaiser onAuth;
 
@@ -92,7 +66,10 @@ namespace test.jabber.connection
                         sentIq = arg0;
                         sentCallback = arg1;
 
-                        return true;
+                        string id = arg0.GetAttribute("id");
+                        string original = arg0.OuterXml;
+                        return original.Replace(" ", "") ==
+                               GetInfoXml(id).Replace(" ", "");
                     });
 
                 Expect.Call(stream.Document).Return(doc);
@@ -108,8 +85,8 @@ namespace test.jabber.connection
 
             using (mocks.Playback())
             {
-                dm = new DiscoManager();
-                dm.Stream = stream;
+                DiscoManager newDm = new DiscoManager();
+                newDm.Stream = stream;
 
                 onAuth.Raise(new object[] { null });
 
@@ -117,7 +94,7 @@ namespace test.jabber.connection
                 {
                     string id = sentIq.GetAttribute("id");
                     if (sentCallback != null)
-                        sentCallback(null, CreateDiscoInfoResponse(id), dm.Root);
+                        sentCallback(null, CreateDiscoInfoResponse(id), newDm.Root);
                 }
             }
         }
