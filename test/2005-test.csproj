@@ -142,6 +142,7 @@
     <Compile Include="jabber\client\RosterManagerTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="jabber\connection\CapsManagerTest.cs" />
     <Compile Include="jabber\connection\ConferenceManagerTest.cs" />
     <Compile Include="jabber\connection\DiscoManagerTest.cs" />
     <Compile Include="jabber\connection\PubSubManagerTest.cs" />
