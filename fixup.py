@@ -32,7 +32,7 @@ def fixup(f):
             line = line.rstrip()
             line = line.expandtabs(4)
             if not cr:
-                cl = COPY.sub("Copyright (c) 2002-2007 Cursive Systems", line)
+                cl = COPY.sub("Copyright (c) 2002-2008 Cursive Systems", line)
                 if cl != line:
                     line = cl
                     cr = True
