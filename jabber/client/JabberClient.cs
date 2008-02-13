@@ -861,6 +861,7 @@ namespace jabber.client
                 proc[SASLProcessor.USERNAME] = User;
                 proc[SASLProcessor.PASSWORD] = Password;
                 proc[MD5Processor.REALM] = this.Server;
+                proc[KerbProcessor.USE_WINDOWS_CREDS] = this[KerbProcessor.USE_WINDOWS_CREDS].ToString();
             }
         }
 

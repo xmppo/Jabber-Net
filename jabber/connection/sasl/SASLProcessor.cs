@@ -125,11 +125,24 @@ namespace jabber.connection.sasl
         /// <param name="mt">The types the server implements</param>
         /// <param name="plaintextOK">Is it ok to select insecure types?</param>
         /// <returns></returns>
-        public static SASLProcessor createProcessor(MechanismType mt, bool plaintextOK)
+        public static SASLProcessor createProcessor(MechanismType mt, bool plaintextOK, Mechanisms mechs)
         {
             if ((mt & MechanismType.EXTERNAL) == MechanismType.EXTERNAL)
             {
                 return new ExternalProcessor();
+            }
+            if ((mt & MechanismType.GSSAPI) == MechanismType.GSSAPI)
+            {
+                string RemotePrincipal = "";
+                foreach (Mechanism mechanism in mechs.GetMechanisms())
+                {
+                    if (mechanism.MechanismName == "GSSAPI")
+                    {
+                        RemotePrincipal = mechanism.GetAttribute("kerb:principal");
+                        break;
+                    }
+                }
+                return new KerbProcessor(RemotePrincipal);
             }
             if ((mt & MechanismType.DIGEST_MD5) == MechanismType.DIGEST_MD5)
             {

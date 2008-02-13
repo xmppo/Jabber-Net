@@ -1294,7 +1294,7 @@ namespace jabber.connection
                         {
                             State = SASLState.Instance;
                         }
-                        m_saslProc = SASLProcessor.createProcessor(types, m_sslOn || (bool)this[Options.PLAINTEXT]);
+                        m_saslProc = SASLProcessor.createProcessor(types, m_sslOn || (bool)this[Options.PLAINTEXT], ms);
                         if (m_saslProc == null)
                         {
 

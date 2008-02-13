@@ -21,6 +21,7 @@ using System.Xml;
 
 using bedrock.util;
 using jabber.connection;
+using jabber.connection.sasl;
 
 namespace muzzle
 {
@@ -71,6 +72,7 @@ namespace muzzle
         private TextBox txtURL;
         private Label label12;
         private ComboBox cmbConnectionType;
+        private CheckBox cbUseWinCreds;
         private Label label11;
 
         /// <summary>
@@ -112,6 +114,7 @@ namespace muzzle
             cbPlaintext.Tag = Options.PLAINTEXT;
             txtURL.Tag = Options.POLL_URL;
             cmbConnectionType.Tag = Options.CONNECTION_TYPE;
+            cbUseWinCreds.Tag = KerbProcessor.USE_WINDOWS_CREDS;
         }
 
         /// <summary>
@@ -210,6 +213,7 @@ namespace muzzle
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.cmbProxy = new System.Windows.Forms.ComboBox();
+            this.cbUseWinCreds = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.error)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numPort)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -222,8 +226,8 @@ namespace muzzle
             // 
             // txtServer
             // 
-            this.txtServer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtServer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.txtServer.Location = new System.Drawing.Point(72, 72);
             this.txtServer.Name = "txtServer";
             this.txtServer.Size = new System.Drawing.Size(191, 20);
@@ -234,8 +238,8 @@ namespace muzzle
             // 
             // txtUser
             // 
-            this.txtUser.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtUser.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.txtUser.Location = new System.Drawing.Point(72, 8);
             this.txtUser.Name = "txtUser";
             this.txtUser.Size = new System.Drawing.Size(191, 20);
@@ -294,6 +298,7 @@ namespace muzzle
             // 
             // tpBasic
             // 
+            this.tpBasic.Controls.Add(this.cbUseWinCreds);
             this.tpBasic.Controls.Add(this.cbPlaintext);
             this.tpBasic.Controls.Add(this.txtPass);
             this.tpBasic.Controls.Add(this.txtServer);
@@ -309,8 +314,8 @@ namespace muzzle
             // 
             // cbPlaintext
             // 
-            this.cbPlaintext.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbPlaintext.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.cbPlaintext.Location = new System.Drawing.Point(8, 104);
             this.cbPlaintext.Name = "cbPlaintext";
             this.cbPlaintext.Size = new System.Drawing.Size(268, 32);
@@ -319,8 +324,8 @@ namespace muzzle
             // 
             // txtPass
             // 
-            this.txtPass.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtPass.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.txtPass.Location = new System.Drawing.Point(72, 40);
             this.txtPass.Name = "txtPass";
             this.txtPass.PasswordChar = '*';
@@ -371,8 +376,8 @@ namespace muzzle
             // 
             // txtNetworkHost
             // 
-            this.txtNetworkHost.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtNetworkHost.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.txtNetworkHost.Location = new System.Drawing.Point(88, 37);
             this.txtNetworkHost.Name = "txtNetworkHost";
             this.txtNetworkHost.Size = new System.Drawing.Size(173, 20);
@@ -410,8 +415,8 @@ namespace muzzle
             // 
             // txtURL
             // 
-            this.txtURL.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtURL.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.txtURL.Enabled = false;
             this.txtURL.Location = new System.Drawing.Point(50, 40);
             this.txtURL.Name = "txtURL";
@@ -429,8 +434,8 @@ namespace muzzle
             // 
             // cmbConnectionType
             // 
-            this.cmbConnectionType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cmbConnectionType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbConnectionType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbConnectionType.Location = new System.Drawing.Point(50, 9);
             this.cmbConnectionType.Name = "cmbConnectionType";
@@ -467,8 +472,8 @@ namespace muzzle
             // 
             // txtProxyPassword
             // 
-            this.txtProxyPassword.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtProxyPassword.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.txtProxyPassword.Enabled = false;
             this.txtProxyPassword.Location = new System.Drawing.Point(72, 117);
             this.txtProxyPassword.Name = "txtProxyPassword";
@@ -478,8 +483,8 @@ namespace muzzle
             // 
             // txtProxyUser
             // 
-            this.txtProxyUser.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtProxyUser.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.txtProxyUser.Enabled = false;
             this.txtProxyUser.Location = new System.Drawing.Point(72, 90);
             this.txtProxyUser.Name = "txtProxyUser";
@@ -488,8 +493,8 @@ namespace muzzle
             // 
             // numProxyPort
             // 
-            this.numProxyPort.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.numProxyPort.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.numProxyPort.Enabled = false;
             this.numProxyPort.Location = new System.Drawing.Point(72, 63);
             this.numProxyPort.Maximum = new decimal(new int[] {
@@ -513,8 +518,8 @@ namespace muzzle
             // 
             // txtProxyHost
             // 
-            this.txtProxyHost.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtProxyHost.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.txtProxyHost.Enabled = false;
             this.txtProxyHost.Location = new System.Drawing.Point(72, 36);
             this.txtProxyHost.Name = "txtProxyHost";
@@ -568,14 +573,25 @@ namespace muzzle
             // 
             // cmbProxy
             // 
-            this.cmbProxy.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cmbProxy.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbProxy.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbProxy.Location = new System.Drawing.Point(72, 8);
             this.cmbProxy.Name = "cmbProxy";
             this.cmbProxy.Size = new System.Drawing.Size(140, 21);
             this.cmbProxy.TabIndex = 1;
             this.cmbProxy.SelectedIndexChanged += new System.EventHandler(this.cmbProxy_SelectedIndexChanged);
+            // 
+            // cbUseWinCreds
+            // 
+            this.cbUseWinCreds.AutoSize = true;
+            this.cbUseWinCreds.Location = new System.Drawing.Point(8, 142);
+            this.cbUseWinCreds.Name = "cbUseWinCreds";
+            this.cbUseWinCreds.Size = new System.Drawing.Size(147, 17);
+            this.cbUseWinCreds.TabIndex = 7;
+            this.cbUseWinCreds.Text = "Use Windows Credentials";
+            this.cbUseWinCreds.UseVisualStyleBackColor = true;
+            this.cbUseWinCreds.CheckedChanged += new System.EventHandler(this.cbUseWinCreds_CheckedChanged);
             // 
             // ClientLogin
             // 
@@ -646,6 +662,11 @@ namespace muzzle
         private void onValidated(object sender, EventArgs e)
         {
             this.ClearError(sender, e);
+        }
+
+        private void cbUseWinCreds_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
