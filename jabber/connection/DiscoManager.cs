@@ -2,7 +2,7 @@
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
- * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * Copyright (c) 2002-2008 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
@@ -30,7 +30,7 @@ using jabber.protocol.iq;
 namespace jabber.connection
 {
     /// <summary>
-    /// Manages a service discovery (disco) identity. See <a href="http://www.xmpp.org/extensions/xep-0030.html">XEP-0030</a> for more information. 
+    /// Manages a service discovery (disco) identity. See <a href="http://www.xmpp.org/extensions/xep-0030.html">XEP-0030</a> for more information.
     /// </summary>
     public class Ident : IComparable
     {
@@ -94,7 +94,7 @@ namespace jabber.connection
 
         /// <summary>
         /// Contains the capabilities category, such as server,
-        /// client, gateway, directory and so on. 
+        /// client, gateway, directory and so on.
         /// </summary>
         [Category("Identity")]
         public string Category
@@ -412,13 +412,13 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Retrieves an identity object for each identity of the node.  
+        /// Retrieves an identity object for each identity of the node.
         /// </summary>
         /// <returns>List of identities associated with this node.</returns>
         public Ident[] GetIdentities()
         {
             if (Identity == null)
-                return new Ident[0]; 
+                return new Ident[0];
 
             Ident[] ret = new Ident[Identity.Count];
             int count = 0;
@@ -520,8 +520,8 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Add a single feature to the node.  
-        /// Does not fire OnFeatures, since this should mostly be used by 
+        /// Add a single feature to the node.
+        /// Does not fire OnFeatures, since this should mostly be used by
         /// things that are not querying externally.
         /// </summary>
         /// <param name="feature"></param>
@@ -1087,7 +1087,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Finds a component that implements a given feature, which is a child of 
+        /// Finds a component that implements a given feature, which is a child of
         /// the root. This will call back on the first match.  It will call back
         /// with null if none are found.
         /// </summary>

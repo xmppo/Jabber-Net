@@ -2,7 +2,7 @@
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
- * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * Copyright (c) 2002-2008 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
@@ -90,9 +90,9 @@ namespace bedrock.net
         /// <param name="chain">The chain of CAs for the cert</param>
         /// <param name="sslPolicyErrors">A bitfield for the erorrs in the certificate.</param>
         /// <returns>True if the cert should be accepted anyway.</returns>
-        bool OnInvalidCertificate(BaseSocket sock, 
-            System.Security.Cryptography.X509Certificates.X509Certificate certificate, 
-            System.Security.Cryptography.X509Certificates.X509Chain chain, 
+        bool OnInvalidCertificate(BaseSocket sock,
+            System.Security.Cryptography.X509Certificates.X509Certificate certificate,
+            System.Security.Cryptography.X509Certificates.X509Chain chain,
             System.Net.Security.SslPolicyErrors sslPolicyErrors);
 #endif
     }

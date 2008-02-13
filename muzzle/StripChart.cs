@@ -2,7 +2,7 @@
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
- * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * Copyright (c) 2002-2008 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
@@ -73,7 +73,7 @@ namespace muzzle
         private Color      m_statsColor = Color.Wheat;
         private System.Windows.Forms.PictureBox pictureBox1;
 
-        private static float[] s_sampleData = new float[] { 
+        private static float[] s_sampleData = new float[] {
             .9800F,
             .7572F,
             .8259F,
@@ -702,9 +702,9 @@ namespace muzzle
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
-            // 
+            //
             // pictureBox1
-            // 
+            //
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Name = "pictureBox1";
@@ -712,9 +712,9 @@ namespace muzzle
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             this.pictureBox1.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox1_Paint);
-            // 
+            //
             // StripChart
-            // 
+            //
             this.Controls.Add(this.pictureBox1);
             this.Name = "StripChart";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();

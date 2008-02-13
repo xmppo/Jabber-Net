@@ -2,7 +2,7 @@
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
- * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * Copyright (c) 2002-2008 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
@@ -240,7 +240,7 @@ namespace jabber.client
             #region IEnumerator Members
             public object Current
             {
-                get 
+                get
                 {
                     UserPresenceManager m = (UserPresenceManager)m_enum.Current;
                     if (m == null)
@@ -265,9 +265,9 @@ namespace jabber.client
         /// <summary>
         /// Manage the presence for all of the resources of a user.  No locking is performed,
         /// since PresenceManager is already doing locking.
-        /// 
-        /// The intent of this class is to be able to deliver the last presence stanza 
-        /// from the "most available" resource. 
+        ///
+        /// The intent of this class is to be able to deliver the last presence stanza
+        /// from the "most available" resource.
         /// Note that negative priority sessions are never the most available.
         /// </summary>
         private class UserPresenceManager
@@ -317,7 +317,7 @@ namespace jabber.client
                 // Tree can't overwrite. Have to delete first.
                 m_items.Remove(res);
                 m_items[res] = p;
-    
+
                 // first one is always highest
                 if (m_pres == null)
                 {
@@ -403,7 +403,7 @@ namespace jabber.client
 
             public Presence[] GetAll()
             {
-                Presence[] all; 
+                Presence[] all;
                 if (m_items.Count > 0)
                     all = new Presence[m_items.Count];
                 else if (m_pres == null)

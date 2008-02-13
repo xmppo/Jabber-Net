@@ -2,7 +2,7 @@
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
- * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * Copyright (c) 2002-2008 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
@@ -60,13 +60,13 @@ namespace ConsoleClient
         public bool initialPresence = true;
 
         public Class1(string[] args)
-        {            
+        {
             JabberClient jc = new JabberClient();
             jc.OnReadText += new bedrock.TextHandler(jc_OnReadText);
             jc.OnWriteText += new bedrock.TextHandler(jc_OnWriteText);
             jc.OnError +=new bedrock.ExceptionHandler(jc_OnError);
             jc.OnStreamError += new jabber.protocol.ProtocolHandler(jc_OnStreamError);
-            
+
             jc.AutoReconnect = 3f;
 
             GetOpt go = new GetOpt(this);
@@ -83,7 +83,7 @@ namespace ConsoleClient
             {
                 jc.OnInvalidCertificate += new System.Net.Security.RemoteCertificateValidationCallback(jc_OnInvalidCertificate);
             }
-            
+
 
             JID j = new JID(jid);
             jc.User = j.User;
@@ -189,7 +189,7 @@ namespace ConsoleClient
             Console.WriteLine("ERROR: " + ex.ToString());
             Environment.Exit(1);
         }
-        
+
         private void jc_OnStreamError(object sender, System.Xml.XmlElement rp)
         {
             Console.WriteLine("Stream ERROR: " + rp.OuterXml);
@@ -210,7 +210,7 @@ namespace ConsoleClient
             if (iq.Type == IQType.result)
                 jc.Login();
         }
-        
+
         private bool jc_OnRegisterInfo(object sender, Register r)
         {
             return true;

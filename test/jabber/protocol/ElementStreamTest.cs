@@ -2,7 +2,7 @@
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
- * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * Copyright (c) 2002-2008 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
@@ -53,7 +53,7 @@ namespace test.jabber.protocol
 
             es.Push(ENC.GetBytes("st/>"));
             es.Push(ENC.GetBytes("<test>"));
-            es.Push(ENC.GetBytes("</"));                    
+            es.Push(ENC.GetBytes("</"));
             es.Push(ENC.GetBytes("test>"));
             es.Push(ENC.GetBytes("<test>&#1"));
             es.Push(ENC.GetBytes("16;est</test>"));
@@ -77,7 +77,7 @@ namespace test.jabber.protocol
         {
             AsynchElementStream es = new AsynchElementStream();
             // es.OnElement += new ProtocolHandler(jabOnElement);
-            
+
             es.Push(ENC.GetBytes("<stream>"));
             byte[] buf = ENC.GetBytes("<test/>");
             MemoryStream ms = new MemoryStream();
@@ -87,7 +87,7 @@ namespace test.jabber.protocol
             }
             es.Push(ms.ToArray());
         }
-        
+
         /*
         [Test] public void Test_NullBody()
         {

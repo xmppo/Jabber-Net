@@ -2,7 +2,7 @@
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
- * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * Copyright (c) 2002-2008 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
@@ -464,7 +464,7 @@ namespace jabber.connection
 
 #if MODERN
         /// <summary>
-        /// An invalid cert was received from the other side.  Set this event and return true to 
+        /// An invalid cert was received from the other side.  Set this event and return true to
         /// use the cert anyway.  If the event is not set, an ugly user interface will be displayed.
         /// </summary>
         [Category("Stream")]
@@ -548,8 +548,8 @@ namespace jabber.connection
         public JID JID
         {
             // Make sure to set this option in subclasses.
-            get 
-            { 
+            get
+            {
                 object j = this[Options.JID];
                 if (j == null)
                     return null;
@@ -1279,7 +1279,7 @@ namespace jabber.connection
 
                     if (ms != null)
                     {
-                        // if SASL_MECHANISMS is set in the options, it is the limited set 
+                        // if SASL_MECHANISMS is set in the options, it is the limited set
                         // of mechanisms we're willing to try.  Mask them off of the offered set.
                         object smt = this[Options.SASL_MECHANISMS];
                         if (smt != null)
@@ -1807,7 +1807,7 @@ namespace jabber.connection
             return false;
 #endif
         }
-     
+
         bool IStanzaEventListener.OnInvalidCertificate(bedrock.net.BaseSocket sock,
             System.Security.Cryptography.X509Certificates.X509Certificate certificate,
             System.Security.Cryptography.X509Certificates.X509Chain chain,

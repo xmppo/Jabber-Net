@@ -2,7 +2,7 @@
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
- * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * Copyright (c) 2002-2008 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
@@ -98,7 +98,7 @@ namespace bedrock.net
         /// set this to DefaultUntrustedPolicy.  False, the default,
         /// sets this to None.  </summary>
         private static SslPolicyErrors AllowedSSLErrors = SslPolicyErrors.None;
-    
+
         /// <summary>
         /// Are untrusted root certificates OK when connecting using
         /// SSL?  Setting this to true is insecure, but it's unlikely
@@ -269,7 +269,7 @@ namespace bedrock.net
                 SslStream str = m_stream as SslStream;
                 if (str == null)
                     return null;
-                
+
                 return str.RemoteCertificate;
             }
         }
@@ -350,7 +350,7 @@ namespace bedrock.net
             X509Certificate remoteCertificate,
             string[] acceptableIssuers)
         {
-            // this will be called twice if the server requires a client cert.  
+            // this will be called twice if the server requires a client cert.
             // Ignore the callback the first time; I think this is a .Net bug.
             if (acceptableIssuers.Length == 0)
                 return m_cert;
@@ -688,7 +688,7 @@ namespace bedrock.net
                         SocketType.Stream,
                         ProtocolType.Tcp);
                 }
- 
+
 #elif !NO_SSL
                 SecurityOptions options =
                     new SecurityOptions(m_secureProtocol,
@@ -792,8 +792,8 @@ namespace bedrock.net
 #if NET20  || __MonoCS__
         /// <summary>
         /// Validate the server cert.  SSLPolicyErrors will be
-        /// pre-filled with the errors you got.  
-        /// 
+        /// pre-filled with the errors you got.
+        ///
         /// If there is an error in the cert, OnIvalidCertificate will be called.
         /// </summary>
         /// <param name="sender"></param>
@@ -840,7 +840,7 @@ namespace bedrock.net
                 m_secureProtocol = SslProtocols.Tls;
 
             m_stream = new SslStream(m_stream, false, ValidateServerCertificate, ChooseClientCertificate);
-            
+
             if (m_server)
             {
                 if (m_cert == null)

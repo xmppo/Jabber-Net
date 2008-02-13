@@ -2,7 +2,7 @@
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
- * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * Copyright (c) 2002-2008 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
@@ -30,8 +30,8 @@ namespace jabber.connection
     /// Manages the entity capabilities information for the local connection as well as remote ones.
     /// See XEP-0115, version 1.5 for details.
     /// </summary>
-	public class CapsManager: StreamComponent
-	{
+    public class CapsManager: StreamComponent
+    {
         /// <summary>
         /// Defines the default hash function to use for calculating ver attributes.
         /// </summary>
@@ -39,33 +39,33 @@ namespace jabber.connection
         private const string SEP = "<";
 
         /// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.IContainer components = null;
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
 
         private DiscoNode m_disco = new DiscoNode(new JID(null, "placeholder", null), null);
         private string m_hash = DEFAULT_HASH;
         private string m_ver = null;
-		
+
         /// <summary>
         /// Creates a new capability manager.
         /// </summary>
-		public CapsManager()
-		{
-			InitializeComponent();
+        public CapsManager()
+        {
+            InitializeComponent();
             this.OnStreamChanged += new bedrock.ObjectHandler(CapsManager_OnStreamChanged);
-		}
+        }
 
         /// <summary>
         /// Creates a new capability manager and associates it with a container.
         /// </summary>
         /// <param name="container">Parent container.</param>
-		public CapsManager(IContainer container) : this()
-		{
-			container.Add(this);
-		}
+        public CapsManager(IContainer container) : this()
+        {
+            container.Add(this);
+        }
 
-        /// <summary> 
+        /// <summary>
         /// Performs tasks associated with freeing, releasing, or resetting resources.
         /// </summary>
         /// <param name="disposing">
@@ -97,11 +97,11 @@ namespace jabber.connection
         [DefaultValue(null)]
         public string[] Features
         {
-            get 
+            get
             {
                 if (m_disco.Features == null)
                     return new string[0];
-                return m_disco.FeatureNames; 
+                return m_disco.FeatureNames;
             }
             set
             {
@@ -141,7 +141,7 @@ namespace jabber.connection
         public string Hash
         {
             get { return m_hash; }
-            set 
+            set
             {
                 GetHasher(value);  // throws if bad.
                 m_hash = value;
@@ -156,14 +156,14 @@ namespace jabber.connection
             // 1. Initialize an empty string S.
             StringBuilder S = new StringBuilder();
 
-            // 2. Sort the service discovery identities [16] by category and then by type 
-            // (if it exists) and then by xml:lang (if it exists), formatted as 
-            // CATEGORY '/' [TYPE] '/' [LANG] '/' [NAME]. Note that each slash is 
+            // 2. Sort the service discovery identities [16] by category and then by type
+            // (if it exists) and then by xml:lang (if it exists), formatted as
+            // CATEGORY '/' [TYPE] '/' [LANG] '/' [NAME]. Note that each slash is
             // included even if the TYPE, LANG, or NAME is not included.
             Ident[] ids = m_disco.GetIdentities();
             Array.Sort(ids);
 
-            // 3. For each identity, append the 'category/type/lang/name' to S, followed by 
+            // 3. For each identity, append the 'category/type/lang/name' to S, followed by
             // the '<' character.
             foreach (Ident id in ids)
             {
@@ -183,15 +183,15 @@ namespace jabber.connection
             }
 
             // No forms yet.  Wait for software version.
-            
+
 
             // Ensure that S is encoded according to the UTF-8 encoding (RFC 3269 [16]).
             byte[] input = Encoding.UTF8.GetBytes(S.ToString());
 
-            // Compute the verification string by hashing S using the algorithm specified 
-            // in the 'hash' attribute (e.g., SHA-1 as defined in RFC 3174 [17]). The hashed 
-            // data MUST be generated with binary output and encoded using Base64 as specified 
-            // in Section 4 of RFC 4648 [18] (note: the Base64 output MUST NOT include 
+            // Compute the verification string by hashing S using the algorithm specified
+            // in the 'hash' attribute (e.g., SHA-1 as defined in RFC 3174 [17]). The hashed
+            // data MUST be generated with binary output and encoded using Base64 as specified
+            // in Section 4 of RFC 4648 [18] (note: the Base64 output MUST NOT include
             // whitespace and MUST set padding bits to zero). [19]
             HashAlgorithm hasher = GetHasher(m_hash);
             byte[] hash = hasher.ComputeHash(input, 0, input.Length);
@@ -262,11 +262,11 @@ namespace jabber.connection
         [DefaultValue(null)]
         public Ident[] Identities
         {
-            get 
+            get
             {
                 if (m_disco.Identity == null)
                     return new Ident[0];
-                return m_disco.GetIdentities(); 
+                return m_disco.GetIdentities();
             }
             set
             {
@@ -359,5 +359,5 @@ namespace jabber.connection
         }
 
         #endregion
-	}
+    }
 }

@@ -2,7 +2,7 @@
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
- * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * Copyright (c) 2002-2008 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
@@ -21,8 +21,8 @@ namespace jabber.protocol.stream
     /// <summary>
     /// XEP-138 compression.
     /// </summary>
-    [SVN(@"$Id$")]    
-	public class Compression : Element
+    [SVN(@"$Id$")]
+    public class Compression : Element
     {
         /// <summary>
         /// Create a new compression feature element.
@@ -83,7 +83,7 @@ namespace jabber.protocol.stream
             }
             return false;
         }
-	}
+    }
 
     /// <summary>
     /// XEP-138 compression failure.

@@ -2,7 +2,7 @@
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
- * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * Copyright (c) 2002-2008 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
@@ -62,7 +62,7 @@ namespace bedrock.net
                 string cmd = string.Format(@"CONNECT {0}:{1} HTTP/1.1
 Host: {0}
 ", RemoteAddress.Hostname, RemoteAddress.Port);
-                    
+
                 // if authinfo is set, send it.
                 if (Username != null && Username.Length > 0 && Password != null && Password.Length > 0)
                 {

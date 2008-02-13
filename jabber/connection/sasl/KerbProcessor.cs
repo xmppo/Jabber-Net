@@ -1,3 +1,17 @@
+/* --------------------------------------------------------------------------
+ * Copyrights
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2008 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * information for Cursive Systems, Inc. is available at
+ * http://www.cursive.net/.
+ *
+ * License
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
+ * See LICENSE.txt for details.
+ * --------------------------------------------------------------------------*/
+using System;
 using System;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
@@ -5,12 +19,15 @@ using System.Xml;
 using jabber.protocol.stream;
 using HANDLE = System.IntPtr;
 
+using bedrock.util;
+
 namespace jabber.connection.sasl
 {
 
     ///<summary>
     /// Uses Kerberos authentication ot log into XMPP server.
     ///</summary>
+    [SVN(@"$Id$")]
     public class KerbProcessor : SASLProcessor
     {
         /// <summary>

@@ -2,7 +2,7 @@
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
- * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * Copyright (c) 2002-2008 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
@@ -192,9 +192,9 @@ namespace Example
             this.tpDebug.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // sb
-            // 
+            //
             this.sb.Location = new System.Drawing.Point(0, 416);
             this.sb.Name = "sb";
             this.sb.Panels.AddRange(new System.Windows.Forms.StatusBarPanel[] {
@@ -205,30 +205,30 @@ namespace Example
             this.sb.Size = new System.Drawing.Size(632, 22);
             this.sb.TabIndex = 0;
             this.sb.PanelClick += new System.Windows.Forms.StatusBarPanelClickEventHandler(this.sb_PanelClick);
-            // 
+            //
             // pnlCon
-            // 
+            //
             this.pnlCon.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Spring;
             this.pnlCon.Name = "pnlCon";
             this.pnlCon.Text = "Click on \"Offline\", and select a presence to log in.";
             this.pnlCon.Width = 539;
-            // 
+            //
             // pnlSSL
-            // 
+            //
             this.pnlSSL.Alignment = System.Windows.Forms.HorizontalAlignment.Center;
             this.pnlSSL.Name = "pnlSSL";
             this.pnlSSL.Width = 30;
-            // 
+            //
             // pnlPresence
-            // 
+            //
             this.pnlPresence.Alignment = System.Windows.Forms.HorizontalAlignment.Right;
             this.pnlPresence.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Contents;
             this.pnlPresence.Name = "pnlPresence";
             this.pnlPresence.Text = "Offline";
             this.pnlPresence.Width = 47;
-            // 
+            //
             // tabControl1
-            // 
+            //
             this.tabControl1.Controls.Add(this.tpRoster);
             this.tabControl1.Controls.Add(this.tpServices);
             this.tabControl1.Controls.Add(this.tpDebug);
@@ -238,9 +238,9 @@ namespace Example
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(632, 392);
             this.tabControl1.TabIndex = 2;
-            // 
+            //
             // tpRoster
-            // 
+            //
             this.tpRoster.Controls.Add(this.roster);
             this.tpRoster.Location = new System.Drawing.Point(4, 22);
             this.tpRoster.Name = "tpRoster";
@@ -248,9 +248,9 @@ namespace Example
             this.tpRoster.TabIndex = 1;
             this.tpRoster.Text = "Roster";
             this.tpRoster.UseVisualStyleBackColor = true;
-            // 
+            //
             // roster
-            // 
+            //
             this.roster.AllowDrop = true;
             this.roster.Client = this.jc;
             this.roster.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -268,9 +268,9 @@ namespace Example
             this.roster.StatusColor = System.Drawing.Color.Teal;
             this.roster.TabIndex = 0;
             this.roster.DoubleClick += new System.EventHandler(this.roster_DoubleClick);
-            // 
+            //
             // jc
-            // 
+            //
             this.jc.AutoReconnect = 3F;
             this.jc.AutoStartCompression = true;
             this.jc.AutoStartTLS = true;
@@ -289,22 +289,22 @@ namespace Example
             this.jc.OnAuthError += new jabber.protocol.ProtocolHandler(this.jc_OnAuthError);
             this.jc.OnRegistered += new jabber.client.IQHandler(this.jc_OnRegistered);
             this.jc.OnMessage += new jabber.client.MessageHandler(this.jc_OnMessage);
-            // 
+            //
             // pm
-            // 
+            //
             this.pm.Stream = this.jc;
-            // 
+            //
             // rm
-            // 
+            //
             this.rm.AutoAllow = jabber.client.AutoSubscriptionHanding.AllowIfSubscribed;
             this.rm.AutoSubscribe = true;
             this.rm.Stream = this.jc;
             this.rm.OnRosterEnd += new bedrock.ObjectHandler(this.rm_OnRosterEnd);
             this.rm.OnSubscription += new jabber.client.SubscriptionHandler(this.rm_OnSubscription);
             this.rm.OnUnsubscription += new jabber.client.UnsubscriptionHandler(this.rm_OnUnsubscription);
-            // 
+            //
             // tpServices
-            // 
+            //
             this.tpServices.Controls.Add(this.services);
             this.tpServices.Location = new System.Drawing.Point(4, 22);
             this.tpServices.Name = "tpServices";
@@ -312,9 +312,9 @@ namespace Example
             this.tpServices.TabIndex = 2;
             this.tpServices.Text = "Services";
             this.tpServices.UseVisualStyleBackColor = true;
-            // 
+            //
             // services
-            // 
+            //
             this.services.DiscoManager = this.dm;
             this.services.Dock = System.Windows.Forms.DockStyle.Fill;
             this.services.ImageList = null;
@@ -323,13 +323,13 @@ namespace Example
             this.services.Size = new System.Drawing.Size(624, 366);
             this.services.Stream = this.jc;
             this.services.TabIndex = 0;
-            // 
+            //
             // dm
-            // 
+            //
             this.dm.Stream = this.jc;
-            // 
+            //
             // tpDebug
-            // 
+            //
             this.tpDebug.Controls.Add(this.debug);
             this.tpDebug.Location = new System.Drawing.Point(4, 22);
             this.tpDebug.Name = "tpDebug";
@@ -337,9 +337,9 @@ namespace Example
             this.tpDebug.TabIndex = 0;
             this.tpDebug.Text = "Debug";
             this.tpDebug.UseVisualStyleBackColor = true;
-            // 
+            //
             // debug
-            // 
+            //
             this.debug.Dock = System.Windows.Forms.DockStyle.Fill;
             this.debug.ErrorColor = System.Drawing.Color.Red;
             this.debug.Location = new System.Drawing.Point(0, 0);
@@ -351,31 +351,31 @@ namespace Example
             this.debug.Stream = this.jc;
             this.debug.TabIndex = 0;
             this.debug.TextColor = System.Drawing.Color.Black;
-            // 
+            //
             // mnuPresence
-            // 
+            //
             this.mnuPresence.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.mnuAvailable,
             this.mnuAway});
-            // 
+            //
             // mnuAvailable
-            // 
+            //
             this.mnuAvailable.Enabled = false;
             this.mnuAvailable.Index = 0;
             this.mnuAvailable.Shortcut = System.Windows.Forms.Shortcut.CtrlO;
             this.mnuAvailable.Text = "&Available";
             this.mnuAvailable.Click += new System.EventHandler(this.mnuAvailable_Click);
-            // 
+            //
             // mnuAway
-            // 
+            //
             this.mnuAway.Enabled = false;
             this.mnuAway.Index = 1;
             this.mnuAway.Shortcut = System.Windows.Forms.Shortcut.CtrlA;
             this.mnuAway.Text = "A&way";
             this.mnuAway.Click += new System.EventHandler(this.mnuAway_Click);
-            // 
+            //
             // menuStrip1
-            // 
+            //
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.viewToolStripMenuItem,
@@ -387,9 +387,9 @@ namespace Example
             this.menuStrip1.Size = new System.Drawing.Size(632, 24);
             this.menuStrip1.TabIndex = 3;
             this.menuStrip1.Text = "menuStrip1";
-            // 
+            //
             // fileToolStripMenuItem
-            // 
+            //
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.connectToolStripMenuItem,
             this.joinConferenceToolStripMenuItem,
@@ -398,63 +398,63 @@ namespace Example
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(35, 20);
             this.fileToolStripMenuItem.Text = "&File";
-            // 
+            //
             // connectToolStripMenuItem
-            // 
+            //
             this.connectToolStripMenuItem.Name = "connectToolStripMenuItem";
             this.connectToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F9;
             this.connectToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
             this.connectToolStripMenuItem.Text = "&Connect";
             this.connectToolStripMenuItem.Click += new System.EventHandler(this.connectToolStripMenuItem_Click);
-            // 
+            //
             // joinConferenceToolStripMenuItem
-            // 
+            //
             this.joinConferenceToolStripMenuItem.Name = "joinConferenceToolStripMenuItem";
             this.joinConferenceToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.J)));
             this.joinConferenceToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
             this.joinConferenceToolStripMenuItem.Text = "&Join Conference";
             this.joinConferenceToolStripMenuItem.Click += new System.EventHandler(this.joinConferenceToolStripMenuItem_Click);
-            // 
+            //
             // toolStripMenuItem1
-            // 
+            //
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(197, 6);
-            // 
+            //
             // exitToolStripMenuItem
-            // 
+            //
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
-            // 
+            //
             // viewToolStripMenuItem
-            // 
+            //
             this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.servicesToolStripMenuItem,
             this.debugToolStripMenuItem});
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
             this.viewToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
             this.viewToolStripMenuItem.Text = "&View";
-            // 
+            //
             // servicesToolStripMenuItem
-            // 
+            //
             this.servicesToolStripMenuItem.Name = "servicesToolStripMenuItem";
             this.servicesToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F8;
             this.servicesToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.servicesToolStripMenuItem.Text = "&Services";
             this.servicesToolStripMenuItem.Click += new System.EventHandler(this.servicesToolStripMenuItem_Click);
-            // 
+            //
             // debugToolStripMenuItem
-            // 
+            //
             this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
             this.debugToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F12;
             this.debugToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.debugToolStripMenuItem.Text = "&Debug";
             this.debugToolStripMenuItem.Click += new System.EventHandler(this.debugToolStripMenuItem_Click);
-            // 
+            //
             // rosterToolStripMenuItem
-            // 
+            //
             this.rosterToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addContactToolStripMenuItem,
             this.removeContactToolStripMenuItem,
@@ -462,74 +462,74 @@ namespace Example
             this.rosterToolStripMenuItem.Name = "rosterToolStripMenuItem";
             this.rosterToolStripMenuItem.Size = new System.Drawing.Size(51, 20);
             this.rosterToolStripMenuItem.Text = "&Roster";
-            // 
+            //
             // addContactToolStripMenuItem
-            // 
+            //
             this.addContactToolStripMenuItem.Name = "addContactToolStripMenuItem";
             this.addContactToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Insert;
             this.addContactToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
             this.addContactToolStripMenuItem.Text = "&Add Contact";
             this.addContactToolStripMenuItem.Click += new System.EventHandler(this.menuItem3_Click);
-            // 
+            //
             // removeContactToolStripMenuItem
-            // 
+            //
             this.removeContactToolStripMenuItem.Name = "removeContactToolStripMenuItem";
             this.removeContactToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Delete;
             this.removeContactToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
             this.removeContactToolStripMenuItem.Text = "&Remove Contact";
             this.removeContactToolStripMenuItem.Click += new System.EventHandler(this.menuItem5_Click);
-            // 
+            //
             // addGroupToolStripMenuItem
-            // 
+            //
             this.addGroupToolStripMenuItem.Name = "addGroupToolStripMenuItem";
             this.addGroupToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
             this.addGroupToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
             this.addGroupToolStripMenuItem.Text = "&Add Group";
             this.addGroupToolStripMenuItem.Click += new System.EventHandler(this.addGroupToolStripMenuItem_Click);
-            // 
+            //
             // windowToolStripMenuItem
-            // 
+            //
             this.windowToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.closeTabToolStripMenuItem});
             this.windowToolStripMenuItem.Name = "windowToolStripMenuItem";
             this.windowToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
             this.windowToolStripMenuItem.Text = "&Window";
-            // 
+            //
             // closeTabToolStripMenuItem
-            // 
+            //
             this.closeTabToolStripMenuItem.Name = "closeTabToolStripMenuItem";
             this.closeTabToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.W)));
             this.closeTabToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
             this.closeTabToolStripMenuItem.Text = "&Close Tab";
             this.closeTabToolStripMenuItem.Click += new System.EventHandler(this.closeTabToolStripMenuItem_Click);
-            // 
+            //
             // pubSubToolStripMenuItem
-            // 
+            //
             this.pubSubToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.subscribePubSubToolStripMenuItem,
             this.deletePubSubToolStripMenuItem});
             this.pubSubToolStripMenuItem.Name = "pubSubToolStripMenuItem";
             this.pubSubToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
             this.pubSubToolStripMenuItem.Text = "PubSub";
-            // 
+            //
             // subscribePubSubToolStripMenuItem
-            // 
+            //
             this.subscribePubSubToolStripMenuItem.Name = "subscribePubSubToolStripMenuItem";
             this.subscribePubSubToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F10;
             this.subscribePubSubToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.subscribePubSubToolStripMenuItem.Text = "&Subscribe";
             this.subscribePubSubToolStripMenuItem.Click += new System.EventHandler(this.subscribeToPubSubToolStripMenuItem_Click);
-            // 
+            //
             // deletePubSubToolStripMenuItem
-            // 
+            //
             this.deletePubSubToolStripMenuItem.Name = "deletePubSubToolStripMenuItem";
             this.deletePubSubToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F11;
             this.deletePubSubToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.deletePubSubToolStripMenuItem.Text = "&Delete";
             this.deletePubSubToolStripMenuItem.Click += new System.EventHandler(this.deletePubSubToolStripMenuItem_Click);
-            // 
+            //
             // cm
-            // 
+            //
             ident1.Category = "client";
             ident1.Lang = "en";
             ident1.Name = "Jabber-Net Test Client";
@@ -538,25 +538,25 @@ namespace Example
         ident1};
             this.cm.Node = "http://cursive.net/clients/csharp-example";
             this.cm.Stream = this.jc;
-            // 
+            //
             // psm
-            // 
+            //
             this.psm.Stream = this.jc;
-            // 
+            //
             // idler
-            // 
+            //
             this.idler.InvokeControl = this;
             this.idler.OnIdle += new bedrock.util.SpanEventHandler(this.idler_OnIdle);
             this.idler.OnUnIdle += new bedrock.util.SpanEventHandler(this.idler_OnUnIdle);
-            // 
+            //
             // muc
-            // 
+            //
             this.muc.Stream = this.jc;
             this.muc.OnRoomConfig += new jabber.connection.ConfigureRoom(this.muc_OnRoomConfig);
             this.muc.OnPresenceError += new jabber.connection.RoomPresenceHandler(this.muc_OnPresenceError);
-            // 
+            //
             // MainForm
-            // 
+            //
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.ClientSize = new System.Drawing.Size(632, 438);
             this.ContextMenu = this.mnuPresence;
@@ -657,7 +657,7 @@ namespace Example
             if (MessageBox.Show(this,
                 "Create new account?",
                 "Authentication error",
-                MessageBoxButtons.OKCancel, 
+                MessageBoxButtons.OKCancel,
                 MessageBoxIcon.Warning) == DialogResult.OK)
             {
                 if (!m_connected)
@@ -729,7 +729,7 @@ namespace Example
                 jc.Write(iq);
                 return;
             }
-            
+
             if (query is Time)
             {
                 iq = iq.GetResponse(jc.Document);
@@ -738,7 +738,7 @@ namespace Example
                 jc.Write(iq);
                 return;
             }
-            
+
             if (query is Last)
             {
                 iq = iq.GetResponse(jc.Document);
@@ -930,9 +930,9 @@ namespace Example
         private void subscribeToPubSubToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PubSubSubcribeForm ps = new PubSubSubcribeForm();
-            // this is a small race.  to do it right, I should call dm.BeginFindServiceWithFeature, 
+            // this is a small race.  to do it right, I should call dm.BeginFindServiceWithFeature,
             // and modify that to call back on all of the found services.  The idea is that
-            // by the the time the user has a chance to click on the menu item, the DiscoManager 
+            // by the the time the user has a chance to click on the menu item, the DiscoManager
             // will be populated.
             ps.DiscoManager = dm;
             if (ps.ShowDialog() != DialogResult.OK)

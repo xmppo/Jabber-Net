@@ -2,7 +2,7 @@
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
- * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * Copyright (c) 2002-2008 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
@@ -113,23 +113,23 @@ namespace jabber.protocol.client
         /// <summary>
         /// do not retry (the error is unrecoverable)
         /// </summary>
-        cancel, 
+        cancel,
         /// <summary>
         /// proceed (the condition was only a warning)
         /// </summary>
-        @continue, 
+        @continue,
         /// <summary>
         /// retry after changing the data sent
         /// </summary>
-        modify, 
+        modify,
         /// <summary>
         /// retry after providing credentials
         /// </summary>
-        auth, 
+        auth,
         /// <summary>
         /// retry after waiting (the error is temporary)
         /// </summary>
-        wait 
+        wait
     }
 
 
@@ -159,91 +159,91 @@ namespace jabber.protocol.client
     public class Error : Element
     {
         /// <summary>
-        /// modify  	400
+        /// modify      400
         /// </summary>
         public const string BAD_REQUEST = "bad-request";
         /// <summary>
-        /// cancel  	409
+        /// cancel      409
         /// </summary>
         public const string CONFLICT = "conflict";
         /// <summary>
-        /// cancel 	501
+        /// cancel  501
         /// </summary>
         public const string FEATURE_NOT_IMPLEMENTED = "feature-not-implemented";
         /// <summary>
-        /// auth 	403
+        /// auth    403
         /// </summary>
         public const string FORBIDDEN = "forbidden";
         /// <summary>
-        /// 	modify 	302 (permanent)
+        ///     modify  302 (permanent)
         /// </summary>
         public const string GONE = "gone";
         /// <summary>
-        /// 	wait 	500
+        ///     wait    500
         /// </summary>
         public const string INTERNAL_SERVER_ERROR = "internal-server-error";
         /// <summary>
-        /// 	cancel 	404
+        ///     cancel  404
         /// </summary>
         public const string ITEM_NOT_FOUND = "item-not-found";
         /// <summary>
-        /// 	modify 	400
+        ///     modify  400
         /// </summary>
         public const string JID_MALFORMED = "jid-malformed";
         /// <summary>
-        /// 	modify 	406
+        ///     modify  406
         /// </summary>
         public const string NOT_ACCEPTABLE = "not-acceptable";
         /// <summary>
-        /// 	cancel 	405
+        ///     cancel  405
         /// </summary>
         public const string NOT_ALLOWED = "not-allowed";
         /// <summary>
-        /// 	auth 	401
+        ///     auth    401
         /// </summary>
         public const string NOT_AUTHORIZED = "not-authorized";
         /// <summary>
-        /// 	auth 	402
+        ///     auth    402
         /// </summary>
         public const string PAYMENT_REQUIRED = "payment-required";
         /// <summary>
-        /// 	wait 	404
+        ///     wait    404
         /// </summary>
         public const string RECIPIENT_UNAVAILABLE = "recipient-unavailable";
         /// <summary>
-        /// 	modify 	302 (temporary)
+        ///     modify  302 (temporary)
         /// </summary>
         public const string REDIRECT = "redirect";
         /// <summary>
-        /// 	auth 	407
+        ///     auth    407
         /// </summary>
         public const string REGISTRATION_REQUIRED = "registration-required";
         /// <summary>
-        /// 	cancel 	404
+        ///     cancel  404
         /// </summary>
         public const string REMOTE_SERVER_NOT_FOUND = "remote-server-not-found";
         /// <summary>
-        /// 	wait 	504
+        ///     wait    504
         /// </summary>
         public const string REMOTE_SERVER_TIMEOUT = "remote-server-timeout";
         /// <summary>
-        /// 	wait 	500
+        ///     wait    500
         /// </summary>
         public const string RESOURCE_CONSTRAINT = "resource-constraint";
         /// <summary>
-        /// 	cancel 	503
+        ///     cancel  503
         /// </summary>
         public const string SERVICE_UNAVAILABLE = "service-unavailable";
         /// <summary>
-        /// 	auth 	407
+        ///     auth    407
         /// </summary>
         public const string SUBSCRIPTION_REQUIRED = "subscription-required";
         /// <summary>
-        /// 	[any] 	500
+        ///     [any]   500
         /// </summary>
         public const string UNDEFINED_CONDITION = "undefined-condition";
         /// <summary>
-        /// 	wait 	400
+        ///     wait    400
         /// </summary>
         public const string UNEXPECTED_REQUEST = "unexpected-request";
 
@@ -378,7 +378,7 @@ namespace jabber.protocol.client
         /// </summary>
         public string Condition
         {
-            get 
+            get
             {
                 foreach (XmlNode n in this.ChildNodes)
                 {

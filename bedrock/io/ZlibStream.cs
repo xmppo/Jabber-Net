@@ -2,7 +2,7 @@
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
- * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * Copyright (c) 2002-2008 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
@@ -42,8 +42,8 @@ namespace bedrock.io
     /// <summary>
     /// Wrap two ComponentAce.Compression.Libs.zlib.ZStream's, one in and one out.
     /// The existing wrappers in the project are uni-directional.
-    /// 
-    /// No, System.IO.Compression.GZipStream won't work, because they didn't expose 
+    ///
+    /// No, System.IO.Compression.GZipStream won't work, because they didn't expose
     /// compression levels or flush types.
     /// </summary>
     [SVN(@"$Id$")]
@@ -397,9 +397,9 @@ namespace bedrock.io
 
             public System.Threading.WaitHandle AsyncWaitHandle
             {
-                get 
-                { 
-                    throw new Exception("The method or operation is not implemented."); 
+                get
+                {
+                    throw new Exception("The method or operation is not implemented.");
                 }
             }
 

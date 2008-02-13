@@ -2,7 +2,7 @@
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
- * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * Copyright (c) 2002-2008 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
@@ -32,11 +32,11 @@ namespace test.bedrock.io
         // python:
         // [ord(x) for x in zlib.compress("Hello, world")]
         private const string HELLO_STR = "Hello, world";
-        private static readonly byte[] HELLO_BYTES = new byte[] 
+        private static readonly byte[] HELLO_BYTES = new byte[]
         {
             120, 156, 243,  72, 205, 201, 201, 215,
-             81,  40, 207,  47, 202,  73,   1,   0, 
-             27, 212,   4, 105 
+             81,  40, 207,  47, 202,  73,   1,   0,
+             27, 212,   4, 105
         };
 
         [Test]

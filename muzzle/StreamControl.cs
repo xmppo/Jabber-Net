@@ -2,7 +2,7 @@
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
- * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * Copyright (c) 2002-2008 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
@@ -26,7 +26,7 @@ namespace muzzle
     /// </summary>
     [SVN(@"$Id$")]
     public class StreamControl : System.Windows.Forms.UserControl
-	{
+    {
         /// <summary>
         /// The XmppStream for this control.  Set at design time when a subclass control is dragged onto a form.
         /// </summary>
@@ -55,15 +55,15 @@ namespace muzzle
                 }
                 return m_stream;
             }
-            set 
-            { 
+            set
+            {
                 if ((object)m_stream != (object)value)
                 {
-                    m_stream = value; 
+                    m_stream = value;
                     if (OnStreamChanged != null)
                         OnStreamChanged(this);
                 }
             }
         }
-	}
+    }
 }

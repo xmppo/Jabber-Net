@@ -2,7 +2,7 @@
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
- * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * Copyright (c) 2002-2008 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
@@ -75,7 +75,7 @@ namespace jabber.connection
     /// </summary>
     [SVN(@"$Id$")]
     public class ConferenceManager : StreamComponent
-	{
+    {
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -95,13 +95,13 @@ namespace jabber.connection
         /// </summary>
         /// <param name="container">Parent container.</param>
         public ConferenceManager(IContainer container)
-		{
-			container.Add(this);
+        {
+            container.Add(this);
 
-			InitializeComponent();
-		}
+            InitializeComponent();
+        }
 
-        /// <summary> 
+        /// <summary>
         /// Performs tasks associated with freeing, releasing, or resetting resources.
         /// </summary>
         /// <param name="disposing">True if managed resources should be disposed; otherwise, false.</param>
@@ -212,7 +212,7 @@ namespace jabber.connection
         /// </summary>
         [Category("Room")]
         public event RoomParticipantEvent OnParticipantPresenceChange;
-        
+
         /// <summary>
         /// Joins a conference room.
         /// </summary>
@@ -293,7 +293,7 @@ namespace jabber.connection
         /// object for that room with the given nick.  You'll be called back on
         /// "callback" when complete; the Room will be null if there was an error
         /// or timeout.
-        /// 
+        ///
         /// Note: the server should implement the feature http://jabber.org/protocol/muc#unique,
         /// or this will return an error.  To work around, just create a room with a Guid for
         /// a name.
@@ -347,7 +347,7 @@ namespace jabber.connection
             Room r = GetRoom(new JID(unique.RoomNode, iq.From.Server, us.Nick));
             us.Callback(r, us.State);
         }
-	}
+    }
 
     /// <summary>
     /// Manages a multi-user conference room.  See XEP-0045 (http://www.xmpp.org/extensions/xep-0045.html).
@@ -369,11 +369,11 @@ namespace jabber.connection
         /// <summary>
         /// Nick JID.  room@conference/nick.
         /// </summary>
-        private JID m_jid;  
+        private JID m_jid;
         /// <summary>
         /// Bare room JID.  room@conference
         /// </summary>
-        private JID m_room; 
+        private JID m_room;
         private XmppStream m_stream;
         private bool m_default = false;
         private ConferenceManager m_manager;
@@ -525,13 +525,13 @@ namespace jabber.connection
         public string Nickname
         {
             get { return m_jid.Resource; }
-            set 
+            set
             {
                 m_jid = new JID(m_jid.User, m_jid.Server, value);
                 Presence p = new Presence(m_stream.Document);
                 p.To = m_jid;
                 m_stream.Write(p);
-            }                
+            }
         }
 
         /// <summary>
@@ -732,7 +732,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Configures the room. OnRoomConfig MUST be set first. 
+        /// Configures the room. OnRoomConfig MUST be set first.
         /// OnRoomConfig will be called back in the GUI thread if there is an
         /// InvokeControl on your XmppStream.  Make sure that OnRoomConfig does not
         /// return until it has the answer, typically by popping up a modal dialog
@@ -759,7 +759,7 @@ namespace jabber.connection
 
         private void ConfigForm(object sender, IQ iq, object context)
         {
-            // We should always be on the GUI thread.  
+            // We should always be on the GUI thread.
             // XmppStream should invoke before calling OnProtocol in the Tracker.
             Debug.Assert((m_stream.InvokeControl == null) || (!m_stream.InvokeControl.InvokeRequired));
 
@@ -810,7 +810,7 @@ namespace jabber.connection
   <query xmlns='http://jabber.org/protocol/muc#owner'>
     <x xmlns='jabber:x:data' type='submit'/>
   </query>
-</iq> 
+</iq>
  */
             m_state = STATE.configSet;
             OwnerIQ iq = new OwnerIQ(m_stream.Document);
@@ -1100,7 +1100,7 @@ namespace jabber.connection
         /// <summary>
         /// Modify the roles of the parties in this list.
         /// To use, retrive a ParticipantCollection, change the roles
-        /// of the parties in that collection, then pass that modified 
+        /// of the parties in that collection, then pass that modified
         /// collection in here.
         /// </summary>
         /// <param name="parties">The modified participant collection</param>
@@ -1251,7 +1251,7 @@ namespace jabber.connection
   <query xmlns='http://jabber.org/protocol/muc#admin'>
     <item affiliation='outcast'/>
   </query>
-</iq>       
+</iq>
 */
             RoomAdminIQ iq = new RoomAdminIQ(m_stream.Document);
             iq.To = m_room;
@@ -1263,7 +1263,7 @@ namespace jabber.connection
         /// <summary>
         /// Modify the roles of the parties in this list.
         /// To use, retrive a ParticipantCollection, change the roles
-        /// of the parties in that collection, then pass that modified 
+        /// of the parties in that collection, then pass that modified
         /// collection in here.
         /// </summary>
         /// <param name="parties">The modified participant collection</param>
@@ -1359,7 +1359,7 @@ namespace jabber.connection
             else
             {
                 party = new RoomParticipant(pres);
-                // XCP will send unavails from registered users that 
+                // XCP will send unavails from registered users that
                 // are not currently online.
                 if (pres.Type != PresenceType.unavailable)
                 {
@@ -1440,7 +1440,7 @@ namespace jabber.connection
         public Presence Presence
         {
             get { return m_presence; }
-            set 
+            set
             {
                 m_presence = value;
                 m_changed = false;
@@ -1458,9 +1458,9 @@ namespace jabber.connection
         /// <summary>
         /// The muc#user item in the presence.
         /// </summary>
-        protected RoomItem Item 
+        protected RoomItem Item
         {
-            get 
+            get
             {
                 UserX x = (UserX)m_presence["x", URI.MUC_USER];
                 if (x == null)

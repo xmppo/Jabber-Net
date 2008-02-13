@@ -2,7 +2,7 @@
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
- * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * Copyright (c) 2002-2008 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
@@ -259,8 +259,8 @@ namespace muzzle
 
         /// <summary>
         /// Add a line that has a colored tag string, followed by a space, followed by
-        /// a chunk of text in the default color, followed by a newline.  
-        /// 
+        /// a chunk of text in the default color, followed by a newline.
+        ///
         /// Note: Although this seems kind of random, it's needed in several places.
         /// </summary>
         /// <param name="tagColor">The color to use for the tag</param>

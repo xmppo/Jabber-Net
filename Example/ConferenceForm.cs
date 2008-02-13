@@ -2,7 +2,7 @@
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
- * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * Copyright (c) 2002-2008 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
@@ -56,11 +56,11 @@ namespace Example
 
         public JID RoomAndNick
         {
-            get 
+            get
             {
                 return new JID(txtRoom.Text, cmbJID.Text, txtNick.Text);
             }
-            set 
+            set
             {
                 cmbJID.Text = value.Server;
                 txtRoom.Text = value.User;
@@ -103,9 +103,9 @@ namespace Example
             this.txtNick = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.SuspendLayout();
-            // 
+            //
             // label1
-            // 
+            //
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(12, 9);
             this.label1.Name = "label1";
@@ -113,9 +113,9 @@ namespace Example
             this.label1.TabIndex = 0;
             this.label1.Text = "Conference Server:";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
+            //
             // label2
-            // 
+            //
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(73, 35);
             this.label2.Name = "label2";
@@ -123,10 +123,10 @@ namespace Example
             this.label2.TabIndex = 2;
             this.label2.Text = "Room:";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
+            //
             // cmbJID
-            // 
-            this.cmbJID.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.cmbJID.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbJID.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
             this.cmbJID.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
@@ -134,18 +134,18 @@ namespace Example
             this.cmbJID.Name = "cmbJID";
             this.cmbJID.Size = new System.Drawing.Size(156, 21);
             this.cmbJID.TabIndex = 1;
-            // 
+            //
             // txtRoom
-            // 
-            this.txtRoom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.txtRoom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtRoom.Location = new System.Drawing.Point(118, 32);
             this.txtRoom.Name = "txtRoom";
             this.txtRoom.Size = new System.Drawing.Size(156, 20);
             this.txtRoom.TabIndex = 3;
-            // 
+            //
             // btnOK
-            // 
+            //
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btnOK.Location = new System.Drawing.Point(118, 84);
             this.btnOK.Name = "btnOK";
@@ -153,9 +153,9 @@ namespace Example
             this.btnOK.TabIndex = 6;
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
-            // 
+            //
             // btnCancel
-            // 
+            //
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.Location = new System.Drawing.Point(199, 84);
             this.btnCancel.Name = "btnCancel";
@@ -163,18 +163,18 @@ namespace Example
             this.btnCancel.TabIndex = 7;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
-            // 
+            //
             // txtNick
-            // 
-            this.txtNick.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.txtNick.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtNick.Location = new System.Drawing.Point(118, 58);
             this.txtNick.Name = "txtNick";
             this.txtNick.Size = new System.Drawing.Size(156, 20);
             this.txtNick.TabIndex = 5;
-            // 
+            //
             // label3
-            // 
+            //
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(53, 61);
             this.label3.Name = "label3";
@@ -182,9 +182,9 @@ namespace Example
             this.label3.TabIndex = 4;
             this.label3.Text = "Nickname:";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
+            //
             // ConferenceForm
-            // 
+            //
             this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;

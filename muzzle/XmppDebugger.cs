@@ -2,7 +2,7 @@
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
- * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * Copyright (c) 2002-2008 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
@@ -41,7 +41,7 @@ namespace muzzle
         private string m_err = "ERROR:";
         private string m_last = "";
 
-        /// <summary> 
+        /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
@@ -193,7 +193,7 @@ namespace muzzle
             Write(m_sendColor, m_send, txt);
         }
 
-        /// <summary> 
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
@@ -321,8 +321,8 @@ namespace muzzle
 
         #region Component Designer generated code
 
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// <summary>
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
@@ -331,9 +331,9 @@ namespace muzzle
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.rtDebug = new muzzle.BottomScrollRichText();
             this.SuspendLayout();
-            // 
+            //
             // rtSend
-            // 
+            //
             this.rtSend.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.rtSend.Location = new System.Drawing.Point(0, 110);
             this.rtSend.Name = "rtSend";
@@ -341,18 +341,18 @@ namespace muzzle
             this.rtSend.TabIndex = 0;
             this.rtSend.Text = "";
             this.rtSend.KeyUp += new System.Windows.Forms.KeyEventHandler(this.rtSend_KeyUp);
-            // 
+            //
             // splitter1
-            // 
+            //
             this.splitter1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.splitter1.Location = new System.Drawing.Point(0, 107);
             this.splitter1.Name = "splitter1";
             this.splitter1.Size = new System.Drawing.Size(150, 3);
             this.splitter1.TabIndex = 1;
             this.splitter1.TabStop = false;
-            // 
+            //
             // rtDebug
-            // 
+            //
             this.rtDebug.BackColor = System.Drawing.SystemColors.Window;
             this.rtDebug.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rtDebug.Location = new System.Drawing.Point(0, 0);
@@ -362,9 +362,9 @@ namespace muzzle
             this.rtDebug.TabIndex = 2;
             this.rtDebug.Text = "";
             this.rtDebug.KeyUp += new System.Windows.Forms.KeyEventHandler(this.rtDebug_KeyUp);
-            // 
+            //
             // XmppDebugger
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.rtDebug);

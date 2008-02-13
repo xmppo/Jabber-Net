@@ -2,7 +2,7 @@
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
- * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * Copyright (c) 2002-2008 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
@@ -23,7 +23,7 @@ namespace Example
 {
     public class ServiceDisplay : UserControl
     {
-        /// <summary> 
+        /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
@@ -43,7 +43,7 @@ namespace Example
 #endif
         }
 
-        /// <summary> 
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
@@ -58,8 +58,8 @@ namespace Example
 
         #region Component Designer generated code
 
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// <summary>
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
@@ -68,9 +68,9 @@ namespace Example
             this.splitter2 = new System.Windows.Forms.Splitter();
             this.pgServices = new System.Windows.Forms.PropertyGrid();
             this.SuspendLayout();
-            // 
+            //
             // tvServices
-            // 
+            //
             this.tvServices.Dock = System.Windows.Forms.DockStyle.Left;
             this.tvServices.Location = new System.Drawing.Point(0, 0);
             this.tvServices.Name = "tvServices";
@@ -81,25 +81,25 @@ namespace Example
             this.tvServices.TabIndex = 1;
             this.tvServices.AfterCollapse += new System.Windows.Forms.TreeViewEventHandler(this.tvServices_AfterCollapse);
             this.tvServices.AfterExpand += new System.Windows.Forms.TreeViewEventHandler(this.tvServices_AfterExpand);
-            // 
+            //
             // splitter2
-            // 
+            //
             this.splitter2.Location = new System.Drawing.Point(175, 0);
             this.splitter2.Name = "splitter2";
             this.splitter2.Size = new System.Drawing.Size(3, 281);
             this.splitter2.TabIndex = 2;
             this.splitter2.TabStop = false;
-            // 
+            //
             // pgServices
-            // 
+            //
             this.pgServices.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pgServices.Location = new System.Drawing.Point(178, 0);
             this.pgServices.Name = "pgServices";
             this.pgServices.Size = new System.Drawing.Size(366, 281);
             this.pgServices.TabIndex = 3;
-            // 
+            //
             // ServiceDisplay
-            // 
+            //
             this.Controls.Add(this.pgServices);
             this.Controls.Add(this.splitter2);
             this.Controls.Add(this.tvServices);

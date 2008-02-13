@@ -1,3 +1,16 @@
+/* --------------------------------------------------------------------------
+ * Copyrights
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2008 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * information for Cursive Systems, Inc. is available at
+ * http://www.cursive.net/.
+ *
+ * License
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
+ * See LICENSE.txt for details.
+ * --------------------------------------------------------------------------*/
 using System;
 using System.Xml;
 
@@ -67,7 +80,7 @@ namespace jabber.protocol.x
         public string[] Extensions
         {
             get { return GetAttribute("ext").Split(SPLIT); }
-            set 
+            set
             {
                 if (value.Length == 0)
                 {
@@ -75,7 +88,7 @@ namespace jabber.protocol.x
                         RemoveAttribute("ext");
                 }
                 else
-                    SetAttribute("ext", string.Join(" ", value)); 
+                    SetAttribute("ext", string.Join(" ", value));
             }
         }
 

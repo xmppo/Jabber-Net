@@ -2,7 +2,7 @@
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
- * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * Copyright (c) 2002-2008 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
@@ -165,20 +165,20 @@ namespace jabber.protocol.iq
         KICKED = 307,
 
         /// <summary>
-        /// Inform user that he or she is being removed from the room 
+        /// Inform user that he or she is being removed from the room
         /// because of an affiliation change
         /// </summary>
         REMOVED_AFFILIATION = 321,
 
         /// <summary>
-        /// Inform user that he or she is being removed from the room 
-        /// because the room has been changed to members-only and the user 
+        /// Inform user that he or she is being removed from the room
+        /// because the room has been changed to members-only and the user
         /// is not a member
         /// </summary>
         REMOVED_NONMEMBER = 322,
 
         /// <summary>
-        /// Inform user that he or she is being removed from the room 
+        /// Inform user that he or she is being removed from the room
         /// because of a system shutdown
         /// </summary>
         REMOVED_SHUTDOWN = 332,
@@ -206,7 +206,7 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="doc"></param>
         /// <param name="roomAndNick"></param>
@@ -243,7 +243,7 @@ namespace jabber.protocol.iq
         ///
         /// </summary>
         /// <param name="doc"></param>
-        public RoomX(XmlDocument doc) 
+        public RoomX(XmlDocument doc)
             : base("x", URI.MUC, doc)
         {
         }
@@ -288,7 +288,7 @@ namespace jabber.protocol.iq
         ///
         /// </summary>
         /// <param name="doc"></param>
-        public History(XmlDocument doc) 
+        public History(XmlDocument doc)
             : base("history", URI.MUC, doc)
         {
         }
@@ -352,7 +352,7 @@ namespace jabber.protocol.iq
         ///
         /// </summary>
         /// <param name="doc"></param>
-        public UserX(XmlDocument doc) 
+        public UserX(XmlDocument doc)
             : base("x", URI.MUC_USER, doc)
         {
         }
@@ -442,7 +442,7 @@ namespace jabber.protocol.iq
         /// <exception cref="FormatException">Invalid code</exception>
         public RoomStatus[] Status
         {
-            get 
+            get
             {
                 XmlNodeList nl = this.GetElementsByTagName("status");
                 RoomStatus[] ret = new RoomStatus[nl.Count];
@@ -454,7 +454,7 @@ namespace jabber.protocol.iq
                 Array.Sort(ret);
                 return ret;
             }
-            set 
+            set
             {
                 RemoveElems("status");
                 foreach (RoomStatus i in value)
@@ -493,7 +493,7 @@ namespace jabber.protocol.iq
         ///
         /// </summary>
         /// <param name="doc"></param>
-        public Decline(XmlDocument doc) 
+        public Decline(XmlDocument doc)
             : base("decline", URI.MUC_USER, doc)
         {
         }
@@ -529,7 +529,7 @@ namespace jabber.protocol.iq
         /// </summary>
         public JID To
         {
-            get 
+            get
             {
                 string to = this.GetAttr("to");
                 if (to == null)
@@ -749,7 +749,7 @@ namespace jabber.protocol.iq
             set { SetAttr("jid", (string)value); }
         }
     }
-#endregion 
+#endregion
 
 #region admin
     /// <summary>
@@ -769,7 +769,7 @@ namespace jabber.protocol.iq
     }
 
     /// <summary>
-    /// Moderator use cases 
+    /// Moderator use cases
     /// </summary>
     public class AdminQuery : Element
     {
@@ -1042,7 +1042,7 @@ namespace jabber.protocol.iq
 #endregion
 
     /// <summary>
-    /// Request for a unique room name.  Seems like just using a GUID on the 
+    /// Request for a unique room name.  Seems like just using a GUID on the
     /// create request would be enough, but it's in XEP-45.
     /// </summary>
     public class UniqueIQ : jabber.protocol.client.IQ
@@ -1055,7 +1055,7 @@ namespace jabber.protocol.iq
             : base(doc)
         {
             AppendChild(new UniqueRoom(doc));
-        }    
+        }
     }
 
     /// <summary>
@@ -1082,9 +1082,9 @@ namespace jabber.protocol.iq
             : base(prefix, qname, doc)
         {
         }
-        
+
         /// <summary>
-        /// The room name returned by the server.  Note: must add conference server to this, 
+        /// The room name returned by the server.  Note: must add conference server to this,
         /// it is just the node.
         /// </summary>
         public string RoomNode

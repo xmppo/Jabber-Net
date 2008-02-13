@@ -2,7 +2,7 @@
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
- * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * Copyright (c) 2002-2008 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
@@ -25,7 +25,7 @@ namespace jabber.connection
     /// </summary>
     [SVN(@"$Id$")]
     public abstract class StreamComponent : System.ComponentModel.Component
-	{
+    {
         /// <summary>
         /// Finds the first component that subclasses XmppStream in Visual Studio
         /// during runtime.
@@ -59,7 +59,7 @@ namespace jabber.connection
                 if (type.IsAssignableFrom(c.GetType()))
                     return c;
             }
-            return null;            
+            return null;
         }
 
         /// <summary>
@@ -102,5 +102,5 @@ namespace jabber.connection
                 }
             }
         }
-	}
+    }
 }

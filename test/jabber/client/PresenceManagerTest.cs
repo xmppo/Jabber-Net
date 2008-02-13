@@ -2,7 +2,7 @@
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
- * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * Copyright (c) 2002-2008 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
@@ -37,7 +37,7 @@ namespace test.jabber.client1 // TODO: Client1 due to a bug in NUnit.
         JID boo  = "foo@bar/boo";
 
 
-        [Test] 
+        [Test]
         public void Test_Create()
         {
             PresenceManager pp = new PresenceManager();

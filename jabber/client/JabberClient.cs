@@ -2,7 +2,7 @@
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
- * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * Copyright (c) 2002-2008 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
@@ -173,7 +173,7 @@ namespace jabber.client
         /// <summary>
         /// Allows the user to enter registration requested information before sending to the XMPP server.
         ///
-        /// WARNING: Make sure you do not return from this handler until the IQ is filled in.  
+        /// WARNING: Make sure you do not return from this handler until the IQ is filled in.
         /// It is now safe to call UI elements, since this callback is now on the GUI thread if
         /// the InvokeControl is set.
         /// </summary>
@@ -497,7 +497,7 @@ namespace jabber.client
         }
 
         /// <summary>
-        /// Removes a contact from the roster.  
+        /// Removes a contact from the roster.
         /// This will also remove the subscription for that contact being removed.
         /// </summary>
         /// <param name="to">The JID to remove</param>
@@ -782,7 +782,7 @@ namespace jabber.client
 
             if (AutoIQErrors)
             {
-                if (!iq.Handled && 
+                if (!iq.Handled &&
                     iq.HasAttribute("from") &&   // Belt.  Suspenders.  Don't respond to roster pushes.
                     ((iq.Type == IQType.get) || (iq.Type == IQType.set)))
                 {

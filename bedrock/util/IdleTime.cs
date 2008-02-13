@@ -2,7 +2,7 @@
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
- * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * Copyright (c) 2002-2008 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
@@ -108,7 +108,7 @@ namespace bedrock.util
         }
 
         /// <summary>
-        /// Time, in seconds, between checking for 
+        /// Time, in seconds, between checking for
         /// </summary>
         [Category("Time")]
         [DefaultValue(DEFAULT_POLL)]

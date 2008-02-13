@@ -2,7 +2,7 @@
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
- * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * Copyright (c) 2002-2008 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
@@ -136,7 +136,7 @@ namespace muzzle
                 g.DrawString("(" + node.Status + ")", this.Font, stat_fg, new PointF(e.Bounds.Left + nick_size.Width, e.Bounds.Top), StringFormat.GenericTypographic);
             }
         }
-       
+
 
         private void RosterTree_DrawNode(object sender, DrawTreeNodeEventArgs e)
         {
@@ -169,7 +169,7 @@ namespace muzzle
                 return null;
             return (GroupNode)node;
         }
-        
+
         private void RosterTree_DragDrop(object sender, DragEventArgs e)
         {
             GroupNode group = GetDropGroup(e);
@@ -354,15 +354,15 @@ namespace muzzle
         [DefaultValue(true)]
         public bool DrawStatus
         {
-            get 
-            { 
+            get
+            {
 #if NET20
-                return (this.DrawMode == TreeViewDrawMode.OwnerDrawText); 
+                return (this.DrawMode == TreeViewDrawMode.OwnerDrawText);
 #else
                 return false;
 #endif
             }
-            set 
+            set
             {
 #if NET20
                 if (value)
@@ -587,7 +587,7 @@ namespace muzzle
             /// </summary>
             public int Current
             {
-                get 
+                get
                 {
                     int count = 0;
                     foreach (ItemNode i in this.Nodes)

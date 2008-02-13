@@ -2,7 +2,7 @@
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
- * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * Copyright (c) 2002-2008 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
@@ -70,8 +70,8 @@ namespace jabber.protocol
         /// </summary>
         public string Lang
         {
-            get 
-            { 
+            get
+            {
                 if (!HasAttribute("lang", URI.XML))
                     return null;
                 return GetAttribute("lang", URI.XML);
@@ -175,7 +175,7 @@ namespace jabber.protocol
         /// ReplaceChild as the setter.
         /// </summary>
         /// <remarks>
-        /// This seems kind of around-the-barn.  Wish there was an easier way to do this, 
+        /// This seems kind of around-the-barn.  Wish there was an easier way to do this,
         /// rather than having to get the constructor, and whatnot.  Hopefully it won't
         /// be called all that often, so the speed issue won't be too bad.
         /// </remarks>
@@ -317,7 +317,7 @@ namespace jabber.protocol
 
         /// <summary>
         /// Set the value of an attribute, with the value being a enum instance.
-        /// The enum in question should have an entry with int value -1, which 
+        /// The enum in question should have an entry with int value -1, which
         /// corresponds to no attribute.
         /// </summary>
         /// <param name="name"></param>
@@ -356,7 +356,7 @@ namespace jabber.protocol
             }
         }
         /// <summary>
-        /// Set the value of a given attribute, as an integer.  Use -1 
+        /// Set the value of a given attribute, as an integer.  Use -1
         /// to remove the attribute.
         /// </summary>
         /// <param name="name">The attribute name</param>
@@ -368,7 +368,7 @@ namespace jabber.protocol
                 // testing shows this is safe for non-existing attributes.
                 RemoveAttribute(name);
             else
-                SetAttribute(name, val.ToString()); 
+                SetAttribute(name, val.ToString());
         }
 
         /// <summary>

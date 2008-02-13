@@ -2,7 +2,7 @@
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
- * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * Copyright (c) 2002-2008 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
@@ -29,11 +29,11 @@ namespace jabber.connection
 #endif
 
     /// <summary>
-    /// Intentionally-ugly form to deal with bad certificates.  Because you don't like it, you should catch XmppStream.OnInvalidCertificate, 
+    /// Intentionally-ugly form to deal with bad certificates.  Because you don't like it, you should catch XmppStream.OnInvalidCertificate,
     /// and do something better.
     /// </summary>
     [SVN(@"$Id$")]
-    public class CertificatePrompt 
+    public class CertificatePrompt
 #if UI_OK
         : Form
 #endif
@@ -52,7 +52,7 @@ namespace jabber.connection
         private Panel panel2;
 
         private X509Certificate2 m_cert;
-        
+
         /// <summary>
         /// Create an ugly form to prompt the user about an invalid certificate.
         /// </summary>
@@ -60,9 +60,9 @@ namespace jabber.connection
         /// <param name="chain">The CA chain for the cert</param>
         /// <param name="errors">The errors associated with the certificate</param>
         public CertificatePrompt(X509Certificate2 cert, X509Chain chain, SslPolicyErrors errors)
-		{
+        {
             m_cert = cert;
-			InitializeComponent();
+            InitializeComponent();
             lblSubject.Text = m_cert.SubjectName.Name;
             if ((errors & SslPolicyErrors.RemoteCertificateNameMismatch) == SslPolicyErrors.RemoteCertificateNameMismatch)
                 lblSubject.ForeColor = Color.Red;
@@ -114,36 +114,36 @@ namespace jabber.connection
             label3 = new System.Windows.Forms.Label();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // label1
-            // 
+            //
             label1.AutoSize = true;
             label1.Location = new System.Drawing.Point(12, 9);
             label1.Name = "label1";
             label1.Size = new System.Drawing.Size(77, 13);
             label1.TabIndex = 2;
             label1.Text = "Subject Name:";
-            // 
+            //
             // label2
-            // 
+            //
             label2.AutoSize = true;
             label2.Location = new System.Drawing.Point(12, 36);
             label2.Name = "label2";
             label2.Size = new System.Drawing.Size(63, 13);
             label2.TabIndex = 3;
             label2.Text = "Begin Date:";
-            // 
+            //
             // label3
-            // 
+            //
             label3.AutoSize = true;
             label3.Location = new System.Drawing.Point(12, 64);
             label3.Name = "label3";
             label3.Size = new System.Drawing.Size(55, 13);
             label3.TabIndex = 4;
             label3.Text = "End Date:";
-            // 
+            //
             // panel2
-            // 
+            //
             this.panel2.Controls.Add(this.btnCancel);
             this.panel2.Controls.Add(this.btnAllow);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -151,9 +151,9 @@ namespace jabber.connection
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(500, 44);
             this.panel2.TabIndex = 1;
-            // 
+            //
             // btnCancel
-            // 
+            //
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.Location = new System.Drawing.Point(413, 9);
@@ -162,9 +162,9 @@ namespace jabber.connection
             this.btnCancel.TabIndex = 2;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
-            // 
+            //
             // btnAllow
-            // 
+            //
             this.btnAllow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnAllow.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btnAllow.Location = new System.Drawing.Point(332, 9);
@@ -173,36 +173,36 @@ namespace jabber.connection
             this.btnAllow.TabIndex = 1;
             this.btnAllow.Text = "Allow Once";
             this.btnAllow.UseVisualStyleBackColor = true;
-            // 
+            //
             // lblSubject
-            // 
+            //
             this.lblSubject.AutoSize = true;
             this.lblSubject.Location = new System.Drawing.Point(126, 9);
             this.lblSubject.Name = "lblSubject";
             this.lblSubject.Size = new System.Drawing.Size(43, 13);
             this.lblSubject.TabIndex = 5;
             this.lblSubject.Text = "Subject";
-            // 
+            //
             // lblBegin
-            // 
+            //
             this.lblBegin.AutoSize = true;
             this.lblBegin.Location = new System.Drawing.Point(126, 36);
             this.lblBegin.Name = "lblBegin";
             this.lblBegin.Size = new System.Drawing.Size(34, 13);
             this.lblBegin.TabIndex = 6;
             this.lblBegin.Text = "Begin";
-            // 
+            //
             // lblEnd
-            // 
+            //
             this.lblEnd.AutoSize = true;
             this.lblEnd.Location = new System.Drawing.Point(126, 64);
             this.lblEnd.Name = "lblEnd";
             this.lblEnd.Size = new System.Drawing.Size(26, 13);
             this.lblEnd.TabIndex = 7;
             this.lblEnd.Text = "End";
-            // 
+            //
             // btnShow
-            // 
+            //
             this.btnShow.Location = new System.Drawing.Point(14, 90);
             this.btnShow.Name = "btnShow";
             this.btnShow.Size = new System.Drawing.Size(75, 23);
@@ -210,9 +210,9 @@ namespace jabber.connection
             this.btnShow.Text = "Trust...";
             this.btnShow.UseVisualStyleBackColor = true;
             this.btnShow.Click += new System.EventHandler(this.btnShow_Click);
-            // 
+            //
             // CertificatePrompt
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;

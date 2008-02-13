@@ -2,7 +2,7 @@
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
- * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * Copyright (c) 2002-2008 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
@@ -77,7 +77,7 @@ namespace test.bedrock.net
             Assert.IsTrue(two >= four);
             Assert.IsTrue(one <= three);
             Assert.IsTrue(two <= four);
-            Assert.IsTrue(one != two); 
+            Assert.IsTrue(one != two);
             Assert.IsTrue(two != one);
             Assert.IsTrue(one > two);
             Assert.IsTrue(one >= two);

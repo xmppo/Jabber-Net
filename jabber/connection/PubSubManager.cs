@@ -2,7 +2,7 @@
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
- * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * Copyright (c) 2002-2008 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
@@ -37,7 +37,7 @@ namespace jabber.connection
     /// </summary>
     [SVN(@"$Id$")]
     public class PubSubManager : StreamComponent
-	{
+    {
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -48,22 +48,22 @@ namespace jabber.connection
         /// Creates a manager.
         /// </summary>
         public PubSubManager()
-		{
-			InitializeComponent();
-		}
+        {
+            InitializeComponent();
+        }
 
         /// <summary>
         /// Creates a manager in a container.
         /// </summary>
         /// <param name="container">Parent container.</param>
-		public PubSubManager(IContainer container)
-		{
-			container.Add(this);
+        public PubSubManager(IContainer container)
+        {
+            container.Add(this);
 
-			InitializeComponent();
-		}
+            InitializeComponent();
+        }
 
-        /// <summary> 
+        /// <summary>
         /// Performs tasks associated with freeing, releasing, or resetting resources.
         /// </summary>
         /// <param name="disposing">True if managed resources should be disposed; otherwise, false.</param>
@@ -90,7 +90,7 @@ namespace jabber.connection
         #endregion
 
         /// <summary>
-        /// Subscribes to a publish-subscribe node.  
+        /// Subscribes to a publish-subscribe node.
         /// </summary>
         /// <param name="service">Component that handles PubSub requests.</param>
         /// <param name="node">The node on the component that the client wants to interact with.</param>
@@ -142,7 +142,7 @@ namespace jabber.connection
 
             psNode.Delete();
         }
-	}
+    }
 
     /// <summary>
     /// Notifies the client about a publish-subscribe item.
@@ -150,7 +150,7 @@ namespace jabber.connection
     public delegate void ItemCB(PubSubNode node, PubSubItem item);
 
     /// <summary>
-    /// Manages a list of items with a maximum size.  Only one item with a given ID will be in the 
+    /// Manages a list of items with a maximum size.  Only one item with a given ID will be in the
     /// list at a given time.
     /// </summary>
     [SVN(@"$Id$")]
@@ -196,7 +196,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Adds to the end of the list, replacing any item with the same ID, 
+        /// Adds to the end of the list, replacing any item with the same ID,
         /// or bumping the oldest item if the list is full.
         /// </summary>
         /// <param name="value">PubSubItem to add to the list.</param>
@@ -462,9 +462,9 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Creates the node then subscribes. If the creation succeeded, or if the node 
+        /// Creates the node then subscribes. If the creation succeeded, or if the node
         /// already exists, retrieve the items for the node.
-        /// 
+        ///
         /// This is the typical starting point.  Please make sure to register callbacks before calling
         /// this function.
         /// </summary>
@@ -481,7 +481,7 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Creates the node with default configuration.  
+        /// Creates the node with default configuration.
         /// </summary>
         public void Create()
         {
@@ -745,10 +745,10 @@ namespace jabber.connection
         public XmlElement this[string id]
         {
             get { return m_items[id]; }
-            set 
-            { 
+            set
+            {
                 // TODO: publish, and reset ID when it comes back.
-                m_items[id] = value; 
+                m_items[id] = value;
             }
         }
 
@@ -776,7 +776,7 @@ namespace jabber.connection
                   <retract id='ae890ac52d0df67ed7cfdf51b644e901'/>
                 </items>
               </event>
-            </message>     
+            </message>
              */
             foreach (string id in items.GetRetractions())
                 m_items.RemoveId(id);

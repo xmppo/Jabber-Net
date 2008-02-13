@@ -2,7 +2,7 @@
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
- * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * Copyright (c) 2002-2008 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
@@ -56,7 +56,7 @@ namespace muzzle
         }
 
         /// <summary>
-        /// Insert the given message into the history.  The timestamp on the message will be used, if 
+        /// Insert the given message into the history.  The timestamp on the message will be used, if
         /// included, otherwise the current time will be used.
         /// Messages without bodies will be ignored.
         /// </summary>
@@ -87,8 +87,8 @@ namespace muzzle
 
         #region Component Designer generated code
 
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// <summary>
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()

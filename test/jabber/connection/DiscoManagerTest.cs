@@ -61,7 +61,7 @@ namespace test.jabber.connection
                 SetupTrackerBeginIq(
                     delegate(IQ arg0, IqCB arg1, object arg2)
                     {
-                        // Grab the iq and callback so this part of 
+                        // Grab the iq and callback so this part of
                         // the code can finish. Call the callback later.
                         sentIq = arg0;
                         sentCallback = arg1;

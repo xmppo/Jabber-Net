@@ -2,7 +2,7 @@
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
- * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * Copyright (c) 2002-2008 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
@@ -48,7 +48,7 @@ namespace jabber.client
     public delegate void UnsubscriptionHandler(RosterManager manager, Presence pres, ref bool remove);
 
     /// <summary>
-    /// Determines how the RosterManager deals with incoming subscriptions. 
+    /// Determines how the RosterManager deals with incoming subscriptions.
     /// </summary>
     public enum AutoSubscriptionHanding
     {
@@ -148,7 +148,7 @@ namespace jabber.client
         /// </summary>
         [Description("Should we subscribe to a user whenever we allow a subscription from them?")]
         [Category("Jabber")]
-        [DefaultValue(false)]        
+        [DefaultValue(false)]
         public bool AutoSubscribe
         {
             get { return m_autoSubscribe; }

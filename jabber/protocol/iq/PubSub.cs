@@ -2,7 +2,7 @@
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
- * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * Copyright (c) 2002-2008 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
@@ -178,7 +178,7 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
-        /// The 
+        /// The
         /// </summary>
         public PubSubCommand Command
         {
@@ -847,7 +847,7 @@ namespace jabber.protocol.iq
     public class PubSubOptions : Element
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="doc"></param>
         public PubSubOptions(XmlDocument doc)
@@ -1096,7 +1096,7 @@ namespace jabber.protocol.iq
     public class Unsubscribe : PubSubCommand
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="doc"></param>
         public Unsubscribe(XmlDocument doc)

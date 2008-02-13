@@ -2,7 +2,7 @@
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
- * Copyright (c) 2002-2007 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * Copyright (c) 2002-2008 Cursive Systems, Inc.  All Rights Reserved.  Contact
  * information for Cursive Systems, Inc. is available at
  * http://www.cursive.net/.
  *
@@ -27,7 +27,7 @@ namespace Example
 
         private PubSubNode m_node = null;
 
-        /// <summary> 
+        /// <summary>
         /// Required designer variable.
         /// </summary>
         private readonly System.ComponentModel.IContainer components = null;
@@ -40,7 +40,7 @@ namespace Example
         public PubSubNode Node
         {
             get { return m_node; }
-            set 
+            set
             {
                 if (m_node == value)
                     return;
@@ -60,7 +60,7 @@ namespace Example
         {
             // OnItemRemove should have fired first, so no reason to remove it here.
             // Hopefully.
-            Debug.Assert(lbID.Items.IndexOf(item.ID) == -1);            
+            Debug.Assert(lbID.Items.IndexOf(item.ID) == -1);
             lbID.Items.Add(item.ID);
         }
 
@@ -73,7 +73,7 @@ namespace Example
                 lbID.Items.RemoveAt(index);
         }
 
-        /// <summary> 
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
@@ -88,8 +88,8 @@ namespace Example
 
         #region Component Designer generated code
 
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// <summary>
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
@@ -98,9 +98,9 @@ namespace Example
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.rtItem = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
-            // 
+            //
             // lbID
-            // 
+            //
             this.lbID.Dock = System.Windows.Forms.DockStyle.Left;
             this.lbID.FormattingEnabled = true;
             this.lbID.IntegralHeight = false;
@@ -109,26 +109,26 @@ namespace Example
             this.lbID.Size = new System.Drawing.Size(120, 170);
             this.lbID.TabIndex = 0;
             this.lbID.SelectedIndexChanged += new System.EventHandler(this.lbID_SelectedIndexChanged);
-            // 
+            //
             // splitter1
-            // 
+            //
             this.splitter1.Location = new System.Drawing.Point(120, 0);
             this.splitter1.Name = "splitter1";
             this.splitter1.Size = new System.Drawing.Size(3, 170);
             this.splitter1.TabIndex = 1;
             this.splitter1.TabStop = false;
-            // 
+            //
             // rtItem
-            // 
+            //
             this.rtItem.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rtItem.Location = new System.Drawing.Point(123, 0);
             this.rtItem.Name = "rtItem";
             this.rtItem.Size = new System.Drawing.Size(236, 170);
             this.rtItem.TabIndex = 2;
             this.rtItem.Text = "";
-            // 
+            //
             // PubSubDisplay
-            // 
+            //
             this.Controls.Add(this.rtItem);
             this.Controls.Add(this.splitter1);
             this.Controls.Add(this.lbID);
