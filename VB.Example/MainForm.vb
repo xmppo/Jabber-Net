@@ -111,7 +111,6 @@ Public Class MainForm
         'pnlCon
         '
         Me.pnlCon.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Spring
-        Me.pnlCon.Name = "pnlCon"
         Me.pnlCon.Text = "Click on ""Offline"", and select a presence to log in."
         Me.pnlCon.Width = 569
         '
@@ -119,7 +118,6 @@ Public Class MainForm
         '
         Me.pnlPresence.Alignment = System.Windows.Forms.HorizontalAlignment.Right
         Me.pnlPresence.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Contents
-        Me.pnlPresence.Name = "pnlPresence"
         Me.pnlPresence.Text = "Offline"
         Me.pnlPresence.Width = 47
         '
@@ -146,8 +144,10 @@ Public Class MainForm
         '
         Me.ilPresence.ImageStream = CType(resources.GetObject("ilPresence.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.ilPresence.TransparentColor = System.Drawing.Color.Transparent
+#If NET20 Then
         Me.ilPresence.Images.SetKeyName(0, "")
         Me.ilPresence.Images.SetKeyName(1, "")
+#End If
         '
         'mnuPresence
         '
@@ -201,7 +201,6 @@ Public Class MainForm
         Me.roster.AllowDrop = True
         Me.roster.Client = Me.jc
         Me.roster.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.roster.DrawMode = System.Windows.Forms.TreeViewDrawMode.OwnerDrawText
         Me.roster.ImageIndex = 1
         Me.roster.Location = New System.Drawing.Point(0, 0)
         Me.roster.Name = "roster"
