@@ -12,7 +12,6 @@
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
-using System;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Xml;
