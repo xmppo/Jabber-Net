@@ -81,7 +81,11 @@ namespace ConsoleClient
 
             if (untrustedOK)
             {
+#if NET20 || __MonoCS__
                 jc.OnInvalidCertificate += new System.Net.Security.RemoteCertificateValidationCallback(jc_OnInvalidCertificate);
+#else
+				bedrock.net.AsyncSocket.UntrustedRootOK = true;
+#endif
             }
 
 
