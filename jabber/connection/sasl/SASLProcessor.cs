@@ -124,6 +124,7 @@ namespace jabber.connection.sasl
         /// </summary>
         /// <param name="mt">The types the server implements</param>
         /// <param name="plaintextOK">Is it ok to select insecure types?</param>
+        /// <param name="mechs">The mechanisms supported by the server</param>
         /// <returns></returns>
         public static SASLProcessor createProcessor(MechanismType mt, bool plaintextOK, Mechanisms mechs)
         {

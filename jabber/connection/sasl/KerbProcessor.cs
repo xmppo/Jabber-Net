@@ -13,6 +13,9 @@ namespace jabber.connection.sasl
     ///</summary>
     public class KerbProcessor : SASLProcessor
     {
+        /// <summary>
+        /// Should we use the existing Windows (kerberos) credentials?
+        /// </summary>
         public const string USE_WINDOWS_CREDS = "USE_WINDOWS_CREDS";
 
         private readonly SSPIHelper kerbClient;
