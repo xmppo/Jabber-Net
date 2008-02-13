@@ -46,11 +46,7 @@ namespace muzzle
         /// Error notifications.
         /// </summary>
         protected ErrorProvider error;
-
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
-        protected System.ComponentModel.IContainer components = null;
+        private IContainer components;
 
         /// <summary>
         /// Create new form
@@ -373,15 +369,13 @@ namespace muzzle
             this.btnOK = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.tip = new System.Windows.Forms.ToolTip(this.components);
-            this.error = new System.Windows.Forms.ErrorProvider();
+            this.error = new System.Windows.Forms.ErrorProvider(this.components);
             this.panel1.SuspendLayout();
-#if NET20
             ((System.ComponentModel.ISupportInitialize)(this.error)).BeginInit();
-#endif
             this.SuspendLayout();
-            //
+            // 
             // btnCancel
-            //
+            // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.CausesValidation = false;
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
@@ -391,9 +385,9 @@ namespace muzzle
             this.btnCancel.TabIndex = 1;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
-            //
+            // 
             // btnOK
-            //
+            // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOK.Location = new System.Drawing.Point(172, 8);
             this.btnOK.Name = "btnOK";
@@ -401,9 +395,9 @@ namespace muzzle
             this.btnOK.TabIndex = 0;
             this.btnOK.Text = "OK";
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
-            //
+            // 
             // panel1
-            //
+            // 
             this.panel1.CausesValidation = false;
             this.panel1.Controls.Add(this.btnCancel);
             this.panel1.Controls.Add(this.btnOK);
@@ -412,14 +406,15 @@ namespace muzzle
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(292, 40);
             this.panel1.TabIndex = 1000;
-            //
+            // 
             // error
-            //
+            // 
             this.error.ContainerControl = this;
-            //
+            // 
             // OptionForm
-            //
+            // 
             this.AcceptButton = this.btnOK;
+            this.AutoValidate = System.Windows.Forms.AutoValidate.Disable;
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(292, 266);
             this.Controls.Add(this.panel1);
@@ -427,9 +422,7 @@ namespace muzzle
             this.Text = "OptionForm";
             this.Load += new System.EventHandler(this.OptionForm_Load);
             this.panel1.ResumeLayout(false);
-#if NET20
             ((System.ComponentModel.ISupportInitialize)(this.error)).EndInit();
-#endif
             this.ResumeLayout(false);
 
         }
@@ -443,6 +436,8 @@ namespace muzzle
         protected void Required(object sender, System.ComponentModel.CancelEventArgs e)
         {
             TextBox box = (TextBox)sender;
+            if (!box.Enabled)
+                return;
             if ((box.Text == null) || (box.Text == ""))
             {
                 e.Cancel = true;
@@ -462,7 +457,7 @@ namespace muzzle
 
         private void btnOK_Click(object sender, EventArgs e)
         {
-            if (!this.Validate())
+            if (!this.ValidateChildren())
                 return;
 
             WriteXmpp();
