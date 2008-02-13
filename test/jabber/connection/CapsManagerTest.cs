@@ -21,7 +21,12 @@ namespace test.jabber.connection
 
         private readonly JID TO_JID = new JID("user1@test.com");
         private readonly JID FROM_JID = new JID("user2@test.com");
-        private readonly string TEST_ID = "TEST_ID";
+        
+        private const string TEST_ID = "TEST_ID";
+        
+        private const string NODE = "http://jm.jabber.com/caps";
+        private const int PRIORITY = 2;
+        private const string STATUS = "Ready to Chat";
 
         [SetUp]
         public void Setup()
@@ -32,8 +37,6 @@ namespace test.jabber.connection
 
             doc = new XmlDocument();
         }
-
-        private const string NODE = "http://jm.jabber.com/caps";
 
         [Test]
         public void OnBeforePresenceOutTest()
@@ -118,9 +121,6 @@ namespace test.jabber.connection
 
             return iq;
         }
-
-        private const int PRIORITY = 2;
-        private const string STATUS = "Ready to Chat";
 
         private static string GetPresenceWithCaps(string ver)
         {

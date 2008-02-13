@@ -100,7 +100,7 @@ namespace jabber.connection
             get 
             {
                 if (m_disco.Features == null)
-                    return null;
+                    return new string[0];
                 return m_disco.FeatureNames; 
             }
             set
@@ -265,7 +265,7 @@ namespace jabber.connection
             get 
             {
                 if (m_disco.Identity == null)
-                    return null;
+                    return new Ident[0];
                 return m_disco.GetIdentities(); 
             }
             set
