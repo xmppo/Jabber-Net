@@ -584,13 +584,11 @@ namespace muzzle
             // 
             // cbUseWinCreds
             // 
-            this.cbUseWinCreds.AutoSize = true;
             this.cbUseWinCreds.Location = new System.Drawing.Point(8, 142);
             this.cbUseWinCreds.Name = "cbUseWinCreds";
             this.cbUseWinCreds.Size = new System.Drawing.Size(147, 17);
             this.cbUseWinCreds.TabIndex = 7;
             this.cbUseWinCreds.Text = "Use Windows Credentials";
-            this.cbUseWinCreds.UseVisualStyleBackColor = true;
             this.cbUseWinCreds.CheckedChanged += new System.EventHandler(this.cbUseWinCreds_CheckedChanged);
             // 
             // ClientLogin

@@ -2,25 +2,35 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Xml;
-using jabber.connection.sasl.SSPITest;
 using jabber.protocol.stream;
 using HANDLE = System.IntPtr;
 
 namespace jabber.connection.sasl
 {
 
-#pragma warning disable 1591
-
+    ///<summary>
+    /// Uses Kerberos authentication ot log into XMPP server.
+    ///</summary>
     public class KerbProcessor : SASLProcessor
     {
         public const string USE_WINDOWS_CREDS = "USE_WINDOWS_CREDS";
 
         private readonly SSPIHelper kerbClient;
+        ///<summary>
+        /// Creates a new KerbProcessor
+        ///</summary>
+        ///<param name="remotePrincipal">Remote principal that represents the XMPP server.</param>
         public KerbProcessor(string remotePrincipal)
         {
             kerbClient = new SSPIHelper(remotePrincipal);
         }
 
+        /// <summary>
+        /// Perform the next step
+        /// </summary>
+        /// <param name="s">Null if it's the initial response</param>
+        /// <param name="doc">Document to create Steps in</param>
+        /// <returns>XML to send to the XMPP server.</returns>
         public override Step step(Step s, XmlDocument doc)
         {
             byte[] outBytes;
@@ -70,7 +80,7 @@ namespace jabber.connection.sasl
         }
     }
 
-    public enum SecBufferType
+    internal enum SecBufferType
     {
         SECBUFFER_VERSION = 0,
         SECBUFFER_EMPTY = 0,
@@ -81,14 +91,14 @@ namespace jabber.connection.sasl
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SecHandle //=PCtxtHandle
+    internal struct SecHandle //=PCtxtHandle
     {
         uint dwLower;
         uint dwUpper;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SecBuffer : IDisposable
+    internal struct SecBuffer : IDisposable
     {
         public int cbBuffer;
         public int BufferType;
@@ -137,7 +147,7 @@ namespace jabber.connection.sasl
         }
     }
 
-    public struct MultipleSecBufferHelper
+    internal struct MultipleSecBufferHelper
     {
         public byte[] Buffer;
         public SecBufferType BufferType;
@@ -150,7 +160,7 @@ namespace jabber.connection.sasl
     };
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SecBufferDesc : IDisposable
+    internal struct SecBufferDesc : IDisposable
     {
 
         public int ulVersion;
@@ -175,7 +185,7 @@ namespace jabber.connection.sasl
             Marshal.StructureToPtr(ThisSecBuffer, pBuffers, false);
         }
 
-        public SecBufferDesc(MultipleSecBufferHelper[] secBufferBytesArray)
+        internal SecBufferDesc(MultipleSecBufferHelper[] secBufferBytesArray)
         {
             if (secBufferBytesArray == null || secBufferBytesArray.Length == 0)
             {
@@ -307,9 +317,8 @@ namespace jabber.connection.sasl
     }
 
 
-#pragma warning disable 168
     [StructLayout(LayoutKind.Sequential)]
-    public struct SECURITY_INTEGER
+    internal struct SECURITY_INTEGER
     {
         public uint LowPart;
         public int HighPart;
@@ -319,11 +328,9 @@ namespace jabber.connection.sasl
             HighPart = 0;
         }
     };
-#pragma warning restore 168
 
-#pragma warning disable 168
     [StructLayout(LayoutKind.Sequential)]
-    public struct SECURITY_HANDLE
+    internal struct SECURITY_HANDLE
     {
         public uint LowPart;
         public uint HighPart;
@@ -332,10 +339,9 @@ namespace jabber.connection.sasl
             LowPart = HighPart = 0;
         }
     };
-#pragma warning restore 168
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SecPkgContext_Sizes
+    internal struct SecPkgContext_Sizes
     {
         public uint cbMaxToken;
         public uint cbMaxSignature;
@@ -344,7 +350,7 @@ namespace jabber.connection.sasl
     };
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SEC_WINNT_AUTH_IDENTITY
+    internal struct SEC_WINNT_AUTH_IDENTITY
     {
         public string User;
         public int UserLength;
@@ -355,354 +361,352 @@ namespace jabber.connection.sasl
         public int Flags;
     }
 
-    namespace SSPITest
+    internal class SSPIHelper
     {
-        public class SSPIHelper
+        public const int TOKEN_QUERY = 0x00008;
+        public const uint SEC_E_OK = 0;
+        public const uint SEC_E_INVALID_HANDLE = 0x80090301;
+        public const uint SEC_E_LOGON_DENIED = 0x8009030C;
+        public const uint SEC_I_CONTINUE_NEEDED = 0x90312;
+        public const uint SEC_I_COMPLETE_NEEDED = 0x90313;
+        public const uint SEC_I_COMPLETE_AND_CONTINUE = 0x90314;
+
+        public const uint SECQOP_WRAP_NO_ENCRYPT = 0x80000001;
+
+        const int SECPKG_CRED_OUTBOUND = 2;
+        private const int SECURITY_NETWORK_DREP = 0x0;
+        const int MAX_TOKEN_SIZE = 12288;
+        //For AcquireCredentialsHandle in 3er Parameter "fCredentialUse"
+
+        SECURITY_HANDLE _hOutboundCred = new SECURITY_HANDLE(0);
+        public SECURITY_HANDLE _hClientContext = new SECURITY_HANDLE(0);
+
+        public const int ISC_REQ_DELEGATE = 0x00000001;
+        public const int ISC_REQ_MUTUAL_AUTH = 0x00000002;
+        public const int ISC_REQ_REPLAY_DETECT = 0x00000004;
+        public const int ISC_REQ_SEQUENCE_DETECT = 0x00000008;
+        public const int ISC_REQ_CONFIDENTIALITY = 0x00000010;
+        public const int ISC_REQ_USE_SESSION_KEY = 0x00000020;
+        public const int ISC_REQ_PROMPT_FOR_CREDS = 0x00000040;
+        public const int ISC_REQ_USE_SUPPLIED_CREDS = 0x00000080;
+        public const int ISC_REQ_ALLOCATE_MEMORY = 0x00000100;
+        public const int ISC_REQ_USE_DCE_STYLE = 0x00000200;
+        public const int ISC_REQ_DATAGRAM = 0x00000400;
+        public const int ISC_REQ_CONNECTION = 0x00000800;
+        public const int ISC_REQ_CALL_LEVEL = 0x00001000;
+        public const int ISC_REQ_FRAGMENT_SUPPLIED = 0x00002000;
+        public const int ISC_REQ_EXTENDED_ERROR = 0x00004000;
+        public const int ISC_REQ_STREAM = 0x00008000;
+        public const int ISC_REQ_INTEGRITY = 0x00010000;
+        public const int ISC_REQ_IDENTIFY = 0x00020000;
+        public const int ISC_REQ_NULL_SESSION = 0x00040000;
+        public const int ISC_REQ_MANUAL_CRED_VALIDATION = 0x00080000;
+        public const int ISC_REQ_RESERVED1 = 0x00100000;
+        public const int ISC_REQ_FRAGMENT_TO_FIT = 0x00200000;
+
+        public const int SECPKG_ATTR_SIZES = 0;
+
+        public const int STANDARD_CONTEXT_ATTRIBUTES = ISC_REQ_MUTUAL_AUTH;
+
+        bool _bGotClientCredentials = false;
+
+        [DllImport("secur32", CharSet = CharSet.Auto)]
+        static extern uint AcquireCredentialsHandle(
+            string pszPrincipal, //SEC_CHAR*
+            string pszPackage, //SEC_CHAR* //"Kerberos","NTLM","Negotiative"
+            int fCredentialUse,
+            IntPtr PAuthenticationID,//_LUID AuthenticationID,//pvLogonID, //PLUID
+            ref SEC_WINNT_AUTH_IDENTITY pAuthData,//PVOID
+            int pGetKeyFn, //SEC_GET_KEY_FN
+            IntPtr pvGetKeyArgument, //PVOID
+            ref SECURITY_HANDLE phCredential, //SecHandle //PCtxtHandle ref
+            ref SECURITY_INTEGER ptsExpiry); //PTimeStamp //TimeStamp ref
+
+        [DllImport("secur32", CharSet = CharSet.Auto)]
+        static extern uint AcquireCredentialsHandle(
+            string pszPrincipal, //SEC_CHAR*
+            string pszPackage, //SEC_CHAR* //"Kerberos","NTLM","Negotiative"
+            int fCredentialUse,
+            IntPtr PAuthenticationID,//_LUID AuthenticationID,//pvLogonID, //PLUID
+            IntPtr pAuthData,//PVOID
+            int pGetKeyFn, //SEC_GET_KEY_FN
+            IntPtr pvGetKeyArgument, //PVOID
+            ref SECURITY_HANDLE phCredential, //SecHandle //PCtxtHandle ref
+            ref SECURITY_INTEGER ptsExpiry); //PTimeStamp //TimeStamp ref
+
+        [DllImport("secur32", CharSet = CharSet.Auto, SetLastError = true)]
+        static extern uint InitializeSecurityContext(
+            ref SECURITY_HANDLE phCredential,//PCredHandle
+            IntPtr phContext, //PCtxtHandle
+            string pszTargetName,
+            int fContextReq,
+            int Reserved1,
+            int TargetDataRep,
+            IntPtr pInput, //PSecBufferDesc SecBufferDesc
+            int Reserved2,
+            out SECURITY_HANDLE phNewContext, //PCtxtHandle
+            out SecBufferDesc pOutput, //PSecBufferDesc SecBufferDesc
+            out uint pfContextAttr, //managed ulong == 64 bits!!!
+            out SECURITY_INTEGER ptsExpiry); //PTimeStamp
+
+        [DllImport("secur32", CharSet = CharSet.Auto, SetLastError = true)]
+        static extern uint InitializeSecurityContext(
+            ref SECURITY_HANDLE phCredential,//PCredHandle
+            ref SECURITY_HANDLE phContext, //PCtxtHandle
+            string pszTargetName,
+            int fContextReq,
+            int Reserved1,
+            int TargetDataRep,
+            ref SecBufferDesc SecBufferDesc, //PSecBufferDesc SecBufferDesc
+            int Reserved2,
+            out SECURITY_HANDLE phNewContext, //PCtxtHandle
+            out SecBufferDesc pOutput, //PSecBufferDesc SecBufferDesc
+            out uint pfContextAttr, //managed ulong == 64 bits!!!
+            out SECURITY_INTEGER ptsExpiry); //PTimeStamp
+
+        [DllImport("secur32.Dll", CharSet = CharSet.Auto, SetLastError = false)]
+        static extern int AcceptSecurityContext(ref SECURITY_HANDLE phCredential,
+                                                IntPtr phContext,
+                                                ref SecBufferDesc pInput,
+                                                uint fContextReq,
+                                                uint TargetDataRep,
+                                                out SECURITY_HANDLE phNewContext,
+                                                out SecBufferDesc pOutput,
+                                                out uint pfContextAttr,    //managed ulong == 64 bits!!!
+                                                out SECURITY_INTEGER ptsTimeStamp);
+
+        [DllImport("secur32.Dll", CharSet = CharSet.Auto, SetLastError = false)]
+        static extern int AcceptSecurityContext(ref SECURITY_HANDLE phCredential,
+                                                ref SECURITY_HANDLE phContext,
+                                                ref SecBufferDesc pInput,
+                                                uint fContextReq,
+                                                uint TargetDataRep,
+                                                out SECURITY_HANDLE phNewContext,
+                                                out SecBufferDesc pOutput,
+                                                out uint pfContextAttr,    //managed ulong == 64 bits!!!
+                                                out SECURITY_INTEGER ptsTimeStamp);
+
+        [DllImport("secur32.Dll", CharSet = CharSet.Auto, SetLastError = false)]
+        public static extern int ImpersonateSecurityContext(ref SECURITY_HANDLE phContext);
+
+        [DllImport("secur32.Dll", CharSet = CharSet.Auto, SetLastError = false)]
+        public static extern int QueryContextAttributes(ref SECURITY_HANDLE phContext,
+                                                        uint ulAttribute,
+                                                        out SecPkgContext_Sizes pContextAttributes);
+
+        [DllImport("secur32.Dll", CharSet = CharSet.Auto, SetLastError = false)]
+        public static extern int EncryptMessage(ref SECURITY_HANDLE phContext,
+                                                uint fQOP,        //managed ulong == 64 bits!!!
+                                                ref SecBufferDesc pMessage,
+                                                uint MessageSeqNo);    //managed ulong == 64 bits!!!
+
+        [DllImport("secur32.Dll", CharSet = CharSet.Auto, SetLastError = false)]
+        public static extern int DecryptMessage(ref SECURITY_HANDLE phContext,
+                                                 ref SecBufferDesc pMessage,
+                                                 uint MessageSeqNo,
+                                                 out uint pfQOP);
+
+        [DllImport("secur32.Dll", CharSet = CharSet.Auto, SetLastError = false)]
+        public static extern int MakeSignature(ref SECURITY_HANDLE phContext,          // Context to use
+                                                uint fQOP,         // Quality of Protection
+                                                ref SecBufferDesc pMessage,        // Message to sign
+                                                uint MessageSeqNo);      // Message Sequence Num.
+
+        [DllImport("secur32.Dll", CharSet = CharSet.Auto, SetLastError = false)]
+        public static extern int VerifySignature(ref SECURITY_HANDLE phContext,          // Context to use
+                                                ref SecBufferDesc pMessage,        // Message to sign
+                                                uint MessageSeqNo,            // Message Sequence Num.
+                                                out uint pfQOP);      // Quality of Protection
+
+
+        readonly string _sAccountName = WindowsIdentity.GetCurrent().Name;
+
+        public SSPIHelper()
         {
-            public const int TOKEN_QUERY = 0x00008;
-            public const uint SEC_E_OK = 0;
-            public const uint SEC_E_INVALID_HANDLE = 0x80090301;
-            public const uint SEC_E_LOGON_DENIED = 0x8009030C;
-            public const uint SEC_I_CONTINUE_NEEDED = 0x90312;
-            public const uint SEC_I_COMPLETE_NEEDED = 0x90313;
-            public const uint SEC_I_COMPLETE_AND_CONTINUE = 0x90314;
 
-            public const uint SECQOP_WRAP_NO_ENCRYPT = 0x80000001;
+        }
 
-            const int SECPKG_CRED_OUTBOUND = 2;
-            private const int SECURITY_NETWORK_DREP = 0x0;
-            const int MAX_TOKEN_SIZE = 12288;
-            //For AcquireCredentialsHandle in 3er Parameter "fCredentialUse"
+        public SSPIHelper(string sRemotePrincipal)
+        {
+            _sAccountName = sRemotePrincipal;
+        }
 
-            SECURITY_HANDLE _hOutboundCred = new SECURITY_HANDLE(0);
-            public SECURITY_HANDLE _hClientContext = new SECURITY_HANDLE(0);
+        private string sUsername;
+        public string Username
+        {
+            set { sUsername = value; }
+            get { return sUsername; }
+        }
+        private string sDomain;
+        public string Domain
+        {
+            set { sDomain = value; }
+            get { return sDomain; }
+        }
+        private string sPassword;
+        public string Password
+        {
+            set { sPassword = value; }
+            get { return sPassword; }
+        }
 
-            public const int ISC_REQ_DELEGATE = 0x00000001;
-            public const int ISC_REQ_MUTUAL_AUTH = 0x00000002;
-            public const int ISC_REQ_REPLAY_DETECT = 0x00000004;
-            public const int ISC_REQ_SEQUENCE_DETECT = 0x00000008;
-            public const int ISC_REQ_CONFIDENTIALITY = 0x00000010;
-            public const int ISC_REQ_USE_SESSION_KEY = 0x00000020;
-            public const int ISC_REQ_PROMPT_FOR_CREDS = 0x00000040;
-            public const int ISC_REQ_USE_SUPPLIED_CREDS = 0x00000080;
-            public const int ISC_REQ_ALLOCATE_MEMORY = 0x00000100;
-            public const int ISC_REQ_USE_DCE_STYLE = 0x00000200;
-            public const int ISC_REQ_DATAGRAM = 0x00000400;
-            public const int ISC_REQ_CONNECTION = 0x00000800;
-            public const int ISC_REQ_CALL_LEVEL = 0x00001000;
-            public const int ISC_REQ_FRAGMENT_SUPPLIED = 0x00002000;
-            public const int ISC_REQ_EXTENDED_ERROR = 0x00004000;
-            public const int ISC_REQ_STREAM = 0x00008000;
-            public const int ISC_REQ_INTEGRITY = 0x00010000;
-            public const int ISC_REQ_IDENTIFY = 0x00020000;
-            public const int ISC_REQ_NULL_SESSION = 0x00040000;
-            public const int ISC_REQ_MANUAL_CRED_VALIDATION = 0x00080000;
-            public const int ISC_REQ_RESERVED1 = 0x00100000;
-            public const int ISC_REQ_FRAGMENT_TO_FIT = 0x00200000;
+        private bool bUseWindowsCreds = false;
+        public bool UseWindowsCreds
+        {
+            set { bUseWindowsCreds = value; }
+            get { return bUseWindowsCreds; }
+        }
 
-            public const int SECPKG_ATTR_SIZES = 0;
-
-            public const int STANDARD_CONTEXT_ATTRIBUTES = ISC_REQ_MUTUAL_AUTH;
-
-            bool _bGotClientCredentials = false;
-
-            [DllImport("secur32", CharSet = CharSet.Auto)]
-            static extern uint AcquireCredentialsHandle(
-                string pszPrincipal, //SEC_CHAR*
-                string pszPackage, //SEC_CHAR* //"Kerberos","NTLM","Negotiative"
-                int fCredentialUse,
-                IntPtr PAuthenticationID,//_LUID AuthenticationID,//pvLogonID, //PLUID
-                ref SEC_WINNT_AUTH_IDENTITY pAuthData,//PVOID
-                int pGetKeyFn, //SEC_GET_KEY_FN
-                IntPtr pvGetKeyArgument, //PVOID
-                ref SECURITY_HANDLE phCredential, //SecHandle //PCtxtHandle ref
-                ref SECURITY_INTEGER ptsExpiry); //PTimeStamp //TimeStamp ref
-
-            [DllImport("secur32", CharSet = CharSet.Auto)]
-            static extern uint AcquireCredentialsHandle(
-                string pszPrincipal, //SEC_CHAR*
-                string pszPackage, //SEC_CHAR* //"Kerberos","NTLM","Negotiative"
-                int fCredentialUse,
-                IntPtr PAuthenticationID,//_LUID AuthenticationID,//pvLogonID, //PLUID
-                IntPtr pAuthData,//PVOID
-                int pGetKeyFn, //SEC_GET_KEY_FN
-                IntPtr pvGetKeyArgument, //PVOID
-                ref SECURITY_HANDLE phCredential, //SecHandle //PCtxtHandle ref
-                ref SECURITY_INTEGER ptsExpiry); //PTimeStamp //TimeStamp ref
-
-            [DllImport("secur32", CharSet = CharSet.Auto, SetLastError = true)]
-            static extern uint InitializeSecurityContext(
-                ref SECURITY_HANDLE phCredential,//PCredHandle
-                IntPtr phContext, //PCtxtHandle
-                string pszTargetName,
-                int fContextReq,
-                int Reserved1,
-                int TargetDataRep,
-                IntPtr pInput, //PSecBufferDesc SecBufferDesc
-                int Reserved2,
-                out SECURITY_HANDLE phNewContext, //PCtxtHandle
-                out SecBufferDesc pOutput, //PSecBufferDesc SecBufferDesc
-                out uint pfContextAttr, //managed ulong == 64 bits!!!
-                out SECURITY_INTEGER ptsExpiry); //PTimeStamp
-
-            [DllImport("secur32", CharSet = CharSet.Auto, SetLastError = true)]
-            static extern uint InitializeSecurityContext(
-                ref SECURITY_HANDLE phCredential,//PCredHandle
-                ref SECURITY_HANDLE phContext, //PCtxtHandle
-                string pszTargetName,
-                int fContextReq,
-                int Reserved1,
-                int TargetDataRep,
-                ref SecBufferDesc SecBufferDesc, //PSecBufferDesc SecBufferDesc
-                int Reserved2,
-                out SECURITY_HANDLE phNewContext, //PCtxtHandle
-                out SecBufferDesc pOutput, //PSecBufferDesc SecBufferDesc
-                out uint pfContextAttr, //managed ulong == 64 bits!!!
-                out SECURITY_INTEGER ptsExpiry); //PTimeStamp
-
-            [DllImport("secur32.Dll", CharSet = CharSet.Auto, SetLastError = false)]
-            static extern int AcceptSecurityContext(ref SECURITY_HANDLE phCredential,
-                                                    IntPtr phContext,
-                                                    ref SecBufferDesc pInput,
-                                                    uint fContextReq,
-                                                    uint TargetDataRep,
-                                                    out SECURITY_HANDLE phNewContext,
-                                                    out SecBufferDesc pOutput,
-                                                    out uint pfContextAttr,    //managed ulong == 64 bits!!!
-                                                    out SECURITY_INTEGER ptsTimeStamp);
-
-            [DllImport("secur32.Dll", CharSet = CharSet.Auto, SetLastError = false)]
-            static extern int AcceptSecurityContext(ref SECURITY_HANDLE phCredential,
-                                                    ref SECURITY_HANDLE phContext,
-                                                    ref SecBufferDesc pInput,
-                                                    uint fContextReq,
-                                                    uint TargetDataRep,
-                                                    out SECURITY_HANDLE phNewContext,
-                                                    out SecBufferDesc pOutput,
-                                                    out uint pfContextAttr,    //managed ulong == 64 bits!!!
-                                                    out SECURITY_INTEGER ptsTimeStamp);
-
-            [DllImport("secur32.Dll", CharSet = CharSet.Auto, SetLastError = false)]
-            public static extern int ImpersonateSecurityContext(ref SECURITY_HANDLE phContext);
-
-            [DllImport("secur32.Dll", CharSet = CharSet.Auto, SetLastError = false)]
-            public static extern int QueryContextAttributes(ref SECURITY_HANDLE phContext,
-                                                            uint ulAttribute,
-                                                            out SecPkgContext_Sizes pContextAttributes);
-
-            [DllImport("secur32.Dll", CharSet = CharSet.Auto, SetLastError = false)]
-            public static extern int EncryptMessage(ref SECURITY_HANDLE phContext,
-                                                    uint fQOP,        //managed ulong == 64 bits!!!
-                                                    ref SecBufferDesc pMessage,
-                                                    uint MessageSeqNo);    //managed ulong == 64 bits!!!
-
-            [DllImport("secur32.Dll", CharSet = CharSet.Auto, SetLastError = false)]
-            public static extern int DecryptMessage(ref SECURITY_HANDLE phContext,
-                                                     ref SecBufferDesc pMessage,
-                                                     uint MessageSeqNo,
-                                                     out uint pfQOP);
-
-            [DllImport("secur32.Dll", CharSet = CharSet.Auto, SetLastError = false)]
-            public static extern int MakeSignature(ref SECURITY_HANDLE phContext,          // Context to use
-                                                    uint fQOP,         // Quality of Protection
-                                                    ref SecBufferDesc pMessage,        // Message to sign
-                                                    uint MessageSeqNo);      // Message Sequence Num.
-
-            [DllImport("secur32.Dll", CharSet = CharSet.Auto, SetLastError = false)]
-            public static extern int VerifySignature(ref SECURITY_HANDLE phContext,          // Context to use
-                                                    ref SecBufferDesc pMessage,        // Message to sign
-                                                    uint MessageSeqNo,            // Message Sequence Num.
-                                                    out uint pfQOP);      // Quality of Protection
-
-
-            readonly string _sAccountName = WindowsIdentity.GetCurrent().Name;
-
-            public SSPIHelper()
+        public void ExecuteKerberos(byte[] inToken, out byte[] outToken)
+        {
+            if (InitializeKerberosStage)
             {
-
+                InitializeClient(inToken, out outToken);
             }
-
-            public SSPIHelper(string sRemotePrincipal)
+            else
             {
-                _sAccountName = sRemotePrincipal;
-            }
-
-            private string sUsername;
-            public string Username
-            {
-                set { sUsername = value; }
-                get { return sUsername; }
-            }
-            private string sDomain;
-            public string Domain
-            {
-                set { sDomain = value; }
-                get { return sDomain; }
-            }
-            private string sPassword;
-            public string Password
-            {
-                set { sPassword = value; }
-                get { return sPassword; }
-            }
-
-            private bool bUseWindowsCreds = false;
-            public bool UseWindowsCreds
-            {
-                set { bUseWindowsCreds = value; }
-                get { return bUseWindowsCreds; }
-            }
-
-            public void ExecuteKerberos(byte[] inToken, out byte[] outToken)
-            {
-                if (InitializeKerberosStage)
+                if (inToken == null)
                 {
-                    InitializeClient(inToken, out outToken);
+                    throw new Exception("Kerberos failure: Incoming bytes can't be null.");
+                }
+
+                DecryptMessage(0, inToken, out outToken);
+
+                inToken = new byte[] { 0x01, 0x00, 0x00, 0x00 };
+                EncryptMessage(inToken, out outToken);
+            }
+        }
+
+        private void InitializeClient(byte[] serverToken, out byte[] clientToken)
+        {
+            clientToken = null;
+
+            SECURITY_INTEGER ClientLifeTime = new SECURITY_INTEGER(0);
+
+            if (!_bGotClientCredentials)
+            {
+                uint returnValue;
+
+                if (!UseWindowsCreds)
+                {
+                    SEC_WINNT_AUTH_IDENTITY ident = new SEC_WINNT_AUTH_IDENTITY();
+                    ident.User = Username;
+                    ident.UserLength = ident.User.Length;
+                    ident.Domain = Domain;
+                    ident.DomainLength = ident.Domain.Length;
+                    ident.Password = Password;
+                    ident.PasswordLength = ident.Password.Length;
+                    ident.Flags = 0x1;
+
+                    returnValue = AcquireCredentialsHandle(null, "Kerberos", SECPKG_CRED_OUTBOUND,
+                                                               IntPtr.Zero, ref ident, 0, IntPtr.Zero,
+                                                               ref _hOutboundCred, ref ClientLifeTime);
                 }
                 else
                 {
-                    if (inToken == null)
-                    {
-                        throw new Exception("Kerberos failure: Incoming bytes can't be null.");
-                    }
-
-                    DecryptMessage(0, inToken, out outToken);
-
-                    inToken = new byte[] { 0x01, 0x00, 0x00, 0x00 };
-                    EncryptMessage(inToken, out outToken);
+                    returnValue = AcquireCredentialsHandle(null, "Kerberos", SECPKG_CRED_OUTBOUND,
+                                                           HANDLE.Zero, HANDLE.Zero, 0, HANDLE.Zero,
+                                                           ref _hOutboundCred, ref ClientLifeTime);
                 }
+
+                if (returnValue != SEC_E_OK)
+                {
+                    throw new Exception("Couldn't acquire client credentials");
+                }
+
+                _bGotClientCredentials = true;
             }
 
-            private void InitializeClient(byte[] serverToken, out byte[] clientToken)
+            uint ss;
+
+            SecBufferDesc ClientToken = new SecBufferDesc(MAX_TOKEN_SIZE);
+
+            try
             {
-                clientToken = null;
+                uint ContextAttributes;
 
-                SECURITY_INTEGER ClientLifeTime = new SECURITY_INTEGER(0);
-
-                if (!_bGotClientCredentials)
+                if (serverToken == null)
                 {
-                    uint returnValue;
+                    ss = InitializeSecurityContext(ref _hOutboundCred,
+                        IntPtr.Zero,
+                        _sAccountName,// null string pszTargetName,
+                        STANDARD_CONTEXT_ATTRIBUTES,
+                        0,//int Reserved1,
+                        SECURITY_NETWORK_DREP, //int TargetDataRep
+                        IntPtr.Zero,    //Always zero first time around...
+                        0, //int Reserved2,
+                        out _hClientContext, //pHandle CtxtHandle = SecHandle
+                        out ClientToken,//ref SecBufferDesc pOutput, //PSecBufferDesc
+                        out ContextAttributes,//ref int pfContextAttr,
+                        out ClientLifeTime); //ref IntPtr ptsExpiry ); //PTimeStamp
 
-                    if (!UseWindowsCreds)
-                    {
-                        SEC_WINNT_AUTH_IDENTITY ident = new SEC_WINNT_AUTH_IDENTITY();
-                        ident.User = Username;
-                        ident.UserLength = ident.User.Length;
-                        ident.Domain = Domain;
-                        ident.DomainLength = ident.Domain.Length;
-                        ident.Password = Password;
-                        ident.PasswordLength = ident.Password.Length;
-                        ident.Flags = 0x1;
-
-                        returnValue = AcquireCredentialsHandle(null, "Kerberos", SECPKG_CRED_OUTBOUND,
-                                                                   IntPtr.Zero, ref ident, 0, IntPtr.Zero,
-                                                                   ref _hOutboundCred, ref ClientLifeTime);
-                    }
-                    else
-                    {
-                        returnValue = AcquireCredentialsHandle(null, "Kerberos", SECPKG_CRED_OUTBOUND,
-                                                               HANDLE.Zero, HANDLE.Zero, 0, HANDLE.Zero,
-                                                               ref _hOutboundCred, ref ClientLifeTime);
-                    }
-
-                    if (returnValue != SEC_E_OK)
-                    {
-                        throw new Exception("Couldn't acquire client credentials");
-                    }
-
-                    _bGotClientCredentials = true;
                 }
-
-                uint ss;
-
-                SecBufferDesc ClientToken = new SecBufferDesc(MAX_TOKEN_SIZE);
-
-                try
+                else
                 {
-                    uint ContextAttributes;
+                    SecBufferDesc ServerToken = new SecBufferDesc(serverToken);
 
-                    if (serverToken == null)
+                    try
                     {
                         ss = InitializeSecurityContext(ref _hOutboundCred,
-                            IntPtr.Zero,
+                            ref _hClientContext,
                             _sAccountName,// null string pszTargetName,
                             STANDARD_CONTEXT_ATTRIBUTES,
                             0,//int Reserved1,
-                            SECURITY_NETWORK_DREP, //int TargetDataRep
-                            IntPtr.Zero,    //Always zero first time around...
+                            SECURITY_NETWORK_DREP,//int TargetDataRep
+                            ref ServerToken,    //Always zero first time around...
                             0, //int Reserved2,
                             out _hClientContext, //pHandle CtxtHandle = SecHandle
                             out ClientToken,//ref SecBufferDesc pOutput, //PSecBufferDesc
                             out ContextAttributes,//ref int pfContextAttr,
                             out ClientLifeTime); //ref IntPtr ptsExpiry ); //PTimeStamp
-
                     }
-                    else
+                    finally
                     {
-                        SecBufferDesc ServerToken = new SecBufferDesc(serverToken);
-
-                        try
-                        {
-                            ss = InitializeSecurityContext(ref _hOutboundCred,
-                                ref _hClientContext,
-                                _sAccountName,// null string pszTargetName,
-                                STANDARD_CONTEXT_ATTRIBUTES,
-                                0,//int Reserved1,
-                                SECURITY_NETWORK_DREP,//int TargetDataRep
-                                ref ServerToken,    //Always zero first time around...
-                                0, //int Reserved2,
-                                out _hClientContext, //pHandle CtxtHandle = SecHandle
-                                out ClientToken,//ref SecBufferDesc pOutput, //PSecBufferDesc
-                                out ContextAttributes,//ref int pfContextAttr,
-                                out ClientLifeTime); //ref IntPtr ptsExpiry ); //PTimeStamp
-                        }
-                        finally
-                        {
-                            ServerToken.Dispose();
-                        }
+                        ServerToken.Dispose();
                     }
-
-                    if (ss == SEC_E_LOGON_DENIED)
-                    {
-                        throw new Exception("Bad username, password or domain.");
-                    }
-                    else if (ss != SEC_E_OK && ss != SEC_I_CONTINUE_NEEDED)
-                    {
-                        throw new Exception("InitializeSecurityContext() failed!!!");
-                    }
-
-                    clientToken = ClientToken.GetSecBufferByteArray();
                 }
-                finally
+
+                if (ss == SEC_E_LOGON_DENIED)
                 {
-                    ClientToken.Dispose();
+                    throw new Exception("Bad username, password or domain.");
+                }
+                else if (ss != SEC_E_OK && ss != SEC_I_CONTINUE_NEEDED)
+                {
+                    throw new Exception("InitializeSecurityContext() failed!!!");
                 }
 
-                InitializeKerberosStage = ss != SEC_E_OK;
+                clientToken = ClientToken.GetSecBufferByteArray();
+            }
+            finally
+            {
+                ClientToken.Dispose();
             }
 
-            private bool bInitializeKerberosStage = true;
-            private bool InitializeKerberosStage
+            InitializeKerberosStage = ss != SEC_E_OK;
+        }
+
+        private bool bInitializeKerberosStage = true;
+        private bool InitializeKerberosStage
+        {
+            get { return bInitializeKerberosStage; }
+            set { bInitializeKerberosStage = value; }
+        }
+
+        public void EncryptMessage(byte[] message, out byte[] encryptedBuffer)
+        {
+            encryptedBuffer = null;
+
+            SECURITY_HANDLE EncryptionContext = _hClientContext;
+
+            SecPkgContext_Sizes ContextSizes;
+
+            if (QueryContextAttributes(ref EncryptionContext,
+                   SECPKG_ATTR_SIZES, out ContextSizes) != SEC_E_OK)
             {
-                get { return bInitializeKerberosStage; }
-                set { bInitializeKerberosStage = value; }
+                throw new Exception("QueryContextAttribute() failed!!!");
             }
 
-            public void EncryptMessage(byte[] message, out byte[] encryptedBuffer)
-            {
-                encryptedBuffer = null;
-
-                SECURITY_HANDLE EncryptionContext = _hClientContext;
-
-                SecPkgContext_Sizes ContextSizes;
-
-                if (QueryContextAttributes(ref EncryptionContext,
-                       SECPKG_ATTR_SIZES, out ContextSizes) != SEC_E_OK)
-                {
-                    throw new Exception("QueryContextAttribute() failed!!!");
-                }
-
-                MultipleSecBufferHelper[] ThisSecHelper = new MultipleSecBufferHelper[]
+            MultipleSecBufferHelper[] ThisSecHelper = new MultipleSecBufferHelper[]
                     {
                         new MultipleSecBufferHelper(new byte[ContextSizes.cbSecurityTrailer],
                                                     SecBufferType.SECBUFFER_TOKEN),
@@ -711,61 +715,60 @@ namespace jabber.connection.sasl
                                                     SecBufferType.SECBUFFER_PADDING)
                     };
 
-                SecBufferDesc DescBuffer = new SecBufferDesc(ThisSecHelper);
+            SecBufferDesc DescBuffer = new SecBufferDesc(ThisSecHelper);
 
-                try
-                {
-                    if (EncryptMessage(ref EncryptionContext,
-                            SECQOP_WRAP_NO_ENCRYPT, ref DescBuffer, 0) != SEC_E_OK)
-                    {
-                        throw new Exception("EncryptMessage() failed!!!");
-                    }
-
-                    encryptedBuffer = DescBuffer.GetSecBufferByteArray();
-                }
-                finally
-                {
-                    DescBuffer.Dispose();
-                }
-            }
-
-            public void DecryptMessage(int messageLength, byte[] encryptedBuffer, out byte[] decryptedBuffer)
+            try
             {
-                decryptedBuffer = null;
+                if (EncryptMessage(ref EncryptionContext,
+                        SECQOP_WRAP_NO_ENCRYPT, ref DescBuffer, 0) != SEC_E_OK)
+                {
+                    throw new Exception("EncryptMessage() failed!!!");
+                }
 
-                SECURITY_HANDLE DecryptionContext = _hClientContext;
+                encryptedBuffer = DescBuffer.GetSecBufferByteArray();
+            }
+            finally
+            {
+                DescBuffer.Dispose();
+            }
+        }
 
-                byte[] EncryptedMessage = new byte[messageLength];
-                Array.Copy(encryptedBuffer, 0, EncryptedMessage, 0, messageLength);
+        public void DecryptMessage(int messageLength, byte[] encryptedBuffer, out byte[] decryptedBuffer)
+        {
+            decryptedBuffer = null;
 
-                int SecurityTrailerLength = encryptedBuffer.Length - messageLength;
+            SECURITY_HANDLE DecryptionContext = _hClientContext;
 
-                byte[] SecurityTrailer = new byte[SecurityTrailerLength];
-                Array.Copy(encryptedBuffer, messageLength, SecurityTrailer, 0, SecurityTrailerLength);
+            byte[] EncryptedMessage = new byte[messageLength];
+            Array.Copy(encryptedBuffer, 0, EncryptedMessage, 0, messageLength);
 
-                MultipleSecBufferHelper[] ThisSecHelper = new MultipleSecBufferHelper[]
+            int SecurityTrailerLength = encryptedBuffer.Length - messageLength;
+
+            byte[] SecurityTrailer = new byte[SecurityTrailerLength];
+            Array.Copy(encryptedBuffer, messageLength, SecurityTrailer, 0, SecurityTrailerLength);
+
+            MultipleSecBufferHelper[] ThisSecHelper = new MultipleSecBufferHelper[]
                     {
                         new MultipleSecBufferHelper(EncryptedMessage, SecBufferType.SECBUFFER_DATA),
                         new MultipleSecBufferHelper(SecurityTrailer, SecBufferType.SECBUFFER_STREAM)
                     };
 
-                SecBufferDesc DescBuffer = new SecBufferDesc(ThisSecHelper);
-                try
-                {
-                    uint EncryptionQuality;
+            SecBufferDesc DescBuffer = new SecBufferDesc(ThisSecHelper);
+            try
+            {
+                uint EncryptionQuality;
 
-                    if (DecryptMessage(ref DecryptionContext, ref DescBuffer, 0, out EncryptionQuality) != SEC_E_OK)
-                    {
-                        throw new Exception("DecryptMessage() failed!!!");
-                    }
-
-                    decryptedBuffer = new byte[messageLength];
-                    Array.Copy(DescBuffer.GetSecBufferByteArray(), 0, decryptedBuffer, 0, messageLength);
-                }
-                finally
+                if (DecryptMessage(ref DecryptionContext, ref DescBuffer, 0, out EncryptionQuality) != SEC_E_OK)
                 {
-                    DescBuffer.Dispose();
+                    throw new Exception("DecryptMessage() failed!!!");
                 }
+
+                decryptedBuffer = new byte[messageLength];
+                Array.Copy(DescBuffer.GetSecBufferByteArray(), 0, decryptedBuffer, 0, messageLength);
+            }
+            finally
+            {
+                DescBuffer.Dispose();
             }
         }
     }
