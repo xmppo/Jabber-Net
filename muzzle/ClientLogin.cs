@@ -199,14 +199,11 @@ namespace muzzle
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.cmbProxy = new System.Windows.Forms.ComboBox();
-            ((System.ComponentModel.ISupportInitialize)(this.error)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numPort)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tpBasic.SuspendLayout();
             this.tpNetwork.SuspendLayout();
             this.tpConnection.SuspendLayout();
             this.tpProxy.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numProxyPort)).BeginInit();
             this.SuspendLayout();
             //
             // txtServer
@@ -586,8 +583,6 @@ namespace muzzle
             this.Name = "ClientLogin";
             this.Text = "Login";
             this.Controls.SetChildIndex(this.tabControl1, 0);
-            ((System.ComponentModel.ISupportInitialize)(this.error)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numPort)).EndInit();
             this.tabControl1.ResumeLayout(false);
             this.tpBasic.ResumeLayout(false);
             this.tpBasic.PerformLayout();
@@ -597,7 +592,6 @@ namespace muzzle
             this.tpConnection.PerformLayout();
             this.tpProxy.ResumeLayout(false);
             this.tpProxy.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numProxyPort)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -651,7 +645,6 @@ namespace muzzle
 
         private void cbUseWinCreds_CheckedChanged(object sender, EventArgs e)
         {
-            txtUser.Enabled = txtPass.Enabled = !cbUseWinCreds.Checked;
             if (cbUseWinCreds.Checked)
             {
                 txtUser.Clear();
@@ -659,6 +652,7 @@ namespace muzzle
                 this.ClearError(txtUser, null);
                 this.ClearError(txtPass, null);
             }
-        }
+			txtUser.Enabled = txtPass.Enabled = !cbUseWinCreds.Checked;
+		}
     }
 }

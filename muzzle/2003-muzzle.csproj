@@ -133,6 +133,16 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "InputBox.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "InputBox.resx"
+                    DependentUpon = "InputBox.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "JidMulti.cs"
                     SubType = "UserControl"
                     BuildAction = "Compile"
@@ -181,6 +191,11 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "StreamControl.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "StripChart.bmp"
                     BuildAction = "EmbeddedResource"
                 />
@@ -202,6 +217,16 @@
                 <File
                     RelPath = "XDataForm.resx"
                     DependentUpon = "XDataForm.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "XmppDebugger.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "XmppDebugger.resx"
+                    DependentUpon = "XmppDebugger.cs"
                     BuildAction = "EmbeddedResource"
                 />
             </Include>

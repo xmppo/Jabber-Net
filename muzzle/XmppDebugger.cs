@@ -251,14 +251,12 @@ namespace muzzle
 
         private void ValidateAndSend()
         {
-            this.UseWaitCursor = true;
             XmlElement elem = ValidateXML();
             if (elem != null)
             {
                 m_stream.Write(elem);
                 rtSend.Clear();
             }
-            this.UseWaitCursor = false;
         }
 
         private void rtSend_KeyUp(object sender, KeyEventArgs e)
@@ -285,7 +283,9 @@ namespace muzzle
             int offset = rtDebug.Text.IndexOf(t, start);
             if (offset < 0)
             {
+#if NET20
                 Console.Beep();
+#endif
                 offset = 0;
             }
             rtDebug.Select(offset, t.Length);
@@ -365,8 +365,6 @@ namespace muzzle
             //
             // XmppDebugger
             //
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.rtDebug);
             this.Controls.Add(this.splitter1);
             this.Controls.Add(this.rtSend);

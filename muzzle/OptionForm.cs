@@ -54,6 +54,9 @@ namespace muzzle
         protected OptionForm()
         {
             InitializeComponent();
+#if NET20
+			this.AutoValidate = System.Windows.Forms.AutoValidate.Disable;
+#endif
         }
 
         /// <summary>
@@ -369,9 +372,8 @@ namespace muzzle
             this.btnOK = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.tip = new System.Windows.Forms.ToolTip(this.components);
-            this.error = new System.Windows.Forms.ErrorProvider(this.components);
+            this.error = new System.Windows.Forms.ErrorProvider(this);
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.error)).BeginInit();
             this.SuspendLayout();
             //
             // btnCancel
@@ -414,7 +416,6 @@ namespace muzzle
             // OptionForm
             //
             this.AcceptButton = this.btnOK;
-            this.AutoValidate = System.Windows.Forms.AutoValidate.Disable;
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(292, 266);
             this.Controls.Add(this.panel1);
@@ -422,7 +423,6 @@ namespace muzzle
             this.Text = "OptionForm";
             this.Load += new System.EventHandler(this.OptionForm_Load);
             this.panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.error)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -457,9 +457,13 @@ namespace muzzle
 
         private void btnOK_Click(object sender, EventArgs e)
         {
+#if NET20
             if (!this.ValidateChildren())
                 return;
-
+#else
+            if (!this.Validate())
+                return;
+#endif
             WriteXmpp();
 
             this.DialogResult = DialogResult.OK;
