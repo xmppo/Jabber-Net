@@ -353,7 +353,7 @@ namespace bedrock.net
             // this will be called twice if the server requires a client cert.  
             // Ignore the callback the first time; I think this is a .Net bug.
             if (acceptableIssuers.Length == 0)
-                return null;
+                return m_cert;
 
             if (CertificateGui)
             {
