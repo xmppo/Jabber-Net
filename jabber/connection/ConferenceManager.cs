@@ -88,6 +88,46 @@ namespace jabber.connection
         public ConferenceManager()
         {
             InitializeComponent();
+            this.OnStreamChanged += new bedrock.ObjectHandler(ConferenceManager_OnStreamChanged);
+        }
+
+        private void ConferenceManager_OnStreamChanged(object sender)
+        {
+            Stream.OnProtocol += new ProtocolHandler(Stream_OnProtocol);
+        }
+
+        private void Stream_OnProtocol(object sender, System.Xml.XmlElement rp)
+        {
+            if (OnInvite == null)
+                return;
+
+            Message msg = rp as Message;
+            if (msg == null)
+                return;
+/*
+<message
+    from='darkcave@macbeth.shakespeare.lit'
+    to='hecate@shakespeare.lit'>
+  <x xmlns='http://jabber.org/protocol/muc#user'>
+    <invite from='crone1@shakespeare.lit/desktop'>
+      <reason>
+        Hey Hecate, this is the place for all good witches!
+      </reason>
+    </invite>
+    <password>cauldronburn</password>
+  </x>
+</message>
+ */
+            UserX x = msg["x", URI.MUC_USER] as UserX;
+            if (x == null)
+                return;
+
+            Invite inv = x["invite", URI.MUC_USER] as Invite;
+            if (inv == null)
+                return;
+
+            Room r = GetRoom(msg.From);
+            OnInvite(r, msg);
         }
 
         /// <summary>
@@ -212,6 +252,12 @@ namespace jabber.connection
         /// </summary>
         [Category("Room")]
         public event RoomParticipantEvent OnParticipantPresenceChange;
+
+        /// <summary>
+        /// An invite was received.  A room object will be passed in as the sender.
+        /// </summary>
+        [Category("Manager")]
+        public event MessageHandler OnInvite;
 
         /// <summary>
         /// Joins a conference room.
