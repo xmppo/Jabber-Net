@@ -60,6 +60,7 @@ $(BASEDIR)/jabber/connection/States.cs \
 $(BASEDIR)/jabber/connection/StreamComponent.cs \
 $(BASEDIR)/jabber/connection/XmppStream.cs \
 $(BASEDIR)/jabber/connection/sasl/ExternalProcessor.cs \
+$(BASEDIR)/jabber/connection/sasl/KerbProcessor.cs \
 $(BASEDIR)/jabber/connection/sasl/MD5Processor.cs \
 $(BASEDIR)/jabber/connection/sasl/PlainProcessor.cs \
 $(BASEDIR)/jabber/connection/sasl/SASLProcessor.cs \
