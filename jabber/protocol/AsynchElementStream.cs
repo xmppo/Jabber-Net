@@ -155,7 +155,7 @@ namespace jabber.protocol
             }
             catch (PartialTokenException)
             {
-                Console.WriteLine("PartialTokenException: " + System.Text.Encoding.UTF8.GetString(copy));
+                // Console.WriteLine("PartialTokenException: " + System.Text.Encoding.UTF8.GetString(copy));
                 // ignored;
             }
             catch (ExtensibleTokenException)
