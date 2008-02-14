@@ -198,6 +198,28 @@ namespace muzzle
         }
 
         /// <summary>
+        /// Read connection properties from the given file,
+        /// pop up the dialog to see if the user wants to change them,
+        /// save the changes, and
+        /// connect to the server.
+        /// </summary>
+        /// <param name="propertyFile">The name of the file to store connection information in.</param>
+        /// <returns>True if the user hit OK, otherwise false</returns>
+        public bool Login(string propertyFile)
+        {
+            if (this.Xmpp == null)
+                throw new ArgumentNullException("Client must be set", "Xmpp");
+            if (propertyFile != null)
+                ReadFromFile(propertyFile);
+            if (ShowDialog() != DialogResult.OK)
+                return false;
+            if (propertyFile != null)
+                WriteToFile(propertyFile);
+            this.Xmpp.Connect();
+            return true;
+        }
+
+        /// <summary>
         /// Set the connection properties from an XML config file.
         /// TODO: Replace this with a better ConfigFile implementation that can write.
         /// </summary>

@@ -72,6 +72,17 @@ namespace muzzle
         }
 
         /// <summary>
+        /// Log in to the server
+        /// </summary>
+        /// <param name="service">The JabberClient instance to connect</param>
+        /// <param name="propertyFile">The name of an XML file to store properties in.</param>
+        /// <returns>True if the user clicked OK, false on cancel</returns>
+        public static bool Login(jabber.server.JabberService service, string propertyFile)
+        {
+            return new ComponentLogin(service).Login(propertyFile);
+        }
+
+        /// <summary>
         /// Create a Client Login dialog box that manages a component
         /// </summary>
         /// <param name="service">The component to manage</param>

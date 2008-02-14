@@ -138,28 +138,6 @@ namespace muzzle
             this.Xmpp = cli;
         }
 
-        /// <summary>
-        /// Read connection properties from the given file,
-        /// pop up the dialog to see if the user wants to change them,
-        /// save the changes, and
-        /// connect to the server.
-        /// </summary>
-        /// <param name="propertyFile">The name of the file to store connection information in.</param>
-        /// <returns>True if the user hit OK, otherwise false</returns>
-        public bool Login(string propertyFile)
-        {
-            if (this.Xmpp == null)
-                throw new ArgumentNullException("Client must be set", "Xmpp");
-            if (propertyFile != null)
-                ReadFromFile(propertyFile);
-            if (ShowDialog() != DialogResult.OK)
-                return false;
-            if (propertyFile != null)
-                WriteToFile(propertyFile);
-            this.Xmpp.Connect();
-            return true;
-        }
-
         #region Windows Form Designer generated code
         /// <summary>
         /// Required method for Designer support - do not modify
