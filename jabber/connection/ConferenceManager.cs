@@ -87,8 +87,8 @@ namespace jabber.connection
         /// </summary>
         public ConferenceManager()
         {
-            InitializeComponent();
             this.OnStreamChanged += new bedrock.ObjectHandler(ConferenceManager_OnStreamChanged);
+            InitializeComponent();
         }
 
         private void ConferenceManager_OnStreamChanged(object sender)
@@ -134,11 +134,9 @@ namespace jabber.connection
         /// Creates a new conference manager in a container
         /// </summary>
         /// <param name="container">Parent container.</param>
-        public ConferenceManager(IContainer container)
+        public ConferenceManager(IContainer container) : this()
         {
             container.Add(this);
-
-            InitializeComponent();
         }
 
         /// <summary>
