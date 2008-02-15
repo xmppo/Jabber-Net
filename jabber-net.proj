@@ -78,6 +78,22 @@
       AssemblyKeyName=""
       AssemblyKeyFile="../../jabbernet.key" />
 
+    <AssemblyInfo CodeLanguage="CS"
+      OutputFile="$(MSBuildProjectDirectory)\muzzle\AssemblyInfo.cs"
+      AssemblyTitle="Muzzle library"
+      AssemblyDescription="GUI helper functions to be used with Jabber-Net."
+      AssemblyCompany="Cursive Systems, Inc."
+      AssemblyProduct="jabber-net"
+      AssemblyCopyright="Copyright (c) Cursive, Inc. 2000-2007"
+      AssemblyConfiguration=""
+      AssemblyTrademark=""
+      AssemblyCulture=""
+      AssemblyVersion="$(Major).$(Minor).$(Build).$(Revision)"
+      AssemblyDelaySign="false"
+      CLSCompliant="true"
+      AssemblyKeyName=""
+      AssemblyKeyFile="../../../jabbernet.key" />
+
   </Target>
 
   <Target Name="Zip" DependsOnTargets="CompileMono">
