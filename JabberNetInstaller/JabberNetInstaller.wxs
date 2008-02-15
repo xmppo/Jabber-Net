@@ -63,21 +63,14 @@
     <Binary Id="ToolboxInstaller" SourceFile="Toolbox.exe"/>
     
     <CustomAction Id="RunJabberNetInstaller" BinaryKey="ToolboxInstaller"
-                  ExeCommand='/installdesktop "[#JabberNetDll]" "Jabber-Net"'/>
+                  ExeCommand='/vs2005 /vs2008 /installdesktop "[#JabberNetDll]" "Jabber-Net" /installdesktop "[#MuzzleDll]" "Muzzle"'/>
     <CustomAction Id="RunJabberNetUninstaller" BinaryKey="ToolboxInstaller"
-                  ExeCommand='/uninstall "Jabber-Net"'/>
-
-    <CustomAction Id="RunMuzzleInstaller" BinaryKey="ToolboxInstaller"
-                  ExeCommand='/installdesktop "[#MuzzleDll]" "Muzzle"'/>
-    <CustomAction Id="RunMuzzleUninstaller" BinaryKey="ToolboxInstaller"
-                  ExeCommand='/uninstall "Muzzle"'/>
+                  ExeCommand='/vs2005 /vs2008 /uninstall "Jabber-Net" /uninstall "Muzzle"'/>
     
     <InstallExecuteSequence>
       <Custom Action="RunJabberNetInstaller" After="InstallFinalize">$ProductComponent&gt;2</Custom>
-      <Custom Action="RunMuzzleInstaller" After="InstallFinalize">$ProductComponent&gt;2</Custom>
       
       <Custom Action="RunJabberNetUninstaller" After="MsiUnpublishAssemblies">$ProductComponent=2</Custom>
-      <Custom Action="RunMuzzleUninstaller" After="MsiUnpublishAssemblies">$ProductComponent=2</Custom>
     </InstallExecuteSequence>
     
 	</Product>
