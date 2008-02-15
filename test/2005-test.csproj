@@ -180,6 +180,7 @@
     <Compile Include="jabber\protocol\iq\RosterTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="jabber\protocol\iq\TimeTest.cs" />
     <Compile Include="jabber\protocol\PacketTest.cs">
       <SubType>Code</SubType>
     </Compile>
