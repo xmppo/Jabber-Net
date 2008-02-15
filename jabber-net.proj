@@ -97,12 +97,16 @@
   </Target>
 
   <Target Name="Zip" DependsOnTargets="CompileMono">
+    <CreateItem Include="@(MonoFiles->'%(rootdir)%(directory)\*.dll')">
+      <Output TaskParameter="Include" ItemName="MonoZipFiles"/>
+    </CreateItem>
     <CreateProperty Value="$(MonoOutput)\Jabber-Net.Mono.v$(Major).$(Minor).$(Build).$(Revision).zip">
       <Output TaskParameter="Value" PropertyName="MonoZipFile"/>
     </CreateProperty>
     <MakeDir Directories="$(MonoOutput)"
       Condition="!Exists('$(MonoOutput)')"/>
-    <Zip Files="@(MonoFiles)"
+    <Message Text="Zip Working Directory: @(MonoFiles->'%(rootdir)%(directory)')"/>
+    <Zip Files="@(MonoZipFiles)"
       WorkingDirectory="@(MonoFiles->'%(rootdir)%(directory)')"
       ZipFileName="$(MonoZipFile)"/>
   </Target>

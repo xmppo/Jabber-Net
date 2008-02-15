@@ -37,7 +37,8 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>TRACE;DEBUG;NET20 NO_SRV</DefineConstants>
+    <DefineConstants Condition="'$(BuildMono)'==''" >TRACE;DEBUG;NET20 NO_SRV</DefineConstants>
+    <DefineConstants Condition="'$(BuildMono)'=='true'" >TRACE;DEBUG;NO_SRV</DefineConstants>
     <DocumentationFile>2005-jabber-net.xml</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
@@ -61,7 +62,8 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>TRACE;NET20 NO_SRV</DefineConstants>
+    <DefineConstants Condition="'$(BuildMono)'==''" >TRACE;NET20 NO_SRV</DefineConstants>
+    <DefineConstants Condition="'$(BuildMono)'=='true'" >TRACE;NO_SRV</DefineConstants>
     <DocumentationFile>2005-jabber-net.xml</DocumentationFile>
     <DebugSymbols>false</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
@@ -77,7 +79,8 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DefineConstants>TRACE;DEBUG;NET20</DefineConstants>
+    <DefineConstants Condition="'$(BuildMono)'==''" >TRACE;DEBUG;NET20</DefineConstants>
+    <DefineConstants Condition="'$(BuildMono)'=='true'" >TRACE;DEBUG</DefineConstants>
   </PropertyGroup>
   <ItemGroup Condition="'$(BuildMono)'==''">
     <Reference Include="System">
@@ -453,7 +456,7 @@
     <EmbeddedResource Include="jabber\connection\ConferenceManager.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="netlib.Dns\netlib.Dns.csproj">
+    <ProjectReference Condition="'$(BuildMono)'==''" Include="netlib.Dns\netlib.Dns.csproj">
       <Project>{40AC7A7C-D3E5-46DF-B740-06BD9D2A00E1}</Project>
       <Name>netlib.Dns</Name>
     </ProjectReference>
