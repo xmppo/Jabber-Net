@@ -36,10 +36,13 @@ namespace test.jabber.protocol.iq
             Time t = iq.Query as Time;
             t.AddChild(doc.CreateElement("utc", t.NamespaceURI));
             Assert.AreEqual(DateTime.MinValue, t.UTC);
-            DateTime start = DateTime.Now;
+            DateTime start = DateTime.UtcNow;
             t.SetCurrentTime();
-            Assert.IsTrue(t.UTC >= start);
 
+            // SetCurrentTime only stores seconds portion, whereas UtcNow has all 
+            // kinds of precision.  Are we within a second of being correct?
+            TimeSpan ts = t.UTC - start;
+            Assert.IsTrue(Math.Abs(ts.TotalSeconds) < 1.0);
         }
     }
 }
