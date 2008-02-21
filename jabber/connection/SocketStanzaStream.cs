@@ -19,7 +19,8 @@ using System.Xml;
 using bedrock.net;
 using bedrock.util;
 using jabber.protocol;
-#if NET20
+
+#if !__MonoCS__
 using netlib.Dns;
 using netlib.Dns.Records;
 #endif
@@ -144,7 +145,7 @@ namespace jabber.connection
 
         }
 
-#if NET20
+#if !__MonoCS__
         private static SRVRecord PickSRV(SRVRecord[] srv)
         {
             if ((srv == null) || (srv.Length == 0))
@@ -261,12 +262,10 @@ namespace jabber.connection
             case ProxyType.None:
                 m_sock = new AsyncSocket(null, this, (bool)m_listener[Options.SSL], false);
 
-#if NET20
                 ((AsyncSocket)m_sock).LocalCertificate = m_listener[Options.LOCAL_CERTIFICATE] as
                     System.Security.Cryptography.X509Certificates.X509Certificate2;
 
                 ((AsyncSocket)m_sock).CertificateGui = (bool)m_listener[Options.CERTIFICATE_GUI];
-#endif
                 break;
 
             default:
@@ -276,10 +275,8 @@ namespace jabber.connection
             if (proxy != null)
             {
                 proxy.Socket = new AsyncSocket(null, proxy, (bool)m_listener[Options.SSL], false);
-#if NET20
                 ((AsyncSocket)proxy.Socket).LocalCertificate = m_listener[Options.LOCAL_CERTIFICATE] as
                     System.Security.Cryptography.X509Certificates.X509Certificate2;
-#endif
 
                 proxy.Host = m_listener[Options.PROXY_HOST] as string;
                 proxy.Port = (int)m_listener[Options.PROXY_PORT];
@@ -294,7 +291,9 @@ namespace jabber.connection
             string host = (string)m_listener[Options.NETWORK_HOST];
             if ((host == null) || (host == ""))
             {
-#if NET20
+#if __MonoCS__
+                host = to;
+#else
                 try
                 {
                     LookupSRV(to, ref host, ref port);
@@ -304,9 +303,7 @@ namespace jabber.connection
                     Debug.WriteLine("WARNING: netlib.Dns.dll missing");
                     host = to;
                 }
- #else
-     host = to;
- #endif
+#endif
             }
 
             Address addr = new Address(host, port);
@@ -321,10 +318,9 @@ namespace jabber.connection
             if (m_accept == null)
             {
                 m_accept = new AsyncSocket(null, this, (bool)m_listener[Options.SSL], false);
-#if NET20
                 ((AsyncSocket)m_accept).LocalCertificate = m_listener[Options.LOCAL_CERTIFICATE] as
                     System.Security.Cryptography.X509Certificates.X509Certificate2;
-#endif
+
                 Address addr = new Address((string)m_listener[Options.NETWORK_HOST],
                     (int)m_listener[Options.PORT]);
 
@@ -522,7 +518,6 @@ namespace jabber.connection
             m_listener.BytesWritten(buf, offset, length);
         }
 
-#if NET20 || __MonoCS__
         /// <summary>
         /// An invalid peer certificate was sent during SSL/TLS neogtiation.
         /// </summary>
@@ -538,7 +533,6 @@ namespace jabber.connection
         {
             return m_listener.OnInvalidCertificate(sock, certificate, chain, sslPolicyErrors);
         }
-#endif
         #endregion
     }
 }

@@ -12,7 +12,7 @@
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 
-#if NET20 && !__MonoCS__
+#if !__MonoCS__
     #define UI_OK
 #endif
 

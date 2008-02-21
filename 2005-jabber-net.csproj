@@ -37,8 +37,8 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants Condition="'$(BuildMono)'==''" >TRACE;DEBUG;NET20 NO_SRV</DefineConstants>
-    <DefineConstants Condition="'$(BuildMono)'=='true'" >TRACE;DEBUG;NO_SRV</DefineConstants>
+    <DefineConstants Condition="'$(BuildMono)'==''">TRACE;DEBUG;NET20 NO_SRV</DefineConstants>
+    <DefineConstants Condition="'$(BuildMono)'=='true'">TRACE;DEBUG;NO_SRV</DefineConstants>
     <DocumentationFile>2005-jabber-net.xml</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
@@ -62,8 +62,8 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants Condition="'$(BuildMono)'==''" >TRACE;NET20 NO_SRV</DefineConstants>
-    <DefineConstants Condition="'$(BuildMono)'=='true'" >TRACE;NO_SRV</DefineConstants>
+    <DefineConstants Condition="'$(BuildMono)'==''">TRACE;NET20 NO_SRV</DefineConstants>
+    <DefineConstants Condition="'$(BuildMono)'=='true'">TRACE;NO_SRV</DefineConstants>
     <DocumentationFile>2005-jabber-net.xml</DocumentationFile>
     <DebugSymbols>false</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
@@ -79,8 +79,11 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DefineConstants Condition="'$(BuildMono)'==''" >TRACE;DEBUG;NET20</DefineConstants>
-    <DefineConstants Condition="'$(BuildMono)'=='true'" >TRACE;DEBUG</DefineConstants>
+    <DefineConstants Condition="'$(BuildMono)'==''">TRACE;DEBUG;NET20</DefineConstants>
+    <DefineConstants Condition="'$(BuildMono)'=='true'">TRACE;DEBUG</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
   <ItemGroup Condition="'$(BuildMono)'==''">
     <Reference Include="System">

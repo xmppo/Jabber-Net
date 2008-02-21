@@ -133,7 +133,6 @@ namespace jabber.connection
         /// <param name="elem">The XML Element received.</param>
         void StanzaReceived(XmlElement elem);
 
-#if NET20 || __MonoCS__
         /// <summary>
         /// An invalid peer certificate was sent during SSL/TLS neogtiation.
         /// </summary>
@@ -146,7 +145,6 @@ namespace jabber.connection
             System.Security.Cryptography.X509Certificates.X509Certificate certificate,
             System.Security.Cryptography.X509Certificates.X509Chain chain,
             System.Net.Security.SslPolicyErrors sslPolicyErrors);
-#endif
     }
 
     /// <summary>

@@ -54,9 +54,7 @@ namespace muzzle
         protected OptionForm()
         {
             InitializeComponent();
-#if NET20
 			this.AutoValidate = System.Windows.Forms.AutoValidate.Disable;
-#endif
         }
 
         /// <summary>
@@ -479,13 +477,9 @@ namespace muzzle
 
         private void btnOK_Click(object sender, EventArgs e)
         {
-#if NET20
             if (!this.ValidateChildren())
                 return;
-#else
-            if (!this.Validate())
-                return;
-#endif
+
             WriteXmpp();
 
             this.DialogResult = DialogResult.OK;

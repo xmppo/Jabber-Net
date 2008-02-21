@@ -17,13 +17,10 @@ using System.Threading;
 using NUnit.Framework;
 using bedrock.net;
 using bedrock.util;
-#if NET20
 using System.Security.Cryptography.X509Certificates;
-#endif
 
 namespace test.bedrock.net
 {
-#if !NO_SSL
     /// <summary>
     ///  Not really async.
     /// </summary>
@@ -78,7 +75,7 @@ namespace test.bedrock.net
 
             SocketWatcher c_w = new SocketWatcher(20);
             c_w.Synchronous = true;
-#if NET20
+
             // Note: must have a client cert in your IE cert store.
             X509Store store = new X509Store(StoreName.My, StoreLocation.CurrentUser);
             store.Open(OpenFlags.ReadOnly);
@@ -98,7 +95,6 @@ namespace test.bedrock.net
 
                 return;
             }
-#endif
             c_w.CreateConnectSocket(this, a, true, "localhost");
         }
 
@@ -108,7 +104,6 @@ namespace test.bedrock.net
 
             //s_w.RequireClientCert = true;
 
-#if NET20
             X509Certificate2 c2;
             X509Store store = new X509Store(StoreName.My, StoreLocation.LocalMachine);
             store.Open(OpenFlags.ReadWrite);
@@ -133,10 +128,8 @@ namespace test.bedrock.net
             Assert.IsNotNull(c2.PrivateKey);
             store.Close();
             s_w.LocalCertificate = c2;
-#else
-            s_w.SetCertificateFile("../../localhost-cert.p12", "test");
-#endif
             s_w.Synchronous = true;
+
             m_listen = s_w.CreateListenSocket(this, a, true);
             lock(start)
             {
@@ -161,9 +154,7 @@ namespace test.bedrock.net
         #region Implementation of ISocketEventListener
         public bool OnAccept(BaseSocket newsocket)
         {
-#if NET20
             Assert.IsTrue(((AsyncSocket)newsocket).IsMutuallyAuthenticated);
-#endif
             newsocket.RequestRead();
             return false;
         }
@@ -209,7 +200,6 @@ namespace test.bedrock.net
             return this;
         }
 
-#if NET20
         public bool OnInvalidCertificate(BaseSocket sock,
             System.Security.Cryptography.X509Certificates.X509Certificate certificate,
             System.Security.Cryptography.X509Certificates.X509Chain chain,
@@ -218,8 +208,6 @@ namespace test.bedrock.net
             return true;
         }
 
-#endif
-
         #endregion
 
         private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
@@ -227,5 +215,4 @@ namespace test.bedrock.net
             System.Diagnostics.Debug.WriteLine(e.ExceptionObject.ToString());
         }
     }
-#endif
 }

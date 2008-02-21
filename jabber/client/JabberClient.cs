@@ -214,9 +214,7 @@ namespace jabber.client
              "if the server doesn't support digest, " +
              "and PlaintextAuth is true")]
         [Category("Jabber")]
-#if NET20
         [PasswordPropertyText]
-#endif
         public string Password
         {
             get { return this[Options.PASSWORD] as string; }

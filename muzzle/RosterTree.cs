@@ -79,18 +79,14 @@ namespace muzzle
             this.DragOver += new DragEventHandler(RosterTree_DragOver);
             this.DragDrop += new DragEventHandler(RosterTree_DragDrop);
             this.AfterSelect += new TreeViewEventHandler(RosterTree_AfterSelect);
-#if NET20
             this.DrawMode = TreeViewDrawMode.OwnerDrawText;
             this.DrawNode += new DrawTreeNodeEventHandler(RosterTree_DrawNode);
-#endif
         }
 
         private void RosterTree_AfterSelect(object sender, TreeViewEventArgs e)
         {
         }
 
-
-#if NET20
         private void DrawGroup(DrawTreeNodeEventArgs e)
         {
             GroupNode node = (GroupNode)e.Node;
@@ -147,8 +143,6 @@ namespace muzzle
             else
                 e.DrawDefault = true; // or assert(false)
         }
-
-#endif
 
         private GroupNode GetDropGroup(DragEventArgs e)
         {
@@ -239,7 +233,6 @@ namespace muzzle
             //
             this.il.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("il.ImageStream")));
             this.il.TransparentColor = System.Drawing.Color.Magenta;
-#if NET20
             this.il.Images.SetKeyName(0, "");
             this.il.Images.SetKeyName(1, "");
             this.il.Images.SetKeyName(2, "");
@@ -249,7 +242,6 @@ namespace muzzle
             this.il.Images.SetKeyName(6, "");
             this.il.Images.SetKeyName(7, "");
             this.il.Images.SetKeyName(8, "blank");
-#endif
             this.ResumeLayout(false);
 
         }
@@ -356,20 +348,14 @@ namespace muzzle
         {
             get
             {
-#if NET20
                 return (this.DrawMode == TreeViewDrawMode.OwnerDrawText);
-#else
-                return false;
-#endif
             }
             set
             {
-#if NET20
                 if (value)
                     this.DrawMode = TreeViewDrawMode.OwnerDrawText;
                 else
                     this.DrawMode = TreeViewDrawMode.Normal;
-#endif
             }
         }
 

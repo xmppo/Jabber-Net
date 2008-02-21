@@ -20,11 +20,7 @@ using System.IO;
 using bedrock.util;
 using bedrock.collections;
 
-#if NET20 || __MonoCS__
 using System.Security.Cryptography.X509Certificates;
-#elif !NO_SSL
-using Org.Mentalis.Security.Certificates;
-#endif
 
 namespace bedrock.net
 {
@@ -49,12 +45,8 @@ namespace bedrock.net
         private int         m_maxSocks;
         private bool        m_synch = false;
 
-#if NET20 || __MonoCS__
         private X509Certificate2 m_cert = null;
         private bool m_requireClientCert = false;
-#elif !NO_SSL
-        private Certificate m_cert = null;
-#endif
 
         /// <summary>
         /// Create a new instance, which will manage an unlimited number of sockets.
@@ -103,7 +95,6 @@ namespace bedrock.net
             }
         }
 
-#if NET20 || __MonoCS__
         /// <summary>
         /// The certificate to be used for the local side of sockets, with SSL on.
         /// </summary>
@@ -139,33 +130,13 @@ namespace bedrock.net
         /// </summary>
         /// <param name="filename">A .pfx or .cer file</param>
         /// <param name="password">The password, if this is a .pfx file, null if .cer file.</param>
-#if NET20
         public void SetCertificateFile(string filename,
                                        string password)
         {
             m_cert = new X509Certificate2(filename, password);
             // TODO: check cert for validity
         }
-#else
-        public void SetCertificateFile(string filename,
-                                       string password)
-        {
-            byte[] data = null;
-            using (FileStream fs = new FileStream(filename, FileMode.Open)) {
-                data = new byte[fs.Length];
-                fs.Read(data, 0, data.Length);
-                fs.Close ();
-            }
 
-            Mono.Security.X509.PKCS12 pfx =
-                new Mono.Security.X509.PKCS12(data, password);
-            if (pfx.Certificates.Count > 0)
-                m_cert = new X509Certificate2(pfx.Certificates[0].RawData);
-            // TODO: check cert for validity
-        }
-#endif
-
- #if NET20
         /// <summary>
         /// Set the certificate from a system store.  Try "MY" for the ones listed in IE.
         /// </summary>
@@ -174,68 +145,6 @@ namespace bedrock.net
         {
             throw new NotImplementedException("Not implemented yet.  Need to figure out how to search for 'server' certs.");
         }
-#endif
-
-#elif !NO_SSL
-        /// <summary>
-        /// The certificate to be used for the local side of sockets, with SSL on.
-        /// </summary>
-        public Certificate LocalCertificate
-        {
-            get { return m_cert; }
-            set { m_cert = value; }
-        }
-
-        /// <summary>
-        /// Set the certificate to be used for accept sockets.  To generate a test .pfx file using openssl,
-        /// add this to openssl.conf:
-        ///   <blockquote>
-        ///   [ serverex ]
-        ///   extendedKeyUsage=1.3.6.1.5.5.7.3.1
-        ///   </blockquote>
-        /// and run the following commands:
-        ///   <blockquote>
-        ///   openssl req -new -x509 -newkey rsa:1024 -keyout privkey.pem -out key.pem -extensions serverex
-        ///   openssl pkcs12 -export -in key.pem -inkey privkey.pem -name localhost -out localhost.pfx
-        ///   </blockquote>
-        /// If you leave the certificate null, and you are doing Accept, the SSL class will try to find a
-        /// default server cert on your box.  If you have IIS installed with a cert, this might just go...
-        /// </summary>
-        /// <param name="filename">A .pfx or .cer file</param>
-        /// <param name="password">The password, if this is a .pfx file, null if .cer file.</param>
-        public void SetCertificateFile(string filename, string password)
-        {
-            if (!File.Exists(filename))
-            {
-                throw new CertificateException("File does not exist: " + filename);
-            }
-            CertificateStore store;
-            if (password != null)
-            {
-                store = CertificateStore.CreateFromPfxFile(filename, password);
-            }
-            else
-            {
-                store = CertificateStore.CreateFromCerFile(filename);
-            }
-            m_cert = CertUtil.FindServerCert(store);
-            if (m_cert == null)
-                throw new CertificateException("The certificate file does not contain a server authentication certificate.");
-        }
-
-        /// <summary>
-        /// Set the certificate from a system store.  Try "MY" for the ones listed in IE.
-        /// </summary>
-        /// <param name="storeName"></param>
-        public void SetCertificateStore(string storeName)
-        {
-            CertificateStore store = new CertificateStore(storeName);
-
-            m_cert = CertUtil.FindServerCert(store);
-            if (m_cert == null)
-                throw new CertificateException("The certificate file does not contain a server authentication certificate.");
-        }
-#endif
 
         /// <summary>
         /// Create a socket that is listening for inbound connections.
@@ -254,14 +163,8 @@ namespace bedrock.net
             AsyncSocket result = new AsyncSocket(this, listener, SSL, m_synch);
             if (SSL)
             {
-#if !NO_SSL
                 result.LocalCertificate = m_cert;
-#if NET20
                 result.RequireClientCert = m_requireClientCert;
-#endif
-#else
-                throw new NotImplementedException("SSL not compiled in");
-#endif
             }
             result.Accept(addr, backlog);
             return result;
@@ -337,13 +240,8 @@ namespace bedrock.net
             // Create the socket:
             result = new AsyncSocket(this, listener, SSL, m_synch);
             if (SSL)
-            {
-#if !NO_SSL && !__MonoCS__
                 result.LocalCertificate = m_cert;
-#else
-                throw new NotImplementedException("SSL not compiled in");
-#endif
-            }
+
             // Start the connect process:
             result.Connect(addr, hostId);
             return result;
@@ -355,7 +253,6 @@ namespace bedrock.net
         /// <param name="s">New socket connection</param>
         public void RegisterSocket(AsyncSocket s)
         {
-
             lock (m_lock)
             {
                 if ((m_maxSocks >= 0) && (m_socks.Count >= m_maxSocks))

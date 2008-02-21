@@ -37,10 +37,8 @@ namespace Example
         {
             InitializeComponent();
             tvServices.ShowNodeToolTips = true;
-#if NET20
             tvServices.NodeMouseDoubleClick += new TreeNodeMouseClickEventHandler(tvServices_NodeMouseDoubleClick);
             tvServices.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvServices_AfterSelect);
-#endif
         }
 
         /// <summary>
@@ -200,7 +198,6 @@ namespace Example
             e.Node.SelectedImageIndex = 7;
         }
 
-#if NET20
         private void tvServices_NodeMouseDoubleClick(object sender,
                                              TreeNodeMouseClickEventArgs e)
         {
@@ -214,7 +211,6 @@ namespace Example
             jabber.connection.DiscoNode dn = (jabber.connection.DiscoNode)e.Node.Tag;
             m_disco.BeginGetFeatures(dn, new jabber.connection.DiscoNodeHandler(GotInfo));
         }
-#endif
 
         private void GotInitialFeatures(jabber.connection.DiscoNode node)
         {

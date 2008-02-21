@@ -144,10 +144,8 @@ Public Class MainForm
         '
         Me.ilPresence.ImageStream = CType(resources.GetObject("ilPresence.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.ilPresence.TransparentColor = System.Drawing.Color.Transparent
-#If NET20 Then
         Me.ilPresence.Images.SetKeyName(0, "")
         Me.ilPresence.Images.SetKeyName(1, "")
-#End If
         '
         'mnuPresence
         '

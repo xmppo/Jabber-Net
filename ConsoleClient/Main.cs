@@ -80,14 +80,7 @@ namespace ConsoleClient
             }
 
             if (untrustedOK)
-            {
-#if NET20 || __MonoCS__
                 jc.OnInvalidCertificate += new System.Net.Security.RemoteCertificateValidationCallback(jc_OnInvalidCertificate);
-#else
-				bedrock.net.AsyncSocket.UntrustedRootOK = true;
-#endif
-            }
-
 
             JID j = new JID(jid);
             jc.User = j.User;
@@ -159,13 +152,11 @@ namespace ConsoleClient
             }
         }
 
-#if NET20 || __MonoCS__
         bool jc_OnInvalidCertificate(object sender, System.Security.Cryptography.X509Certificates.X509Certificate certificate, System.Security.Cryptography.X509Certificates.X509Chain chain, System.Net.Security.SslPolicyErrors sslPolicyErrors)
         {
             Console.WriteLine("Invalid certificate ({0}):\n{1}", sslPolicyErrors.ToString(), certificate.ToString(true));
             return true;
         }
-#endif
 
         /// <summary>
         /// The main entry point for the application.

@@ -89,9 +89,6 @@ namespace Example
             //
             InitializeComponent();
 
-#if !NET20
-            jc.AutoStartTLS = false;  // Mentalis stopped working with XCP 5
-#endif
             services.ImageList = roster.ImageList;
             cm.AddFeature(URI.TIME);
             cm.AddFeature(URI.VERSION);
@@ -606,12 +603,10 @@ namespace Example
             pnlCon.Text = "Connected";
             mnuAway.Enabled = mnuAvailable.Enabled = true;
 
-#if !NO_SSL
             if (jc.SSLon)
             {
 
                 pnlSSL.Text = "SSL";
-#if NET20
                 System.Security.Cryptography.X509Certificates.X509Certificate cert2 =
                     (System.Security.Cryptography.X509Certificates.X509Certificate)
                     jc[Options.REMOTE_CERTIFICATE];
@@ -619,9 +614,7 @@ namespace Example
                 string cert_str = cert2.ToString(true);
                 debug.Write("CERT:", cert_str);
                 pnlSSL.ToolTipText = cert_str;
-#endif
             }
-#endif
             idler.Enabled = true;
         }
 
@@ -645,11 +638,6 @@ namespace Example
             mnuAway.Enabled = mnuAvailable.Enabled = false;
             connectToolStripMenuItem.Text = "&Connect";
             idler.Enabled = false;
-
-#if !NO_SSL && !NET20
-            if (ex is Org.Mentalis.Security.Certificates.CertificateException)
-                m_err = true;
-#endif
 
             pnlCon.Text = "Error: " + ex.Message;
         }

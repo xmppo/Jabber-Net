@@ -153,51 +153,33 @@ namespace bedrock.net
         public void Resolve(AddressResolved callback)
         {
             if ((m_ip != null) && (m_ip != IPAddress.Any)
-#if !OLD_CLR
                 && (m_ip != IPAddress.IPv6Any)
-#endif
                 )
             {
                 callback(this);
             }
             else
-            {
-// hm. this seems to work now, but I'm leaving the comments here for now,
-// just in case.
-
-// #if MONO
-//                 Resolve();
-//                 callback(this);
-// #else
-#if NET20 || __MonoCS__
                 Dns.BeginGetHostEntry(m_hostname, new AsyncCallback(OnResolved), callback);
-#else
-                Dns.BeginResolve(m_hostname, new AsyncCallback(OnResolved), callback);
-#endif
-            }
         }
+
         /// <summary>
         /// Synchronous DNS lookup.
         /// </summary>
         public void Resolve()
         {
-            if ((m_ip != null) && (m_ip != IPAddress.Any)
-#if !OLD_CLR
-                && (m_ip != IPAddress.IPv6Any)
-#endif
-                )
+            if ((m_ip != null) && 
+                (m_ip != IPAddress.Any) && 
+                (m_ip != IPAddress.IPv6Any))
             {
                 return;
             }
             Debug.Assert(m_hostname != null, "Must set hostname first");
-#if NET20 || __MonoCS__
             IPHostEntry iph = Dns.GetHostEntry(m_hostname);
-#else
-            IPHostEntry iph = Dns.Resolve(m_hostname);
-#endif
+
             // TODO: what happens here on error?
             m_ip = iph.AddressList[0];
         }
+
         /// <summary>
         /// Handle the async DNS response.
         /// </summary>
@@ -206,11 +188,7 @@ namespace bedrock.net
         {
             try
             {
-#if NET20 || __MonoCS__
                 IPHostEntry ent = Dns.EndGetHostEntry(ar);
-#else
-                IPHostEntry ent = Dns.EndResolve(ar);
-#endif
                 if (ent.AddressList.Length <= 0)
                 {
                     m_ip = null;

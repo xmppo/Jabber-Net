@@ -95,22 +95,11 @@ namespace bedrock.net
         {
             if (m_state == States.Connecting)
             {
-#if NET20 || __MonoCS__
                 IPHostEntry server = Dns.GetHostEntry(RemoteAddress.Hostname);
-#else
-                IPHostEntry server = Dns.Resolve(RemoteAddress.Hostname);
-#endif
                 IPAddress ip_addr = server.AddressList[0];
 
-#if !OLD_CLR
                 byte[] addr = ip_addr.GetAddressBytes();
-#else
-                byte[] addr = new byte[4];
-                addr[0] = (byte)((ip_addr.Address >> 24) & 0xff);
-                addr[1] = (byte)((ip_addr.Address >> 16) & 0xff);
-                addr[2] = (byte)((ip_addr.Address >> 8) & 0xff);
-                addr[3] = (byte)(ip_addr.Address & 0xff);
-#endif
+
                 int port = RemoteAddress.Port;
                 byte [] buffer = new Byte[14];
                 buffer[0] = 4;  // protocol version.

@@ -11,14 +11,6 @@
  * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
-#if NET20 || __MonoCS__
-#define MODERN
-#define SSL
-#elif !NO_SSL
-#define MENTALIS
-#define SSL
-#endif
-
 using System;
 
 using System.Collections;
@@ -35,11 +27,7 @@ using jabber.protocol;
 using jabber.protocol.stream;
 using jabber.connection.sasl;
 
-#if MODERN
 using System.Security.Cryptography.X509Certificates;
-#elif MENTALIS
-using Org.Mentalis.Security.Certificates;
-#endif
 
 namespace jabber.connection
 {
@@ -237,10 +225,17 @@ namespace jabber.connection
             new object[] {Options.REQUIRE_SASL, false},
             new object[] {Options.PLAINTEXT, false},
             new object[] {Options.AUTO_TLS, true},
-#if !NO_COMPRESSION
+#if NO_COMPRESSION
+            new object[] {Options.AUTO_COMPRESS, false},
+#else
             new object[] {Options.AUTO_COMPRESS, true},
 #endif
+
+#if __MonoCS__
+            new object[] {Options.CERTIFICATE_GUI, false},
+#else
             new object[] {Options.CERTIFICATE_GUI, true},
+#endif
             new object[] {Options.PROXY_TYPE, ProxyType.None},
             new object[] {Options.CONNECTION_TYPE, ConnectionType.Socket},
         };
@@ -462,14 +457,12 @@ namespace jabber.connection
         [Category("Stream")]
         public event bedrock.ObjectHandler OnDisconnect;
 
-#if MODERN
         /// <summary>
         /// An invalid cert was received from the other side.  Set this event and return true to
         /// use the cert anyway.  If the event is not set, an ugly user interface will be displayed.
         /// </summary>
         [Category("Stream")]
         public event System.Net.Security.RemoteCertificateValidationCallback OnInvalidCertificate;
-#endif
 
         /// <summary>
         /// Gets the tracker for sending IQ packets.
@@ -582,13 +575,7 @@ namespace jabber.connection
         public bool SSL
         {
             get { return (bool)this[Options.SSL]; }
-            set
-            {
-#if NO_SSL
-                Debug.Assert(!value, "SSL support not compiled in");
-#endif
-                this[Options.SSL] = value;
-            }
+            set { this[Options.SSL] = value; }
         }
 
         /// <summary>
@@ -612,7 +599,6 @@ namespace jabber.connection
             set { this[Options.AUTO_COMPRESS] = value; }
         }
 
-#if MODERN
         /// <summary>
         /// Gets or sets the certificate to be used for the local
         /// side of sockets when SSL is enabled.
@@ -649,77 +635,8 @@ namespace jabber.connection
         public void SetCertificateFile(string filename,
                                        string password)
         {
-#if __MonoCS__
-            byte[] data = null;
-            using (FileStream fs = File.OpenRead (filename))
-            {
-                data = new byte [fs.Length];
-                fs.Read (data, 0, data.Length);
-                fs.Close ();
-            }
-
-            Mono.Security.X509.PKCS12 pfx = new Mono.Security.X509.PKCS12(data, password);
-            if (pfx.Certificates.Count > 0)
-                this[Options.LOCAL_CERTIFICATE] = new X509Certificate(pfx.Certificates[0].RawData);
-#else
             this[Options.LOCAL_CERTIFICATE] = new X509Certificate2(filename, password);
-#endif
         }
-
-#elif MENTALIS
-        /// <summary>
-        /// The certificate to be used for the local side of sockets,
-        /// with SSL on.
-        /// </summary>
-        [Browsable(false)]
-        public Certificate LocalCertificate
-        {
-
-            get { return this[Options.LOCAL_CERTIFICATE] as Certificate; }
-            set { this[Options.LOCAL_CERTIFICATE] = value; }
-        }
-
-
-        /// <summary>
-        /// Set the certificate to be used for accept sockets.  To generate a test .pfx file using openssl,
-        /// add this to openssl.conf:
-        ///   <blockquote>
-        ///   [ serverex ]
-        ///   extendedKeyUsage=1.3.6.1.5.5.7.3.1
-        ///   </blockquote>
-        /// and run the following commands:
-        ///   <blockquote>
-        ///   openssl req -new -x509 -newkey rsa:1024 -keyout privkey.pem -out key.pem -extensions serverex
-        ///   openssl pkcs12 -export -in key.pem -inkey privkey.pem -name localhost -out localhost.pfx
-        ///   </blockquote>
-        /// If you leave the certificate null, and you are doing
-        /// Accept, the SSL class will try to find a default server
-        /// cert on your box.  If you have IIS installed with a cert,
-        /// this might just go...
-        /// </summary>
-        /// <param name="filename">A .pfx or .cer file</param>
-        /// <param name="password">The password, if this is a .pfx
-        /// file, null if .cer file.</param>
-        public void SetCertificateFile(string filename, string password)
-        {
-                        if (!File.Exists(filename))
-                        {
-                                throw new CertificateException("File does not exist: " + filename);
-                        }
-                        CertificateStore store;
-                        if (password != null)
-                        {
-                                store = CertificateStore.CreateFromPfxFile(filename, password);
-                        }
-                        else
-                        {
-                                store = CertificateStore.CreateFromCerFile(filename);
-                        }
-                        this[Options.LOCAL_CERTIFICATE] = bedrock.net.CertUtil.FindServerCert(store);
-                        if (this[Options.LOCAL_CERTIFICATE] == null)
-                                throw new CertificateException("The certificate file does not contain a server authentication certificate.");
-                }
-#endif
 
         /// <summary>
         /// Calls Invoke() for all callbacks on this control.
@@ -1228,7 +1145,6 @@ namespace jabber.connection
                     return;
                 }
 
-#if SSL
                 // don't do starttls if we're already on an SSL socket.
                 // bad server setup, but no skin off our teeth, we're already
                 // SSL'd.  Also, start-tls won't work when polling.
@@ -1245,7 +1161,6 @@ namespace jabber.connection
                     this.Write(new StartTLS(m_doc));
                     return;
                 }
-#endif
 
 #if !NO_COMPRESSION
                 Compression comp = f.Compression;
@@ -1380,7 +1295,6 @@ namespace jabber.connection
                     return;
                 }
             }
-#if SSL
             else if (State == StartTLSState.Instance)
             {
                 switch (tag.Name)
@@ -1395,7 +1309,6 @@ namespace jabber.connection
                     return;
                 }
             }
-#endif
 
 #if !NO_COMPRESSION
             else if (State == CompressionState.Instance)
@@ -1794,13 +1707,12 @@ namespace jabber.connection
                 OnElement(m_stanzas, elem);
         }
 
-#if MODERN
         private bool ShowCertificatePrompt(object sender,
             System.Security.Cryptography.X509Certificates.X509Certificate certificate,
             System.Security.Cryptography.X509Certificates.X509Chain chain,
             System.Net.Security.SslPolicyErrors sslPolicyErrors)
         {
-#if NET20 && !__MonoCS__
+#if !__MonoCS__
             CertificatePrompt cp = new CertificatePrompt((X509Certificate2)certificate, chain, sslPolicyErrors);
             return (cp.ShowDialog() == System.Windows.Forms.DialogResult.OK);
 #else
@@ -1833,7 +1745,6 @@ namespace jabber.connection
 
             return (bool)m_invoker.Invoke(new System.Net.Security.RemoteCertificateValidationCallback(ShowCertificatePrompt), new object[]{ sock, certificate, chain, sslPolicyErrors });
         }
-#endif
 
         #endregion
     }

@@ -81,7 +81,7 @@ namespace bedrock.net
         /// <param name="offset">Offset into the buffer to start at</param>
         /// <param name="length">Number of bytes to use out of the buffer</param>
         void OnWrite(BaseSocket sock, byte[] buf, int offset, int length);
-#if NET20 || __MonoCS__
+
         /// <summary>
         /// An invalid peer certificate was sent during SSL/TLS neogtiation.
         /// </summary>
@@ -94,7 +94,6 @@ namespace bedrock.net
             System.Security.Cryptography.X509Certificates.X509Certificate certificate,
             System.Security.Cryptography.X509Certificates.X509Chain chain,
             System.Net.Security.SslPolicyErrors sslPolicyErrors);
-#endif
     }
     /// <summary>
     /// Default, empty implementation of ISocketEventListener
@@ -184,7 +183,6 @@ namespace bedrock.net
         {
         }
 
-#if NET20 || __MonoCS__
         /// <summary>
         /// An invalid peer certificate was sent during SSL/TLS neogtiation.
         /// </summary>
@@ -200,7 +198,6 @@ namespace bedrock.net
         {
             return false;
         }
-#endif
         #endregion
     }
 }

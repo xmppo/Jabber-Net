@@ -27,35 +27,6 @@ using bedrock.util;
 
 namespace bedrock.net
 {
-
-
-#if !NET20
-
-    /// <summary>
-    /// Certificate policy that trusts all
-    /// </summary>
-    [SVN(@"$Id$")]
-    public class TrustAllCertificatePolicy : System.Net.ICertificatePolicy
-    {
-        /// <summary>
-        /// Construction
-        /// </summary>
-        public TrustAllCertificatePolicy()
-        {}
-
-        /// <summary>
-        /// Check validation callback
-        /// </summary>
-        public bool CheckValidationResult(System.Net.ServicePoint sp,
-            System.Security.Cryptography.X509Certificates.X509Certificate cert,System.Net.WebRequest req, int problem)
-        {
-            return true;
-        }
-    }
-
-#endif
-
-
     /// <summary>
     /// XEP25 Error conditions
     /// </summary>
@@ -310,8 +281,6 @@ namespace bedrock.net
             m_curKey = m_numKeys - 1;
         }
 
-#if NET20 || __MonoCS__
-
         private bool ValidateRemoteCertificate(Object sender,
                                                X509Certificate certificate,
                                                X509Chain chain,
@@ -319,9 +288,6 @@ namespace bedrock.net
         {
             return UntrustedRootOK;
         }
-
-#endif
-
 
         /// <summary>
         /// Keep polling until
@@ -398,9 +364,9 @@ namespace bedrock.net
 
                 req.KeepAlive       = false;
 
+                // TODO: What about Mono?
 #if NET20
                 req.CachePolicy = new System.Net.Cache.HttpRequestCachePolicy(System.Net.Cache.HttpRequestCacheLevel.NoCacheNoStore);
-
 #endif
 
 
@@ -413,16 +379,9 @@ namespace bedrock.net
                 resp = null;
                 try
                 {
-#if NET20  || __MonoCS__
                     ServicePointManager.ServerCertificateValidationCallback =
                         new System.Net.Security.RemoteCertificateValidationCallback(ValidateRemoteCertificate);
-#else
-                    if (UntrustedRootOK)
-                        ServicePointManager.CertificatePolicy = new TrustAllCertificatePolicy();
-                    else
-                        ServicePointManager.CertificatePolicy = null;
 
-#endif
                     s = req.GetRequestStream();
                     s.Write(start.buf, start.offset, start.len);
 

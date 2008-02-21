@@ -283,9 +283,7 @@ namespace muzzle
             int offset = rtDebug.Text.IndexOf(t, start);
             if (offset < 0)
             {
-#if NET20
                 Console.Beep();
-#endif
                 offset = 0;
             }
             rtDebug.Select(offset, t.Length);
