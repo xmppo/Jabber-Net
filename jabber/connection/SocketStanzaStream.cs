@@ -193,7 +193,27 @@ namespace jabber.connection
 
             throw new Exception();
         }
+
+        private void LookupSRV(string domain, ref string host, ref int port)
+        {
+            try
+            {
+                DnsRequest request = new DnsRequest(m_listener[Options.SRV_PREFIX] + domain);
+                DnsResponse response = request.GetResponse(DnsRecordType.SRV);
+
+                SRVRecord record = PickSRV(response.SRVRecords);
+                host = record.NameNext;
+                port = record.Port;
+                Debug.WriteLine(string.Format("SRV found: {0}:{1}", host, port));
+            }
+            catch
+            {
+                host = domain;
+            }
+        }
+
 #endif
+
 
         /// <summary>
         /// Connects to the XMPP server.
@@ -277,16 +297,11 @@ namespace jabber.connection
 #if NET20
                 try
                 {
-                    DnsRequest request = new DnsRequest(m_listener[Options.SRV_PREFIX] + to);
-                    DnsResponse response = request.GetResponse(DnsRecordType.SRV);
-
-                    SRVRecord record = PickSRV(response.SRVRecords);
-                    host = record.NameNext;
-                    port = record.Port;
-                    Debug.WriteLine(string.Format("SRV found: {0}:{1}", host, port));
+                    LookupSRV(to, ref host, ref port);
                 }
-                catch (Exception)
+                catch
                 {
+                    Debug.WriteLine("WARNING: netlib.Dns.dll missing");
                     host = to;
                 }
  #else
