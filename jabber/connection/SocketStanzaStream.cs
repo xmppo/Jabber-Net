@@ -101,11 +101,15 @@ namespace jabber.connection
         {
             get
             {
-#if NO_COMPRESSION
-                return false;
-#else
-                return true;
-#endif
+                try
+                {
+                    return bedrock.io.ZlibStream.Supported;
+                }
+                catch
+                {
+                    Debug.WriteLine("WARNING: zlib.net.dll missing!");
+                    return false;
+                }
             }
         }
 

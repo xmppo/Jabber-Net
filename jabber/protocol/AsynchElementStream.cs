@@ -169,7 +169,7 @@ namespace jabber.protocol
             }
             catch (Exception e)
             {
-                throw e;
+                throw new Exception("Unexpected exception", e);
             }
             finally
             {

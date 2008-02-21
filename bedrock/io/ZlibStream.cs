@@ -11,13 +11,15 @@
  * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
-#if !NO_COMPRESSION
 using System;
 using System.IO;
 using System.Diagnostics;
 
-using ComponentAce.Compression.Libs.zlib;
 using bedrock.util;
+
+#if !NO_COMPRESSION
+using ComponentAce.Compression.Libs.zlib;
+#endif
 
 namespace bedrock.io
 {
@@ -49,6 +51,23 @@ namespace bedrock.io
     [SVN(@"$Id$")]
     public class ZlibStream : Stream
     {
+        /// <summary>
+        /// Is zlib supported?  Note, this will throw an exception if the library is missing.
+        /// </summary>
+        public static bool Supported
+        {
+            get
+            {
+#if NO_COMPRESSION
+                return false;
+#else
+                return zlibConst.version() != "";
+#endif
+            }
+        }
+
+#if !NO_COMPRESSION
+
         private Stream m_stream = null;
         private ZStream m_in;
         private ZStream m_out;
@@ -427,6 +446,6 @@ namespace bedrock.io
                 this.state = state;
             }
         }
+#endif
     }
 }
-#endif
