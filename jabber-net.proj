@@ -28,10 +28,6 @@
     <DefaultExclude Include="**\*.txt" />
   </ItemGroup>
 
-  <Target Name="Compile" DependsOnTargets="Version">
-    <Exec Command="&quot;C:\Program Files\Microsoft Visual Studio .NET 2003\Common7\IDE\devenv&quot; 2003-jabber-net.sln /Build Debug /Project Setup" />
-  </Target>
-
   <Target Name="Compile2005" DependsOnTargets="Version">
     <MSBuild Projects="2005-jabber-net.sln" Targets="2005-jabber-net;2005-muzzle" Properties="Configuration=Debug" />
   </Target>
@@ -155,14 +151,13 @@
     <RemoveDir Directories="$(SetupOutput)"/>
   </Target>
 
-  <Target Name="CopySetupFiles" DependsOnTargets="Zip;Compile;Setup2005">
+  <Target Name="CopySetupFiles" DependsOnTargets="Zip;Setup2005">
     <MakeDir Directories="$(SetupOutput)"
       Condition="!Exists('$(SetupOutput)')"/>
     <Message Text="VS2005 Installation files: @(JabberNetInstallerFiles)"/>
     <Message Text="Mono Installation files: $(MonoZipFile)"/>
     <Copy SourceFiles="@(JabberNetInstallerFiles)" DestinationFolder="$(SetupOutput)"/>
     <Copy SourceFiles="$(MonoZipFile)" DestinationFolder="$(SetupOutput)"/>
-    <Copy SourceFiles="Setup\Debug\Setup.Exe" DestinationFolder="$(SetupOutput)"/>
   </Target>
 
   <Target Name="Build" DependsOnTargets="CopySetupFiles">
