@@ -16,10 +16,7 @@ using System.IO;
 using System.Diagnostics;
 
 using bedrock.util;
-
-#if !NO_COMPRESSION
 using ComponentAce.Compression.Libs.zlib;
-#endif
 
 namespace bedrock.io
 {
@@ -58,15 +55,9 @@ namespace bedrock.io
         {
             get
             {
-#if NO_COMPRESSION
-                return false;
-#else
                 return zlibConst.version() != "";
-#endif
             }
         }
-
-#if !NO_COMPRESSION
 
         private Stream m_stream = null;
         private ZStream m_in;
@@ -446,6 +437,5 @@ namespace bedrock.io
                 this.state = state;
             }
         }
-#endif
     }
 }

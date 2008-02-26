@@ -130,12 +130,10 @@ namespace bedrock.net
         public abstract void StartTLS();
 #endif
 
-#if !NO_COMPRESSION
         /// <summary>
         /// Start XEP-138 compression on this socket.
         /// </summary>
         public abstract void StartCompression();
-#endif
 
         /// <summary>
         /// Start an async read from the socket.  Listener.OnRead() is

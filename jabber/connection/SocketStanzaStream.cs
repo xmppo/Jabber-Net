@@ -402,7 +402,6 @@ namespace jabber.connection
         }
 #endif
 
-#if !NO_COMPRESSION
         /// <summary>
         /// Starts compressing outgoing traffic for this connection with the XMPP server.
         /// </summary>
@@ -410,7 +409,6 @@ namespace jabber.connection
         {
             m_sock.StartCompression();
         }
-#endif
 
         #region ElementStream handlers
         private void m_elements_OnDocumentStart(object sender, XmlElement rp)

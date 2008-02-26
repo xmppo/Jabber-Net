@@ -204,8 +204,6 @@ namespace bedrock.net
         }
 #endif
 
-#if !NO_COMPRESSION
-
         /// <summary>
         /// Start compression over this connection.  Not implemented.
         /// </summary>
@@ -213,7 +211,6 @@ namespace bedrock.net
         {
             throw new NotImplementedException();
         }
-#endif
 
         /// <summary>
         /// Send bytes to the jabber server

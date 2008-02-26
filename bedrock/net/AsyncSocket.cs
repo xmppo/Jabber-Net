@@ -759,7 +759,6 @@ namespace bedrock.net
             set { m_requireClientCert = value; }
         }
 
-#if !NO_COMPRESSION
         /// <summary>
         /// Start XEP-138 compression on this socket.
         /// </summary>
@@ -767,7 +766,6 @@ namespace bedrock.net
         {
             m_stream = new bedrock.io.ZlibStream(m_stream, ComponentAce.Compression.Libs.zlib.zlibConst.Z_FULL_FLUSH);
         }
-#endif
 
         /// <summary>
         /// Connection complete.

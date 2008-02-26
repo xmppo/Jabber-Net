@@ -225,11 +225,7 @@ namespace jabber.connection
             new object[] {Options.REQUIRE_SASL, false},
             new object[] {Options.PLAINTEXT, false},
             new object[] {Options.AUTO_TLS, true},
-#if NO_COMPRESSION
-            new object[] {Options.AUTO_COMPRESS, false},
-#else
             new object[] {Options.AUTO_COMPRESS, true},
-#endif
 
 #if __MonoCS__
             new object[] {Options.CERTIFICATE_GUI, false},
@@ -1162,7 +1158,6 @@ namespace jabber.connection
                     return;
                 }
 
-#if !NO_COMPRESSION
                 Compression comp = f.Compression;
                 if ((bool)this[Options.AUTO_COMPRESS] &&
                     (comp != null) &&
@@ -1180,7 +1175,6 @@ namespace jabber.connection
                     this.Write(c);
                     return;
                 }
-#endif
 
                 // not authenticated yet.  Note: we'll get a stream:features
                 // after the last sasl restart, so we shouldn't try to iq:auth
@@ -1309,8 +1303,6 @@ namespace jabber.connection
                     return;
                 }
             }
-
-#if !NO_COMPRESSION
             else if (State == CompressionState.Instance)
             {
                 switch (tag.Name)
@@ -1327,7 +1319,6 @@ namespace jabber.connection
                 }
 
             }
-#endif
             else if (State == SASLAuthedState.Instance)
             {
                 Features f = tag as Features;

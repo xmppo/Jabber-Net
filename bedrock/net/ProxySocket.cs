@@ -149,7 +149,6 @@ namespace bedrock.net
         }
 #endif
 
-#if !NO_COMPRESSION
         /// <summary>
         /// Start compression processing on an open socket.
         /// </summary>
@@ -157,7 +156,6 @@ namespace bedrock.net
         {
             m_sock.StartCompression();
         }
-#endif
 
         /// <summary>
         /// Start the flow of async accepts.  Flow will continue while
