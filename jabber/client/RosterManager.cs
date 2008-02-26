@@ -281,12 +281,19 @@ namespace jabber.client
                     break;
                 }
                 break;
+            case PresenceType.subscribed:
+                // This is the new ack case.
+                Presence sub_ack = new Presence(m_stream.Document);
+                sub_ack.To = pres.From;
+                sub_ack.Type = PresenceType.subscribe;
+                m_stream.Write(sub_ack);                
+                break;
             case PresenceType.unsubscribe:
                 // ack.  we'll likely get an unsubscribed soon, anyway.
-                Presence response = new Presence(m_stream.Document);
-                response.To = pres.From;
-                response.Type = PresenceType.unsubscribed;
-                m_stream.Write(response);
+                Presence un_ack = new Presence(m_stream.Document);
+                un_ack.To = pres.From;
+                un_ack.Type = PresenceType.unsubscribed;
+                m_stream.Write(un_ack);
                 break;
             case PresenceType.unsubscribed:
                 bool remove = true;

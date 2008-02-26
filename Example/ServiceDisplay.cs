@@ -176,7 +176,7 @@ namespace Example
             tn.Tag = dn;
             tn.ImageIndex = 8;
             tn.SelectedImageIndex = 8;
-            m_disco.BeginGetFeatures(dn, new jabber.connection.DiscoNodeHandler(GotInitialFeatures));
+            m_disco.BeginGetFeatures(dn, new jabber.connection.DiscoNodeHandler(GotInitialFeatures), null);
         }
 
         private void m_stream_OnDisconnect(object sender)
@@ -203,21 +203,21 @@ namespace Example
         {
             jabber.connection.DiscoNode dn = (jabber.connection.DiscoNode)e.Node.Tag;
             if (dn.Children == null)
-                m_disco.BeginGetItems(dn.JID, dn.Node, new jabber.connection.DiscoNodeHandler(GotItems));
+                m_disco.BeginGetItems(dn.JID, dn.Node, new jabber.connection.DiscoNodeHandler(GotItems), null);
         }
 
         private void tvServices_AfterSelect(object sender, TreeViewEventArgs e)
         {
             jabber.connection.DiscoNode dn = (jabber.connection.DiscoNode)e.Node.Tag;
-            m_disco.BeginGetFeatures(dn, new jabber.connection.DiscoNodeHandler(GotInfo));
+            m_disco.BeginGetFeatures(dn, new jabber.connection.DiscoNodeHandler(GotInfo), null);
         }
 
-        private void GotInitialFeatures(jabber.connection.DiscoNode node)
+        private void GotInitialFeatures(DiscoManager sender, jabber.connection.DiscoNode node, object state)
         {
-            m_disco.BeginGetItems(node, new jabber.connection.DiscoNodeHandler(GotItems));
+            m_disco.BeginGetItems(node, new jabber.connection.DiscoNodeHandler(GotItems), state);
         }
 
-        private void GotItems(jabber.connection.DiscoNode node)
+        private void GotItems(DiscoManager sender, jabber.connection.DiscoNode node, object state)
         {
             // TODO: some of this will break in 2003.
             TreeNode[] nodes = tvServices.Nodes.Find(node.Key, true);
@@ -237,7 +237,7 @@ namespace Example
             pgServices.Refresh();
         }
 
-        private void GotInfo(jabber.connection.DiscoNode node)
+        private void GotInfo(DiscoManager sender, jabber.connection.DiscoNode node, object state)
         {
             pgServices.SelectedObject = node;
         }

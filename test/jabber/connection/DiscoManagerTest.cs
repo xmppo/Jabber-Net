@@ -118,7 +118,7 @@ namespace test.jabber.connection
 
             using (mocks.Playback())
             {
-                dm.BeginGetItems(jid, NODE, delegate { });
+                dm.BeginGetItems(jid, NODE, delegate { }, null);
             }
         }
 
@@ -141,7 +141,7 @@ namespace test.jabber.connection
 
             using (mocks.Playback())
             {
-                dm.BeginGetFeatures(jid, NODE, delegate { });
+                dm.BeginGetFeatures(jid, NODE, delegate { }, null);
             }
         }
 
@@ -165,7 +165,7 @@ namespace test.jabber.connection
 
             using (mocks.Playback())
             {
-                dm.BeginFindServiceWithFeature(FEATURE, delegate { });
+                dm.BeginFindServiceWithFeature(FEATURE, delegate { }, null);
             }
         }
 

@@ -307,6 +307,10 @@ namespace jabber.connection
         private bool m_pendingInfo = false;
         private jabber.protocol.x.Data m_extensions;
 
+        private ArrayList m_featureCallbacks = new ArrayList();
+        private ArrayList m_itemCallbacks = new ArrayList();
+        private ArrayList m_identCallbacks = new ArrayList();
+
         /// <summary>
         /// Creates a disco node.
         /// </summary>
@@ -317,18 +321,106 @@ namespace jabber.connection
         {
         }
 
+        private class NodeCallback
+        {
+            public DiscoManager manager;
+            public DiscoNodeHandler callback;
+            public object state;
+
+            public NodeCallback(DiscoManager m, DiscoNodeHandler h, object s)
+            {
+                Debug.Assert(h != null);
+                manager = m;
+                callback = h;
+                state = s;
+            }
+
+            public void Call(DiscoNode node)
+            {
+                callback(manager, node, state);
+            }
+        }
+
         /// <summary>
-        /// Informs the client that features are now available from the XMPP server.
+        /// Add a callback for when features are received.
+        /// 
+        /// Calls the callback immediately if the features have already been retrieved.
         /// </summary>
-        public event DiscoNodeHandler OnFeatures;
+        /// <param name="manager"></param>
+        /// <param name="callback"></param>
+        /// <param name="state"></param>
+        /// <returns>True if there were no features yet, and the callback was queued.</returns>
+        public bool AddFeatureCallback(DiscoManager manager, DiscoNodeHandler callback, object state)
+        {
+            lock (this)
+            {
+                if (Features != null)
+                {
+                    if (callback != null)
+                        callback(manager, this, state);
+                    return false;
+                }
+                else
+                {
+                    m_featureCallbacks.Add(new NodeCallback(manager, callback, state));
+                    return true;
+                }
+            }
+        }
+
         /// <summary>
-        /// Informs the client that new children are now available.
+        /// Add a callback for when items are received.
+        /// 
+        /// Calls the callback immediately if the items have already been retrieved.
         /// </summary>
-        public event DiscoNodeHandler OnItems;
+        /// <param name="manager"></param>
+        /// <param name="callback"></param>
+        /// <param name="state"></param>
+        /// <returns>True if there were no items yet, and the callback was queued.</returns>
+        public bool AddItemsCallback(DiscoManager manager, DiscoNodeHandler callback, object state)
+        {
+            lock (this)
+            {
+                if (Children != null)
+                {
+                    if (callback != null)
+                        callback(manager, this, state);
+                    return false;
+                }
+                else
+                {
+                    m_itemCallbacks.Add(new NodeCallback(manager, callback, state));
+                    return true;
+                }
+            }
+        }
+
         /// <summary>
-        /// Informs the client that new identities are available.
+        /// Add a callback for when identities are received.
+        /// 
+        /// Calls the callback immediately if the features have already been retrieved.
         /// </summary>
-        public event DiscoNodeHandler OnIdentities;
+        /// <param name="manager"></param>
+        /// <param name="callback"></param>
+        /// <param name="state"></param>
+        /// <returns>True if there were no identities yet, and the callback was queued.</returns>
+        public bool AddIdentityCallback(DiscoManager manager, DiscoNodeHandler callback, object state)
+        {
+            lock (this)
+            {
+                if (Identities != null)
+                {
+                    if (callback != null)
+                        callback(manager, this, state);
+                    return false;
+                }
+                else
+                {
+                    m_identCallbacks.Add(new NodeCallback(manager, callback, state));
+                    return true;
+                }
+            }
+        }
 
         /// <summary>
         /// Gets or sets the string representation of the first identity.
@@ -519,6 +611,16 @@ namespace jabber.connection
             return Features.Contains(URI);
         }
 
+        private void DoCallbacks(ArrayList callbacks)
+        {
+            lock (this)
+            {
+                foreach (NodeCallback cb in callbacks)
+                    cb.Call(this);
+                callbacks.Clear();
+            }
+        }
+
         /// <summary>
         /// Add a single feature to the node.
         /// Does not fire OnFeatures, since this should mostly be used by
@@ -548,11 +650,7 @@ namespace jabber.connection
                     Features.Add(f.Var);
             }
 
-            if (OnFeatures != null)
-            {
-                OnFeatures(this);
-                OnFeatures = null;
-            }
+            DoCallbacks(m_featureCallbacks);
         }
 
         /// <summary>
@@ -591,11 +689,7 @@ namespace jabber.connection
                     Identity.Add(new Ident(id));
             }
 
-            if (OnIdentities != null)
-            {
-                OnIdentities(this);
-                OnIdentities = null;
-            }
+            DoCallbacks(m_identCallbacks);
         }
 
         /// <summary>
@@ -631,11 +725,7 @@ namespace jabber.connection
                     AddItem(di);
             }
 
-            if (OnItems != null)
-            {
-                OnItems(this);
-                OnItems = null;
-            }
+            DoCallbacks(m_itemCallbacks);
         }
 
         /// <summary>
@@ -702,8 +792,10 @@ namespace jabber.connection
     /// <summary>
     /// Represents a callback with a new disco node.
     /// </summary>
-    /// <param name="node"></param>
-    public delegate void DiscoNodeHandler(DiscoNode node);
+    /// <param name="sender">The DiscoManager managing this node</param>
+    /// <param name="node">The node that changed</param>
+    /// <param name="state">State passed in to the Begin request.</param>
+    public delegate void DiscoNodeHandler(DiscoManager sender, DiscoNode node, object state);
 
     /// <summary>
     /// Manages the discovery (disco) database.
@@ -979,19 +1071,14 @@ namespace jabber.connection
         /// </summary>
         /// <param name="node">Node to look for.</param>
         /// <param name="handler">Callback to use afterwards.</param>
-        public void BeginGetFeatures(DiscoNode node, DiscoNodeHandler handler)
+        /// <param name="state">Context to pass back to caller when complete</param>
+        public void BeginGetFeatures(DiscoNode node, DiscoNodeHandler handler, object state)
         {
-            if (node.Features != null)
-            {
-                if (handler != null)
-                    handler(node);
-            }
-            else
-            {
-                if (handler != null)
-                    node.OnFeatures += handler;
+            if (node == null)
+                node = m_root;
+
+            if (node.AddFeatureCallback(this, handler, state))
                 RequestInfo(node);
-            }
         }
 
         /// <summary>
@@ -1002,9 +1089,10 @@ namespace jabber.connection
         /// <param name="jid">JID to look for.</param>
         /// <param name="node">Node to look for.</param>
         /// <param name="handler">Callback to use afterwards.</param>
-        public void BeginGetFeatures(JID jid, string node, DiscoNodeHandler handler)
+        /// <param name="state">Context to pass back to caller when complete</param>
+        public void BeginGetFeatures(JID jid, string node, DiscoNodeHandler handler, object state)
         {
-            BeginGetFeatures(DiscoNode.GetNode(jid, node), handler);
+            BeginGetFeatures(DiscoNode.GetNode(jid, node), handler, state);
         }
 
         /// <summary>
@@ -1015,19 +1103,14 @@ namespace jabber.connection
         /// </summary>
         /// <param name="node">Disco node to search.</param>
         /// <param name="handler">Callback that gets called with the items.</param>
-        public void BeginGetItems(DiscoNode node, DiscoNodeHandler handler)
+        /// <param name="state">Context to pass back to caller when complete</param>
+        public void BeginGetItems(DiscoNode node, DiscoNodeHandler handler, object state)
         {
-            if (node.Children != null)
-            {
-                if (handler != null)
-                    handler(node);
-            }
-            else
-            {
-                if (handler != null)
-                    node.OnItems += handler;
+            if (node == null)
+                node = m_root;
+
+            if (node.AddItemsCallback(this, handler, state))
                 RequestItems(node);
-            }
         }
 
         /// <summary>
@@ -1039,9 +1122,10 @@ namespace jabber.connection
         /// <param name="jid">JID of Service to query.</param>
         /// <param name="node">Node on the service to interact with.</param>
         /// <param name="handler">Callback that gets called with the items.</param>
-        public void BeginGetItems(JID jid, string node, DiscoNodeHandler handler)
+        /// <param name="state">Context to pass back to caller when complete</param>
+        public void BeginGetItems(JID jid, string node, DiscoNodeHandler handler, object state)
         {
-            BeginGetItems(DiscoNode.GetNode(jid, node), handler);
+            BeginGetItems(DiscoNode.GetNode(jid, node), handler, state);
         }
 
         private class FindServiceRequest
@@ -1058,7 +1142,7 @@ namespace jabber.connection
                 m_handler = handler;
             }
 
-            public void GotFeatures(DiscoNode node)
+            public void GotFeatures(DiscoManager manager, DiscoNode node, object state)
             {
 
                 // yes, yes, this may call the handler more than once in multi-threaded world.  Punt for now.
@@ -1066,7 +1150,7 @@ namespace jabber.connection
                 {
                     if (node.HasFeature(m_URI))
                     {
-                        m_handler(node);
+                        m_handler(manager, node, state);
                         m_handler = null;
                     }
                 }
@@ -1074,15 +1158,15 @@ namespace jabber.connection
                 if (Interlocked.Decrement(ref m_outstanding) == 0)
                 {
                     if (m_handler != null)
-                        m_handler(null);
+                        m_handler(manager, null, state);
                 }
             }
 
-            public void GotRootItems(DiscoNode node)
+            public void GotRootItems(DiscoManager manager, DiscoNode node, object state)
             {
                 m_outstanding = node.Children.Count;
                 foreach (DiscoNode n in node.Children)
-                    m_manager.BeginGetFeatures(n, new DiscoNodeHandler(GotFeatures));
+                    manager.BeginGetFeatures(n, new DiscoNodeHandler(GotFeatures), state);
             }
         }
 
@@ -1093,7 +1177,8 @@ namespace jabber.connection
         /// </summary>
         /// <param name="featureURI">Feature to look for.</param>
         /// <param name="handler">Callback to use when finished.</param>
-        public void BeginFindServiceWithFeature(string featureURI, DiscoNodeHandler handler)
+        /// <param name="state">Context to pass back to caller when complete</param>
+        public void BeginFindServiceWithFeature(string featureURI, DiscoNodeHandler handler, object state)
         {
             if (handler == null)
                 return;  // prove I *didn't* call it. :)
@@ -1101,7 +1186,7 @@ namespace jabber.connection
             FindServiceRequest req = new FindServiceRequest(this, featureURI, handler);
             if (m_root == null)
                 m_root = DiscoNode.GetNode(m_stream.Server);
-            BeginGetItems(m_root, new DiscoNodeHandler(req.GotRootItems));  // hopefully enough to prevent GC.
+            BeginGetItems(m_root, new DiscoNodeHandler(req.GotRootItems), state);  // hopefully enough to prevent GC.
         }
 
         IEnumerator IEnumerable.GetEnumerator()
