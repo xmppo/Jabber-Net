@@ -264,8 +264,8 @@ namespace jabber.protocol.iq
         /// </summary>
         public string Password
         {
-            get { return GetAttr("password"); }
-            set { SetAttr("password", value); }
+            get { return GetElem("password"); }
+            set { SetElem("password", value); }
         }
 
         /// <summary>
