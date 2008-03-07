@@ -881,6 +881,22 @@ namespace jabber.connection
         }
 
         /// <summary>
+        /// Join a room, using a password.
+        /// </summary>
+        /// <param name="password"></param>
+        public void Join(string password)
+        {
+            if (m_state == STATE.running)
+                return;
+
+            m_state = STATE.join;
+            RoomPresence pres = new RoomPresence(m_stream.Document, m_jid);
+            pres.X.Password = password;
+
+            m_stream.Write(pres);
+        }
+
+        /// <summary>
         /// Exits the room.  This cleans up the entry in the ConferenceManager, as well.
         /// </summary>
         /// <param name="reason">Reason for leaving the room.  May be null for no reason.</param>
@@ -1385,6 +1401,7 @@ namespace jabber.connection
         /// Add a participant to the list, indexed by full nick JID.
         /// </summary>
         /// <param name="pres">The latest presence</param>
+        /// <param name="mod">Was this a JOIN, a LEAVE, or no change?</param>
         /// <returns>The associated participant.</returns>
         internal RoomParticipant Modify(Presence pres, out Modification mod)
         {
