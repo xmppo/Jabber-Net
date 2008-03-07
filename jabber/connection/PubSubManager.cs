@@ -338,6 +338,11 @@ namespace jabber.connection
         }
     }
 
+    /// <summary>
+    /// Some event has occurred on a PubSub node.
+    /// </summary>
+    /// <param name="node"></param>
+    public delegate void NodeHandler(PubSubNode node);
 
     /// <summary>
     /// Manages a node to be subscribed to.  Will keep a maximum number of items.
@@ -389,8 +394,6 @@ namespace jabber.connection
         {
             if (stream == null)
                 throw new ArgumentException("must not be null", "stream");
-            if (jid == null)
-                throw new ArgumentException("must not be null", "jid");
             if (node == null)
                 throw new ArgumentException("must not be null", "node");
             if (node == "")
@@ -411,6 +414,14 @@ namespace jabber.connection
         }
 
         /// <summary>
+        /// Has the creation request succeeded?
+        /// </summary>
+        public bool IsCreated
+        {
+            get { return this[Op.CREATE] == STATE.Running; }
+        }
+
+        /// <summary>
         /// Informs the client that an item has been added to the node,
         /// either on initial get or by notification.
         /// NOTE: This may fire for the same item more than once.
@@ -428,6 +439,10 @@ namespace jabber.connection
         /// </summary>
         public event bedrock.ExceptionHandler OnError;
 
+        /// <summary>
+        /// Node has finished being created, successfully.
+        /// </summary>
+        public event NodeHandler OnCreate;
 
         private STATE this[Op op]
         {
@@ -485,6 +500,15 @@ namespace jabber.connection
         /// </summary>
         public void Create()
         {
+            Create(null);
+        }
+
+        /// <summary>
+        /// Creates the node using the specified configuration form.
+        /// </summary>
+        /// <param name="config">Null for the default configuration</param>
+        public void Create(jabber.protocol.x.Data config)
+        {
             lock (this)
             {
                 if (!NeedsAsking(this[Op.CREATE]))
@@ -509,7 +533,8 @@ namespace jabber.connection
             PubSubIQ iq = new PubSubIQ(m_stream.Document, PubSubCommandType.create, m_node);
             iq.To = m_jid;
             iq.Type = IQType.set;
-            iq.Query.AppendChild(m_stream.Document.CreateElement("configure", URI.PUBSUB));
+            Create c = (Create)iq.Command;
+            c.CreateConfiguration(config);
             m_stream.Tracker.BeginIQ(iq, GotCreated, null);
         }
 
@@ -547,6 +572,10 @@ namespace jabber.connection
             }
 
             this[Op.CREATE] = STATE.Running;
+
+            if (OnCreate != null)
+                OnCreate(this);
+
             SubscribeIfPending();
         }
 

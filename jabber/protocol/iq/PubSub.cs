@@ -15,6 +15,7 @@ using System;
 using System.Xml;
 
 using bedrock.util;
+using jabber.protocol.x;
 
 namespace jabber.protocol.iq
 {
@@ -465,6 +466,31 @@ namespace jabber.protocol.iq
         {
             return ParentNode["configure", URI.PUBSUB] as Configure;
         }
+
+        /// <summary>
+        /// Add a (or return a pre-exisitng) configuration section to the creation request, complete with x:data.
+        /// </summary>
+        /// <returns>The x:data form</returns>
+        public Data CreateConfiguration()
+        {
+            return CreateConfiguration(null);
+        }
+
+        /// <summary>
+        /// Add a configuration section to the creation request, using the given x:data.
+        /// </summary>
+        /// <param name="form"></param>
+        /// <returns></returns>
+        public Data CreateConfiguration(Data form)
+        {
+            Configure config = GetConfiguration();
+            if (config == null)
+            {
+                config = new Configure(this.OwnerDocument);
+                ParentNode.AppendChild(config);
+            }
+            return config.CreateForm(form);
+        }
     }
 
     /// <summary>
@@ -491,6 +517,40 @@ namespace jabber.protocol.iq
         {
         }
 
+        /// <summary>
+        /// Create or return the existing x:data form, with the appropriate form type.
+        /// </summary>
+        /// <returns></returns>
+        public Data CreateForm()
+        {
+            Data x = this["x", URI.XDATA] as Data;
+            if (x == null)
+            {
+                x = new Data(this.OwnerDocument);
+                x.FormType = URI.PUBSUB_NODE_CONFIG;
+                this.AddChild(x);
+            }
+            return x;
+        }
+
+        /// <summary>
+        /// Add the given form to the configuration, removing any existing form, and ensuring that the
+        /// form type is correct.
+        /// </summary>
+        /// <param name="form"></param>
+        /// <returns></returns>
+        public Data CreateForm(Data form)
+        {
+            Data x = this["x", URI.XDATA] as Data;
+            if (x != null)
+                RemoveChild(x);
+            if (form != null)
+            {
+                form.FormType = URI.PUBSUB_NODE_CONFIG;
+                AddChild(form);
+            }
+            return form;
+        }
     }
 
     /// <summary>

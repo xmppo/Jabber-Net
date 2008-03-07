@@ -50,6 +50,11 @@ namespace jabber.protocol.x
     public class Data : Element
     {
         /// <summary>
+        /// XEP-68 field that describes the type of the form.
+        /// </summary>
+        public const string FORM_TYPE = "FORM_TYPE";
+
+        /// <summary>
         ///
         /// </summary>
         /// <param name="doc"></param>
@@ -165,6 +170,50 @@ namespace jabber.protocol.x
                     return f;
             }
             return null;
+        }
+
+        /// <summary>
+        /// Remove the first field with the var specified
+        /// </summary>
+        /// <param name="var"></param>
+        /// <returns></returns>
+        public Field RemoveField(string var)
+        {
+            XmlNodeList nl = GetElementsByTagName("field", URI.XDATA);
+            foreach (XmlNode n in nl)
+            {
+                Field f = (Field)n;
+                if (f.Var == var)
+                    return (Field)this.RemoveChild(f);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// The XEP-68 type of this form.
+        /// </summary>
+        public string FormType
+        {
+            get 
+            {
+                Field f = GetField(FORM_TYPE);
+                if (f == null)
+                    return null;
+                return f.Val;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    RemoveField(FORM_TYPE);
+                    return;
+                }
+                Field f = GetField(FORM_TYPE);
+                if (f == null)
+                    f = this.AddField(FORM_TYPE, FieldType.hidden, null, value, null);
+                else
+                    f.Val = value;
+            }
         }
     }
 

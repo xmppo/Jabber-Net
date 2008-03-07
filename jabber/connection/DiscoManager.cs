@@ -189,8 +189,6 @@ namespace jabber.connection
         /// <param name="node">Node to associate with JIDNode.</param>
         public JIDNode(JID jid, string node)
         {
-            if (jid == null)
-                throw new ArgumentException("JID may not be null", "jid");
             this.m_jid = jid;
             if ((node != null) && (node != ""))
                 this.m_node = node;
@@ -225,7 +223,11 @@ namespace jabber.connection
         protected static string GetKey(string jid, string node)
         {
             if ((node == null) || (node == ""))
+            {
+                if (jid == null)
+                    return null;
                 return jid.ToString();
+            }
             return jid + '\u0000' + node;
         }
 
@@ -262,8 +264,9 @@ namespace jabber.connection
         /// <returns>The hash code of this JIDNode.</returns>
         public override int GetHashCode()
         {
-            Debug.Assert(m_jid != null);
-            int code = m_jid.GetHashCode();
+            int code = 0;
+            if (m_jid != null)
+                code = m_jid.GetHashCode();
             if (m_node != null)
                 code ^= m_node.GetHashCode();
             return code;
@@ -864,29 +867,35 @@ namespace jabber.connection
 
         private void RequestInfo(DiscoNode node)
         {
-            if (!node.PendingInfo)
+            lock (node)
             {
-                IQ iq = node.InfoIQ(m_stream.Document);
-                jabber.server.JabberService js = m_stream as jabber.server.JabberService;
-                if (js != null)
-                    iq.From = js.ComponentID;
-                m_stream.Tracker.BeginIQ(iq,
-                                         new jabber.connection.IqCB(GotInfo),
-                                         node);
+                if (!node.PendingInfo)
+                {
+                    IQ iq = node.InfoIQ(m_stream.Document);
+                    jabber.server.JabberService js = m_stream as jabber.server.JabberService;
+                    if (js != null)
+                        iq.From = js.ComponentID;
+                    m_stream.Tracker.BeginIQ(iq,
+                                             new jabber.connection.IqCB(GotInfo),
+                                             node);
+                }
             }
         }
 
         private void RequestItems(DiscoNode node)
         {
-            if (!node.PendingItems)
+            lock (node)
             {
-                IQ iq = node.ItemsIQ(m_stream.Document);
-                jabber.server.JabberService js = m_stream as jabber.server.JabberService;
-                if (js != null)
-                    iq.From = js.ComponentID;
-                m_stream.Tracker.BeginIQ(iq,
-                                         new jabber.connection.IqCB(GotItems),
-                                         node);
+                if (!node.PendingItems)
+                {
+                    IQ iq = node.ItemsIQ(m_stream.Document);
+                    jabber.server.JabberService js = m_stream as jabber.server.JabberService;
+                    if (js != null)
+                        iq.From = js.ComponentID;
+                    m_stream.Tracker.BeginIQ(iq,
+                                             new jabber.connection.IqCB(GotItems),
+                                             node);
+                }
             }
         }
 
