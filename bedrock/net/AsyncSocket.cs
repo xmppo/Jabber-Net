@@ -133,6 +133,7 @@ namespace bedrock.net
         private Socket               m_sock              = null;
         private X509Certificate2     m_cert              = null;
         private Stream               m_stream            = null;
+        private SslStream            m_sslStream         = null;  // hold on to the SSL stream as it goes by, since compression might happen later.
         private MemoryStream         m_pending           = new MemoryStream();
         private bool                 m_writing           = false;
         private bool                 m_requireClientCert = false;
@@ -225,11 +226,9 @@ namespace bedrock.net
         {
             get
             {
-                SslStream str = m_stream as SslStream;
-                if (str == null)
+                if (m_sslStream == null)
                     return null;
-
-                return str.RemoteCertificate;
+                return m_sslStream.RemoteCertificate;
             }
         }
 
@@ -349,10 +348,9 @@ namespace bedrock.net
         {
             get
             {
-                SslStream str = m_stream as SslStream;
-                if (str == null)
+                if (m_sslStream == null)
                     return false;
-                return str.IsEncrypted;
+                return m_sslStream.IsEncrypted;
             }
         }
 
@@ -702,7 +700,7 @@ namespace bedrock.net
             if (m_secureProtocol == SslProtocols.None)
                 m_secureProtocol = SslProtocols.Tls;
 
-            m_stream = new SslStream(m_stream, false, ValidateServerCertificate, ChooseClientCertificate);
+            m_stream = m_sslStream = new SslStream(m_stream, false, ValidateServerCertificate, ChooseClientCertificate);
 
             if (m_server)
             {
@@ -713,7 +711,7 @@ namespace bedrock.net
                     return;
                 }
                 // TODO: surface these as params
-                ((SslStream)m_stream).AuthenticateAsServer(m_cert, m_requireClientCert, m_secureProtocol, false);
+                m_sslStream.AuthenticateAsServer(m_cert, m_requireClientCert, m_secureProtocol, false);
             }
             else
             {
@@ -728,7 +726,7 @@ namespace bedrock.net
                 }
                 try
                 {
-                    ((SslStream)m_stream).AuthenticateAsClient(m_hostid, certs, m_secureProtocol, false);
+                    m_sslStream.AuthenticateAsClient(m_hostid, certs, m_secureProtocol, false);
                 }
                 catch (Exception ex)
                 {
@@ -746,7 +744,9 @@ namespace bedrock.net
         {
             get
             {
-                return ((SslStream)m_stream).IsMutuallyAuthenticated;
+                if (m_sslStream == null)
+                    return false;
+                return m_sslStream.IsMutuallyAuthenticated;
             }
         }
 
