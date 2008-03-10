@@ -547,6 +547,7 @@ namespace jabber.protocol.iq
             if (form != null)
             {
                 form.FormType = URI.PUBSUB_NODE_CONFIG;
+                form.Type = XDataType.submit;
                 AddChild(form);
             }
             return form;
