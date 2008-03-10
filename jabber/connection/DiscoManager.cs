@@ -629,12 +629,27 @@ namespace jabber.connection
         /// Does not fire OnFeatures, since this should mostly be used by
         /// things that are not querying externally.
         /// </summary>
-        /// <param name="feature"></param>
+        /// <param name="feature">The feature URI to add</param>
         public void AddFeature(string feature)
         {
             if (Features == null)
                 Features = new Set();
             Features.Add(feature);
+        }
+
+        /// <summary>
+        /// Remove a single feature from the node.
+        /// Does not fire OnFeatures, since this should mostly be used by
+        /// things that are not querying externally.
+        /// 
+        /// No exception should be thrown if the feature doesn't exist.
+        /// </summary>
+        /// <param name="feature">The feature URI to remove</param>
+        public void RemoveFeature(string feature)
+        {
+            if (Features == null)
+                return;
+            Features.Remove(feature);
         }
 
         /// <summary>

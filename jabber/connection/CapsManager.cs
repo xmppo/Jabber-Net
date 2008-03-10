@@ -91,6 +91,16 @@ namespace jabber.connection
         }
 
         /// <summary>
+        /// Removes a feature from the feature list
+        /// </summary>
+        /// <param name="feature"></param>
+        public void RemoveFeature(string feature)
+        {
+            m_ver = null;
+            m_disco.RemoveFeature(feature);
+        }
+
+        /// <summary>
         /// Gets or sets the current features enabled by this entity.
         /// </summary>
         [Category("Capabilities")]
