@@ -171,6 +171,32 @@ namespace jabber.connection
         {
             return Key.GetHashCode();
         }
+
+        /// <summary>
+        /// A slash-separated version of the name, with the unset parts omitted.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            sb.Append(m_type);
+            sb.Append("/");
+            sb.Append(m_type);
+
+            if ((m_lang != null) && (m_lang != ""))
+            {
+                sb.Append("/");
+                sb.Append(m_lang);
+            }
+
+            if ((m_name != null) && (m_name != ""))
+            {
+                sb.Append("/");
+                sb.Append(m_name);
+            }
+
+            return sb.ToString(); ;
+        }
     }
 
     /// <summary>
