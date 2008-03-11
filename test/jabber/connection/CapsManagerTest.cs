@@ -18,6 +18,8 @@ using jabber.connection;
 using jabber.protocol;
 using jabber.protocol.client;
 using jabber.protocol.iq;
+using jabber.protocol.x;
+
 using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.Mocks.Interfaces;
@@ -165,5 +167,50 @@ namespace test.jabber.connection
             return packet;
         }
 
+        [Test]
+        public void SimpleGenerationExample()
+        {
+            CapsManager cm = new CapsManager();
+            cm.AddIdentity("client", "pc", null, "Exodus 0.9.1");
+            cm.AddFeature("http://jabber.org/protocol/muc");
+            cm.AddFeature("http://jabber.org/protocol/disco#info");
+            cm.AddFeature("http://jabber.org/protocol/disco#items");
+            Assert.AreEqual("SrFo9ar2CCk2EnOH4q4QANeuxLQ=", cm.Ver);
+        }
+
+        [Test]
+        public void ComplexGenerationExample()
+        {
+
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml("<book xml:lang='en'/>");
+            XmlElement book = doc.DocumentElement;
+            foreach (XmlAttribute attr in book.Attributes)
+            {
+                System.Console.WriteLine(attr.Name);
+            }
+
+            XmlElement root = doc.DocumentElement;
+
+            DiscoInfo info = new DiscoInfo(doc);
+            info.AddFeature("http://jabber.org/protocol/muc");
+            info.AddFeature("http://jabber.org/protocol/disco#info");
+            info.AddFeature("http://jabber.org/protocol/disco#items");
+            info.AddIdentity("client", "pc", "Psi 0.9.1", "en");
+            info.AddIdentity("client", "pc", "\u03a8 0.9.1", "el");
+            Data x = info.CreateExtension();
+            x.FormType = "urn:xmpp:dataforms:softwareinfo";
+            x.AddField("ip_version").Vals = new string[] { "ipv4", "ipv6" };
+            x.AddField("os").Val = "Mac";
+            x.AddField("os_version").Val = "10.5.1";
+            x.AddField("software").Val = "Psi";
+            x.AddField("software_version").Val = "0.11";
+
+            DiscoNode dn = new DiscoNode(new JID(null, "placeholder", null), null);
+            dn.AddInfo(info);
+
+            CapsManager cm = new CapsManager(dn);
+            Assert.AreEqual("8lu+88MRxmKM7yO3MEzY7YmTsWs=", cm.Ver);
+        }
     }
 }

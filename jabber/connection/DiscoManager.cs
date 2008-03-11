@@ -334,7 +334,7 @@ namespace jabber.connection
         private string m_name = null;
         private bool m_pendingItems = false;
         private bool m_pendingInfo = false;
-        private jabber.protocol.x.Data m_extensions;
+        private jabber.protocol.x.Data[] m_extensions;
 
         private ArrayList m_featureCallbacks = new ArrayList();
         private ArrayList m_itemCallbacks = new ArrayList();
@@ -571,7 +571,7 @@ namespace jabber.connection
         /// <summary>
         /// Gets or sets the x:data extensions of the disco information.
         /// </summary>
-        public jabber.protocol.x.Data Extensions
+        public jabber.protocol.x.Data[] Extensions
         {
             get
             {
@@ -648,6 +648,23 @@ namespace jabber.connection
                     cb.Call(this);
                 callbacks.Clear();
             }
+        }
+
+        /// <summary>
+        /// Pulls all of the data out of the given protocol response.
+        /// </summary>
+        /// <param name="info">If null, just calls callbacks</param>
+        public void AddInfo(DiscoInfo info)
+        {
+            if (info == null)
+            {
+                AddIdentities(null);
+                AddFeatures(null);
+                return;
+            }
+            Extensions = info.GetExtensions();
+            AddIdentities(info.GetIdentities());
+            AddFeatures(info.GetFeatures());
         }
 
         /// <summary>
@@ -969,26 +986,11 @@ namespace jabber.connection
             if (iq.Type != IQType.result)
             {
                 // protocol error
-                dn.AddIdentities(null);
-                dn.AddFeatures(null);
+                dn.AddInfo(null);
                 return;
             }
 
-            DiscoInfo info = iq.Query as DiscoInfo;
-            if (info == null)
-            {
-                // protocol error
-                dn.AddIdentities(null);
-                dn.AddFeatures(null);
-                return;
-            }
-
-            jabber.protocol.x.Data ext = info["x", URI.XDATA] as jabber.protocol.x.Data;
-            if (ext != null)
-                dn.Extensions = ext;
-
-            dn.AddIdentities(info.GetIdentities());
-            dn.AddFeatures(info.GetFeatures());
+            dn.AddInfo(iq.Query as DiscoInfo);
 
             if (dn == m_root)
                 RequestItems(m_root);

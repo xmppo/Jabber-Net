@@ -78,10 +78,14 @@ namespace jabber.protocol
             }
             set
             {
-                if ((value == null) || (value == ""))
+                if (HasAttribute("lang", URI.XML))
                     RemoveAttribute("lang", URI.XML);
-                else
-                    SetAttribute("lang", URI.XML, value);
+                if (value != null)
+                {
+                    XmlAttribute attr = OwnerDocument.CreateAttribute("xml:lang", URI.XML);
+                    attr.Value = value;
+                    this.Attributes.Append(attr);
+                }
             }
         }
 

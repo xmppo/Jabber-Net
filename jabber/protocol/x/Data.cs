@@ -130,6 +130,20 @@ namespace jabber.protocol.x
         }
 
         /// <summary>
+        /// Add a form field, with just the field name.
+        /// </summary>
+        /// <param name="var">Variable name</param>
+        /// <returns></returns>
+        public Field AddField(string var)
+        {
+            Field f = new Field(this.OwnerDocument);
+            if (var != null)
+                f.Var = var;
+            AddChild(f);
+            return f;
+        }
+
+        /// <summary>
         /// Add a form field
         /// </summary>
         /// <param name="var">Variable name</param>

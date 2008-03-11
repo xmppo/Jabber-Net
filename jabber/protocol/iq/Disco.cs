@@ -15,6 +15,7 @@ using System;
 using System.Xml;
 
 using bedrock.util;
+using jabber.protocol.x;
 
 namespace jabber.protocol.iq
 {
@@ -110,6 +111,7 @@ namespace jabber.protocol.iq
      *         category='directory'
      *         type='room'
      *         name='Play-Specific Chatrooms'/>
+     * 
      *     <feature var='gc-1.0'/>
      *     <feature var='http://jabber.org/protocol/muc'/>
      *     <feature var='jabber:iq:register'/>
@@ -293,6 +295,14 @@ namespace jabber.protocol.iq
     <feature var='muc-open'/>
     <feature var='muc-unmoderated'/>
     <feature var='muc-nonanonymous'/>
+    <x xmlns='jabber:x:data' type='result'>
+      <field var='FORM_TYPE' type='hidden'>
+        <value>http://jabber.org/network/serverinfo</value>
+      </field>
+      <field var='c2s_port'>
+        <value>5222</value>
+      </field>
+    </x>
   </query>
 </iq>
 */
@@ -409,6 +419,65 @@ namespace jabber.protocol.iq
                     return true;
             }
             return false;
+        }
+
+        /// <summary>
+        /// Create a XEP-0128 x:data extension, or return the first existing one.
+        /// </summary>
+        /// <returns></returns>
+        public jabber.protocol.x.Data CreateExtension()
+        {
+            Data d = Extension;
+            if (d != null)
+                return d;
+            d = new Data(this.OwnerDocument);
+            d.Type = XDataType.result;
+            this.AppendChild(d);
+            return d;
+        }
+
+        /// <summary>
+        /// Get or set the first XEP-0128 x:data extension.
+        /// </summary>
+        public Data Extension
+        {
+            get { return this["x", URI.XDATA] as jabber.protocol.x.Data; }
+            set 
+            {
+                Data d = this["x", URI.XDATA] as jabber.protocol.x.Data;
+                if (d != null)
+                    this.RemoveChild(d);
+                if (value != null)
+                    this.AppendChild(value);
+            }
+        }
+
+        /// <summary>
+        /// In the unlikely event that there are multiple extensions, we need to be able
+        /// to retrieve all of them.  This will return a list, sorted by FORM_TYPE.
+        /// </summary>
+        /// <returns></returns>
+        public Data[] GetExtensions()
+        {
+            XmlNodeList nl = GetElementsByTagName("x", URI.XDATA);
+            Data[] items = new Data[nl.Count];
+            if (nl.Count == 0)
+                return items;
+            
+            bedrock.collections.Tree tree = new bedrock.collections.Tree();
+            foreach (XmlNode n in nl)
+            {
+                Data x = (Data)n;
+                tree[x.FormType] = x;
+            }
+
+            int i = 0;
+            foreach (System.Collections.DictionaryEntry entry in tree)
+            {
+                items[i++] = (Data)entry.Value;
+            }
+            return items;
+
         }
     }
 

@@ -43,26 +43,40 @@ namespace jabber.connection
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        private DiscoNode m_disco = new DiscoNode(new JID(null, "placeholder", null), null);
+        private DiscoNode m_disco;
         private string m_hash = DEFAULT_HASH;
         private string m_ver = null;
 
         /// <summary>
         /// Creates a new capability manager.
         /// </summary>
-        public CapsManager()
+        public CapsManager() : this((DiscoNode)null)
         {
-            InitializeComponent();
-            this.OnStreamChanged += new bedrock.ObjectHandler(CapsManager_OnStreamChanged);
         }
 
         /// <summary>
         /// Creates a new capability manager and associates it with a container.
         /// </summary>
         /// <param name="container">Parent container.</param>
-        public CapsManager(IContainer container) : this()
+        public CapsManager(IContainer container) : this((DiscoNode)null)
         {
             container.Add(this);
+        }
+
+        /// <summary>
+        /// Create a CapsManager from an existing Disco Node.  Pass in null
+        /// to use a placeholder.
+        /// </summary>
+        /// <param name="node"></param>
+        public CapsManager(DiscoNode node)
+        {
+            InitializeComponent();
+            this.OnStreamChanged += new bedrock.ObjectHandler(CapsManager_OnStreamChanged);
+
+            if (node == null)
+                m_disco = new DiscoNode(new JID(null, "placeholder", null), null);
+            else
+                m_disco = node;
         }
 
         /// <summary>
@@ -192,8 +206,49 @@ namespace jabber.connection
                 S.Append(SEP);
             }
 
-            // No forms yet.  Wait for software version.
+            // 6. If the service discovery information response includes XEP-0128 data forms, 
+            // sort the forms by the FORM_TYPE (i.e., by the XML character 
+            // data of the <value/> element).
+            Data[] ext = m_disco.Extensions;
+            if (ext != null)
+            {
+                foreach (Data x in ext)  // already sorted by FORM_TYPE.
+                {
+                    // For each extended service discovery information form:
 
+                    // 1. Append the XML character data of the FORM_TYPE field's <value/> 
+                    // element, followed by the '<' character.
+                    S.Append(x.FormType);
+                    S.Append(SEP);
+
+                    // 2. Sort the fields by the value of the "var" attribute.
+                    bedrock.collections.Tree fields = new bedrock.collections.Tree();
+                    foreach (Field f in x.GetFields())
+                        fields[f.Var] = f;
+
+                    // 3. For each field:
+                    foreach (System.Collections.DictionaryEntry entry in fields)
+                    {
+                        Field f = (Field)entry.Value;
+                        if (f.Var == "FORM_TYPE")
+                            continue;
+
+                        // 1. Append the value of the "var" attribute, followed by the '<' character.
+                        S.Append(f.Var);
+                        S.Append(SEP);
+
+                        // 2. Sort values by the XML character data of the <value/> element.
+                        string[] values = f.Vals;
+                        Array.Sort(values);
+                        foreach (string v in values)
+                        {
+                            // 3. For each <value/> element, append the XML character data, followed by the '<' character.
+                            S.Append(v);
+                            S.Append(SEP);
+                        }
+                    }
+                }
+            }
 
             // Ensure that S is encoded according to the UTF-8 encoding (RFC 3269 [16]).
             byte[] input = Encoding.UTF8.GetBytes(S.ToString());

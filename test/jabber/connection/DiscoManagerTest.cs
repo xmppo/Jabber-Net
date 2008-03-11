@@ -233,5 +233,18 @@ namespace test.jabber.connection
             tracker.BeginIQ(null, null, null);
             LastCall.Callback(func);
         }
+
+        [Test]
+        public void IdentityLang()
+        {
+            DiscoIdentity id = new DiscoIdentity(doc);
+            Assert.IsNull(id.Lang);
+            id.Lang = "en";
+            Assert.AreEqual("en", id.Lang);
+            id.Lang = "el";
+            Assert.AreEqual("el", id.Lang);
+            id.Lang = null;
+            Assert.IsNull(id.Lang);
+        }
     }
 }
