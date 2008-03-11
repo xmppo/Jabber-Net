@@ -348,7 +348,7 @@ namespace jabber.connection
     /// Manages a node to be subscribed to.  Will keep a maximum number of items.
     /// </summary>
     [SVN(@"$Id$")]
-    public class PubSubNode : IEnumerable
+    public class PubSubNode : StreamComponent, IEnumerable
     {
         private enum STATE
         {
@@ -362,7 +362,6 @@ namespace jabber.connection
         // indexed by op.
         private STATE[] m_state = new STATE[] { STATE.Start, STATE.Start, STATE.Start, STATE.Start};
 
-        private XmppStream  m_stream = null;
         private JID         m_jid = null;
         private string      m_node = null;
         private ItemList    m_items = null;
@@ -403,6 +402,14 @@ namespace jabber.connection
             m_jid = jid;
             m_node = node;
             m_items = new ItemList(this, maxItems);
+        }
+
+        /// <summary>
+        /// The document associated with the stream we're attached to.
+        /// </summary>
+        public XmlDocument Document
+        {
+            get { return m_stream.Document; }
         }
 
         /// <summary>
