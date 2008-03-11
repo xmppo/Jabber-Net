@@ -179,7 +179,7 @@ namespace jabber.connection
         public override string ToString()
         {
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
-            sb.Append(m_type);
+            sb.Append(m_category);
             sb.Append("/");
             sb.Append(m_type);
 
