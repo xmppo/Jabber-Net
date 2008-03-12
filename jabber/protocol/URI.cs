@@ -163,6 +163,10 @@ namespace jabber.protocol
         /// </summary>
         public const string XDELAY   = "jabber:x:delay";
         /// <summary>
+        /// Modern, XEP-0203 delay.
+        /// </summary>
+        public const string DELAY    = "urn:xmpp:delay";
+        /// <summary>
         /// Out-of-band (file transfer)
         /// </summary>
         public const string XOOB     = "jabber:x:oob";
