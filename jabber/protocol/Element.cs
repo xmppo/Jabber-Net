@@ -66,6 +66,40 @@ namespace jabber.protocol
         }
 
         /// <summary>
+        /// Get the first child element with the given name and namespace,
+        /// and cast it to the given type.
+        /// </summary>
+        /// <typeparam name="T">The XmlElement subtype of the return value</typeparam>
+        /// <param name="name">The element name</param>
+        /// <param name="namespaceURI">the element namespace</param>
+        /// <returns>Null </returns>
+        public T GetChild<T>(string name, string namespaceURI)
+            where T : XmlElement
+        {
+            return this[name, namespaceURI] as T;
+        }
+
+        /// <summary>
+        /// Returns the first child element with the given type.
+        /// 
+        /// You might expect this to be slower than this["name", "uri"], but it's 
+        /// probably actually faster, since that code has to check several different
+        /// things, and this code can just do a type comparison.
+        /// </summary>
+        /// <typeparam name="T">The type of child to search for</typeparam>
+        /// <returns>The first child with the given type, or null if none found</returns>
+        public T GetChild<T>()
+            where T : XmlElement
+        {
+            for (XmlNode node = this.FirstChild; node != null; node = node.NextSibling)
+            {
+                if (child is T)
+                    return (T)child;
+            }
+            return null;
+        }
+
+        /// <summary>
         /// The xml:lang of this element.
         /// </summary>
         public string Lang
