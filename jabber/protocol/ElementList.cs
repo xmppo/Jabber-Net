@@ -274,6 +274,7 @@ namespace jabber.protocol
             int i = 0;
             foreach (T item in this)
             {
+                //T item = (T)o;
                 array[i++] = item;
             }
             return array;
@@ -322,7 +323,7 @@ namespace jabber.protocol
 
             public void Dispose()
             {
-                throw new Exception("The method or operation is not implemented.");
+                m_parent = null;
             }
 
             #endregion
