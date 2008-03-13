@@ -323,7 +323,7 @@ namespace jabber.protocol
 
             public void Dispose()
             {
-                m_parent = null;
+                
             }
 
             #endregion
