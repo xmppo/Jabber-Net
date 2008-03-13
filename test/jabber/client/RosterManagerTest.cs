@@ -44,7 +44,7 @@ namespace test.jabber.client1 // TODO: Client1 due to a bug in NUnit.
 
             RosterIQ riq = new RosterIQ(doc);
             riq.Type = IQType.set;
-            Roster r = (Roster) riq.Query;
+            Roster r = riq.Instruction;
             Item i = r.AddItem();
             i.JID = new JID("foo", "bar", null);
             i.Nickname = "FOO";
@@ -56,7 +56,7 @@ namespace test.jabber.client1 // TODO: Client1 due to a bug in NUnit.
 
             riq = new RosterIQ(doc);
             riq.Type = IQType.set;
-            r = (Roster) riq.Query;
+            r = riq.Instruction;
             i = r.AddItem();
             i.JID = new JID("foo", "bar", null);
             i.Nickname = "BAR";
@@ -71,7 +71,7 @@ namespace test.jabber.client1 // TODO: Client1 due to a bug in NUnit.
 
             RosterIQ riq = new RosterIQ(doc);
             riq.Type = IQType.set;
-            Roster r = (Roster) riq.Query;
+            Roster r = riq.Instruction;
             Item i = r.AddItem();
             i.JID = new JID("support", "conference.192.168.32.109", null);
             i.Nickname = "FOO";

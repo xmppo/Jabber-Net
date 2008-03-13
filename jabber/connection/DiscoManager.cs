@@ -802,7 +802,7 @@ namespace jabber.connection
             iiq.Type = IQType.get;
             if (Node != null)
             {
-                DiscoInfo info = (DiscoInfo)iiq.Query;
+                DiscoInfo info = iiq.Instruction;
                 info.Node = Node;
             }
 
@@ -823,7 +823,7 @@ namespace jabber.connection
             iiq.Type = IQType.get;
             if (Node != null)
             {
-                DiscoItems items = (DiscoItems)iiq.Query;
+                DiscoItems items = iiq.Instruction;
                 items.Node = Node;
             }
             return iiq;

@@ -16,6 +16,7 @@ using System;
 using System.Xml;
 
 using bedrock.util;
+using jabber.protocol.x;
 
 namespace jabber.protocol.client
 {
@@ -191,6 +192,65 @@ namespace jabber.protocol.client
                 return 3;
             }
         }
+        
+        /// <summary>
+        /// Date/Time stamp that the presence was originially received by the sending
+        /// server, if this presence is in response to a probe.
+        /// </summary>
+        public DateTime Stamp
+        {
+            get
+            {
+                jabber.protocol.x.ModernDelay md = GetChildElement<jabber.protocol.x.ModernDelay>();
+                if (md != null)
+                    return md.Stamp;
+                jabber.protocol.x.Delay delay = GetChildElement<jabber.protocol.x.Delay>();
+                if (delay != null)
+                    return delay.Stamp;
+                return DateTime.MinValue;
+            }
+            set
+            {
+                jabber.protocol.x.ModernDelay md = GetChildElement<jabber.protocol.x.ModernDelay>();
+                if (md != null)
+                {
+                    md.Stamp = value;
+                    return;
+                }
+                jabber.protocol.x.Delay delay = GetChildElement<jabber.protocol.x.Delay>();
+                if (delay != null)
+                {
+                    delay.Stamp = value;
+                    return;
+                }
+                md = new jabber.protocol.x.ModernDelay(this.OwnerDocument);
+                md.Stamp = value;
+            }
+        }
+
+        /// <summary>
+        /// If there is a stamp, returns it, otherwise looks for and adds a new stamp element.
+        /// This method should never be called for presence that is to be sent out, since it 
+        /// will add non-standard protocol to the presence.
+        /// </summary>
+        public DateTime ReceivedTime
+        {
+            get
+            {
+                DateTime dt = this.Stamp;
+                if (dt != DateTime.MinValue)
+                    return dt;
+                const string RECEIVED = "http://cursive.net/protocol/received";
+                XmlElement el = this["x", RECEIVED];
+                if (el != null)
+                    return Element.DateTimeProfile(el.InnerText);
+                dt = DateTime.Now;
+                el = OwnerDocument.CreateElement("x", RECEIVED);
+                el.InnerText = Element.DateTimeProfile(dt);
+                this.AppendChild(el);
+                return dt;
+            }
+        }
 
         /// <summary>
         /// Compare two presences (from the same bare JID, but from
@@ -218,12 +278,8 @@ namespace jabber.protocol.client
             if (fs > ss)
                 return false;
 
-            // TODO: check times.  probably have to ensure that
-            // inbound presences get DateTime stamped if they don't
-            // have one.
-
             // equal show
-            return false;
+            return first.ReceivedTime < second.ReceivedTime;
         }
 
         /// <summary>
@@ -252,11 +308,8 @@ namespace jabber.protocol.client
             if (fs < ss)
                 return false;
 
-            // TODO: check times.  probably have to ensure that inbound presences get DateTime
-            // stamped if they don't have one.
-
             // equal show
-            return false;
+            return first.ReceivedTime > second.ReceivedTime;
         }
     }
 }

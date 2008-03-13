@@ -23,7 +23,7 @@ namespace jabber.protocol.iq
     /// IQ packet with a version query element inside.
     /// </summary>
     [SVN(@"$Id$")]
-    public class VersionIQ : jabber.protocol.client.IQ
+    public class VersionIQ : jabber.protocol.client.TypedIQ<Version>
     {
         /// <summary>
         /// Create a version IQ
@@ -31,7 +31,6 @@ namespace jabber.protocol.iq
         /// <param name="doc"></param>
         public VersionIQ(XmlDocument doc) : base(doc)
         {
-            this.Query = new Version(doc);
         }
     }
 

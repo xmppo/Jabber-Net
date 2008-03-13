@@ -403,7 +403,7 @@ C: <iq from='juliet@example.com/balcony' type='set' id='delete_1'>
  */
             RosterIQ iq = new RosterIQ(m_stream.Document);
             iq.Type = IQType.set;
-            Roster r = (Roster)iq.Query;
+            Roster r = iq.Instruction;
             Item item = r.AddItem();
             item.JID = jid;
             item.Subscription = Subscription.remove;
@@ -420,7 +420,7 @@ C: <iq from='juliet@example.com/balcony' type='set' id='delete_1'>
         {
             RosterIQ iq = new RosterIQ(m_stream.Document);
             iq.Type = IQType.set;
-            Roster r = (Roster)iq.Query;
+            Roster r = iq.Instruction;
             r.AppendChild(item);
             m_stream.Write(iq);  // ignore response
         }

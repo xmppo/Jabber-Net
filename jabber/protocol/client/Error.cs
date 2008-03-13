@@ -369,8 +369,8 @@ namespace jabber.protocol.client
         /// </summary>
         public ErrorType ErrorType
         {
-            get { return (ErrorType)this.GetEnumAttr("type", typeof(ErrorType)); }
-            set { this.SetAttribute("type", value.ToString()); }
+            get { return this.GetEnumAttr<ErrorType>("type"); }
+            set { this.SetEnumAttr("type", value); }
         }
 
         /// <summary>

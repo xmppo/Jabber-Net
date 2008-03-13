@@ -86,21 +86,8 @@ namespace jabber.protocol.accept
         /// </summary>
         public LogType Type
         {
-            get { return (LogType) GetEnumAttr("type", typeof(LogType)); }
-            set
-            {
-                LogType cur = this.Type;
-                if (cur == value)
-                    return;
-                if (value == LogType.NONE)
-                {
-                    RemoveAttribute("type");
-                }
-                else
-                {
-                    SetAttribute("type", value.ToString());
-                }
-            }
+            get { return GetEnumAttr<LogType>("type"); }
+            set { SetEnumAttr("type", value); }
         }
 
         /// <summary>

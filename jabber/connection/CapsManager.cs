@@ -212,7 +212,8 @@ namespace jabber.connection
             Data[] ext = m_disco.Extensions;
             if (ext != null)
             {
-                foreach (Data x in ext)  // already sorted by FORM_TYPE.
+                Array.Sort(ext, new FormTypeComparer());
+                foreach (Data x in ext)  
                 {
                     // For each extended service discovery information form:
 

@@ -85,6 +85,11 @@ namespace jabber.protocol.iq
     public enum RoomStatus
     {
         /// <summary>
+        /// An invalid or unknown RoomStatus
+        /// </summary>
+        UNKNOWN = -1,
+
+        /// <summary>
         /// Inform user that any occupant is allowed to see the user's full JID.
         /// </summary>
         NON_ANONYMOUS_JOIN = 100,
@@ -202,7 +207,7 @@ namespace jabber.protocol.iq
             : base(doc)
         {
             this.To = roomAndNick;
-            this.AppendChild(new RoomX(doc));
+            this.CreateChildElement<RoomX>();
         }
 
         /// <summary>
@@ -216,9 +221,7 @@ namespace jabber.protocol.iq
             : base(doc)
         {
             this.To = roomAndNick;
-            RoomX x = new RoomX(doc);
-            x.Password = password;
-            this.AppendChild(x);
+            this.CreateChildElement<RoomX>().Password = password;
         }
 
         /// <summary>
@@ -227,8 +230,8 @@ namespace jabber.protocol.iq
         /// </summary>
         public RoomX X
         {
-            get { return this["x", URI.MUC] as RoomX; }
-            set { ReplaceChild(value); }
+            get { return GetChildElement<RoomX>(); }
+            set { ReplaceChild<RoomX>(value); }
         }
     }
 
@@ -269,12 +272,21 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
+        /// Add a history element, or return the existing one.
+        /// </summary>
+        /// <returns></returns>
+        public History AddHistory()
+        {
+            return GetOrCreateElement<History>();
+        }
+
+        /// <summary>
         /// History options
         /// </summary>
         public History History
         {
-            get { return GetOrCreateElement("history", URI.MUC_USER, typeof(History)) as History; }
-            set { this.ReplaceChild(value); }
+            get { return GetChildElement<History>(); }
+            set { this.ReplaceChild<History>(value); }
         }
     }
 
@@ -369,12 +381,30 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
+        /// Add a decline element, or return the existing one.
+        /// </summary>
+        /// <returns></returns>
+        public Decline AddDecline()
+        {
+            return GetOrCreateElement<Decline>();
+        }
+
+        /// <summary>
         /// Invite was declined
         /// </summary>
         public Decline Decline
         {
-            get { return GetOrCreateElement("decline", null, typeof(Decline)) as Decline; }
-            set { ReplaceChild(value); }
+            get { return GetChildElement<Decline>(); }
+            set { ReplaceChild<Decline>(value); }
+        }
+
+        /// <summary>
+        /// Add a destroy element, or return the existing one.
+        /// </summary>
+        /// <returns></returns>
+        public Destroy AddDestroy()
+        {
+            return GetOrCreateElement<Destroy>();
         }
 
         /// <summary>
@@ -382,8 +412,8 @@ namespace jabber.protocol.iq
         /// </summary>
         public Destroy Destroy
         {
-            get { return GetOrCreateElement("destroy", null, typeof(Destroy)) as Destroy; }
-            set { ReplaceChild(value); }
+            get { return GetChildElement<Destroy>();  }
+            set { ReplaceChild<Destroy>(value); }
         }
 
         /// <summary>
@@ -391,15 +421,7 @@ namespace jabber.protocol.iq
         /// </summary>
         public Invite[] GetInvites()
         {
-            XmlNodeList nl = GetElementsByTagName("invite", URI.MUC_USER);
-            Invite[] items = new Invite[nl.Count];
-            int i=0;
-            foreach (XmlNode n in nl)
-            {
-                items[i] = (Invite)n;
-                i++;
-            }
-            return items;
+            return GetElements<Invite>().ToArray();
         }
 
         /// <summary>
@@ -410,12 +432,20 @@ namespace jabber.protocol.iq
         /// <returns></returns>
         public Invite AddInvite(JID to, string reason)
         {
-            Invite inv = new Invite(this.OwnerDocument);
+            Invite inv = CreateChildElement<Invite>();
             inv.To = to;
             if (reason != null)
                 inv.Reason = reason;
-            this.AddChild(inv);
             return inv;
+        }
+
+        /// <summary>
+        /// Add a room item element, or return the existing one.
+        /// </summary>
+        /// <returns></returns>
+        public RoomItem AddRoomItem()
+        {
+            return GetOrCreateElement<RoomItem>();
         }
 
         /// <summary>
@@ -423,8 +453,8 @@ namespace jabber.protocol.iq
         /// </summary>
         public RoomItem RoomItem
         {
-            get { return GetOrCreateElement("item", null, typeof(RoomItem)) as RoomItem; }
-            set { ReplaceChild(value); }
+            get { return GetChildElement<RoomItem>(); }
+            set { ReplaceChild<RoomItem>(value); }
         }
 
         /// <summary>
@@ -449,7 +479,15 @@ namespace jabber.protocol.iq
                 int i = 0;
                 foreach (XmlElement status in nl)
                 {
-                    ret[i++] = (RoomStatus)int.Parse(status.GetAttribute("code"));
+                    try
+                    {
+                        ret[i] = (RoomStatus)int.Parse(status.GetAttribute("code"));
+                    }
+                    catch
+                    {
+                        ret[i] = RoomStatus.UNKNOWN;
+                    }
+                    i++;
                 }
                 Array.Sort(ret);
                 return ret;
@@ -755,7 +793,7 @@ namespace jabber.protocol.iq
     /// <summary>
     /// An IQ with a AdminQuery inside.
     /// </summary>
-    public class RoomAdminIQ : jabber.protocol.client.IQ
+    public class RoomAdminIQ : jabber.protocol.client.TypedIQ<AdminQuery>
     {
         /// <summary>
         /// Create a admin IQ, with a single muc#admin query element.
@@ -764,7 +802,6 @@ namespace jabber.protocol.iq
         public RoomAdminIQ(XmlDocument doc)
             : base(doc)
         {
-            this.AppendChild(new AdminQuery(doc));
         }
     }
 
@@ -924,7 +961,7 @@ namespace jabber.protocol.iq
     /// <summary>
     /// IQ with an OwnerQuery inside
     /// </summary>
-    public class OwnerIQ : jabber.protocol.client.IQ
+    public class OwnerIQ : jabber.protocol.client.TypedIQ<OwnerQuery>
     {
         /// <summary>
         /// Create
@@ -933,7 +970,6 @@ namespace jabber.protocol.iq
         public OwnerIQ(XmlDocument doc)
             : base(doc)
         {
-            AppendChild(new OwnerQuery(doc));
         }
     }
 

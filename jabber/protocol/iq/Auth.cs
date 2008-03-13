@@ -25,7 +25,7 @@ namespace jabber.protocol.iq
     /// An auth IQ.
     /// </summary>
     [SVN(@"$Id$")]
-    public class AuthIQ : jabber.protocol.client.IQ
+    public class AuthIQ : jabber.protocol.client.TypedIQ<Auth>
     {
         /// <summary>
         /// Create an Auth IQ.
@@ -33,7 +33,6 @@ namespace jabber.protocol.iq
         /// <param name="doc"></param>
         public AuthIQ(XmlDocument doc) : base(doc)
         {
-            this.Query = new Auth(doc);
         }
     }
 

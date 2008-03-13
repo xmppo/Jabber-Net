@@ -66,16 +66,14 @@ namespace jabber.protocol.iq
     /// A PubSub IQ
     /// </summary>
     [SVN(@"$Id$")]
-    public class PubSubIQ : jabber.protocol.client.IQ
+    public class PubSubIQ : jabber.protocol.client.TypedIQ<PubSub>
     {
         /// <summary>
         /// Create a pubsub IQ, with a single pubsub query element.
         /// </summary>
         /// <param name="doc"></param>
-        public PubSubIQ(XmlDocument doc)
-            : base(doc)
+        public PubSubIQ(XmlDocument doc) : base(doc)
         {
-            this.Query = new PubSub(doc);
         }
 
         /// <summary>
@@ -87,8 +85,6 @@ namespace jabber.protocol.iq
         public PubSubIQ(XmlDocument doc, PubSubCommandType command, string node)
             : base(doc)
         {
-            this.Query = new PubSub(doc);
-
             PubSubCommand cmd = null;
             switch (command)
             {
@@ -119,11 +115,13 @@ namespace jabber.protocol.iq
             case PubSubCommandType.delete:
                 cmd = new Delete(doc);
                 break;
+            default:
+                throw new ArgumentException("Command not understood: " + command.ToString(), "command");
             }
 
             if (node != null)
                 cmd.Node = node;
-            this.Query.AppendChild(cmd);
+            this.Instruction.AppendChild(cmd);
         }
 
         /// <summary>
@@ -133,11 +131,72 @@ namespace jabber.protocol.iq
         {
             get
             {
-                PubSub ps = (PubSub)this.Query;
+                PubSub ps = this.Instruction;
                 if (ps == null)
                     return null;
                 return ps.Command;
             }
+        }
+    }
+
+    /// <summary>
+    /// A type-safe PubSub IQ.
+    /// </summary>
+    /// <typeparam name="T">The type of command to create</typeparam>
+    public class PubSubCommandIQ<T> : jabber.protocol.client.TypedIQ<TypedPubSub<T>>
+        where T : PubSubCommand
+    {
+        /// <summary>
+        /// Create
+        /// </summary>
+        /// <param name="doc"></param>
+        public PubSubCommandIQ(XmlDocument doc)
+            : base(doc)
+        {
+        }
+
+        /// <summary>
+        /// The command inside the pubsub element.
+        /// </summary>
+        public T Command
+        {
+            get { return Instruction.Command; }
+            set { Instruction.Command = value; }
+        }
+    }
+
+    /// <summary>
+    /// A type-safe pubsub element.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public class TypedPubSub<T> : Element
+        where T : PubSubCommand
+    {
+        /// <summary>
+        /// Create
+        /// </summary>
+        /// <param name="doc"></param>
+        public TypedPubSub(XmlDocument doc)
+            : base("pubsub", URI.PUBSUB, doc)
+        {
+            CreateChildElement<T>();
+        }
+
+        /// <summary>
+        /// The pubsub command
+        /// </summary>
+        public T Command
+        {
+            get { return GetChildElement<T>(); }
+            set { ReplaceChild<T>(value); }
+        }
+
+        /// <summary>
+        /// The type of pubsub command
+        /// </summary>
+        public PubSubCommandType CommandType
+        {
+            get { return Command.CommandType; }
         }
     }
 
@@ -179,22 +238,11 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
-        /// The
+        /// The PubSub command associated with this instruction
         /// </summary>
         public PubSubCommand Command
         {
-            get
-            {
-                if (!this.HasChildNodes)
-                    return null;
-
-                foreach (XmlNode child in this.ChildNodes)
-                {
-                    if (child is PubSubCommand)
-                        return (PubSubCommand)child;
-                }
-                return null;
-            }
+            get { return GetChildElement<PubSubCommand>(); }
         }
     }
 
@@ -285,15 +333,7 @@ namespace jabber.protocol.iq
         /// <returns></returns>
         public Affiliation[] GetAffiliations()
         {
-            XmlNodeList nl = GetElementsByTagName("affiliation", URI.PUBSUB);
-            Affiliation[] items = new Affiliation[nl.Count];
-            int i=0;
-            foreach (XmlNode n in nl)
-            {
-                items[i] = (Affiliation)n;
-                i++;
-            }
-            return items;
+            return GetElements<Affiliation>().ToArray();
         }
 
         /// <summary>
@@ -304,10 +344,9 @@ namespace jabber.protocol.iq
         /// <returns></returns>
         public Affiliation AddAffiliation(AffiliationType type, string node)
         {
-            Affiliation afil = new Affiliation(this.OwnerDocument);
+            Affiliation afil = CreateChildElement<Affiliation>();
             afil.Type = type;
             afil.Node = node;
-            AddChild(afil);
             return afil;
         }
     }
@@ -384,14 +423,8 @@ namespace jabber.protocol.iq
         /// </summary>
         public AffiliationType Type
         {
-            get { return (AffiliationType)GetEnumAttr("affiliation", typeof(AffiliationType)); }
-            set
-            {
-                if (value == AffiliationType.NONE_SPECIFIED)
-                    RemoveAttribute("affiliation");
-                else
-                    SetAttribute("affiliation", value.ToString());
-            }
+            get { return GetEnumAttr<AffiliationType>("affiliation"); }
+            set { SetEnumAttr("affiliation", value); }
         }
 
     }
@@ -523,12 +556,11 @@ namespace jabber.protocol.iq
         /// <returns></returns>
         public Data CreateForm()
         {
-            Data x = this["x", URI.XDATA] as Data;
+            Data x = GetChildElement<Data>();
             if (x == null)
             {
-                x = new Data(this.OwnerDocument);
+                x = CreateChildElement<Data>();
                 x.FormType = URI.PUBSUB_NODE_CONFIG;
-                this.AddChild(x);
             }
             return x;
         }
@@ -541,15 +573,9 @@ namespace jabber.protocol.iq
         /// <returns></returns>
         public Data CreateForm(Data form)
         {
-            Data x = this["x", URI.XDATA] as Data;
-            if (x != null)
-                RemoveChild(x);
-            if (form != null)
-            {
-                form.FormType = URI.PUBSUB_NODE_CONFIG;
-                form.Type = XDataType.submit;
-                AddChild(form);
-            }
+            ReplaceChild<Data>(form);
+            form.FormType = URI.PUBSUB_NODE_CONFIG;
+            form.Type = XDataType.submit;
             return form;
         }
     }
@@ -588,15 +614,7 @@ namespace jabber.protocol.iq
         public PubSubItem[] GetItems()
         {
             // Might be PUBSUB or PUBSUB_EVENT
-            XmlNodeList nl = GetElementsByTagName("item", this.NamespaceURI);
-            PubSubItem[] items = new PubSubItem[nl.Count];
-            int i=0;
-            foreach (XmlNode n in nl)
-            {
-                items[i] = (PubSubItem)n;
-                i++;
-            }
-            return items;
+            return GetElements<PubSubItem>().ToArray();
         }
 
         /// <summary>
@@ -606,31 +624,10 @@ namespace jabber.protocol.iq
         /// <returns></returns>
         public PubSubItem AddItem(string id)
         {
-            PubSubItem item = new PubSubItem(this.OwnerDocument);
-            if (id != null)
-                item.ID = id;
-            AddChild(item);
+            PubSubItem item = CreateChildElement<PubSubItem>();
+            item.ID = id;
             return item;
         }
-
-        /// <summary>
-        /// Get a list of id's of deleted items.
-        /// </summary>
-        /// <returns></returns>
-        public string[] GetRetractions()
-        {
-            // Might be PUBSUB or PUBSUB_EVENT
-            XmlNodeList nl = GetElementsByTagName("retract", this.NamespaceURI);
-            string[] ids = new string[nl.Count];
-            int i=0;
-            foreach (XmlElement n in nl)
-            {
-                ids[i] = n.GetAttribute("id");
-                i++;
-            }
-            return ids;
-        }
-
     }
 
 
@@ -673,8 +670,8 @@ namespace jabber.protocol.iq
         /// </summary>
         public string SubID
         {
-            get { return GetAttribute("subid"); }
-            set { SetAttribute("subid", value); }
+            get { return GetAttr("subid"); }
+            set { SetAttr("subid", value); }
         }
 
         /// <summary>
@@ -683,7 +680,21 @@ namespace jabber.protocol.iq
         public int MaxItems
         {
             get { return GetIntAttr("max_items"); }
-            set { SetAttribute("max_items", value.ToString()); }
+            set { SetIntAttr("max_items", value); }
+        }
+
+        /// <summary>
+        /// Get a list of id's of deleted items.
+        /// </summary>
+        /// <returns></returns>
+        public string[] GetRetractions()
+        {
+            TypedElementList<Retract> nl = GetElements<Retract>();
+            string[] ids = new string[nl.Count];
+            int i = 0;
+            foreach (PubSubItem item in nl)
+                ids[i++] = item.ID;
+            return ids;
         }
     }
 
@@ -719,8 +730,8 @@ namespace jabber.protocol.iq
         /// </summary>
         public string ID
         {
-            get { return GetAttribute("id"); }
-            set { SetAttribute("id", value); }
+            get { return GetAttr("id"); }
+            set { SetAttr("id", value); }
         }
 
         /// <summary>
@@ -803,6 +814,15 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
+        /// When in an event, there may be an ID as an attribute.
+        /// </summary>
+        public string ID
+        {
+            get { return GetAttr("id"); }
+            set { SetAttr("id", value); }
+        }
+
+        /// <summary>
         /// Don notifications?
         /// </summary>
         public bool Notify
@@ -859,8 +879,8 @@ namespace jabber.protocol.iq
         /// </summary>
         public JID JID
         {
-            get { return new JID(GetAttribute("jid")); }
-            set { SetAttribute("jid", value.ToString()); }
+            get { return GetAttr("jid"); }
+            set { SetAttr("jid", value); }
         }
 
         /// <summary>
@@ -932,8 +952,8 @@ namespace jabber.protocol.iq
         /// </summary>
         public string Node
         {
-            get { return GetAttribute("node"); }
-            set { SetAttribute("node", value); }
+            get { return GetAttr("node"); }
+            set { SetAttr("node", value); }
         }
 
         /// <summary>
@@ -941,8 +961,8 @@ namespace jabber.protocol.iq
         /// </summary>
         public JID JID
         {
-            get { return new JID(GetAttribute("jid")); }
-            set { SetAttribute("jid", value.ToString()); }
+            get { return GetAttr("jid"); }
+            set { SetAttr("jid", value); }
         }
 
         /// <summary>
@@ -950,8 +970,8 @@ namespace jabber.protocol.iq
         /// </summary>
         public string SubID
         {
-            get { return GetAttribute("subid"); }
-            set { SetAttribute("subid", value); }
+            get { return GetAttr("subid"); }
+            set { SetAttr("subid", value); }
         }
 
 
@@ -960,28 +980,13 @@ namespace jabber.protocol.iq
         /// </summary>
         public bool HasXData
         {
-            get
-            {
-                jabber.protocol.x.Data xdata = GetXData();
-                return (xdata != null);
-            }
+            get { return (GetXData() != null); }
             set
             {
-                jabber.protocol.x.Data xdata = GetXData();
                 if (value)
-                {
-                    if (xdata != null)
-                        return;
-                    xdata = new jabber.protocol.x.Data(this.OwnerDocument);
-                    xdata.Type = jabber.protocol.x.XDataType.submit;
-                    ParentNode.AppendChild(xdata);
-                }
+                    GetOrCreateElement<Data>().Type = XDataType.submit;
                 else
-                {
-                    if (xdata == null)
-                        return;
-                    ParentNode.RemoveChild(xdata);
-                }
+                    RemoveElem<Data>();
             }
         }
 
@@ -989,9 +994,9 @@ namespace jabber.protocol.iq
         /// Get the XData child, if it exists.
         /// </summary>
         /// <returns></returns>
-        public jabber.protocol.x.Data GetXData()
+        public Data GetXData()
         {
-            return this["x", URI.XDATA] as jabber.protocol.x.Data;
+            return GetChildElement<Data>();
         }
 
     }
@@ -1036,15 +1041,7 @@ namespace jabber.protocol.iq
         /// <returns></returns>
         public PubSubSubscription[] GetSubscriptions()
         {
-            XmlNodeList nl = GetElementsByTagName("subscription", URI.PUBSUB);
-            PubSubSubscription[] items = new PubSubSubscription[nl.Count];
-            int i=0;
-            foreach (XmlNode n in nl)
-            {
-                items[i] = (PubSubSubscription)n;
-                i++;
-            }
-            return items;
+            return GetElements<PubSubSubscription>().ToArray();
         }
 
         /// <summary>
@@ -1053,9 +1050,7 @@ namespace jabber.protocol.iq
         /// <returns></returns>
         public PubSubSubscription AddSubscription()
         {
-            PubSubSubscription item = new PubSubSubscription(this.OwnerDocument);
-            AddChild(item);
-            return item;
+            return CreateChildElement<PubSubSubscription>();
         }
     }
 
@@ -1085,14 +1080,13 @@ namespace jabber.protocol.iq
         {
         }
 
-
         /// <summary>
         /// The node these options apply to.
         /// </summary>
         public string Node
         {
-            get { return GetAttribute("node"); }
-            set { SetAttribute("node", value); }
+            get { return GetAttr("node"); }
+            set { SetAttr("node", value); }
         }
 
         /// <summary>
@@ -1100,8 +1094,8 @@ namespace jabber.protocol.iq
         /// </summary>
         public JID JID
         {
-            get { return new JID(GetAttribute("jid")); }
-            set { SetAttribute("jid", value.ToString()); }
+            get { return GetAttr("jid"); }
+            set { SetAttr("jid", value); }
         }
 
         /// <summary>
@@ -1109,8 +1103,8 @@ namespace jabber.protocol.iq
         /// </summary>
         public string SubID
         {
-            get { return GetAttribute("subid"); }
-            set { SetAttribute("subid", value); }
+            get { return GetAttr("subid"); }
+            set { SetAttr("subid", value); }
         }
 
         /// <summary>
@@ -1118,8 +1112,8 @@ namespace jabber.protocol.iq
         /// </summary>
         public PubSubSubscriptionType Type
         {
-            get { return (PubSubSubscriptionType)GetEnumAttr("subscription", typeof(PubSubSubscriptionType)); }
-            set { SetAttribute("subscription", value.ToString()); }
+            get { return GetEnumAttr<PubSubSubscriptionType>("subscription"); }
+            set { SetEnumAttr("subscription", value); }
         }
     }
 
@@ -1189,8 +1183,8 @@ namespace jabber.protocol.iq
         /// </summary>
         public JID JID
         {
-            get { return new JID(GetAttribute("jid")); }
-            set { SetAttribute("jid", value.ToString()); }
+            get { return GetAttr("jid"); }
+            set { SetAttr("jid", value); }
         }
 
         /// <summary>
@@ -1198,8 +1192,8 @@ namespace jabber.protocol.iq
         /// </summary>
         public string SubID
         {
-            get { return GetAttribute("subid"); }
-            set { SetAttribute("subid", value); }
+            get { return GetAttr("subid"); }
+            set { SetAttr("subid", value); }
         }
     }
 
@@ -1233,7 +1227,7 @@ namespace jabber.protocol.iq
         /// </summary>
         public Items Items
         {
-            get { return this["items", URI.PUBSUB_EVENT] as Items; }
+            get { return GetChildElement<Items>(); }
         }
     }
 }

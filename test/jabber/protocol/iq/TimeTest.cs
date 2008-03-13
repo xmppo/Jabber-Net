@@ -33,7 +33,7 @@ namespace test.jabber.protocol.iq
         {
             XmlDocument doc = new XmlDocument();
             TimeIQ iq = new TimeIQ(doc);
-            Time t = iq.Query as Time;
+            Time t = iq.Instruction;
             t.AddChild(doc.CreateElement("utc", t.NamespaceURI));
             Assert.AreEqual(DateTime.MinValue, t.UTC);
             DateTime start = DateTime.UtcNow;

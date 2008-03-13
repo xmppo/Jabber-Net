@@ -30,7 +30,7 @@ namespace jabber.protocol.iq
     /// IQ packet with an Last query element inside.
     /// </summary>
     [SVN(@"$Id$")]
-    public class LastIQ : jabber.protocol.client.IQ
+    public class LastIQ : jabber.protocol.client.TypedIQ<Last>
     {
         /// <summary>
         /// Create a Last IQ
@@ -38,7 +38,6 @@ namespace jabber.protocol.iq
         /// <param name="doc"></param>
         public LastIQ(XmlDocument doc) : base(doc)
         {
-            this.Query = new Last(doc);
         }
     }
 
@@ -81,7 +80,7 @@ namespace jabber.protocol.iq
         /// </summary>
         public int Seconds
         {
-            get { return Int32.Parse(GetAttribute("seconds"));  }
+            get { return GetIntAttr("seconds");}
             set { SetAttribute("seconds", value.ToString()); }
         }
     }

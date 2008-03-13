@@ -31,7 +31,7 @@ namespace jabber.protocol.iq
     /// IQ packet with an oob query element inside.
     /// </summary>
     [SVN(@"$Id$")]
-    public class OobIQ : jabber.protocol.client.IQ
+    public class OobIQ : jabber.protocol.client.TypedIQ<OOB>
     {
         /// <summary>
         /// Create an OOB IQ.
@@ -39,7 +39,6 @@ namespace jabber.protocol.iq
         /// <param name="doc"></param>
         public OobIQ(XmlDocument doc) : base(doc)
         {
-            this.Query = new OOB(doc);
         }
     }
 

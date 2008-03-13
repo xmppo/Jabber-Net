@@ -88,31 +88,32 @@ namespace jabber.protocol.client
         /// </summary>
         public IQType Type
         {
-            get { return (IQType) GetEnumAttr("type", typeof(IQType)); }
-            set
+            get { return GetEnumAttr<IQType>("type"); }
+            set 
             {
                 IQType cur = this.Type;
                 if (cur == value)
                     return;
-                // FIXME: this should iterate through child elements, removing them, I think.
+
                 if (value == IQType.error)
                 {
                     this.InnerXml = "";
-                    this.AppendChild(new Error(this.OwnerDocument));
+                    this.GetOrCreateElement<Error>();
                 }
-                SetAttribute("type", value.ToString());
+                SetEnumAttr("type", value);
             }
         }
+
         /// <summary>
         /// IQ error.
         /// </summary>
         public Error Error
         {
-            get { return (Error) this["error"]; }
+            get { return GetChildElement<Error>(); }
             set
             {
                 this.Type = IQType.error;
-                ReplaceChild(value);
+                ReplaceChild<Error>(value);
             }
         }
 
@@ -190,4 +191,33 @@ namespace jabber.protocol.client
             return resp;
         }
     }
+
+    /// <summary>
+    /// An IQ subclass that allows typed access to its first child,
+    /// through the Instruction property.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public class TypedIQ<T> : IQ
+        where T : Element
+    {
+        /// <summary>
+        /// Create an IQ to send out, with an instance of the specified
+        /// type as a child.
+        /// </summary>
+        /// <param name="doc"></param>
+        public TypedIQ(XmlDocument doc) : base(doc)
+        {
+            CreateChildElement<T>();
+        }
+
+        /// <summary>
+        /// The child element (often "query") with the command for this IQ.
+        /// </summary>
+        public T Instruction
+        {
+            get { return GetChildElement<T>(); }
+            set { ReplaceChild<T>(value); }
+        }
+    }
+
 }

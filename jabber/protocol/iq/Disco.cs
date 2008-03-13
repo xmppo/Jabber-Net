@@ -38,7 +38,7 @@ namespace jabber.protocol.iq
     /// IQ packet with a disco#items query element inside.
     /// </summary>
     [SVN(@"$Id$")]
-    public class DiscoItemsIQ : jabber.protocol.client.IQ
+    public class DiscoItemsIQ : jabber.protocol.client.TypedIQ<DiscoItems>
     {
         /// <summary>
         /// Create a disco#items IQ
@@ -46,7 +46,6 @@ namespace jabber.protocol.iq
         /// <param name="doc"></param>
         public DiscoItemsIQ(XmlDocument doc) : base(doc)
         {
-            this.Query = new DiscoItems(doc);
         }
 
         /// <summary>
@@ -54,14 +53,8 @@ namespace jabber.protocol.iq
         /// </summary>
         public string Node
         {
-            get
-            {
-                return ((DiscoItems)this.Query).Node;
-            }
-            set
-            {
-                ((DiscoItems)this.Query).Node = value;
-            }
+            get { return this.Instruction.Node; }
+            set { this.Instruction.Node = value; }
         }
     }
 
@@ -69,7 +62,7 @@ namespace jabber.protocol.iq
     /// IQ packet with a disco#info query element inside.
     /// </summary>
     [SVN(@"$Id$")]
-    public class DiscoInfoIQ : jabber.protocol.client.IQ
+    public class DiscoInfoIQ : jabber.protocol.client.TypedIQ<DiscoInfo>
     {
         /// <summary>
         /// Create a disco#items IQ
@@ -77,7 +70,6 @@ namespace jabber.protocol.iq
         /// <param name="doc"></param>
         public DiscoInfoIQ(XmlDocument doc) : base(doc)
         {
-            this.Query = new DiscoInfo(doc);
         }
 
         /// <summary>
@@ -85,14 +77,8 @@ namespace jabber.protocol.iq
         /// </summary>
         public string Node
         {
-            get
-            {
-                return ((DiscoInfo)this.Query).Node;
-            }
-            set
-            {
-                ((DiscoInfo)this.Query).Node = value;
-            }
+            get {return this.Instruction.Node; }
+            set { this.Instruction.Node = value; }
         }
     }
 
@@ -154,8 +140,8 @@ namespace jabber.protocol.iq
         /// </summary>
         public string Node
         {
-            get { return GetAttribute("node"); }
-            set { SetAttribute("node", value); }
+            get { return GetAttr("node"); }
+            set { SetAttr("node", value); }
         }
 
         /// <summary>
@@ -164,9 +150,7 @@ namespace jabber.protocol.iq
         /// <returns></returns>
         public DiscoItem AddItem()
         {
-            DiscoItem i = new DiscoItem(this.OwnerDocument);
-            AddChild(i);
-            return i;
+            return CreateChildElement<DiscoItem>();
         }
 
         /// <summary>
@@ -175,15 +159,7 @@ namespace jabber.protocol.iq
         /// <returns></returns>
         public DiscoItem[] GetItems()
         {
-            XmlNodeList nl = GetElementsByTagName("item", URI.DISCO_ITEMS);
-            DiscoItem[] items = new DiscoItem[nl.Count];
-            int i=0;
-            foreach (XmlNode n in nl)
-            {
-                items[i] = (DiscoItem) n;
-                i++;
-            }
-            return items;
+            return GetElements<DiscoItem>().ToArray();
         }
     }
 
@@ -237,8 +213,8 @@ namespace jabber.protocol.iq
         /// </summary>
         public JID Jid
         {
-            get { return GetAttribute("jid"); }
-            set { SetAttribute("jid", value); }
+            get { return GetAttr("jid"); }
+            set { SetAttr("jid", value.ToString()); }
         }
 
         /// <summary>
@@ -246,8 +222,8 @@ namespace jabber.protocol.iq
         /// </summary>
         public string Named
         {
-            get { return GetAttribute("name"); }
-            set { SetAttribute("name", value); }
+            get { return GetAttr("name"); }
+            set { SetAttr("name", value); }
         }
 
         /// <summary>
@@ -255,8 +231,8 @@ namespace jabber.protocol.iq
         /// </summary>
         public string Node
         {
-            get { return GetAttribute("node"); }
-            set { SetAttribute("node", value); }
+            get { return GetAttr("node"); }
+            set { SetAttr("node", value); }
         }
 
         /// <summary>
@@ -264,14 +240,8 @@ namespace jabber.protocol.iq
         /// </summary>
         public DiscoAction Action
         {
-            get { return (DiscoAction) GetEnumAttr("action", typeof(DiscoAction)); }
-            set
-            {
-                if (value == DiscoAction.NONE)
-                    RemoveAttribute("action");
-                else
-                    SetAttribute("action", value.ToString());
-            }
+            get { return GetEnumAttr<DiscoAction>("action"); }
+            set { SetEnumAttr("action", value); }
         }
     }
 
@@ -336,8 +306,8 @@ namespace jabber.protocol.iq
         /// </summary>
         public string Node
         {
-            get { return GetAttribute("node"); }
-            set { SetAttribute("node", value); }
+            get { return GetAttr("node"); }
+            set { SetAttr("node", value); }
         }
 
         /// <summary>
@@ -350,8 +320,7 @@ namespace jabber.protocol.iq
         /// <returns></returns>
         public DiscoIdentity AddIdentity(string category, string discoType, string name, string language)
         {
-            DiscoIdentity i = new DiscoIdentity(this.OwnerDocument);
-            AddChild(i);
+            DiscoIdentity i = CreateChildElement<DiscoIdentity>();
             i.Category = category;
             i.Type = discoType;
             i.Named = name;
@@ -365,15 +334,7 @@ namespace jabber.protocol.iq
         /// <returns></returns>
         public DiscoIdentity[] GetIdentities()
         {
-            XmlNodeList nl = GetElementsByTagName("identity", URI.DISCO_INFO);
-            DiscoIdentity[] items = new DiscoIdentity[nl.Count];
-            int i=0;
-            foreach (XmlNode n in nl)
-            {
-                items[i] = (DiscoIdentity) n;
-                i++;
-            }
-            return items;
+            return GetElements<DiscoIdentity>().ToArray();
         }
 
         /// <summary>
@@ -382,8 +343,7 @@ namespace jabber.protocol.iq
         /// <returns></returns>
         public DiscoFeature AddFeature(string featureURI)
         {
-            DiscoFeature i = new DiscoFeature(this.OwnerDocument);
-            AddChild(i);
+            DiscoFeature i = CreateChildElement<DiscoFeature>();
             i.Var = featureURI;
             return i;
         }
@@ -394,15 +354,7 @@ namespace jabber.protocol.iq
         /// <returns></returns>
         public DiscoFeature[] GetFeatures()
         {
-            XmlNodeList nl = GetElementsByTagName("feature", URI.DISCO_INFO);
-            DiscoFeature[] items = new DiscoFeature[nl.Count];
-            int i=0;
-            foreach (XmlNode n in nl)
-            {
-                items[i] = (DiscoFeature) n;
-                i++;
-            }
-            return items;
+            return GetElements<DiscoFeature>().ToArray();
         }
 
         /// <summary>
@@ -412,8 +364,7 @@ namespace jabber.protocol.iq
         /// <returns></returns>
         public bool HasFeature(string featureURI)
         {
-            XmlNodeList nl = GetElementsByTagName("feature", URI.DISCO_INFO);
-            foreach (DiscoFeature feat in nl)
+            foreach (DiscoFeature feat in GetElements<DiscoFeature>())
             {
                 if (feat.Var == featureURI)
                     return true;
@@ -425,14 +376,10 @@ namespace jabber.protocol.iq
         /// Create a XEP-0128 x:data extension, or return the first existing one.
         /// </summary>
         /// <returns></returns>
-        public jabber.protocol.x.Data CreateExtension()
+        public Data CreateExtension()
         {
-            Data d = Extension;
-            if (d != null)
-                return d;
-            d = new Data(this.OwnerDocument);
+            Data d = GetOrCreateElement<Data>();
             d.Type = XDataType.result;
-            this.AppendChild(d);
             return d;
         }
 
@@ -441,43 +388,19 @@ namespace jabber.protocol.iq
         /// </summary>
         public Data Extension
         {
-            get { return this["x", URI.XDATA] as jabber.protocol.x.Data; }
-            set 
-            {
-                Data d = this["x", URI.XDATA] as jabber.protocol.x.Data;
-                if (d != null)
-                    this.RemoveChild(d);
-                if (value != null)
-                    this.AppendChild(value);
-            }
+            get { return GetChildElement<jabber.protocol.x.Data>(); }
+            set { ReplaceChild<Data>(value); }
         }
+
 
         /// <summary>
         /// In the unlikely event that there are multiple extensions, we need to be able
-        /// to retrieve all of them.  This will return a list, sorted by FORM_TYPE.
+        /// to retrieve all of them.  
         /// </summary>
         /// <returns></returns>
         public Data[] GetExtensions()
         {
-            XmlNodeList nl = GetElementsByTagName("x", URI.XDATA);
-            Data[] items = new Data[nl.Count];
-            if (nl.Count == 0)
-                return items;
-            
-            bedrock.collections.Tree tree = new bedrock.collections.Tree();
-            foreach (XmlNode n in nl)
-            {
-                Data x = (Data)n;
-                tree[x.FormType] = x;
-            }
-
-            int i = 0;
-            foreach (System.Collections.DictionaryEntry entry in tree)
-            {
-                items[i++] = (Data)entry.Value;
-            }
-            return items;
-
+            return GetElements<Data>().ToArray();
         }
     }
 
@@ -511,8 +434,8 @@ namespace jabber.protocol.iq
         /// </summary>
         public string Named
         {
-            get { return GetAttribute("name"); }
-            set { SetAttribute("name", value); }
+            get { return GetAttr("name"); }
+            set { SetAttr("name", value); }
         }
 
         /// <summary>
@@ -520,8 +443,8 @@ namespace jabber.protocol.iq
         /// </summary>
         public string Category
         {
-            get { return GetAttribute("category"); }
-            set { SetAttribute("category", value); }
+            get { return GetAttr("category"); }
+            set { SetAttr("category", value); }
         }
 
         /// <summary>
@@ -529,8 +452,8 @@ namespace jabber.protocol.iq
         /// </summary>
         public string Type
         {
-            get { return GetAttribute("type"); }
-            set { SetAttribute("type", value); }
+            get { return GetAttr("type"); }
+            set { SetAttr("type", value); }
         }
 
     }
@@ -565,8 +488,8 @@ namespace jabber.protocol.iq
         /// </summary>
         public string Var
         {
-            get { return GetAttribute("var"); }
-            set { SetAttribute("var", value); }
+            get { return GetAttr("var"); }
+            set { SetAttr("var", value); }
         }
     }
 }

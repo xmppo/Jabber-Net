@@ -23,7 +23,7 @@ namespace jabber.protocol.iq
     /// IQ packet with a roster query element inside.
     /// </summary>
     [SVN(@"$Id$")]
-    public class RosterIQ : jabber.protocol.client.IQ
+    public class RosterIQ : jabber.protocol.client.TypedIQ<Roster>
     {
         /// <summary>
         /// Create a roster IQ.
@@ -31,7 +31,6 @@ namespace jabber.protocol.iq
         /// <param name="doc"></param>
         public RosterIQ(XmlDocument doc) : base(doc)
         {
-            this.Query = new Roster(doc);
         }
     }
 
@@ -66,9 +65,7 @@ namespace jabber.protocol.iq
         /// <returns></returns>
         public Item AddItem()
         {
-            Item i = new Item(this.OwnerDocument);
-            AddChild(i);
-            return i;
+            return CreateChildElement<Item>();
         }
 
         /// <summary>
@@ -77,15 +74,7 @@ namespace jabber.protocol.iq
         /// <returns></returns>
         public Item[] GetItems()
         {
-            XmlNodeList nl = GetElementsByTagName("item");
-            Item[] items = new Item[nl.Count];
-            int i=0;
-            foreach (XmlNode n in nl)
-            {
-                items[i] = (Item) n;
-                i++;
-            }
-            return items;
+            return GetElements<Item>().ToArray();
         }
     }
 
@@ -95,6 +84,10 @@ namespace jabber.protocol.iq
     [SVN(@"$Id$")]
     public enum Subscription
     {
+        /// <summary>
+        /// No subscription state has been specified.
+        /// </summary>
+        UNSPECIFIED = -1,
         /// <summary>
         /// Subscription to this person.  They are a lurkee.
         /// </summary>
@@ -167,8 +160,8 @@ namespace jabber.protocol.iq
         /// </summary>
         public JID JID
         {
-            get { return new JID(GetAttribute("jid")); }
-            set { this.SetAttribute("jid", value.ToString()); }
+            get { return GetAttr("jid"); }
+            set { this.SetAttr("jid", value); }
         }
 
         /// <summary>
@@ -176,8 +169,8 @@ namespace jabber.protocol.iq
         /// </summary>
         public string Nickname
         {
-            get { return GetAttribute("name"); }
-            set { SetAttribute("name", value); }
+            get { return GetAttr("name"); }
+            set { SetAttr("name", value); }
         }
 
         /// <summary>
@@ -185,8 +178,8 @@ namespace jabber.protocol.iq
         /// </summary>
         public Subscription Subscription
         {
-            get { return (Subscription) GetEnumAttr("subscription", typeof(Subscription)); }
-            set { SetAttribute("subscription", value.ToString()); }
+            get { return GetEnumAttr<Subscription>("subscription"); }
+            set { SetEnumAttr("subscription", value); }
         }
 
         /// <summary>
@@ -194,18 +187,12 @@ namespace jabber.protocol.iq
         /// </summary>
         public Ask Ask
         {
-            get { return (Ask) GetEnumAttr("ask", typeof(Ask)); }
-            set
-            {
-                if (value == Ask.NONE)
-                    RemoveAttribute("ask");
-                else
-                    SetAttribute("ask", value.ToString());
-            }
+            get { return GetEnumAttr<Ask>("ask"); }
+            set { SetEnumAttr("ask", value); }
         }
 
         /// <summary>
-        /// Add an item group
+        /// Add an item group, or return an existing group with the given name
         /// </summary>
         /// <returns></returns>
         public Group AddGroup(string name)
@@ -213,9 +200,8 @@ namespace jabber.protocol.iq
             Group g = GetGroup(name);
             if (g == null)
             {
-                g = new Group(this.OwnerDocument);
+                g = CreateChildElement<Group>();
                 g.GroupName = name;
-                AddChild(g);
             }
             return g;
         }
@@ -226,8 +212,7 @@ namespace jabber.protocol.iq
         /// <param name="name"></param>
         public void RemoveGroup(string name)
         {
-            XmlNodeList nl = GetElementsByTagName("group", URI.ROSTER);
-            foreach (Group g in nl)
+            foreach (Group g in GetElements<Group>())
             {
                 if (g.GroupName == name)
                 {
@@ -243,15 +228,7 @@ namespace jabber.protocol.iq
         /// <returns></returns>
         public Group[] GetGroups()
         {
-            XmlNodeList nl = GetElementsByTagName("group", URI.ROSTER);
-            Group[] groups = new Group[nl.Count];
-            int i=0;
-            foreach (XmlNode n in nl)
-            {
-                groups[i] = (Group) n;
-                i++;
-            }
-            return groups;
+            return GetElements<Group>().ToArray();
         }
 
         /// <summary>
@@ -261,8 +238,7 @@ namespace jabber.protocol.iq
         /// <returns></returns>
         public bool HasGroup(string name)
         {
-            Group[] gl = GetGroups();
-            foreach (Group g in gl)
+            foreach (Group g in GetElements<Group>())
             {
                 if (g.GroupName == name)
                     return true;
@@ -278,8 +254,7 @@ namespace jabber.protocol.iq
         /// <returns>null if none found.</returns>
         public Group GetGroup(string name)
         {
-            Group[] gl = GetGroups();
-            foreach (Group g in gl)
+            foreach (Group g in GetElements<Group>())
             {
                 if (g.GroupName == name)
                     return g;
@@ -287,6 +262,7 @@ namespace jabber.protocol.iq
             return null;
         }
     }
+
     /// <summary>
     /// Roster item groups.  &lt;group&gt;GroupName&lt;/group&gt;
     /// </summary>

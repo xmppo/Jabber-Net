@@ -141,7 +141,7 @@ namespace jabber.protocol.iq
     /// IQ packet with a version query element inside.
     /// </summary>
     [SVN(@"$Id$")]
-    public class VCardIQ : jabber.protocol.client.IQ
+    public class VCardIQ : jabber.protocol.client.TypedIQ<VCard>
     {
         /// <summary>
         /// Create a vCard IQ
@@ -149,7 +149,6 @@ namespace jabber.protocol.iq
         /// <param name="doc"></param>
         public VCardIQ(XmlDocument doc) : base(doc)
         {
-            AddChild(new VCard(doc));
         }
 
         /// <summary>
@@ -157,7 +156,7 @@ namespace jabber.protocol.iq
         /// </summary>
         public VCard VCard
         {
-            get { return (VCard)this["vCard"]; }
+            get { return Instruction; }
         }
     }
 

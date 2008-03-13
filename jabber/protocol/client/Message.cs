@@ -162,6 +162,7 @@ namespace jabber.protocol.client
         /// <summary>
         /// The first x tag, regardless of namespace.
         /// </summary>
+        [Obsolete("This almost certainly doesn't do what you want.")]
         public XmlElement X
         {
             get { return this["x"]; }
@@ -173,11 +174,11 @@ namespace jabber.protocol.client
         /// </summary>
         public Error Error
         {
-            get { return (Error) this["error"]; }
+            get { return GetChildElement<Error>(); }
             set
             {
                 this.Type = MessageType.error;
-                ReplaceChild(value);
+                ReplaceChild<Error>(value);
             }
         }
     }

@@ -28,8 +28,8 @@ namespace jabber.protocol
     public class ElementList : XmlNodeList
     {
         private XmlElement m_parent = null;
-        private string m_name       = null;
-        private string m_uri        = null;
+        private string m_name = null;
+        private string m_uri = null;
 
         /// <summary>
         /// Create an element list that is for all child elements.
@@ -45,7 +45,8 @@ namespace jabber.protocol
         /// </summary>
         /// <param name="parent"></param>
         /// <param name="name"></param>
-        public ElementList(XmlElement parent, string name) : this(parent)
+        public ElementList(XmlElement parent, string name)
+            : this(parent)
         {
             m_name = name;
         }
@@ -56,7 +57,8 @@ namespace jabber.protocol
         /// <param name="parent"></param>
         /// <param name="name"></param>
         /// <param name="namespaceURI"></param>
-        public ElementList(XmlElement parent, string name, string namespaceURI) : this(parent)
+        public ElementList(XmlElement parent, string name, string namespaceURI)
+            : this(parent)
         {
             m_name = name;
             m_uri = namespaceURI;
@@ -174,6 +176,153 @@ namespace jabber.protocol
             {
                 m_cur = m_list.GetNextNode(m_cur);
                 return (m_cur != null);
+            }
+
+            #endregion
+        }
+    }
+
+    /// <summary>
+    /// Parameterized version of ElementList.
+    /// </summary>
+    [SVN(@"$Id$")]
+    public class TypedElementList<T> : XmlNodeList, System.Collections.Generic.IEnumerable<T>
+        where T : XmlElement
+    {
+        private XmlElement m_parent = null;
+
+        /// <summary>
+        /// Create an element list that is for all child elements with the specified type
+        /// </summary>
+        /// <param name="parent"></param>
+        public TypedElementList(XmlElement parent)
+        {
+            m_parent = parent;
+        }
+
+        /// <summary>
+        /// Get the next node in the enumeration.  Pass in null to start.
+        /// </summary>
+        /// <param name="start">Starting point for search.</param>
+        /// <returns></returns>
+        public T GetNextNode(T start)
+        {
+            XmlNode n = (start == null) ? m_parent.FirstChild : start.NextSibling;
+            while ((n != null) && !(n is T))
+            {
+                n = n.NextSibling;
+            }
+            return (T)n;
+        }
+
+        /// <summary>
+        /// Enumerate over the matching children.
+        /// </summary>
+        /// <returns></returns>
+        public override System.Collections.IEnumerator GetEnumerator()
+        {
+            return new TypedElementListEnumerator(this);
+        }
+
+        System.Collections.Generic.IEnumerator<T> System.Collections.Generic.IEnumerable<T>.GetEnumerator()
+        {
+            return new TypedElementListEnumerator(this);
+        }
+
+        /// <summary>
+        /// Gets the number of matching children.
+        /// </summary>
+        public override int Count
+        {
+            get
+            {
+                int c = 0;
+                T n = null;
+                while ((n = GetNextNode(n)) != null)
+                {
+                    c++;
+                }
+                return c;
+            }
+        }
+
+        /// <summary>
+        /// Retrieve a given child.
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public override XmlNode Item(int index)
+        {
+            int c = 0;
+            T n = null;
+            while ((n = GetNextNode(n)) != null)
+            {
+                if (c == index)
+                    return n;
+                c++;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Create an aray from the list.
+        /// </summary>
+        /// <returns></returns>
+        public T[] ToArray()
+        {
+            T[] array = new T[Count];
+            int i = 0;
+            foreach (T item in this)
+            {
+                array[i++] = item;
+            }
+            return array;
+        }
+
+        private class TypedElementListEnumerator : IEnumerator, System.Collections.Generic.IEnumerator<T>
+        {
+            private TypedElementList<T> m_list;
+            private T m_cur = null;
+
+            public TypedElementListEnumerator(TypedElementList<T> list)
+            {
+                m_list = list;
+            }
+
+            #region IEnumerator Members
+
+            public void Reset()
+            {
+                m_cur = null;
+            }
+
+            public object Current
+            {
+                get { return m_cur; }
+            }
+
+            public bool MoveNext()
+            {
+                m_cur = m_list.GetNextNode(m_cur);
+                return (m_cur != null);
+            }
+
+            #endregion
+
+            #region IEnumerator<T> Members
+
+            T System.Collections.Generic.IEnumerator<T>.Current
+            {
+                get { return m_cur; }
+            }
+
+            #endregion
+
+            #region IDisposable Members
+
+            public void Dispose()
+            {
+                throw new Exception("The method or operation is not implemented.");
             }
 
             #endregion

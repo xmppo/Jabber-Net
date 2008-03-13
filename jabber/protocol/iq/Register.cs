@@ -24,7 +24,7 @@ namespace jabber.protocol.iq
     /// IQ packet with a register query element inside.
     /// </summary>
     [SVN(@"$Id$")]
-    public class RegisterIQ : jabber.protocol.client.IQ
+    public class RegisterIQ : jabber.protocol.client.TypedIQ<Register>
     {
         /// <summary>
         /// Create a Register IQ.
@@ -32,7 +32,6 @@ namespace jabber.protocol.iq
         /// <param name="doc"></param>
         public RegisterIQ(XmlDocument doc) : base(doc)
         {
-            this.Query = new Register(doc);
         }
     }
 
@@ -272,8 +271,8 @@ namespace jabber.protocol.iq
         /// </summary>
         public jabber.protocol.x.Data Form
         {
-            get { return this["x", URI.XDATA] as jabber.protocol.x.Data; }
-            set { ReplaceChild(value); }
+            get { return GetChildElement<jabber.protocol.x.Data>(); }
+            set { ReplaceChild <jabber.protocol.x.Data>(value); }
         }
     }
 }

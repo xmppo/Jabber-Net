@@ -35,7 +35,7 @@ namespace jabber.protocol.iq
     /// IQ packet with an agents query element inside.
     /// </summary>
     [SVN(@"$Id$")]
-    public class AgentsIQ : jabber.protocol.client.IQ
+    public class AgentsIQ : jabber.protocol.client.TypedIQ<AgentsQuery>
     {
         /// <summary>
         /// Create an agents IQ packet.
@@ -43,9 +43,9 @@ namespace jabber.protocol.iq
         /// <param name="doc"></param>
         public AgentsIQ(XmlDocument doc) : base(doc)
         {
-            this.Query = new AgentsQuery(doc);
         }
     }
+
     /// <summary>
     /// An agents query element.
     /// </summary>
@@ -76,9 +76,7 @@ namespace jabber.protocol.iq
         /// <returns></returns>
         public Agent AddAgent()
         {
-            Agent i = new Agent(this.OwnerDocument);
-            AddChild(i);
-            return i;
+            return CreateChildElement<Agent>();
         }
 
         /// <summary>
@@ -87,15 +85,7 @@ namespace jabber.protocol.iq
         /// <returns></returns>
         public Agent[] GetAgents()
         {
-            XmlNodeList nl = GetElementsByTagName("agent", URI.AGENTS);
-            Agent[] items = new Agent[nl.Count];
-            int i=0;
-            foreach (XmlNode n in nl)
-            {
-                items[i] = (Agent) n;
-                i++;
-            }
-            return items;
+            return GetElements<Agent>().ToArray();
         }
     }
 
@@ -129,8 +119,8 @@ namespace jabber.protocol.iq
         /// </summary>
         public JID JID
         {
-            get { return new JID(GetAttribute("jid")); }
-            set { this.SetAttribute("jid", value.ToString()); }
+            get { return GetAttr("jid"); }
+            set { this.SetAttr("jid", value.ToString()); }
         }
 
         /// <summary>

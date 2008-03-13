@@ -45,7 +45,7 @@ namespace test.jabber.protocol.iq
         [Test] public void Test_Item()
         {
             RosterIQ riq = new RosterIQ(doc);
-            Roster r = (Roster) riq.Query;
+            Roster r = riq.Instruction;
             Item i = r.AddItem();
             i.JID = new JID("hildjj@jabber.com");
             Assert.AreEqual("<iq id=\""+riq.ID+"\" type=\"get\"><query xmlns=\"jabber:iq:roster\">" +
@@ -55,7 +55,7 @@ namespace test.jabber.protocol.iq
         [Test] public void Test_GetItems()
         {
             RosterIQ riq = new RosterIQ(doc);
-            Roster r = (Roster) riq.Query;
+            Roster r = riq.Instruction;
             Item i = r.AddItem();
             i.JID = new JID("hildjj@jabber.com");
             i = r.AddItem();
@@ -70,7 +70,7 @@ namespace test.jabber.protocol.iq
         [Test] public void Test_Groups()
         {
             RosterIQ riq = new RosterIQ(doc);
-            Roster r = (Roster) riq.Query;
+            Roster r = riq.Instruction;
             Item i = r.AddItem();
             i.JID = new JID("hildjj@jabber.com");
             Group g = i.AddGroup("foo");
@@ -95,7 +95,7 @@ namespace test.jabber.protocol.iq
         [Test] public void Test_Ask()
         {
             RosterIQ riq = new RosterIQ(doc);
-            Roster r = (Roster) riq.Query;
+            Roster r = riq.Instruction;
             Item i = r.AddItem();
             Assert.AreEqual("", i.GetAttribute("ask"));
             Assert.AreEqual(Ask.NONE, i.Ask);

@@ -25,7 +25,7 @@ namespace jabber.protocol.iq
     /// A GeoLoc IQ.
     /// </summary>
     [SVN(@"$Id$")]
-    public class GeoLocIQ : jabber.protocol.client.IQ
+    public class GeoLocIQ : jabber.protocol.client.TypedIQ<GeoLoc>
     {
         /// <summary>
         /// Create a GeoLoc IQ.
@@ -33,7 +33,6 @@ namespace jabber.protocol.iq
         /// <param name="doc"></param>
         public GeoLocIQ(XmlDocument doc) : base(doc)
         {
-            this.AppendChild(new GeoLocIQ(doc));
         }
     }
 

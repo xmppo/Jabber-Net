@@ -25,7 +25,7 @@ namespace jabber.protocol.iq
     /// An browse IQ.
     /// </summary>
     [SVN(@"$Id$")]
-    public class BrowseIQ : jabber.protocol.client.IQ
+    public class BrowseIQ : jabber.protocol.client.TypedIQ<Browse>
     {
         /// <summary>
         /// Create a Browse IQ.
@@ -33,7 +33,6 @@ namespace jabber.protocol.iq
         /// <param name="doc"></param>
         public BrowseIQ(XmlDocument doc) : base(doc)
         {
-            this.Query = new Browse(doc);
         }
     }
 
@@ -68,7 +67,7 @@ namespace jabber.protocol.iq
         /// </summary>
         public JID JID
         {
-            get { return new JID(GetAttribute("jid")); }
+            get { return GetAttribute("jid"); }
             set { SetAttribute("jid", value.ToString()); }
         }
 
@@ -116,15 +115,7 @@ namespace jabber.protocol.iq
         /// <returns></returns>
         public Browse[] GetItems()
         {
-            XmlNodeList nl = GetElementsByTagName("item", URI.BROWSE);
-            Browse[] items = new Browse[nl.Count];
-            int i=0;
-            foreach (XmlNode n in nl)
-            {
-                items[i] = (Browse) n;
-                i++;
-            }
-            return items;
+            return GetElements<Browse>().ToArray();
         }
 
         /// <summary>
@@ -133,9 +124,7 @@ namespace jabber.protocol.iq
         /// <returns></returns>
         public Browse AddItem()
         {
-            Browse b = new Browse(this.OwnerDocument);
-            this.AppendChild(b);
-            return b;
+            return CreateChildElement<Browse>();
         }
 
         /// <summary>

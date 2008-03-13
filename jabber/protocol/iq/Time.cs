@@ -34,7 +34,7 @@ namespace jabber.protocol.iq
     /// IQ packet with an time query element inside.
     /// </summary>
     [SVN(@"$Id$")]
-    public class TimeIQ : jabber.protocol.client.IQ
+    public class TimeIQ : jabber.protocol.client.TypedIQ<Time>
     {
         /// <summary>
         /// Create a time IQ
@@ -42,7 +42,6 @@ namespace jabber.protocol.iq
         /// <param name="doc"></param>
         public TimeIQ(XmlDocument doc) : base(doc)
         {
-            this.Query = new Time(doc);
         }
     }
 

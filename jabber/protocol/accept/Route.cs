@@ -86,21 +86,8 @@ namespace jabber.protocol.accept
         /// </summary>
         public RouteType Type
         {
-            get { return (RouteType) GetEnumAttr("type", typeof(RouteType)); }
-            set
-            {
-                RouteType cur = this.Type;
-                if (cur == value)
-                    return;
-                if (value == RouteType.NONE)
-                {
-                    RemoveAttribute("type");
-                }
-                else
-                {
-                    SetAttribute("type", value.ToString());
-                }
-            }
+            get { return GetEnumAttr<RouteType>("type"); }
+            set { SetEnumAttr("type", value); }
         }
     }
 }

@@ -326,17 +326,6 @@ namespace jabber.client
                     return;
                 }
 
-                if (m_pres.From == p.From)
-                {
-                    // replacing.  If we're going up, or staying the same, no need to recalc.
-                    if (!(p < m_pres))
-                    {
-                        // can't be negative priority here, since m_pres is always >= 0.
-                        Primary(p, handler);
-                        return;
-                    }
-                }
-
                 // Otherwise, recalc
                 SetHighest(handler);
             }

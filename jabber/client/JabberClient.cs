@@ -355,7 +355,7 @@ namespace jabber.client
 
             AuthIQ aiq = new AuthIQ(Document);
             aiq.Type = IQType.get;
-            Auth a = (Auth) aiq.Query;
+            Auth a = aiq.Instruction;
             a.Username = User;
 
             lock (StateLock)
@@ -476,7 +476,7 @@ namespace jabber.client
 
             RosterIQ riq = new RosterIQ(Document);
             riq.Type = IQType.set;
-            Roster r = (Roster)riq.Query;
+            Roster r = riq.Instruction;
             Item i = r.AddItem();
             i.JID = to;
             if (nickname != null)
@@ -512,7 +512,7 @@ namespace jabber.client
  */
             RosterIQ riq = new RosterIQ(Document);
             riq.Type = IQType.set;
-            Roster r = (Roster)riq.Query;
+            Roster r = riq.Instruction;
             Item i = r.AddItem();
             i.JID = to;
             i.Subscription = Subscription.remove;
@@ -566,7 +566,7 @@ namespace jabber.client
         public void Register(JID jid)
         {
             RegisterIQ iq = new RegisterIQ(Document);
-            Register reg = (Register)iq.Query;
+            Register reg = iq.Instruction;
             iq.Type = IQType.get;
             iq.To = jid.Server;
 
@@ -684,7 +684,7 @@ namespace jabber.client
 
             AuthIQ aiq = new AuthIQ(Document);
             aiq.Type = IQType.set;
-            Auth a = (Auth) aiq.Query;
+            Auth a = aiq.Instruction;
 
             if ((res["sequence"] != null) && (res["token"] != null))
             {

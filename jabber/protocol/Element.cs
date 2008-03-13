@@ -66,20 +66,6 @@ namespace jabber.protocol
         }
 
         /// <summary>
-        /// Get the first child element with the given name and namespace,
-        /// and cast it to the given type.
-        /// </summary>
-        /// <typeparam name="T">The XmlElement subtype of the return value</typeparam>
-        /// <param name="name">The element name</param>
-        /// <param name="namespaceURI">the element namespace</param>
-        /// <returns>Null </returns>
-        public T GetChild<T>(string name, string namespaceURI)
-            where T : XmlElement
-        {
-            return this[name, namespaceURI] as T;
-        }
-
-        /// <summary>
         /// Returns the first child element with the given type.
         /// 
         /// You might expect this to be slower than this["name", "uri"], but it's 
@@ -88,13 +74,13 @@ namespace jabber.protocol
         /// </summary>
         /// <typeparam name="T">The type of child to search for</typeparam>
         /// <returns>The first child with the given type, or null if none found</returns>
-        public T GetChild<T>()
+        public T GetChildElement<T>()
             where T : XmlElement
         {
             for (XmlNode node = this.FirstChild; node != null; node = node.NextSibling)
             {
-                if (child is T)
-                    return (T)child;
+                if (node is T)
+                    return (T)node;
             }
             return null;
         }
@@ -160,6 +146,32 @@ namespace jabber.protocol
             return new ElementList(this, localName);
         }
 
+        /// <summary>
+        /// Get a list of child elements that have the specified type.
+        /// </summary>
+        /// <typeparam name="T">The type of element to search for</typeparam>
+        /// <returns>A typed element list</returns>
+        public TypedElementList<T> GetElements<T>()
+            where T : XmlElement
+        {
+            return new TypedElementList<T>(this);
+        }
+
+        /// <summary>
+        /// Gett he text contents of the first sub-element with the specified type
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        protected string GetElem<T>()
+            where T : Element
+        {
+            T e = GetChildElement<T>();
+            if (e == null)
+                return null;
+            if (!e.HasChildNodes)
+                return null;
+            return e.InnerText;
+        }
 
         /// <summary>
         /// Get the text contents of a sub-element.
@@ -175,6 +187,24 @@ namespace jabber.protocol
                 return null;
             return e.InnerText;
         }
+
+        /// <summary>
+        /// Sets the text contents of a sub-element with a specified type.
+        /// Creates the element if it doesn't exist.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        T SetElem<T>(string value)
+            where T : Element
+        {
+            T result = GetOrCreateElement<T>();
+            result.RemoveAll();
+            if (value != null)
+                result.InnerText = value;
+            return result;
+        }
+
         /// <summary>
         /// Sets the text contents of a sub-element.
         /// Note: Do not use this if you want the sub-element to have a type that is not XmlElement.
@@ -204,6 +234,41 @@ namespace jabber.protocol
 
             if (value != null)
                 e.InnerText = value;
+        }
+
+        /// <summary>
+        /// Create an element that is a child of this element, of the specified type.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        protected T CreateChildElement<T>()
+            where T : Element
+        {
+            // Note: It would be cool to just do new T(OwnerDocument), but you can only call
+            // parameter-less constructors in generic-land.
+            ConstructorInfo constructor = typeof(T).GetConstructor(new Type[] { typeof(XmlDocument) });
+            Debug.Assert(constructor != null, "Type " + typeof(T).ToString() + " does not have a constructor taking an XmlDocument");
+            T c = (T)constructor.Invoke(new object[] { this.OwnerDocument });
+            AppendChild(c);
+            return c;
+        }
+
+        /// <summary>
+        /// If a child element exists with the given type, return it.  Otherwise,
+        /// gin up a new instance of the given type, add it as a child, 
+        /// and return the result.
+        /// 
+        /// This should not have the performance impact of GetOrCreateElement.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        protected T GetOrCreateElement<T>()
+            where T : Element
+        {
+            T c = GetChildElement<T>();
+            if (c == null)
+                c = CreateChildElement<T>();
+            return c;
         }
 
         /// <summary>
@@ -245,6 +310,23 @@ namespace jabber.protocol
         }
 
         /// <summary>
+        /// Replaces the first element that has the specified type.
+        /// </summary>
+        /// <typeparam name="T">The type of sub-element to find</typeparam>
+        /// <param name="elem">The element to replace; if this is null, the old element is just deleted</param>
+        /// <returns>The replaced element</returns>
+        protected T ReplaceChild<T>(T elem)
+            where T : Element
+        {
+            T old = GetChildElement<T>();
+            if (old != null)
+                this.RemoveChild(old);
+            if (elem != null)
+                AddChild(elem);
+            return old;
+        }
+
+        /// <summary>
         /// Replaces the first element that has the same name
         /// with the passed in element.
         /// </summary>
@@ -263,6 +345,20 @@ namespace jabber.protocol
         }
 
         /// <summary>
+        /// Remove a child element of the specified type
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        protected T RemoveElem<T>()
+            where T : Element
+        {
+            T e = GetChildElement<T>();
+            if (e != null)
+                this.RemoveChild(e);
+            return e;
+        }
+
+        /// <summary>
         /// Remove a child element
         /// </summary>
         /// <param name="name"></param>
@@ -274,6 +370,18 @@ namespace jabber.protocol
                 this.RemoveChild(e);
             return e;
         }
+
+        /// <summary>
+        /// Remove each of the child elements with the specified type.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        protected void RemoveElems<T>()
+            where T : Element
+        {
+            foreach (T child in GetElements<T>())
+                this.RemoveChild(child);
+        }
+
         /// <summary>
         /// Removes all of the matching elements from this element.
         /// </summary>
@@ -334,6 +442,30 @@ namespace jabber.protocol
 
         /// <summary>
         /// Get the value of an attribute, as a value in the given Enum type.
+        /// The specified enum should have a member with value -1, which will
+        /// be returned if the attribute doesn't exist or is in the wrong format.
+        /// </summary>
+        /// <typeparam name="T">The enum type</typeparam>
+        /// <param name="name">The attribute name</param>
+        /// <returns>The enum value</returns>
+        protected T GetEnumAttr<T>(string name)
+        {
+            string a = this.GetAttribute(name);
+            if ((a == null) || (a.Length == 0))
+                return (T)(object)(-1);
+            try
+            {
+                return (T)Enum.Parse(typeof(T), a, true);
+            }
+            catch (ArgumentException)
+            {
+                return (T)(object)(-1);
+            }
+
+        }
+
+        /// <summary>
+        /// Get the value of an attribute, as a value in the given Enum type.
         /// </summary>
         /// <param name="name"></param>
         /// <param name="enumType"></param>
@@ -364,6 +496,7 @@ namespace jabber.protocol
         {
             Debug.Assert(value.GetType().IsSubclassOf(typeof(Enum)));
             if ((int)value == -1)
+                // Yes, this is safe if the attribute doesn't exist.
                 RemoveAttribute(name);
             else
                 SetAttribute(name, value.ToString());

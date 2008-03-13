@@ -111,21 +111,8 @@ namespace jabber.protocol.accept
         /// </summary>
         public XdbType Type
         {
-            get { return (XdbType) GetEnumAttr("type", typeof(XdbType)); }
-            set
-            {
-                XdbType cur = this.Type;
-                if (cur == value)
-                    return;
-                if (value == XdbType.NONE)
-                {
-                    RemoveAttribute("type");
-                }
-                else
-                {
-                    SetAttribute("type", value.ToString());
-                }
-            }
+            get { return GetEnumAttr<XdbType>("type"); }
+            set { SetEnumAttr("type", value); }
         }
 
         /// <summary>
@@ -133,21 +120,8 @@ namespace jabber.protocol.accept
         /// </summary>
         public XdbAction Action
         {
-            get { return (XdbAction) GetEnumAttr("action", typeof(XdbAction)); }
-            set
-            {
-                XdbAction cur = this.Action;
-                if (cur == value)
-                    return;
-                if (value == XdbAction.NONE)
-                {
-                    RemoveAttribute("action");
-                }
-                else
-                {
-                    SetAttribute("action", value.ToString());
-                }
-            }
+            get { return GetEnumAttr<XdbAction>("action"); }
+            set { SetEnumAttr("action", value); }
         }
 
         /// <summary>

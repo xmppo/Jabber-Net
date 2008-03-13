@@ -860,7 +860,7 @@ namespace jabber.connection
             OwnerIQ iq = new OwnerIQ(m_stream.Document);
             iq.Type = IQType.set;
             iq.To = m_room;
-            OwnerQuery oq = (OwnerQuery)iq.Query;
+            OwnerQuery oq = iq.Instruction;
             Data form = oq.Form;
             form.Type = XDataType.submit;
             m_stream.Tracker.BeginIQ(iq, new IqCB(Configured), null);
@@ -1039,7 +1039,7 @@ namespace jabber.connection
             RoomAdminIQ iq = new RoomAdminIQ(m_stream.Document);
             iq.To = m_room;
             iq.Type = IQType.set;
-            AdminQuery query = (AdminQuery) iq.Query;
+            AdminQuery query = iq.Instruction;
             AdminItem item = query.AddItem();
             item.Nick = nick;
             item.Role = role;
@@ -1112,7 +1112,7 @@ namespace jabber.connection
 */
             RoomAdminIQ iq = new RoomAdminIQ(m_stream.Document);
             iq.To = m_room;
-            AdminQuery query = (AdminQuery)iq.Query;
+            AdminQuery query = iq.Instruction;
             query.AddItem().Role = role;
             m_stream.Tracker.BeginIQ(iq, new IqCB(GotList), new RetrieveParticipantsState(callback, state));
         }
@@ -1191,7 +1191,7 @@ namespace jabber.connection
             RoomAdminIQ iq = new RoomAdminIQ(m_stream.Document);
             iq.To = m_room;
             iq.Type = IQType.set;
-            AdminQuery query = (AdminQuery)iq.Query;
+            AdminQuery query = iq.Instruction;
 
             int count = 0;
             foreach (RoomParticipant party in parties)
@@ -1244,7 +1244,7 @@ namespace jabber.connection
             RoomAdminIQ iq = new RoomAdminIQ(m_stream.Document);
             iq.To = m_room;
             iq.Type = IQType.set;
-            AdminQuery query = (AdminQuery)iq.Query;
+            AdminQuery query = iq.Instruction;
             AdminItem item = query.AddItem();
             item.JID = jid;
             item.Affiliation = affiliation;
@@ -1315,7 +1315,7 @@ namespace jabber.connection
 */
             RoomAdminIQ iq = new RoomAdminIQ(m_stream.Document);
             iq.To = m_room;
-            AdminQuery query = (AdminQuery)iq.Query;
+            AdminQuery query = iq.Instruction;
             query.AddItem().Affiliation = affiliation;
             m_stream.Tracker.BeginIQ(iq, new IqCB(GotList), new RetrieveParticipantsState(callback, state));
         }
@@ -1348,7 +1348,7 @@ namespace jabber.connection
             RoomAdminIQ iq = new RoomAdminIQ(m_stream.Document);
             iq.To = m_room;
             iq.Type = IQType.set;
-            AdminQuery query = (AdminQuery)iq.Query;
+            AdminQuery query = iq.Instruction;
 
             int count = 0;
             foreach (RoomParticipant party in parties)

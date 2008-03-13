@@ -44,6 +44,23 @@ namespace jabber.protocol.x
     }
 
     /// <summary>
+    /// Compare two x:data forms by form type.
+    /// </summary>
+    public class FormTypeComparer : System.Collections.Generic.Comparer<Data>
+    {
+        /// <summary>
+        /// Compare two x:data forms by form type
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        public override int Compare(Data x, Data y)
+        {
+            return string.Compare(x.FormType, y.FormType);
+        }
+    }
+
+    /// <summary>
     /// jabber:x:data support, as in http://www.xmpp.org/extensions/xep-0004.html.
     /// </summary>
     [SVN(@"$Id$")]
