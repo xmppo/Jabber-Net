@@ -537,7 +537,7 @@ namespace jabber.connection
     </pubsub>
 </iq>
  */
-            PubSubCommandIQ<Create> iq = new PubSubCommandIQ<Create>(m_stream.Document);
+            PubSubCommandIQ<Create> iq = new PubSubCommandIQ<Create>(m_stream.Document, m_node);
             iq.To = m_jid;
             iq.Type = IQType.set;
             iq.Command.CreateConfiguration(config);

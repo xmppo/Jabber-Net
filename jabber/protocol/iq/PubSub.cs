@@ -156,6 +156,17 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
+        /// Create, with node
+        /// </summary>
+        /// <param name="doc"></param>
+        /// <param name="node"></param>
+        public PubSubCommandIQ(XmlDocument doc, string node)
+            : base(doc)
+        {
+            Command.Node = node;
+        }
+
+        /// <summary>
         /// The command inside the pubsub element.
         /// </summary>
         public T Command
@@ -574,8 +585,11 @@ namespace jabber.protocol.iq
         public Data CreateForm(Data form)
         {
             ReplaceChild<Data>(form);
-            form.FormType = URI.PUBSUB_NODE_CONFIG;
-            form.Type = XDataType.submit;
+            if (form != null)
+            {
+                form.FormType = URI.PUBSUB_NODE_CONFIG;
+                form.Type = XDataType.submit;
+            }
             return form;
         }
     }
