@@ -37,6 +37,7 @@ $(BASEDIR)/bedrock/net/Address.cs \
 $(BASEDIR)/bedrock/net/AsyncSocket.cs \
 $(BASEDIR)/bedrock/net/BaseSocket.cs \
 $(BASEDIR)/bedrock/net/Exceptions.cs \
+$(BASEDIR)/bedrock/net/IHttpSocket.cs \
 $(BASEDIR)/bedrock/net/XEP25Socket.cs \
 $(BASEDIR)/bedrock/net/XEP124Socket.cs \
 $(BASEDIR)/bedrock/net/ProxySocket.cs \
@@ -52,7 +53,9 @@ $(BASEDIR)/jabber/JID.cs \
 $(BASEDIR)/jabber/client/JabberClient.cs \
 $(BASEDIR)/jabber/client/PresenceManager.cs \
 $(BASEDIR)/jabber/client/RosterManager.cs \
+$(BASEDIR)/jabber/connection/HttpStanzaStream.cs \
 $(BASEDIR)/jabber/connection/IQTracker.cs \
+$(BASEDIR)/jabber/connection/BindingStanzaStream.cs \
 $(BASEDIR)/jabber/connection/PollingStanzaStream.cs \
 $(BASEDIR)/jabber/connection/SocketStanzaStream.cs \
 $(BASEDIR)/jabber/connection/StanzaStream.cs \
@@ -150,7 +153,10 @@ RESOURCES = \
 -resource:$(BASEDIR)/jabber/client/RosterManager.bmp \
 -resource:$(BASEDIR)/jabber/server/JabberService.bmp
 
-SYSTEM_REFERENCES = -r:zlib.net.dll -r:System.dll -r:System.Xml.dll -r:Mono.Security.dll
+SYSTEM_REFERENCES = -r:zlib.net.dll \
+					-r:System.dll \
+					-r:System.Xml.dll \
+					-r:Mono.Security.dll
 
 DEBUGDIR = $(BASEDIR)/bin/debug
 
