@@ -154,6 +154,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="bedrock\net\Exceptions.cs" />
+    <Compile Include="bedrock\net\IHttpSocket.cs" />
     <Compile Include="bedrock\net\ProxySocket.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -186,6 +187,7 @@
     <Compile Include="bedrock\util\Version.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="jabber\connection\BindingStanzaStream.cs" />
     <Compile Include="jabber\connection\CapsManager.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -207,6 +209,7 @@
     <Compile Include="jabber\client\RosterManager.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="jabber\connection\HttpStanzaStream.cs" />
     <Compile Include="jabber\connection\HttpUploader.cs" />
     <Compile Include="jabber\connection\IQTracker.cs">
       <SubType>Code</SubType>
@@ -463,6 +466,9 @@
       <Project>{40AC7A7C-D3E5-46DF-B740-06BD9D2A00E1}</Project>
       <Name>netlib.Dns</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Data" />
   </ItemGroup>
   <Import Condition="'$(BuildMono)'==''" Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

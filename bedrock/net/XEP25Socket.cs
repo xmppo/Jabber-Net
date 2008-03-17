@@ -11,18 +11,16 @@
  * Jabber-Net can be used under either JOSL or the GPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
+
 using System;
 using System.Collections;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
-using System.Security;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
-
-using bedrock.io;
 using bedrock.util;
 
 namespace bedrock.net
@@ -47,28 +45,28 @@ namespace bedrock.net
     /// TODO: get rid of the PipeStream, if possible.
     /// </summary>
     [SVN(@"$Id$")]
-    public class XEP25Socket : BaseSocket
+    public class XEP25Socket : BaseSocket, IHttpSocket
     {
         private const string CONTENT_TYPE = "application/x-www-form-urlencoded";
         private const string METHOD       = "POST";
 
-        RandomNumberGenerator s_rng = RNGCryptoServiceProvider.Create();
+        private readonly RandomNumberGenerator s_rng = RNGCryptoServiceProvider.Create();
 
-        private Queue      m_writeQ  = new Queue();
-        private Object     m_lock    = new Object();
-        private Thread     m_thread  = null;
-        private int        m_maxPoll = 30;
-        private int        m_minPoll = 1;
-        private double     m_curPoll = 1.0;
-        private string     m_url     = null;
-        private string[]   m_keys    = null;
-        private int        m_numKeys = 512;
-        private int        m_curKey  = 511;
-        private bool       m_running = false;
-        private string     m_id      = null;
-        private WebProxy   m_proxy   = null;
-        private X509Certificate m_cert = null;
-        private X509Certificate m_remote_cert = null;
+        private readonly Queue      m_writeQ  = new Queue();
+        private readonly Object     m_lock    = new Object();
+        private Thread              m_thread  = null;
+        private int                 m_maxPoll = 30;
+        private int                 m_minPoll = 1;
+        private double              m_curPoll = 1.0;
+        private string              m_url     = null;
+        private string[]            m_keys    = null;
+        private int                 m_numKeys = 512;
+        private int                 m_curKey  = 511;
+        private bool                m_running = false;
+        private string              m_id      = null;
+        private WebProxy            m_proxy   = null;
+        private X509Certificate     m_cert = null;
+        private X509Certificate     m_remote_cert = null;
 
         /// <summary>
         /// Do trust all server sertificates?
@@ -188,7 +186,7 @@ namespace bedrock.net
 
             if (m_thread == null)
             {
-                m_thread = new Thread(new ThreadStart(PollThread));
+                m_thread = new Thread(PollThread);
                 m_thread.IsBackground = true;
                 m_thread.Start();
             }
@@ -278,7 +276,7 @@ namespace bedrock.net
             m_curKey = m_numKeys - 1;
         }
 
-        private bool ValidateRemoteCertificate(Object sender,
+        private static bool ValidateRemoteCertificate(Object sender,
                                                X509Certificate certificate,
                                                X509Chain chain,
                                                System.Net.Security.SslPolicyErrors sslPolicyErrors)
@@ -300,13 +298,11 @@ namespace bedrock.net
 
             Stream rs;
             byte[] buf;
-            int readlen;
             HttpWebResponse resp;
             HttpWebRequest req;
             Stream s;
             WriteBuf start;
 
-            int count;
             while (m_running)
             {
                 lock (m_lock)
@@ -342,7 +338,7 @@ namespace bedrock.net
                 m_curKey--;
 
                 ms.SetLength(0);
-                count = start.len;
+                int count = start.len;
                 while (m_writeQ.Count > 0)
                 {
                     WriteBuf b = (WriteBuf) m_writeQ.Dequeue();
@@ -361,23 +357,18 @@ namespace bedrock.net
 
                 req.KeepAlive       = false;
 
-                // TODO: What about Mono?
-#if NET20
                 req.CachePolicy = new System.Net.Cache.HttpRequestCachePolicy(System.Net.Cache.HttpRequestCacheLevel.NoCacheNoStore);
-#endif
-
+                req.CachePolicy = new System.Net.Cache.HttpRequestCachePolicy(System.Net.Cache.HttpRequestCacheLevel.NoCacheNoStore);
 
                 if (m_proxy != null)
                     req.Proxy = m_proxy;
                 req.ContentLength = count;
 
 
-
-                resp = null;
                 try
                 {
                     ServicePointManager.ServerCertificateValidationCallback =
-                        new System.Net.Security.RemoteCertificateValidationCallback(ValidateRemoteCertificate);
+                        ValidateRemoteCertificate;
 
                     s = req.GetRequestStream();
                     s.Write(start.buf, start.offset, start.len);
@@ -456,8 +447,7 @@ namespace bedrock.net
                 rs = resp.GetResponseStream();
 
 
-
-
+                int readlen;
                 while ((readlen = rs.Read(readbuf, 0, readbuf.Length)) > 0)
                 {
                     ms.Write(readbuf, 0, readlen);
@@ -476,12 +466,10 @@ namespace bedrock.net
                         }
                     } catch (NullReferenceException)
                     {}
-                    buf = null;
                     m_curPoll = m_minPoll;
                 }
                 else
                 {
-                    buf = null;
                     m_curPoll *= 1.25;
                     if (m_curPoll > m_maxPoll)
                         m_curPoll = m_maxPoll;
@@ -492,7 +480,7 @@ namespace bedrock.net
         /// <summary>
         /// Is socket connected.
         /// </summary>
-        public bool Connected
+        public override bool Connected
         {
             get
             { return m_running; }
@@ -509,9 +497,9 @@ namespace bedrock.net
 
         private class WriteBuf
         {
-            public byte[] buf;
-            public int offset;
-            public int len;
+            public readonly byte[] buf;
+            public readonly int offset;
+            public readonly int len;
 
             public WriteBuf(byte[] buf, int offset, int len)
             {
@@ -522,9 +510,9 @@ namespace bedrock.net
 
             public WriteBuf(string b)
             {
-                this.buf = Encoding.UTF8.GetBytes(b);
-                this.offset = 0;
-                this.len = buf.Length;
+                buf = Encoding.UTF8.GetBytes(b);
+                offset = 0;
+                len = buf.Length;
             }
         }
     }}

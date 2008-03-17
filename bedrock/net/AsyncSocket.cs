@@ -357,7 +357,7 @@ namespace bedrock.net
         /// <summary>
         /// Is the socket connected?
         /// </summary>
-        public bool Connected
+        public override bool Connected
         {
             get
             {

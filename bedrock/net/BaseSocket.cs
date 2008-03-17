@@ -123,6 +123,14 @@ namespace bedrock.net
         /// <param name="addr"></param>
         public abstract void Connect(Address addr);
 
+        ///<summary>
+        /// Returns true if the socket is connected.
+        ///</summary>
+        public abstract bool Connected
+        { 
+            get;
+        }
+
 #if !NO_SSL
         /// <summary>
         /// Start TLS processing on an open socket.

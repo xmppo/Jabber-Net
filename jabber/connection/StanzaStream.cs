@@ -177,9 +177,8 @@ namespace jabber.connection
                 return new SocketStanzaStream(listener);
             case ConnectionType.HTTP_Polling:
                 return new PollingStanzaStream(listener);
-            // TODO: Fix broken build.
-            //            case ConnectionType.HTTP_Binding:
-            //                return new BindingStanzaStream(listener);
+            case ConnectionType.HTTP_Binding:
+                return new BindingStanzaStream(listener);
             default:
                 throw new NotImplementedException("Proxy type not implemented yet: " + kind.ToString());
             }

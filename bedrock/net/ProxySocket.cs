@@ -104,6 +104,11 @@ namespace bedrock.net
             set { m_password = value; }
         }
 
+        public override bool Connected
+        {
+            get { return false; }
+        }
+
         /// <summary>
         /// Prepare to start accepting inbound requests.  Call RequestAccept() to start the async process.
         /// </summary>
