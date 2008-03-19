@@ -312,6 +312,7 @@ namespace bedrock.net
                     m_request.ContentType = CONTENT_TYPE;
                     m_request.Method = METHOD;
                     m_request.KeepAlive = true;
+                    m_request.ContentType = "text/xml; charset=utf-8";
                     //req.Timeout = m_wait * 1000;
 
                     m_request.CachePolicy =
@@ -358,30 +359,33 @@ namespace bedrock.net
             StringBuilder body = new StringBuilder();
             body.AppendFormat("<body xmlns='{0}' ", HTTPBIND_NS);
 
-            if (m_rid == -1)
+            lock (this)
             {
-                Random rnd = new Random();
-                m_rid = rnd.Next();
-
-                Uri uri = new Uri(m_url);
-
-                body.AppendFormat("content='{0}' xmlns:xmpp='urn:xmpp:xbosh'",
-                    CONTENT_TYPE);
-                body.AppendFormat(" to='{0}' wait='{1}' hold='{2}'",
-                    uri.Host, m_wait, m_hold);
-                body.Append(" xml:lang='en' xmpp:version='1.0'");
-            }
-            else
-            {
-                m_rid++;
-
-                if (m_sid != null)
+                if (m_rid == -1)
                 {
-                    body.AppendFormat(" sid='{0}'", m_sid);
-                }
-            }
-            body.AppendFormat(" rid='{0}'", m_rid);
+                    Random rnd = new Random();
+                    m_rid = rnd.Next();
+                    Console.WriteLine("new RID: {0}", m_rid);
 
+                    Uri uri = new Uri(m_url);
+
+                    body.AppendFormat("content='{0}' xmlns:xmpp='urn:xmpp:xbosh'",
+                        CONTENT_TYPE);
+                    body.AppendFormat(" to='{0}' wait='{1}' hold='{2}'",
+                        uri.Host, m_wait, m_hold);
+                    body.Append(" xml:lang='en' xmpp:version='1.0'");
+                }
+                else
+                {
+                    m_rid++;
+
+                    if (m_sid != null)
+                    {
+                        body.AppendFormat(" sid='{0}'", m_sid);
+                    }
+                }
+                body.AppendFormat(" rid='{0}'", m_rid);
+            }
             if (m_terminate)
             {
                 body.Append(" type='terminate' ");
@@ -528,6 +532,7 @@ namespace bedrock.net
                             jabber.protocol.stream.Stream stream =
                                 new jabber.protocol.stream.Stream(new XmlDocument(), NS);
                             stream.Version = "1.0";
+                            stream.ID = bodyElement.GetAttribute("authid");
 
                             buf = new WriteBuf(stream.StartTag());
                             if (!m_listener.OnRead(this, buf.buf, 0, buf.len))

@@ -98,9 +98,9 @@ namespace jabber.connection
                 host = to;
 
             bool ssl = (bool)m_listener[Options.SSL];
-            string url = (string)m_listener[Options.POLL_URL];
+            //string url = (string)m_listener[Options.POLL_URL];
 
-            ((IHttpSocket)m_sock).URL = ((ssl)?"https://":"http://") + host + ":" + port.ToString() + "/" + url;
+            ((IHttpSocket)m_sock).URL = (string)m_listener[Options.POLL_URL];
 
             Address addr = new Address(host, port);
             m_sock.Connect(addr, (string)m_listener[Options.SERVER_ID]);
