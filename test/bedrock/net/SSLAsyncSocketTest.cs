@@ -119,11 +119,11 @@ namespace test.bedrock.net
             }
             Assert.IsTrue(c2.HasPrivateKey);
             Assert.IsNotNull(c2.PrivateKey);
-            Assert.IsInstanceOfType(typeof(X509Certificate2), c2);
+            Assert.AreEqual(typeof(X509Certificate2), c2.GetType());
 
             cert = store.Certificates.Find(X509FindType.FindByThumbprint, c2.GetCertHashString(), false);
             c2 = cert[0];
-            Assert.IsInstanceOfType(typeof(X509Certificate2), c2);
+            Assert.AreEqual(typeof(X509Certificate2), c2.GetType());
             Assert.IsTrue(c2.HasPrivateKey);
             Assert.IsNotNull(c2.PrivateKey);
             store.Close();
