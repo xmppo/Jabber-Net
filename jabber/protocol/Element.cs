@@ -23,6 +23,13 @@ using bedrock.util;
 
 namespace jabber.protocol
 {
+    public class DashAttribute : Attribute
+    {
+        public DashAttribute()
+        {
+        }
+    }
+
     /// <summary>
     /// An XmlElement with type-safe accessors.  This class is not much use by itself,
     /// but provides a number of utility functions for its descendants.
@@ -453,6 +460,11 @@ namespace jabber.protocol
             string a = this.GetAttribute(name);
             if ((a == null) || (a.Length == 0))
                 return (T)(object)(-1);
+            
+            object[] o = typeof(T).GetCustomAttributes(typeof(DashAttribute), true);
+            if (o.Length > 0)
+                a = a.Replace("-", "_");
+            
             try
             {
                 return (T)Enum.Parse(typeof(T), a, true);
@@ -461,7 +473,6 @@ namespace jabber.protocol
             {
                 return (T)(object)(-1);
             }
-
         }
 
         /// <summary>
@@ -475,6 +486,11 @@ namespace jabber.protocol
             string a = this.GetAttribute(name);
             if ((a == null) || (a.Length == 0))
                 return -1;
+            
+            object[] o = enumType.GetCustomAttributes(typeof(DashAttribute), true);
+            if (o.Length > 0)
+                a = a.Replace("-", "_");
+            
             try
             {
                 return Enum.Parse(enumType, a, true);
@@ -494,12 +510,25 @@ namespace jabber.protocol
         /// <param name="value"></param>
         protected void SetEnumAttr(string name, object value)
         {
-            Debug.Assert(value.GetType().IsSubclassOf(typeof(Enum)));
+            if (value == null)
+            {
+                RemoveAttribute("name");
+                return;
+            }
+            Type t = value.GetType();
+            Debug.Assert(t.IsSubclassOf(typeof(Enum)));
             if ((int)value == -1)
                 // Yes, this is safe if the attribute doesn't exist.
                 RemoveAttribute(name);
             else
-                SetAttribute(name, value.ToString());
+            {
+                string a = value.ToString();
+                object[] o = t.GetCustomAttributes(typeof(DashAttribute), true);
+                if (o.Length > 0)
+                    a = a.Replace("_", "-");
+
+                SetAttribute(name, a);
+            }
         }
 
         /// <summary>
@@ -542,6 +571,46 @@ namespace jabber.protocol
                 SetAttribute(name, val.ToString());
         }
 
+        /// <summary>
+        /// Get the value of a given attribute, as an unsigned long.  Returns -1L for
+        /// most errors.   TODO: should this throw exceptions?
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        protected long GetLongAttr(string name)
+        {
+            string a = this.GetAttribute(name);
+            if ((a == null) || (a.Length == 0))
+                return -1L;
+            try
+            {
+                return long.Parse(a);
+            }
+            catch (FormatException)
+            {
+                return -1L;
+            }
+            catch (OverflowException)
+            {
+                return -1L;
+            }
+        }
+        /// <summary>
+        /// Set the value of a given attribute, as a long  Use -1L
+        /// to remove the attribute.
+        /// </summary>
+        /// <param name="name">The attribute name</param>
+        /// <param name="val">The integer to set</param>
+        /// <returns></returns>
+        protected void SetLongAttr(string name, long val)
+        {
+            if (val == -1L)
+                // testing shows this is safe for non-existing attributes.
+                RemoveAttribute(name);
+            else
+                SetAttribute(name, val.ToString());
+        }
+        
         /// <summary>
         /// Get an attribute cast to DateTime, using the DateTime profile
         /// of XEP-82.
