@@ -336,6 +336,7 @@ namespace jabber.client
             if (IsAuthenticated)
             {
                 Presence p = new Presence(Document);
+                p.Type = PresenceType.unavailable;
                 p.Status = "offline";
                 Write(p);
             }
