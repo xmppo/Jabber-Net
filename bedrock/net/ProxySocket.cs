@@ -104,6 +104,9 @@ namespace bedrock.net
             set { m_password = value; }
         }
 
+        /// <summary>
+        /// Are we currently connected?
+        /// </summary>
         public override bool Connected
         {
             get { return false; }
