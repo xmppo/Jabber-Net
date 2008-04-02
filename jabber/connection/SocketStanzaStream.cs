@@ -367,7 +367,10 @@ namespace jabber.connection
         /// <param name="elem">XML stanza to write.</param>
         public override void Write(XmlElement elem)
         {
-            Write(elem.OuterXml);
+            if (m_sock is IElementSocket)
+                ((IElementSocket)m_sock).Write(elem);
+            else
+                Write(elem.OuterXml);
         }
 
         /// <summary>
