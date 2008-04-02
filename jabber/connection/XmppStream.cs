@@ -988,6 +988,10 @@ namespace jabber.connection
             {
                 m_stanzas.Close(doStream);
             }
+            else
+            {
+                FireOnError(new InvalidOperationException("Cannot close a socket before it is open"));
+            }
         }
 
         /// <summary>
