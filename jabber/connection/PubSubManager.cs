@@ -90,6 +90,12 @@ namespace jabber.connection
         #endregion
 
         /// <summary>
+        /// Notifies the client that an error occurred.  If this is set, it will be copied to
+        /// each node that is created by the manager.
+        /// </summary>
+        public event bedrock.ExceptionHandler OnError;
+
+        /// <summary>
         /// Subscribes to a publish-subscribe node.
         /// </summary>
         /// <param name="service">Component that handles PubSub requests.</param>
@@ -108,6 +114,7 @@ namespace jabber.connection
                 return n;
             n = new PubSubNode(Stream, service, node, maxItems);
             m_nodes[jn] = n;
+            n.OnError += OnError;
             return n;
         }
 
@@ -141,6 +148,59 @@ namespace jabber.connection
             psNode.OnError += errorHandler;
 
             psNode.Delete();
+        }
+
+        /// <summary>
+        /// Get the default configuration of the node.
+        /// </summary>
+        /// <param name="service">JID of the pub/sub service</param>
+        /// <param name="callback">Callback.  Must not be null.  Will not be called back 
+        /// if there is an error, but instead OnError will be called.</param>
+        /// <param name="state">State information to be passed back to callback</param>
+        public void GetDefaults(JID service, IqCB callback, object state)
+        {
+            OwnerPubSubCommandIQ<OwnerDefault> iq = new OwnerPubSubCommandIQ<OwnerDefault>(m_stream.Document);
+            iq.To = service;
+            iq.Type = IQType.get;
+            m_stream.Tracker.BeginIQ(iq, OnDefaults, new IQTracker.TrackerData(callback, state));
+        }
+
+        private void OnDefaults(object sender, IQ iq, object data)
+        {
+            if (iq == null)
+            {
+                if (OnError != null)
+                    OnError(this, new PubSubException(Op.DEFAULTS, "IQ timeout", null));
+                return;
+            }
+
+            if (iq.Type != IQType.result)
+            {
+                string msg = string.Format("Error configuring pubsub node: {0}", iq.Error.Condition);
+                Debug.WriteLine(msg);
+
+                if (OnError != null)
+                    OnError(this, new PubSubException(Op.DEFAULTS, msg, iq));
+                return;
+            }
+            PubSubOwner ow = iq.Query as PubSubOwner;
+            if (ow == null)
+            {
+                if (OnError != null)
+                    OnError(this, new PubSubException(Op.DEFAULTS, "Invalid protocol", iq));
+                return;
+            }
+
+            OwnerDefault conf = ow.Command as OwnerDefault;
+            if (conf == null)
+            {
+                if (OnError != null)
+                    OnError(this, new PubSubException(Op.DEFAULTS, "Invalid protocol", iq));
+                return;
+            }
+
+            IQTracker.TrackerData td = data as IQTracker.TrackerData;
+            td.Call(this, iq);
         }
     }
 
@@ -208,7 +268,7 @@ namespace jabber.connection
                 throw new ArgumentException("Must be an XmlElement", "value");
             string id = item.ID;
             int i;
-            if (id == "")
+            if (id == null)
             {
                 if (Count == Capacity)
                 {
@@ -299,6 +359,18 @@ namespace jabber.connection
         /// Publishes an item to a node
         /// </summary>
         PUBLISH_ITEM,
+        /// <summary>
+        /// Configure a node
+        /// </summary>
+        CONFIGURE,
+        /// <summary>
+        /// Purge all items from a node.
+        /// </summary>
+        PURGE,
+        /// <summary>
+        /// Configuration defaults
+        /// </summary>
+        DEFAULTS
     }
 
     /// <summary>
@@ -399,6 +471,7 @@ namespace jabber.connection
                 throw new ArgumentException("must not be empty", "node");
 
             m_stream = stream;
+            m_stream.OnProtocol += m_stream_OnProtocol;
             m_jid = jid;
             m_node = node;
             m_items = new ItemList(this, maxItems);
@@ -630,7 +703,6 @@ namespace jabber.connection
 
         private PubSubIQ createCommand(PubSubCommandType type)
         {
-            m_stream.OnProtocol += m_stream_OnProtocol;
             PubSubIQ iq = new PubSubIQ(m_stream.Document, type, m_node);
             iq.To = m_jid;
             iq.Type = IQType.set;
@@ -795,7 +867,7 @@ namespace jabber.connection
             if (evt == null)
                 return;
 
-            Items items = evt.Items;
+            EventItems items = evt.GetChildElement<EventItems>();
             if (items == null)
                 return;
             if (items.Node != m_node)
@@ -839,7 +911,10 @@ namespace jabber.connection
         /// </summary>
         public void Delete()
         {
-            PubSubIQ iq = createCommand(PubSubCommandType.delete);
+            OwnerPubSubCommandIQ<OwnerDelete> iq = new OwnerPubSubCommandIQ<OwnerDelete>(m_stream.Document);
+            iq.To = m_jid;
+            iq.Type = IQType.set;
+            iq.Command.Node = m_node;
             m_stream.Tracker.BeginIQ(iq, GotDelete, null);
         }
 
@@ -878,6 +953,28 @@ namespace jabber.connection
         }
 
         /// <summary>
+        /// Delete all items from a node at once.
+        /// </summary>
+        public void Purge()
+        {
+            OwnerPubSubCommandIQ<OwnerPurge> iq = new OwnerPubSubCommandIQ<OwnerPurge>(m_stream.Document);
+            iq.To = m_jid;
+            iq.Type = IQType.set;
+            iq.Command.Node = m_node;
+            m_stream.Tracker.BeginIQ(iq, GotPurge, null);
+
+        }
+
+        private void GotPurge(object sender, IQ iq, object data)
+        {
+            if (iq.Type != IQType.result)
+            {
+                FireError(Op.PURGE, "Purge failed", iq);
+                return;
+            }
+        }
+
+        /// <summary>
         /// Publishes an item to the node.
         /// </summary>
         /// <param name="id">If null, the server will assign an item ID.</param>
@@ -905,6 +1002,59 @@ namespace jabber.connection
                     OnError(this, new PubSubException(Op.PUBLISH_ITEM, msg, iq));
                 return;
             }
+        }
+
+        /// <summary>
+        /// Request configuration form as the owner
+        /// </summary>
+        /// <param name="callback">Callback.  Must not be null.  Will not be called back 
+        /// if there is an error, but instead OnError will be called.</param>
+        /// <param name="state">State information to be passed back to callback</param>
+        public void Configure(IqCB callback, object state)
+        {
+            OwnerPubSubCommandIQ<OwnerConfigure> iq = new OwnerPubSubCommandIQ<OwnerConfigure>(m_stream.Document);
+            iq.To = m_jid;
+            iq.Type = IQType.get;
+            iq.Command.Node = m_node;
+            m_stream.Tracker.BeginIQ(iq, OnConfigure, new IQTracker.TrackerData(callback, state));
+        }
+
+        private void OnConfigure(object sender, IQ iq, object data)
+        {
+            if (iq == null)
+            {
+                if (OnError != null)
+                    OnError(this, new PubSubException(Op.CONFIGURE, "IQ timeout", null));
+                return;
+            }
+
+            if (iq.Type != IQType.result)
+            {
+                string msg = string.Format("Error configuring pubsub node: {0}", iq.Error.Condition);
+                Debug.WriteLine(msg);
+
+                if (OnError != null)
+                    OnError(this, new PubSubException(Op.CONFIGURE, msg, iq));
+                return;
+            }
+            PubSubOwner ow = iq.Query as PubSubOwner;
+            if (ow == null)
+            {
+                if (OnError != null)
+                    OnError(this, new PubSubException(Op.CONFIGURE, "Invalid protocol", iq));
+                return;
+            }
+
+            OwnerConfigure conf = ow.Command as OwnerConfigure;
+            if (conf == null)
+            {
+                if (OnError != null)
+                    OnError(this, new PubSubException(Op.CONFIGURE, "Invalid protocol", iq));
+                return;
+            }
+
+            IQTracker.TrackerData td = data as IQTracker.TrackerData;
+            td.Call(this, iq);
         }
 
         #region IEnumerable Members

@@ -23,8 +23,14 @@ using bedrock.util;
 
 namespace jabber.protocol
 {
+    /// <summary>
+    /// An enum that should translate "_" into "-" for use externally.
+    /// </summary>
     public class DashAttribute : Attribute
     {
+        /// <summary>
+        /// This is just a flag attribute.
+        /// </summary>
         public DashAttribute()
         {
         }

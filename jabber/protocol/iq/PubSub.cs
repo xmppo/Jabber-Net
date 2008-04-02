@@ -59,7 +59,33 @@ namespace jabber.protocol.iq
         /// <summary>
         /// Delete a node. See: http://www.xmpp.org/extensions/xep-0060.html#owner-delete
         /// </summary>
-        delete
+        delete,
+
+        /// <summary>
+        /// Collection modification
+        /// </summary>
+        collection,
+        /// <summary>
+        /// Node configuration change
+        /// </summary>
+        configuration,
+        /// <summary>
+        /// All items purged
+        /// </summary>
+        purge,
+        /// <summary>
+        /// A new subscription
+        /// </summary>
+        subscription,
+
+        /// <summary>
+        /// Owner configuring the node
+        /// </summary>
+        configure,
+        /// <summary>
+        /// Owner-level defaults, in a "default" element.  "default" is a C# keyword, though.
+        /// </summary>
+        defaults
     }
 
     /// <summary>
@@ -111,9 +137,6 @@ namespace jabber.protocol.iq
                 break;
             case PubSubCommandType.unsubscribe:
                 cmd = new Unsubscribe(doc);
-                break;
-            case PubSubCommandType.delete:
-                cmd = new Delete(doc);
                 break;
             default:
                 throw new ArgumentException("Command not understood: " + command.ToString(), "command");
@@ -211,18 +234,6 @@ namespace jabber.protocol.iq
         }
     }
 
-    internal class Delete : PubSubCommand
-    {
-        public Delete(XmlDocument doc) : base("delete", URI.PUBSUB, doc)
-        {
-        }
-
-        public override PubSubCommandType CommandType
-        {
-            get { return PubSubCommandType.delete; }
-        }
-    }
-
     /// <summary>
     /// Publish/Subscribe.  See XEP-60: http://www.xmpp.org/extensions/xep-0060.html
     /// </summary>
@@ -275,6 +286,18 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
+        /// Create for outbound, in the namespace of the parent element,
+        /// then attach to the parent element.
+        /// </summary>
+        /// <param name="elementName">The name of the element to create</param>
+        /// <param name="parent">The parent element</param>
+        public PubSubCommand(string elementName, XmlElement parent)
+            : base(elementName, parent.NamespaceURI, parent.OwnerDocument)
+        {
+            parent.AppendChild(this);
+        }
+
+        /// <summary>
         /// Create a pubsub command.  Should not be called directly.
         /// </summary>
         /// <param name="prefix"></param>
@@ -290,8 +313,8 @@ namespace jabber.protocol.iq
         /// </summary>
         public string Node
         {
-            get { return GetAttribute("node"); }
-            set { SetAttribute("node", value); }
+            get { return GetAttr("node"); }
+            set { SetAttr("node", value); }
         }
 
         /// <summary>
@@ -406,6 +429,17 @@ namespace jabber.protocol.iq
         /// <param name="doc"></param>
         public Affiliation(XmlDocument doc)
             : base("affiliation", URI.PUBSUB, doc)
+        {
+        }
+
+        /// <summary>
+        /// Create a new instance for output, specifying the namespace.  This 
+        /// exists for things in pubsub#owner.
+        /// </summary>
+        /// <param name="doc"></param>
+        /// <param name="namespaceURI"></param>
+        public Affiliation(XmlDocument doc, string namespaceURI)
+            : base("affiliation", namespaceURI, doc)
         {
         }
 
@@ -540,7 +574,7 @@ namespace jabber.protocol.iq
     /// <summary>
     /// Configuring a pubsub node.  If the default is desired, it will be empty.  Otherwise it will contain an x:data.
     /// </summary>
-    public class Configure : Element
+    public class Configure : PubSubCommand
     {
         /// <summary>
         ///
@@ -559,6 +593,14 @@ namespace jabber.protocol.iq
         public Configure(string prefix, XmlQualifiedName qname, XmlDocument doc)
             : base(prefix, qname, doc)
         {
+        }
+
+        /// <summary>
+        /// What type of command?
+        /// </summary>
+        public override PubSubCommandType CommandType
+        {
+            get { return PubSubCommandType.configuration; }
         }
 
         /// <summary>
@@ -627,7 +669,6 @@ namespace jabber.protocol.iq
         /// <returns></returns>
         public PubSubItem[] GetItems()
         {
-            // Might be PUBSUB or PUBSUB_EVENT
             return GetElements<PubSubItem>().ToArray();
         }
 
@@ -647,6 +688,7 @@ namespace jabber.protocol.iq
 
     /// <summary>
     /// Retrieve the items for a node. See http://www.xmpp.org/extensions/xep-0060.html#subscriber-retrieve
+    /// Note: this same type is used for event notifications, in the pubsub#event namespace
     /// </summary>
     [SVN(@"$Id$")]
     public class Items : PubSubItemCommand
@@ -696,20 +738,6 @@ namespace jabber.protocol.iq
             get { return GetIntAttr("max_items"); }
             set { SetIntAttr("max_items", value); }
         }
-
-        /// <summary>
-        /// Get a list of id's of deleted items.
-        /// </summary>
-        /// <returns></returns>
-        public string[] GetRetractions()
-        {
-            TypedElementList<Retract> nl = GetElements<Retract>();
-            string[] ids = new string[nl.Count];
-            int i = 0;
-            foreach (PubSubItem item in nl)
-                ids[i++] = item.ID;
-            return ids;
-        }
     }
 
 
@@ -729,6 +757,17 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
+        /// Create a new instance for output, specifying the namespace.  This 
+        /// exists for things in pubsub#event.
+        /// </summary>
+        /// <param name="doc"></param>
+        /// <param name="namespaceURI"></param>
+        public PubSubItem(XmlDocument doc, string namespaceURI)
+            : base("item", namespaceURI, doc)
+        {
+        }
+
+        /// <summary>
         ///
         /// </summary>
         /// <param name="prefix"></param>
@@ -737,6 +776,15 @@ namespace jabber.protocol.iq
         public PubSubItem(string prefix, XmlQualifiedName qname, XmlDocument doc)
             : base(prefix, qname, doc)
         {
+        }
+
+        /// <summary>
+        /// The node of the published item, when doing hierachical subscribes
+        /// </summary>
+        public string Node
+        {
+            get { return GetAttr("node"); }
+            set { SetAttr("node", value); }
         }
 
         /// <summary>
@@ -1031,6 +1079,17 @@ namespace jabber.protocol.iq
         }
 
         /// <summary>
+        /// Create a new instance for output, specifying the namespace.  This 
+        /// exists for things in pubsub#owner.
+        /// </summary>
+        /// <param name="doc"></param>
+        /// <param name="namespaceURI"></param>
+        public Subscriptions(XmlDocument doc, string namespaceURI)
+            : base("subscriptions", namespaceURI, doc)
+        {
+        }
+
+        /// <summary>
         ///
         /// </summary>
         /// <param name="prefix"></param>
@@ -1211,37 +1270,5 @@ namespace jabber.protocol.iq
         }
     }
 
-    /// <summary>
-    /// A pubsub event notifification.
-    /// </summary>
-    [SVN(@"$Id$")]
-    public class PubSubEvent : Element
-    {
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="doc"></param>
-        public PubSubEvent(XmlDocument doc) : base("event", URI.PUBSUB_EVENT, doc)
-        {
-        }
 
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="prefix"></param>
-        /// <param name="qname"></param>
-        /// <param name="doc"></param>
-        public PubSubEvent(string prefix, XmlQualifiedName qname, XmlDocument doc)
-            : base(prefix, qname, doc)
-        {
-        }
-
-        /// <summary>
-        /// Get the items for this event.
-        /// </summary>
-        public Items Items
-        {
-            get { return GetChildElement<Items>(); }
-        }
-    }
 }

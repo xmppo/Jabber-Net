@@ -318,6 +318,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="jabber\protocol\iq\PubSub.cs" />
+    <Compile Include="jabber\protocol\iq\PubSubErrors.cs" />
+    <Compile Include="jabber\protocol\iq\PubSubEvent.cs" />
+    <Compile Include="jabber\protocol\iq\PubSubOwner.cs" />
     <Compile Include="jabber\protocol\iq\Register.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -352,6 +355,7 @@
     <Compile Include="jabber\protocol\stream\Features.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="jabber\protocol\stream\HttpBind.cs" />
     <Compile Include="jabber\protocol\stream\SASL.cs">
       <SubType>Code</SubType>
     </Compile>

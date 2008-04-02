@@ -229,6 +229,12 @@ namespace jabber.protocol
         public const string PUBSUB = "http://jabber.org/protocol/pubsub";
 
         /// <summary>
+        /// Publish/Subscribe, Owner use cases
+        /// See XEP-0060 (http://www.xmpp.org/extensions/xep-0060.html)
+        /// </summary>
+        public const string PUBSUB_OWNER = "http://jabber.org/protocol/pubsub#owner";
+
+        /// <summary>
         /// Pub/Sub node configuration.
         /// See XEP-0060 (http://www.xmpp.org/extensions/xep-0060.html)
         /// </summary>
@@ -239,6 +245,12 @@ namespace jabber.protocol
         /// See XEP-0060 (http://www.xmpp.org/extensions/xep-0060.html)
         /// </summary>
         public const string PUBSUB_EVENT = "http://jabber.org/protocol/pubsub#event";
+
+        /// <summary>
+        /// Publish/Subscribe Errors
+        /// See XEP-0060 (http://www.xmpp.org/extensions/xep-0060.html)
+        /// </summary>
+        public const string PUBSUB_ERRORS = "http://jabber.org/protocol/pubsub#errors";
 
     }
 }

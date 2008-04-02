@@ -45,7 +45,7 @@ namespace jabber.protocol
         /// <param name="localName"></param>
         /// <param name="doc"></param>
         public Packet(string localName, XmlDocument doc) :
-            base(localName, doc)
+            base(localName, URI.CLIENT, doc)
         {
         }
 

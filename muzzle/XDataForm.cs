@@ -24,6 +24,7 @@ using jabber.protocol;
 using jabber.protocol.x;
 using jabber.protocol.client;
 using Msg = jabber.protocol.client.Message;
+using System.Diagnostics;
 
 namespace muzzle
 {
@@ -34,8 +35,9 @@ namespace muzzle
     {
         private static Regex WS = new Regex("\\s+", RegexOptions.Compiled);
 
-        private Packet      m_parent   = null;
-        private FormField[] m_fields   = null;
+        private Packet      m_stanza = null;
+        private Element     m_parent = null;
+        private FormField[] m_fields = null;
         private XDataType   m_type;
 
         private System.Windows.Forms.Panel panel1;
@@ -64,21 +66,38 @@ namespace muzzle
         /// Create an x:data form from the given message stanza.
         /// </summary>
         /// <param name="parent">Original stanza</param>
-        public XDataForm(jabber.protocol.client.Message parent) : this(parent["x", URI.XDATA] as jabber.protocol.x.Data)
+        public XDataForm(jabber.protocol.client.Message parent) : this(FindData(parent) as jabber.protocol.x.Data)
         {
-            m_parent = (Packet) parent.CloneNode(true);
-            m_parent.RemoveChild(m_parent["x", URI.XDATA]);
+            m_stanza = (Packet) parent.CloneNode(true);
+            Data d = FindData(m_stanza);
+            Debug.Assert(d != null);
+            m_parent = (Element)d.ParentNode;
+            m_parent.RemoveChild(d);
         }
 
         /// <summary>
         /// Create an x:data form from the given iq stanza.
         /// </summary>
         /// <param name="parent">Original stanza</param>
-        public XDataForm(jabber.protocol.client.IQ parent) : this(parent.Query["x", URI.XDATA] as jabber.protocol.x.Data)
+        public XDataForm(jabber.protocol.client.IQ parent) : this(FindData(parent))
         {
-            m_parent = (Packet) parent.CloneNode(true);
-            XmlElement q = m_parent.GetFirstChildElement();
-            q.RemoveChild(q["x", URI.XDATA]);
+            m_stanza = (Packet) parent.CloneNode(true);
+            Data d = FindData(m_stanza);
+            m_parent = (Element)d.ParentNode;
+            m_parent.RemoveChild(d);
+        }
+
+        private static jabber.protocol.x.Data FindData(Element el)
+        {
+            if (el is Data)
+                return (Data)el;
+            foreach (Element c in el.GetElements<Element>())
+            {
+                Data d = FindData(c);
+                if (d != null)
+                    return d;
+            }
+            return null;
         }
 
         /// <summary>
@@ -301,32 +320,22 @@ namespace muzzle
         /// <returns>A stanza ready to be sent back to the originator.</returns>
         public Packet GetResponse()
         {
-            if (m_parent == null)
+            if (m_stanza == null)
                 throw new ArgumentException("parent was null", "parent");
             if (m_type != XDataType.form)
                 throw new InvalidOperationException("Can only generate a submit response for x:data of type 'form'");
 
-            m_parent.Swap();
+            m_stanza.Swap();
 
-            Data x = new Data(m_parent.OwnerDocument);
-            if (m_parent is Msg)
-            {
-                m_parent.AppendChild(x);
-            }
-            else if (m_parent is IQ)
-            {
-                m_parent.GetFirstChildElement().AppendChild(x);
-                m_parent.SetAttribute("type", "set");
-            }
-            else
-            {
-                throw new ArgumentException("unknown parent type", "parent");
-            }
+            Data x = new Data(m_stanza.OwnerDocument);
+            m_parent.AppendChild(x);
+            if (m_stanza is IQ)
+                m_stanza.SetAttribute("type", "set");
 
             if (this.DialogResult == DialogResult.Cancel)
             {
                 x.Type = XDataType.cancel;
-                return m_parent;
+                return m_stanza;
             }
 
             x.Type = XDataType.submit;
@@ -335,7 +344,7 @@ namespace muzzle
                 f.AppendField(x);
             }
 
-            return m_parent;
+            return m_stanza;
         }
 
         /// <summary>

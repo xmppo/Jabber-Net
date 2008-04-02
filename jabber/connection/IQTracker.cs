@@ -31,6 +31,7 @@ namespace jabber.connection
     /// <summary>
     /// Informs the client that an IQ has timed out.
     /// </summary>
+    [SVN(@"$Id$")]
     public class IQTimeoutException : Exception
     {
         /// <summary>
@@ -46,6 +47,7 @@ namespace jabber.connection
     ///<summary>
     /// Represents the interface for tracking an IQ packet.
     ///</summary>
+    [SVN(@"$Id$")]
     public interface IIQTracker
     {
         ///<summary>
@@ -105,8 +107,7 @@ namespace jabber.connection
                 m_pending.Remove(id);
             }
 
-            // don't need to check for null.  protected by check below.
-            td.cb(this, iq, td.data);
+            td.Call(this, iq);
         }
 
         /// <summary>
@@ -120,9 +121,7 @@ namespace jabber.connection
             // if no callback, ignore response.
             if (cb != null)
             {
-                TrackerData td = new TrackerData();
-                td.cb   = cb;
-                td.data = cbArg;
+                TrackerData td = new TrackerData(cb, cbArg);
                 lock (m_pending)
                 {
                     m_pending[iq.ID] = td;
@@ -139,10 +138,8 @@ namespace jabber.connection
         /// <returns>An IQ in reponse to the sent IQ.</returns>
         public IQ IQ(IQ iqp, int millisecondsTimeout)
         {
-            TrackerData td = new TrackerData();
-            td.cb   = new IqCB(SignalEvent);
             AutoResetEvent are = new AutoResetEvent(false);
-            td.data = are;
+            TrackerData td = new TrackerData(SignalEvent, are);
             string id = iqp.ID;
             lock (m_pending)
             {
@@ -169,10 +166,36 @@ namespace jabber.connection
             ((AutoResetEvent)data).Set();
         }
 
-        private class TrackerData
+        /// <summary>
+        /// Internal state for a pending tracker request
+        /// </summary>
+        [SVN(@"$Id$")]
+        public class TrackerData
         {
-            public IqCB  cb;
-            public object data;
+            private IqCB  cb;
+            private object data;
+
+            /// <summary>
+            /// Create a tracker data instance.
+            /// </summary>
+            /// <param name="callback"></param>
+            /// <param name="state"></param>
+            public TrackerData(IqCB callback, object state)
+            {
+                Debug.Assert(callback != null);
+                cb = callback;
+                data = state;
+            }
+
+            /// <summary>
+            /// Call the callback.
+            /// </summary>
+            /// <param name="sender"></param>
+            /// <param name="iq"></param>
+            public void Call(object sender, IQ iq)
+            {
+                cb(sender, iq, data);
+            }
         }
     }
 }
