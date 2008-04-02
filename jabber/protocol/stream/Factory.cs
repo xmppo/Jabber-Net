@@ -51,6 +51,8 @@ namespace jabber.protocol.stream
 
             new QnameType("session",    URI.SESSION,   typeof(Session)),
             new QnameType("bind",       URI.BIND,      typeof(Bind)),
+
+            new QnameType("body",       URI.HTTP_BIND, typeof(Body)),
         };
         QnameType[] IPacketTypes.Types { get { return s_qnt; } }
     }

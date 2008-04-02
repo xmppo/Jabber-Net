@@ -435,7 +435,7 @@ namespace jabber.protocol.stream
         
         /// <summary>
         /// This attribute specifies the highest version of the BOSH protocol 
-        /// that the client supports. The numbering scheme is "<major>.<minor>" 
+        /// that the client supports. The numbering scheme is "major.minor" 
         /// (where the minor number MAY be incremented higher than a single digit, 
         /// so it MUST be treated as a separate integer). Note: The 'ver' attribute 
         /// should not be confused with the version of any protocol being transported.
@@ -452,10 +452,10 @@ namespace jabber.protocol.stream
         /// This enables the client to limit the delay before it discovers any network failure, 
         /// and to prevent its HTTP/TCP connection from expiring due to inactivity.
         /// </summary>
-        public string Wait
+        public int Wait
         {
-            get { return GetAttr("wait"); }
-            set { SetAttr("wait", value); }
+            get { return GetIntAttr("wait"); }
+            set { SetIntAttr("wait", value); }
         }
    }
 }
