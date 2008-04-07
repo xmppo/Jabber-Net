@@ -18,7 +18,14 @@ using System.Net;
 using System.Net.Sockets;
 using System.ComponentModel;
 using System.Globalization;
+
 using bedrock.util;
+
+#if !__MonoCS__
+using netlib.Dns;
+using netlib.Dns.Records;
+#endif
+
 namespace bedrock.net
 {
     /// <summary>
@@ -63,6 +70,130 @@ namespace bedrock.net
         {
             this.IP = ip;
         }
+
+
+#if !__MonoCS__
+        private static SRVRecord PickSRV(SRVRecord[] srv)
+        {
+            // TODO: keep track of connection failures, and try the next priority down.
+
+            if ((srv == null) || (srv.Length == 0))
+                throw new ArgumentException();
+            if (srv.Length == 1)
+                return srv[0];
+
+            // randomize order.  One might wish that the OS would have done this for us.
+            // cf. Bob Schriter's Grandfather.
+            Random rnd = new Random();
+            byte[] keys = new byte[srv.Length];
+            rnd.NextBytes(keys);
+            Array.Sort(keys, srv);  // Permute me, Knuth!  (I wish I had a good anagram for that)
+
+            int minpri = int.MaxValue;
+            foreach (SRVRecord rec in srv)
+            {
+                if (rec.Priority < minpri)
+                {
+                    minpri = rec.Priority;
+                }
+            }
+
+            int weight = 0;
+            foreach (SRVRecord rec in srv)
+            {
+                if (rec.Priority == minpri)
+                {
+                    weight += rec.Weight;
+                }
+            }
+
+            int pos = rnd.Next(weight);
+            weight = 0;
+            foreach (SRVRecord rec in srv)
+            {
+                if (rec.Priority == minpri)
+                {
+                    weight += rec.Weight;
+                    if ((pos < weight) || (weight == 0))
+                    {
+                        return rec;
+                    }
+                }
+            }
+
+            throw new DnsException("No matching SRV");
+        }
+
+        /// <summary>
+        /// Look up a DNS SRV record, returning the best host and port number to connect to.
+        /// </summary>
+        /// <param name="prefix">The SRV prefix, ending with a dot.  Example: "_xmpp-client._tcp."</param>
+        /// <param name="domain">The domain to check</param>
+        /// <param name="host">The host name to connect to</param>
+        /// <param name="port">The port number to connect to</param>
+        public static void LookupSRV(string prefix, string domain, ref string host, ref int port)
+        {
+            if (prefix == null)
+                throw new ArgumentNullException("prefix");
+            if (domain == null)
+                throw new ArgumentNullException("domain");
+            if (!prefix.EndsWith("."))
+                throw new ArgumentOutOfRangeException("Prefix must end in '.'", "prefix");
+            try
+            {
+                DnsRequest request = new DnsRequest(prefix + domain);
+                DnsResponse response = request.GetResponse(DnsRecordType.SRV);
+
+                SRVRecord record = PickSRV(response.SRVRecords);
+                host = record.NameNext;
+                port = record.Port;
+                Debug.WriteLine(string.Format("SRV found: {0}:{1}", host, port));
+            }
+            catch
+            {
+                host = domain;
+            }
+        }
+
+        /// <summary>
+        /// Look up a DNS TXT record.
+        /// </summary>
+        /// <param name="prefix">The prefix, ending in '.'.  Example: "_xmppconnect."</param>
+        /// <param name="domain">The domain to search</param>
+        /// <param name="attribute">The attribute name to look for.  Example: "_xmpp-client-xbosh"</param>
+        /// <returns></returns>
+        public static string LookupTXT(string prefix, string domain, string attribute)
+        {
+            if (prefix == null)
+                throw new ArgumentNullException("prefix");
+            if (domain == null)
+                throw new ArgumentNullException("domain");
+            if (attribute == null)
+                throw new ArgumentNullException("attribute");
+            if (!prefix.EndsWith("."))
+                throw new ArgumentOutOfRangeException("Prefix must end in '.'", "prefix");
+
+            try
+            {
+                DnsRequest request = new DnsRequest(prefix + domain);
+                DnsResponse response = request.GetResponse(DnsRecordType.TEXT);
+                string attr = attribute + "=";
+                foreach (TXTRecord txt in response.TXTRecords)
+                {
+                    if (txt.StringArray.StartsWith(attr))
+                    {
+                        Debug.WriteLine(string.Format("TXT found: {0}", txt.StringArray));
+                        return txt.StringArray.Substring(attr.Length);
+                    }
+                }
+            }
+            catch
+            {
+            }
+            return null;
+        }
+#endif
+
         /// <summary>
         /// The host name.  When set, checks for dotted-quad representation, to avoid
         /// async DNS call when possible.

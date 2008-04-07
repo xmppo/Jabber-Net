@@ -20,11 +20,6 @@ using bedrock.net;
 using bedrock.util;
 using jabber.protocol;
 
-#if !__MonoCS__
-using netlib.Dns;
-using netlib.Dns.Records;
-#endif
-
 namespace jabber.connection
 {
     /// <summary>
@@ -145,77 +140,6 @@ namespace jabber.connection
 
         }
 
-#if !__MonoCS__
-        private static SRVRecord PickSRV(SRVRecord[] srv)
-        {
-            if ((srv == null) || (srv.Length == 0))
-                throw new ArgumentException();
-            if (srv.Length == 1)
-                return srv[0];
-
-            // randomize order.  One might wish that the OS would have done this for us.
-            // cf. Bob Schriter's Grandfather.
-            Random rnd = new Random();
-            byte[] keys = new byte[srv.Length];
-            rnd.NextBytes(keys);
-            Array.Sort(keys, srv);  // Permute me, Knuth!  (I wish I had a good anagram for that)
-
-            int minpri = int.MaxValue;
-            foreach (SRVRecord rec in srv)
-            {
-                if (rec.Priority < minpri)
-                {
-                    minpri = rec.Priority;
-                }
-            }
-
-            int weight = 0;
-            foreach (SRVRecord rec in srv)
-            {
-                if (rec.Priority == minpri)
-                {
-                    weight += rec.Weight;
-                }
-            }
-
-            int pos = rnd.Next(weight);
-            weight = 0;
-            foreach (SRVRecord rec in srv)
-            {
-                if (rec.Priority == minpri)
-                {
-                    weight += rec.Weight;
-                    if ((pos < weight) || (weight == 0))
-                    {
-                        return rec;
-                    }
-                }
-            }
-
-            throw new Exception();
-        }
-
-        private void LookupSRV(string domain, ref string host, ref int port)
-        {
-            try
-            {
-                DnsRequest request = new DnsRequest(m_listener[Options.SRV_PREFIX] + domain);
-                DnsResponse response = request.GetResponse(DnsRecordType.SRV);
-
-                SRVRecord record = PickSRV(response.SRVRecords);
-                host = record.NameNext;
-                port = record.Port;
-                Debug.WriteLine(string.Format("SRV found: {0}:{1}", host, port));
-            }
-            catch
-            {
-                host = domain;
-            }
-        }
-
-#endif
-
-
         /// <summary>
         /// Connects to the XMPP server.
         /// </summary>
@@ -296,7 +220,7 @@ namespace jabber.connection
 #else
                 try
                 {
-                    LookupSRV(to, ref host, ref port);
+                    Address.LookupSRV((string)m_listener[Options.SRV_PREFIX], to, ref host, ref port);
                 }
                 catch
                 {
