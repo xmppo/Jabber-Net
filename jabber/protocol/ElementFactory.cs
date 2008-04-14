@@ -53,6 +53,26 @@ namespace jabber.protocol
             this.NS    = ns;
             this.ElementType = typ;
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == (object)this)
+                return true;
+            QnameType other = obj as QnameType;
+            if (other == null)
+                return false;
+            return (other.Name == Name) && (other.NS == NS);
+        }
+
+        public override int GetHashCode()
+        {
+            return ToString().GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return NS + "|" + Name;
+        }
     }
 
     /// <summary>
@@ -113,7 +133,7 @@ namespace jabber.protocol
         {
             Debug.Assert(ci != null);
             if (m_types.Contains(qname))
-                Debug.WriteLine("Warning: overriding existing packet factory");
+                Debug.WriteLine("Warning: overriding existing packet factory: " + qname.ToString());
             m_types[qname] = ci;
         }
         /// <summary>
