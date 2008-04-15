@@ -1681,6 +1681,23 @@ namespace netlib.Dns
         }
 
         /// <summary>
+        /// Gets all the <see cref="TXTRecord"/> for the queried domain.
+        /// </summary>
+        /// <remarks>
+        /// Uses the <see cref="GetRecords"/> method to retrieve an
+        /// array of <see cref="TXTRecord"/>s representing all the Address
+        /// records for the domain.
+        /// </remarks>
+        /// <value>An array of <see cref="SRVRecord"/> objects.</value>
+        public TXTRecord[] TXTRecords
+        {
+            get
+            {
+                ArrayList arr = GetRecords(DnsRecordType.TEXT);
+                return (TXTRecord[])arr.ToArray(typeof(TXTRecord));
+            }
+        }
+        /// <summary>
         /// Gets all the <see cref="MXRecord"/> for the queried domain.
         /// </summary>
         /// <remarks>
