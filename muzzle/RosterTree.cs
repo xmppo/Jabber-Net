@@ -603,10 +603,10 @@ namespace muzzle
             {
                 m_item = ri;
                 m_nick = ri.Nickname;
-                if (m_nick == "")
+                if ((m_nick == null) || (m_nick == ""))
                 {
                     m_nick = ri.JID.User;
-                    if (m_nick == null)
+                    if ((m_nick == null) || (m_nick == ""))
                         m_nick = ri.JID.ToString(); // punt.
                 }
                 this.Text = m_nick;
