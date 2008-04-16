@@ -103,8 +103,10 @@ namespace jabber.connection
             string url = (string)m_listener[Options.POLL_URL];
             if ((url == null) || (url == ""))
             {
+#if !__MonoCS__
                 url = Address.LookupTXT("_xmppconnect.", to, "_xmpp-client-xbosh");
                 if (url == null)
+#endif
                     throw new ArgumentNullException("URL not found in DNS, and not specified", "URL");
             }
             ((IHttpSocket)m_sock).URL = url;

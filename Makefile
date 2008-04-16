@@ -37,6 +37,7 @@ $(BASEDIR)/bedrock/net/Address.cs \
 $(BASEDIR)/bedrock/net/AsyncSocket.cs \
 $(BASEDIR)/bedrock/net/BaseSocket.cs \
 $(BASEDIR)/bedrock/net/Exceptions.cs \
+$(BASEDIR)/bedrock/net/HttpSocket.cs \
 $(BASEDIR)/bedrock/net/IHttpSocket.cs \
 $(BASEDIR)/bedrock/net/XEP25Socket.cs \
 $(BASEDIR)/bedrock/net/XEP124Socket.cs \
@@ -97,6 +98,9 @@ $(BASEDIR)/jabber/protocol/iq/Last.cs \
 $(BASEDIR)/jabber/protocol/iq/MUC.cs \
 $(BASEDIR)/jabber/protocol/iq/OOB.cs \
 $(BASEDIR)/jabber/protocol/iq/PubSub.cs \
+$(BASEDIR)/jabber/protocol/iq/PubSubErrors.cs \
+$(BASEDIR)/jabber/protocol/iq/PubSubEvent.cs \
+$(BASEDIR)/jabber/protocol/iq/PubSubOwner.cs \
 $(BASEDIR)/jabber/protocol/iq/Register.cs \
 $(BASEDIR)/jabber/protocol/iq/Roster.cs \
 $(BASEDIR)/jabber/protocol/iq/Time.cs \
@@ -107,6 +111,7 @@ $(BASEDIR)/jabber/protocol/stream/Compression.cs \
 $(BASEDIR)/jabber/protocol/stream/Error.cs \
 $(BASEDIR)/jabber/protocol/stream/Factory.cs \
 $(BASEDIR)/jabber/protocol/stream/Features.cs \
+$(BASEDIR)/jabber/protocol/stream/HttpBind.cs \
 $(BASEDIR)/jabber/protocol/stream/SASL.cs \
 $(BASEDIR)/jabber/protocol/stream/Session.cs \
 $(BASEDIR)/jabber/protocol/stream/StartTLS.cs \
@@ -171,6 +176,8 @@ SUBDIRS = ConsoleClient test
 .PHONY: all clean $(SUBDIRS)
 
 all:  $(DLL) $(SUBDIRS)
+
+dll : $(DLL)
 
 $(DLL): $(SOURCES)
 	-mkdir -p bin/debug
