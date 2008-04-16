@@ -54,6 +54,11 @@ namespace jabber.protocol
             this.ElementType = typ;
         }
 
+        /// <summary>
+        /// Is this the same qname by element name and namespace?
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public override bool Equals(object obj)
         {
             if (obj == (object)this)
@@ -64,11 +69,19 @@ namespace jabber.protocol
             return (other.Name == Name) && (other.NS == NS);
         }
 
+        /// <summary>
+        /// Get a hash over the name and namespace.
+        /// </summary>
+        /// <returns></returns>
         public override int GetHashCode()
         {
             return ToString().GetHashCode();
         }
 
+        /// <summary>
+        /// Namespace|Name
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return NS + "|" + Name;
