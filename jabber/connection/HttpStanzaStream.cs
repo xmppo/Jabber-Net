@@ -30,6 +30,9 @@ namespace jabber.connection
         private AsynchElementStream m_elements = null;
         private BaseSocket m_sock = null;
 
+        /// <summary>
+        /// The underlying socket
+        /// </summary>
         protected BaseSocket Socket
         {
             get { return m_sock; }
@@ -97,15 +100,23 @@ namespace jabber.connection
             if ((host == null) || (host == ""))
                 host = to;
 
-            bool ssl = (bool)m_listener[Options.SSL];
-            //string url = (string)m_listener[Options.POLL_URL];
+            string url = (string)m_listener[Options.POLL_URL];
+            if ((url == null) || (url == ""))
+            {
+                url = Address.LookupTXT("_xmppconnect.", to, "_xmpp-client-xbosh");
+                if (url == null)
+                    throw new ArgumentNullException("URL not found in DNS, and not specified", "URL");
+            }
+            ((IHttpSocket)m_sock).URL = url;
 
-            ((IHttpSocket)m_sock).URL = (string)m_listener[Options.POLL_URL];
-
-            Address addr = new Address(host, port);
-            m_sock.Connect(addr, (string)m_listener[Options.SERVER_ID]);
+            //Address addr = new Address(host, port);
+            m_sock.Connect(null, (string)m_listener[Options.SERVER_ID]);
         }
 
+        /// <summary>
+        /// Create a socket of the correct type.
+        /// </summary>
+        /// <returns></returns>
         protected abstract BaseSocket CreateSocket();
 
         /// <summary>
@@ -131,7 +142,6 @@ namespace jabber.connection
         public override void Write(string str)
         {
             //int keep = (int)m_listener[Options.KEEP_ALIVE];
-            //m_timer.Change(keep, keep);
             m_sock.Write(ENC.GetBytes(str));
         }
 
@@ -150,7 +160,10 @@ namespace jabber.connection
         /// <param name="elem">The stanza to write out.</param>
         public override void Write(XmlElement elem)
         {
-            Write(elem.OuterXml);
+            if (m_sock is IElementSocket)
+                ((IElementSocket)m_sock).Write(elem);
+            else
+                Write(elem.OuterXml);
         }
 
         /// <summary>
@@ -159,7 +172,7 @@ namespace jabber.connection
         /// <param name="clean">Sends the stream:stream close packet if true.</param>
         public override void Close(bool clean)
         {
-            // Note: socket should still be connected, excepts for races.  Revist.
+            // TODO: socket should still be connected, excepts for races.  Revist.
             if (clean)
                 Write("</stream:stream>");
             m_sock.Close();
@@ -204,7 +217,6 @@ namespace jabber.connection
         private void m_elements_OnError(object sender, Exception ex)
         {
             // XML parse error.
-            //m_timer.Change(Timeout.Infinite, Timeout.Infinite);
             m_listener.Errored(ex);
         }
         #endregion
@@ -247,11 +259,8 @@ namespace jabber.connection
 
         void ISocketEventListener.OnClose(BaseSocket sock)
         {
-            //System.Windows.Forms.Application.DoEvents();
-            //System.Threading.Thread.Sleep(1000);
             m_listener[Options.REMOTE_CERTIFICATE] = null;
             m_elements = null;
-            //m_timer.Change(Timeout.Infinite, Timeout.Infinite);
             m_listener.Closed();
         }
 
@@ -259,14 +268,13 @@ namespace jabber.connection
         {
             m_listener[Options.REMOTE_CERTIFICATE] = null;
             m_elements = null;
-            //m_timer.Change(Timeout.Infinite, Timeout.Infinite);
             m_listener.Errored(ex);
         }
 
         bool ISocketEventListener.OnRead(BaseSocket sock, byte[] buf, int offset, int length)
         {
             m_listener.BytesRead(buf, offset, length);
-            m_elements.Push(buf, 0, length);
+            m_elements.Push(buf, offset, length);
             return true;
         }
 

@@ -37,6 +37,10 @@ namespace jabber.connection
         {
         }
 
+        /// <summary>
+        /// Create a XEP25Socket.
+        /// </summary>
+        /// <returns></returns>
         protected override BaseSocket CreateSocket()
         {
             return new XEP25Socket(this);

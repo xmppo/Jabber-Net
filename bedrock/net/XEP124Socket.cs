@@ -25,8 +25,12 @@ using System.Threading;
 using System.Xml;
 using bedrock.util;
 
+using jabber.protocol.stream;
+using jabber.connection;
+using jabber.protocol;
+
 namespace bedrock.net
-{
+{    
     /// <summary>
     /// XEP-0124 Error conditions
     /// </summary>
@@ -48,35 +52,56 @@ namespace bedrock.net
     /// TODO: get rid of the PipeStream, if possible.
     /// </summary>
     [SVN(@"$Id$")]
-    public class XEP124Socket : BaseSocket, IHttpSocket
+    public class XEP124Socket : BaseSocket, IHttpSocket, IElementSocket, ISocketEventListener
     {
+        /// <summary>
+        /// Text encoding.  Always UTF-8 for XMPP.
+        /// </summary>
+        protected static readonly Encoding ENC = Encoding.UTF8;
+
         private const string CONTENT_TYPE = "text/xml; charset=utf-8";
         private const string METHOD = "POST";
 
-        private readonly RandomNumberGenerator s_rng = RNGCryptoServiceProvider.Create();
-
-        private readonly Queue<WriteBuf> m_writeQ = new Queue<WriteBuf>();
         private readonly Object m_lock = new Object();
-        private Thread m_thread = null;
+
         private readonly int m_hold = 5;
         private int m_wait = 60;
-        private int m_requests = 0;
         private int m_polling = 10;
         private int m_maxPoll = 30;
         private int m_minPoll = 1;
-        private string m_url = null;
-        private string[] m_keys = null;
-        private int m_numKeys = 512;
-        private int m_curKey = 511;
+        private Uri m_uri = null;
         private bool m_running = false;
-        private Int64 m_rid = -1;
+        private long m_rid = -1L;
         private string m_sid = null;
-        private WebProxy m_proxy = null;
         private X509Certificate m_remote_cert = null;
         private bool m_StartStream = false;
         private string m_NS;
-        private string m_authid;
-        private int m_inactivity;
+        private string m_lang = System.Globalization.CultureInfo.CurrentCulture.IetfLanguageTag;
+        private XmlDocument m_doc = new XmlDocument();
+
+        private Uri m_proxyURI = null;
+        private NetworkCredential m_proxyCredentials = null;
+
+        private HttpSocket m_sockA = null;
+        private HttpSocket m_sockB = null;
+        private HttpSocket m_lastSock = null;
+
+        /// <summary>
+        /// Create an instance
+        /// </summary>
+        /// <param name="listener"></param>
+        public XEP124Socket(ISocketEventListener listener) : base(listener)
+        {
+        }
+
+        /// <summary>
+        /// The xml:lang for all requests.  Defaults to the current culture's language tag.
+        /// </summary>
+        public string Lang
+        {
+            get { return m_lang; }
+            set { m_lang = value; }
+        }
 
         ///<summary>
         /// Informs the socket that we are dealing with the start tag.
@@ -94,18 +119,6 @@ namespace bedrock.net
         {
             get { return m_NS; }
             set { m_NS = value; }
-        }
-
-        /// <summary>
-        /// Create an instance
-        /// </summary>
-        /// <param name="listener"></param>
-        public XEP124Socket(ISocketEventListener listener)
-        {
-            Debug.Assert(listener != null);
-            m_listener = listener;
-
-            ServicePointManager.DefaultConnectionLimit = 10;
         }
 
         /// <summary>
@@ -131,28 +144,26 @@ namespace bedrock.net
         /// </summary>
         public string URL
         {
-            get { return m_url; }
-            set { m_url = value; }
+            get { return m_uri.ToString(); }
+            set { m_uri = new Uri(value); }
         }
 
         /// <summary>
-        /// The number of keys to generate at a time.  Higher numbers use more memory,
-        /// and more CPU to generate keys, less often.  Defaults to 512.
+        /// The URI of the HTTP proxy.  Note: HTTPS connections through a proxy are not yet supported.
         /// </summary>
-        public int NumKeys
+        public Uri ProxyURI
         {
-            get { return m_numKeys; }
-            set { m_numKeys = value; }
+            get { return m_proxyURI; }
+            set { m_proxyURI = value; }
         }
 
         /// <summary>
-        /// Proxy information.  My guess is if you leave this null, the IE proxy
-        /// info may be used.  Not tested.
+        /// Username/password for the proxy.
         /// </summary>
-        public WebProxy Proxy
+        public NetworkCredential ProxyCredentials
         {
-            get { return m_proxy; }
-            set { m_proxy = value; }
+            get { return m_proxyCredentials; }
+            set { m_proxyCredentials = value; }
         }
 
         /// <summary>
@@ -162,7 +173,25 @@ namespace bedrock.net
         /// <param name="backlog"></param>
         public override void Accept(Address addr, int backlog)
         {
-            throw new NotImplementedException("HTTP binding server not implemented yet");
+            throw new NotImplementedException("HTTP binding server not implemented");
+        }
+
+        private HttpSocket GetSocket()
+        {
+            lock (m_lock)
+            {
+                if (m_lastSock == m_sockA)
+                {
+                    Debug.WriteLine("B");
+                    m_lastSock = m_sockB;
+                }
+                else
+                {
+                    Debug.WriteLine("A");
+                    m_lastSock = m_sockA;
+                }
+                return m_lastSock;
+            }
         }
 
         /// <summary>
@@ -170,52 +199,46 @@ namespace bedrock.net
         /// </summary>
         public override void Close()
         {
+            Body body = CreateOpenBodyTag();
+            body.Type = BodyType.terminate;
+
+            byte[] buf = ENC.GetBytes(body.OuterXml);
+            //m_listener.OnWrite(this, buf, 0, buf.Length);
+
+            GetSocket().Execute(METHOD, m_uri, buf, 0, buf.Length, CONTENT_TYPE);
+            
+            m_sockA.EnqueueClose();
+            m_sockB.EnqueueClose();
+
             lock (m_lock)
             {
-                m_terminate = true;
-                Monitor.Pulse(m_lock);
+                m_running = false;
+                m_sockA = m_sockB = m_lastSock = null;
             }
             m_listener.OnClose(this);
-        }
-
-        private Stream m_stream;
-        private int m_connected = 0;
-        private bool m_terminate = false;
-
-        private bool WebConnected
-        {
-            get { return m_connected > 0; }
-            set
-            {
-                if (value)
-                    m_connected++;
-                else
-                    m_connected--;
-
-                if (m_connected < 0)
-                    m_connected = 0;
-            }
         }
 
         /// <summary>
         /// Start polling
         /// </summary>
-        /// <param name="addr"></param>
+        /// <param name="addr">Ignored in this case.  Set URL.</param>
         public override void Connect(Address addr)
         {
-            Debug.Assert(m_url != null);
-            m_curKey = -1;
+            Debug.Assert(m_uri != null);
 
-            if (m_thread == null)
-            {
-                m_running = true;
-                m_thread = new Thread(PollThread);
-                m_thread.IsBackground = false;
-                m_thread.Name = "XEP124 Thread";
-                m_thread.Start();
-            }
+            m_rid = -1L;
+            m_lastSock = null;
+            m_running = false;
 
-            m_listener.OnConnect(this);
+            // Create new ones each time, in case the URL has changed or something.
+            m_sockA = new HttpSocket(this);
+            m_sockB = new HttpSocket(this);
+
+            m_sockA.ProxyURI = m_sockB.ProxyURI = m_proxyURI;
+            m_sockA.ProxyCredentials = m_sockB.ProxyCredentials = m_proxyCredentials;
+
+            m_sockA.Connect(m_uri);
+            m_sockB.Connect(m_uri);
         }
 
         /// <summary>
@@ -231,11 +254,17 @@ namespace bedrock.net
         /// </summary>
         public override void RequestRead()
         {
-            if (!m_running)
-                throw new InvalidOperationException("Call Connect() first");
-        }
+            Debug.WriteLine("RequestRead");
 
-#if !NO_SSL
+            // shutdown race, likely.
+            if (!m_running)
+                //throw new InvalidOperationException("Call Connect() first");
+                return;
+            if (m_sockA.IsPending || m_sockB.IsPending)
+                return;
+
+            Write(null);
+        }
 
         /// <summary>
         /// Start TLS over this connection.  Not implemented.
@@ -244,7 +273,6 @@ namespace bedrock.net
         {
             throw new NotImplementedException();
         }
-#endif
 
         /// <summary>
         /// Start compression over this connection.  Not implemented.
@@ -262,180 +290,56 @@ namespace bedrock.net
         /// <param name="len"></param>
         public override void Write(byte[] buf, int offset, int len)
         {
-            lock (m_lock)
-            {
-                m_writeQ.Enqueue(new WriteBuf(buf, offset, len));
-                Monitor.PulseAll(m_lock);
-            }
+            if (buf != null)
+                throw new NotImplementedException("Call Write(XmlElement)");
+
+            StartStream = true;
+            byte[] p = ENC.GetBytes("Psuedo-stream body");
+            m_listener.OnWrite(this, p, 0, p.Length);
         }
-
-        private void GenKeys()
-        {
-            byte[] seed = new byte[32];
-            SHA1 sha = SHA1.Create();
-            Encoding ENC = Encoding.ASCII; // All US-ASCII.  No need for UTF8.
-            string prev;
-
-            // K(n, seed) = Base64Encode(SHA1(K(n - 1, seed))), for n > 0
-            // K(0, seed) = seed, which is client-determined
-
-            s_rng.GetBytes(seed);
-            prev = Convert.ToBase64String(seed);
-            m_keys = new string[m_numKeys];
-            for (int i = 0; i < m_numKeys; i++)
-            {
-                m_keys[i] = Convert.ToBase64String(sha.ComputeHash(ENC.GetBytes(prev)));
-                prev = m_keys[i];
-            }
-            m_curKey = m_numKeys - 1;
-        }
-
-        private const string HTTPBIND_NS = "http://jabber.org/protocol/httpbind";
 
         /// <summary>
-        /// Keep polling until
+        /// Write an XML element to the socket.
+        /// In this case, the element is queued, so that the write thread can pick it up.
         /// </summary>
-        private void PollThread()
+        /// <param name="elem"></param>
+        public void Write(XmlElement elem)
         {
-            lock (m_lock)
-            {
-                while (m_running)
-                {
-                    while (m_writeQ.Count == 0 && WebConnected && !m_terminate)
-                    {
-                        Monitor.Wait(m_lock, m_polling * 1000);
-                    }
+            Body body = CreateOpenBodyTag();
+            if (elem != null)
+                body.AddChild(elem);
 
-                    string body = CreateOpenBodyTag();
+            byte[] buf = ENC.GetBytes(body.OuterXml);
+            //m_listener.OnWrite(this, buf, 0, buf.Length);
 
-                    HttpWebRequest m_request = (HttpWebRequest)WebRequest.Create(m_url);
-                    m_request.ContentType = CONTENT_TYPE;
-                    m_request.Method = METHOD;
-                    m_request.KeepAlive = true;
-                    m_request.ContentType = "text/xml; charset=utf-8";
-                    //req.Timeout = m_wait * 1000;
-
-                    m_request.CachePolicy =
-                        new System.Net.Cache.HttpRequestCachePolicy(
-                            System.Net.Cache.HttpRequestCacheLevel.NoCacheNoStore);
-
-                    if (m_proxy != null)
-                        m_request.Proxy = m_proxy;
-
-                    using (m_stream = m_request.GetRequestStream())
-                    {
-                        WriteBuf b = new WriteBuf(body);
-
-                        try
-                        {
-                            m_stream.Write(b.buf, b.offset, b.len);
-                        }
-                        catch (WebException ex)
-                        {
-                            Debug.WriteLine(ex);
-                            Debug.WriteLine(ex.Status);
-                            throw;
-                        }
-
-                        foreach (WriteBuf buf in m_writeQ)
-                        {
-                            m_stream.Write(buf.buf, buf.offset, buf.len);
-                            m_listener.OnWrite(this, buf.buf, buf.offset, buf.len);
-                        }
-                        m_writeQ.Clear();
-
-                        b = new WriteBuf("</body>");
-                        m_stream.Write(b.buf, b.offset, b.len);
-                    }
-
-                    WebConnected = true;
-                    ThreadPool.QueueUserWorkItem(GetResponse, m_request);
-                }
-            }
+            GetSocket().Execute(METHOD, m_uri, buf, 0, buf.Length, CONTENT_TYPE);
         }
 
-        private string CreateOpenBodyTag()
+        private Body CreateOpenBodyTag()
         {
-            StringBuilder body = new StringBuilder();
-            body.AppendFormat("<body xmlns='{0}' ", HTTPBIND_NS);
+            Body body = new Body(m_doc);
 
-            lock (this)
+            long r = -1L;
+            if (m_rid == -1L)
             {
-                if (m_rid == -1)
-                {
-                    Random rnd = new Random();
-                    m_rid = rnd.Next();
-                    Console.WriteLine("new RID: {0}", m_rid);
-
-                    Uri uri = new Uri(m_url);
-
-                    body.AppendFormat("content='{0}' xmlns:xmpp='urn:xmpp:xbosh'",
-                        CONTENT_TYPE);
-                    body.AppendFormat(" to='{0}' wait='{1}' hold='{2}'",
-                        uri.Host, m_wait, m_hold);
-                    body.Append(" xml:lang='en' xmpp:version='1.0'");
-                }
-                else
-                {
-                    m_rid++;
-
-                    if (m_sid != null)
-                    {
-                        body.AppendFormat(" sid='{0}'", m_sid);
-                    }
-                }
-                body.AppendFormat(" rid='{0}'", m_rid);
+                Random rnd = new Random();
+                r = m_rid = (long)rnd.Next();
+                body.Content = CONTENT_TYPE;
+                
+                body.To = m_hostid;
+                body.Wait = m_wait;
+                body.Hold = m_hold;
+                body.Lang = m_lang;
             }
-            if (m_terminate)
+            else
             {
-                body.Append(" type='terminate' ");
-                m_running = false;
+                r = Interlocked.Increment(ref m_rid);
+                
+                body.SID = m_sid;
             }
-
-            body.Append(">");
-
-            if (m_terminate)
-            {
-                // Add the unavailable presence.
-                body.Append("<presence type='unavailable' xmlns='jabber:client'/>");
-            }
-
-            return body.ToString();
-        }
-
-        private void GetResponse(object parameter)
-        {
-            try
-            {
-                HttpWebRequest m_request = parameter as HttpWebRequest;
-
-                //if (m_request != null)
-                //    m_request.BeginGetResponse(GotResponse, m_request);
-
-                if (m_request != null)
-                {
-                    using (HttpWebResponse response =
-                        (HttpWebResponse)m_request.GetResponse())
-                    {
-                        ReadData(response);
-                    }
-                }
-            }
-            catch (WebException ex)
-            {
-                if (ex.Status != WebExceptionStatus.KeepAliveFailure)
-                    m_listener.OnError(this, ex);
-            }
-            finally
-            {
-                lock (m_lock)
-                {
-                    WebConnected = false;
-
-                    if (!WebConnected)
-                        Monitor.Pulse(m_lock);
-                }
-            }
+            body.RID = r;
+            
+            return body;
         }
 
         /// <summary>
@@ -444,125 +348,7 @@ namespace bedrock.net
         /// <returns></returns>
         public override string ToString()
         {
-            return "XEP-0124 socket: " + m_url;
-        }
-
-
-        private void GotResponse(IAsyncResult result)
-        {
-            HttpWebRequest request = (HttpWebRequest)result.AsyncState;
-
-            try
-            {
-                using (HttpWebResponse response =
-                    (HttpWebResponse)request.EndGetResponse(result))
-                {
-                    ReadData(response);
-                }
-            }
-            catch (WebException ex)
-            {
-                if (ex.Status != WebExceptionStatus.KeepAliveFailure)
-                    m_listener.OnError(this, ex);
-
-                return;
-            }
-        }
-
-        private void ReadData(HttpWebResponse response)
-        {
-            try
-            {
-                if (response.StatusCode != HttpStatusCode.OK)
-                {
-                    m_listener.OnError(this, new WebException("Invalid HTTP return code: " + response.StatusCode));
-                    return;
-                }
-
-                using (StreamReader reader = new StreamReader(response.GetResponseStream()))
-                {
-                    string xml = reader.ReadToEnd();
-                    reader.Close();
-
-                    XmlDocument doc = new XmlDocument();
-                    doc.LoadXml(xml);
-
-                    XmlElement bodyElement = null;
-                    if (doc.ChildNodes.Count == 1)
-                    {
-                        bodyElement = doc.ChildNodes[0] as XmlElement;
-                    }
-
-                    if (bodyElement == null)
-                    {
-                        return;
-                    }
-
-                    string content = "";
-                    foreach (XmlElement node in bodyElement.ChildNodes)
-                    {
-                        content += node.OuterXml;
-                    }
-                    content = content.Replace("xmlns=\"" + HTTPBIND_NS + "\"", "");
-
-                    if (doc.DocumentElement.Attributes["sid"] != null)
-                        m_sid = doc.DocumentElement.Attributes["sid"].Value;
-
-                    if (doc.DocumentElement.Attributes["authid"] != null)
-                        m_authid = doc.DocumentElement.Attributes["authid"].Value;
-
-                    if (doc.DocumentElement.Attributes["requests"] != null)
-                        m_requests = int.Parse(doc.DocumentElement.Attributes["requests"].Value);
-
-                    if (doc.DocumentElement.Attributes["wait"] != null)
-                        m_wait = int.Parse(doc.DocumentElement.Attributes["wait"].Value);
-
-                    if (doc.DocumentElement.Attributes["polling"] != null)
-                        m_polling = int.Parse(doc.DocumentElement.Attributes["polling"].Value);
-
-                    if (doc.DocumentElement.Attributes["inactivity"] != null)
-                        m_inactivity = int.Parse(doc.DocumentElement.Attributes["inactivity"].Value);
-
-                    if (content != "")
-                    {
-                        WriteBuf buf;
-                        if (StartStream)
-                        {
-                            StartStream = false;
-                            jabber.protocol.stream.Stream stream =
-                                new jabber.protocol.stream.Stream(new XmlDocument(), NS);
-                            stream.Version = "1.0";
-                            stream.ID = bodyElement.GetAttribute("authid");
-
-                            buf = new WriteBuf(stream.StartTag());
-                            if (!m_listener.OnRead(this, buf.buf, 0, buf.len))
-                            {
-                                Close();
-                                return;
-                            }
-                        }
-
-                        buf = new WriteBuf(content);
-
-                        if (!m_listener.OnRead(this, buf.buf, 0, buf.len))
-                        {
-                            Close();
-                            return;
-                        }
-                    }
-                    //buf = new WriteBuf(xml);
-                    //if (!m_listener.OnRead(this, buf.buf, 0, buf.len))
-                    //{
-                    //    Close();
-                    //    return;
-                    //}
-                }
-            }
-            catch (WebException ex)
-            {
-                if (ex.Status != WebExceptionStatus.KeepAliveFailure)
-                    m_listener.OnError(this, ex);
-            }
+            return "XEP-0124 socket: " + m_uri.ToString();
         }
 
         /// <summary>
@@ -583,36 +369,167 @@ namespace bedrock.net
             set { m_remote_cert = value; }
         }
 
-        private class WriteBuf
+        #region ISocketEventListener Members
+
+        void ISocketEventListener.OnInit(BaseSocket newSock)
         {
-            public readonly byte[] buf;
-            public readonly int offset;
-            public readonly int len;
-
-            public WriteBuf(byte[] buf, int offset, int len)
-            {
-                this.buf = buf;
-                this.offset = offset;
-                this.len = len;
-            }
-
-            public WriteBuf(string b)
-            {
-                buf = Encoding.UTF8.GetBytes(b);
-                offset = 0;
-                len = buf.Length;
-            }
-
-            public static WriteBuf operator +(WriteBuf a, WriteBuf b)
-            {
-                int size = a.len + b.len;
-
-                byte[] newArray = new byte[size];
-                Array.Copy(a.buf, a.offset, newArray, 0, a.len);
-                Array.Copy(b.buf, b.offset, newArray, a.len, b.len);
-
-                return new WriteBuf(newArray, 0, size);
-            }
+            m_listener.OnInit(newSock);
         }
+
+        ISocketEventListener ISocketEventListener.GetListener(BaseSocket newSock)
+        {
+            throw new Exception("The method or operation is not implemented.");
+        }
+
+        bool ISocketEventListener.OnAccept(BaseSocket newsocket)
+        {
+            throw new Exception("The method or operation is not implemented.");
+        }
+
+        void ISocketEventListener.OnConnect(BaseSocket sock)
+        {
+            lock (m_lock)
+            {
+                if (!m_running &&
+                    (m_sockA != null) && m_sockA.Connected &&
+                    (m_sockB != null) && m_sockB.Connected)
+                {
+                    m_running = true;
+                    m_lastSock = m_sockB;
+                    m_listener.OnConnect(this);
+                }
+            }            
+        }
+
+        void ISocketEventListener.OnClose(BaseSocket sock)
+        {
+            throw new Exception("The method or operation is not implemented.");
+        }
+
+        void ISocketEventListener.OnError(BaseSocket sock, Exception ex)
+        {
+            // shutdown race.
+            if (!m_running)
+                return;
+
+            m_listener.OnError(this, ex);
+        }
+
+        bool ISocketEventListener.OnRead(BaseSocket sock, byte[] buf, int offset, int length)
+        {
+            if (!m_running)
+            {
+                Debug.WriteLine("shutting down.  extra bytes received.");
+                return false;
+            }
+
+            // Parse out the first start tag or empty element, which will be
+            // <body/>.
+            xpnet.UTF8Encoding e = new xpnet.UTF8Encoding();
+            xpnet.ContentToken ct = new xpnet.ContentToken();
+            xpnet.TOK tok = e.tokenizeContent(buf, offset, offset + length, ct);
+
+            if ((tok != xpnet.TOK.START_TAG_WITH_ATTS) &&
+                (tok != xpnet.TOK.EMPTY_ELEMENT_WITH_ATTS))
+            {
+                m_listener.OnError(this, new ProtocolViolationException("Invalid HTTP binding XML.  Token type: " + tok.ToString()));
+                return false;
+            }
+
+            string name = ENC.GetString(buf,
+                                        offset + e.MinBytesPerChar,
+                                        ct.NameEnd - offset - e.MinBytesPerChar);
+            Debug.Assert(name == "body");
+            Body b = new Body(m_doc);
+            string val;
+            int start;
+            int end;
+            for (int i = 0; i < ct.getAttributeSpecifiedCount(); i++)
+            {
+                start = ct.getAttributeNameStart(i);
+                end = ct.getAttributeNameEnd(i);
+                name = ENC.GetString(buf, start, end - start);
+
+                start = ct.getAttributeValueStart(i);
+                end = ct.getAttributeValueEnd(i);
+                val = ENC.GetString(buf, start, end - start);
+
+                if (!name.StartsWith("xmlns"))
+                    b.SetAttribute(name, val);
+            }
+
+            if (b.SID != null)
+                m_sid = b.SID;
+
+            if (m_sid == null)
+            {
+                m_listener.OnError(this, new ProtocolViolationException("Invalid HTTP binding.  No SID."));
+                return false;
+            }
+
+            if (b.Wait != -1)
+                m_wait = b.Wait;
+
+            if (b.Polling != -1)
+                m_polling = b.Polling;
+
+            if (StartStream)
+            {
+                StartStream = false;
+                jabber.protocol.stream.Stream stream =
+                    new jabber.protocol.stream.Stream(m_doc, NS);
+                stream.Version = "1.0";
+                stream.ID = b.AuthID;
+
+                byte[] sbuf = ENC.GetBytes(stream.StartTag());
+                if (!m_listener.OnRead(this, sbuf, 0, sbuf.Length))
+                {
+                    Close();
+                    return false;
+                }
+            }
+
+            lock (m_lock)
+            {
+                if (!m_running)
+                    return false;
+                if (b.Type == BodyType.terminate)
+                {
+                    m_running = false;
+                    Error err = new Error(m_doc);
+                    err.AppendChild(m_doc.CreateElement(b.GetAttribute("condition"), URI.STREAM_ERROR));
+                    byte[] sbuf = ENC.GetBytes(err.OuterXml);
+                    m_listener.OnRead(this, sbuf, 0, sbuf.Length);
+                    sbuf = ENC.GetBytes("</stream:stream>");
+                    m_listener.OnRead(this, sbuf, 0, sbuf.Length);
+                    Close();
+                    return false;
+                }
+            }
+
+
+            if (tok == xpnet.TOK.START_TAG_WITH_ATTS)
+            {
+                // len(</body>) = 7
+                start = ct.TokenEnd;
+                if (m_listener.OnRead(this, buf, start, offset + length - start - 7))
+                    RequestRead();
+            }
+            else
+                RequestRead();
+            return true;
+        }
+
+        void ISocketEventListener.OnWrite(BaseSocket sock, byte[] buf, int offset, int length)
+        {
+            m_listener.OnWrite(this, buf, offset, length);
+        }
+
+        bool ISocketEventListener.OnInvalidCertificate(BaseSocket sock, X509Certificate certificate, X509Chain chain, System.Net.Security.SslPolicyErrors sslPolicyErrors)
+        {
+            return m_listener.OnInvalidCertificate(this, certificate, chain, sslPolicyErrors);
+        }
+
+        #endregion
     }
 }

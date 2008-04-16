@@ -154,6 +154,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="bedrock\net\Exceptions.cs" />
+    <Compile Include="bedrock\net\HttpSocket.cs" />
     <Compile Include="bedrock\net\IHttpSocket.cs" />
     <Compile Include="bedrock\net\ProxySocket.cs">
       <SubType>Code</SubType>

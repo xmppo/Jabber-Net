@@ -990,7 +990,8 @@ namespace jabber.connection
             }
             else
             {
-                FireOnError(new InvalidOperationException("Cannot close a socket before it is open"));
+                Debug.WriteLine("Cannot close a socket before it is open");
+                //FireOnError(new InvalidOperationException("Cannot close a socket before it is open"));
             }
         }
 

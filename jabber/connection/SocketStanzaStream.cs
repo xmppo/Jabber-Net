@@ -43,7 +43,7 @@ namespace jabber.connection
         /// <summary>
         /// HTTP CONNECT
         /// </summary>
-        CONNECT,
+        HTTP,
     }
 
 
@@ -162,7 +162,7 @@ namespace jabber.connection
                 proxy = new Socks5Proxy(this);
                 break;
 
-            case ProxyType.CONNECT:
+            case ProxyType.HTTP:
                 proxy = new ShttpProxy(this);
                 break;
 
@@ -423,7 +423,7 @@ namespace jabber.connection
             m_listener.BytesRead(buf, offset, length);
             try
             {
-                m_elements.Push(buf, 0, length);
+                m_elements.Push(buf, offset, length);
             }
             catch (Exception e)
             {
