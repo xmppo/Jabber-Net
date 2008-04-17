@@ -246,7 +246,7 @@ namespace jabber.connection
         /// <param name="jid">JID to use in the hash code.</param>
         /// <param name="node">Node to use in the hash code.</param>
         /// <returns>The hash code.</returns>
-        protected static string GetKey(string jid, string node)
+        internal static string GetKey(string jid, string node)
         {
             if ((node == null) || (node == ""))
             {
@@ -317,8 +317,6 @@ namespace jabber.connection
     [SVN(@"$Id$")]
     public class DiscoNode : JIDNode, IEnumerable
     {
-        private static Tree m_items = new Tree();
-
         /// <summary>
         /// Contains the children of this node.
         /// </summary>
@@ -584,51 +582,6 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Creates nodes and ensure that they are cached.
-        /// </summary>
-        /// <param name="jid">JID associated with DiscoNode.</param>
-        /// <param name="node">Node associated with DiscoNode.</param>
-        /// <returns>
-        /// If DiscoNode exists, returns the found node.
-        /// Otherwise it creates the node and return it.
-        /// </returns>
-        public static DiscoNode GetNode(JID jid, string node)
-        {
-            lock (m_items)
-            {
-                string key = GetKey(jid, node);
-                DiscoNode n = (DiscoNode)m_items[key];
-                if (n == null)
-                {
-                    n = new DiscoNode(jid, node);
-                    m_items.Add(key, n);
-                }
-                return n;
-            }
-        }
-
-        /// <summary>
-        /// Creates nodes where only the JID is specified.
-        /// </summary>
-        /// <param name="jid">JID associated with DiscoNode.</param>
-        /// <returns>
-        /// If DiscoNode exists, returns the found node.
-        /// Otherwise it creates the node and return it.
-        /// </returns>
-        public static DiscoNode GetNode(JID jid)
-        {
-            return GetNode(jid, null);
-        }
-
-        /// <summary>
-        /// Deletes the cache.
-        /// </summary>
-        public static void Clear()
-        {
-            m_items.Clear();
-        }
-
-        /// <summary>
         /// Determines if this node has the specified feature.
         /// </summary>
         /// <param name="URI">Feature to look for.</param>
@@ -761,9 +714,9 @@ namespace jabber.connection
             Identity = null;
         }
 
-        internal DiscoNode AddItem(DiscoItem di)
+        internal DiscoNode AddItem(DiscoManager manager, DiscoItem di)
         {
-            DiscoNode dn = GetNode(di.Jid, di.Node);
+            DiscoNode dn = manager.GetNode(di.Jid, di.Node);
             if ((di.Named != null) && (di.Named != ""))
                 dn.Name = di.Named;
             Children.Add(dn);
@@ -773,8 +726,9 @@ namespace jabber.connection
         /// <summary>
         /// Adds the given items to the cache.
         /// </summary>
+        /// <param name="manager">The DiscoManager used to create/cache nodes</param>
         /// <param name="items">Items to add.</param>
-        public void AddItems(DiscoItem[] items)
+        public void AddItems(DiscoManager manager, DiscoItem[] items)
         {
             if (Children == null)
                 Children = new Set();
@@ -783,7 +737,7 @@ namespace jabber.connection
             if (items != null)
             {
                 foreach (DiscoItem di in items)
-                    AddItem(di);
+                    AddItem(manager, di);
             }
 
             DoCallbacks(m_itemCallbacks);
@@ -829,15 +783,6 @@ namespace jabber.connection
             return iiq;
         }
 
-        /// <summary>
-        /// Gets all of the items.
-        /// </summary>
-        /// <returns>Tree enumerator to loop over.</returns>
-        public static IEnumerator EnumerateAll()
-        {
-            return m_items.GetEnumerator();
-        }
-
         #region IEnumerable Members
         /// <summary>
         /// Gets an enumerator across all items.
@@ -872,6 +817,7 @@ namespace jabber.connection
         /// </summary>
         private System.ComponentModel.Container components = null;
         private DiscoNode m_root = null;
+        private Tree m_items = new Tree();
 
         /// <summary>
         /// Creates a new DiscoManager and associates it with a parent container.
@@ -900,7 +846,74 @@ namespace jabber.connection
         /// </summary>
         public DiscoNode Root
         {
-            get { return m_root; }
+            get 
+            {
+                if (m_root != null)
+                    return m_root;
+                if (m_stream == null)
+                    return null;
+                // GetNode locks.
+                m_root = GetNode(m_stream.Server);
+                return m_root; 
+            }
+        }
+
+        /// <summary>
+        /// Creates nodes and ensure that they are cached.
+        /// </summary>
+        /// <param name="jid">JID associated with DiscoNode.</param>
+        /// <param name="node">Node associated with DiscoNode.</param>
+        /// <returns>
+        /// If DiscoNode exists, returns the found node.
+        /// Otherwise it creates the node and return it.
+        /// </returns>
+        public DiscoNode GetNode(JID jid, string node)
+        {
+            lock (m_items)
+            {
+                string key = DiscoNode.GetKey(jid, node);
+                DiscoNode n = (DiscoNode)m_items[key];
+                if (n == null)
+                {
+                    n = new DiscoNode(jid, node);
+                    m_items.Add(key, n);
+                }
+                return n;
+            }
+        }
+
+        /// <summary>
+        /// Creates nodes where only the JID is specified.
+        /// </summary>
+        /// <param name="jid">JID associated with DiscoNode.</param>
+        /// <returns>
+        /// If DiscoNode exists, returns the found node.
+        /// Otherwise it creates the node and return it.
+        /// </returns>
+        public DiscoNode GetNode(JID jid)
+        {
+            return GetNode(jid, null);
+        }
+
+        /// <summary>
+        /// Deletes the cache.
+        /// </summary>
+        public void Clear()
+        {
+            lock (m_items)
+            {
+                m_root = null;
+                m_items.Clear();
+            }
+        }
+
+        /// <summary>
+        /// Gets all of the cached nodes.
+        /// </summary>
+        /// <returns>Tree enumerator to loop over.</returns>
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return m_items.GetEnumerator();
         }
 
         private void DiscoManager_OnStreamChanged(object sender)
@@ -908,20 +921,25 @@ namespace jabber.connection
             if (m_stream == null)
                 return;
             m_stream.OnAuthenticate += new bedrock.ObjectHandler(m_client_OnAuthenticate);
+            m_stream.OnDisconnect += new bedrock.ObjectHandler(m_stream_OnDisconnect);
+            m_stream.OnError += new bedrock.ExceptionHandler(m_stream_OnError);
         }
 
         private void m_client_OnAuthenticate(object sender)
         {
-            if (m_root == null)
-                m_root = DiscoNode.GetNode(m_stream.Server);
-            RequestInfo(m_root);
+            RequestInfo(Root);
         }
 
-        private void GotDisconnect(object sender)
+        private void m_stream_OnDisconnect(object sender)
         {
-            m_root = null;
-            DiscoNode.Clear();
+            Clear();
         }
+
+        private void m_stream_OnError(object sender, Exception ex)
+        {
+            Clear();
+        }
+
 
         private void RequestInfo(DiscoNode node)
         {
@@ -1004,7 +1022,7 @@ namespace jabber.connection
             if (iq.Type != IQType.result)
             {
                 // protocol error
-                dn.AddItems(null);
+                dn.AddItems(this, null);
                 return;
             }
 
@@ -1012,11 +1030,11 @@ namespace jabber.connection
             if (items == null)
             {
                 // protocol error
-                dn.AddItems(null);
+                dn.AddItems(this, null);
                 return;
             }
 
-            dn.AddItems(items.GetItems());
+            dn.AddItems(this, items.GetItems());
 
             // automatically info everything we get an item for.
             foreach (DiscoNode n in dn.Children)
@@ -1035,14 +1053,14 @@ namespace jabber.connection
 
             if (iq.Type != IQType.result)
             {
-                dn.AddItems(null);
+                dn.AddItems(this, null);
                 return;
             }
 
             AgentsQuery aq = iq.Query as AgentsQuery;
             if (aq == null)
             {
-                dn.AddItems(null);
+                dn.AddItems(this, null);
                 return;
             }
 
@@ -1055,7 +1073,7 @@ namespace jabber.connection
                 di.Jid = agent.JID;
                 di.Named = agent.AgentName;
 
-                DiscoNode child = dn.AddItem(di);
+                DiscoNode child = dn.AddItem(this, di);
                 if (child.Features == null)
                     child.Features = new Set();
                 if (child.Identity == null)
@@ -1107,11 +1125,11 @@ namespace jabber.connection
                 {
                     child.Features.Add(ns.InnerText);
                 }
-                child.AddItems(null);
+                child.AddItems(this, null);
                 child.AddIdentities(null);
                 child.AddFeatures(null);
             }
-            dn.AddItems(null);
+            dn.AddItems(this, null);
             dn.AddIdentities(null);
             dn.AddFeatures(null);
         }
@@ -1127,10 +1145,28 @@ namespace jabber.connection
         public void BeginGetFeatures(DiscoNode node, DiscoNodeHandler handler, object state)
         {
             if (node == null)
-                node = m_root;
+                node = Root;
 
             if (node.AddFeatureCallback(this, handler, state))
                 RequestInfo(node);
+        }
+
+        /// <summary>
+        /// Retrieves the features associated with this node and
+        /// then calls back on the handler.
+        /// 
+        /// If caching is specified, items already in the cache call the handler
+        /// immediately.
+        /// </summary>
+        /// <param name="jid">JID to look for.</param>
+        /// <param name="node">Node to look for.</param>
+        /// <param name="handler">Callback to use afterwards.</param>
+        /// <param name="state">Context to pass back to caller when complete</param>
+        /// <param name="cache">Should caching be performed on this request?</param>
+        public void BeginGetFeatures(JID jid, string node, DiscoNodeHandler handler, object state, bool cache)
+        {
+            DiscoNode dn = cache ? GetNode(jid, node) : new DiscoNode(jid, node);
+            BeginGetFeatures(dn, handler, state);
         }
 
         /// <summary>
@@ -1144,7 +1180,7 @@ namespace jabber.connection
         /// <param name="state">Context to pass back to caller when complete</param>
         public void BeginGetFeatures(JID jid, string node, DiscoNodeHandler handler, object state)
         {
-            BeginGetFeatures(DiscoNode.GetNode(jid, node), handler, state);
+            BeginGetFeatures(GetNode(jid, node), handler, state);
         }
 
         /// <summary>
@@ -1159,10 +1195,28 @@ namespace jabber.connection
         public void BeginGetItems(DiscoNode node, DiscoNodeHandler handler, object state)
         {
             if (node == null)
-                node = m_root;
+                node = Root;
 
             if (node.AddItemsCallback(this, handler, state))
                 RequestItems(node);
+        }
+
+        /// <summary>
+        /// Retrieves the child items associated with this node,
+        /// and then calls back on the handler.
+        /// 
+        /// If caching is specified, items already in the cache call the handler
+        /// immediately.
+        /// </summary>
+        /// <param name="jid">JID of Service to query.</param>
+        /// <param name="node">Node on the service to interact with.</param>
+        /// <param name="handler">Callback that gets called with the items.</param>
+        /// <param name="state">Context to pass back to caller when complete</param>
+        /// <param name="cache">Should caching be performed on this request?</param>
+        public void BeginGetItems(JID jid, string node, DiscoNodeHandler handler, object state, bool cache)
+        {
+            DiscoNode dn = cache ? GetNode(jid, node) : new DiscoNode(jid, node);
+            BeginGetItems(dn, handler, state);
         }
 
         /// <summary>
@@ -1177,7 +1231,7 @@ namespace jabber.connection
         /// <param name="state">Context to pass back to caller when complete</param>
         public void BeginGetItems(JID jid, string node, DiscoNodeHandler handler, object state)
         {
-            BeginGetItems(DiscoNode.GetNode(jid, node), handler, state);
+            BeginGetItems(GetNode(jid, node), handler, state);
         }
 
         private class FindServiceRequest
@@ -1236,14 +1290,7 @@ namespace jabber.connection
                 return;  // prove I *didn't* call it. :)
 
             FindServiceRequest req = new FindServiceRequest(this, featureURI, handler);
-            if (m_root == null)
-                m_root = DiscoNode.GetNode(m_stream.Server);
-            BeginGetItems(m_root, new DiscoNodeHandler(req.GotRootItems), state);  // hopefully enough to prevent GC.
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return DiscoNode.EnumerateAll();
+            BeginGetItems(Root, new DiscoNodeHandler(req.GotRootItems), state);  // hopefully enough to prevent GC.
         }
 
         #region Component Designer generated code

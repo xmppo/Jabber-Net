@@ -35,7 +35,7 @@ namespace test.jabber.connection
         [TearDown]
         public void cleanUp()
         {
-            DiscoNode.Clear();
+            dm.Clear();
         }
 
         private readonly JID jid = new JID("test.com");

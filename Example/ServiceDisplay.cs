@@ -170,7 +170,7 @@ namespace Example
         private void m_stream_OnAuthenticate(object sender)
         {
             // TODO: some of this will break in 2003.
-            jabber.connection.DiscoNode dn = DiscoNode.GetNode(m_stream.Server, null);
+            jabber.connection.DiscoNode dn = m_disco.GetNode(m_stream.Server, null);
             TreeNode tn = tvServices.Nodes.Add(dn.Key, dn.Name);
             tn.ToolTipText = dn.Key.Replace('\u0000', '\n');
             tn.Tag = dn;
