@@ -324,6 +324,7 @@ namespace jabber.client
         /// </summary>
         public override void Connect()
         {
+            this[Options.AUTO_LOGIN_THISPASS] = this[Options.AUTO_LOGIN];
             this[Options.SERVER_ID] = this[Options.TO];
             base.Connect();
         }
@@ -351,6 +352,14 @@ namespace jabber.client
             Debug.Assert(User != null);
             Debug.Assert(Password != null);
             Debug.Assert(Resource != null);
+
+            this[Options.AUTO_LOGIN_THISPASS] = true;
+
+            if (State == ManualSASLLoginState.Instance)
+            {
+                ProcessFeatures();
+                return;
+            }
 
             this[Options.JID] = new JID(User, Server, Resource);
 
@@ -820,9 +829,28 @@ namespace jabber.client
             FireAuthError(rp);
         }
 
+        private void LoginRequired(BaseState newState)
+        {
+            lock (StateLock)
+            {
+                State = newState;
+            }
+
+            if (OnLoginRequired != null)
+            {
+                if (InvokeRequired)
+                    CheckedInvoke(OnLoginRequired, new object[] { this });
+                else
+                    OnLoginRequired(this);
+            }
+            else
+            {
+                FireOnError(new InvalidOperationException("If AutoLogin is false, you must supply a OnLoginRequired event handler"));
+            }
+        }
+
         private void JabberClient_OnSASLStart(Object sender, jabber.connection.sasl.SASLProcessor proc)
         {
-
             BaseState s = null;
             lock (StateLock)
             {
@@ -832,38 +860,28 @@ namespace jabber.client
             // HACK: fire OnSASLStart with state of NonSASLAuthState to initiate old-style auth.
             if (s == NonSASLAuthState.Instance)
             {
-                if (AutoLogin)
+                if ((bool)this[Options.AUTO_LOGIN_THISPASS])
                     Login();
                 else
-                {
-                    lock (StateLock)
-                    {
-                        State = ManualLoginState.Instance;
-                    }
-                    if (OnLoginRequired != null)
-                    {
-                        if (InvokeRequired)
-                            CheckedInvoke(OnLoginRequired, new object[]{this});
-                        else
-                            OnLoginRequired(this);
-                    }
-                    else
-                    {
-                        FireOnError(new InvalidOperationException("If AutoLogin is false, you must supply a OnLoginRequired event handler"));
-                        return;
-                    }
-                }
+                    LoginRequired(ManualLoginState.Instance);
             }
             else
             {
-                // TODO: integrate SASL params into XmppStream params
-                proc[SASLProcessor.USERNAME] = User;
-                proc[SASLProcessor.PASSWORD] = Password;
-                proc[MD5Processor.REALM] = this.Server;
-                object creds = this[KerbProcessor.USE_WINDOWS_CREDS];
-                if (creds == null)
-                    creds = false;
-                proc[KerbProcessor.USE_WINDOWS_CREDS] = creds.ToString();
+                if ((bool)this[Options.AUTO_LOGIN_THISPASS])
+                {
+                    // TODO: integrate SASL params into XmppStream params
+                    proc[SASLProcessor.USERNAME] = User;
+                    proc[SASLProcessor.PASSWORD] = Password;
+                    proc[MD5Processor.REALM] = this.Server;
+                    object creds = this[KerbProcessor.USE_WINDOWS_CREDS];
+                    if (creds == null)
+                        creds = false;
+                    proc[KerbProcessor.USE_WINDOWS_CREDS] = creds.ToString();
+                }
+                else
+                {
+                    LoginRequired(ManualSASLLoginState.Instance);
+                }
             }
         }
 
@@ -998,4 +1016,19 @@ namespace jabber.client
         /// </summary>
         public static readonly jabber.connection.BaseState Instance = new ManualLoginState();
     }
+
+    /// <summary>
+    /// Informs the client that the JabberClient is in
+    /// the "Waiting for manual login" state, but when Login()
+    /// happens, it should try SASL.
+    /// </summary>
+    [SVN(@"$Id$")]
+    public class ManualSASLLoginState : jabber.connection.BaseState
+    {
+        /// <summary>
+        /// Gets the instance that is always used.
+        /// </summary>
+        public static readonly jabber.connection.BaseState Instance = new ManualSASLLoginState();
+    }
+
 }

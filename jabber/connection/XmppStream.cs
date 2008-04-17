@@ -135,6 +135,11 @@ namespace jabber.connection
         /// </summary>
         public const string AUTO_LOGIN    = "auto.login";
         /// <summary>
+        /// This pass through the login process, can we login?
+        /// This option is set/reset by the framework.
+        /// </summary>
+        public const string AUTO_LOGIN_THISPASS = "auto.login.thispass";
+        /// <summary>
         /// Retrieves the roster items from the XMPP server on
         /// connection if set to true.
         /// </summary>
@@ -264,6 +269,7 @@ namespace jabber.connection
         // XMPP v1 stuff
         private string m_serverVersion = null;
         private SASLProcessor m_saslProc = null;
+        private Features m_features = null; // the last features tag received.
 
 
         /// <summary>
@@ -1088,15 +1094,117 @@ namespace jabber.connection
                     OnSASLStart(this, null); // Hack.  Old-style auth for jabberclient.
                 }
             }
-// TODO: Fix broken build
-/*
-            else if (elem is jabber.protocol.httpbind.Body)
-            {
-                jabber.protocol.httpbind.Body body = elem as jabber.protocol.httpbind.Body;
+        }
 
-                m_streamID = body.AuthID;
+        protected virtual void ProcessFeatures()
+        {
+            // don't do starttls if we're already on an SSL socket.
+            // bad server setup, but no skin off our teeth, we're already
+            // SSL'd.  Also, start-tls won't work when polling.
+            if ((bool)this[Options.AUTO_TLS] &&
+                (m_features.StartTLS != null) &&
+                (!m_sslOn) &&
+                m_stanzas.SupportsTLS)
+            {
+                // start-tls
+                lock (m_stateLock)
+                {
+                    State = StartTLSState.Instance;
+                }
+                this.Write(new StartTLS(m_doc));
+                return;
             }
-*/
+
+            Compression comp = m_features.Compression;
+            if ((bool)this[Options.AUTO_COMPRESS] &&
+                (comp != null) &&
+                comp.HasMethod("zlib") &&
+                (!m_compressionOn) &&
+                m_stanzas.SupportsCompression)
+            {
+                // start compression
+                lock (m_stateLock)
+                {
+                    State = CompressionState.Instance;
+                }
+                Compress c = new Compress(m_doc);
+                c.Method = "zlib";
+                this.Write(c);
+                return;
+            }
+
+            // not authenticated yet.  Note: we'll get a stream:features
+            // after the last sasl restart, so we shouldn't try to iq:auth
+            // at that point.
+            if (!IsAuthenticated)
+            {
+                Mechanisms ms = m_features.Mechanisms;
+                m_saslProc = null;
+
+                MechanismType types = MechanismType.NONE;
+
+                if (ms != null)
+                {
+                    // if SASL_MECHANISMS is set in the options, it is the limited set
+                    // of mechanisms we're willing to try.  Mask them off of the offered set.
+                    object smt = this[Options.SASL_MECHANISMS];
+                    if (smt != null)
+                        types = (MechanismType)smt & ms.Types;
+                    else
+                        types = ms.Types;
+                }
+
+                // If we're doing SASL, and there are mechanisms implemented by both
+                // client and server.
+                if ((types != MechanismType.NONE) && ((bool)this[Options.SASL]))
+                {
+                    lock (m_stateLock)
+                    {
+                        State = SASLState.Instance;
+                    }
+                    m_saslProc = SASLProcessor.createProcessor(types, m_sslOn || (bool)this[Options.PLAINTEXT], ms);
+                    if (m_saslProc == null)
+                    {
+                        FireOnError(new NotImplementedException("No implemented mechanisms in: " + types.ToString()));
+                        return;
+                    }
+                    if (OnSASLStart != null)
+                        OnSASLStart(this, m_saslProc);
+                    lock (m_stateLock)
+                    {
+                        // probably manual authentication
+                        if (State != SASLState.Instance)
+                            return;
+                    }
+
+                    try
+                    {
+                        Step s = m_saslProc.step(null, this.Document);
+                        if (s != null)
+                            this.Write(s);
+                    }
+                    catch (Exception e)
+                    {
+                        FireOnError(new SASLException(e.Message));
+                        return;
+                    }
+                }
+
+                if (m_saslProc == null)
+                { // no SASL mechanisms.  Try iq:auth.
+                    if ((bool)this[Options.REQUIRE_SASL])
+                    {
+                        FireOnError(new SASLException("No SASL mechanisms available"));
+                        return;
+                    }
+                    lock (m_stateLock)
+                    {
+                        State = NonSASLAuthState.Instance;
+                    }
+                    if (OnSASLStart != null)
+                        OnSASLStart(this, null); // HACK: old-style auth for jabberclient.
+                }
+            }
         }
 
         /// <summary>
@@ -1145,107 +1253,9 @@ namespace jabber.connection
                     FireOnError(new InvalidOperationException("Expecting stream:features from a version='1.0' server"));
                     return;
                 }
-
-                // don't do starttls if we're already on an SSL socket.
-                // bad server setup, but no skin off our teeth, we're already
-                // SSL'd.  Also, start-tls won't work when polling.
-                if ((bool)this[Options.AUTO_TLS] &&
-                    (f.StartTLS != null) &&
-                    (!m_sslOn) &&
-                    m_stanzas.SupportsTLS)
-                {
-                    // start-tls
-                    lock (m_stateLock)
-                    {
-                        State = StartTLSState.Instance;
-                    }
-                    this.Write(new StartTLS(m_doc));
-                    return;
-                }
-
-                Compression comp = f.Compression;
-                if ((bool)this[Options.AUTO_COMPRESS] &&
-                    (comp != null) &&
-                    comp.HasMethod("zlib") &&
-                    (!m_compressionOn) &&
-                    m_stanzas.SupportsCompression )
-                {
-                    // start-tls
-                    lock (m_stateLock)
-                    {
-                        State = CompressionState.Instance;
-                    }
-                    Compress c = new Compress(m_doc);
-                    c.Method = "zlib";
-                    this.Write(c);
-                    return;
-                }
-
-                // not authenticated yet.  Note: we'll get a stream:features
-                // after the last sasl restart, so we shouldn't try to iq:auth
-                // at that point.
-                if (!IsAuthenticated)
-                {
-                    Mechanisms ms = f.Mechanisms;
-                    m_saslProc = null;
-
-                    MechanismType types = MechanismType.NONE;
-
-                    if (ms != null)
-                    {
-                        // if SASL_MECHANISMS is set in the options, it is the limited set
-                        // of mechanisms we're willing to try.  Mask them off of the offered set.
-                        object smt = this[Options.SASL_MECHANISMS];
-                        if (smt != null)
-                            types = (MechanismType)smt & ms.Types;
-                        else
-                            types = ms.Types;
-                    }
-
-                    if ((types != MechanismType.NONE) && ((bool)this[Options.SASL]))
-                    {
-                        lock (m_stateLock)
-                        {
-                            State = SASLState.Instance;
-                        }
-                        m_saslProc = SASLProcessor.createProcessor(types, m_sslOn || (bool)this[Options.PLAINTEXT], ms);
-                        if (m_saslProc == null)
-                        {
-
-                            FireOnError(new NotImplementedException("No implemented mechanisms in: " + types.ToString()));
-                            return;
-                        }
-                        if (OnSASLStart != null)
-                            OnSASLStart(this, m_saslProc);
-
-                        try
-                        {
-                            Step s = m_saslProc.step(null, this.Document);
-                            if (s != null)
-                                this.Write(s);
-                        }
-                        catch (Exception e)
-                        {
-                            FireOnError(new SASLException(e.Message));
-                            return;
-                        }
-                    }
-
-                    if (m_saslProc == null)
-                    { // no SASL mechanisms.  Try iq:auth.
-                        if ((bool)this[Options.REQUIRE_SASL])
-                        {
-                            FireOnError(new SASLException("No SASL mechanisms available"));
-                            return;
-                        }
-                        lock (m_stateLock)
-                        {
-                            State = NonSASLAuthState.Instance;
-                        }
-                        if (OnSASLStart != null)
-                            OnSASLStart(this, null); // HACK: old-style auth for jabberclient.
-                    }
-                }
+                m_features = f;
+                ProcessFeatures();
+                return;
             }
             else if (State == SASLState.Instance)
             {
