@@ -389,7 +389,8 @@ namespace jabber.connection
                 }
                 else
                 {
-                    m_featureCallbacks.Add(new NodeCallback(manager, callback, state));
+                    if (callback != null)
+                        m_featureCallbacks.Add(new NodeCallback(manager, callback, state));
                     return true;
                 }
             }
@@ -416,7 +417,8 @@ namespace jabber.connection
                 }
                 else
                 {
-                    m_itemCallbacks.Add(new NodeCallback(manager, callback, state));
+                    if (callback != null)
+                        m_itemCallbacks.Add(new NodeCallback(manager, callback, state));
                     return true;
                 }
             }
