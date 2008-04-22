@@ -514,6 +514,13 @@ namespace jabber.connection
         /// </summary>
         public event ItemCB OnItemRemove;
 
+
+        /// <summary>
+        /// Informs the publisher that an item has been published 
+        /// successfully.
+        /// </summary>
+        public event ItemCB OnItemPublished;
+
         /// <summary>
         /// Notifies the client that an error occurred.
         /// </summary>
@@ -988,7 +995,7 @@ namespace jabber.connection
                 item.ID = id;
             item.AddChild(contents);
             pub.AddChild(item);
-            m_stream.Tracker.BeginIQ(iq, new IqCB(OnPublished), null);
+            m_stream.Tracker.BeginIQ(iq, new IqCB(OnPublished), item);
         }
 
         private void OnPublished(object sender, IQ iq, object data)
@@ -1002,6 +1009,10 @@ namespace jabber.connection
                     OnError(this, new PubSubException(Op.PUBLISH_ITEM, msg, iq));
                 return;
             }
+
+            // TODO: if an item is returned, it will have a new item id.
+            if (OnItemPublished != null)
+                OnItemPublished(this, (PubSubItem)data);
         }
 
         /// <summary>
