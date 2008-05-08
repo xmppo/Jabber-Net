@@ -54,10 +54,12 @@ $(BASEDIR)/jabber/JID.cs \
 $(BASEDIR)/jabber/client/JabberClient.cs \
 $(BASEDIR)/jabber/client/PresenceManager.cs \
 $(BASEDIR)/jabber/client/RosterManager.cs \
+$(BASEDIR)/jabber/connection/BindingStanzaStream.cs \
+$(BASEDIR)/jabber/connection/DiscoManager.cs \
 $(BASEDIR)/jabber/connection/HttpStanzaStream.cs \
 $(BASEDIR)/jabber/connection/IQTracker.cs \
-$(BASEDIR)/jabber/connection/BindingStanzaStream.cs \
 $(BASEDIR)/jabber/connection/PollingStanzaStream.cs \
+$(BASEDIR)/jabber/connection/PubSubManager.cs \
 $(BASEDIR)/jabber/connection/SocketStanzaStream.cs \
 $(BASEDIR)/jabber/connection/StanzaStream.cs \
 $(BASEDIR)/jabber/connection/States.cs \
