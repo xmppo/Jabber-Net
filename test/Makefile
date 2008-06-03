@@ -50,14 +50,17 @@ $(BASEDIR)/jabber/protocol/x/EventTest.cs
 
 RESOURCES = 
 
-ASSEMBLIES = -r:nunit.framework.dll -r:jabber-net.dll -r:zlib.net.dll
+ASSEMBLIES = \
+	-r:$(BASEDIR)/nunit/nunit.framework.dll \
+	-r:jabber-net.dll \
+	-r:zlib.net.dll
 
 SYSTEM_REFERENCES = -r:System.dll \
 					-r:System.Xml.dll \
 					-r:System.Security.dll \
 					-r:Mono.Security.dll
 
-MCS_OPTIONS = -lib:$(DEBUGDIR) -debug -nowarn:0618
+MCS_OPTIONS = -lib:$(DEBUGDIR) -debug -nowarn:0618 -nowarn:0219
 DLL = jabber-net-tests.dll
 OUTFILE = $(DEBUGDIR)/$(DLL)
 
@@ -68,7 +71,11 @@ $(DEBUGDIR)/jabber-net.dll: $(BASEDIR)/../bin/debug/jabber-net.dll
 	-cp $(BASEDIR)/../bin/debug/jabber-net.dll $(DEBUGDIR)
 	-cp $(BASEDIR)/../lib20/*.dll $(DEBUGDIR)
 
-$(OUTFILE): $(DEBUGDIR)/jabber-net.dll $(SOURCES)
+$(DEBUGDIR)/nunit.framework.dll: $(BASEDIR)/nunit/nunit.framework.dll
+	-mkdir -p bin/debug
+	-cp $(BASEDIR)/nunit/nunit.framework.dll $(DEBUGDIR)
+
+$(OUTFILE): $(DEBUGDIR)/jabber-net.dll $(DEBUGDIR)/nunit.framework.dll $(SOURCES)
 	gmcs $(MCS_OPTIONS) -target:library \
 	-out:"$(OUTFILE)" $(RESOURCES) \
 	$(SOURCES) $(ASSEMBLIES)  $(SYSTEM_REFERENCES)

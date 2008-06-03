@@ -27,6 +27,7 @@ $(BASEDIR)/bedrock/collections/IndexedTrie.cs \
 $(BASEDIR)/bedrock/collections/LinkedList.cs \
 $(BASEDIR)/bedrock/collections/Set.cs \
 $(BASEDIR)/bedrock/collections/SkipList.cs \
+$(BASEDIR)/bedrock/collections/StringSet.cs \
 $(BASEDIR)/bedrock/collections/Tree.cs \
 $(BASEDIR)/bedrock/collections/Trie.cs \
 $(BASEDIR)/bedrock/collections/TrieNode.cs \
@@ -55,7 +56,9 @@ $(BASEDIR)/jabber/client/JabberClient.cs \
 $(BASEDIR)/jabber/client/PresenceManager.cs \
 $(BASEDIR)/jabber/client/RosterManager.cs \
 $(BASEDIR)/jabber/connection/BindingStanzaStream.cs \
+$(BASEDIR)/jabber/connection/CapsManager.cs \
 $(BASEDIR)/jabber/connection/DiscoManager.cs \
+$(BASEDIR)/jabber/connection/FileMap.cs \
 $(BASEDIR)/jabber/connection/HttpStanzaStream.cs \
 $(BASEDIR)/jabber/connection/IQTracker.cs \
 $(BASEDIR)/jabber/connection/PollingStanzaStream.cs \
@@ -78,7 +81,6 @@ $(BASEDIR)/jabber/protocol/ElementStream.cs \
 $(BASEDIR)/jabber/protocol/NS.cs \
 $(BASEDIR)/jabber/protocol/Packet.cs \
 $(BASEDIR)/jabber/protocol/URI.cs \
-$(BASEDIR)/jabber/protocol/XmlLoader.cs \
 $(BASEDIR)/jabber/protocol/accept/Factory.cs \
 $(BASEDIR)/jabber/protocol/accept/Handshake.cs \
 $(BASEDIR)/jabber/protocol/accept/Log.cs \
