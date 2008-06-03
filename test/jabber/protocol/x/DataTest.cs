@@ -30,7 +30,9 @@ namespace test.jabber.protocol.x
     [TestFixture]
     public class DataTest
     {
-        private const string tstring = @"<x xmlns='jabber:x:data'>
+        private bool gotElement = false;
+
+        private const string tstring = @"<stream><x xmlns='jabber:x:data'>
       <instructions>
         Welcome to the BloodBank-Service!  We thank you for registering with
         us and helping to save lives.  Please fill out the following form.
@@ -74,20 +76,22 @@ namespace test.jabber.protocol.x
         <required/>
         <value>1</value>
       </field>
-    </x>";
+    </x></stream>";
 
         [Test] public void Test_Parse()
         {
-            XmlDocument doc = new XmlDocument();
-            XmlTextReader tr = new XmlTextReader(new StringReader(tstring));
-            XmlLoader l = new XmlLoader(tr, doc);
-            ElementFactory ef = new ElementFactory();
-            ef.AddType(new Factory());
-            l.Factory = ef;
-            tr.Read();
-            XmlNode n = l.ReadCurrentNode();
-            Assert.AreEqual("jabber.protocol.x.Data", n.GetType().ToString());
-            Data d = (Data) n;
+            AsynchElementStream es = new AsynchElementStream();
+            es.AddFactory(new global::jabber.protocol.x.Factory());
+            es.OnElement += new ProtocolHandler(es_OnElement);
+            es.Push(System.Text.Encoding.UTF8.GetBytes(tstring));
+
+            Assert.IsTrue(gotElement);
+        }
+
+        void es_OnElement(object sender, XmlElement n)
+        {
+            Assert.IsInstanceOfType(typeof(global::jabber.protocol.x.Data), n);
+            Data d = (Data)n;
             Assert.AreEqual(@"
         Welcome to the BloodBank-Service!  We thank you for registering with
         us and helping to save lives.  Please fill out the following form.
@@ -106,6 +110,21 @@ namespace test.jabber.protocol.x
             Assert.AreEqual(4, options.Length);
             Assert.AreEqual("Two", options[2].Label);
             Assert.AreEqual("2", options[2].Val);
+            gotElement = true;
+        }
+
+        [Test]
+        public void Test_Convert()
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(tstring);
+
+            ElementFactory f = new ElementFactory();
+            f.AddType(new global::jabber.protocol.x.Factory());
+
+            Element stream = Element.AddTypes(doc.DocumentElement, f);
+            Data d = stream.GetChildElement<global::jabber.protocol.x.Data>();
+            Assert.IsNotNull(d);
         }
     }
 }

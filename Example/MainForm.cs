@@ -527,7 +527,9 @@ namespace Example
             // 
             // cm
             // 
+            this.cm.DiscoManager = this.dm;
             this.cm.Features = new string[0];
+            this.cm.FileName = "caps.xml";
             ident1.Category = "client";
             ident1.Lang = "en";
             ident1.Name = "Jabber-Net Test Client";
@@ -660,7 +662,6 @@ namespace Example
             else
             {
                 jc.Close();
-                Connect();
             }
         }
 

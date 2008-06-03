@@ -16,6 +16,7 @@ using System.Xml;
 
 using bedrock.util;
 using jabber.protocol.x;
+using bedrock.collections;
 
 namespace jabber.protocol.iq
 {
@@ -282,6 +283,8 @@ namespace jabber.protocol.iq
     [SVN(@"$Id$")]
     public class DiscoInfo : Element
     {
+        private StringSet m_features = null;
+
         /// <summary>
         ///
         /// </summary>
@@ -345,6 +348,8 @@ namespace jabber.protocol.iq
         {
             DiscoFeature i = CreateChildElement<DiscoFeature>();
             i.Var = featureURI;
+            if (m_features != null)
+                m_features.Add(featureURI);
             return i;
         }
 
@@ -364,12 +369,50 @@ namespace jabber.protocol.iq
         /// <returns></returns>
         public bool HasFeature(string featureURI)
         {
+            if (m_features != null)
+                return m_features.Contains(featureURI);
+
             foreach (DiscoFeature feat in GetElements<DiscoFeature>())
             {
                 if (feat.Var == featureURI)
                     return true;
             }
             return false;
+        }
+
+        /// <summary>
+        /// Clear all of the features from the 
+        /// </summary>
+        public void ClearFeatures()
+        {
+            this.RemoveElems<DiscoFeature>();
+            m_features = null;
+        }
+
+        /// <summary>
+        /// Get or set a compressed set of features.
+        /// Setting this has the side-effect of removing all existing features, and
+        /// replacing them with the specified ones.
+        /// </summary>
+        public StringSet FeatureSet
+        {
+            get
+            {
+                if (m_features == null)
+                {
+                    m_features = new StringSet();
+                    foreach (DiscoFeature f in GetElements<DiscoFeature>())
+                        m_features.Add(f.Var);
+                }
+                return m_features;
+            }
+            set
+            {
+                ClearFeatures();
+                m_features = new StringSet();
+                foreach (string s in value)
+                    AddFeature(s);
+            }
         }
 
         /// <summary>
@@ -391,7 +434,6 @@ namespace jabber.protocol.iq
             get { return GetChildElement<jabber.protocol.x.Data>(); }
             set { ReplaceChild<Data>(value); }
         }
-
 
         /// <summary>
         /// In the unlikely event that there are multiple extensions, we need to be able

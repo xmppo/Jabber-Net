@@ -18,11 +18,15 @@ using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text;
+using System.Xml;
 
 using jabber.protocol;
 using jabber.protocol.client;
 using jabber.protocol.iq;
 using jabber.protocol.x;
+
+using bedrock.util;
+using bedrock.io;
 
 namespace jabber.connection
 {
@@ -30,6 +34,7 @@ namespace jabber.connection
     /// Manages the entity capabilities information for the local connection as well as remote ones.
     /// See XEP-0115, version 1.5 for details.
     /// </summary>
+    [SVN("$Id$")]
     public class CapsManager: StreamComponent
     {
         /// <summary>
@@ -46,6 +51,9 @@ namespace jabber.connection
         private DiscoNode m_disco;
         private string m_hash = DEFAULT_HASH;
         private string m_ver = null;
+
+        private FileMap<DiscoInfo> m_cache = null;
+        private DiscoManager m_discoManager = null;
 
         /// <summary>
         /// Creates a new capability manager.
@@ -92,6 +100,57 @@ namespace jabber.connection
                 components.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        /// <summary>
+        /// The RosterManager for this view
+        /// </summary>
+        [Category("Cache")]
+        public DiscoManager DiscoManager
+        {
+            get
+            {
+                // If we are running in the designer, let's try to auto-hook a RosterManager
+                if ((m_discoManager == null) && DesignMode)
+                {
+                    IDesignerHost host = (IDesignerHost)base.GetService(typeof(IDesignerHost));
+                    this.DiscoManager = (DiscoManager)jabber.connection.StreamComponent.GetComponentFromHost(host, typeof(DiscoManager));
+                }
+                return m_discoManager;
+            }
+            set
+            {
+                if ((object)m_discoManager == (object)value)
+                    return;
+                m_discoManager = value;
+            }
+        }
+
+        /// <summary>
+        /// The file to store a cache of all received caps into.  If no cache file is supplied,
+        /// caps queries will not be generated.
+        /// </summary>
+        [Category("Cache")]
+        public string FileName
+        {
+            get
+            {
+                if (m_cache == null)
+                    return null;
+                return m_cache.FileName;
+            }
+            set
+            {
+                if (m_cache == null)
+                {
+                    ElementFactory ef = new ElementFactory();
+                    ef.AddType(new jabber.protocol.iq.Factory());
+
+                    m_cache = new FileMap<DiscoInfo>(value, ef);
+                }
+                else
+                    m_cache.FileName = value;
+            }
         }
 
         /// <summary>
@@ -172,10 +231,10 @@ namespace jabber.connection
             }
         }
 
-        private void CalculateVer()
+        private string CalculateVer(DiscoNode n)
         {
             if (m_hash == null)
-                return;
+                return null;
 
             // 1. Initialize an empty string S.
             StringBuilder S = new StringBuilder();
@@ -184,7 +243,7 @@ namespace jabber.connection
             // (if it exists) and then by xml:lang (if it exists), formatted as
             // CATEGORY '/' [TYPE] '/' [LANG] '/' [NAME]. Note that each slash is
             // included even if the TYPE, LANG, or NAME is not included.
-            Ident[] ids = m_disco.GetIdentities();
+            Ident[] ids = n.GetIdentities();
             Array.Sort(ids);
 
             // 3. For each identity, append the 'category/type/lang/name' to S, followed by
@@ -196,7 +255,7 @@ namespace jabber.connection
             }
 
             // 4. Sort the supported service discovery features.
-            string[] features = m_disco.FeatureNames;
+            string[] features = n.FeatureNames;
             Array.Sort(features);
 
             // 5. For each feature, append the feature to S, followed by the '<' character.
@@ -209,7 +268,7 @@ namespace jabber.connection
             // 6. If the service discovery information response includes XEP-0128 data forms, 
             // sort the forms by the FORM_TYPE (i.e., by the XML character 
             // data of the <value/> element).
-            Data[] ext = m_disco.Extensions;
+            Data[] ext = n.Extensions;
             if (ext != null)
             {
                 Array.Sort(ext, new FormTypeComparer());
@@ -261,7 +320,7 @@ namespace jabber.connection
             // whitespace and MUST set padding bits to zero). [19]
             HashAlgorithm hasher = GetHasher(m_hash);
             byte[] hash = hasher.ComputeHash(input, 0, input.Length);
-            m_ver = Convert.ToBase64String(hash);
+            return Convert.ToBase64String(hash);
         }
 
         /// <summary>
@@ -273,7 +332,7 @@ namespace jabber.connection
             get
             {
                 if (m_ver == null)
-                    CalculateVer();
+                    m_ver = CalculateVer(m_disco);
                 return m_ver;
             }
         }
@@ -354,6 +413,71 @@ namespace jabber.connection
 
             jc.OnBeforePresenceOut += new jabber.client.PresenceHandler(jc_OnBeforePresenceOut);
             jc.OnIQ += new jabber.client.IQHandler(jc_OnIQ);
+            jc.OnPresence += new jabber.client.PresenceHandler(jc_OnPresence);
+        }
+
+        private void jc_OnPresence(object sender, Presence pres)
+        {
+            if ((m_cache == null) || (m_discoManager == null))
+                return;
+            Caps c = pres["c", URI.CAPS] as Caps;
+            if (c == null)
+                return;
+            
+            // TODO: ignoring old-style caps for now.
+            if (!c.NewStyle)
+                return;
+            string ver = c.Version;
+            if ((ver == null) || (ver == ""))
+                return;
+            string node = c.Node;
+            if ((node == null) || (node == ""))
+                return;
+
+            if (m_cache.Contains(ver))
+                return;
+
+            m_discoManager.BeginGetFeatures(pres.From, c.Node + "#" + ver, GotCaps, ver);
+        }
+
+        private void GotCaps(DiscoManager m, DiscoNode node, object state)
+        {
+            // timeout
+            if (node == null)
+                return;
+
+            string ver = (string)state;
+            if (ver != CalculateVer(node))
+            {
+                Debug.WriteLine("WARNING: invalid caps ver hash: " + ver);
+                Debug.WriteLine(node.Info.OuterXml);
+                return;
+            }
+            m_cache[ver] = node.Info;
+        }
+
+        /// <summary>
+        /// Get a DiscoNode that has all of the info associated with the 
+        /// given ver hash, or null if there is none cached.
+        /// 
+        /// </summary>
+        /// <param name="ver"></param>
+        /// <returns></returns>
+        public DiscoInfo this[string ver]
+        {
+            get
+            {
+                if (m_cache == null)
+                    return null;
+                return m_cache[ver];
+            }
+            set
+            {
+                // mostly for test.
+                if (m_cache == null)
+                    return;
+                m_cache[ver] = value;
+            }
         }
 
         /// <summary>
@@ -373,13 +497,22 @@ namespace jabber.connection
                 return false;
 
             string node = info.Node;
-            if (node == "")
+            if (node == null)
                 return true;
 
             if (node == NodeVer)
                 return true;
 
             return false;
+        }
+
+        public void FillInInfo(DiscoInfo info)
+        {
+            info.Node = NodeVer;
+            foreach (Ident id in Identities)
+                info.AddIdentity(id.Category, id.Type, id.Name, id.Lang);
+            foreach (string uri in Features)
+                info.AddFeature(uri);
         }
 
         private void jc_OnIQ(object sender, IQ iq)
@@ -393,24 +526,29 @@ namespace jabber.connection
 
             IQ resp = iq.GetResponse(m_stream.Document);
             info = (DiscoInfo)resp.Query;
-            info.Node = NodeVer;
-            foreach (Ident id in Identities)
-                info.AddIdentity(id.Category, id.Type, id.Name, id.Lang);
-            foreach (string uri in Features)
-                info.AddFeature(uri);
+            FillInInfo(info);
 
             m_stream.Write(resp);
+        }
+
+        /// <summary>
+        /// Get a caps element that describes the current version, etc.
+        /// </summary>
+        /// <param name="doc"></param>
+        /// <returns></returns>
+        public Caps GetCaps(XmlDocument doc)
+        {
+            Caps caps = new Caps(doc);
+            caps.Version = Ver;
+            caps.Node = Node;
+            caps.Hash = m_hash;
+            return caps;
         }
 
         private void jc_OnBeforePresenceOut(object sender, Presence pres)
         {
             Debug.Assert(Node != null, "Node is required");
-
-            Caps caps = new Caps(pres.OwnerDocument);
-            caps.Version = Ver;
-            caps.Node = Node;
-            caps.Hash = m_hash;
-            pres.AppendChild(caps);
+            pres.AppendChild(GetCaps(pres.OwnerDocument));
         }
 
         #region Component Designer generated code

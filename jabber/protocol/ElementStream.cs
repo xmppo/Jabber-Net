@@ -55,7 +55,7 @@ namespace jabber.protocol
         /// The document started.  This will have a full element, even
         /// though only the start tag has been received.
         /// </summary>
-        public event ProtocolHandler       OnDocumentStart;
+        public event ProtocolHandler OnDocumentStart;
 
         /// <summary>
         /// The document has completed.
@@ -66,7 +66,7 @@ namespace jabber.protocol
         /// <summary>
         /// A protocol element (child of the doc root) has been received.
         /// </summary>
-        public event ProtocolHandler       OnElement;
+        public event ProtocolHandler OnElement;
 
         /// <summary>
         /// An XML parsing error occurred.
@@ -80,8 +80,6 @@ namespace jabber.protocol
         {
             m_doc = new XmlDocument();
             m_factory.AddType(new jabber.protocol.stream.Factory());
-// TODO: Fix broken build.
-//            m_factory.AddType(new jabber.protocol.httpbind.Factory());
         }
 
         /// <summary>
@@ -151,6 +149,18 @@ namespace jabber.protocol
         {
             if (OnError != null)
                 OnError(this, ex);
+        }
+
+        /// <summary>
+        /// Get an element by name using the current factory.
+        /// </summary>
+        /// <param name="name">The element name to use</param>
+        /// <param name="ns">The namespace URI of the element to get</param>
+        /// <returns></returns>
+        public Element GetElement(string name, string ns)
+        {
+            XmlQualifiedName q = new XmlQualifiedName(name, ns);
+            return m_factory.GetElement("", q, m_doc);
         }
     }
 }

@@ -324,7 +324,7 @@ namespace jabber.connection
         /// <summary>
         /// Contains the Features of this node.
         /// </summary>
-        public Set Features = null;
+        public StringSet Features = null;
         /// <summary>
         /// Contains the identities of this node.
         /// </summary>
@@ -333,6 +333,7 @@ namespace jabber.connection
         private bool m_pendingItems = false;
         private bool m_pendingInfo = false;
         private jabber.protocol.x.Data[] m_extensions;
+        private DiscoInfo m_info = null;
 
         private ArrayList m_featureCallbacks = new ArrayList();
         private ArrayList m_itemCallbacks = new ArrayList();
@@ -506,9 +507,7 @@ namespace jabber.connection
             {
                 if (Features == null)
                     return new string[0];
-                string[] names = new string[Features.Count];
-                Features.CopyTo(names, 0);
-                return names;
+                return Features.GetStrings();
             }
         }
 
@@ -584,6 +583,14 @@ namespace jabber.connection
         }
 
         /// <summary>
+        /// This last info result returned for this JID and node.
+        /// </summary>
+        public DiscoInfo Info
+        {
+            get { return m_info; }
+        }
+
+        /// <summary>
         /// Determines if this node has the specified feature.
         /// </summary>
         /// <param name="URI">Feature to look for.</param>
@@ -611,15 +618,16 @@ namespace jabber.connection
         /// <param name="info">If null, just calls callbacks</param>
         public void AddInfo(DiscoInfo info)
         {
+            m_info = info;
             if (info == null)
             {
                 AddIdentities(null);
-                AddFeatures(null);
+                AddFeatures((StringSet)null);
                 return;
             }
             Extensions = info.GetExtensions();
             AddIdentities(info.GetIdentities());
-            AddFeatures(info.GetFeatures());
+            AddFeatures(info.FeatureSet);
         }
 
         /// <summary>
@@ -631,7 +639,8 @@ namespace jabber.connection
         public void AddFeature(string feature)
         {
             if (Features == null)
-                Features = new Set();
+                Features = new StringSet();
+            
             Features.Add(feature);
         }
 
@@ -654,10 +663,11 @@ namespace jabber.connection
         /// Adds these features to the node. Calls the OnFeatures event.
         /// </summary>
         /// <param name="features">Features to add to this node.</param>
+        [Obsolete("Use AddFeatures(StringSet)")]
         public void AddFeatures(DiscoFeature[] features)
         {
             if (Features == null)
-                Features = new Set();
+                Features = new StringSet();
 
             // features may be null when used from outside.
             if (features != null)
@@ -666,6 +676,22 @@ namespace jabber.connection
                     Features.Add(f.Var);
             }
 
+            DoCallbacks(m_featureCallbacks);
+        }
+
+        /// <summary>
+        /// Add all of the features from the specified set.
+        /// </summary>
+        /// <param name="features"></param>
+        public void AddFeatures(StringSet features)
+        {
+            if (features != null)
+            {
+                if (Features == null)
+                    Features = new StringSet(features);
+                else
+                    Features.Add(features);
+            }
             DoCallbacks(m_featureCallbacks);
         }
 
@@ -1077,7 +1103,7 @@ namespace jabber.connection
 
                 DiscoNode child = dn.AddItem(this, di);
                 if (child.Features == null)
-                    child.Features = new Set();
+                    child.Features = new StringSet();
                 if (child.Identity == null)
                     child.Identity = new Set();
 
@@ -1129,11 +1155,11 @@ namespace jabber.connection
                 }
                 child.AddItems(this, null);
                 child.AddIdentities(null);
-                child.AddFeatures(null);
+                child.AddFeatures((StringSet)null);
             }
             dn.AddItems(this, null);
             dn.AddIdentities(null);
-            dn.AddFeatures(null);
+            dn.AddFeatures((StringSet)null);
         }
 
         /// <summary>

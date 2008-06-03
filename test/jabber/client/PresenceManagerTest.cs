@@ -20,6 +20,11 @@ using bedrock.util;
 using jabber;
 using jabber.client;
 using jabber.protocol.client;
+using jabber.protocol.x;
+using jabber.connection;
+using jabber.protocol;
+using bedrock.collections;
+using jabber.protocol.iq;
 
 namespace test.jabber.client1 // TODO: Client1 due to a bug in NUnit.
 {
@@ -123,6 +128,7 @@ namespace test.jabber.client1 // TODO: Client1 due to a bug in NUnit.
             JID f = new JID("foo", "bar", "baz");
             pres.From = f;
             pres.Status = "Working";
+            pres.Priority = "1";
             pp.AddPresence(pres);
             Assert.AreEqual("foo@bar/baz", pp[f].From.ToString());
             f.Resource = null;
@@ -249,6 +255,41 @@ namespace test.jabber.client1 // TODO: Client1 due to a bug in NUnit.
             pres.IntPriority = 1;
             pp.AddPresence(pres);
             Assert.AreEqual(boo, pp[bare].From);
+        }
+
+        [Test]
+        public void TestCaps()
+        {
+            PresenceManager pp = new PresenceManager();
+            Presence pres = new Presence(doc);
+            pres.From = baz;
+
+            CapsManager cm = new CapsManager();
+            pp.CapsManager = cm;
+
+            cm.FileName = "caps.xml";
+            cm.Node = "http://cursive.net/clients/PresenceManagerTest";
+            cm.AddFeature(URI.DISCO_INFO);
+            cm.AddFeature(URI.DELAY);
+            cm.AddIdentity("client", "pc", null, "Presence Manager Test");
+
+            DiscoInfo info = new DiscoInfo(doc);
+            cm.FillInInfo(info);
+            cm[cm.Ver] = info;
+
+            pres.AddChild(cm.GetCaps(pres.OwnerDocument));
+            pp.AddPresence(pres);
+
+            JID dij = pp.GetFeatureJID(bare, URI.DISCO_INFO);
+            Assert.AreEqual(baz, dij);
+            dij = pp.GetFeatureJID(bare, URI.DISCO_ITEMS);
+            Assert.IsNull(dij);
+            dij = pp.GetFeatureJID(baz, URI.DISCO_INFO);
+            Assert.AreEqual(baz, dij);
+
+            StringSet fs = pp.GetFeatures(bare);
+            Assert.IsTrue(fs[URI.DISCO_INFO]);
+            Assert.IsFalse(fs[URI.DISCO_ITEMS]);
         }
     }
 }

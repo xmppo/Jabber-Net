@@ -79,7 +79,7 @@ namespace jabber.connection.sasl
 
         private static readonly MD5CryptoServiceProvider MD5 = new MD5CryptoServiceProvider();
         private static readonly Encoding ENC = System.Text.Encoding.UTF8;
-        private static readonly Regex CSV = new Regex(@"(?<tag>[^=]+)=(?:(?<data>[^,""]+)|(?:""(?<data>[^""]*)"")),?",
+        private static readonly Regex CSV = new Regex(@"(?<tag>[^= \t\r\n]+)=(?:(?<data>[^,"" \t\r\n]+)|(?:""(?<data>[^""]*)"")),?",
                 RegexOptions.ExplicitCapture | RegexOptions.Compiled);
 
         /// <summary>

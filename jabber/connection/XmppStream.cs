@@ -976,11 +976,14 @@ namespace jabber.connection
             bool doClose = false;
             bool doStream = false;
 
+
             lock (StateLock)
             {
+                // if close is called, never try to reconnect.
+                m_reconnect = false;
+
                 if ((State == RunningState.Instance) && (clean))
                 {
-                    m_reconnect = false;
                     doStream = true;
                 }
                 if (m_state != ClosedState.Instance)

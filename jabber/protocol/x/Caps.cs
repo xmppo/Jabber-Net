@@ -52,8 +52,8 @@ namespace jabber.protocol.x
         /// </summary>
         public string Node
         {
-            get { return GetAttribute("node"); }
-            set { SetAttribute("node", value); }
+            get { return GetAttr("node"); }
+            set { SetAttr("node", value); }
         }
 
         /// <summary>
@@ -61,8 +61,8 @@ namespace jabber.protocol.x
         /// </summary>
         public string Version
         {
-            get { return GetAttribute("ver"); }
-            set { SetAttribute("ver", value); }
+            get { return GetAttr("ver"); }
+            set { SetAttr("ver", value); }
         }
 
         /// <summary>
@@ -70,16 +70,25 @@ namespace jabber.protocol.x
         /// </summary>
         public string Hash
         {
-            get { return GetAttribute("hash"); }
-            set { SetAttribute("hash", value); }
+            get { return GetAttr("hash"); }
+            set { SetAttr("hash", value); }
+        }
+
+        /// <summary>
+        /// Is this a new-style (post v1.5) caps?
+        /// </summary>
+        public bool NewStyle
+        {
+            get { return HasAttribute("hash"); }
         }
 
         /// <summary>
         /// The extensions currently on in the entity.
         /// </summary>
+        [Obsolete]
         public string[] Extensions
         {
-            get { return GetAttribute("ext").Split(SPLIT); }
+            get { return GetAttr("ext").Split(SPLIT); }
             set
             {
                 if (value.Length == 0)
@@ -88,13 +97,14 @@ namespace jabber.protocol.x
                         RemoveAttribute("ext");
                 }
                 else
-                    SetAttribute("ext", string.Join(" ", value));
+                    SetAttr("ext", string.Join(" ", value));
             }
         }
 
         /// <summary>
         /// All of the combinations of node#ver, node#ext.
         /// </summary>
+        [Obsolete]
         public string[] DiscoInfoNodes
         {
             get

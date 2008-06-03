@@ -20,6 +20,7 @@ using jabber;
 using jabber.client;
 using jabber.protocol.client;
 using jabber.protocol.iq;
+using jabber.connection;
 
 namespace ConsoleClient
 {
@@ -106,6 +107,11 @@ namespace ConsoleClient
                 jc.OnRegisterInfo += new RegisterInfoHandler(this.jc_OnRegisterInfo);
                 jc.OnRegistered += new IQHandler(jc_OnRegistered);
             }
+
+            CapsManager cm = new CapsManager();
+            cm.Stream = jc;
+            cm.Node = "http://cursive.net/clients/ConsoleClient";
+            
             Console.WriteLine("Connecting");
             jc.Connect();
             Console.WriteLine("Connected");

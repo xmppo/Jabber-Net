@@ -899,12 +899,46 @@ namespace jabber.protocol
                     }
                     else
                     {
-                        doc.ImportNode(n, deep);
+                        el.AppendChild(doc.ImportNode(n, deep));
                     }
                 }
             }
             return el;
+        }
 
+        /// <summary>
+        /// Convert the given source element to typed subclasses of Element, according
+        /// to the given ElementFactory.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="factory"></param>
+        /// <returns></returns>
+        public static Element AddTypes(XmlElement source, ElementFactory factory)
+        {
+            if (source is Element)
+                return (Element)source; // assume all kids are converted already.
+
+            XmlDocument doc = source.OwnerDocument;
+            XmlQualifiedName qn = new XmlQualifiedName(source.Name, source.NamespaceURI);
+            Element el = factory.GetElement(source.Prefix, qn, doc);
+
+            el.IsEmpty = source.IsEmpty;
+
+            if (source.HasAttributes)
+            {
+                foreach (XmlAttribute attr in source.Attributes)
+                    el.Attributes.Append((XmlAttribute)attr.CloneNode(true));
+            }
+
+            foreach (XmlNode n in source.ChildNodes)
+            {
+                if (n is XmlElement)
+                    el.AppendChild(AddTypes((XmlElement)n, factory));
+                else
+                    el.AppendChild(n.CloneNode(true));
+            }
+
+            return el;
         }
 
         /// <summary>

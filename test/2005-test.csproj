@@ -113,6 +113,7 @@
     <Compile Include="bedrock\collections\SkipListTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="bedrock\collections\StringSet.cs" />
     <Compile Include="bedrock\collections\TreeTest.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -122,6 +123,7 @@
     <Compile Include="bedrock\collections\TrieTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="jabber\connection\FileMap.cs" />
     <Compile Include="bedrock\io\ZlibStream.cs" />
     <Compile Include="bedrock\net\AsyncSocketTest.cs">
       <SubType>Code</SubType>
@@ -146,6 +148,7 @@
     <Compile Include="jabber\connection\ConferenceManagerTest.cs" />
     <Compile Include="jabber\connection\DiscoManagerTest.cs" />
     <Compile Include="jabber\connection\PubSubManagerTest.cs" />
+    <Compile Include="jabber\connection\sasl\MD5Processor.cs" />
     <Compile Include="jabber\JIDTest.cs">
       <SubType>Code</SubType>
     </Compile>

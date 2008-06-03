@@ -125,6 +125,7 @@
     <Compile Include="bedrock\collections\SkipList.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="bedrock\collections\StringSet.cs" />
     <Compile Include="bedrock\collections\Tree.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -140,6 +141,7 @@
     <Compile Include="bedrock\io\BufferAggregate.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="jabber\connection\FileMap.cs" />
     <Compile Include="bedrock\io\ReadEventStream.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -370,9 +372,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="jabber\protocol\URI.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="jabber\protocol\XmlLoader.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="jabber\protocol\x\Caps.cs" />

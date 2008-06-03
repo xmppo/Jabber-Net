@@ -69,7 +69,7 @@ namespace jabber.protocol.client
     /// Client presence packet.
     /// </summary>
     [SVN(@"$Id$")]
-    public class Presence : Packet
+    public class Presence : Packet, IComparable<Presence>, IComparable
     {
         /// <summary>
         ///
@@ -225,6 +225,7 @@ namespace jabber.protocol.client
                 }
                 md = new jabber.protocol.x.ModernDelay(this.OwnerDocument);
                 md.Stamp = value;
+                this.AddChild(md);
             }
         }
 
@@ -262,24 +263,7 @@ namespace jabber.protocol.client
         /// <returns></returns>
         public static bool operator<(Presence first, Presence second)
         {
-            int fp = first.IntPriority;
-            int sp = second.IntPriority;
-            if (fp < sp)
-                return true;
-            if (fp > sp)
-                return false;
-
-            // equal priority
-            int fs = IntShow(first.Show);
-            int ss = IntShow(second.Show);
-
-            if (fs < ss)
-                return true;
-            if (fs > ss)
-                return false;
-
-            // equal show
-            return first.ReceivedTime < second.ReceivedTime;
+            return (((IComparable<Presence>)first).CompareTo(second) == -1);
         }
 
         /// <summary>
@@ -292,24 +276,61 @@ namespace jabber.protocol.client
         /// <returns></returns>
         public static bool operator>(Presence first, Presence second)
         {
-            int fp = first.IntPriority;
-            int sp = second.IntPriority;
-            if (fp > sp)
-                return true;
-            if (fp < sp)
-                return false;
+            return (((IComparable<Presence>)first).CompareTo(second) == 1);
+        }
+
+        #region IComparable<Presence> Members
+
+        public int CompareTo(Presence other)
+        {
+            /*
+            Less than zero 
+             This object is less than the other parameter.
+ 
+            Zero 
+             This object is equal to other. 
+ 
+            Greater than zero 
+             This object is greater than other. 
+
+             */
+            if ((object)this == (object)other)
+                return 0;
+
+            if (other == null)
+                return 1;
+
+            int tp = this.IntPriority;
+            int op = other.IntPriority;
+            if (tp > op)
+                return 1;
+            if (tp < op)
+                return -1;
 
             // equal priority
-            int fs = IntShow(first.Show);
-            int ss = IntShow(second.Show);
+            int ts = IntShow(this.Show);
+            int os = IntShow(other.Show);
 
-            if (fs > ss)
-                return true;
-            if (fs < ss)
-                return false;
+            if (ts > os)
+                return 1;
+            if (ts < os)
+                return -1;
 
             // equal show
-            return first.ReceivedTime > second.ReceivedTime;
+            return this.ReceivedTime.CompareTo(other.ReceivedTime);
         }
+
+        #endregion
+
+        #region IComparable Members
+
+        public int CompareTo(object obj)
+        {
+            if (obj is Presence)
+                return CompareTo((Presence)obj);
+            return 1;
+        }
+
+        #endregion
     }
 }
