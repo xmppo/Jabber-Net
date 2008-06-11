@@ -73,6 +73,7 @@ namespace bedrock.net
         private bool m_running = false;
         private long m_rid = -1L;
         private string m_sid = null;
+        private string m_authID = null;
         private X509Certificate m_remote_cert = null;
         private bool m_StartStream = false;
         private string m_NS;
@@ -261,7 +262,10 @@ namespace bedrock.net
                 //throw new InvalidOperationException("Call Connect() first");
                 return;
             if (m_sockA.IsPending || m_sockB.IsPending)
+            {
+                Debug.WriteLine("Skipping request, already pending");
                 return;
+            }
 
             Write(null);
         }
@@ -282,6 +286,23 @@ namespace bedrock.net
             throw new NotImplementedException();
         }
 
+        private void FakeTimer(object state)
+        {
+            // HACK: stream restart is null for older versions of XEP-124.
+            if (!FakeReceivedStream())
+                return;
+
+            Features f = new Features(m_doc);
+            f.AddChild(new Bind(m_doc));
+            f.AddChild(new Session(m_doc));
+            byte[] p = ENC.GetBytes(f.OuterXml);
+            if (!m_listener.OnRead(this, p, 0, p.Length))
+            {
+                Close();
+                return;
+            }
+        }
+
         /// <summary>
         /// Send bytes to the jabber server
         /// </summary>
@@ -293,9 +314,18 @@ namespace bedrock.net
             if (buf != null)
                 throw new NotImplementedException("Call Write(XmlElement)");
 
-            StartStream = true;
+            // HACK
             byte[] p = ENC.GetBytes("Psuedo-stream body");
             m_listener.OnWrite(this, p, 0, p.Length);
+            if (m_sid == null)
+            {
+                StartStream = true;
+                return;
+            }
+
+            // HACK: upper levels need this to come in after the return from write.
+            // Double-hack: hope this doesn't get gc's before the timer fires.... :)
+            Timer t = new Timer(new TimerCallback(FakeTimer), null, 0, Timeout.Infinite);
         }
 
         /// <summary>
@@ -415,6 +445,22 @@ namespace bedrock.net
             m_listener.OnError(this, ex);
         }
 
+        private bool FakeReceivedStream()
+        {
+            jabber.protocol.stream.Stream stream =
+                new jabber.protocol.stream.Stream(m_doc, NS);
+            stream.Version = "1.0";
+            stream.ID = m_authID;
+
+            byte[] sbuf = ENC.GetBytes(stream.StartTag());
+            if (!m_listener.OnRead(this, sbuf, 0, sbuf.Length))
+            {
+                Close();
+                return false;
+            }
+            return true;
+        }
+
         bool ISocketEventListener.OnRead(BaseSocket sock, byte[] buf, int offset, int length)
         {
             if (!m_running)
@@ -476,17 +522,9 @@ namespace bedrock.net
             if (StartStream)
             {
                 StartStream = false;
-                jabber.protocol.stream.Stream stream =
-                    new jabber.protocol.stream.Stream(m_doc, NS);
-                stream.Version = "1.0";
-                stream.ID = b.AuthID;
-
-                byte[] sbuf = ENC.GetBytes(stream.StartTag());
-                if (!m_listener.OnRead(this, sbuf, 0, sbuf.Length))
-                {
-                    Close();
+                m_authID = b.AuthID;
+                if (!FakeReceivedStream())
                     return false;
-                }
             }
 
             lock (m_lock)

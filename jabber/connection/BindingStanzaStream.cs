@@ -22,7 +22,7 @@ namespace jabber.connection
                 string proxy_uri = string.Format("http://{0}:{1}/", host, port);
                 sock.ProxyURI = new System.Uri(proxy_uri);
                 string user = m_listener[Options.PROXY_USER] as string;
-                if (user != null)
+                if ((user != null) && (user != ""))
                 {
                     sock.ProxyCredentials = new System.Net.NetworkCredential(user,
                         m_listener[Options.PROXY_PW] as string);

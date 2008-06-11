@@ -33,7 +33,7 @@ namespace jabber.protocol.stream
         /// </summary>
         /// <param name="doc"></param>
         public Features(XmlDocument doc) :
-            base("", new XmlQualifiedName("features", jabber.protocol.URI.STREAM), doc)
+            base("stream", new XmlQualifiedName("features", jabber.protocol.URI.STREAM), doc)
         {
         }
 
