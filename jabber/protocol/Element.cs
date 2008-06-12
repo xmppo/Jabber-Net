@@ -240,7 +240,7 @@ namespace jabber.protocol
         /// <typeparam name="T"></typeparam>
         /// <param name="value"></param>
         /// <returns></returns>
-        T SetElem<T>(string value)
+        public T SetElem<T>(string value)
             where T : Element
         {
             T result = GetOrCreateElement<T>();

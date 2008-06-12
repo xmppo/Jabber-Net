@@ -81,7 +81,9 @@ namespace jabber.client
         /// <summary>
         /// Required designer variable.
         /// </summary>
+#pragma warning disable 0414
         private System.ComponentModel.Container components = null;
+#pragma warning restore 0414
         private Tree m_items = new Tree();
         private AutoSubscriptionHanding m_autoAllow = AutoSubscriptionHanding.NONE;
         private bool m_autoSubscribe = false;

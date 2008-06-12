@@ -275,8 +275,10 @@ namespace jabber.connection
         /// <summary>
         /// Required designer variable.
         /// </summary>
+#pragma warning disable 0414
         private System.ComponentModel.Container components = new System.ComponentModel.Container();
-
+#pragma warning restore 0414
+        
         /// <summary>
         /// Creates a new XMPP stream and associates it with the parent control.
         /// </summary>

@@ -37,7 +37,8 @@ namespace bedrock.collections
         {
         }
         /// <summary>
-        /// Creates a new node, with key and data, possibly having sorted children.
+        /// Creates a new node, with key and data, possibly having
+        /// sorted children. 
         /// </summary>
         /// <param name="key">The key used to retrieve the data</param>
         /// <param name="data">The data in the node</param>
@@ -56,6 +57,24 @@ namespace bedrock.collections
                 m_children = new Hashtable();
             }
         }
+
+        /// <summary>
+        /// The key for this node.
+        /// </summary>
+        public object Key
+        {
+            get { return m_key; }
+        }
+
+        /// <summary>
+        /// The data associated with this node.
+        /// </summary>
+        public object Data
+        {
+            get { return m_data; }
+            set { m_data = value; }
+        }
+        
         /// <summary>
         /// Adds a new child node
         /// </summary>

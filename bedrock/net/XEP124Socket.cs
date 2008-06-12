@@ -66,7 +66,6 @@ namespace bedrock.net
 
         private readonly int m_hold = 5;
         private int m_wait = 60;
-        private int m_polling = 10;
         private int m_maxPoll = 30;
         private int m_minPoll = 1;
         private Uri m_uri = null;
@@ -329,7 +328,8 @@ namespace bedrock.net
 
         /// <summary>
         /// Write an XML element to the socket.
-        /// In this case, the element is queued, so that the write thread can pick it up.
+        /// In this case, the element is queued, so that the write
+        /// thread can pick it up.
         /// </summary>
         /// <param name="elem"></param>
         public void Write(XmlElement elem)
@@ -514,9 +514,6 @@ namespace bedrock.net
 
             if (b.Wait != -1)
                 m_wait = b.Wait;
-
-            if (b.Polling != -1)
-                m_polling = b.Polling;
 
             if (StartStream)
             {

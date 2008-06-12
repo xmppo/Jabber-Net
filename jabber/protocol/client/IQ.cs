@@ -128,6 +128,7 @@ namespace jabber.protocol.client
             set { this.InnerXml = ""; this.AddChild(value); }
         }
 
+#pragma warning disable 0809
         /// <summary>
         /// Swap the To and the From addresses.
         /// Obsolete: Use GetResponse or GetErrorResponse, now, for IQs.
@@ -137,6 +138,7 @@ namespace jabber.protocol.client
         {
             base.Swap();
         }
+#pragma warning restore 0809
 
         /// <summary>
         /// Swap the to and from, set the type to result.
