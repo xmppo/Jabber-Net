@@ -358,7 +358,6 @@ namespace jabber.connection
 
             public NodeCallback(DiscoManager m, DiscoNodeHandler h, object s)
             {
-                Debug.Assert(h != null);
                 manager = m;
                 callback = h;
                 state = s;
@@ -366,7 +365,8 @@ namespace jabber.connection
 
             public void Call(DiscoNode node)
             {
-                callback(manager, node, state);
+                if (callback != null)
+                    callback(manager, node, state);
             }
         }
 
