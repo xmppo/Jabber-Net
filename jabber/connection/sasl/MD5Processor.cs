@@ -44,7 +44,6 @@ namespace jabber.connection.sasl
         private string  m_ncString;
         private string  m_qop;
         private string  m_charset;
-        private string  m_algorithm;
         private string  m_authzid;
 
         /// <summary>
@@ -198,10 +197,6 @@ namespace jabber.connection.sasl
             if ( (n = this[CHARSET]) != null)
             {
                 m_charset = n.ToString();
-            }
-            if ( (n = this[ALGORITHM]) != null)
-            {
-                m_algorithm = n.ToString();
             }
             if ( (n = this[AUTHZID]) != null)
             {

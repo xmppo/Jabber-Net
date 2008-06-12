@@ -180,12 +180,6 @@ namespace jabber.connection
             m_sock.Close();
         }
 
-        private void DoKeepAlive(object state)
-        {
-            if ((m_sock != null) && this.Connected)
-                m_sock.Write(new byte[] { 32 });
-        }
-
 #if !NO_SSL
         /// <summary>
         /// Negotiates Start-TLS with the other endpoint.

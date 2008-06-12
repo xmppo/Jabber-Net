@@ -108,14 +108,14 @@ namespace jabber.connection.sasl
         SECBUFFER_PADDING = 9,
         SECBUFFER_STREAM = 10
     }
-
+    /*
     [StructLayout(LayoutKind.Sequential)]
     internal struct SecHandle //=PCtxtHandle
     {
         uint dwLower;
         uint dwUpper;
     }
-
+    */
     [StructLayout(LayoutKind.Sequential)]
     internal struct SecBuffer : IDisposable
     {
@@ -483,6 +483,7 @@ namespace jabber.connection.sasl
             out uint pfContextAttr, //managed ulong == 64 bits!!!
             out SECURITY_INTEGER ptsExpiry); //PTimeStamp
 
+        /*
         [DllImport("secur32.Dll", CharSet = CharSet.Auto, SetLastError = false)]
         static extern int AcceptSecurityContext(ref SECURITY_HANDLE phCredential,
                                                 IntPtr phContext,
@@ -504,6 +505,7 @@ namespace jabber.connection.sasl
                                                 out SecBufferDesc pOutput,
                                                 out uint pfContextAttr,    //managed ulong == 64 bits!!!
                                                 out SECURITY_INTEGER ptsTimeStamp);
+        */
 
         [DllImport("secur32.Dll", CharSet = CharSet.Auto, SetLastError = false)]
         public static extern int ImpersonateSecurityContext(ref SECURITY_HANDLE phContext);

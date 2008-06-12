@@ -27,8 +27,6 @@ namespace test.bedrock.collections
     [TestFixture]
     public class SkipListTest
     {
-        private System.Text.Encoding ENC = System.Text.Encoding.Default;
-
         [ExpectedException(typeof(ArgumentNullException))]
         [Test] public void Test_Null_Key()
         {

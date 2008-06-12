@@ -323,9 +323,12 @@ namespace bedrock.net
                 return;
             }
 
-            // HACK: upper levels need this to come in after the return from write.
-            // Double-hack: hope this doesn't get gc's before the timer fires.... :)
-            Timer t = new Timer(new TimerCallback(FakeTimer), null, 0, Timeout.Infinite);
+            // HACK: upper levels need this to come in after the
+            // return from write. Double-hack: hope this doesn't get
+            // gc's before the timer fires.... :)
+            
+            //Timer t =
+            new Timer(new TimerCallback(FakeTimer), null, 0, Timeout.Infinite);
         }
 
         /// <summary>

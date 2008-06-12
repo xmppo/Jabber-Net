@@ -60,6 +60,9 @@ namespace ConsoleClient
         [CommandLine("i", "Do not send initial presence", false)]
         public bool initialPresence = true;
 
+        [CommandLine("b", "HTTP Binding (BOSH) URL", false)]
+        public string boshURL = null;
+
         public Class1(string[] args)
         {
             JabberClient jc = new JabberClient();
@@ -99,6 +102,12 @@ namespace ConsoleClient
                 Console.WriteLine(jc.LocalCertificate.ToString(true));
             }
 
+            if (boshURL != null)
+            {
+                jc[Options.POLL_URL] = boshURL;
+                jc[Options.CONNECTION_TYPE] = ConnectionType.HTTP_Binding;
+            }
+            
             if (register)
             {
                 jc.AutoLogin = false;

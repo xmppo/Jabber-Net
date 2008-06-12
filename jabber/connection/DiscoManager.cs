@@ -1264,14 +1264,12 @@ namespace jabber.connection
 
         private class FindServiceRequest
         {
-            private DiscoManager m_manager;
             private string m_URI;
             private DiscoNodeHandler m_handler;
             private int m_outstanding = 0;
 
-            public FindServiceRequest(DiscoManager man, string featureURI, DiscoNodeHandler handler)
+            public FindServiceRequest(string featureURI, DiscoNodeHandler handler)
             {
-                m_manager = man;
                 m_URI = featureURI;
                 m_handler = handler;
             }
@@ -1317,7 +1315,7 @@ namespace jabber.connection
             if (handler == null)
                 return;  // prove I *didn't* call it. :)
 
-            FindServiceRequest req = new FindServiceRequest(this, featureURI, handler);
+            FindServiceRequest req = new FindServiceRequest(featureURI, handler);
             BeginGetItems(Root, new DiscoNodeHandler(req.GotRootItems), state);  // hopefully enough to prevent GC.
         }
 
