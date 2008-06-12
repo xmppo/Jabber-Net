@@ -20,6 +20,7 @@ using bedrock.util;
 namespace test.bedrock.collections
 {
     [TestFixture]
+    [SVN(@"$Id$")]
     public class StringSetTest
     {
         [Test]

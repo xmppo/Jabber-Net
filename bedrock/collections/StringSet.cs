@@ -1,6 +1,21 @@
+/* --------------------------------------------------------------------------
+ * Copyrights
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2008 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * information for Cursive Systems, Inc. is available at
+ * http://www.cursive.net/.
+ *
+ * License
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
+ * See LICENSE.txt for details.
+ * --------------------------------------------------------------------------*/
 using System;
 using System.Collections;
 using System.Collections.Generic;
+
+using bedrock.util;
 
 namespace bedrock.collections
 {
@@ -8,7 +23,8 @@ namespace bedrock.collections
     /// A set of strings, backed into a BitArray.  Any given string that is inserted
     /// into any instance of a StringSet increases the size of all StringSets over time.
     /// </summary>
-	public class StringSet : IEnumerable, IEnumerable<string>, ICloneable
+    [SVN(@"$Id$")]
+    public class StringSet : IEnumerable, IEnumerable<string>, ICloneable
 	{
         private BitArray m_bits = null;
 

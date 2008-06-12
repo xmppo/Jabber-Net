@@ -13,6 +13,8 @@
  * --------------------------------------------------------------------------*/
 using System;
 
+using bedrock.util;
+
 using jabber.connection;
 using jabber.connection.sasl;
 using jabber.protocol.stream;
@@ -23,6 +25,7 @@ using System.Xml;
 namespace test.jabber.connection.sasl
 {
     [TestFixture]
+    [SVN(@"$Id$")]
     public class MD5ProcessorTest
     {
         [Test]

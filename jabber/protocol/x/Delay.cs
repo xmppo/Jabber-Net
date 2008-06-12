@@ -75,6 +75,7 @@ namespace jabber.protocol.x
     /// <summary>
     /// A modern, XEP-0203 delay element
     /// </summary>
+    [SVN(@"$Id$")]
     public class ModernDelay : Element
     {
 /*

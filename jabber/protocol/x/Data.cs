@@ -46,6 +46,7 @@ namespace jabber.protocol.x
     /// <summary>
     /// Compare two x:data forms by form type.
     /// </summary>
+    [SVN(@"$Id$")]
     public class FormTypeComparer : System.Collections.Generic.Comparer<Data>
     {
         /// <summary>

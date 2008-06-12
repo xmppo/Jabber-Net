@@ -12,12 +12,13 @@
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
-using System.Collections.Generic;
 using System.Text;
-using NUnit.Framework;
 using System.IO;
-using jabber.connection;
 using System.Threading;
+
+using NUnit.Framework;
+using bedrock.util;
+using jabber.connection;
 
 namespace test.bedrock.net
 {
@@ -25,6 +26,7 @@ namespace test.bedrock.net
     /// TODO: This test is known to not work.  Add one that does, please.
     /// </summary>
     [TestFixture]
+    [SVN(@"$Id$")]
     public class HttpUploadTest
     {
         private object m_lock = new object();

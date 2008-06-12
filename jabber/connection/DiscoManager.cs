@@ -32,6 +32,7 @@ namespace jabber.connection
     /// <summary>
     /// Manages a service discovery (disco) identity. See <a href="http://www.xmpp.org/extensions/xep-0030.html">XEP-0030</a> for more information.
     /// </summary>
+    [SVN(@"$Id$")]
     public class Ident : IComparable
     {
         private string m_name;

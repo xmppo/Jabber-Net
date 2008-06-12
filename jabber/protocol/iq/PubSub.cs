@@ -166,6 +166,7 @@ namespace jabber.protocol.iq
     /// A type-safe PubSub IQ.
     /// </summary>
     /// <typeparam name="T">The type of command to create</typeparam>
+    [SVN(@"$Id$")]
     public class PubSubCommandIQ<T> : jabber.protocol.client.TypedIQ<TypedPubSub<T>>
         where T : PubSubCommand
     {
@@ -203,6 +204,7 @@ namespace jabber.protocol.iq
     /// A type-safe pubsub element.
     /// </summary>
     /// <typeparam name="T"></typeparam>
+    [SVN(@"$Id$")]
     public class TypedPubSub<T> : Element
         where T : PubSubCommand
     {
@@ -574,6 +576,7 @@ namespace jabber.protocol.iq
     /// <summary>
     /// Configuring a pubsub node.  If the default is desired, it will be empty.  Otherwise it will contain an x:data.
     /// </summary>
+    [SVN(@"$Id$")]
     public class Configure : PubSubCommand
     {
         /// <summary>
@@ -1131,6 +1134,7 @@ namespace jabber.protocol.iq
     /// <summary>
     /// A single subscription
     /// </summary>
+    [SVN(@"$Id$")]
     public class PubSubSubscription : Element
     {
       /// <summary>

@@ -197,6 +197,7 @@ namespace jabber.protocol.client
     /// through the Instruction property.
     /// </summary>
     /// <typeparam name="T"></typeparam>
+    [SVN(@"$Id$")]
     public class TypedIQ<T> : IQ
         where T : Element
     {

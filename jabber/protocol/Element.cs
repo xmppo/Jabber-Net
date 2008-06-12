@@ -27,6 +27,7 @@ namespace jabber.protocol
     /// <summary>
     /// An enum that should translate "_" into "-" for use externally.
     /// </summary>
+    [SVN(@"$Id$")]
     public class DashAttribute : Attribute
     {
         /// <summary>

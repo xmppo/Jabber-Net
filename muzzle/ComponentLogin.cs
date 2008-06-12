@@ -18,6 +18,8 @@ using System.ComponentModel.Design;
 using System.Windows.Forms;
 using System.Xml;
 
+using bedrock.util;
+
 using jabber.connection;
 using jabber.server;
 
@@ -34,6 +36,7 @@ namespace muzzle
     ///     jc.Connect();
     /// }
     /// </example>
+    [SVN(@"$Id$")]
     public class ComponentLogin : OptionForm
     {
 

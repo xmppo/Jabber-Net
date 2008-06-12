@@ -12,6 +12,9 @@
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System.Xml;
+
+using bedrock.util;
+
 using jabber;
 using jabber.client;
 using jabber.connection;
@@ -27,6 +30,7 @@ using Rhino.Mocks.Interfaces;
 namespace test.jabber.connection
 {
     [TestFixture]
+    [SVN(@"$Id$")]
     public class CapsManagerTest
     {
         private MockRepository mocks;

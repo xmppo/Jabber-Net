@@ -16,11 +16,14 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Windows.Forms;
 
+using bedrock.util;
+
 using jabber.client;
 using jabber.connection;
 
 namespace Example
 {
+    [SVN(@"$Id$")]
     public class ServiceDisplay : UserControl
     {
         /// <summary>

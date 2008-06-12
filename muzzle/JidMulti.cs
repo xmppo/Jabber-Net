@@ -18,11 +18,14 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 
+using bedrock.util;
+
 namespace muzzle
 {
     /// <summary>
     /// Summary description for JidMulti.
     /// </summary>
+    [SVN(@"$Id$")]
     public class JidMulti : System.Windows.Forms.UserControl
     {
         private System.Windows.Forms.ListBox lstJID;

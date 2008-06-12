@@ -14,15 +14,20 @@
 using System.Collections;
 using System.Reflection;
 using System.Xml;
+
+using bedrock.util;
+
 using jabber;
 using jabber.connection;
 using jabber.protocol.client;
+
 using NUnit.Framework;
 using Rhino.Mocks;
 
 namespace test.jabber.connection
 {
     [TestFixture]
+    [SVN(@"$Id$")]
     public class PubSubManagerTest
     {
         private const string PUB_SUB_XMLNS = "http://jabber.org/protocol/pubsub";

@@ -17,8 +17,11 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using jabber.connection;
 
+using bedrock.util;
+
 namespace Example
 {
+    [SVN(@"$Id$")]
     public class PubSubDisplay : UserControl
     {
         private ListBox lbID;

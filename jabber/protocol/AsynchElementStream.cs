@@ -327,6 +327,7 @@ namespace jabber.protocol
         /// <summary>
         /// There was an error parsing XML.  What was the context?
         /// </summary>
+        [SVN(@"$Id$")]
         public class XMLParseException : Exception
         {
             private string m_context = null;

@@ -18,6 +18,7 @@ using System.Diagnostics;
 using System.Xml;
 
 using jabber.protocol;
+using bedrock.util;
 
 namespace jabber.connection
 {
@@ -25,7 +26,8 @@ namespace jabber.connection
     /// A dictionary backed into a file.  Any modification to the dictionary re-writes the file, so 
     /// writes are somewhat costly.  Reads are cached lazily.
     /// </summary>
-	public class FileMap<T>
+    [SVN(@"$Id$")]
+    public class FileMap<T>
         where T : Element
 	{
         private const string NS = "http://cursive.net/xml/FileMap";

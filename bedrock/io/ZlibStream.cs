@@ -23,6 +23,7 @@ namespace bedrock.io
     /// <summary>
     /// Compression failed.
     /// </summary>
+    [SVN(@"$Id$")]
     public class CompressionFailedException : ApplicationException
     {
         /// <summary>

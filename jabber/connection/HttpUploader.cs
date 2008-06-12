@@ -19,11 +19,14 @@ using System.Net;
 using System.IO;
 using System.Collections;
 
+using bedrock.util;
+
 namespace jabber.connection
 {
     /// <summary>
     /// Manages HTTP Requests via XMPP (XEP-70).
     /// </summary>
+    [SVN(@"$Id$")]
     public class HttpUploader
     {
         /// <summary>

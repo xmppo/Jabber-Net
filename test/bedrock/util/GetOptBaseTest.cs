@@ -214,6 +214,7 @@ namespace test.bedrock.util
         BAR
     }
 
+    [SVN(@"$Id$")]
     public class TestGetOpt : GetOpt
     {
         [CommandLine("nologo", Description="Command line argument for NUnit.")]

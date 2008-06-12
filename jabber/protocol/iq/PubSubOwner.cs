@@ -1,3 +1,16 @@
+/* --------------------------------------------------------------------------
+ * Copyrights
+ *
+ * Portions created by or assigned to Cursive Systems, Inc. are
+ * Copyright (c) 2002-2008 Cursive Systems, Inc.  All Rights Reserved.  Contact
+ * information for Cursive Systems, Inc. is available at
+ * http://www.cursive.net/.
+ *
+ * License
+ *
+ * Jabber-Net can be used under either JOSL or the GPL.
+ * See LICENSE.txt for details.
+ * --------------------------------------------------------------------------*/
 using System;
 using System.Text;
 using System.Xml;
@@ -10,6 +23,7 @@ namespace jabber.protocol.iq
     /// A type-safe PubSub IQ for owner actions.
     /// </summary>
     /// <typeparam name="T">The type of command to create</typeparam>
+    [SVN(@"$Id$")]
     public class OwnerPubSubCommandIQ<T> : jabber.protocol.client.TypedIQ<OwnerPubSub<T>>
         where T : PubSubCommand
     {
@@ -47,6 +61,7 @@ namespace jabber.protocol.iq
     /// A type-safe pubsub element.
     /// </summary>
     /// <typeparam name="T"></typeparam>
+    [SVN(@"$Id$")]
     public class OwnerPubSub<T> : Element
         where T : PubSubCommand
     {

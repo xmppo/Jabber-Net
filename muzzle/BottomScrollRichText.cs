@@ -18,12 +18,15 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 
+using bedrock.util;
+
 namespace muzzle
 {
 
     /// <summary>
     /// Summary description for BottomScrollRichText.
     /// </summary>
+    [SVN(@"$Id$")]
     public class BottomScrollRichText : System.Windows.Forms.RichTextBox
     {
         private const int SB_HORZ             = 0;

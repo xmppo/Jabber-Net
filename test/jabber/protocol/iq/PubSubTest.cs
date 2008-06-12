@@ -12,12 +12,14 @@
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System.Xml;
+using bedrock.util;
 using jabber.protocol.iq;
 using NUnit.Framework;
 
 namespace test.jabber.protocol.iq
 {
     [TestFixture]
+    [SVN(@"$Id$")]
     public class PubSubTest
     {
         private const string NODE = "TestNode";

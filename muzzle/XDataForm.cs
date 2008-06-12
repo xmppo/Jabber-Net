@@ -20,6 +20,8 @@ using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using System.Xml;
 
+using bedrock.util;
+
 using jabber.protocol;
 using jabber.protocol.x;
 using jabber.protocol.client;
@@ -31,6 +33,7 @@ namespace muzzle
     /// <summary>
     /// Summary description for XData.
     /// </summary>
+    [SVN(@"$Id$")]
     public class XDataForm : System.Windows.Forms.Form
     {
         private static Regex WS = new Regex("\\s+", RegexOptions.Compiled);

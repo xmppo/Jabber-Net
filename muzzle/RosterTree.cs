@@ -21,6 +21,7 @@ using System.Diagnostics;
 using System.Windows.Forms;
 
 using bedrock.collections;
+using bedrock.util;
 using jabber;
 using jabber.client;
 using jabber.protocol.client;
@@ -33,6 +34,7 @@ namespace muzzle
     /// form you drop this on has a JabberClient, a PresenceManager, and a RosterManager
     /// on the form first, and this widget will automatically connect to them.
     /// </summary>
+    [SVN(@"$Id$")]
     public class RosterTree : System.Windows.Forms.TreeView
     {
         // image list offsets
@@ -538,6 +540,7 @@ namespace muzzle
         /// <summary>
         /// A TreeNode to hold a Roster Group
         /// </summary>
+        [SVN(@"$Id$")]
         public class GroupNode : TreeNode
         {
             private jabber.protocol.iq.Group m_group;
@@ -589,6 +592,7 @@ namespace muzzle
         /// <summary>
         /// A TreeNode to hold a RosterItem
         /// </summary>
+        [SVN(@"$Id$")]
         public class ItemNode : TreeNode
         {
             private jabber.protocol.iq.Item m_item;

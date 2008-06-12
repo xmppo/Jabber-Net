@@ -24,7 +24,7 @@ namespace jabber.connection
     /// <summary>
     /// Manages the HTTP Polling XMPP stream.
     /// </summary>
-    [SVN(@"$Id: HttpStanzaStream.cs 614 2008-02-21 20:50:15Z michael.wegman $")]
+    [SVN(@"$Id$")]
     public abstract class HttpStanzaStream : StanzaStream, ISocketEventListener
     {
         private AsynchElementStream m_elements = null;
