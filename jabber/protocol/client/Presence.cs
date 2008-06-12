@@ -281,6 +281,19 @@ namespace jabber.protocol.client
 
         #region IComparable<Presence> Members
 
+        /// <summary>
+        /// Compare this presence element with another, first by priority, 
+        /// then by show, then by time received.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns>
+        ///    Less than zero 
+        ///     This object is less than the other parameter.
+        ///    Zero 
+        ///     This object is equal to other. 
+        ///    Greater than zero 
+        ///     This object is greater than other. 
+        /// </returns>
         public int CompareTo(Presence other)
         {
             /*
@@ -324,10 +337,23 @@ namespace jabber.protocol.client
 
         #region IComparable Members
 
-        public int CompareTo(object obj)
+        /// <summary>
+        /// Compare this presence element with another, first by priority, 
+        /// then by show, then by time received.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns>
+        ///    Less than zero 
+        ///     This object is less than the other parameter.
+        ///    Zero 
+        ///     This object is equal to other. 
+        ///    Greater than zero 
+        ///     This object is greater than other. 
+        /// </returns>
+        public int CompareTo(object other)
         {
-            if (obj is Presence)
-                return CompareTo((Presence)obj);
+            if (other is Presence)
+                return CompareTo((Presence)other);
             return 1;
         }
 

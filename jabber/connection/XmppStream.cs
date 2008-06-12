@@ -1099,6 +1099,10 @@ namespace jabber.connection
             }
         }
 
+        /// <summary>
+        /// Handle the last set of stream:features we have received, 
+        /// based on the current state.
+        /// </summary>
         protected virtual void ProcessFeatures()
         {
             // don't do starttls if we're already on an SSL socket.

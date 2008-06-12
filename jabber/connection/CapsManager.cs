@@ -506,6 +506,11 @@ namespace jabber.connection
             return false;
         }
 
+        /// <summary>
+        /// Take the info for this entity, and fill it in to the given DiscoInfo protocol element.
+        /// Node, identities, and features get filled in.
+        /// </summary>
+        /// <param name="info">The empty info element to fill in.</param>
         public void FillInInfo(DiscoInfo info)
         {
             info.Node = NodeVer;
