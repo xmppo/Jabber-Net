@@ -17,6 +17,7 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml;
 
 using bedrock.util;
@@ -47,6 +48,15 @@ namespace jabber.protocol
         /// UTF-8 encoding used throughout.
         /// </summary>
         protected static readonly Encoding ENCODING = Encoding.UTF8;
+
+        /// <summary>
+        /// Fix up bad namespaces that don't need to be sent on XML streams.
+        /// jabber:client and jabber:component:accept are removed from the root element,
+        /// and empty namespace declarations are removed throughout.
+        /// </summary>
+        private static readonly Regex s_RemoveNS = 
+            new Regex("(?:(?<=^[^>]*)( xmlns=\"(?:jabber:client|jabber:component:accept)\")| xmlns=\"\")",
+                      RegexOptions.Compiled);
 
         /// <summary>
         ///
@@ -136,6 +146,27 @@ namespace jabber.protocol
             {
                 this.AppendChild(this.OwnerDocument.ImportNode(value, true));
             }
+        }
+
+        /// <summary>
+        /// Get a string representation of this element and its children, with the default
+        /// namespace stripped off if and only if it is jabber:client or jabber:component:accept.
+        /// </summary>
+        public override string OuterXml
+        {
+            get
+            {
+                return s_RemoveNS.Replace(base.OuterXml, "");
+            }
+        }
+
+        /// <summary>
+        /// The implementation of OuterXml from XmlElement, without removing the jabber:client
+        /// namespace.  Needed for Stream.
+        /// </summary>
+        protected string OriginalOuterXml
+        {
+            get { return base.OuterXml; }
         }
 
         /// <summary>

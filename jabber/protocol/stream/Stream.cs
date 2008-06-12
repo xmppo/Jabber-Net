@@ -70,5 +70,13 @@ namespace jabber.protocol.stream
             get { return this.GetAttribute("version"); }
             set { this.SetAttribute("version", value); }
         }
+
+        /// <summary>
+        /// Make sure that the namespace from this stream gets output.
+        /// </summary>
+        public override string OuterXml
+        {
+            get { return this.OriginalOuterXml; }
+        }
     }
 }

@@ -34,7 +34,7 @@ namespace test.jabber.protocol.client
             Presence p = new Presence(doc);
             p.Type   = PresenceType.available;
             p.Status = "foo";
-            Assert.AreEqual("<presence xmlns=\"jabber:client\"><status>foo</status></presence>", p.ToString());
+            Assert.AreEqual("<presence><status>foo</status></presence>", p.ToString());
         }
 
         [Test] public void Test_Available()
