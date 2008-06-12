@@ -333,8 +333,6 @@ namespace bedrock.net
 
         void ISocketEventListener.OnConnect(BaseSocket sock)
         {
-            Debug.WriteLine("OnConnect");
-
             m_errorCount = 0;
 
             m_listener.OnConnect(null);
@@ -352,7 +350,6 @@ namespace bedrock.net
 
         void ISocketEventListener.OnClose(BaseSocket sock)
         {
-            Debug.WriteLine("OnClose");
             m_sock = null;
             lock (m_queue)
             {

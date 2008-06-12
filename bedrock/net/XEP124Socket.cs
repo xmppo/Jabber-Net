@@ -183,12 +183,10 @@ namespace bedrock.net
             {
                 if (m_lastSock == m_sockA)
                 {
-                    Debug.WriteLine("B");
                     m_lastSock = m_sockB;
                 }
                 else
                 {
-                    Debug.WriteLine("A");
                     m_lastSock = m_sockA;
                 }
                 return m_lastSock;
@@ -255,8 +253,6 @@ namespace bedrock.net
         /// </summary>
         public override void RequestRead()
         {
-            Debug.WriteLine("RequestRead");
-
             // shutdown race, likely.
             if (!m_running)
                 //throw new InvalidOperationException("Call Connect() first");
