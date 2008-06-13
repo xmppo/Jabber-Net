@@ -85,9 +85,9 @@ namespace test.jabber.connection
                         sentCallback = arg1;
 
                         string id = arg0.GetAttribute("id");
-                        string original = arg0.OuterXml;
-                        return original.Replace(" ", "") ==
-                               GetInfoXml(id).Replace(" ", "");
+                        string original = arg0.OuterXml.Replace(" ", "");
+                        string comparison = GetInfoXml(id).Replace(" ", "");
+                        return original == comparison;
                     });
 
                 Expect.Call(stream.Document).Return(doc);
@@ -128,9 +128,9 @@ namespace test.jabber.connection
                     delegate(IQ arg0, IqCB arg1, object arg2)
                     {
                         string id = arg0.GetAttribute("id");
-                        string original = arg0.OuterXml;
-                        return original.Replace(" ", "") ==
-                            GetItemsXml(id).Replace(" ", "");
+                        string original = arg0.OuterXml.Replace(" ", "");
+                        string comparison = GetItemsXml(id).Replace(" ", "");
+                        return original == comparison;
                     });
             }
 
@@ -151,9 +151,9 @@ namespace test.jabber.connection
                     delegate(IQ arg0, IqCB arg1, object arg2)
                     {
                         string id = arg0.GetAttribute("id");
-                        string original = arg0.OuterXml;
-                        return original.Replace(" ", "") ==
-                            GetFeaturesXml(id).Replace(" ", "");
+                        string original = arg0.OuterXml.Replace(" ", "");
+                        string comparison = GetFeaturesXml(id).Replace(" ", "");
+                        return original == comparison;
                     });
             }
 
@@ -175,9 +175,9 @@ namespace test.jabber.connection
                     delegate(IQ arg0, IqCB arg1, object arg2)
                     {
                         string id = arg0.GetAttribute("id");
-                        string original = arg0.OuterXml;
-                        return original.Replace(" ", "") ==
-                            GetItemsForServiceXml(id).Replace(" ", "");
+                        string original = arg0.OuterXml.Replace(" ", "");
+                        string comparison = GetItemsForServiceXml(id).Replace(" ", "");
+                        return original == comparison;
                     });
             }
 

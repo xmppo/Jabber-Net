@@ -45,10 +45,9 @@ namespace test.jabber.connection
         public void setup()
         {
             mocks = new MockRepository();
-            cm = new ConferenceManager();
             stream = mocks.DynamicMock<XmppStream>();
             tracker = mocks.DynamicMock<IIQTracker>();
-            cm.Stream = stream;
+            cm = null;
 
             doc = new XmlDocument();
         }
@@ -56,13 +55,16 @@ namespace test.jabber.connection
         [Test]
         public void GetRoomTest()
         {
-            Room test = cm.GetRoom(jid);
+            Room test = CreateRoomPlayback(false, delegate { return null; });
             Assert.IsNotNull(test);
         }
 
         [Test]
         public void HasRoomTest()
         {
+            cm = new ConferenceManager();
+            cm.Stream = stream;
+
             bool roomExists = cm.HasRoom(jid);
             Assert.IsFalse(roomExists);
 
@@ -74,6 +76,9 @@ namespace test.jabber.connection
         [Test]
         public void RemoveRoomTest()
         {
+            cm = new ConferenceManager();
+            cm.Stream = stream;
+
             cm.GetRoom(jid);
             bool roomExists = cm.HasRoom(jid);
             Assert.IsTrue(roomExists);
@@ -86,7 +91,7 @@ namespace test.jabber.connection
         private delegate T Func<A0, T>(A0 arg0);
 
         [Test]
-        [Ignore("TODO: deal with cm calling OnProtocol +=.")]
+        //[Ignore("TODO: deal with cm calling OnProtocol +=.")]
         public void RoomJoinTest()
         {
             using (mocks.Record())
@@ -96,19 +101,19 @@ namespace test.jabber.connection
 
             using (mocks.Playback())
             {
-                CreateJoinPlayback(delegate { return null; });
+                CreateRoomPlayback(true, delegate { return null; });
             }
         }
 
         [Test]
-        [Ignore("TODO: deal with cm calling OnProtocol +=.")]
+        //[Ignore("TODO: deal with cm calling OnProtocol +=.")]
         public void RoomJoinDefaultConfigTest()
         {
             RoomConfigTest(true);
         }
 
         [Test]
-        [Ignore("TODO: deal with cm calling OnProtocol +=.")]
+        //[Ignore("TODO: deal with cm calling OnProtocol +=.")]
         public void RoomJoinGetConfigTest()
         {
             RoomConfigTest(false);
@@ -132,13 +137,13 @@ namespace test.jabber.connection
 
             using (mocks.Playback())
             {
-                CreateJoinPlayback(
-                    delegate(Room arg0)
-                    {
-                        arg0.DefaultConfig = defaultConfig;
-                        arg0.OnRoomConfig += delegate { return null; };
-                        return arg0;
-                    });
+                CreateRoomPlayback(
+                    true, delegate(Room arg0)
+                              {
+                                  arg0.DefaultConfig = defaultConfig;
+                                  arg0.OnRoomConfig += delegate { return null; };
+                                  return arg0;
+                              });
             }
         }
 
@@ -204,7 +209,7 @@ namespace test.jabber.connection
         private const string MESSAGE = "TestMessage";
 
         [Test]
-        [Ignore("TODO: deal with cm calling OnProtocol +=.")]
+        //[Ignore("TODO: deal with cm calling OnProtocol +=.")]
         public void RoomMessageTest()
         {
             SendMessage(true);
@@ -236,18 +241,23 @@ namespace test.jabber.connection
 
             using (mocks.Playback())
             {
-                Room testRoom = shouldJoinRoom ?
-                    CreateJoinPlayback(delegate { return null; }) :
-                    cm.GetRoom(jid);
+                Room testRoom = CreateRoomPlayback(shouldJoinRoom, delegate { return null; });
                 testRoom.PublicMessage(MESSAGE);
             }
         }
 
-        private Room CreateJoinPlayback(Func<Room, Room> alterRoom)
+        private Room CreateRoomPlayback(bool joinRoom, Func<Room, Room> alterRoom)
         {
+            cm = new ConferenceManager();
+            cm.Stream = stream;
+
             Room testRoom = cm.GetRoom(jid);
             alterRoom(testRoom);
-            testRoom.Join();
+            if (joinRoom)
+            {
+                testRoom.Join();
+            }
+
             return testRoom;
         }
 
@@ -273,7 +283,7 @@ namespace test.jabber.connection
         private const string TO_NICK = "TestNick";
 
         [Test]
-        [Ignore("TODO: deal with cm calling OnProtocol +=.")]
+        //[Ignore("TODO: deal with cm calling OnProtocol +=.")]
         public void RoomPrivateMessageTest()
         {
             SendPrivateMessage(true);
@@ -306,10 +316,7 @@ namespace test.jabber.connection
 
             using (mocks.Playback())
             {
-                Room testRoom = shouldJoin ?
-                    CreateJoinPlayback(delegate { return null; }) :
-                    cm.GetRoom(jid);
-
+                Room testRoom = CreateRoomPlayback(shouldJoin, delegate { return null; });
                 testRoom.PrivateMessage(TO_NICK, MESSAGE);
             }
         }
@@ -317,7 +324,7 @@ namespace test.jabber.connection
         private const string REASON = "TestReason";
 
         [Test]
-        [Ignore("TODO: deal with cm calling OnProtocol +=.")]
+        //[Ignore("TODO: deal with cm calling OnProtocol +=.")]
         public void RoomLeaveTest()
         {
             using (mocks.Record())
@@ -337,13 +344,13 @@ namespace test.jabber.connection
 
             using (mocks.Playback())
             {
-                Room testRoom = cm.GetRoom(jid);
+                Room testRoom = CreateRoomPlayback(false, delegate { return null; });
                 testRoom.Leave(REASON);
             }
         }
 
         [Test]
-        [Ignore("TODO: deal with cm calling OnProtocol +=.")]
+        //[Ignore("TODO: deal with cm calling OnProtocol +=.")]
         public void RoomFinishLeaveTest()
         {
             using (mocks.Record())
@@ -364,7 +371,7 @@ namespace test.jabber.connection
 
             using (mocks.Playback())
             {
-                Room testRoom = cm.GetRoom(jid);
+                Room testRoom = CreateRoomPlayback(false, delegate { return null; });
                 testRoom.Leave(REASON);
             }
 

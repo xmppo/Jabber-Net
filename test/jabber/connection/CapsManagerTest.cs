@@ -76,8 +76,9 @@ namespace test.jabber.connection
                 Presence packet = CreatePresencePacket();
                 presHandler.Raise(new object[] { null, packet });
 
-                Assert.IsTrue(packet.OuterXml.Replace(" ", "") ==
-                              GetPresenceWithCaps(cm.Ver).Replace(" ", ""));
+                string original = packet.OuterXml.Replace(" ", "");
+                string comparison = GetPresenceWithCaps(cm.Ver).Replace(" ", "");
+                Assert.IsTrue(original == comparison);
             }
         }
 
@@ -98,10 +99,11 @@ namespace test.jabber.connection
                 stream.Write((XmlElement)null);
                 LastCall.Callback((Func<XmlElement, bool>)
                     delegate(XmlElement arg0)
-                    {
-                        return arg0.OuterXml.Replace(" ", "") ==
-                               GetIQResponse(nodever).Replace(" ", "");
-                    });
+                        {
+                            string original = arg0.OuterXml.Replace(" ", "");
+                            string comparison = GetIQResponse(nodever).Replace(" ", "");
+                            return original == comparison;
+                        });
             }
 
             using (mocks.Playback())
@@ -150,9 +152,10 @@ namespace test.jabber.connection
                       "<status>{1}</status>" +
                       "<c ver=\"{2}\"" +
                          "node=\"{3}\"" +
-                         "hash=\"sha-1\" xmlns=\"{4}\"/>" +
+                         "hash=\"sha-1\"" +
+                         "xmlns=\"{4}\"/>" +
                     "</presence>",
-                    PRIORITY, STATUS, ver, NODE, URI.CAPS);
+                    PRIORITY, STATUS, ver, NODE, URI.CAPS, URI.CLIENT);
         }
 
         private Presence CreatePresencePacket()

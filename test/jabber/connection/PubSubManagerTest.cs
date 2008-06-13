@@ -19,6 +19,7 @@ using bedrock.util;
 
 using jabber;
 using jabber.connection;
+using jabber.protocol;
 using jabber.protocol.client;
 
 using NUnit.Framework;
@@ -69,12 +70,12 @@ namespace test.jabber.connection
             using (mocks.Record())
             {
                 Expect.Call(stream.Document).Return(doc);
-                Expect.Call(stream.Document).Return(doc);
                 SetupTrackerBeginIq(delegate(IQ iq, IqCB cb, object cbArg)
                     {
                         string id = iq.GetAttribute("id");
-                        string original = iq.OuterXml;
-                        return original.Replace(" ", "") == GetCreateNodeIQ(id).Replace(" ", "");
+                        string original = iq.OuterXml.Replace(" ", "");
+                        string comparison = GetCreateNodeIQ(id).Replace(" ", "");
+                        return original == comparison;
                     });
             }
 
@@ -95,8 +96,9 @@ namespace test.jabber.connection
                 SetupTrackerBeginIq(delegate(IQ iq, IqCB cb, object cbArg)
                     {
                         string id = iq.GetAttribute("id");
-                        string original = iq.OuterXml;
-                        return original.Replace(" ", "") == GetRemoveNodeIq(id).Replace(" ", "");
+                        string original = iq.OuterXml.Replace(" ", "");
+                        string comparison = GetRemoveNodeIq(id).Replace(" ", "");
+                        return original == comparison;
                     });
             }
 
@@ -171,8 +173,9 @@ namespace test.jabber.connection
                 SetupTrackerBeginIq(delegate(IQ iq, IqCB cb, object cbArg)
                     {
                         string id = iq.GetAttribute("id");
-                        string original = iq.OuterXml;
-                        return original.Replace(" ", "") == GetPublishItemIq(id).Replace(" ", "");
+                        string original = iq.OuterXml.Replace(" ", "");
+                        string comparison = GetPublishItemIq(id).Replace(" ", "");
+                        return original == comparison;
                     });
             }
 
@@ -200,8 +203,9 @@ namespace test.jabber.connection
                 SetupTrackerBeginIq(delegate(IQ iq, IqCB cb, object cbArg)
                     {
                         string id = iq.GetAttribute("id");
-                        string original = iq.OuterXml;
-                        return original.Replace(" ", "") == GetDeleteItemString(id).Replace(" ", "");
+                        string original = iq.OuterXml.Replace(" ", "");
+                        string comparison = GetDeleteItemString(id).Replace(" ", "");
+                        return original == comparison;
                     });
             }
 
@@ -228,7 +232,7 @@ namespace test.jabber.connection
         private string GetPublishItemIq(string id)
         {
             return string.Format(
-                "<iq id=\"{0}\" type=\"set\" to=\"{1}\">"+
+                "<iq id=\"{0}\" type=\"set\" to=\"{1}\">" +
                     "<pubsub xmlns=\"{2}\">"+
                         "<publish node=\"{3}\">"+
                             "<item>"+
@@ -255,7 +259,7 @@ namespace test.jabber.connection
                         "<delete node=\"{3}\"/>"+
                     "</pubsub>"+
                 "</iq>",
-                id, jid, PUB_SUB_XMLNS, NODE);
+                id, jid, URI.PUBSUB_OWNER, NODE);
         }
 
         private string GetCreateNodeIQ(string id)
