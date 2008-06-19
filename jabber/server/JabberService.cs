@@ -153,26 +153,26 @@ namespace jabber.server
         [Category("Component")]
         public string ComponentID
         {
-            get { return Server; }
-            set { Server = value; }
+            get { return (string)this[Options.TO]; }
+            set
+            {
+                this[Options.JID] = value;
+                this[Options.TO] = value;
+            }
         }
 
         /// <summary>
-        /// The name of the server to connect to.
+        /// Should not be used for components.  Set NetworkHost instead.
         /// </summary>
         [Description("The name of the Jabber server.")]
         [DefaultValue("jabber.com")]
         [Category("Jabber")]
         [Browsable(false)]
+        [Obsolete]
         public override string Server
         {
-            get { return base.Server; }
-            set
-            {
-                base.Server = value;
-                this[Options.JID] = value;
-                this[Options.TO] = value;
-            }
+            get { return base.NetworkHost; }
+            set { base.NetworkHost = value; }
         }
 
         /// <summary>
@@ -245,6 +245,7 @@ namespace jabber.server
         public override void Connect()
         {
             this[Options.SERVER_ID] = this[Options.NETWORK_HOST];
+            this[Options.JID] = new JID((string)this[Options.TO]);
             if (this.Type == ComponentType.Accept)
                 base.Connect();
             else
