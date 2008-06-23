@@ -294,6 +294,7 @@
     <Compile Include="jabber\protocol\ElementStream.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="jabber\protocol\EnumParser.cs" />
     <Compile Include="jabber\protocol\iq\Agents.cs">
       <SubType>Code</SubType>
     </Compile>

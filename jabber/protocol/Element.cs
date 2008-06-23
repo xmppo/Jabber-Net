@@ -496,21 +496,7 @@ namespace jabber.protocol
         protected T GetEnumAttr<T>(string name)
         {
             string a = this.GetAttribute(name);
-            if ((a == null) || (a.Length == 0))
-                return (T)(object)(-1);
-            
-            object[] o = typeof(T).GetCustomAttributes(typeof(DashAttribute), true);
-            if (o.Length > 0)
-                a = a.Replace("-", "_");
-            
-            try
-            {
-                return (T)Enum.Parse(typeof(T), a, true);
-            }
-            catch (ArgumentException)
-            {
-                return (T)(object)(-1);
-            }
+            return EnumParser.Parse<T>(a);
         }
 
         /// <summary>
@@ -522,21 +508,7 @@ namespace jabber.protocol
         protected object GetEnumAttr(string name, Type enumType)
         {
             string a = this.GetAttribute(name);
-            if ((a == null) || (a.Length == 0))
-                return -1;
-            
-            object[] o = enumType.GetCustomAttributes(typeof(DashAttribute), true);
-            if (o.Length > 0)
-                a = a.Replace("-", "_");
-            
-            try
-            {
-                return Enum.Parse(enumType, a, true);
-            }
-            catch (ArgumentException)
-            {
-                return -1;
-            }
+            return EnumParser.Parse(a, enumType);
         }
 
         /// <summary>
@@ -548,25 +520,12 @@ namespace jabber.protocol
         /// <param name="value"></param>
         protected void SetEnumAttr(string name, object value)
         {
-            if (value == null)
+            if ((value == null) || ((int)value == -1))
             {
-                RemoveAttribute("name");
+                RemoveAttribute(name);
                 return;
             }
-            Type t = value.GetType();
-            Debug.Assert(t.IsSubclassOf(typeof(Enum)));
-            if ((int)value == -1)
-                // Yes, this is safe if the attribute doesn't exist.
-                RemoveAttribute(name);
-            else
-            {
-                string a = value.ToString();
-                object[] o = t.GetCustomAttributes(typeof(DashAttribute), true);
-                if (o.Length > 0)
-                    a = a.Replace("_", "-");
-
-                SetAttribute(name, a);
-            }
+            SetAttribute(name, EnumParser.ToString(value));
         }
 
         /// <summary>

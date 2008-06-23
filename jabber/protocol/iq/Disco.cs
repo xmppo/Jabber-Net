@@ -444,6 +444,21 @@ namespace jabber.protocol.iq
         {
             return GetElements<Data>().ToArray();
         }
+
+        /// <summary>
+        /// Get the extension with the given XEP-0068 form type.
+        /// </summary>
+        /// <param name="formType">The value of the FORM_TYPE field to search for.</param>
+        /// <returns>null if none found</returns>
+        public Data GetExtension(string formType)
+        {
+            foreach (Data d in GetElements<Data>())
+            {
+                if (d.FormType == formType)
+                    return d;
+            }
+            return null;
+        }
     }
 
     /// <summary>
