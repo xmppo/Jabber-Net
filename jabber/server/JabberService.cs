@@ -100,7 +100,7 @@ namespace jabber.server
             string secret) : base()
         {
             init();
-            this.Server = name;
+            this.ComponentID = name;
             this.NetworkHost = host;
             this.Port = port;
 
@@ -117,7 +117,7 @@ namespace jabber.server
         public JabberService(int port, string name, string secret) : base()
         {
             init();
-            this.Server = name;
+            this.ComponentID = name;
             this.Port = port;
 
             this[Options.PASSWORD] = secret;
@@ -232,7 +232,7 @@ namespace jabber.server
         /// <param name="address">The address to connect to.</param>
         public void Connect(bedrock.net.Address address)
         {
-            this.Server = address.Hostname;
+            this.NetworkHost = address.Hostname;
             this.Port = address.Port;
 
             Connect();
@@ -284,7 +284,7 @@ namespace jabber.server
                 }
 
                 jabber.protocol.stream.Stream str = new jabber.protocol.stream.Stream(this.Document, NS);
-                str.To = this.Server;
+                str.To = this.ComponentID;
                 this.StreamID = str.ID;
                 if (ServerVersion.StartsWith("1."))
                     str.Version = "1.0";
