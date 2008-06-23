@@ -90,6 +90,7 @@
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
+    <Reference Include="System.Data" />
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
@@ -169,6 +170,7 @@
     <Compile Include="jabber\protocol\ElementStreamTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="jabber\protocol\EnumParserTest.cs" />
     <Compile Include="jabber\protocol\iq\AgentTest.cs">
       <SubType>Code</SubType>
     </Compile>
