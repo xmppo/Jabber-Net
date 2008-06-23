@@ -78,6 +78,7 @@ $(BASEDIR)/jabber/protocol/Element.cs \
 $(BASEDIR)/jabber/protocol/ElementFactory.cs \
 $(BASEDIR)/jabber/protocol/ElementList.cs \
 $(BASEDIR)/jabber/protocol/ElementStream.cs \
+$(BASEDIR)/jabber/protocol/EnumParser.cs \
 $(BASEDIR)/jabber/protocol/NS.cs \
 $(BASEDIR)/jabber/protocol/Packet.cs \
 $(BASEDIR)/jabber/protocol/URI.cs \
