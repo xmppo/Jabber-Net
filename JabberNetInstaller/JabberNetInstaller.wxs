@@ -21,6 +21,7 @@
             <File Id="NETLIB" Name="$(var.netlib.Dns.TargetFileName)" Source="$(var.netlib.Dns.TargetPath)" DiskId="1">
             </File>
             <File Id="zlib.net.dll" Name="zlib.net.dll" ShortName="ZLIB.DLL" Source="..\lib20\zlib.net.dll" />
+            <File Id="License.rtf" Name="License.rtf" ShortName="LICENSE.RTF" Source="License.rtf" />
           </Component>
           <!--Guid="11015458-BAEE-11DC-8C6A-D5BF55D89593"-->
           <Directory Id="HELPFILES" Name="Help">
