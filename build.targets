@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Target Name="Version">
+    <SvnVersion LocalPath="$(JabberNetDirectory)">
+      <Output TaskParameter="Revision" PropertyName="Revision"/>
+    </SvnVersion>
+
+    <Message Text="Version: $(Major).$(Minor).$(Build).$(Revision)"/>
+
+    <AssemblyInfo CodeLanguage="CS"
+      OutputFile="$(JabberNetDirectory)\AssemblyInfo.cs"
+      AssemblyTitle="Jabber-Net library"
+      AssemblyDescription="Connect to Jabber (http://www.jabber.org/) from .Net"
+      AssemblyCompany="Cursive Systems, Inc."
+      AssemblyProduct="jabber-net"
+      AssemblyCopyright="Copyright (c) Cursive, Inc. 2000-2008"
+      AssemblyConfiguration=""
+      AssemblyTrademark=""
+      AssemblyCulture=""
+      AssemblyVersion="$(Major).$(Minor).$(Build).$(Revision)"
+      AssemblyDelaySign="false"
+      CLSCompliant="true"
+      AssemblyKeyName=""
+      AssemblyKeyFile="../../jabbernet.key" />
+
+    <AssemblyInfo CodeLanguage="CS"
+      OutputFile="$(JabberNetDirectory)\muzzle\AssemblyInfo.cs"
+      AssemblyTitle="Muzzle library"
+      AssemblyDescription="GUI helper functions to be used with Jabber-Net."
+      AssemblyCompany="Cursive Systems, Inc."
+      AssemblyProduct="jabber-net"
+      AssemblyCopyright="Copyright (c) Cursive, Inc. 2000-2008"
+      AssemblyConfiguration=""
+      AssemblyTrademark=""
+      AssemblyCulture=""
+      AssemblyVersion="$(Major).$(Minor).$(Build).$(Revision)"
+      AssemblyDelaySign="false"
+      CLSCompliant="true"
+      AssemblyKeyName=""
+      AssemblyKeyFile="../../../jabbernet.key" />
+  </Target>
+</Project>

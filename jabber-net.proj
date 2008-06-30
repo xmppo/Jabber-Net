@@ -1,32 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
+  <Import Project="version"/>
+  <Import Project="build.targets"/>
 
   <PropertyGroup>
-    <Major>2</Major>
-    <Minor>0</Minor>
-    <Build>0</Build>
-    <Revision>0</Revision>
-
+    <JabberNetDirectory>$(MSBuildProjectDirectory)</JabberNetDirectory>
     <MonoOutput>MonoZip</MonoOutput>
     <SetupOutput>dist</SetupOutput>
   </PropertyGroup>
-
-  <ItemGroup>
-    <DefaultExclude Include="**\.svn\**" />
-    <DefaultExclude Include="**\bin\**" />
-    <DefaultExclude Include="**\obj\**" />
-    <DefaultExclude Include="**\Release\**" />
-    <DefaultExclude Include="**\Debug\**" />
-    <DefaultExclude Include="**\Test\**" />
-    <DefaultExclude Include="**\TestResults\**" />
-    <DefaultExclude Include="**\doc\**" />
-    <DefaultExclude Include="**\www\**" />
-    <DefaultExclude Include="**\*.user" />
-    <DefaultExclude Include="**\*.suo" />
-    <DefaultExclude Include="**\*.zip" />
-    <DefaultExclude Include="**\*.txt" />
-  </ItemGroup>
 
   <Target Name="Compile2005" DependsOnTargets="Version">
     <MSBuild Projects="2005-jabber-net.sln" Targets="2005-jabber-net;2005-muzzle" Properties="Configuration=Debug" />
@@ -39,7 +21,7 @@
   </Target>
 
   <Target Name="Setup2005" DependsOnTargets="NUnit2005;Doc">
-    <MSBuild Projects="2005-jabber-net.sln" Targets="JabberNetInstaller" Properties="Configuration=Debug">
+    <MSBuild Projects="2005-jabber-net.sln" Targets="JabberNetInstaller" Properties="Configuration=Debug;WixVersion=$(Major).$(Minor).$(Build).$(Revision)">
       <Output ItemName="JabberNetInstallerFiles" TaskParameter="TargetOutputs"/>
     </MSBuild>
   </Target>
@@ -51,46 +33,6 @@
     </MSBuild>
   </Target>
 
-  <Target Name="Version">
-    <SvnVersion LocalPath="$(MSBuildProjectDirectory)">
-      <Output TaskParameter="Revision" PropertyName="Revision"/>
-    </SvnVersion>
-
-    <Message Text="Version: $(Major).$(Minor).$(Build).$(Revision)"/>
-
-    <AssemblyInfo CodeLanguage="CS"
-      OutputFile="$(MSBuildProjectDirectory)\AssemblyInfo.cs"
-      AssemblyTitle="Jabber-Net library"
-      AssemblyDescription="Connect to Jabber (http://www.jabber.org/) from .Net"
-      AssemblyCompany="Cursive Systems, Inc."
-      AssemblyProduct="jabber-net"
-      AssemblyCopyright="Copyright (c) Cursive, Inc. 2000-2007"
-      AssemblyConfiguration=""
-      AssemblyTrademark=""
-      AssemblyCulture=""
-      AssemblyVersion="$(Major).$(Minor).$(Build).$(Revision)"
-      AssemblyDelaySign="false"
-      CLSCompliant="true"
-      AssemblyKeyName=""
-      AssemblyKeyFile="../../jabbernet.key" />
-
-    <AssemblyInfo CodeLanguage="CS"
-      OutputFile="$(MSBuildProjectDirectory)\muzzle\AssemblyInfo.cs"
-      AssemblyTitle="Muzzle library"
-      AssemblyDescription="GUI helper functions to be used with Jabber-Net."
-      AssemblyCompany="Cursive Systems, Inc."
-      AssemblyProduct="jabber-net"
-      AssemblyCopyright="Copyright (c) Cursive, Inc. 2000-2007"
-      AssemblyConfiguration=""
-      AssemblyTrademark=""
-      AssemblyCulture=""
-      AssemblyVersion="$(Major).$(Minor).$(Build).$(Revision)"
-      AssemblyDelaySign="false"
-      CLSCompliant="true"
-      AssemblyKeyName=""
-      AssemblyKeyFile="../../../jabbernet.key" />
-
-  </Target>
 
   <Target Name="Zip" DependsOnTargets="CompileMono">
     <CreateItem Include="@(MonoFiles->'%(rootdir)%(directory)\*.dll')">
@@ -142,9 +84,6 @@
   <Target Name="Clean">
     <Delete Files="vsi\jabber-net.vsi"/>
     <MSBuild Projects="2005-jabber-net.sln" Targets="Clean" />
-
-    <Exec Command="&quot;C:\Program Files\Microsoft Visual Studio .NET 2003\Common7\IDE\devenv&quot; /clean Debug 2003-jabber-net.sln" />
-
     <MSBuild Projects="mono-jabber-net.csproj" Properties="TargetFrameworkVersion=Mono v2.0"
       Targets="Clean" />
     <RemoveDir Directories="$(MonoOutput)"/>

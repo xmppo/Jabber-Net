@@ -4,7 +4,8 @@
     <ProductVersion>3.0</ProductVersion>
     <ProjectGuid>{d31142e8-ecc1-459e-912f-485331655de9}</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
-    <OutputName>JabberNetInstaller</OutputName>
+    <OutputName Condition="'$(WixVersion)' != '' ">JabberNet-$(WixVersion)</OutputName>
+    <OutputName Condition="'$(WixVersion)' == '' ">JabberNet</OutputName>
     <OutputType>Package</OutputType>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.0\Wix.targets</WixTargetsPath>
     <WixToolPath>$(ProgramFiles)\Windows Installer XML v3\bin\</WixToolPath>
@@ -13,7 +14,8 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <OutputPath>bin\Debug\</OutputPath>
     <IntermediateOutputPath>obj\Debug\</IntermediateOutputPath>
-    <DefineConstants>Debug</DefineConstants>
+    <DefineConstants Condition="'$(WixVersion)' != '' ">Debug;ProductVersion=$(WixVersion)</DefineConstants>
+    <DefineConstants Condition="'$(WixVersion)' == '' ">Debug;ProductVersion=1.0.1</DefineConstants>
     <IncludeSearchPaths>
     </IncludeSearchPaths>
     <Pedantic>False</Pedantic>
@@ -57,6 +59,8 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <OutputPath>bin\Release\</OutputPath>
     <IntermediateOutputPath>obj\Release\</IntermediateOutputPath>
+    <DefineConstants Condition="'$(WixVersion)' != '' ">ProductVersion=$(WixVersion)</DefineConstants>
+    <DefineConstants Condition="'$(WixVersion)' == '' ">ProductVersion=1.0.1</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="JabberNetInstaller.wxs" />

@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+<?define UpgradeCode = "a9b118d3-9edc-4835-8213-c3acc9f2274f" ?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <Product Id="524aa976-70d8-4992-a803-291f5ab2b95b" Name="Jabber-Net" Language="1033" Version="2.0.0.0" Manufacturer="Jabber, Inc." UpgradeCode="a9b118d3-9edc-4835-8213-c3acc9f2274f">
+  <Product Id="*" Name="Jabber-Net" Language="1033" Version="$(var.ProductVersion)" Manufacturer="Jabber, Inc." UpgradeCode="$(var.UpgradeCode)">
     <Package InstallerVersion="200" Compressed="yes" Description="Jabber's Jabber-Net Installer" Manufacturer="Jabber, Inc." />
+    <Upgrade Id="$(var.UpgradeCode)">
+      <UpgradeVersion Minimum="$(var.ProductVersion)" OnlyDetect="yes" Property="NEWERVERSIONDETECTED" />
+      <UpgradeVersion Minimum="1.0.0" IncludeMinimum="yes" Maximum="$(var.ProductVersion)" IncludeMaximum="no" Property="OLDERVERSIONBEINGUPGRADED" />
+    </Upgrade>
     <Condition Message="Must be Windows 2000 or newer">VersionNT = 500 OR VersionNT = 501 OR VersionNT = 502 OR VersionNT = 600</Condition>
     <Media Id="1" Cabinet="JabberNetInstaller.cab" EmbedCab="yes" />
     <Directory Id="TARGETDIR" Name="SourceDir">
@@ -49,6 +54,7 @@
     <CustomAction Id="RunJabberNetInstaller" BinaryKey="ToolboxInstaller" ExeCommand="/vs2005 /vs2008 /installdesktop &quot;[#JabberNetDll]&quot; &quot;Jabber-Net&quot; /installdesktop &quot;[#MuzzleDll]&quot; &quot;Muzzle&quot;" />
     <CustomAction Id="RunJabberNetUninstaller" BinaryKey="ToolboxInstaller" ExeCommand="/vs2005 /vs2008 /uninstall &quot;Jabber-Net&quot; /uninstall &quot;Muzzle&quot;" />
     <InstallExecuteSequence>
+      <RemoveExistingProducts Before="InstallInitialize" />
       <Custom Action="RunJabberNetInstaller" After="InstallFinalize">$ProductComponent&gt;2</Custom>
       <Custom Action="RunJabberNetUninstaller" After="MsiUnpublishAssemblies">$ProductComponent=2</Custom>
     </InstallExecuteSequence>
