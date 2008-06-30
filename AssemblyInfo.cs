@@ -17,7 +17,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("Connect to Jabber (http://www.jabber.org/) from .Net")]
 [assembly: AssemblyCompany("Cursive Systems, Inc.")]
 [assembly: AssemblyProduct("jabber-net")]
-[assembly: AssemblyCopyright("Copyright (c) Cursive, Inc. 2000-2007")]
+[assembly: AssemblyCopyright("Copyright (c) Cursive, Inc. 2000-2008")]
 [assembly: AssemblyVersion("2.0.0.613")]
 [assembly: AssemblyDelaySign(false)]
 [assembly: CLSCompliant(true)]

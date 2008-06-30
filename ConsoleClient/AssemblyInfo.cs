@@ -19,12 +19,12 @@ using System.Runtime.CompilerServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 //
-[assembly: AssemblyTitle("")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("ConsoleClient")]
+[assembly: AssemblyDescription("Jabber-net console client example")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("")]
-[assembly: AssemblyCopyright("")]
+[assembly: AssemblyCompany("Cursive Systems, Inc.")]
+[assembly: AssemblyProduct("jnExample")]
+[assembly: AssemblyCopyright("Copyright (c) Cursive Systems, 2000-2008")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

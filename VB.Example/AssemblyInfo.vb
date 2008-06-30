@@ -9,9 +9,9 @@ Imports System.Runtime.InteropServices
 
 <Assembly: AssemblyTitle("")> 
 <Assembly: AssemblyDescription("")> 
-<Assembly: AssemblyCompany("")> 
-<Assembly: AssemblyProduct("")> 
-<Assembly: AssemblyCopyright("")> 
+<Assembly: AssemblyCompany("Cursive Systems, Inc.")> 
+<Assembly: AssemblyProduct("jnExample")> 
+<Assembly: AssemblyCopyright("Copyright (c) Cursive Systems, 2000-2008")> 
 <Assembly: AssemblyTrademark("")> 
 <Assembly: CLSCompliant(True)> 
 
