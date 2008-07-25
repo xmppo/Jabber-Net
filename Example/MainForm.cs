@@ -661,7 +661,7 @@ namespace Example
             }
             else
             {
-                jc.Close();
+                jc.Close(false);
             }
         }
 

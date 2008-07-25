@@ -349,9 +349,9 @@ namespace jabber.client
         /// </summary>
         public void Login()
         {
-            Debug.Assert(User != null);
-            Debug.Assert(Password != null);
-            Debug.Assert(Resource != null);
+            Debug.Assert(User != null, "Username must not be null for XEP-78 authentication");
+            Debug.Assert(Password != null, "Password must not be null for XEP-78 authentication");
+            Debug.Assert(Resource != null, "Resource must not be null for XEP-78 authentication");
 
             this[Options.AUTO_LOGIN_THISPASS] = true;
 

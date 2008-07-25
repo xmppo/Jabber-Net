@@ -5,7 +5,7 @@ Reserved.  Contact information for Cursive Systems, Inc. is available
 at http://www.cursive.net/.
 
 
-As of version 1.1, Jabber-Net can be used under the GNU Lesser General 
+As of version 2.1, Jabber-Net can be used under the GNU Lesser General 
 Public License (LGPL), version 3.  For commercial support, please contact 
 Jabber, Inc. via email: sales (at) jabber.com.
 
