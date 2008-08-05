@@ -254,7 +254,7 @@ namespace muzzle
             XmlElement elem = ValidateXML();
             if (elem != null)
             {
-                m_stream.Write(elem);
+                Write(elem);
                 rtSend.Clear();
             }
         }
