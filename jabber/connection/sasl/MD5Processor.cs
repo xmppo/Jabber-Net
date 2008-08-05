@@ -46,6 +46,10 @@ namespace jabber.connection.sasl
         private string  m_charset;
         private string  m_authzid;
 
+        private readonly MD5CryptoServiceProvider MD5 = new MD5CryptoServiceProvider();
+        private readonly Regex CSV = new Regex(@"(?<tag>[^= \t\r\n]+)=(?:(?<data>[^,"" \t\r\n]+)|(?:""(?<data>[^""]*)"")),?",
+                RegexOptions.ExplicitCapture);
+
         /// <summary>
         /// DIGEST-MD5 Realm
         /// </summary>
@@ -76,10 +80,7 @@ namespace jabber.connection.sasl
         /// </summary>
         public static readonly string[] s_requiredDirectives = {USERNAME, PASSWORD};
 
-        private static readonly MD5CryptoServiceProvider MD5 = new MD5CryptoServiceProvider();
         private static readonly Encoding ENC = System.Text.Encoding.UTF8;
-        private static readonly Regex CSV = new Regex(@"(?<tag>[^= \t\r\n]+)=(?:(?<data>[^,"" \t\r\n]+)|(?:""(?<data>[^""]*)"")),?",
-                RegexOptions.ExplicitCapture | RegexOptions.Compiled);
 
         /// <summary>
         ///
