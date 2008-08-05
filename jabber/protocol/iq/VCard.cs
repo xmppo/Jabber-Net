@@ -885,31 +885,81 @@ namespace jabber.protocol.iq
             {
             }
 
-            /*
             /// <summary>
-            ///
+            /// The MIME type of the image.  Must be set before
+            /// calling Image.set.
             /// </summary>
-            public System.Drawing.Image Bitmap
+            public System.Drawing.Imaging.ImageFormat ImageType
+            {
+                get 
+                {
+                    System.Drawing.Imaging.ImageFormat def = System.Drawing.Imaging.ImageFormat.Png;
+
+                    // Strip off all but everything after the last slash,
+                    // if any.
+                    string t = GetElem("TYPE");
+                    if ((t == null) || (t == ""))
+                        return def;
+                    string[] parts = t.Split("/".ToCharArray());
+                    if (parts.Length == 0)
+                        return def;
+                    t = parts[parts.Length - 1].ToLower();
+                    switch (t)
+                    {
+                        case "jpeg":
+                        case "jpg":
+                            return System.Drawing.Imaging.ImageFormat.Jpeg;
+                        case "png":
+                            return System.Drawing.Imaging.ImageFormat.Png;
+                        case "bmp":
+                            return System.Drawing.Imaging.ImageFormat.Bmp;
+                        case "gif":
+                            return System.Drawing.Imaging.ImageFormat.Gif;
+                        case "tif":
+                        case "tiff":
+                            return System.Drawing.Imaging.ImageFormat.Tiff;
+                    }
+                    return def;
+                }
+                set { SetElem("TYPE", value.ToString().ToLower()); }
+            }
+
+            /// <summary>
+            /// The bytes associated with the picture
+            /// </summary>
+            public byte[] BinVal
             {
                 get
                 {
-                    XmlElement ext = this["EXTVAL"];
-                    if (ext != null)
-                    {
-                        System.Net.WebRequest req = System.Net.WebRequest.Create(ext.InnerText);
-                        System.Net.WebResponse resp = req.GetResponse();
-                        return new System.Drawing.Bitmap(resp.GetResponseStream());
-                    }
-                    XmlElement binv = this["BINVAL"];
-                    if (binv != null)
-                    {
+                    string b64 = GetElem("BINVAL");
+                    if (b64 == null)
+                        return null;
+                    return Convert.FromBase64String(b64);
+                }
+                set { SetElem("BINVAL", Convert.ToBase64String(value)); }
+            }
 
-                    }
-                    return null;
+            /// <summary>
+            /// An Image representation of the bytes in the picture.
+            /// The MimeType MUST be set before calling set.
+            /// </summary>
+            public System.Drawing.Image Image
+            {
+                get
+                {
+                    byte[] bin = this.BinVal;
+                    if (bin == null)
+                        return null;
+                    System.IO.MemoryStream ms = new System.IO.MemoryStream(bin);
+                    return System.Drawing.Image.FromStream(ms);
+                }
+                set
+                {
+                    System.IO.MemoryStream ms = new System.IO.MemoryStream();
+                    Image.Save(ms, this.ImageType);
+                    this.BinVal = ms.GetBuffer();
                 }
             }
-            */
         }
-
     }
 }
