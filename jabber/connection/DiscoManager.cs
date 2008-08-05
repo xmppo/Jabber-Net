@@ -982,9 +982,7 @@ namespace jabber.connection
                     jabber.server.JabberService js = m_stream as jabber.server.JabberService;
                     if (js != null)
                         iq.From = js.ComponentID;
-                    m_stream.Tracker.BeginIQ(iq,
-                                             new jabber.connection.IqCB(GotInfo),
-                                             node);
+                    BeginIQ(iq, new jabber.connection.IqCB(GotInfo), node);
                 }
             }
         }
@@ -999,9 +997,7 @@ namespace jabber.connection
                     jabber.server.JabberService js = m_stream as jabber.server.JabberService;
                     if (js != null)
                         iq.From = js.ComponentID;
-                    m_stream.Tracker.BeginIQ(iq,
-                                             new jabber.connection.IqCB(GotItems),
-                                             node);
+                    BeginIQ(iq, new jabber.connection.IqCB(GotItems), node);
                 }
             }
         }
@@ -1026,7 +1022,7 @@ namespace jabber.connection
                             (cond == Error.SERVICE_UNAVAILABLE))
                         {
                             IQ aiq = new AgentsIQ(m_stream.Document);
-                            m_stream.Tracker.BeginIQ(aiq, new jabber.connection.IqCB(GotAgents), m_root);
+                            BeginIQ(aiq, new jabber.connection.IqCB(GotAgents), m_root);
                             return;
                         }
                     }

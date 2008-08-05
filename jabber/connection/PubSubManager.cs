@@ -162,7 +162,7 @@ namespace jabber.connection
             OwnerPubSubCommandIQ<OwnerDefault> iq = new OwnerPubSubCommandIQ<OwnerDefault>(m_stream.Document);
             iq.To = service;
             iq.Type = IQType.get;
-            m_stream.Tracker.BeginIQ(iq, OnDefaults, new IQTracker.TrackerData(callback, state));
+            BeginIQ(iq, OnDefaults, new IQTracker.TrackerData(callback, state));
         }
 
         private void OnDefaults(object sender, IQ iq, object data)
@@ -621,7 +621,7 @@ namespace jabber.connection
             iq.To = m_jid;
             iq.Type = IQType.set;
             iq.Command.CreateConfiguration(config);
-            m_stream.Tracker.BeginIQ(iq, GotCreated, null);
+            BeginIQ(iq, GotCreated, null);
         }
 
         private void GotCreated(object sender, IQ iq, object state)
@@ -704,7 +704,7 @@ namespace jabber.connection
 
             PubSubIQ iq = createCommand(PubSubCommandType.subscribe);
             addInfo(iq);
-            m_stream.Tracker.BeginIQ(iq, GotSubscribed, null);
+            BeginIQ(iq, GotSubscribed, null);
             // don't parallelize getItems, in case sub fails.
         }
 
@@ -794,7 +794,7 @@ namespace jabber.connection
             PubSubIQ piq = new PubSubIQ(m_stream.Document, PubSubCommandType.items, m_node);
             piq.To = m_jid;
             piq.Type = IQType.get;
-            m_stream.Tracker.BeginIQ(piq, GotItems, null);
+            BeginIQ(piq, GotItems, null);
         }
 
         private void GotItems(object sender, IQ iq, object state)
@@ -905,7 +905,7 @@ namespace jabber.connection
         public void Unsubscribe()
         {
             PubSubIQ iq = createCommand(PubSubCommandType.unsubscribe);
-            m_stream.Tracker.BeginIQ(iq, GotUnsubsribed, null);
+            BeginIQ(iq, GotUnsubsribed, null);
         }
 
         private void GotUnsubsribed(object sender, IQ iq, object data)
@@ -922,7 +922,7 @@ namespace jabber.connection
             iq.To = m_jid;
             iq.Type = IQType.set;
             iq.Command.Node = m_node;
-            m_stream.Tracker.BeginIQ(iq, GotDelete, null);
+            BeginIQ(iq, GotDelete, null);
         }
 
         private void GotDelete(object sender, IQ iq, object data)
@@ -943,7 +943,7 @@ namespace jabber.connection
             PubSubIQ iq = createCommand(PubSubCommandType.retract);
             Retract retract = (Retract)iq.Command;
             retract.AddItem(id);
-            m_stream.Tracker.BeginIQ(iq, OnDeleteNode, null);
+            BeginIQ(iq, OnDeleteNode, null);
         }
 
         private void OnDeleteNode(object sender, IQ iq, object data)
@@ -968,7 +968,7 @@ namespace jabber.connection
             iq.To = m_jid;
             iq.Type = IQType.set;
             iq.Command.Node = m_node;
-            m_stream.Tracker.BeginIQ(iq, GotPurge, null);
+            BeginIQ(iq, GotPurge, null);
 
         }
 
@@ -995,7 +995,7 @@ namespace jabber.connection
                 item.ID = id;
             item.AddChild(contents);
             pub.AddChild(item);
-            m_stream.Tracker.BeginIQ(iq, new IqCB(OnPublished), item);
+            BeginIQ(iq, new IqCB(OnPublished), item);
         }
 
         private void OnPublished(object sender, IQ iq, object data)
@@ -1027,7 +1027,7 @@ namespace jabber.connection
             iq.To = m_jid;
             iq.Type = IQType.get;
             iq.Command.Node = m_node;
-            m_stream.Tracker.BeginIQ(iq, OnConfigure, new IQTracker.TrackerData(callback, state));
+            BeginIQ(iq, OnConfigure, new IQTracker.TrackerData(callback, state));
         }
 
         private void OnConfigure(object sender, IQ iq, object data)

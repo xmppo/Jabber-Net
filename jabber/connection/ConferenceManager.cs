@@ -365,7 +365,7 @@ namespace jabber.connection
  */
             UniqueIQ iq = new UniqueIQ(m_stream.Document);
             iq.To = server;
-            m_stream.Tracker.BeginIQ(iq, new IqCB(GotUnique), new UniqueState(nick, callback, state));
+            BeginIQ(iq, new IqCB(GotUnique), new UniqueState(nick, callback, state));
         }
 
         private void GotUnique(object sender, IQ iq, object state)
@@ -798,7 +798,7 @@ namespace jabber.connection
             OwnerIQ iq = new OwnerIQ(m_manager.Stream.Document);
             iq.Type = IQType.get;
             iq.To = m_room;
-            m_manager.Stream.Tracker.BeginIQ(iq, new IqCB(ConfigForm), null);
+            m_manager.BeginIQ(iq, new IqCB(ConfigForm), null);
         }
 
         private void ConfigForm(object sender, IQ iq, object context)
@@ -818,7 +818,7 @@ namespace jabber.connection
             resp.To = m_room;
             resp.Type = IQType.set;
             resp.From = null;
-            m_manager.Stream.Tracker.BeginIQ(resp, new IqCB(Configured), null);
+            m_manager.BeginIQ(resp, new IqCB(Configured), null);
         }
 
         private void Configured(object sender, IQ iq, object context)
@@ -863,7 +863,7 @@ namespace jabber.connection
             OwnerQuery oq = iq.Instruction;
             Data form = oq.Form;
             form.Type = XDataType.submit;
-            m_manager.Stream.Tracker.BeginIQ(iq, new IqCB(Configured), null);
+            m_manager.BeginIQ(iq, new IqCB(Configured), null);
         }
 
         /// <summary>
@@ -1044,7 +1044,7 @@ namespace jabber.connection
             item.Nick = nick;
             item.Role = role;
             item.Reason = reason;
-            m_manager.Stream.Tracker.BeginIQ(iq, null, null);
+            m_manager.BeginIQ(iq, null, null);
         }
 
         /// <summary>
@@ -1114,7 +1114,7 @@ namespace jabber.connection
             iq.To = m_room;
             AdminQuery query = iq.Instruction;
             query.AddItem().Role = role;
-            m_manager.Stream.Tracker.BeginIQ(iq, new IqCB(GotList), new RetrieveParticipantsState(callback, state));
+            m_manager.BeginIQ(iq, new IqCB(GotList), new RetrieveParticipantsState(callback, state));
         }
 
         private void GotList(object sender, IQ iq, object state)
@@ -1206,7 +1206,7 @@ namespace jabber.connection
                 }
             }
             if (count > 0)
-                m_manager.Stream.Tracker.BeginIQ(iq, callback, state);
+                m_manager.BeginIQ(iq, callback, state);
             else
                 callback(this, null, state);
         }
@@ -1249,7 +1249,7 @@ namespace jabber.connection
             item.JID = jid;
             item.Affiliation = affiliation;
             item.Reason = reason;
-            m_manager.Stream.Tracker.BeginIQ(iq, null, null);
+            m_manager.BeginIQ(iq, null, null);
         }
 
         /// <summary>
@@ -1317,7 +1317,7 @@ namespace jabber.connection
             iq.To = m_room;
             AdminQuery query = iq.Instruction;
             query.AddItem().Affiliation = affiliation;
-            m_manager.Stream.Tracker.BeginIQ(iq, new IqCB(GotList), new RetrieveParticipantsState(callback, state));
+            m_manager.BeginIQ(iq, new IqCB(GotList), new RetrieveParticipantsState(callback, state));
         }
 
         /// <summary>
@@ -1363,7 +1363,7 @@ namespace jabber.connection
                 }
             }
             if (count > 0)
-                m_manager.Stream.Tracker.BeginIQ(iq, callback, state);
+                m_manager.BeginIQ(iq, callback, state);
             else
                 callback(this, null, state);
         }

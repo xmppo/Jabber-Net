@@ -14,10 +14,11 @@
 using System;
 using System.ComponentModel;
 using System.ComponentModel.Design;
+using System.Xml;
 
 using bedrock.util;
 using System.Diagnostics;
-using System.Xml;
+using jabber.protocol.client;
 
 namespace jabber.connection
 {
@@ -71,7 +72,7 @@ namespace jabber.connection
 
         /// <summary>
         /// Informs the client that the XmppStream was changed.
-        /// Often at design time, the object will be this StreamControl.
+        /// Often at design time, the object will be this StreamComponent.
         /// </summary>
         public event bedrock.ObjectHandler OnStreamChanged;
 
@@ -119,6 +120,8 @@ namespace jabber.connection
 
         /// <summary>
         /// Write the specified stanza to the stream.
+        /// If the from address hasn't been set, and an OverrideFrom has been set,
+        /// the from address will be set to the value of OverrideFrom.
         /// </summary>
         /// <param name="elem"></param>
         public void Write(XmlElement elem)
@@ -126,6 +129,21 @@ namespace jabber.connection
             if ((m_overrideFrom != null) && (elem.GetAttribute("from") == ""))
                 elem.SetAttribute("from", m_overrideFrom);
             m_stream.Write(elem);
+        }
+
+        ///<summary>
+        /// Does an asynchronous IQ call.
+        /// If the from address hasn't been set, and an OverrideFrom has been set,
+        /// the from address will be set to the value of OverrideFrom.
+        ///</summary>
+        ///<param name="iq">IQ packet to send.</param>
+        ///<param name="cb">Callback to execute when the result comes back.</param>
+        ///<param name="cbArg">Arguments to pass to the callback.</param>
+        public void BeginIQ(IQ iq, IqCB cb, object cbArg)
+        {
+            if ((m_overrideFrom != null) && (iq.From == null))
+                iq.From = m_overrideFrom;
+            m_stream.Tracker.BeginIQ(iq, cb, cbArg);
         }
     }
 }
