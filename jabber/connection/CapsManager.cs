@@ -513,7 +513,6 @@ namespace jabber.connection
         /// <param name="info">The empty info element to fill in.</param>
         public void FillInInfo(DiscoInfo info)
         {
-            info.Node = NodeVer;
             foreach (Ident id in Identities)
                 info.AddIdentity(id.Category, id.Type, id.Name, id.Lang);
             foreach (string uri in Features)
