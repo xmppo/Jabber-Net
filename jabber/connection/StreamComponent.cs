@@ -17,6 +17,7 @@ using System.ComponentModel.Design;
 
 using bedrock.util;
 using System.Diagnostics;
+using System.Xml;
 
 namespace jabber.connection
 {
@@ -101,6 +102,30 @@ namespace jabber.connection
                         OnStreamChanged(this);
                 }
             }
+        }
+
+        private JID m_overrideFrom = null;
+
+        /// <summary>
+        /// Override the from address that will be stamped on outbound packets.
+        /// Unless your server implemets XEP-193, you shouldn't use this for 
+        /// client connections.
+        /// </summary>
+        public JID OverrideFrom
+        {
+            get { return m_overrideFrom; }
+            set { m_overrideFrom = value; }
+        }
+
+        /// <summary>
+        /// Write the specified stanza to the stream.
+        /// </summary>
+        /// <param name="elem"></param>
+        public void Write(XmlElement elem)
+        {
+            if ((m_overrideFrom != null) && (elem.GetAttribute("from") == ""))
+                elem.SetAttribute("from", m_overrideFrom);
+            m_stream.Write(elem);
         }
     }
 }

@@ -208,6 +208,10 @@ namespace jabber.connection
         /// Contains the password for the proxy server.
         /// </summary>
         public const string PROXY_PW   = "proxy.password";
+        /// <summary>
+        /// Override the from address, in a component/service connection.
+        /// </summary>
+        public const string OVERRIDE_FROM = "override_from";
     }
 
     /// <summary>

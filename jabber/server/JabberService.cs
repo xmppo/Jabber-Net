@@ -70,6 +70,7 @@ namespace jabber.server
         private static readonly object[][] DEFAULTS = new object[][] {
             new object[] {Options.COMPONENT_DIRECTION, ComponentType.Accept},
             new object[] {Options.PORT, 7400},
+            new object[] {Options.OVERRIDE_FROM, null},
         };
 
         private void init()
@@ -211,8 +212,6 @@ namespace jabber.server
             }
         }
 
-
-
         /// <summary>
         /// The stream namespace for this connection.
         /// </summary>
@@ -223,6 +222,16 @@ namespace jabber.server
             {
                 return (this.Type == ComponentType.Accept) ? URI.ACCEPT : URI.CONNECT;
             }
+        }
+
+        /// <summary>
+        /// Override the from address that is stamped on all outbound stanzas that 
+        /// have no from address.
+        /// </summary>
+        public JID OverrideFrom
+        {
+            get { return this[Options.OVERRIDE_FROM] as JID; }
+            set { this[Options.OVERRIDE_FROM] = value; }
         }
 
         /// <summary>
@@ -263,7 +272,13 @@ namespace jabber.server
             if (State == RunningState.Instance)
             {
                 if (elem.GetAttribute("from") == "")
-                    elem.SetAttribute("from", this.ComponentID);
+                {
+                    JID from = this[Options.OVERRIDE_FROM] as JID;
+                    if (from == null)
+                        from = this.ComponentID;
+
+                    elem.SetAttribute("from", from);
+                }
             }
             base.Write(elem);
         }

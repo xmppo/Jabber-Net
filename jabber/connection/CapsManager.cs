@@ -533,7 +533,7 @@ namespace jabber.connection
             info = (DiscoInfo)resp.Query;
             FillInInfo(info);
 
-            m_stream.Write(resp);
+            Write(resp);
         }
 
         /// <summary>

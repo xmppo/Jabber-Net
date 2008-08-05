@@ -288,14 +288,14 @@ namespace jabber.client
                 Presence sub_ack = new Presence(m_stream.Document);
                 sub_ack.To = pres.From;
                 sub_ack.Type = PresenceType.subscribe;
-                m_stream.Write(sub_ack);                
+                Write(sub_ack);                
                 break;
             case PresenceType.unsubscribe:
                 // ack.  we'll likely get an unsubscribed soon, anyway.
                 Presence un_ack = new Presence(m_stream.Document);
                 un_ack.To = pres.From;
                 un_ack.Type = PresenceType.unsubscribed;
-                m_stream.Write(un_ack);
+                Write(un_ack);
                 break;
             case PresenceType.unsubscribed:
                 bool remove = true;
@@ -364,14 +364,14 @@ namespace jabber.client
             Presence reply = new Presence(m_stream.Document);
             reply.To = pres.From;
             reply.Type = PresenceType.subscribed;
-            m_stream.Write(reply);
+            Write(reply);
 
             if (m_autoSubscribe)
             {
                 Presence sub = new Presence(m_stream.Document);
                 sub.To = pres.From;
                 sub.Type = PresenceType.subscribe;
-                m_stream.Write(sub);
+                Write(sub);
             }
         }
 
@@ -387,7 +387,7 @@ namespace jabber.client
             Presence reply = new Presence(m_stream.Document);
             reply.To = pres.From;
             reply.Type = PresenceType.unsubscribed;
-            m_stream.Write(reply);
+            Write(reply);
         }
 
         /// <summary>
@@ -409,7 +409,7 @@ C: <iq from='juliet@example.com/balcony' type='set' id='delete_1'>
             Item item = r.AddItem();
             item.JID = jid;
             item.Subscription = Subscription.remove;
-            m_stream.Write(iq);  // ignore response
+            Write(iq);  // ignore response
         }
 
         /// <summary>
@@ -424,7 +424,7 @@ C: <iq from='juliet@example.com/balcony' type='set' id='delete_1'>
             iq.Type = IQType.set;
             Roster r = iq.Instruction;
             r.AppendChild(item);
-            m_stream.Write(iq);  // ignore response
+            Write(iq);  // ignore response
         }
 
         #region Component Designer generated code
