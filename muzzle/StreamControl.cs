@@ -20,6 +20,7 @@ using System.Xml;
 using bedrock.util;
 using jabber;
 using jabber.connection;
+using jabber.protocol.client;
 
 namespace muzzle
 {
@@ -90,6 +91,21 @@ namespace muzzle
             if ((m_overrideFrom != null) && (elem.GetAttribute("from") == ""))
                 elem.SetAttribute("from", m_overrideFrom);
             m_stream.Write(elem);
+        }
+
+        ///<summary>
+        /// Does an asynchronous IQ call.
+        /// If the from address hasn't been set, and an OverrideFrom has been set,
+        /// the from address will be set to the value of OverrideFrom.
+        ///</summary>
+        ///<param name="iq">IQ packet to send.</param>
+        ///<param name="cb">Callback to execute when the result comes back.</param>
+        ///<param name="cbArg">Arguments to pass to the callback.</param>
+        public void BeginIQ(IQ iq, IqCB cb, object cbArg)
+        {
+            if ((m_overrideFrom != null) && (iq.From == null))
+                iq.From = m_overrideFrom;
+            m_stream.Tracker.BeginIQ(iq, cb, cbArg);
         }
     }
 }
