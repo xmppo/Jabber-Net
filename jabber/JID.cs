@@ -558,6 +558,9 @@ namespace jabber
         /// <returns></returns>
         public override object ConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value)
         {
+            if (value == null)
+                return null;
+
             string s = value as string;
             if (s != null)
             {
@@ -581,6 +584,8 @@ namespace jabber
         /// <returns></returns>
         public override object ConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, Type destinationType)
         {
+            if (value == null)
+                return null;
             if (destinationType == typeof(string))
                 return value.ToString();
             if (destinationType == typeof(JID))
