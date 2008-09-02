@@ -181,7 +181,8 @@ namespace jabber.protocol
 
             Dictionary<object, string> map = GetStringHash(t);
             string val = null;
-            Debug.Assert(map.TryGetValue(value, out val));
+            bool found = map.TryGetValue(value, out val);
+            Debug.Assert(found, "Tried to convert an unknown enum value to string");
             return val;
         }
 	}
