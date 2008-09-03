@@ -57,6 +57,7 @@ $(BASEDIR)/jabber/client/PresenceManager.cs \
 $(BASEDIR)/jabber/client/RosterManager.cs \
 $(BASEDIR)/jabber/connection/BindingStanzaStream.cs \
 $(BASEDIR)/jabber/connection/CapsManager.cs \
+$(BASEDIR)/jabber/connection/ConferenceManager.cs \
 $(BASEDIR)/jabber/connection/DiscoManager.cs \
 $(BASEDIR)/jabber/connection/FileMap.cs \
 $(BASEDIR)/jabber/connection/HttpStanzaStream.cs \
@@ -166,6 +167,7 @@ RESOURCES = \
 SYSTEM_REFERENCES = -r:zlib.net.dll \
 					-r:System.dll \
 					-r:System.Xml.dll \
+					-r:System.Drawing.dll \
 					-r:Mono.Security.dll
 
 DEBUGDIR = $(BASEDIR)/bin/debug
