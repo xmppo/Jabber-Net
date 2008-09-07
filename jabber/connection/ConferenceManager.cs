@@ -81,6 +81,7 @@ namespace jabber.connection
         /// </summary>
         private System.ComponentModel.IContainer components = null;
         private Hashtable m_rooms = new Hashtable();
+        private string m_nick = null;
 
         /// <summary>
         /// Creates a new conference manager.
@@ -258,6 +259,25 @@ namespace jabber.connection
         public event MessageHandler OnInvite;
 
         /// <summary>
+        /// The default room nickname, if one is not specified.  If none
+        /// specified, the user name from the stream JID is used.
+        /// </summary>
+        [Category("Manager")]
+        [DefaultValue(null)]
+        public string DefaultNick
+        {
+            get 
+            { 
+                if (m_nick != null)
+                    return m_nick;
+                if ((m_stream == null) || m_stream.JID == null)
+                    return null;
+                return m_stream.JID.User;
+            }
+            set { m_nick = value; }
+        }
+
+        /// <summary>
         /// Joins a conference room.
         /// </summary>
         /// <param name="roomAndNick">room@conference/nick, where "nick" is the desred nickname in the room.</param>
@@ -269,6 +289,9 @@ namespace jabber.connection
         {
             if (roomAndNick == null)
                 throw new ArgumentNullException("roomAndNick");
+
+            if (roomAndNick.Resource == null)
+                roomAndNick.Resource = DefaultNick;
 
             Room r = (Room)m_rooms[roomAndNick];
             if (r != null)
@@ -872,12 +895,7 @@ namespace jabber.connection
         /// </summary>
         public void Join()
         {
-            if (m_state == STATE.running)
-                return;
-
-            m_state = STATE.join;
-            RoomPresence pres = new RoomPresence(m_manager.Stream.Document, m_jid);
-            m_manager.Write(pres);
+            Join(null);
         }
 
         /// <summary>
@@ -891,7 +909,8 @@ namespace jabber.connection
 
             m_state = STATE.join;
             RoomPresence pres = new RoomPresence(m_manager.Stream.Document, m_jid);
-            pres.X.Password = password;
+            if (password != null)
+                pres.X.Password = password;
 
             m_manager.Write(pres);
         }
