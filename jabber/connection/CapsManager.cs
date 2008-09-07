@@ -447,10 +447,12 @@ namespace jabber.connection
                 return;
 
             string ver = (string)state;
-            if (ver != CalculateVer(node))
+            string calc = CalculateVer(node);
+            if (ver != calc)
             {
-                Debug.WriteLine("WARNING: invalid caps ver hash: " + ver);
-                Debug.WriteLine(node.Info.OuterXml);
+                Debug.WriteLine("WARNING: invalid caps ver hash: '" + ver + "' != '" + calc + "'");
+                if (node.Info != null)
+                    Debug.WriteLine(node.Info.OuterXml);
                 return;
             }
             m_cache[ver] = node.Info;
