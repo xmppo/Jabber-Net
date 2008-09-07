@@ -97,7 +97,7 @@ namespace jabber.client
         }
 
         /// <summary>
-        /// The RosterManager for this view
+        /// The CapsManager for this view
         /// </summary>
         [Category("Jabber")]
         public CapsManager CapsManager
