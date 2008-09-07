@@ -252,5 +252,16 @@ namespace jabber.protocol
         /// </summary>
         public const string PUBSUB_ERRORS = "http://jabber.org/protocol/pubsub#errors";
 
+        /// <summary>
+        /// Bookmarks.
+        /// See XEP-0048 (http://www.xmpp.org/extensions/xep-0048.html)
+        /// </summary>
+        public const string BOOKMARKS = "storage:bookmarks";
+
+        /// <summary>
+        /// Private storage.
+        /// See XEP-0049 (http://www.xmpp.org/extensions/xep-0049.html)
+        /// </summary>
+        public const string PRIVATE = "jabber:iq:private";
     }
 }

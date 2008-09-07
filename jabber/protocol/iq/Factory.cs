@@ -40,6 +40,13 @@ namespace jabber.protocol.iq
             new QnameType("query", URI.LAST,     typeof(jabber.protocol.iq.Last)),
             new QnameType("item",  URI.BROWSE,   typeof(jabber.protocol.iq.Browse)),
             new QnameType("geoloc",URI.GEOLOC,   typeof(jabber.protocol.iq.GeoLoc)),
+            
+            
+            new QnameType("query",      URI.PRIVATE,   typeof(jabber.protocol.iq.Private)),
+            new QnameType("storage",    URI.BOOKMARKS, typeof(jabber.protocol.iq.Bookmarks)),
+            new QnameType("url",        URI.BOOKMARKS, typeof(jabber.protocol.iq.BookmarkURL)),
+            new QnameType("conference", URI.BOOKMARKS, typeof(jabber.protocol.iq.BookmarkConference)),
+            new QnameType("note",       URI.BOOKMARKS, typeof(jabber.protocol.iq.BookmarkNote)),
 
             // VCard
             new QnameType("vCard", URI.VCARD, typeof(jabber.protocol.iq.VCard)),

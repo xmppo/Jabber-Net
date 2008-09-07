@@ -54,14 +54,8 @@ namespace jabber.protocol
         /// </summary>
         public JID To
         {
-            get { return new JID(this.GetAttribute("to")); }
-            set
-            {
-                if (value == null)
-                    this.RemoveAttribute("to");
-                else
-                    this.SetAttribute("to", value);
-            }
+            get { return (JID)this.GetAttr("to"); }
+            set { SetAttr("to", value); }
         }
 
         /// <summary>
@@ -69,14 +63,8 @@ namespace jabber.protocol
         /// </summary>
         public JID From
         {
-            get { return new JID(this.GetAttribute("from")); }
-            set
-            {
-                if (value == null)
-                    this.RemoveAttribute("from");
-                else
-                    this.SetAttribute("from", value);
-            }
+            get { return (JID)this.GetAttr("from"); }
+            set { SetAttr("from", value); }
         }
 
         /// <summary>
@@ -84,8 +72,8 @@ namespace jabber.protocol
         /// </summary>
         public string ID
         {
-            get { return this.GetAttribute("id"); }
-            set { this.SetAttribute("id", value); }
+            get { return this.GetAttr("id"); }
+            set { this.SetAttr("id", value); }
         }
 
         /// <summary>

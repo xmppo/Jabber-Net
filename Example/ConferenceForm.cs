@@ -54,6 +54,14 @@ namespace Example
             set { m_disco = value; }
         }
 
+        public JID RoomJID
+        {
+            get
+            {
+                return new JID(txtRoom.Text, cmbJID.Text, null);
+            }
+        }
+
         public JID RoomAndNick
         {
             get
@@ -62,14 +70,22 @@ namespace Example
             }
             set
             {
-                cmbJID.Text = value.Server;
-                txtRoom.Text = value.User;
-                txtNick.Text = value.Resource;
+                if (value == null)
+                {
+                    cmbJID.Text = txtRoom.Text = txtNick.Text = "";
+                }
+                else
+                {
+                    cmbJID.Text = value.Server;
+                    txtRoom.Text = value.User;
+                    txtNick.Text = value.Resource;
+                }
             }
         }
 
         public string Nick
         {
+            get { return txtNick.Text; }
             set { txtNick.Text = value; }
         }
 
@@ -213,15 +229,25 @@ namespace Example
         {
             cmbJID.BeginUpdate();
             cmbJID.Items.Clear();
-            foreach (DiscoNode component in m_disco.Root.Children)
-            {
-                if (component.HasFeature(jabber.protocol.URI.MUC))
-                    cmbJID.Items.Add(component.JID);
-            }
-            if (cmbJID.Items.Count > 0)
-                cmbJID.SelectedIndex = 0;
-            cmbJID.EndUpdate();
+            if (m_disco != null)
+                m_disco.BeginGetItems(null, GotRoot, null);
+            else
+                cmbJID.EndUpdate();
         }
 
+        private void GotRoot(DiscoManager sender, DiscoNode node, object state)
+        {
+            if (node.Children != null)
+            {
+                foreach (DiscoNode component in node.Children)
+                {
+                    if (component.HasFeature(jabber.protocol.URI.MUC))
+                        cmbJID.Items.Add(component.JID);
+                }
+                if (cmbJID.Items.Count > 0)
+                    cmbJID.SelectedIndex = 0;
+            }
+            cmbJID.EndUpdate();
+        }
     }
 }

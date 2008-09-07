@@ -78,6 +78,15 @@ namespace Example
         private ToolStripMenuItem joinConferenceToolStripMenuItem;
 
         private bool m_err = false;
+        private jabber.client.BookmarkManager bmm;
+        private TabPage tpBookmarks;
+        private ListView lvBookmarks;
+        private ColumnHeader chName;
+        private ColumnHeader chNick;
+        private ColumnHeader chAutoJoin;
+        private ToolStripMenuItem bookmarkToolStripMenuItem;
+        private ToolStripMenuItem addToolStripMenuItem;
+        private ToolStripMenuItem removeToolStripMenuItem;
         private bool m_connected = false;
 
         #endregion
@@ -138,7 +147,7 @@ namespace Example
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            jabber.connection.Ident ident1 = new jabber.connection.Ident();
+            jabber.connection.Ident ident2 = new jabber.connection.Ident();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.sb = new System.Windows.Forms.StatusBar();
             this.pnlCon = new System.Windows.Forms.StatusBarPanel();
@@ -149,10 +158,16 @@ namespace Example
             this.roster = new muzzle.RosterTree();
             this.jc = new jabber.client.JabberClient(this.components);
             this.pm = new jabber.client.PresenceManager(this.components);
+            this.cm = new jabber.connection.CapsManager(this.components);
+            this.dm = new jabber.connection.DiscoManager(this.components);
             this.rm = new jabber.client.RosterManager(this.components);
             this.tpServices = new System.Windows.Forms.TabPage();
             this.services = new Example.ServiceDisplay();
-            this.dm = new jabber.connection.DiscoManager(this.components);
+            this.tpBookmarks = new System.Windows.Forms.TabPage();
+            this.lvBookmarks = new System.Windows.Forms.ListView();
+            this.chName = new System.Windows.Forms.ColumnHeader();
+            this.chNick = new System.Windows.Forms.ColumnHeader();
+            this.chAutoJoin = new System.Windows.Forms.ColumnHeader();
             this.tpDebug = new System.Windows.Forms.TabPage();
             this.debug = new muzzle.XmppDebugger();
             this.mnuPresence = new System.Windows.Forms.ContextMenu();
@@ -171,21 +186,25 @@ namespace Example
             this.addContactToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeContactToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addGroupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.bookmarkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.removeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.windowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pubSubToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.subscribePubSubToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deletePubSubToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.cm = new jabber.connection.CapsManager(this.components);
             this.psm = new jabber.connection.PubSubManager(this.components);
             this.idler = new bedrock.util.IdleTime();
             this.muc = new jabber.connection.ConferenceManager(this.components);
+            this.bmm = new jabber.client.BookmarkManager(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pnlCon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pnlSSL)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pnlPresence)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tpRoster.SuspendLayout();
             this.tpServices.SuspendLayout();
+            this.tpBookmarks.SuspendLayout();
             this.tpDebug.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -228,6 +247,7 @@ namespace Example
             // 
             this.tabControl1.Controls.Add(this.tpRoster);
             this.tabControl1.Controls.Add(this.tpServices);
+            this.tabControl1.Controls.Add(this.tpBookmarks);
             this.tabControl1.Controls.Add(this.tpDebug);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 24);
@@ -289,12 +309,35 @@ namespace Example
             // 
             // pm
             // 
+            this.pm.CapsManager = this.cm;
+            this.pm.OverrideFrom = null;
             this.pm.Stream = this.jc;
+            // 
+            // cm
+            // 
+            this.cm.DiscoManager = this.dm;
+            this.cm.Features = new string[0];
+            this.cm.FileName = "caps.xml";
+            ident2.Category = "client";
+            ident2.Lang = "en";
+            ident2.Name = "Jabber-Net Test Client";
+            ident2.Type = "pc";
+            this.cm.Identities = new jabber.connection.Ident[] {
+        ident2};
+            this.cm.Node = "http://cursive.net/clients/csharp-example";
+            this.cm.OverrideFrom = null;
+            this.cm.Stream = this.jc;
+            // 
+            // dm
+            // 
+            this.dm.OverrideFrom = null;
+            this.dm.Stream = this.jc;
             // 
             // rm
             // 
             this.rm.AutoAllow = jabber.client.AutoSubscriptionHanding.AllowIfSubscribed;
             this.rm.AutoSubscribe = true;
+            this.rm.OverrideFrom = null;
             this.rm.Stream = this.jc;
             this.rm.OnRosterEnd += new bedrock.ObjectHandler(this.rm_OnRosterEnd);
             this.rm.OnSubscription += new jabber.client.SubscriptionHandler(this.rm_OnSubscription);
@@ -321,9 +364,46 @@ namespace Example
             this.services.Stream = this.jc;
             this.services.TabIndex = 0;
             // 
-            // dm
+            // tpBookmarks
             // 
-            this.dm.Stream = this.jc;
+            this.tpBookmarks.Controls.Add(this.lvBookmarks);
+            this.tpBookmarks.Location = new System.Drawing.Point(4, 22);
+            this.tpBookmarks.Name = "tpBookmarks";
+            this.tpBookmarks.Size = new System.Drawing.Size(624, 366);
+            this.tpBookmarks.TabIndex = 3;
+            this.tpBookmarks.Text = "Bookmarks";
+            this.tpBookmarks.UseVisualStyleBackColor = true;
+            // 
+            // lvBookmarks
+            // 
+            this.lvBookmarks.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.chName,
+            this.chNick,
+            this.chAutoJoin});
+            this.lvBookmarks.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lvBookmarks.Location = new System.Drawing.Point(0, 0);
+            this.lvBookmarks.Name = "lvBookmarks";
+            this.lvBookmarks.Size = new System.Drawing.Size(624, 366);
+            this.lvBookmarks.Sorting = System.Windows.Forms.SortOrder.Ascending;
+            this.lvBookmarks.TabIndex = 0;
+            this.lvBookmarks.UseCompatibleStateImageBehavior = false;
+            this.lvBookmarks.View = System.Windows.Forms.View.Details;
+            this.lvBookmarks.DoubleClick += new System.EventHandler(this.lvBookmarks_DoubleClick);
+            this.lvBookmarks.KeyUp += new System.Windows.Forms.KeyEventHandler(this.lvBookmarks_KeyUp);
+            // 
+            // chName
+            // 
+            this.chName.Text = "Room";
+            this.chName.Width = 198;
+            // 
+            // chNick
+            // 
+            this.chNick.Text = "Nick";
+            this.chNick.Width = 88;
+            // 
+            // chAutoJoin
+            // 
+            this.chAutoJoin.Text = "AutoJoin";
             // 
             // tpDebug
             // 
@@ -342,6 +422,7 @@ namespace Example
             this.debug.Location = new System.Drawing.Point(0, 0);
             this.debug.Name = "debug";
             this.debug.OtherColor = System.Drawing.Color.Green;
+            this.debug.OverrideFrom = null;
             this.debug.ReceiveColor = System.Drawing.Color.Orange;
             this.debug.SendColor = System.Drawing.Color.Blue;
             this.debug.Size = new System.Drawing.Size(624, 366);
@@ -377,6 +458,7 @@ namespace Example
             this.fileToolStripMenuItem,
             this.viewToolStripMenuItem,
             this.rosterToolStripMenuItem,
+            this.bookmarkToolStripMenuItem,
             this.windowToolStripMenuItem,
             this.pubSubToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
@@ -484,6 +566,32 @@ namespace Example
             this.addGroupToolStripMenuItem.Text = "&Add Group";
             this.addGroupToolStripMenuItem.Click += new System.EventHandler(this.addGroupToolStripMenuItem_Click);
             // 
+            // bookmarkToolStripMenuItem
+            // 
+            this.bookmarkToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addToolStripMenuItem,
+            this.removeToolStripMenuItem});
+            this.bookmarkToolStripMenuItem.Name = "bookmarkToolStripMenuItem";
+            this.bookmarkToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
+            this.bookmarkToolStripMenuItem.Text = "Bookmark";
+            // 
+            // addToolStripMenuItem
+            // 
+            this.addToolStripMenuItem.Name = "addToolStripMenuItem";
+            this.addToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.B)));
+            this.addToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.addToolStripMenuItem.Text = "Add";
+            this.addToolStripMenuItem.Click += new System.EventHandler(this.addToolStripMenuItem_Click);
+            // 
+            // removeToolStripMenuItem
+            // 
+            this.removeToolStripMenuItem.Name = "removeToolStripMenuItem";
+            this.removeToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
+                        | System.Windows.Forms.Keys.B)));
+            this.removeToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.removeToolStripMenuItem.Text = "Remove";
+            this.removeToolStripMenuItem.Click += new System.EventHandler(this.removeToolStripMenuItem_Click);
+            // 
             // windowToolStripMenuItem
             // 
             this.windowToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -525,22 +633,9 @@ namespace Example
             this.deletePubSubToolStripMenuItem.Text = "&Delete";
             this.deletePubSubToolStripMenuItem.Click += new System.EventHandler(this.deletePubSubToolStripMenuItem_Click);
             // 
-            // cm
-            // 
-            this.cm.DiscoManager = this.dm;
-            this.cm.Features = new string[0];
-            this.cm.FileName = "caps.xml";
-            ident1.Category = "client";
-            ident1.Lang = "en";
-            ident1.Name = "Jabber-Net Test Client";
-            ident1.Type = "pc";
-            this.cm.Identities = new jabber.connection.Ident[] {
-        ident1};
-            this.cm.Node = "http://cursive.net/clients/csharp-example";
-            this.cm.Stream = this.jc;
-            // 
             // psm
             // 
+            this.psm.OverrideFrom = null;
             this.psm.Stream = this.jc;
             // 
             // idler
@@ -551,10 +646,16 @@ namespace Example
             // 
             // muc
             // 
+            this.muc.OverrideFrom = null;
             this.muc.Stream = this.jc;
-            this.muc.OnRoomConfig += new jabber.connection.ConfigureRoom(this.muc_OnRoomConfig);
-            this.muc.OnInvite += new jabber.client.MessageHandler(this.muc_OnInvite);
-            this.muc.OnPresenceError += new jabber.connection.RoomPresenceHandler(this.muc_OnPresenceError);
+            // 
+            // bmm
+            // 
+            this.bmm.ConferenceManager = this.muc;
+            this.bmm.OverrideFrom = null;
+            this.bmm.Stream = this.jc;
+            this.bmm.OnConferenceAdd += new jabber.client.BookmarkConferenceDelegate(this.bmm_OnConferenceAdd);
+            this.bmm.OnConferenceRemove += new jabber.client.BookmarkConferenceDelegate(this.bmm_OnConferenceRemove);
             // 
             // MainForm
             // 
@@ -575,6 +676,7 @@ namespace Example
             this.tabControl1.ResumeLayout(false);
             this.tpRoster.ResumeLayout(false);
             this.tpServices.ResumeLayout(false);
+            this.tpBookmarks.ResumeLayout(false);
             this.tpDebug.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -629,6 +731,7 @@ namespace Example
             pnlSSL.Text = "";
             pnlSSL.ToolTipText = "";
             connectToolStripMenuItem.Text = "&Connect";
+            lvBookmarks.Items.Clear();
 
             if (!m_err)
                 pnlCon.Text = "Disconnected";
@@ -640,6 +743,7 @@ namespace Example
             mnuAway.Enabled = mnuAvailable.Enabled = false;
             connectToolStripMenuItem.Text = "&Connect";
             idler.Enabled = false;
+            lvBookmarks.Items.Clear();
 
             pnlCon.Text = "Error: " + ex.Message;
         }
@@ -1023,7 +1127,7 @@ namespace Example
         {
             ConferenceForm cf = new ConferenceForm();
             cf.DiscoManager = dm;
-            cf.Nick = jc.JID.User;
+            cf.Nick = muc.DefaultNick;
             if (cf.ShowDialog() != DialogResult.OK)
                 return;
 
@@ -1049,6 +1153,72 @@ namespace Example
         {
             Room r = sender as Room;
             r.Join();
+        }
+
+        private void bmm_OnConferenceAdd(jabber.client.BookmarkManager manager, BookmarkConference conference)
+        {
+            string jid = conference.JID;
+            string name = conference.ConferenceName;
+            if (name == null)
+                name = jid;
+            if (lvBookmarks.Items.ContainsKey(jid))
+                lvBookmarks.Items.RemoveByKey(jid);
+            ListViewItem item = lvBookmarks.Items.Add(jid, name, -1);
+            item.SubItems.Add(conference.Nick);
+            item.SubItems.Add(conference.AutoJoin.ToString());
+            item.Tag = conference.JID;
+        }
+
+        private void bmm_OnConferenceRemove(jabber.client.BookmarkManager manager, BookmarkConference conference)
+        {
+            string jid = conference.JID;
+            if (lvBookmarks.Items.ContainsKey(jid))
+                lvBookmarks.Items.RemoveByKey(jid);
+        }
+
+        private void lvBookmarks_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete)
+                removeToolStripMenuItem_Click(null, null);
+        }
+
+        private void addToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // pop up AddBookmark dialog
+            ConferenceForm cf = new ConferenceForm();
+            cf.DiscoManager = dm;
+            cf.Nick = muc.DefaultNick;
+            if (cf.ShowDialog() != DialogResult.OK)
+                return;
+            // TODO: add autojoin and name.
+            bmm.AddConference(cf.RoomJID, null, false, cf.Nick);
+        }
+
+        private void removeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (ListViewItem lvi in lvBookmarks.SelectedItems)
+            {
+                bmm[(JID)lvi.Tag] = null;
+            }
+        }
+
+        private void lvBookmarks_DoubleClick(object sender, EventArgs e)
+        {
+            if (lvBookmarks.SelectedItems.Count == 0)
+                return;
+            ListViewItem lvi = lvBookmarks.SelectedItems[0];
+
+            JID jid = (JID)lvi.Tag;
+            BookmarkConference conf = bmm[jid];
+            Debug.Assert(conf != null);
+
+            ConferenceForm cf = new ConferenceForm();
+            cf.DiscoManager = dm;
+            cf.RoomAndNick = new JID(jid.User, jid.Server, conf.Nick);
+
+            if (cf.ShowDialog() != DialogResult.OK)
+                return;
+            bmm.AddConference(cf.RoomJID, null, false, cf.Nick);
         }
     }
 }

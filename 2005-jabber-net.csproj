@@ -141,6 +141,9 @@
     <Compile Include="bedrock\io\BufferAggregate.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="jabber\client\BookmarkManager.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="jabber\connection\FileMap.cs" />
     <Compile Include="bedrock\io\ReadEventStream.cs">
       <SubType>Code</SubType>
@@ -301,6 +304,7 @@
     <Compile Include="jabber\protocol\iq\Auth.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="jabber\protocol\iq\Bookmarks.cs" />
     <Compile Include="jabber\protocol\iq\Browse.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -321,6 +325,7 @@
     <Compile Include="jabber\protocol\iq\OOB.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="jabber\protocol\iq\Private.cs" />
     <Compile Include="jabber\protocol\iq\PubSub.cs" />
     <Compile Include="jabber\protocol\iq\PubSubErrors.cs" />
     <Compile Include="jabber\protocol\iq\PubSubEvent.cs" />
