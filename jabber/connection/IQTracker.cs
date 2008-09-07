@@ -14,6 +14,7 @@
 using System;
 
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using System.Xml;
@@ -73,7 +74,7 @@ namespace jabber.connection
     [SVN(@"$Id$")]
     public class IQTracker: IIQTracker
     {
-        private Hashtable  m_pending = new Hashtable();
+        private Dictionary<string, TrackerData> m_pending = new Dictionary<string, TrackerData>();
         private XmppStream m_cli     = null;
 
         /// <summary>
@@ -91,19 +92,21 @@ namespace jabber.connection
             IQ iq = elem as IQ;
             if (iq == null)
                 return;
+            if ((iq.Type != IQType.result) && (iq.Type != IQType.error))
+                return;
 
             string id = iq.ID;
             TrackerData td;
 
             lock (m_pending)
             {
-                td = (TrackerData) m_pending[id];
+                if (!m_pending.TryGetValue(id, out td))
+                    return;
 
                 // this wasn't one that was being tracked.
-                if (td == null)
-                {
+                if (!td.IsMatch(iq))
                     return;
-                }
+
                 m_pending.Remove(id);
             }
 
@@ -121,7 +124,7 @@ namespace jabber.connection
             // if no callback, ignore response.
             if (cb != null)
             {
-                TrackerData td = new TrackerData(cb, cbArg);
+                TrackerData td = new TrackerData(cb, cbArg, iq.To, iq.ID);
                 lock (m_pending)
                 {
                     m_pending[iq.ID] = td;
@@ -139,7 +142,7 @@ namespace jabber.connection
         public IQ IQ(IQ iqp, int millisecondsTimeout)
         {
             AutoResetEvent are = new AutoResetEvent(false);
-            TrackerData td = new TrackerData(SignalEvent, are);
+            TrackerData td = new TrackerData(SignalEvent, are, iqp.To, iqp.ID);
             string id = iqp.ID;
             lock (m_pending)
             {
@@ -154,7 +157,7 @@ namespace jabber.connection
 
             lock (m_pending)
             {
-                IQ resp = (IQ) m_pending[id];
+                IQ resp = td.Response;
                 m_pending.Remove(id);
                 return resp;
             }
@@ -162,7 +165,6 @@ namespace jabber.connection
 
         private void SignalEvent(object sender, IQ iq, object data)
         {
-            m_pending[iq.ID] = iq;
             ((AutoResetEvent)data).Set();
         }
 
@@ -174,17 +176,42 @@ namespace jabber.connection
         {
             private IqCB  cb;
             private object data;
+            private JID jid;
+            private string id;
+            private IQ response = null;
 
             /// <summary>
             /// Create a tracker data instance.
             /// </summary>
             /// <param name="callback"></param>
             /// <param name="state"></param>
-            public TrackerData(IqCB callback, object state)
+            /// <param name="to"></param>
+            /// <param name="iq_id"></param>
+            public TrackerData(IqCB callback, object state, JID to, string iq_id)
             {
                 Debug.Assert(callback != null);
                 cb = callback;
                 data = state;
+                jid = to;
+                id = iq_id;
+            }
+
+            /// <summary>
+            /// The response that came in.
+            /// </summary>
+            public IQ Response
+            {
+                get { return response; }
+            }
+
+            /// <summary>
+            /// Is this IQ the one we're looking for?
+            /// </summary>
+            /// <param name="iq"></param>
+            /// <returns></returns>
+            public bool IsMatch(IQ iq)
+            {
+                return (iq.ID == id) && ((jid == null) || (iq.From == jid));
             }
 
             /// <summary>
@@ -194,6 +221,7 @@ namespace jabber.connection
             /// <param name="iq"></param>
             public void Call(object sender, IQ iq)
             {
+                response = iq;
                 cb(sender, iq, data);
             }
         }

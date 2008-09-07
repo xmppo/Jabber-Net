@@ -162,7 +162,7 @@ namespace jabber.connection
             OwnerPubSubCommandIQ<OwnerDefault> iq = new OwnerPubSubCommandIQ<OwnerDefault>(m_stream.Document);
             iq.To = service;
             iq.Type = IQType.get;
-            BeginIQ(iq, OnDefaults, new IQTracker.TrackerData(callback, state));
+            BeginIQ(iq, OnDefaults, new IQTracker.TrackerData(callback, state, null, null));
         }
 
         private void OnDefaults(object sender, IQ iq, object data)
@@ -1027,7 +1027,7 @@ namespace jabber.connection
             iq.To = m_jid;
             iq.Type = IQType.get;
             iq.Command.Node = m_node;
-            BeginIQ(iq, OnConfigure, new IQTracker.TrackerData(callback, state));
+            BeginIQ(iq, OnConfigure, new IQTracker.TrackerData(callback, state, null, null));
         }
 
         private void OnConfigure(object sender, IQ iq, object data)
