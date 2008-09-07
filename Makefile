@@ -52,6 +52,7 @@ $(BASEDIR)/bedrock/util/ConfigFile.cs \
 $(BASEDIR)/bedrock/util/GetOptBase.cs \
 $(BASEDIR)/bedrock/util/Version.cs \
 $(BASEDIR)/jabber/JID.cs \
+$(BASEDIR)/jabber/client/BookmarkManager.cs \
 $(BASEDIR)/jabber/client/JabberClient.cs \
 $(BASEDIR)/jabber/client/PresenceManager.cs \
 $(BASEDIR)/jabber/client/RosterManager.cs \
@@ -96,6 +97,7 @@ $(BASEDIR)/jabber/protocol/client/Presence.cs \
 $(BASEDIR)/jabber/protocol/client/ProtocolException.cs \
 $(BASEDIR)/jabber/protocol/iq/Agents.cs \
 $(BASEDIR)/jabber/protocol/iq/Auth.cs \
+$(BASEDIR)/jabber/protocol/iq/Bookmarks.cs \
 $(BASEDIR)/jabber/protocol/iq/Browse.cs \
 $(BASEDIR)/jabber/protocol/iq/Disco.cs \
 $(BASEDIR)/jabber/protocol/iq/Factory.cs \
@@ -103,6 +105,7 @@ $(BASEDIR)/jabber/protocol/iq/GeoLoc.cs \
 $(BASEDIR)/jabber/protocol/iq/Last.cs \
 $(BASEDIR)/jabber/protocol/iq/MUC.cs \
 $(BASEDIR)/jabber/protocol/iq/OOB.cs \
+$(BASEDIR)/jabber/protocol/iq/Private.cs \
 $(BASEDIR)/jabber/protocol/iq/PubSub.cs \
 $(BASEDIR)/jabber/protocol/iq/PubSubErrors.cs \
 $(BASEDIR)/jabber/protocol/iq/PubSubEvent.cs \
