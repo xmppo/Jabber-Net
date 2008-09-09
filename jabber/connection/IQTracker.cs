@@ -211,7 +211,8 @@ namespace jabber.connection
             /// <returns></returns>
             public bool IsMatch(IQ iq)
             {
-                return (iq.ID == id) && ((jid == null) || (iq.From == jid));
+                JID from = iq.From;
+                return (iq.ID == id) && ((jid == null) || (from == null) || (from == jid));
             }
 
             /// <summary>
