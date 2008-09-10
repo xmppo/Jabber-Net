@@ -116,6 +116,20 @@ namespace jabber
 
         }
 
+        /// <summary>
+        /// Builds a new JID, from portions that are guaranteed to already be stringprep'd.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="server"></param>
+        /// <param name="resource"></param>
+        private JID(string user, string server, string resource, string full)
+        {
+            m_user = user;
+            m_server = server;
+            m_resource = resource;
+            m_JID = full;
+        }
+
         private static string build(string user, string server, string resource)
         {
             Debug.Assert(server != null, "Server must be non-null");
@@ -425,7 +439,25 @@ namespace jabber
             get
             {
                 parse();
+                if (m_resource == null)
+                    return m_JID;
                 return build(m_user, m_server, null);
+            }
+        }
+
+        /// <summary>
+        /// Gets the user@server JID associated with this JID, as a JID.
+        /// Slightly faster than building it yourself, since stringprep
+        /// is avoided.
+        /// </summary>
+        public JID BareJID
+        {
+            get 
+            {
+                parse();
+                if (m_resource == null)
+                    return this; // already bare
+                return new JID(m_user, m_server, null, build(m_user, m_server, null)); 
             }
         }
 
