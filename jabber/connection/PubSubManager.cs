@@ -14,6 +14,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Xml;
@@ -38,11 +39,31 @@ namespace jabber.connection
     [SVN(@"$Id$")]
     public class PubSubManager : StreamComponent
     {
+        private class CBHolder
+        {
+            public string Node = null;
+            public int Max = 10;
+            public event ItemCB OnAdd;
+            public event ItemCB OnRemove;
+
+            public void FireAdd(PubSubNode node, PubSubItem item)
+            {
+                if (OnAdd != null)
+                    OnAdd(node, item);
+            }
+            public void FireRemove(PubSubNode node, PubSubItem item)
+            {
+                if (OnRemove != null)
+                    OnRemove(node, item);
+            }
+        }
+
         /// <summary>
         /// Required designer variable.
         /// </summary>
         private IContainer components = null;
-        private Hashtable m_nodes = new Hashtable();
+        private Dictionary<JIDNode, PubSubNode> m_nodes = new Dictionary<JIDNode,PubSubNode>();
+        private Dictionary<string, CBHolder> m_callbacks = new Dictionary<string, CBHolder>();
 
         /// <summary>
         /// Creates a manager.
@@ -50,17 +71,54 @@ namespace jabber.connection
         public PubSubManager()
         {
             InitializeComponent();
+            this.OnStreamChanged += new bedrock.ObjectHandler(PubSubManager_OnStreamChanged);
         }
 
         /// <summary>
         /// Creates a manager in a container.
         /// </summary>
         /// <param name="container">Parent container.</param>
-        public PubSubManager(IContainer container)
+        public PubSubManager(IContainer container) : this()
         {
             container.Add(this);
+        }
 
-            InitializeComponent();
+        private void PubSubManager_OnStreamChanged(object sender)
+        {
+            m_stream.OnProtocol += new ProtocolHandler(m_stream_OnProtocol);
+        }
+
+        private void m_stream_OnProtocol(object sender, XmlElement rp)
+        {
+            Message msg = rp as Message;
+            if (msg == null)
+                return;
+            PubSubEvent evt = msg["event", URI.PUBSUB_EVENT] as PubSubEvent;
+            if (evt == null)
+                return;
+
+            EventItems items = evt.GetChildElement<EventItems>();
+            if (items == null)
+                return;
+
+            string node = items.Node;
+            JID from = msg.From.BareJID;
+            JIDNode jn = new JIDNode(from, node);
+            PubSubNode psn = null;
+            if (!m_nodes.TryGetValue(jn, out psn))
+            {
+                CBHolder holder = null;
+                if (!m_callbacks.TryGetValue(node, out holder))
+                {
+                    Console.WriteLine("WARNING: notification received for unknown pubsub node");
+                    return;
+                }
+                psn = new PubSubNode(m_stream, from, node, holder.Max);
+                psn.OnItemAdd += holder.FireAdd;
+                psn.OnItemRemove += holder.FireRemove;
+                m_nodes[jn] = psn;
+            }
+            psn.FireItems(items);
         }
 
         /// <summary>
@@ -96,6 +154,44 @@ namespace jabber.connection
         public event bedrock.ExceptionHandler OnError;
 
         /// <summary>
+        /// Add a handler for all inbound notifications with the given node name.
+        /// This is handy for PEP implicit subscriptions.
+        /// </summary>
+        /// <param name="node">PEP node URI</param>
+        /// <param name="addCB">Callback when items added</param>
+        /// <param name="removeCB">Callbacks when items removed</param>
+        /// <param name="maxNumber">Maximum number of items to store per node in this namespace</param>
+        public void AddNodeHandler(string node, ItemCB addCB, ItemCB removeCB, int maxNumber)
+        {
+            CBHolder holder = null;
+            if (!m_callbacks.TryGetValue(node, out holder))
+            {
+                holder = new CBHolder();
+                holder.Node = node;
+                holder.Max = maxNumber;
+                m_callbacks[node] = holder;
+            }
+            holder.OnAdd += addCB;
+            holder.OnRemove += removeCB;
+        }
+
+        /// <summary>
+        /// Remove an existing callback.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="cb"></param>
+        public void RemoveNodeHandler(string node, ItemCB cb)
+        {
+            CBHolder holder = null;
+            if (m_callbacks.TryGetValue(node, out holder))
+            {
+                // tests indicate removing from a list that doesn't contain this callback is safe.
+                holder.OnAdd -= cb;
+                holder.OnRemove -= cb;
+            }
+        }
+
+        /// <summary>
         /// Subscribes to a publish-subscribe node.
         /// </summary>
         /// <param name="service">Component that handles PubSub requests.</param>
@@ -109,8 +205,8 @@ namespace jabber.connection
         public PubSubNode GetNode(JID service, string node, int maxItems)
         {
             JIDNode jn = new JIDNode(service, node);
-            PubSubNode n = (PubSubNode) m_nodes[jn];
-            if (n != null)
+            PubSubNode n = null;
+            if (m_nodes.TryGetValue(jn, out n))
                 return n;
             n = new PubSubNode(Stream, service, node, maxItems);
             m_nodes[jn] = n;
@@ -149,6 +245,7 @@ namespace jabber.connection
 
             psNode.Delete();
         }
+
 
         /// <summary>
         /// Get the default configuration of the node.
@@ -471,7 +568,6 @@ namespace jabber.connection
                 throw new ArgumentException("must not be empty", "node");
 
             m_stream = stream;
-            m_stream.OnProtocol += m_stream_OnProtocol;
             m_jid = jid;
             m_node = node;
             m_items = new ItemList(this, maxItems);
@@ -544,6 +640,27 @@ namespace jabber.connection
 
             if (OnError != null)
                 OnError(this, new PubSubException(op, message, protocol));
+        }
+
+        internal void FireItems(EventItems items)
+        {
+            // OK, it's for us.  Might be a new one or a retraction.
+            // Shrug, even if we're sent a mix, it shouldn't hurt anything.
+
+            /*
+            <message from='pubsub.shakespeare.lit' to='bernardo@denmark.lit' id='bar'>
+              <event xmlns='http://jabber.org/protocol/pubsub#event'>
+                <items node='princely_musings'>
+                  <retract id='ae890ac52d0df67ed7cfdf51b644e901'/>
+                </items>
+              </event>
+            </message>
+             */
+            foreach (string id in items.GetRetractions())
+                m_items.RemoveId(id);
+
+            foreach (PubSubItem item in items.GetItems())
+                m_items.Add(item);
         }
 
         /// <summary>
@@ -864,39 +981,6 @@ namespace jabber.connection
                 // TODO: publish, and reset ID when it comes back.
                 m_items[id] = value;
             }
-        }
-
-        private void m_stream_OnProtocol(object sender, XmlElement rp)
-        {
-            if (rp.Name != "message")
-                return;
-            PubSubEvent evt = rp["event", URI.PUBSUB_EVENT] as PubSubEvent;
-            if (evt == null)
-                return;
-
-            EventItems items = evt.GetChildElement<EventItems>();
-            if (items == null)
-                return;
-            if (items.Node != m_node)
-                return;
-
-            // OK, it's for us.  Might be a new one or a retraction.
-            // Shrug, even if we're sent a mix, it shouldn't hurt anything.
-
-            /*
-            <message from='pubsub.shakespeare.lit' to='bernardo@denmark.lit' id='bar'>
-              <event xmlns='http://jabber.org/protocol/pubsub#event'>
-                <items node='princely_musings'>
-                  <retract id='ae890ac52d0df67ed7cfdf51b644e901'/>
-                </items>
-              </event>
-            </message>
-             */
-            foreach (string id in items.GetRetractions())
-                m_items.RemoveId(id);
-
-            foreach (PubSubItem item in items.GetItems())
-                m_items.Add(item);
         }
 
         /// <summary>
