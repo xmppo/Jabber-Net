@@ -301,5 +301,67 @@ namespace test.jabber
             JID j = new JID("support", "conference.192.168.32.109", "bob");
             Assert.AreEqual("conference.192.168.32.109", j.Server);
         }
+
+        [Test]
+        public void Test_Escape()
+        {
+            JID j = JID.Escape("d'artagnan", "gascon.fr", "elder");
+            Assert.AreEqual(@"d\27artagnan@gascon.fr/elder", j.ToString());
+            j = JID.Escape("space cadet", "example.com", null);
+            Assert.AreEqual(@"space\20cadet@example.com", j.ToString());
+            j = JID.Escape("call me \"ishmael\"", "example.com", null);
+            Assert.AreEqual(@"call\20me\20\22ishmael\22@example.com", j.ToString());
+            j = JID.Escape("at&t guy", "example.com", null);
+            Assert.AreEqual(@"at\26t\20guy@example.com", j.ToString());
+            j = JID.Escape("/.fanboy", "example.com", null);
+            Assert.AreEqual(@"\2f.fanboy@example.com", j.ToString());
+            j = JID.Escape("::foo::", "example.com", null);
+            Assert.AreEqual(@"\3a\3afoo\3a\3a@example.com", j.ToString());
+            j = JID.Escape("<foo>", "example.com", null);
+            Assert.AreEqual(@"\3cfoo\3e@example.com", j.ToString());
+            j = JID.Escape("user@host", "example.com", null);
+            Assert.AreEqual(@"user\40host@example.com", j.ToString());
+            j = JID.Escape(@"c:\net", "example.com", null);
+            Assert.AreEqual(@"c\3a\5cnet@example.com", j.ToString());
+            j = JID.Escape(@"c:\\net", "example.com", null);
+            Assert.AreEqual(@"c\3a\5c\5cnet@example.com", j.ToString());
+            j = JID.Escape(@"c:\cool stuff", "example.com", null);
+            Assert.AreEqual(@"c\3a\5ccool\20stuff@example.com", j.ToString());
+            j = JID.Escape(@"c:\5commas", "example.com", null);
+            Assert.AreEqual(@"c\3a\5c5commas@example.com", j.ToString());
+        }
+
+        [Test]
+        public void Test_Unescape()
+        {
+            string u = new JID(@"d\27artagnan@gascon.fr/elder").Unescape();
+            Assert.AreEqual("d'artagnan", u);
+            u = new JID(@"space\20cadet@example.com").Unescape();
+            Assert.AreEqual("space cadet", u);
+            u = new JID(@"call\20me\20\22ishmael\22@example.com").Unescape();
+            Assert.AreEqual("call me \"ishmael\"", u);
+            u = new JID(@"at\26t\20guy@example.com").Unescape();
+            Assert.AreEqual("at&t guy", u);
+            u = new JID(@"\2f.fanboy@example.com").Unescape();
+            Assert.AreEqual("/.fanboy", u);
+            u = new JID(@"\3a\3afoo\3a\3a@example.com").Unescape();
+            Assert.AreEqual("::foo::", u);
+            u = new JID(@"\3cfoo\3e@example.com").Unescape();
+            Assert.AreEqual("<foo>", u);
+            u = new JID(@"user\40host@example.com").Unescape();
+            Assert.AreEqual("user@host", u);
+            u = new JID(@"c\3a\5cnet@example.com").Unescape();
+            Assert.AreEqual(@"c:\net", u);
+            u = new JID(@"c\3a\5c\5cnet@example.com").Unescape();
+            Assert.AreEqual(@"c:\\net", u);
+            u = new JID(@"c\3a\5ccool\20stuff@example.com").Unescape();
+            Assert.AreEqual(@"c:\cool stuff", u);
+            u = new JID(@"c\3a\5c5commas@example.com").Unescape();
+            Assert.AreEqual(@"c:\5commas", u);
+            u = new JID(@"\c0@example.com").Unescape();
+            Assert.AreEqual(@"\c0", u);
+            u = new JID(@"\30@example.com").Unescape();
+            Assert.AreEqual(@"\30", u);
+        }
     }
 }

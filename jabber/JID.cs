@@ -17,6 +17,7 @@ using System.Text;
 using System.Diagnostics;
 
 using bedrock.util;
+using System.Text.RegularExpressions;
 
 namespace jabber
 {
@@ -459,6 +460,99 @@ namespace jabber
                     return this; // already bare
                 return new JID(m_user, m_server, null, build(m_user, m_server, null)); 
             }
+        }
+
+
+        /// <summary>
+        /// XEP-0106 escaping.
+        /// </summary>
+        /// <returns></returns>
+        public static JID Escape(string user, string server, string resource)
+        {
+            StringBuilder sb = new StringBuilder();
+            int count = 0;
+            foreach (char c in user)
+            {
+                switch (c)
+                {
+                    case ' ':
+                        if ((count == 0) || (count == (user.Length - 1)))
+                            throw new JIDFormatException();
+                        sb.Append("\\20");
+                        break;
+                    case '"':
+                        sb.Append("\\22");
+                        break;
+                    case '&':
+                        sb.Append("\\26");
+                        break;
+                    case '\'':
+                        sb.Append("\\27");
+                        break;
+                    case '/':
+                        sb.Append("\\2f");
+                        break;
+                    case ':':
+                        sb.Append("\\3a");
+                        break;
+                    case '<':
+                        sb.Append("\\3c");
+                        break;
+                    case '>':
+                        sb.Append("\\3e");
+                        break;
+                    case '@':
+                        sb.Append("\\40");
+                        break;
+                    case '\\':
+                        sb.Append("\\5c");
+                        break;
+                    default:
+                        sb.Append(c);
+                        break;
+                }
+                count++;
+            }
+            string u = sb.ToString();
+            return new JID(u, server, resource); 
+        }
+
+        /// <summary>
+        /// Unescape the username portion of a JID, as specified in XEP-106.
+        /// </summary>
+        /// <returns></returns>
+        public string Unescape()
+        {
+            Regex re = new Regex(@"\\([2-5][0267face])");
+            string u = re.Replace(m_user, new MatchEvaluator(delegate(Match m)
+            {
+                switch (m.Groups[1].Value)
+                {
+                    case "20":
+                        return " ";
+                    case "22":
+                        return "\"";
+                    case "26":
+                        return "&";
+                    case "27":
+                        return "'";
+                    case "2f":
+                        return "/";
+                    case "3a":
+                        return ":";
+                    case "3c":
+                        return "<";
+                    case "3e":
+                        return ">";
+                    case "40":
+                        return "@";
+                    case "5c":
+                        return "\\";
+                    default:
+                        return m.Groups[0].Value;
+                }
+            }));
+            return u;
         }
 
         #region Implementation of IComparable
