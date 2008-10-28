@@ -57,7 +57,8 @@ namespace jabber.protocol
         /// <param name="uri"></param>
         public void AddNamespace(string prefix, string uri)
         {
-            ((Hashtable)m_stack.Peek()).Add(prefix, uri);
+            Hashtable h = (Hashtable)m_stack.Peek();
+            h[prefix] = uri;
         }
 
         /// <summary>
