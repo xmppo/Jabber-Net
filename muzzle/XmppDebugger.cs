@@ -30,7 +30,7 @@ namespace muzzle
     {
         private RichTextBox rtSend;
         private Splitter splitter1;
-        public BottomScrollRichText rtDebug;
+        private BottomScrollRichText rtDebug;
 
         private Color m_sendColor = Color.Blue;
         private Color m_recvColor = Color.Orange;
