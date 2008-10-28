@@ -201,11 +201,6 @@ namespace bedrock.net
             return m_lastSock;
         }
 
-        public bool[] Pending
-        {
-            get { return new bool[] { m_sockA.IsPending, m_sockB.IsPending }; }
-        }
-
         private bool BothPending
         {
             get { return (m_sockA != null) && (m_sockB != null) && 
