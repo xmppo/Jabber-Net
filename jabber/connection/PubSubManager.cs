@@ -231,10 +231,10 @@ namespace jabber.connection
         {
             JIDNode jn = new JIDNode(service, node);
 
-            PubSubNode psNode = m_nodes[jn] as PubSubNode;
-            if (psNode != null)
+            PubSubNode psNode = null;
+            if (m_nodes.TryGetValue(jn, out psNode))
             {
-                m_nodes[jn] = null;
+                m_nodes.Remove(jn);
             }
             else
             {
