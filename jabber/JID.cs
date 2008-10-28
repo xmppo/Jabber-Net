@@ -123,6 +123,7 @@ namespace jabber
         /// <param name="user"></param>
         /// <param name="server"></param>
         /// <param name="resource"></param>
+        /// <param name="full">The full user@server/resource JID, so that it doesn't have to be recreated from the parts</param>
         private JID(string user, string server, string resource, string full)
         {
             m_user = user;
