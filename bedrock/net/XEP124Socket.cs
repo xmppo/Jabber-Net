@@ -62,9 +62,7 @@ namespace bedrock.net
         private const string CONTENT_TYPE = "text/xml; charset=utf-8";
         private const string METHOD = "POST";
 
-        private readonly Object m_lock = new Object();
-
-        private readonly int m_hold = 5;
+        private readonly int m_hold = 1;
         private int m_wait = 60;
         private int m_maxPoll = 30;
         private int m_minPoll = 1;
@@ -81,6 +79,9 @@ namespace bedrock.net
 
         private Uri m_proxyURI = null;
         private NetworkCredential m_proxyCredentials = null;
+
+        private Thread m_thread = null;
+        private LinkedList<XmlElement> m_queue = new LinkedList<XmlElement>();
 
         private HttpSocket m_sockA = null;
         private HttpSocket m_sockB = null;
@@ -176,19 +177,122 @@ namespace bedrock.net
             throw new NotImplementedException("HTTP binding server not implemented");
         }
 
+        private void Enqueue(XmlElement elem)
+        {
+            lock (m_queue)
+            {
+                m_queue.AddLast(elem);
+                Monitor.Pulse(m_queue);
+            }
+        }
+
+        // Must hold lock first.
         private HttpSocket GetSocket()
         {
-            lock (m_lock)
+            // Debug.Assert(!BothPending);
+
+            // Switch to the other socket than the last one, assuming the other socket isn't pending.
+            // If the other socket is pending, use the last one.
+            HttpSocket other = (m_lastSock == m_sockA) ? m_sockB : m_sockA;
+            if (!other.IsPending)
+                m_lastSock = other;
+
+            Debug.WriteLine("Socket: " + m_lastSock.Name);
+            return m_lastSock;
+        }
+
+        public bool[] Pending
+        {
+            get { return new bool[] { m_sockA.IsPending, m_sockB.IsPending }; }
+        }
+
+        private bool BothPending
+        {
+            get { return (m_sockA != null) && (m_sockB != null) && 
+                          m_sockA.IsPending && m_sockB.IsPending; }
+        }
+
+        private bool NeitherPending
+        {
+            get { return !m_sockA.IsPending && !m_sockB.IsPending; }
+        }
+
+        private bool BothConnected
+        {
+            get
             {
-                if (m_lastSock == m_sockA)
+                return (m_sockA != null) && (m_sockB != null) &&
+                        m_sockA.Connected && m_sockB.Connected;
+            }
+        }
+
+        private void ProcessThread()
+        {
+            Body body = null;
+            int children = 0;
+
+            while (m_running)
+            {
+                lock (m_queue)
                 {
-                    m_lastSock = m_sockB;
+                    //if (NeitherPending)
+                    //    m_queue.AddFirst((XmlElement)null);
+
+                    Debug.WriteLine("A: " + m_sockA.IsPending);
+                    Debug.WriteLine("b: " + m_sockB.IsPending);
+                    while ((m_queue.First == null) || BothPending)
+                    {
+                        Monitor.Wait(m_queue);
+                        if (!m_running)
+                            return;
+                    }
+
+                    // We'll enq nulls to get a poll.
+                    // We'll enq a body in order to terminate.
+
+                    Debug.Assert(m_queue.First != null);
+                    body = m_queue.First.Value as Body;
+                    children = 0;
+                    if (body != null)
+                        // TODO: what to do with leftover stanzas!?
+                        m_queue.RemoveFirst();
+                    else
+                    {
+                        body = CreateOpenBodyTag();
+                        while (m_queue.First != null)
+                        {
+                            XmlElement elem = m_queue.First.Value;
+                            // ignore nulls.  we're going munge together all pending poll requests.
+                            if (elem != null)
+                            {
+                                // if we get to a body in the queue, stop inserting, and wait for the body
+                                // to come around again next time.
+                                if (elem is Body)
+                                    break;
+                                body.AddChild(elem);
+                                children++;
+                            }
+                            m_queue.RemoveFirst();
+                        }
+                    }
                 }
-                else
+
+                if (NeitherPending || (children > 0) || (body.Type == BodyType.terminate))
                 {
-                    m_lastSock = m_sockA;
+                    if (body.RID == -1)
+                        body.RID = Interlocked.Increment(ref m_rid);
+
+                    byte[] buf = ENC.GetBytes(body.OuterXml);
+                    GetSocket().Execute(METHOD, m_uri, buf, 0, buf.Length, CONTENT_TYPE);
                 }
-                return m_lastSock;
+
+                if (body.Type == BodyType.terminate)
+                {
+                    // shutting down.
+                    m_sockA.EnqueueClose();
+                    m_sockB.EnqueueClose();
+                    return;
+                }
             }
         }
 
@@ -200,17 +304,15 @@ namespace bedrock.net
             Body body = CreateOpenBodyTag();
             body.Type = BodyType.terminate;
 
-            byte[] buf = ENC.GetBytes(body.OuterXml);
-            //m_listener.OnWrite(this, buf, 0, buf.Length);
-
-            GetSocket().Execute(METHOD, m_uri, buf, 0, buf.Length, CONTENT_TYPE);
+            Enqueue(body);
             
-            m_sockA.EnqueueClose();
-            m_sockB.EnqueueClose();
+            if (m_thread != null)
+                m_thread.Join();
 
-            lock (m_lock)
+            lock (m_queue)
             {
                 m_running = false;
+                m_thread = null;
                 m_sockA = m_sockB = m_lastSock = null;
             }
             m_listener.OnClose(this);
@@ -231,6 +333,9 @@ namespace bedrock.net
             // Create new ones each time, in case the URL has changed or something.
             m_sockA = new HttpSocket(this);
             m_sockB = new HttpSocket(this);
+
+            m_sockA.Name = "A";
+            m_sockB.Name = "B";
 
             m_sockA.ProxyURI = m_sockB.ProxyURI = m_proxyURI;
             m_sockA.ProxyCredentials = m_sockB.ProxyCredentials = m_proxyCredentials;
@@ -262,7 +367,7 @@ namespace bedrock.net
                 return;
             }
 
-            Write(null);
+            Enqueue(null);
         }
 
         /// <summary>
@@ -334,39 +439,29 @@ namespace bedrock.net
         /// <param name="elem"></param>
         public void Write(XmlElement elem)
         {
-            Body body = CreateOpenBodyTag();
-            if (elem != null)
-                body.AddChild(elem);
-
-            byte[] buf = ENC.GetBytes(body.OuterXml);
-            //m_listener.OnWrite(this, buf, 0, buf.Length);
-
-            GetSocket().Execute(METHOD, m_uri, buf, 0, buf.Length, CONTENT_TYPE);
+            Enqueue(elem);
         }
 
         private Body CreateOpenBodyTag()
         {
             Body body = new Body(m_doc);
 
-            long r = -1L;
             if (m_rid == -1L)
             {
                 Random rnd = new Random();
-                r = m_rid = (long)rnd.Next();
+                long r = m_rid = (long)rnd.Next();
                 body.Content = CONTENT_TYPE;
                 
                 body.To = m_hostid;
                 body.Wait = m_wait;
                 body.Hold = m_hold;
                 body.Lang = m_lang;
+                body.RID = r;
             }
             else
             {
-                r = Interlocked.Increment(ref m_rid);
-                
                 body.SID = m_sid;
             }
-            body.RID = r;
             
             return body;
         }
@@ -417,7 +512,7 @@ namespace bedrock.net
 
         void ISocketEventListener.OnConnect(BaseSocket sock)
         {
-            lock (m_lock)
+            lock (m_queue)
             {
                 if (!m_running &&
                     (m_sockA != null) && m_sockA.Connected &&
@@ -425,6 +520,12 @@ namespace bedrock.net
                 {
                     m_running = true;
                     m_lastSock = m_sockB;
+
+                    m_thread = new Thread(ProcessThread);
+                    m_thread.IsBackground = true;
+                    m_thread.Name = "XEP 124 processing thread";
+                    m_thread.Start();
+
                     m_listener.OnConnect(this);
                 }
             }            
@@ -467,6 +568,8 @@ namespace bedrock.net
                 Debug.WriteLine("shutting down.  extra bytes received.");
                 return false;
             }
+
+            Debug.WriteLine("OnRead: " + ((HttpSocket)sock).Name);
 
             // Parse out the first start tag or empty element, which will be
             // <body/>.
@@ -523,10 +626,11 @@ namespace bedrock.net
                     return false;
             }
 
-            lock (m_lock)
+            lock (m_queue)
             {
                 if (!m_running)
                     return false;
+
                 if (b.Type == BodyType.terminate)
                 {
                     m_running = false;
@@ -551,6 +655,11 @@ namespace bedrock.net
             }
             else
                 RequestRead();
+
+            lock (m_queue)
+            {
+                Monitor.Pulse(m_queue);
+            }
             return true;
         }
 

@@ -269,6 +269,8 @@ namespace jabber.connection
 
         bool ISocketEventListener.OnRead(BaseSocket sock, byte[] buf, int offset, int length)
         {
+            Debug.Assert(m_listener != null);
+            Debug.Assert(m_elements != null);
             m_listener.BytesRead(buf, offset, length);
             m_elements.Push(buf, offset, length);
             return true;

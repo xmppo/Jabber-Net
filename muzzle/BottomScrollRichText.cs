@@ -19,6 +19,7 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 
 using bedrock.util;
+using System.Diagnostics;
 
 namespace muzzle
 {
@@ -73,6 +74,17 @@ namespace muzzle
         private const uint OBJID_HSCROLL = 0xFFFFFFFA;
 
         private bool m_bottom = true;
+        private int m_maxLines = 500;
+
+        /// <summary>
+        /// Maximum number of lines to keep
+        /// </summary>
+        [Category("Appearance")]
+        public int MaxLines
+        {
+            get { return m_maxLines; }
+            set { m_maxLines = value; }
+        }
 
         [StructLayout(LayoutKind.Sequential)]
         private struct SCROLLINFO
@@ -247,6 +259,85 @@ namespace muzzle
             }
         }
 
+        private static string EscapeRTF(string plain)
+        {
+            System.Text.StringBuilder sb = new System.Text.StringBuilder(plain.Length);
+
+            char state = 'c';
+
+            foreach (char c in plain)
+            {
+                if (state == 'r')
+                {
+                    if (c == '\n')
+                        state = 'n';
+                    else
+                    {
+                        state = 'c';
+                    }
+                }
+                else if (state == 'n')
+                {
+                    state = 'c';
+                }
+
+                if (state == 'c')
+                {
+                    if (c > 127)
+                    {
+                        sb.Append(@"\u");
+                        sb.Append((int)c);
+                        sb.Append('?');
+                    }
+                    else
+                    {
+                        switch (c)
+                        {
+                            case '{':
+                            case '}':
+                            case '\\':
+                                sb.Append('\\');
+                                sb.Append(c);
+                                break;
+                            case '\r':
+                                sb.Append("\\\r\n");
+                                state = 'r';
+                                break;
+                            case '\n':
+                                sb.Append("\\\r\n");
+                                state = 'n';
+                                break;
+                            default:
+                                sb.Append(c);
+                                break;
+                        }
+                    }
+                }
+            }
+            return sb.ToString();
+        }
+
+        private static string RTFColor(Color c)
+        {
+            return String.Format("\\red{0}\\green{1}\\blue{2};", c.R, c.G, c.B);
+        }
+
+        /// <summary>
+        /// Append text with the given color to the end of the text area.
+        /// Side effect: the existing selection is modified.  Save the selection
+        /// if you want to keep it.
+        /// </summary>
+        /// <param name="c"></param>
+        /// <param name="text"></param>
+        public void AppendText(Color c, string text)
+        {
+            this.SelectionLength = 0;
+            this.SelectionStart = this.TextLength;
+            string rtf = "{\\rtf1\\ansi{{\\colortbl ;" + RTFColor(c) +
+                               "}\\cf1 " + EscapeRTF(text) + "}";
+            this.SelectedRtf = rtf;
+        }
+
         /// <summary>
         /// Append text.  If we were at the bottom, scroll to the bottom.  Otherwise leave the scroll position
         /// where it is.
@@ -271,15 +362,53 @@ namespace muzzle
         /// <param name="text">The main text</param>
         public void AppendMaybeScroll(Color tagColor, string tag, string text)
         {
+            this.SuspendLayout();
+
+            // This should always be called on the GUI thread, right?
+            // Assume so.  No locking.
+
             bool bottom = m_bottom;
-            SelectionColor = tagColor;
-            AppendText(tag);
+            int start = 0;
+            int len = 0;
+            if (!bottom)
+            {
+                start = this.SelectionStart;
+                len = this.SelectionLength;
+            }
+
+            AppendText(tagColor, tag);
             AppendText(" ");
-            SelectionColor = ForeColor;
-            AppendText(text);
+            AppendText(ForeColor, text);
             AppendText("\r\n");
+
+            string[] lines = this.Lines;
+            if (lines.Length > m_maxLines)
+            {
+                int rm = 0;
+                bool ro = this.ReadOnly;
+                this.ReadOnly = false;
+                for (int i = 0; i < (lines.Length - m_maxLines); i++)
+                {
+                    rm += lines[i].Length + 1;
+                }
+                this.Select(0, rm);
+                this.SelectedText = "";
+                this.ReadOnly = ro;
+            }
+
             if (bottom)
+            {
                 ScrollToBottom();
+                this.SelectionStart = this.TextLength;
+                this.SelectionLength = 0;
+            }
+            else
+            {
+                this.SelectionStart = start;
+                this.SelectionLength = len;
+            }
+
+            this.ResumeLayout();
         }
     }
 }

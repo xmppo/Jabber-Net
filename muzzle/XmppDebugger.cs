@@ -30,7 +30,7 @@ namespace muzzle
     {
         private RichTextBox rtSend;
         private Splitter splitter1;
-        private BottomScrollRichText rtDebug;
+        public BottomScrollRichText rtDebug;
 
         private Color m_sendColor = Color.Blue;
         private Color m_recvColor = Color.Orange;
@@ -40,6 +40,7 @@ namespace muzzle
         private string m_recv = "RECV:";
         private string m_err = "ERROR:";
         private string m_last = "";
+
 
         /// <summary>
         /// Required designer variable.
@@ -103,6 +104,17 @@ namespace muzzle
         {
             get { return m_otherColor; }
             set { m_otherColor = value; }
+        }
+
+        /// <summary>
+        /// Maximum number of lines to keep
+        /// </summary>
+        [Category("Appearance")]
+        [DefaultValue(500)]
+        public int MaxLines
+        {
+            get { return rtDebug.MaxLines; }
+            set { rtDebug.MaxLines = value; }
         }
 
         /// <summary>

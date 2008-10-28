@@ -123,6 +123,7 @@
     <Compile Include="bedrock\collections\TrieTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="bedrock\net\HttpSocketTest.cs" />
     <Compile Include="jabber\connection\FileMap.cs" />
     <Compile Include="bedrock\io\ZlibStream.cs" />
     <Compile Include="bedrock\net\AsyncSocketTest.cs">

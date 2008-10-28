@@ -86,8 +86,6 @@ namespace bedrock.net
         private bool m_ssl = false;
 
         private AsyncSocket m_sock = null;
-        private LinkedList<PendingRequest> m_queue = new LinkedList<PendingRequest>();
-        private Thread m_thread;
         private ParseState m_state = ParseState.START;
         private PendingRequest m_current = null;
         private bool m_keepRunning = true;
@@ -96,6 +94,7 @@ namespace bedrock.net
         private float m_connectRetrySec = 10.0F;
         private int m_maxErrors = 5;
         private int m_errorCount = 0;
+        private object m_lock = new Object();
                 
         private static readonly byte[] SPACE = ENC.GetBytes(" ");
         private static readonly byte[] CRLF = ENC.GetBytes("\r\n");
@@ -109,10 +108,6 @@ namespace bedrock.net
         /// </summary>
         public HttpSocket(ISocketEventListener listener) : base(listener)
         {
-            m_thread = new Thread(new ThreadStart(ProcessThread));
-            m_thread.Name = "HTTP processing thread";
-            m_thread.IsBackground = true;
-            m_thread.Start();
         }
 
         /// <summary>
@@ -155,41 +150,15 @@ namespace bedrock.net
             set { m_maxErrors = value; }
         }
 
-        private void ProcessThread()
+        private string m_name;
+
+        /// <summary>
+        /// The name of the socket, for debugging purposes
+        /// </summary>
+        public string Name
         {
-            PendingRequest req;
-            while (m_keepRunning)
-            {
-                lock (m_queue)
-                {
-                    req = null;
-                    while (m_keepRunning && ((m_queue.Count == 0) || IsPending))
-                    {
-                        if (m_keepRunning && (m_addr != null) && !Connected)
-                        {
-                            Monitor.Wait(m_queue, (int)(m_connectRetrySec * 1000));
-                            if (!m_keepRunning)
-                                return;
-                            Connect();
-                        }
-                        Monitor.Wait(m_queue);
-                    }
-
-                    if (!m_keepRunning)
-                        return;
-
-                    Debug.Assert(Connected);
-                    Debug.Assert(m_queue.Count > 0);
-                    Debug.Assert(!IsPending);
-
-                    req = m_queue.First.Value;
-                    m_queue.RemoveFirst();
-                }
-                if (req.Method == null)
-                    Close();
-                else
-                    Send(req);
-            }
+            get { return m_name; }
+            set { m_name = value; }
         }
 
         /// <summary>
@@ -203,16 +172,33 @@ namespace bedrock.net
         /// <param name="contentType">The MIME type of the supplied body</param>
         public void Execute(string method, Uri URL, byte[] body, int offset, int len, string contentType)
         {
-            lock (m_queue)
+            Debug.Assert(!this.IsPending);
+
+            PendingRequest req = new PendingRequest(method, URL, body, offset, len, contentType);
+            if (m_host == null)
+                m_host = req.URI.Host;
+            else if (m_host != req.URI.Host)
+                throw new InvalidOperationException("All requests must got to same host: " + m_host);
+
+            // connect if not yet connected
+            if (req.Method != null)
             {
-                PendingRequest req = new PendingRequest(method, URL, body, offset, len, contentType);
-                if (m_host == null)
-                    m_host = req.URI.Host;
-                else if (m_host != req.URI.Host)
-                    throw new InvalidOperationException("All requests must got to same host: " + m_host);
-                m_queue.AddLast(req);
-                Monitor.Pulse(m_queue);
+                lock (m_lock)
+                {
+                    if (!Connected)
+                    {
+                        Connect(req.URI);
+
+                        Monitor.Wait(m_lock, (int)(m_connectRetrySec * 1000));
+                        if (!m_keepRunning)
+                            return;
+
+                        Debug.Assert(Connected);
+                        Debug.Assert(!IsPending);
+                    }
+                }
             }
+            Send(req);
         }
 
         /// <summary>
@@ -249,6 +235,8 @@ namespace bedrock.net
 
         private void Connect()
         {
+            m_errorCount = 0;
+
             if (!m_keepRunning)
                 return;
             m_state = ParseState.START;
@@ -261,11 +249,11 @@ namespace bedrock.net
         /// </summary>
         public override void Close()
         {
-            m_keepRunning = false;
-            lock (m_queue)
+            lock (m_lock)
             {
-                m_queue.Clear();
-                Monitor.Pulse(m_queue);
+                m_keepRunning = false;
+                // in case we closed while waiting for connect
+                Monitor.Pulse(m_lock);
             }
 
             if (Connected)
@@ -274,15 +262,19 @@ namespace bedrock.net
         }
 
         /// <summary>
-        /// Close the socket after all pending requests are completed.
+        /// Close the socket after any pending request is completed.
         /// </summary>
         public void EnqueueClose()
         {
-            PendingRequest req = new PendingRequest(null, null, null, 0, 0, null);
-            lock (m_queue)
+            lock (m_lock)
             {
-                m_queue.AddLast(req);
-                Monitor.Pulse(m_queue);
+                if (!m_keepRunning)
+                    return;
+
+                m_keepRunning = false;
+                if (!IsPending)
+                    Close();
+                // otherwise, we'll close after the current pending request completes
             }
         }
 
@@ -335,6 +327,8 @@ namespace bedrock.net
                 byte[] creds = Encoding.ASCII.GetBytes(m_proxyCredentials.UserName + ":" + m_proxyCredentials.Password);
                 coll.Add("Proxy-Authorization", "Basic " + Convert.ToBase64String(creds));
             }
+            coll.Add("X-JN-Name", m_name);
+            coll.Add(HttpRequestHeader.Date, string.Format("{0:r}", DateTime.Now));
             coll.Add(HttpRequestHeader.ContentLength, req.Length.ToString());
 
             byte[] headers = coll.ToByteArray();
@@ -350,27 +344,19 @@ namespace bedrock.net
 
         void ISocketEventListener.OnConnect(BaseSocket sock)
         {
-            m_errorCount = 0;
-
             m_listener.OnConnect(null);
-            lock (m_queue)
+            lock (m_lock)
             {
-                // push back.
-                if (m_current != null)
-                {
-                    m_queue.AddFirst(m_current);
-                    m_current = null;
-                }
-                Monitor.Pulse(m_queue);
+                Monitor.Pulse(m_lock);
             }
         }
 
         void ISocketEventListener.OnClose(BaseSocket sock)
         {
             m_sock = null;
-            lock (m_queue)
+            lock (m_lock)
             {
-                Monitor.Pulse(m_queue);
+                Monitor.Pulse(m_lock);
             }
         }
 
@@ -382,9 +368,9 @@ namespace bedrock.net
                 m_listener.OnError(null, ex);
             }
 
-            lock (m_queue)
+            lock (m_lock)
             {
-                Monitor.Pulse(m_queue);
+                Monitor.Pulse(m_lock);
             }
         }
 
@@ -443,9 +429,16 @@ namespace bedrock.net
             BODY_CONTINUE
         }
 
+        private void Done()
+        {
+            m_state = ParseState.START;
+            m_current = null;
+            Debug.WriteLine("HTTP Socket " + m_name + " done");
+        }
+
         bool ISocketEventListener.OnRead(BaseSocket sock, byte[] buf, int offset, int length)
         {
-            Debug.WriteLine("IN HTTP: " + ENC.GetString(buf, offset, length));
+            Debug.WriteLine("IN HTTP(" + m_name + "): " + ENC.GetString(buf, offset, length));
             int i = offset;
             string header = null;
             int last = offset + length;
@@ -521,16 +514,11 @@ namespace bedrock.net
                             goto ERROR;
                         if (i + len <= last)
                         {
-                            m_current = null;
-                            m_state = ParseState.START;
-                            if (!m_listener.OnRead(null, buf, i, len))
+                            Done();
+                            if (!m_listener.OnRead(this, buf, i, len) || !m_keepRunning)
                             {
                                 Close();
                                 return false;
-                            }
-                            lock (m_queue)
-                            {
-                                Monitor.Pulse(m_queue);
                             }
                             return false;
                         }
@@ -547,20 +535,15 @@ namespace bedrock.net
                         if (m_current.Response.Length == m_current.Response.Capacity)
                         {
                             PendingRequest req = m_current;
-                            m_current = null;
-                            m_state = ParseState.START;
+                            Done();
 
                             byte[] resp = req.Response.ToArray();
-                            if (!m_listener.OnRead(null, resp, 0, resp.Length))
+                            if (!m_listener.OnRead(this, resp, 0, resp.Length) || !m_keepRunning)
                             {
                                 Close();
                                 return false;
                             }
 
-                            lock (m_queue)
-                            {
-                                Monitor.Pulse(m_queue);
-                            }
                             return false;
                         }
                         return true;
