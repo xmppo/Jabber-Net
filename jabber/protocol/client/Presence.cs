@@ -78,6 +78,7 @@ namespace jabber.protocol.client
         public Presence(XmlDocument doc) :
             base("presence", doc)
         {
+            ID   = NextID();
         }
 
         /// <summary>
