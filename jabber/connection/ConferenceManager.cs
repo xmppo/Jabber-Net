@@ -13,6 +13,7 @@
  * --------------------------------------------------------------------------*/
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 
@@ -80,7 +81,7 @@ namespace jabber.connection
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
-        private Hashtable m_rooms = new Hashtable();
+        private Dictionary<JID, Room> m_rooms = new Dictionary<JID, Room>();
         private string m_nick = null;
 
         /// <summary>
@@ -293,15 +294,14 @@ namespace jabber.connection
             if (roomAndNick.Resource == null)
                 roomAndNick.Resource = DefaultNick;
 
-            Room r = (Room)m_rooms[roomAndNick];
-            if (r != null)
-                return r;
+	    if (m_rooms.ContainsKey(roomAndNick))
+            	return m_rooms[roomAndNick];
 
             // If no resource specified, pick up the user's name from their JID
             if (roomAndNick.Resource == null)
                 roomAndNick.Resource = m_stream.JID.User;
 
-            r = new Room(this, roomAndNick);
+            Room r = new Room(this, roomAndNick);
             r.OnJoin += OnJoin;
             r.OnLeave += OnLeave;
             r.OnPresenceError += OnPresenceError;
@@ -340,6 +340,19 @@ namespace jabber.connection
         {
             m_rooms.Remove(roomAndNick);
         }
+
+	public IEnumerable<Room> Rooms
+	{
+	    get{ 
+	        return m_rooms.Values;
+	    }
+	}
+
+	public int Count {
+		get {
+			return m_rooms.Count;
+		}
+	}
 
         private class UniqueState
         {
