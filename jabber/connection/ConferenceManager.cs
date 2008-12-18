@@ -562,7 +562,12 @@ namespace jabber.connection
         /// </summary>
         public string Subject
         {
-            get { return m_subject.Subject; }
+            get {
+	        if (m_subject != null)
+	            return m_subject.Subject;
+                else
+	            return null;
+            }
             set
             {
                 Message m = new Message(m_manager.Stream.Document);
