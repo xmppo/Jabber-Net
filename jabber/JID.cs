@@ -81,6 +81,16 @@ namespace jabber
         private string m_resource = null;
         private string m_JID      = null;
 
+	public static bool TryParse (string j, out JID jid)
+	{
+		try {
+			jid = new JID(j);
+			return true;
+		} catch { }
+		jid = null;
+		return false;
+	}
+
         /// <summary>
         /// Creates a JID from a string.
         /// This will parse and perform the stringprep (RFC 3454) process.
