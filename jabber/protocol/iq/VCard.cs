@@ -13,6 +13,8 @@
  * --------------------------------------------------------------------------*/
 using System;
 
+using System.Diagnostics;
+
 using System.Xml;
 
 using bedrock.util;
@@ -950,8 +952,13 @@ namespace jabber.protocol.iq
                     byte[] bin = this.BinVal;
                     if (bin == null)
                         return null;
-                    System.IO.MemoryStream ms = new System.IO.MemoryStream(bin);
-                    return System.Drawing.Image.FromStream(ms);
+                    try {
+                        System.IO.MemoryStream ms = new System.IO.MemoryStream(bin);
+                        return System.Drawing.Image.FromStream(ms);
+                    } catch (Exception ex) {
+                        Debug.WriteLine("Failed to load VCard Image: " + ex);
+                        return null;
+                    }
                 }
                 set
                 {
