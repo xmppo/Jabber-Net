@@ -424,7 +424,10 @@ C: <iq from='juliet@example.com/balcony' type='set' id='delete_1'>
             RosterIQ iq = new RosterIQ(m_stream.Document);
             iq.Type = IQType.set;
             Roster r = iq.Instruction;
-            r.AppendChild(item);
+            if (item.OwnerDocument != m_stream.Document)
+                r.AppendChild(m_stream.Document.ImportNode(item, true));
+            else
+                r.AppendChild(item);
             Write(iq);  // ignore response
         }
 
@@ -442,9 +445,9 @@ C: <iq from='juliet@example.com/balcony' type='set' id='delete_1'>
         #region IEnumerable Members
 
         IEnumerator IEnumerable.GetEnumerator()
-	{
+        {
             return m_items.Keys.GetEnumerator();
-	}
+        }
 
         IEnumerator<JID> IEnumerable<JID>.GetEnumerator()
         {
