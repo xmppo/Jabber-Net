@@ -425,7 +425,7 @@ C: <iq from='juliet@example.com/balcony' type='set' id='delete_1'>
             iq.Type = IQType.set;
             Roster r = iq.Instruction;
             if (item.OwnerDocument != m_stream.Document)
-                r.AppendChild(m_stream.Document.ImportNode(item, true));
+                r.AppendChild(item.CloneNode(true, m_stream.Document));
             else
                 r.AppendChild(item);
             Write(iq);  // ignore response
