@@ -689,6 +689,9 @@ namespace jabber.connection
                     case STATE.running:
                         if (p.Type == PresenceType.unavailable)
                             OnLeavePresence(p);
+			else
+			    // FIXME: Create an OnPresenceChange event for this to keep things consistent?
+			    OnParticipantPresenceChange(this, party);
                         break;
                     }
                 }
