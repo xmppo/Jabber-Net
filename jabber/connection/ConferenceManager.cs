@@ -807,6 +807,8 @@ namespace jabber.connection
             if (p.Type != PresenceType.unavailable)
                 return;
 
+            m_state = STATE.leaving;
+
             m_manager.Stream.OnProtocol -= new jabber.protocol.ProtocolHandler(m_stream_OnProtocol);
             jabber.client.JabberClient jc = m_manager.Stream as jabber.client.JabberClient;
             if (jc != null)
