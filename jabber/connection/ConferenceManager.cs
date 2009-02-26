@@ -64,6 +64,14 @@ namespace jabber.connection
     public delegate void RoomParticipantEvent(Room room, RoomParticipant participant);
 
     /// <summary>
+    /// A participant-presence-related callback.
+    /// </summary>
+    /// <param name="room">The room the event is for</param>
+    /// <param name="participant">The participant in the room</param>
+    /// <param name="oldPresence">The participant's old presence</param>
+    public delegate void RoomParticipantPresenceEvent(Room room, RoomParticipant participant, Presence oldPresence);
+
+    /// <summary>
     /// A participantCollection-related callback.
     /// </summary>
     /// <param name="room">The room the event is for</param>
@@ -247,11 +255,18 @@ namespace jabber.connection
         public event RoomParticipantEvent OnParticipantLeave;
 
         /// <summary>
+        /// You have changed presence, without joining or leaving the room.
+        /// If set, will be added to each room created through the manager.
+        /// </summary>
+        [Category("Room")]
+        public event RoomParticipantPresenceEvent OnPresenceChange;
+
+        /// <summary>
         /// A participant has changed presence, without joining or leaving the room.  This will not fire for yourself.
         /// If set, will be added to each room created through the manager.
         /// </summary>
         [Category("Room")]
-        public event RoomParticipantEvent OnParticipantPresenceChange;
+        public event RoomParticipantPresenceEvent OnParticipantPresenceChange;
 
         /// <summary>
         /// An invite was received.  A room object will be passed in as the sender.
@@ -314,6 +329,7 @@ namespace jabber.connection
             r.OnParticipantJoin += OnParticipantJoin;
             r.OnParticipantLeave += OnParticipantLeave;
             r.OnParticipantPresenceChange += OnParticipantPresenceChange;
+            r.OnPresenceChange += OnPresenceChange;
 
             m_rooms[roomAndNick] = r;
             return r;
@@ -544,7 +560,13 @@ namespace jabber.connection
         /// A participant has changed presence, without joining or leaving the room.  This will not fire for yourself.
         /// </summary>
         [Category("Room")]
-        public event RoomParticipantEvent OnParticipantPresenceChange;
+        public event RoomParticipantPresenceEvent OnParticipantPresenceChange;
+
+        /// <summary>
+        /// You have changed presence, without joining or leaving the room.
+        /// </summary>
+        [Category("Room")]
+        public event RoomParticipantPresenceEvent OnPresenceChange;
 
         /// <summary>
         /// Determines whether to use the default conference room configuration
@@ -672,6 +694,8 @@ namespace jabber.connection
                     return;
                 }
 
+                Presence oldPresence = (m_participants[from] != null) ? ((RoomParticipant)m_participants[from]).Presence : null;
+
                 ParticipantCollection.Modification mod = ParticipantCollection.Modification.NONE;
                 RoomParticipant party = m_participants.Modify(p, out mod);
 
@@ -689,9 +713,8 @@ namespace jabber.connection
                     case STATE.running:
                         if (p.Type == PresenceType.unavailable)
                             OnLeavePresence(p);
-			else
-			    // FIXME: Create an OnPresenceChange event for this to keep things consistent?
-			    OnParticipantPresenceChange(this, party);
+                        else
+                            OnPresenceChange(this, party, oldPresence);
                         break;
                     }
                 }
@@ -701,7 +724,7 @@ namespace jabber.connection
                     {
                     case ParticipantCollection.Modification.NONE:
                         if (OnParticipantPresenceChange != null)
-                            OnParticipantPresenceChange(this, party);
+                            OnParticipantPresenceChange(this, party, oldPresence);
                         break;
                     case ParticipantCollection.Modification.JOIN:
                         if (OnParticipantJoin != null)
