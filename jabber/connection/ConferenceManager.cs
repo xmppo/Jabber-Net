@@ -490,6 +490,7 @@ namespace jabber.connection
             m_jid = roomAndNick;
             m_room = new JID(m_jid.User, m_jid.Server, null);
             stream.OnProtocol += new jabber.protocol.ProtocolHandler(m_stream_OnProtocol);
+            stream.OnDisconnect += new bedrock.ObjectHandler(m_stream_OnDisconect);
             JabberClient jc = stream as JabberClient;
             if (jc != null)
                 jc.OnAfterPresenceOut += new jabber.client.PresenceHandler(m_stream_OnAfterPresenceOut);
@@ -777,6 +778,12 @@ namespace jabber.connection
                 // TODO: IQs the room sends to us.
                 break;
             }
+        }
+
+        private void m_stream_OnDisconect(object sender)
+        {
+            // FIXME: It's not REALLY an error..
+            m_state = STATE.error;
         }
 
         private void OnJoinPresence(Presence p)
