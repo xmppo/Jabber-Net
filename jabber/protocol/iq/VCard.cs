@@ -936,7 +936,11 @@ namespace jabber.protocol.iq
                     string b64 = GetElem("BINVAL");
                     if (b64 == null)
                         return null;
-                    return Convert.FromBase64String(b64);
+                    try {
+                        return Convert.FromBase64String(b64);
+                    } catch {
+                        return null;
+                    }
                 }
                 set { SetElem("BINVAL", Convert.ToBase64String(value)); }
             }
