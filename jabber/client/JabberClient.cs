@@ -51,10 +51,12 @@ namespace jabber.client
     /// You can install this in your Toolbox, drop onto a form, a service, and so on.
     /// This class hooks into the OnProtocol event and calls the Connect() method.
     /// </summary>
-    [SVN(@"$Id$")]
+    [SVN(@"$Id: JabberClient.cs 724 2008-08-06 18:09:25Z hildjj $")]
     public class JabberClient : XmppStream
     {
         private static readonly object[][] DEFAULTS = new object[][] {
+            //FF
+            new object[] {Options.ANONYMOUS, false},
             new object[] {Options.RESOURCE, "Jabber.Net"},
             new object[] {Options.PRIORITY, 0},
             new object[] {Options.AUTO_LOGIN, true},
@@ -354,6 +356,37 @@ namespace jabber.client
             Debug.Assert(Resource != null, "Resource must not be null for XEP-78 authentication");
 
             this[Options.AUTO_LOGIN_THISPASS] = true;
+
+            if (State == ManualSASLLoginState.Instance)
+            {
+                ProcessFeatures();
+                return;
+            }
+
+            this[Options.JID] = new JID(User, Server, Resource);
+
+            AuthIQ aiq = new AuthIQ(Document);
+            aiq.Type = IQType.get;
+            Auth a = aiq.Instruction;
+            a.Username = User;
+
+            lock (StateLock)
+            {
+                State = GetAuthState.Instance;
+            }
+            Tracker.BeginIQ(aiq, new IqCB(OnGetAuth), null);
+        }
+
+        public void LoginAnonymously()
+        {
+            //FF
+            /*
+            Debug.Assert(User != null, "Username must not be null for XEP-78 authentication");
+            Debug.Assert(Password != null, "Password must not be null for XEP-78 authentication");
+            Debug.Assert(Resource != null, "Resource must not be null for XEP-78 authentication");
+            //*/
+            this[Options.AUTO_LOGIN_THISPASS] = true;
+            this[Options.ANONYMOUS] = true;
 
             if (State == ManualSASLLoginState.Instance)
             {
@@ -980,7 +1013,7 @@ namespace jabber.client
     /// <summary>
     /// Contains the "Getting authorization" information.
     /// </summary>
-    [SVN(@"$Id$")]
+    [SVN(@"$Id: JabberClient.cs 724 2008-08-06 18:09:25Z hildjj $")]
     public class GetAuthState : jabber.connection.BaseState
     {
         /// <summary>
@@ -992,7 +1025,7 @@ namespace jabber.client
     /// <summary>
     /// Contains the "Setting authorization" information.
     /// </summary>
-    [SVN(@"$Id$")]
+    [SVN(@"$Id: JabberClient.cs 724 2008-08-06 18:09:25Z hildjj $")]
     public class SetAuthState : jabber.connection.BaseState
     {
         /// <summary>
@@ -1005,7 +1038,7 @@ namespace jabber.client
     /// Informs the client that the JabberClient is in
     /// the "Waiting for manual login" state.
     /// </summary>
-    [SVN(@"$Id$")]
+    [SVN(@"$Id: JabberClient.cs 724 2008-08-06 18:09:25Z hildjj $")]
     public class ManualLoginState : jabber.connection.BaseState
     {
         /// <summary>
@@ -1019,7 +1052,7 @@ namespace jabber.client
     /// the "Waiting for manual login" state, but when Login()
     /// happens, it should try SASL.
     /// </summary>
-    [SVN(@"$Id$")]
+    [SVN(@"$Id: JabberClient.cs 724 2008-08-06 18:09:25Z hildjj $")]
     public class ManualSASLLoginState : jabber.connection.BaseState
     {
         /// <summary>

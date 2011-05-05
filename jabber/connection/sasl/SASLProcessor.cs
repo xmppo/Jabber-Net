@@ -29,7 +29,7 @@ namespace jabber.connection.sasl
     /// <summary>
     /// Some sort of SASL error
     /// </summary>
-    [SVN(@"$Id$")]
+    [SVN(@"$Id: SASLProcessor.cs 724 2008-08-06 18:09:25Z hildjj $")]
     public class SASLException : ApplicationException
     {
         /// <summary>
@@ -47,7 +47,7 @@ namespace jabber.connection.sasl
     /// <summary>
     /// Authentication failed.
     /// </summary>
-    [SVN(@"$Id$")]
+    [SVN(@"$Id: SASLProcessor.cs 724 2008-08-06 18:09:25Z hildjj $")]
     public class AuthenticationFailedException : SASLException
     {
         /// <summary>
@@ -67,7 +67,7 @@ namespace jabber.connection.sasl
     /// <summary>
     /// A required directive wasn't supplied.
     /// </summary>
-    [SVN(@"$Id$")]
+    [SVN(@"$Id: SASLProcessor.cs 724 2008-08-06 18:09:25Z hildjj $")]
     public class MissingDirectiveException : SASLException
     {
         /// <summary>
@@ -81,7 +81,7 @@ namespace jabber.connection.sasl
     /// <summary>
     /// Server sent an invalid challenge
     /// </summary>
-    [SVN(@"$Id$")]
+    [SVN(@"$Id: SASLProcessor.cs 724 2008-08-06 18:09:25Z hildjj $")]
     public class InvalidServerChallengeException : SASLException
     {
         /// <summary>
@@ -94,7 +94,7 @@ namespace jabber.connection.sasl
     /// <summary>
     /// Summary description for SASLProcessor.
     /// </summary>
-    [SVN(@"$Id$")]
+    [SVN(@"$Id: SASLProcessor.cs 724 2008-08-06 18:09:25Z hildjj $")]
     public abstract class SASLProcessor
     {
         /// <summary>
@@ -126,8 +126,14 @@ namespace jabber.connection.sasl
         /// <param name="plaintextOK">Is it ok to select insecure types?</param>
         /// <param name="mechs">The mechanisms supported by the server</param>
         /// <returns></returns>
-        public static SASLProcessor createProcessor(MechanismType mt, bool plaintextOK, Mechanisms mechs)
+        public static SASLProcessor createProcessor(MechanismType mt, bool plaintextOK, Mechanisms mechs, bool useAnonymous)
         {
+            //FF
+            if (useAnonymous && (mt & MechanismType.ANONYMOUS) == MechanismType.ANONYMOUS)
+            {
+                return new AnonymousProcessor();
+            }
+
             if ((mt & MechanismType.EXTERNAL) == MechanismType.EXTERNAL)
             {
                 return new ExternalProcessor();

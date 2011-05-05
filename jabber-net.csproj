@@ -227,6 +227,7 @@
     <Compile Include="jabber\connection\PubSubManager.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="jabber\connection\sasl\AnonymousProcessor.cs" />
     <Compile Include="jabber\connection\sasl\ExternalProcessor.cs" />
     <Compile Include="jabber\connection\sasl\KerbProcessor.cs" />
     <Compile Include="jabber\connection\sasl\MD5Processor.cs">

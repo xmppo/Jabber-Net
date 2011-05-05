@@ -39,9 +39,12 @@ namespace jabber.connection
     /// <summary>
     /// Manages option names.  These must be well-formed XML element names.
     /// </summary>
-    [SVN(@"$Id$")]
+    [SVN(@"$Id: XmppStream.cs 724 2008-08-06 18:09:25Z hildjj $")]
     public abstract class Options
     {
+        //FF
+        public const string ANONYMOUS = "anonymous";
+
         /// <summary>
         /// Contains the default namespace for this connection.
         /// </summary>
@@ -217,7 +220,7 @@ namespace jabber.connection
     /// <summary>
     /// Manages the XMPP stream of the connection.
     /// </summary>
-    [SVN(@"$Id$")]
+    [SVN(@"$Id: XmppStream.cs 724 2008-08-06 18:09:25Z hildjj $")]
     abstract public class XmppStream :
         System.ComponentModel.Component,
         IStanzaEventListener
@@ -471,6 +474,13 @@ namespace jabber.connection
         /// </summary>
         [Category("Stream")]
         public event System.Net.Security.RemoteCertificateValidationCallback OnInvalidCertificate;
+
+        //FF
+        public bool UseAnonymous
+        {
+            get { return (bool)this[Options.ANONYMOUS]; }
+            set { this[Options.ANONYMOUS] = value; }
+        }
 
         /// <summary>
         /// Gets the tracker for sending IQ packets.
@@ -1175,7 +1185,12 @@ namespace jabber.connection
                     {
                         State = SASLState.Instance;
                     }
-                    m_saslProc = SASLProcessor.createProcessor(types, m_sslOn || (bool)this[Options.PLAINTEXT], ms);
+
+                    //FF
+                    m_saslProc = SASLProcessor.createProcessor(types
+                                                               , m_sslOn || (bool)this[Options.PLAINTEXT]
+                                                               , ms
+                                                               , (bool)this[Options.ANONYMOUS]);
                     if (m_saslProc == null)
                     {
                         FireOnError(new NotImplementedException("No implemented mechanisms in: " + types.ToString()));
