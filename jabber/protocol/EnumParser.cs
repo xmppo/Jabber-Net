@@ -70,60 +70,78 @@ namespace jabber.protocol
 
         private static Dictionary<string, object> GetValHash(Type t)
         {
-            Dictionary<string, object> map = null;
-            if (!s_vals.TryGetValue(t, out map))
+            Dictionary<string, object> map;
+            lock (s_vals)
             {
-                s_vals[t] = map = new Dictionary<string, object>();
-                bool dash = IsDash(t);
-
-                FieldInfo[] fields = t.GetFields(BindingFlags.Public | BindingFlags.Static);
-                foreach (FieldInfo fi in fields)
+                if (s_vals.TryGetValue(t, out map))
                 {
-                    object[] attrs = fi.GetCustomAttributes(typeof(XMLAttribute), false);
-                    object val = fi.GetValue(null);
-                    if (attrs.Length > 0)
-                    {
-                        string name = ((XMLAttribute)attrs[0]).Name;
-                        map[name] = val;
-                    }
-                    if (dash)
-                        map[fi.Name.Replace("_", "-")] = val;
-                    else
-                        map[fi.Name] = val;
+                    return map;
                 }
             }
-            return map;
+
+            map = new Dictionary<string, object>();
+            bool dash = IsDash(t);
+
+            FieldInfo[] fields = t.GetFields(BindingFlags.Public | BindingFlags.Static);
+            foreach (FieldInfo fi in fields)
+            {
+                object[] attrs = fi.GetCustomAttributes(typeof(XMLAttribute), false);
+                object val = fi.GetValue(null);
+                if (attrs.Length > 0)
+                {
+                    string name = ((XMLAttribute)attrs[0]).Name;
+                    map[name] = val;
+                }
+                if (dash)
+                    map[fi.Name.Replace("_", "-")] = val;
+                else
+                    map[fi.Name] = val;
+            }
+
+            lock (s_vals)
+            {
+                s_vals[t] = map;
+                return map;
+            }
         }
 
         private static Dictionary<object, string> GetStringHash(Type t)
         {
-            Dictionary<object, string> map = null;
-            string name;
-
-            if (!s_strings.TryGetValue(t, out map))
+            Dictionary<object, string> map;
+            lock (s_strings)
             {
-                s_strings[t] = map = new Dictionary<object, string>();
-
-                bool dash = IsDash(t);
-
-                FieldInfo[] fields = t.GetFields(BindingFlags.Public | BindingFlags.Static);
-                foreach (FieldInfo fi in fields)
+                if (s_strings.TryGetValue(t, out map))
                 {
-                    object[] attrs = fi.GetCustomAttributes(typeof(XMLAttribute), false);
-                    object val = fi.GetValue(null);
-                    if (attrs.Length > 0)
-                        name = ((XMLAttribute)attrs[0]).Name;
-                    else
-                    {
-                        if (dash)
-                            name = fi.Name.Replace('_', '-');
-                        else
-                            name = fi.Name;
-                    }
-                    map[val] = name;
+                    return map;
                 }
             }
-            return map;
+
+            map = new Dictionary<object, string>();
+            bool dash = IsDash(t);
+
+            FieldInfo[] fields = t.GetFields(BindingFlags.Public | BindingFlags.Static);
+            foreach (FieldInfo fi in fields)
+            {
+                object[] attrs = fi.GetCustomAttributes(typeof(XMLAttribute), false);
+                object val = fi.GetValue(null);
+                string name;
+                if (attrs.Length > 0)
+                    name = ((XMLAttribute)attrs[0]).Name;
+                else
+                {
+                    if (dash)
+                        name = fi.Name.Replace('_', '-');
+                    else
+                        name = fi.Name;
+                }
+                map[val] = name;
+            }
+
+            lock (s_strings)
+            {
+                s_strings[t] = map;
+                return map;
+            }
         }
 
         /// <summary>
