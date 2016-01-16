@@ -1,5 +1,7 @@
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "2005-test", "test\2005-test.csproj", "{76F923A3-5D99-45B9-9327-FBE56648A39F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "2005-muzzle", "muzzle\2005-muzzle.csproj", "{071A79A9-E23F-418F-A6B7-63D3A3E59EEB}"
@@ -11,6 +13,18 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "jabber-net", "jabber-net.csproj", "{6CAE854A-F202-4D2B-B10E-E8D8E81E5EF5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "netlib.Dns", "netlib.Dns\netlib.Dns.csproj", "{40AC7A7C-D3E5-46DF-B740-06BD9D2A00E1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{BBF059F0-722F-4DCC-AF7F-82054E8EF9F4}"
+	ProjectSection(SolutionItems) = preProject
+		Scripts\Package.ps1 = Scripts\Package.ps1
+		Scripts\Push-Package.ps1 = Scripts\Push-Package.ps1
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2C25C63F-7C2F-4025-8A4D-B85ABF2C8A34}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE.txt = LICENSE.txt
+		Readme.md = Readme.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
