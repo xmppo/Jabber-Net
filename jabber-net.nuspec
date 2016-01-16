@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>jabber-net</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>Cursive Inc.</authors>
+    <owners>Friedrich von Never</owners>
+    <licenseUrl>https://github.com/ForNeVeR/jabber-net/blob/d501f203026ea60338dd72e810c136da281a3a11/LICENSE.txt</licenseUrl>
+    <projectUrl>https://github.com/ForNeVeR/jabber-net</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A set of .Net controls for sending and receiving Extensible Messaging and Presence Protocol (XMPP), also known as the Jabber.</description>
+    <releaseNotes>First NuGet release.</releaseNotes>
+    <copyright>Copyright (c) Cursive, Inc. 2000-2008</copyright>
+    <tags>XMPP Jabber</tags>
+  </metadata>
+</package>
