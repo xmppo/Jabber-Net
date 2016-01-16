@@ -19,6 +19,7 @@ BASEDIR = $(CURDIR)
 
 SOURCES = \
 $(BASEDIR)/AssemblyInfo.cs \
+$(BASEDIR)/netlib.Dns/dns.cs \
 $(BASEDIR)/bedrock/Delegates.cs \
 $(BASEDIR)/bedrock/collections/ByteStack.cs \
 $(BASEDIR)/bedrock/collections/GraphNode.cs \
@@ -48,6 +49,7 @@ $(BASEDIR)/bedrock/net/SocketEventListener.cs \
 $(BASEDIR)/bedrock/net/SocketWatcher.cs \
 $(BASEDIR)/bedrock/net/Socks4Proxy.cs \
 $(BASEDIR)/bedrock/net/Socks5Proxy.cs \
+$(BASEDIR)/bedrock/net/UnixDnsResolver.cs \
 $(BASEDIR)/bedrock/util/ConfigFile.cs \
 $(BASEDIR)/bedrock/util/GetOptBase.cs \
 $(BASEDIR)/bedrock/util/Version.cs \
@@ -167,17 +169,18 @@ RESOURCES = \
 -resource:$(BASEDIR)/jabber/client/RosterManager.bmp \
 -resource:$(BASEDIR)/jabber/server/JabberService.bmp
 
-SYSTEM_REFERENCES = -r:zlib.net.dll \
-					-r:System.dll \
-					-r:System.Xml.dll \
-					-r:System.Drawing.dll \
-					-r:Mono.Security.dll
+SYSTEM_REFERENCES = \
+	-r:zlib.net.dll \
+	-r:System.dll \
+	-r:System.Xml.dll \
+	-r:System.Drawing.dll \
+	-r:Mono.Security.dll
 
 DEBUGDIR = $(BASEDIR)/bin/debug
 
 MCS=gmcs
 
-MCS_OPTIONS = -lib:$(DEBUGDIR),$(BASEDIR)/lib20 $(DEBUG) -define:DEBUG
+MCS_OPTIONS = -lib:$(DEBUGDIR),$(BASEDIR)/lib20 $(DEBUG) -define:DEBUG -unsafe -clscheck-
 
 ASSEMBLIES =
 DLL = $(DEBUGDIR)/jabber-net.dll

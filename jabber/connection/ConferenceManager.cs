@@ -13,6 +13,7 @@
  * --------------------------------------------------------------------------*/
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 
@@ -63,6 +64,14 @@ namespace jabber.connection
     public delegate void RoomParticipantEvent(Room room, RoomParticipant participant);
 
     /// <summary>
+    /// A participant-presence-related callback.
+    /// </summary>
+    /// <param name="room">The room the event is for</param>
+    /// <param name="participant">The participant in the room</param>
+    /// <param name="oldPresence">The participant's old presence</param>
+    public delegate void RoomParticipantPresenceEvent(Room room, RoomParticipant participant, Presence oldPresence);
+
+    /// <summary>
     /// A participantCollection-related callback.
     /// </summary>
     /// <param name="room">The room the event is for</param>
@@ -80,7 +89,7 @@ namespace jabber.connection
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
-        private Hashtable m_rooms = new Hashtable();
+        private Dictionary<JID, Room> m_rooms = new Dictionary<JID, Room>();
         private string m_nick = null;
 
         /// <summary>
@@ -246,11 +255,18 @@ namespace jabber.connection
         public event RoomParticipantEvent OnParticipantLeave;
 
         /// <summary>
+        /// You have changed presence, without joining or leaving the room.
+        /// If set, will be added to each room created through the manager.
+        /// </summary>
+        [Category("Room")]
+        public event RoomParticipantPresenceEvent OnPresenceChange;
+
+        /// <summary>
         /// A participant has changed presence, without joining or leaving the room.  This will not fire for yourself.
         /// If set, will be added to each room created through the manager.
         /// </summary>
         [Category("Room")]
-        public event RoomParticipantEvent OnParticipantPresenceChange;
+        public event RoomParticipantPresenceEvent OnParticipantPresenceChange;
 
         /// <summary>
         /// An invite was received.  A room object will be passed in as the sender.
@@ -293,15 +309,14 @@ namespace jabber.connection
             if (roomAndNick.Resource == null)
                 roomAndNick.Resource = DefaultNick;
 
-            Room r = (Room)m_rooms[roomAndNick];
-            if (r != null)
-                return r;
+	    if (m_rooms.ContainsKey(roomAndNick))
+            	return m_rooms[roomAndNick];
 
             // If no resource specified, pick up the user's name from their JID
             if (roomAndNick.Resource == null)
                 roomAndNick.Resource = m_stream.JID.User;
 
-            r = new Room(this, roomAndNick);
+            Room r = new Room(this, roomAndNick);
             r.OnJoin += OnJoin;
             r.OnLeave += OnLeave;
             r.OnPresenceError += OnPresenceError;
@@ -314,6 +329,7 @@ namespace jabber.connection
             r.OnParticipantJoin += OnParticipantJoin;
             r.OnParticipantLeave += OnParticipantLeave;
             r.OnParticipantPresenceChange += OnParticipantPresenceChange;
+            r.OnPresenceChange += OnPresenceChange;
 
             m_rooms[roomAndNick] = r;
             return r;
@@ -340,6 +356,19 @@ namespace jabber.connection
         {
             m_rooms.Remove(roomAndNick);
         }
+
+	public IEnumerable<Room> Rooms
+	{
+	    get{ 
+	        return m_rooms.Values;
+	    }
+	}
+
+	public int Count {
+		get {
+			return m_rooms.Count;
+		}
+	}
 
         private class UniqueState
         {
@@ -461,6 +490,7 @@ namespace jabber.connection
             m_jid = roomAndNick;
             m_room = new JID(m_jid.User, m_jid.Server, null);
             stream.OnProtocol += new jabber.protocol.ProtocolHandler(m_stream_OnProtocol);
+            stream.OnDisconnect += new bedrock.ObjectHandler(m_stream_OnDisconect);
             JabberClient jc = stream as JabberClient;
             if (jc != null)
                 jc.OnAfterPresenceOut += new jabber.client.PresenceHandler(m_stream_OnAfterPresenceOut);
@@ -531,7 +561,13 @@ namespace jabber.connection
         /// A participant has changed presence, without joining or leaving the room.  This will not fire for yourself.
         /// </summary>
         [Category("Room")]
-        public event RoomParticipantEvent OnParticipantPresenceChange;
+        public event RoomParticipantPresenceEvent OnParticipantPresenceChange;
+
+        /// <summary>
+        /// You have changed presence, without joining or leaving the room.
+        /// </summary>
+        [Category("Room")]
+        public event RoomParticipantPresenceEvent OnPresenceChange;
 
         /// <summary>
         /// Determines whether to use the default conference room configuration
@@ -549,7 +585,12 @@ namespace jabber.connection
         /// </summary>
         public string Subject
         {
-            get { return m_subject.Subject; }
+            get {
+	        if (m_subject != null)
+	            return m_subject.Subject;
+                else
+	            return null;
+            }
             set
             {
                 Message m = new Message(m_manager.Stream.Document);
@@ -654,6 +695,8 @@ namespace jabber.connection
                     return;
                 }
 
+                Presence oldPresence = (m_participants[from] != null) ? ((RoomParticipant)m_participants[from]).Presence : null;
+
                 ParticipantCollection.Modification mod = ParticipantCollection.Modification.NONE;
                 RoomParticipant party = m_participants.Modify(p, out mod);
 
@@ -671,6 +714,8 @@ namespace jabber.connection
                     case STATE.running:
                         if (p.Type == PresenceType.unavailable)
                             OnLeavePresence(p);
+                        else
+                            OnPresenceChange(this, party, oldPresence);
                         break;
                     }
                 }
@@ -680,7 +725,7 @@ namespace jabber.connection
                     {
                     case ParticipantCollection.Modification.NONE:
                         if (OnParticipantPresenceChange != null)
-                            OnParticipantPresenceChange(this, party);
+                            OnParticipantPresenceChange(this, party, oldPresence);
                         break;
                     case ParticipantCollection.Modification.JOIN:
                         if (OnParticipantJoin != null)
@@ -733,6 +778,12 @@ namespace jabber.connection
                 // TODO: IQs the room sends to us.
                 break;
             }
+        }
+
+        private void m_stream_OnDisconect(object sender)
+        {
+            // FIXME: It's not REALLY an error..
+            m_state = STATE.error;
         }
 
         private void OnJoinPresence(Presence p)
@@ -788,6 +839,8 @@ namespace jabber.connection
             // not quite an assert.  some sort of race.
             if (p.Type != PresenceType.unavailable)
                 return;
+
+            m_state = STATE.leaving;
 
             m_manager.Stream.OnProtocol -= new jabber.protocol.ProtocolHandler(m_stream_OnProtocol);
             jabber.client.JabberClient jc = m_manager.Stream as jabber.client.JabberClient;

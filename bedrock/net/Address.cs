@@ -21,10 +21,8 @@ using System.Globalization;
 
 using bedrock.util;
 
-#if !__MonoCS__
 using netlib.Dns;
 using netlib.Dns.Records;
-#endif
 
 namespace bedrock.net
 {
@@ -71,8 +69,6 @@ namespace bedrock.net
             this.IP = ip;
         }
 
-
-#if !__MonoCS__
         private static SRVRecord PickSRV(SRVRecord[] srv)
         {
             // TODO: keep track of connection failures, and try the next priority down.
@@ -141,12 +137,17 @@ namespace bedrock.net
                 throw new ArgumentOutOfRangeException("Prefix must end in '.'", "prefix");
             try
             {
-                DnsRequest request = new DnsRequest(prefix + domain);
-                DnsResponse response = request.GetResponse(DnsRecordType.SRV);
-
-                SRVRecord record = PickSRV(response.SRVRecords);
-                host = record.NameNext;
-                port = record.Port;
+		SRVRecord record;
+                if (Environment.OSVersion.Platform != PlatformID.Unix) {
+                    DnsRequest request = new DnsRequest(prefix + domain);
+                    DnsResponse response = request.GetResponse(DnsRecordType.SRV);
+                    record = PickSRV(response.SRVRecords);
+                } else {
+                    var records = UnixDnsResolver.ResolveSRV(prefix + domain);
+		    record = PickSRV(records);
+                }
+	        host = record.NameNext;
+	        port = record.Port;
                 Debug.WriteLine(string.Format("SRV found: {0}:{1}", host, port));
             }
             catch
@@ -175,24 +176,28 @@ namespace bedrock.net
 
             try
             {
-                DnsRequest request = new DnsRequest(prefix + domain);
-                DnsResponse response = request.GetResponse(DnsRecordType.TEXT);
-                string attr = attribute + "=";
-                foreach (TXTRecord txt in response.TXTRecords)
-                {
-                    if (txt.StringArray.StartsWith(attr))
+		if (Environment.OSVersion.Platform != PlatformID.Unix) {
+                    DnsRequest request = new DnsRequest(prefix + domain);
+                    DnsResponse response = request.GetResponse(DnsRecordType.TEXT);
+                    string attr = attribute + "=";
+                    foreach (TXTRecord txt in response.TXTRecords)
                     {
-                        Debug.WriteLine(string.Format("TXT found: {0}", txt.StringArray));
-                        return txt.StringArray.Substring(attr.Length);
+                        if (txt.StringArray.StartsWith(attr))
+                        {
+                            Debug.WriteLine(string.Format("TXT found: {0}", txt.StringArray));
+                            return txt.StringArray.Substring(attr.Length);
+                        }
                     }
-                }
+		} else {
+		    // FIXME: Add TXT support to UnixDnsResolver...
+		    throw new NotImplementedException();
+		}
             }
             catch
             {
             }
             return null;
         }
-#endif
 
         /// <summary>
         /// The host name.  When set, checks for dotted-quad representation, to avoid

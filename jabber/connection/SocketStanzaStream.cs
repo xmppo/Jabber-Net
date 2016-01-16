@@ -215,19 +215,16 @@ namespace jabber.connection
             string host = (string)m_listener[Options.NETWORK_HOST];
             if ((host == null) || (host == ""))
             {
-#if __MonoCS__
                 host = to;
-#else
                 try
                 {
                     Address.LookupSRV((string)m_listener[Options.SRV_PREFIX], to, ref host, ref port);
                 }
-                catch
+                catch (Exception ex)
                 {
-                    Debug.WriteLine("WARNING: netlib.Dns.dll missing");
+                    Debug.WriteLine("WARNING: DNS SRV lookup failed: " + ex);
                     host = to;
                 }
-#endif
             }
 
             Address addr = new Address(host, port);

@@ -212,6 +212,24 @@ namespace jabber.client
             }
         }
 
+	/// <summary>
+	/// Returns the number of bookmarked conferences.
+	/// </summary>
+	public int Count {
+		get {
+			return m_conferences.Count;
+		}
+	}
+
+	/// <summary>
+	/// Exposes an enumerator for all bookmarked conferences.
+	/// </summary>
+	public IEnumerable<BookmarkConference> Conferences {
+		get {
+			return m_conferences.Values;
+		}
+	}
+
         private void BookmarksSet(object sender, IQ iq, object state)
         {
             if ((iq == null) || (iq.Type != IQType.result))

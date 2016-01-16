@@ -110,7 +110,7 @@ namespace jabber.connection
                 CBHolder holder = null;
                 if (!m_callbacks.TryGetValue(node, out holder))
                 {
-                    Console.WriteLine("WARNING: notification received for unknown pubsub node");
+                    Console.WriteLine(String.Format("WARNING: notification received for unknown pubsub node: {0}", node));
                     return;
                 }
                 psn = new PubSubNode(m_stream, from, node, holder.Max);

@@ -16,6 +16,7 @@ using System;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 using bedrock.collections;
@@ -76,7 +77,7 @@ namespace jabber.client
     /// Manages the roster of the client.
     /// </summary>
     [SVN(@"$Id$")]
-    public class RosterManager : jabber.connection.StreamComponent, IEnumerable
+    public class RosterManager : jabber.connection.StreamComponent, IEnumerable<JID>
     {
         /// <summary>
         /// Required designer variable.
@@ -84,7 +85,7 @@ namespace jabber.client
 #pragma warning disable 0414
         private System.ComponentModel.Container components = null;
 #pragma warning restore 0414
-        private Tree m_items = new Tree();
+        private Dictionary<JID,Item> m_items = new Dictionary<JID,Item>();
         private AutoSubscriptionHanding m_autoAllow = AutoSubscriptionHanding.NONE;
         private bool m_autoSubscribe = false;
 
@@ -211,7 +212,7 @@ namespace jabber.client
             get
             {
                 lock (this)
-                    return (Item) m_items[jid];
+                    return m_items.ContainsKey(jid) ? m_items[jid] : null;
             }
         }
 
@@ -339,7 +340,7 @@ namespace jabber.client
                     }
                     else
                     {
-                        if (m_items.Contains(i.JID))
+                        if (m_items.ContainsKey(i.JID))
                             m_items.Remove(i.JID);
                         m_items[i.JID] = i;
                     }
@@ -423,7 +424,10 @@ C: <iq from='juliet@example.com/balcony' type='set' id='delete_1'>
             RosterIQ iq = new RosterIQ(m_stream.Document);
             iq.Type = IQType.set;
             Roster r = iq.Instruction;
-            r.AppendChild(item);
+            if (item.OwnerDocument != m_stream.Document)
+                r.AppendChild(item.CloneNode(true, m_stream.Document));
+            else
+                r.AppendChild(item);
             Write(iq);  // ignore response
         }
 
@@ -441,6 +445,11 @@ C: <iq from='juliet@example.com/balcony' type='set' id='delete_1'>
         #region IEnumerable Members
 
         IEnumerator IEnumerable.GetEnumerator()
+        {
+            return m_items.Keys.GetEnumerator();
+        }
+
+        IEnumerator<JID> IEnumerable<JID>.GetEnumerator()
         {
             return m_items.Keys.GetEnumerator();
         }

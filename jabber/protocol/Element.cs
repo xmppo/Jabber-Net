@@ -139,14 +139,14 @@ namespace jabber.protocol
         /// <param name="value"></param>
         public void AddChild(XmlElement value)
         {
-            if (this.OwnerDocument == value.OwnerDocument)
+            if (this.OwnerDocument != value.OwnerDocument && value is Element)
             {
+                this.AppendChild(((Element)value).CloneNode(true, this.OwnerDocument));
+            }
+	    else
+	    {
                 this.AppendChild(value);
-            }
-            else
-            {
-                this.AppendChild(this.OwnerDocument.ImportNode(value, true));
-            }
+	    }
         }
 
         /// <summary>
