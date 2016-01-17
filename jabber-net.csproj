@@ -89,6 +89,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup Condition="'$(BuildMono)'==''">
     <Reference Include="System">
@@ -146,6 +147,7 @@
     <Compile Include="bedrock\io\BufferAggregate.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="bedrock\net\UnixDnsResolver.cs" />
     <Compile Include="jabber\client\BookmarkManager.cs">
       <SubType>Component</SubType>
     </Compile>
