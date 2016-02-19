@@ -21,9 +21,6 @@ Licensing
 - Copyright © 2002-2008 Cursive Systems, Inc.
 
 Jabber-Net can be used under the GNU Lesser General Public License (LGPL),
-version 3. Consult the scripts documentation to get the information about their
-parameters.
-
-Please consult `LICENSE.txt` for details.
+version 3. Please consult `LICENSE.txt` for details.
 
 [nuget]: https://www.nuget.org/
