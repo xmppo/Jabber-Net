@@ -3,5 +3,5 @@ mono: latest
 install:
 - nuget restore jabber-net.sln
 script:
-- xbuild /p:Configuration=Release jabber-net.sln
-- mono ./packages/NUnit.ConsoleRunner.3.4.1/tools/nunit3-console.exe  ./test/bin5/Release/test.dll
+- xbuild /p:Configuration=Debug jabber-net.sln
+- mono ./packages/NUnit.ConsoleRunner.3.4.1/tools/nunit3-console.exe  ./test/bin5/Debug/test.dll
