@@ -59,68 +59,70 @@ namespace test.bedrock.net
             listen.Close();
         }
 
-// %$@! can't use #pragma in VS.Net 2003.  Just live with these warnings.
-// #pragma warning disable 1718
         [Test]
         public void Test_Ops()
         {
-            SocketWatcher w = new SocketWatcher(20);
-            Address a = new Address("127.0.0.1", 7002);
-            a.Resolve();
-            AsyncSocket one = w.CreateListenSocket(this, a);
-            AsyncSocket two = null;
-            AsyncSocket three = one;
-            AsyncSocket four = two;
-            Assert.IsTrue(one == three);
-            Assert.IsTrue(two == four);
-            Assert.IsTrue(one >= three);
-            Assert.IsTrue(two >= four);
-            Assert.IsTrue(one <= three);
-            Assert.IsTrue(two <= four);
-            Assert.IsTrue(one != two);
-            Assert.IsTrue(two != one);
-            Assert.IsTrue(one > two);
-            Assert.IsTrue(one >= two);
-            Assert.IsTrue(two < one);
-            Assert.IsTrue(two <= one);
-
-            two = w.CreateListenSocket(this, a);
-            four = two;
-            Assert.IsTrue(one == three);
-            Assert.IsTrue(two == four);
-            Assert.IsTrue(one >= three);
-            Assert.IsTrue(two >= four);
-            Assert.IsTrue(one <= three);
-            Assert.IsTrue(two <= four);
-            Assert.IsTrue(one != two);
-            Assert.IsTrue(two != one);
-
-            int c = ((IComparable)one).CompareTo(two);
-            Assert.IsTrue(c != 0);
-            if (c == -1)
+            using (var w = new SocketWatcher(20))
             {
-                // one less than two
-                Assert.IsTrue(one < two);
-                Assert.IsTrue(one <= two);
-                Assert.IsTrue(two > one);
-                Assert.IsTrue(two >= one);
-            }
-            else if (c == 1)
-            {
-                // one greater than two
+                var a = new Address("127.0.0.1", 7002);
+                a.Resolve();
+                var one = w.CreateListenSocket(this, a);
+                one.Close();
+                AsyncSocket two = null;
+                var three = one;
+                var four = two;
+                Assert.IsTrue(one == three);
+                Assert.IsTrue(two == four);
+                Assert.IsTrue(one >= three);
+                Assert.IsTrue(two >= four);
+                Assert.IsTrue(one <= three);
+                Assert.IsTrue(two <= four);
+                Assert.IsTrue(one != two);
+                Assert.IsTrue(two != one);
                 Assert.IsTrue(one > two);
                 Assert.IsTrue(one >= two);
                 Assert.IsTrue(two < one);
                 Assert.IsTrue(two <= one);
+
+                two = w.CreateListenSocket(this, a);
+                two.Close();
+                four = two;
+                Assert.IsTrue(one == three);
+                Assert.IsTrue(two == four);
+                Assert.IsTrue(one >= three);
+                Assert.IsTrue(two >= four);
+                Assert.IsTrue(one <= three);
+                Assert.IsTrue(two <= four);
+                Assert.IsTrue(one != two);
+                Assert.IsTrue(two != one);
+
+                var c = ((IComparable)one).CompareTo(two);
+                Assert.IsTrue(c != 0);
+                if (c == -1)
+                {
+                    // one less than two
+                    Assert.IsTrue(one < two);
+                    Assert.IsTrue(one <= two);
+                    Assert.IsTrue(two > one);
+                    Assert.IsTrue(two >= one);
+                }
+                else if (c == 1)
+                {
+                    // one greater than two
+                    Assert.IsTrue(one > two);
+                    Assert.IsTrue(one >= two);
+                    Assert.IsTrue(two < one);
+                    Assert.IsTrue(two <= one);
+                }
+                else
+                {
+                    Assert.IsTrue(false);
+                }
+                one.Close();
+                two.Close();
             }
-            else
-            {
-                Assert.IsTrue(false);
-            }
-            one.Close();
-            two.Close();
         }
-// #pragma warning restore
+
         #region Implementation of ISocketEventListener
         public bool OnAccept(BaseSocket newsocket)
         {

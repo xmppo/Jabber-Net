@@ -163,35 +163,37 @@ Content-Type: text/plain
         [Test]
         public void Test_Full_Response()
         {
-            SocketWatcher watcher = new SocketWatcher();
-            Address a = new Address("127.0.0.1", 7002);
-            a.Resolve();
+            using (var watcher = new SocketWatcher())
+            {
+                var a = new Address("127.0.0.1", 7002);
+                a.Resolve();
 
-            ServerListener server = new ServerListener();
-            AsyncSocket server_sock = watcher.CreateListenSocket(server, a);
-            server_sock.RequestAccept();
+                var server = new ServerListener();
+                var serverSock = watcher.CreateListenSocket(server, a);
+                serverSock.RequestAccept();
 
-            ResponseListener resp = new ResponseListener();
-            HttpSocket sock = new HttpSocket(resp);
+                var resp = new ResponseListener();
+                var sock = new HttpSocket(resp);
 
-            Uri u = new Uri("http://127.0.0.1:7002/");
-            byte[] buf = ENC.GetBytes("11111");
-            HttpSocket s = (HttpSocket)sock;
-            s.Execute("GET", u, buf, 0, buf.Length, "text/plain");
-            resp.Event.WaitOne();
-            Assert.AreEqual("1234567890", resp.Last);
+                var u = new Uri("http://127.0.0.1:7002/");
+                var buf = ENC.GetBytes("11111");
+                var s = (HttpSocket)sock;
+                s.Execute("GET", u, buf, 0, buf.Length, "text/plain");
+                resp.Event.WaitOne();
+                Assert.AreEqual("1234567890", resp.Last);
 
-            resp.Last = null;
-            buf = ENC.GetBytes("22222");
-            s.Execute("GET", u, buf, 0, buf.Length, "text/plain");
-            resp.Event.WaitOne();
-            Assert.AreEqual("1234567890", resp.Last);
+                resp.Last = null;
+                buf = ENC.GetBytes("22222");
+                s.Execute("GET", u, buf, 0, buf.Length, "text/plain");
+                resp.Event.WaitOne();
+                Assert.AreEqual("1234567890", resp.Last);
 
-            resp.Last = null;
-            buf = ENC.GetBytes("33333");
-            s.Execute("GET", u, buf, 0, buf.Length, "text/plain");
-            resp.Event.WaitOne();
-            Assert.AreEqual("12345678901234567890", resp.Last);
+                resp.Last = null;
+                buf = ENC.GetBytes("33333");
+                s.Execute("GET", u, buf, 0, buf.Length, "text/plain");
+                resp.Event.WaitOne();
+                Assert.AreEqual("12345678901234567890", resp.Last);
+            }
         }
     }
 }
