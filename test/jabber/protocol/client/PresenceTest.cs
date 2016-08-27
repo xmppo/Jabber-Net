@@ -32,6 +32,7 @@ namespace test.jabber.protocol.client
         [Test] public void Test_Create()
         {
             Presence p = new Presence(doc);
+            p.RemoveAttribute("id"); // remove non-constant attribute for comparison
             p.Type   = PresenceType.available;
             p.Status = "foo";
             Assert.AreEqual("<presence><status>foo</status></presence>", p.ToString());
