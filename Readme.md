@@ -18,8 +18,9 @@ Consult the scripts documentation to get the information about their parameters.
 Licensing
 ---------
 
-- Copyright © 2002-2008 Cursive Systems, Inc.
-- All the code changes from 2008 are owned by the corresponding contributors.
+-   Copyright © 2002-2008 Cursive Systems, Inc.
+-   All the code changes from 2008 are copyrighted by the corresponding
+    contributors.
 
 Jabber-Net can be used under the GNU Lesser General Public License (LGPL),
 version 3. Please consult `LICENSE.txt` for details.

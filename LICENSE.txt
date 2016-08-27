@@ -4,7 +4,8 @@ Jabber-Net, Copyright (c) 2002-2008 Cursive Systems, Inc.  All Rights
 Reserved.  Contact information for Cursive Systems, Inc. is available
 at http://www.cursive.net/.
 
-All the code changes from 2008 are owned by the corresponding contributors.
+All the code changes from 2008 are copyrighted by the corresponding
+contributors.
 
 As of version 2.1, Jabber-Net can be used under the GNU Lesser General
 Public License (LGPL), version 3.  For commercial support, please contact
@@ -19,7 +20,7 @@ following URL:
 
 http://www.gnu.org/licenses/lgpl.html
 
-		   GNU LESSER GENERAL PUBLIC LICENSE
+           GNU LESSER GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 
  Copyright (C) 2007 Free Software Foundation, Inc. <http://fsf.org/>
