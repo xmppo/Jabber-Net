@@ -1,4 +1,4 @@
-Jabber-Net [![NuGet][nuget-badge]][nuget]
+Jabber-Net [![NuGet][nuget-badge]][nuget] [![Appveyor build][appveyor-badge]][appveyor]
 ==========
 
 Jabber-Net is a set of .NET classes for sending and receiving Extensible
@@ -25,6 +25,8 @@ Licensing
 Jabber-Net can be used under the GNU Lesser General Public License (LGPL),
 version 3. Please consult `LICENSE.txt` for details.
 
+[appveyor]: https://ci.appveyor.com/project/ForNeVeR/jabber-net/branch/develop
 [nuget]: https://www.nuget.org/packages/jabber-net/
 
+[appveyor-badge]: https://ci.appveyor.com/api/projects/status/fpe2djtjucsl89x3/branch/develop?svg=true
 [nuget-badge]: https://img.shields.io/nuget/v/jabber-net.svg?maxAge=2592000
