@@ -15,7 +15,7 @@ your terminal. On Windows:
 ```console
 > nuget restore jabber-net.sln
 > msbuild jabber-net.sln /p:Configuration=Debug
-> .\packages\NUnit.ConsoleRunner.3.4.1\tools\nunit3-console.exe  .\test\bin5\Debug\test.dll
+> .\packages\NUnit.ConsoleRunner.3.4.1\tools\nunit3-console.exe .\test\bin5\Debug\test.dll
 ```
 
 On Linux:
@@ -23,7 +23,7 @@ On Linux:
 ```console
 $ nuget restore jabber-net.sln
 $ xbuild /p:Configuration=Debug jabber-net.sln
-$ mono ./packages/NUnit.ConsoleRunner.3.4.1/tools/nunit3-console.exe  ./test/bin5/Debug/test.dll
+$ mono ./packages/NUnit.ConsoleRunner.3.4.1/tools/nunit3-console.exe ./test/bin5/Debug/test.dll
 ```
 
 Packaging
