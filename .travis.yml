@@ -1,0 +1,4 @@
+language: csharp
+mono: latest
+script:
+- xbuild jabber-net.sln /p:Configuration=Release
