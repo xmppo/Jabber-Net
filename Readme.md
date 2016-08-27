@@ -1,4 +1,4 @@
-Jabber-Net [![NuGet][nuget-badge]][nuget] [![Appveyor build][appveyor-badge]][appveyor]
+Jabber-Net [![NuGet][nuget-badge]][nuget] [![Appveyor build][appveyor-badge]][appveyor] [![Travis build][travis-badge]][travis]
 ==========
 
 Jabber-Net is a set of .NET classes for sending and receiving Extensible
@@ -47,6 +47,8 @@ version 3. Please consult `LICENSE.txt` for details.
 
 [appveyor]: https://ci.appveyor.com/project/ForNeVeR/jabber-net/branch/develop
 [nuget]: https://www.nuget.org/packages/jabber-net/
+[travis]: https://travis-ci.org/ForNeVeR/jabber-net
 
 [appveyor-badge]: https://ci.appveyor.com/api/projects/status/fpe2djtjucsl89x3/branch/develop?svg=true
 [nuget-badge]: https://img.shields.io/nuget/v/jabber-net.svg?maxAge=2592000
+[travis-badge]: https://travis-ci.org/ForNeVeR/jabber-net.svg?branch=develop
