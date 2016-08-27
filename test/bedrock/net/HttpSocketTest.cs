@@ -44,7 +44,7 @@ namespace test.bedrock.net
 
             public void OnClose(BaseSocket sock)
             {
-                
+
             }
 
             public void OnError(BaseSocket sock, Exception ex)
@@ -174,7 +174,7 @@ Content-Type: text/plain
             ResponseListener resp = new ResponseListener();
             HttpSocket sock = new HttpSocket(resp);
 
-            Uri u = new Uri("http://localhost:7002/");
+            Uri u = new Uri("http://127.0.0.1:7002/");
             byte[] buf = ENC.GetBytes("11111");
             HttpSocket s = (HttpSocket)sock;
             s.Execute("GET", u, buf, 0, buf.Length, "text/plain");
