@@ -274,6 +274,7 @@ namespace test.jabber.connection
                               {
                                   onProtocol.Raise(new object[] { null, sendPresence(elem) });
 
+                                  elem.RemoveAttribute("id"); // remove non-constant attribute
                                   string original = elem.OuterXml;
                                   return original.Replace(" ", "") ==
                                          GetJoinPresence().Replace(" ", "");
@@ -334,6 +335,7 @@ namespace test.jabber.connection
                 LastCall.Callback((Func<XmlElement, bool>)
                     delegate(XmlElement elem)
                     {
+                        elem.RemoveAttribute("id"); // remove non-constant attribute
                         string original = elem.OuterXml;
                         return original.Replace(" ", "") ==
                             GetLeavePresence().Replace(" ", "");
