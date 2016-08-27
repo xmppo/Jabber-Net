@@ -216,6 +216,9 @@ namespace test.jabber.connection
         }
 
         [Test]
+        [Platform(
+            Exclude = "Linux",
+            Reason = "Rhino fails with the message \"XmppStream.get_Document(); Expected #1, Actual #0.\"")]
         public void RoomMessageNoJoinTest()
         {
             Assert.Throws<InvalidOperationException>(() =>
@@ -293,6 +296,9 @@ namespace test.jabber.connection
         }
 
         [Test]
+        [Platform(
+            Exclude = "Linux",
+            Reason = "Rhino fails with the message \"XmppStream.get_Document(); Expected #1, Actual #0.\"")]
         public void RoomPrivateMessageNoJoinTest()
         {
             Assert.Throws<InvalidOperationException>(() =>
