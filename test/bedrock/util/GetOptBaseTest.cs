@@ -12,9 +12,10 @@
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
-
+using System.Linq;
 using NUnit.Framework;
 using bedrock.util;
+
 namespace test.bedrock.util
 {
     /// <summary>
@@ -100,9 +101,10 @@ namespace test.bedrock.util
 
         [Test] public void Test_Env()
         {
+            var realArguments = Environment.GetCommandLineArgs();
             TestGetOpt go = new TestGetOpt(null);
 
-            Assert.IsTrue(go.Args[0].StartsWith("test"));
+            Assert.AreEqual(realArguments.Skip(1).FirstOrDefault(), go.Args.FirstOrDefault());
         }
         [Test] public void Test_CaseInsensitive()
         {
