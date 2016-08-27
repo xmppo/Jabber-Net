@@ -127,11 +127,13 @@ namespace test.bedrock.collections
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void Null()
         {
-            StringSet ss = new StringSet();
-            ss.Add((string)null);
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                var ss = new StringSet();
+                ss.Add((string)null);
+            });
         }
 
         [Test]

@@ -169,11 +169,14 @@ namespace test.bedrock.collections
             Assert.AreEqual(4096, count);
         }
 
-        [ExpectedException(typeof(ArgumentNullException))]
-        [Test] public void Test_Null()
+        [Test]
+        public void Test_Null()
         {
-            Tree sl = new Tree();
-            sl[null] = "n";
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                var sl = new Tree();
+                sl[null] = "n";
+            });
         }
     }
 }

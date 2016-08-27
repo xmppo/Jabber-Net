@@ -165,51 +165,85 @@ namespace test.bedrock.util
             go["test"] = "foo";
             Assert.AreEqual("foo", nc.test);
         }
-        [ExpectedException(typeof(FormatException))]
-        [Test] public void Test_BadInt()
+
+        [Test]
+        public void Test_BadInt()
         {
-            TestGetOpt t = new TestGetOpt(new string[] {"/some", "one"});
+            Assert.Throws<FormatException>(() =>
+            {
+                var t = new TestGetOpt(new[] { "/some", "one" });
+            });
         }
-        [ExpectedException(typeof(ArgumentException))]
-        [Test] public void Test_Error()
+
+        [Test]
+        public void Test_Error()
         {
-            TestGetOpt go = new TestGetOpt(new string[] {"/broncos"});
+            Assert.Throws<ArgumentException>(() =>
+            {
+                var go = new TestGetOpt(new[] { "/broncos" });
+            });
         }
-        [ExpectedException(typeof(ArgumentException))]
-        [Test] public void Test_DashError()
+
+        [Test]
+        public void Test_DashError()
         {
-            TestGetOpt go = new TestGetOpt(new string[] {"-broncos"});
+            Assert.Throws<ArgumentException>(() =>
+            {
+                var go = new TestGetOpt(new[] { "-broncos" });
+            });
         }
-        [ExpectedException(typeof(IndexOutOfRangeException))]
-        [Test] public void Test_InsufficientError()
+
+        [Test]
+        public void Test_InsufficientError()
         {
-            TestGetOpt go = new TestGetOpt(new string[] {"/some"});
+            Assert.Throws<IndexOutOfRangeException>(() =>
+            {
+                var go = new TestGetOpt(new[] { "/some" });
+            });
         }
-        [ExpectedException(typeof(IndexOutOfRangeException))]
-        [Test] public void Test_DashInsufficientError()
+
+        [Test]
+        public void Test_DashInsufficientError()
         {
-            TestGetOpt go = new TestGetOpt(new string[] {"-some"});
+            Assert.Throws<IndexOutOfRangeException>(() =>
+            {
+                var go = new TestGetOpt(new[] {"-some"});
+            });
         }
-        [ExpectedException(typeof(ArgumentException))]
-        [Test] public void Test_BadRequired()
+
+        [Test]
+        public void Test_BadRequired()
         {
-            BadOpt bo = new BadOpt();
-            bo.Process(new string[] {});
+            Assert.Throws<ArgumentException>(() =>
+            {
+                var bo = new BadOpt();
+                bo.Process(new string[] {});
+            });
         }
+
         [Test] public void Test_Required()
         {
             ReqOpt bo = new ReqOpt(new string[] {"/req:here"});
             Assert.AreEqual("here", bo.Req);
         }
-        [ExpectedException(typeof(ArgumentException))]
-        [Test] public void Test_RequiredNotPassed()
+
+        [Test]
+        public void Test_RequiredNotPassed()
         {
-            ReqOpt bo = new ReqOpt(new string[] {});
+            Assert.Throws<ArgumentException>(() =>
+            {
+                var bo = new ReqOpt(new string[] { });
+            });
         }
-        [ExpectedException(typeof(IndexOutOfRangeException))]
-        [Test] public void Test_MethodNotEnoughParams()
+
+        [Test]
+        public void Test_MethodNotEnoughParams()
         {
-            TestGetOpt go = new TestGetOpt(new string[] {"-methodparams", "2"});
+            Assert.Throws<IndexOutOfRangeException>(() =>
+            {
+                var go = new TestGetOpt(new[] { "-methodparams", "2" });
+            });
+            
         }
     }
     public enum TestOptEnum

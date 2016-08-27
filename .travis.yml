@@ -1,7 +1,7 @@
 language: csharp
 mono: latest
 install:
-- nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
+- nuget restore jabber-net.sln
 script:
 - xbuild /p:Configuration=Release jabber-net.sln
-- mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe  ./test/bin5/Release/test.dll
+- mono ./packages/NUnit.ConsoleRunner.3.4.1/tools/nunit3-console.exe  ./test/bin5/Release/test.dll

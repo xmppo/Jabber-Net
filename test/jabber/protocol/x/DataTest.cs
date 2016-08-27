@@ -90,7 +90,7 @@ namespace test.jabber.protocol.x
 
         void es_OnElement(object sender, XmlElement n)
         {
-            Assert.IsInstanceOfType(typeof(global::jabber.protocol.x.Data), n);
+            Assert.IsInstanceOf<Data>(n);
             Data d = (Data)n;
             Assert.AreEqual(@"
         Welcome to the BloodBank-Service!  We thank you for registering with

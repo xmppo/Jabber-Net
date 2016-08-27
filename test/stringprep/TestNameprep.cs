@@ -13,7 +13,6 @@
  * --------------------------------------------------------------------------*/
 #if !NO_STRINGPREP
 
-using System;
 using NUnit.Framework;
 using stringprep;
 using stringprep.steps;
@@ -155,11 +154,14 @@ namespace test.stringprep
             TryOne("\xC2\xA0", "\x20");
         }
 
-        [ExpectedException(typeof(ProhibitedCharacterException))]
-        [Test] public void Test_Space_03()
+        [Test]
+        public void Test_Space_03()
         {
-            // Non-ASCII multibyte space character U+1680",
-            TryOne("\xE1\x9A\x80", null);
+            Assert.Throws<ProhibitedCharacterException>(() =>
+            {
+                // Non-ASCII multibyte space character U+1680",
+                TryOne("\xE1\x9A\x80", null);
+            });
         }
 
         [Test] public void Test_Space_04()
@@ -185,131 +187,203 @@ namespace test.stringprep
             // ASCII control characters U+0010 U+007F",
             TryOne("\x10\x7F", "\x10\x7F");
         }
-        [ExpectedException(typeof(ProhibitedCharacterException))]
-        [Test] public void Test_Control_02()
+
+        [Test]
+        public void Test_Control_02()
         {
-            // Non-ASCII 8bit control character U+0085",
-            TryOne("\xC2\x85", null);
+            Assert.Throws<ProhibitedCharacterException>(() =>
+            {
+                // Non-ASCII 8bit control character U+0085",
+                TryOne("\xC2\x85", null);
+            });
         }
 
-        [ExpectedException(typeof(ProhibitedCharacterException))]
-        [Test] public void Test_Control_03()
+        [Test]
+        public void Test_Control_03()
         {
-            // Non-ASCII multibyte control character U+180E",
-            TryOne("\xE1\xA0\x8E", null);
+            Assert.Throws<ProhibitedCharacterException>(() =>
+            {
+                // Non-ASCII multibyte control character U+180E",
+                TryOne("\xE1\xA0\x8E", null);
+            });
         }
+
         [Test] public void Test_Control_04()
         {
             // Zero Width No-Break Space U+FEFF",
             TryOne("\xEF\xBB\xBF", "");
         }
-        [ExpectedException(typeof(ProhibitedCharacterException))]
-        [Test] public void Test_Control_05()
+
+        [Test]
+        public void Test_Control_05()
         {
-            // Non-ASCII control character U+1D175",
-            TryOne("\xF0\x9D\x85\xB5", null);
+            Assert.Throws<ProhibitedCharacterException>(() =>
+            {
+                // Non-ASCII control character U+1D175",
+                TryOne("\xF0\x9D\x85\xB5", null);
+            });
         }
-        [ExpectedException(typeof(ProhibitedCharacterException))]
-        [Test] public void Test_Plane_0_Private()
+
+        [Test]
+        public void Test_Plane_0_Private()
         {
-            // Plane 0 private use character U+F123",
-            TryOne("\xEF\x84\xA3", null);
+            Assert.Throws<ProhibitedCharacterException>(() =>
+            {
+                // Plane 0 private use character U+F123",
+                TryOne("\xEF\x84\xA3", null);
+            });
         }
-        [ExpectedException(typeof(ProhibitedCharacterException))]
-        [Test] public void Test_Plane_15_Private()
+
+        [Test]
+        public void Test_Plane_15_Private()
         {
-            // Plane 15 private use character U+F1234",
-            TryOne("\xF3\xB1\x88\xB4", null);
+            Assert.Throws<ProhibitedCharacterException>(() =>
+            {
+                // Plane 15 private use character U+F1234",
+                TryOne("\xF3\xB1\x88\xB4", null);
+            });
         }
-        [ExpectedException(typeof(ProhibitedCharacterException))]
-        [Test] public void Test_Plane_16_Private()
+
+        [Test]
+        public void Test_Plane_16_Private()
         {
-            // Plane 16 private use character U+10F234",
-            TryOne("\xF4\x8F\x88\xB4", null);
+            Assert.Throws<ProhibitedCharacterException>(() =>
+            {
+                // Plane 16 private use character U+10F234",
+                TryOne("\xF4\x8F\x88\xB4", null);
+            });
         }
-        [ExpectedException(typeof(ProhibitedCharacterException))]
-        [Test] public void Test_NonCharacter_01()
+
+        [Test]
+        public void Test_NonCharacter_01()
         {
-            // Non-character code point U+8FFFE",
-            TryOne("\xF2\x8F\xBF\xBE", null);
+            Assert.Throws<ProhibitedCharacterException>(() =>
+            {
+                // Non-character code point U+8FFFE",
+                TryOne("\xF2\x8F\xBF\xBE", null);
+            });
         }
-        [ExpectedException(typeof(ProhibitedCharacterException))]
-        [Test] public void Test_NonCharacter_02 ()
+
+        [Test]
+        public void Test_NonCharacter_02 ()
         {
-            // Non-character code point U+10FFFF",
-            TryOne("\xF4\x8F\xBF\xBF", null);
+            Assert.Throws<ProhibitedCharacterException>(() =>
+            {
+                // Non-character code point U+10FFFF",
+                TryOne("\xF4\x8F\xBF\xBF", null);
+            });
         }
-        [ExpectedException(typeof(ProhibitedCharacterException))]
-        [Test] public void Test_Surrogate()
+
+        [Test]
+        public void Test_Surrogate()
         {
-            // Surrogate code U+DF42",
-            //TryOne("\xED\xBD\x82", null);
-            string input = "\uDF42";
-            string output = nameprep.Prepare(input);
+            Assert.Throws<ProhibitedCharacterException>(() =>
+            {
+                // Surrogate code U+DF42",
+                //TryOne("\xED\xBD\x82", null);
+                var input = "\uDF42";
+                var output = nameprep.Prepare(input);
+            });
         }
-        [ExpectedException(typeof(ProhibitedCharacterException))]
-        [Test] public void Test_NonPlaintext()
+
+        [Test]
+        public void Test_NonPlaintext()
         {
-            // Non-plain text character U+FFFD",
-            TryOne("\xEF\xBF\xBD", null);
+            Assert.Throws<ProhibitedCharacterException>(() =>
+            {
+                // Non-plain text character U+FFFD",
+                TryOne("\xEF\xBF\xBD", null);
+            });
         }
-        [ExpectedException(typeof(ProhibitedCharacterException))]
-        [Test] public void Test_IdeographicDescription()
+
+        [Test]
+        public void Test_IdeographicDescription()
         {
-            // Ideographic description character U+2FF5",
-            TryOne("\xE2\xBF\xB5", null);
+            Assert.Throws<ProhibitedCharacterException>(() =>
+            {
+                // Ideographic description character U+2FF5",
+                TryOne("\xE2\xBF\xB5", null);
+            });
         }
+
         [Test] public void Test_Property()
         {
             // Display property character U+0341",
             TryOne("\xCD\x81", "\xCC\x81");
         }
-        [ExpectedException(typeof(ProhibitedCharacterException))]
+
         [Test] public void Test_LTR ()
         {
-            // Left-to-right mark U+200E",
-            TryOne("\xE2\x80\x8E", "\xCC\x81");
+            Assert.Throws<ProhibitedCharacterException>(() =>
+            {
+                // Left-to-right mark U+200E",
+                TryOne("\xE2\x80\x8E", "\xCC\x81");
+            });
         }
-        [ExpectedException(typeof(ProhibitedCharacterException))]
+
         [Test] public void Test_Deprecated()
         {
-            // Deprecated U+202A",
-            TryOne("\xE2\x80\xAA", "\xCC\x81");
+            Assert.Throws<ProhibitedCharacterException>(() =>
+            {
+                // Deprecated U+202A",
+                TryOne("\xE2\x80\xAA", "\xCC\x81");
+            });
         }
-        [ExpectedException(typeof(ProhibitedCharacterException))]
-        [Test] public void Test_Tagging_01()
+
+        [Test]
+        public void Test_Tagging_01()
         {
-            // Language tagging character U+E0001",
-            TryOne("\xF3\xA0\x80\x81", "\xCC\x81");
+            Assert.Throws<ProhibitedCharacterException>(() =>
+            {
+                // Language tagging character U+E0001",
+                TryOne("\xF3\xA0\x80\x81", "\xCC\x81");
+            });
         }
-        [ExpectedException(typeof(ProhibitedCharacterException))]
-        [Test] public void Test_Tagging_02()
+
+        [Test]
+        public void Test_Tagging_02()
         {
-            // Language tagging character U+E0042",
-            TryOne("\xF3\xA0\x81\x82", null);
+            Assert.Throws<ProhibitedCharacterException>(() =>
+            {
+                // Language tagging character U+E0042",
+                TryOne("\xF3\xA0\x81\x82", null);
+            });
         }
-        [ExpectedException(typeof(BidiException))]
-        [Test] public void Test_Bidi_01()
+
+        [Test]
+        public void Test_Bidi_01()
         {
-            // Bidi: RandALCat character U+05BE and LCat characters",
-            TryOne("foo\xD6\xBE" + "bar", null);
+            Assert.Throws<BidiException>(() =>
+            {
+                // Bidi: RandALCat character U+05BE and LCat characters",
+                TryOne("foo\xD6\xBE" + "bar", null);
+            });
         }
-        [ExpectedException(typeof(BidiException))]
-        [Test] public void Test_Bidi_02()
+
+        [Test]
+        public void Test_Bidi_02()
         {
-            // Bidi: RandALCat character U+FD50 and LCat characters",
-            TryOne("foo\xEF\xB5\x90" + "bar", null);
+            Assert.Throws<BidiException>(() =>
+            {
+                // Bidi: RandALCat character U+FD50 and LCat characters",
+                TryOne("foo\xEF\xB5\x90" + "bar", null);
+            });
         }
+
         [Test] public void Test_Bidi_03()
         {
             // Bidi: RandALCat character U+FB38 and LCat characters",
             TryOne("foo\xEF\xB9\xB6" + "bar", "foo \xd9\x8e" + "bar");
         }
-        [ExpectedException(typeof(BidiException))]
-        [Test] public void Test_Bidi_04()
+
+        [Test]
+        public void Test_Bidi_04()
         {
-            // Bidi: RandALCat without trailing RandALCat U+0627 U+0031",
-            TryOne("\xD8\xA7\x31", null);
+            Assert.Throws<BidiException>(() =>
+            {
+                // Bidi: RandALCat without trailing RandALCat U+0627 U+0031",
+                TryOne("\xD8\xA7\x31", null);
+            });
         }
 
         [Test] public void Test_Bidi_05()
@@ -318,11 +392,14 @@ namespace test.stringprep
             TryOne("\xD8\xA7\x31\xD8\xA8", "\xD8\xA7\x31\xD8\xA8");
         }
 
-        [ExpectedException(typeof(ProhibitedCharacterException))]
-        [Test] public void Test_Unassigned()
+        [Test]
+        public void Test_Unassigned()
         {
-            // Unassigned code point U+E0002",
-            TryOne("\xF3\xA0\x80\x82", null);
+            Assert.Throws<ProhibitedCharacterException>(() =>
+            {
+                // Unassigned code point U+E0002",
+                TryOne("\xF3\xA0\x80\x82", null);
+            });
         }
 
         [Test] public void Test_LargerShrinking()

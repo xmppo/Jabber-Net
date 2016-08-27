@@ -42,58 +42,70 @@ namespace test.stringprep
             TryOne("\x226f", "\x226f"); // not greater than
         }
 
-        [ExpectedException(typeof(ProhibitedCharacterException))]
-        [Test] public void Test_Dquote()
+        [Test]
+        public void Test_Dquote()
         {
-            TryOne("\"", null);
+            Assert.Throws<ProhibitedCharacterException>(() => { TryOne("\"", null); });
         }
-        [ExpectedException(typeof(ProhibitedCharacterException))]
-        [Test] public void Test_Amp()
+
+        [Test]
+        public void Test_Amp()
         {
-            TryOne("&", null);
+            Assert.Throws<ProhibitedCharacterException>(() => { TryOne("&", null); });
         }
-        [ExpectedException(typeof(ProhibitedCharacterException))]
-        [Test] public void Test_Squote()
+
+        [Test]
+        public void Test_Squote()
         {
-            TryOne("'", null);
+            Assert.Throws<ProhibitedCharacterException>(() => { TryOne("'", null); });
         }
-        [ExpectedException(typeof(ProhibitedCharacterException))]
-        [Test] public void Test_Slash()
+
+        [Test]
+        public void Test_Slash()
         {
-            TryOne("/", null);
+            Assert.Throws<ProhibitedCharacterException>(() => { TryOne("/", null); });
         }
-        [ExpectedException(typeof(ProhibitedCharacterException))]
-        [Test] public void Test_Colon()
+
+        [Test]
+        public void Test_Colon()
         {
-            TryOne(":", null);
+            Assert.Throws<ProhibitedCharacterException>(() => { TryOne(":", null); });
         }
-        [ExpectedException(typeof(ProhibitedCharacterException))]
-        [Test] public void Test_Less()
+
+        [Test]
+        public void Test_Less()
         {
-            TryOne("<", null);
+            Assert.Throws<ProhibitedCharacterException>(() => { TryOne("<", null); });
         }
-        [ExpectedException(typeof(ProhibitedCharacterException))]
-        [Test] public void Test_Greater()
+
+        [Test]
+        public void Test_Greater()
         {
-            TryOne(">", null);
+            Assert.Throws<ProhibitedCharacterException>(() => { TryOne(">", null); });
         }
+
 #if !NO_STRINGPREP
-        [ExpectedException(typeof(ProhibitedCharacterException))]
-        [Test] public void Test_SmallGreater()
+        [Test]
+        public void Test_SmallGreater()
         {
-            TryOne("\xfe65", null); // small greater than
+            Assert.Throws<ProhibitedCharacterException>(() =>
+            {
+                TryOne("\xfe65", null); // small greater than
+            });
         }
 #endif
-        [ExpectedException(typeof(ProhibitedCharacterException))]
-        [Test] public void Test_At()
+
+        [Test]
+        public void Test_At()
         {
-            TryOne("@", null);
+            Assert.Throws<ProhibitedCharacterException>(() => { TryOne("@", null); });
         }
-        [ExpectedException(typeof(ProhibitedCharacterException))]
-        [Test] public void Test_Prep_Less()
+
+        [Test]
+        public void Test_Prep_Less()
         {
             // U+FE68: small commercial at
-            TryOne("\xFE6b", null);
+            Assert.Throws<ProhibitedCharacterException>(() => { TryOne("\xFE6b", null); });
         }
     }
 }

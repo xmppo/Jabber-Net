@@ -43,12 +43,14 @@ namespace test.jabber.connection
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void TestNull()
         {
-            FileMap<Element> fm = new FileMap<Element>("test.xml", null);
-            Assert.IsNotNull(fm);
-            FileMap<DiscoInfo> fm2 = new FileMap<DiscoInfo>("test.xml", null);
+            Assert.Throws<ArgumentException>(() =>
+            {
+                var fm = new FileMap<Element>("test.xml", null);
+                Assert.IsNotNull(fm);
+                var fm2 = new FileMap<DiscoInfo>("test.xml", null);
+            });
         }
 
         [Test]
@@ -65,13 +67,13 @@ namespace test.jabber.connection
             fm[g] = Element;
             Assert.IsTrue(fm.Contains(g));
             Assert.IsFalse(fm.Contains("foo"));
-            Assert.IsInstanceOfType(typeof(DiscoInfo), fm[g]);
+            Assert.IsInstanceOf<DiscoInfo>(fm[g]);
             Assert.AreEqual(1, fm.Count);
 
             // re-read, to reparse
             fm = new FileMap<DiscoInfo>("test.xml", ef);
             Assert.IsTrue(fm.Contains(g));
-            Assert.IsInstanceOfType(typeof(DiscoInfo), fm[g]);
+            Assert.IsInstanceOf<DiscoInfo>(fm[g]);
 
             fm[g] = null;
             Assert.AreEqual(1, fm.Count);

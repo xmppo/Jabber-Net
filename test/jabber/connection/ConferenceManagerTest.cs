@@ -216,10 +216,12 @@ namespace test.jabber.connection
         }
 
         [Test]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void RoomMessageNoJoinTest()
         {
-            SendMessage(false);
+            Assert.Throws<InvalidOperationException>(() =>
+            {
+                SendMessage(false);
+            });
         }
 
         private void SendMessage(bool shouldJoinRoom)
@@ -291,10 +293,12 @@ namespace test.jabber.connection
         }
 
         [Test]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void RoomPrivateMessageNoJoinTest()
         {
-            SendPrivateMessage(false);
+            Assert.Throws<InvalidOperationException>(() =>
+            {
+                SendPrivateMessage(false);
+            });
         }
 
         private void SendPrivateMessage(bool shouldJoin)

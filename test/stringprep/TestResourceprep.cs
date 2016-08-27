@@ -13,7 +13,6 @@
  * --------------------------------------------------------------------------*/
 #if !NO_STRINGPREP
 
-using System;
 using NUnit.Framework;
 using stringprep;
 using stringprep.steps;
@@ -41,10 +40,13 @@ namespace test.stringprep
             TryOne("test", "test");
         }
 
-        [ExpectedException(typeof(ProhibitedCharacterException))]
-        [Test] public void Test_Bad()
+        [Test]
+        public void Test_Bad()
         {
-            TryOne("Test\x180E", null);
+            Assert.Throws<ProhibitedCharacterException>(() =>
+            {
+                TryOne("Test\x180E", null);
+            });
         }
     }
 }

@@ -27,19 +27,25 @@ namespace test.bedrock.collections
     [TestFixture]
     public class SkipListTest
     {
-        [ExpectedException(typeof(ArgumentNullException))]
-        [Test] public void Test_Null_Key()
+        [Test]
+        public void Test_Null_Key()
         {
-            SkipList sl = new SkipList();
-            sl.Add(null, "one");
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                var sl = new SkipList();
+                sl.Add(null, "one");
+            });
         }
 
-        [ExpectedException(typeof(ArgumentException))]
-        [Test] public void Test_Key_Twice()
+        [Test]
+        public void Test_Key_Twice()
         {
-            SkipList sl = new SkipList();
-            sl.Add("one", "one");
-            sl.Add("one", "one");
+            Assert.Throws<ArgumentException>(() =>
+            {
+                var sl = new SkipList();
+                sl.Add("one", "one");
+                sl.Add("one", "one");
+            });
         }
 
         [Test] public void Test_Add()
