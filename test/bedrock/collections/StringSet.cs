@@ -40,7 +40,8 @@ namespace test.bedrock.collections
             ss.Add("bar");
             Assert.IsTrue(ss["foo"]);
             Assert.AreEqual(2, ss.Count);
-            Assert.AreEqual("foo\r\nbar\r\n", ss.ToString());
+            var newLine = Environment.NewLine;
+            Assert.AreEqual($"foo{newLine}bar{newLine}", ss.ToString());
             ss.Remove("bar");
             Assert.AreEqual(1, ss.Count);
             Assert.IsFalse(ss["fool"]);
@@ -132,7 +133,7 @@ namespace test.bedrock.collections
             StringSet ss = new StringSet();
             ss.Add((string)null);
         }
-        
+
         [Test]
         public void Empty()
         {
