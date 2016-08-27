@@ -1,4 +1,4 @@
-Jabber-Net
+Jabber-Net [![NuGet][nuget-badge]][nuget]
 ==========
 
 Jabber-Net is a set of .NET classes for sending and receiving Extensible
@@ -23,4 +23,6 @@ Licensing
 Jabber-Net can be used under the GNU Lesser General Public License (LGPL),
 version 3. Please consult `LICENSE.txt` for details.
 
-[nuget]: https://www.nuget.org/
+[nuget]: https://www.nuget.org/packages/jabber-net/
+
+[nuget-badge]: https://img.shields.io/nuget/v/jabber-net.svg?maxAge=2592000
