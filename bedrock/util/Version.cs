@@ -32,6 +32,8 @@ namespace bedrock.util
                     Inherited     = false)]
     public abstract class SourceVersionAttribute : Attribute
     {
+        protected const string DateTimeFormat = "MM/dd/yyyy h:mm:ss tt";
+
         /// <summary>
         /// The entire header
         /// </summary>
@@ -201,7 +203,7 @@ namespace bedrock.util
             set
             {
                 SetParse();
-                m_date = DateTime.Parse(GetField(value));
+                m_date = DateTime.ParseExact(GetField(value), DateTimeFormat, CultureInfo.InvariantCulture);
             }
         }
         /// <summary>
@@ -304,8 +306,6 @@ namespace bedrock.util
                     AllowMultiple=false, Inherited=false)]
     public class StarTeamAttribute : SourceVersionAttribute
     {
-        private const string DateTimeFormat = "MM/dd/yyyy h:mm:ss tt";
-
         // Dammit gumby.  Don't mess up my regex.
         private static readonly Regex REGEX =
             new Regex(@"^\$" + @"Header(: (?<archive>[^,]+), (?<version>[0-9.]+), (?<date>[^,]+), (?<author>[^$]+))?" + @"\$$");
@@ -335,8 +335,15 @@ namespace bedrock.util
                 return s;
             }
 
-            return String.Format("{0}Header: {1}, {2}, {3:MM/dd/yyyy h:mm:ss tt}, {4}{5}",
-                                 new object[] {"$", m_archive, m_version, m_date, m_author, "$"});
+            return string.Format(
+                CultureInfo.InvariantCulture,
+                "{0}Header: {1}, {2}, {3:MM/dd/yyyy h:mm:ss tt}, {4}{5}",
+                "$",
+                m_archive,
+                m_version,
+                m_date,
+                m_author,
+                "$");
         }
         /// <summary>
         /// Parse the header
@@ -462,7 +469,10 @@ namespace bedrock.util
             {
                 m_archive = m.Groups["archive"].ToString();
                 m_version = m.Groups["version"].ToString();
-                m_date    = DateTime.Parse(m.Groups["date"].ToString());
+                m_date = DateTime.ParseExact(
+                    m.Groups["date"].ToString(),
+                    "M/dd/yy h:mm",
+                    CultureInfo.InvariantCulture);
                 if (m.Groups["ampm"].ToString() == "p")
                 {
                     m_date = m_date.AddHours(12);
