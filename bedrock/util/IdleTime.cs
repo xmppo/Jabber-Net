@@ -13,9 +13,7 @@
  * --------------------------------------------------------------------------*/
 using System;
 using System.ComponentModel;
-using System.Text;
 using System.Runtime.InteropServices;
-using System.ComponentModel.Design;
 
 namespace bedrock.util
 {
@@ -30,7 +28,7 @@ namespace bedrock.util
     /// Idle time calculations and notifications.
     /// </summary>
     [SVN(@"$Id$")]
-    public class IdleTime : System.ComponentModel.Component
+    public class IdleTime
     {
         [StructLayout(LayoutKind.Sequential)]
         private struct LASTINPUTINFO
@@ -99,8 +97,6 @@ namespace bedrock.util
         /// <summary>
         /// Is the timer running?
         /// </summary>
-        [Category("Logic")]
-        [DefaultValue(false)]
         public bool Enabled
         {
             get { return m_timer.Enabled; }
@@ -110,8 +106,6 @@ namespace bedrock.util
         /// <summary>
         /// Time, in seconds, between checking for
         /// </summary>
-        [Category("Time")]
-        [DefaultValue(DEFAULT_POLL)]
         public double PollInterval
         {
             get { return m_timer.Interval / 1000.0; }
@@ -121,8 +115,6 @@ namespace bedrock.util
         /// <summary>
         /// The amount of time (in seconds) the computer can be idle before OnIdle is fired.
         /// </summary>
-        [Category("Time")]
-        [DefaultValue(DEFAULT_IDLE)]
         public double IdleLength
         {
             get { return m_notifySecs;  }
@@ -132,7 +124,6 @@ namespace bedrock.util
         /// <summary>
         /// Are we currently idle?
         /// </summary>
-        [Category("Logic")]
         public bool IsIdle
         {
             get { return m_idle; }
@@ -141,30 +132,10 @@ namespace bedrock.util
         /// <summary>
         /// Invoke() all callbacks on this control.
         /// </summary>
-        [Description("Invoke all callbacks on this control")]
-        [DefaultValue(null)]
-        [Category("Logic")]
         public ISynchronizeInvoke InvokeControl
         {
             get
             {
-                // If we are running in the designer, let's try to get
-                // an invoke control from the environment.  VB
-                // programmers can't seem to follow directions.
-                if ((this.m_invoker == null) && DesignMode)
-                {
-                    IDesignerHost host = (IDesignerHost)base.GetService(typeof(IDesignerHost));
-                    if (host != null)
-                    {
-                        object root = host.RootComponent;
-                        if ((root != null) && (root is ISynchronizeInvoke))
-                        {
-                            m_invoker = (ISynchronizeInvoke)root;
-                            // TODO: fire some sort of propertyChanged event,
-                            // so that old code gets cleaned up correctly.
-                        }
-                    }
-                }
                 return m_invoker;
             }
             set { m_invoker = value; }

@@ -15,10 +15,6 @@ using System;
 
 using System.Diagnostics;
 using System.Net;
-using System.Net.Sockets;
-using System.ComponentModel;
-using System.Globalization;
-
 using bedrock.util;
 
 using netlib.Dns;
@@ -137,17 +133,17 @@ namespace bedrock.net
                 throw new ArgumentOutOfRangeException("Prefix must end in '.'", "prefix");
             try
             {
-		SRVRecord record;
+        SRVRecord record;
                 if (Environment.OSVersion.Platform != PlatformID.Unix) {
                     DnsRequest request = new DnsRequest(prefix + domain);
                     DnsResponse response = request.GetResponse(DnsRecordType.SRV);
                     record = PickSRV(response.SRVRecords);
                 } else {
                     var records = UnixDnsResolver.ResolveSRV(prefix + domain);
-		    record = PickSRV(records);
+            record = PickSRV(records);
                 }
-	        host = record.NameNext;
-	        port = record.Port;
+            host = record.NameNext;
+            port = record.Port;
                 Debug.WriteLine(string.Format("SRV found: {0}:{1}", host, port));
             }
             catch
@@ -176,7 +172,7 @@ namespace bedrock.net
 
             try
             {
-		if (Environment.OSVersion.Platform != PlatformID.Unix) {
+        if (Environment.OSVersion.Platform != PlatformID.Unix) {
                     DnsRequest request = new DnsRequest(prefix + domain);
                     DnsResponse response = request.GetResponse(DnsRecordType.TEXT);
                     string attr = attribute + "=";
@@ -188,10 +184,10 @@ namespace bedrock.net
                             return txt.StringArray.Substring(attr.Length);
                         }
                     }
-		} else {
-		    // FIXME: Add TXT support to UnixDnsResolver...
-		    throw new NotImplementedException();
-		}
+        } else {
+            // FIXME: Add TXT support to UnixDnsResolver...
+            throw new NotImplementedException();
+        }
             }
             catch
             {
@@ -303,8 +299,8 @@ namespace bedrock.net
         /// </summary>
         public void Resolve()
         {
-            if ((m_ip != null) && 
-                (m_ip != IPAddress.Any) && 
+            if ((m_ip != null) &&
+                (m_ip != IPAddress.Any) &&
                 (m_ip != IPAddress.IPv6Any))
             {
                 return;

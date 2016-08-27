@@ -60,11 +60,6 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Notifies the user that one of the properties has changed.
-        /// </summary>
-        event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-
-        /// <summary>
         /// Informs the client that the connection to the XMPP server has finished.
         /// Time to send the stream:stream packet.
         /// </summary>

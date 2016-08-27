@@ -11,13 +11,9 @@
  * Jabber-Net is licensed under the LGPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
-using System;
-using System.ComponentModel;
-using System.ComponentModel.Design;
 using System.Xml;
 
 using bedrock.util;
-using System.Diagnostics;
 using jabber.protocol.client;
 
 namespace jabber.connection
@@ -26,44 +22,8 @@ namespace jabber.connection
     /// Manages the XmppStream as a component.
     /// </summary>
     [SVN(@"$Id$")]
-    public abstract class StreamComponent : System.ComponentModel.Component
+    public abstract class StreamComponent
     {
-        /// <summary>
-        /// Finds the first component that subclasses XmppStream in Visual Studio
-        /// during runtime.
-        /// </summary>
-        /// <param name="host">
-        /// Calls GetService(typeof(IDesignerHost)) on your control to get this.
-        /// </param>
-        /// <returns>Null if none found</returns>
-        public static XmppStream GetStreamFromHost(IDesignerHost host)
-        {
-            return (XmppStream)GetComponentFromHost(host, typeof(XmppStream));
-        }
-
-        /// <summary>
-        /// Finds the first component that subclasses the given type at runtime.
-        /// </summary>
-        /// <param name="host">Call GetService(typeof(IDesignerHost)) on your control to get this.</param>
-        /// <param name="type">The type to search for.</param>
-        /// <returns>Null if none found</returns>
-        public static Component GetComponentFromHost(IDesignerHost host, Type type)
-        {
-            if (host == null)
-                return null;
-            Debug.Assert(type != null);
-            Component root = host.RootComponent as Component;
-            if (root == null)
-                return null;
-
-            foreach (Component c in root.Container.Components)
-            {
-                if (type.IsAssignableFrom(c.GetType()))
-                    return c;
-            }
-            return null;
-        }
-
         /// <summary>
         /// Retrieves the XmppStream for this control.
         /// Set at design time when a subclass control is dragged onto a form.
@@ -79,19 +39,10 @@ namespace jabber.connection
         /// <summary>
         /// Gets and sets the JabberClient or JabberService XMPP stream value.
         /// </summary>
-        [Description("The JabberClient or JabberService to hook up to.")]
-        [Category("Jabber")]
         public virtual XmppStream Stream
         {
             get
             {
-                // If we are running in the designer, let's try to get an XmppStream control
-                // from the environment.
-                if ((this.m_stream == null) && DesignMode)
-                {
-                    IDesignerHost host = (IDesignerHost)base.GetService(typeof(IDesignerHost));
-                    this.Stream = GetStreamFromHost(host);
-                }
                 return m_stream;
             }
             set
@@ -109,7 +60,7 @@ namespace jabber.connection
 
         /// <summary>
         /// Override the from address that will be stamped on outbound packets.
-        /// Unless your server implemets XEP-193, you shouldn't use this for 
+        /// Unless your server implemets XEP-193, you shouldn't use this for
         /// client connections.
         /// </summary>
         public JID OverrideFrom

@@ -12,13 +12,7 @@
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
-
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Threading;
 using System.Xml;
-
-using bedrock.net;
 using bedrock.util;
 
 using jabber.connection;
@@ -128,30 +122,21 @@ namespace jabber.server
         /// <summary>
         /// We received a route packet.
         /// </summary>
-        [Category("Protocol")]
-        [Description("We received a route packet.")]
         public event RouteHandler OnRoute;
 
         /// <summary>
         /// We received an XDB packet.
         /// </summary>
-        [Category("Protocol")]
-        [Description("We received an XDB packet.")]
         public event XdbHandler OnXdb;
 
         /// <summary>
         /// We received a Log packet.
         /// </summary>
-        [Category("Protocol")]
-        [Description("We received a Log packet.")]
         public event LogHandler OnLog;
 
         /// <summary>
         /// The service name.  Needs to be in the id attribute in the
         /// jabber.xml file.  </summary>
-        [Description("The service name.  The id attribute in the jabber.xml file.")]
-        [DefaultValue(null)]
-        [Category("Component")]
         public string ComponentID
         {
             get { return (string)this[Options.TO]; }
@@ -165,10 +150,6 @@ namespace jabber.server
         /// <summary>
         /// Should not be used for components.  Set NetworkHost instead.
         /// </summary>
-        [Description("The name of the Jabber server.")]
-        [DefaultValue("jabber.com")]
-        [Category("Jabber")]
-        [Browsable(false)]
         [Obsolete]
         public override string Server
         {
@@ -179,10 +160,6 @@ namespace jabber.server
         /// <summary>
         /// Component secret.
         /// </summary>
-        [Description("Component secret.")]
-        [DefaultValue(null)]
-        [Category("Component")]
-        [PasswordPropertyText]
         public string Secret
         {
             get { return (string)this[Options.PASSWORD]; }
@@ -193,9 +170,6 @@ namespace jabber.server
         /// Is this an outgoing connection (base_accept), or an incoming
         /// connection (base_connect).
         /// </summary>
-        [Description("Is this an outgoing connection (base_accept), or an incoming connection (base_connect).")]
-        [DefaultValue(ComponentType.Accept)]
-        [Category("Component")]
         public ComponentType Type
         {
             get { return (ComponentType)this[Options.COMPONENT_DIRECTION]; }
@@ -215,7 +189,6 @@ namespace jabber.server
         /// <summary>
         /// The stream namespace for this connection.
         /// </summary>
-        [Browsable(false)]
         protected override string NS
         {
             get
@@ -225,7 +198,7 @@ namespace jabber.server
         }
 
         /// <summary>
-        /// Override the from address that is stamped on all outbound stanzas that 
+        /// Override the from address that is stamped on all outbound stanzas that
         /// have no from address.
         /// </summary>
         public JID OverrideFrom

@@ -13,12 +13,10 @@
  * --------------------------------------------------------------------------*/
 using System;
 
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
-using System.Threading;
 using bedrock.util;
 
 using System.Security.Authentication;
@@ -101,7 +99,6 @@ namespace bedrock.net
         ///
         /// Setting this modifies AllowedSSLErrors by side-effect.
         /// </summary>
-        [DefaultValue(false)]
         [Obsolete("Catch OnInvalidCertificate, instead")]
         public static bool UntrustedRootOK
         {

@@ -14,7 +14,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 
 using bedrock.util;
@@ -23,7 +22,6 @@ using jabber.protocol.client;
 using jabber.protocol.iq;
 using jabber.client;
 using jabber.protocol.x;
-using System.ComponentModel.Design;
 
 namespace jabber.connection
 {
@@ -88,7 +86,6 @@ namespace jabber.connection
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
         private Dictionary<JID, Room> m_rooms = new Dictionary<JID, Room>();
         private string m_nick = null;
 
@@ -98,7 +95,6 @@ namespace jabber.connection
         public ConferenceManager()
         {
             this.OnStreamChanged += new bedrock.ObjectHandler(ConferenceManager_OnStreamChanged);
-            InitializeComponent();
         }
 
         private void ConferenceManager_OnStreamChanged(object sender)
@@ -141,59 +137,21 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Creates a new conference manager in a container
-        /// </summary>
-        /// <param name="container">Parent container.</param>
-        public ConferenceManager(IContainer container) : this()
-        {
-            container.Add(this);
-        }
-
-        /// <summary>
-        /// Performs tasks associated with freeing, releasing, or resetting resources.
-        /// </summary>
-        /// <param name="disposing">True if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-        #region Component Designer generated code
-
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
-        private void InitializeComponent()
-        {
-            components = new System.ComponentModel.Container();
-        }
-
-        #endregion
-
-        /// <summary>
         /// Finished joining the room, including all potential configuration.
         /// If set, will be added to each room created through the manager.
         /// </summary>
-        [Category("Room")]
         public event RoomEvent OnJoin;
 
         /// <summary>
         /// Finished leaving the room, or was kicked/banned, or the room server went down cleanly.
         /// If set, will be added to each room created through the manager.
         /// </summary>
-        [Category("Room")]
         public event RoomPresenceHandler OnLeave;
 
         /// <summary>
         /// Error in response to a room join, nick change, or presence update.
         /// If set, will be added to each room created through the manager.
         /// </summary>
-        [Category("Room")]
         public event RoomPresenceHandler OnPresenceError;
 
         /// <summary>
@@ -201,21 +159,18 @@ namespace jabber.connection
         /// The IQ in the callback is the parent of the x:data element.
         /// If set, will be added to each room created through the manager.
         /// </summary>
-        [Category("Room")]
         public event ConfigureRoom OnRoomConfig;
 
         /// <summary>
         /// A message broadcast to all in the room
         /// If set, will be added to each room created through the manager.
         /// </summary>
-        [Category("Room")]
         public event MessageHandler OnRoomMessage;
 
         /// <summary>
         /// A side-chat message.
         /// If set, will be added to each room created through the manager.
         /// </summary>
-        [Category("Room")]
         public event MessageHandler OnPrivateMessage;
 
         /// <summary>
@@ -223,67 +178,57 @@ namespace jabber.connection
         /// like kick/ban.
         /// If set, will be added to each room created through the manager.
         /// </summary>
-        [Category("Room")]
         public event MessageHandler OnAdminMessage;
 
         /// <summary>
         /// A message that was sent by this user to the room, echo'd back.
         /// If set, will be added to each room created through the manager.
         /// </summary>
-        [Category("Room")]
         public event MessageHandler OnSelfMessage;
 
         /// <summary>
         /// The subject of the room has been changed
         /// If set, will be added to each room created through the manager.
         /// </summary>
-        [Category("Room")]
         public event MessageHandler OnSubjectChange;
 
         /// <summary>
         /// A participant has joined the room.  This will not fire for yourself.
         /// If set, will be added to each room created through the manager.
         /// </summary>
-        [Category("Room")]
         public event RoomParticipantEvent OnParticipantJoin;
 
         /// <summary>
         /// A participant has left the room.  This will not fire for yourself.
         /// If set, will be added to each room created through the manager.
         /// </summary>
-        [Category("Room")]
         public event RoomParticipantEvent OnParticipantLeave;
 
         /// <summary>
         /// You have changed presence, without joining or leaving the room.
         /// If set, will be added to each room created through the manager.
         /// </summary>
-        [Category("Room")]
         public event RoomParticipantPresenceEvent OnPresenceChange;
 
         /// <summary>
         /// A participant has changed presence, without joining or leaving the room.  This will not fire for yourself.
         /// If set, will be added to each room created through the manager.
         /// </summary>
-        [Category("Room")]
         public event RoomParticipantPresenceEvent OnParticipantPresenceChange;
 
         /// <summary>
         /// An invite was received.  A room object will be passed in as the sender.
         /// </summary>
-        [Category("Manager")]
         public event MessageHandler OnInvite;
 
         /// <summary>
         /// The default room nickname, if one is not specified.  If none
         /// specified, the user name from the stream JID is used.
         /// </summary>
-        [Category("Manager")]
-        [DefaultValue(null)]
         public string DefaultNick
         {
-            get 
-            { 
+            get
+            {
                 if (m_nick != null)
                     return m_nick;
                 if ((m_stream == null) || m_stream.JID == null)
@@ -309,8 +254,8 @@ namespace jabber.connection
             if (roomAndNick.Resource == null)
                 roomAndNick.Resource = DefaultNick;
 
-	    if (m_rooms.ContainsKey(roomAndNick))
-            	return m_rooms[roomAndNick];
+        if (m_rooms.ContainsKey(roomAndNick))
+                return m_rooms[roomAndNick];
 
             // If no resource specified, pick up the user's name from their JID
             if (roomAndNick.Resource == null)
@@ -357,18 +302,18 @@ namespace jabber.connection
             m_rooms.Remove(roomAndNick);
         }
 
-	public IEnumerable<Room> Rooms
-	{
-	    get{ 
-	        return m_rooms.Values;
-	    }
-	}
+    public IEnumerable<Room> Rooms
+    {
+        get{
+            return m_rooms.Values;
+        }
+    }
 
-	public int Count {
-		get {
-			return m_rooms.Count;
-		}
-	}
+    public int Count {
+        get {
+            return m_rooms.Count;
+        }
+    }
 
         private class UniqueState
         {
@@ -548,32 +493,27 @@ namespace jabber.connection
         /// <summary>
         /// A participant has joined the room.  This will not fire for yourself.
         /// </summary>
-        [Category("Room")]
         public event RoomParticipantEvent OnParticipantJoin;
 
         /// <summary>
         /// A participant has left the room.  This will not fire for yourself.
         /// </summary>
-        [Category("Room")]
         public event RoomParticipantEvent OnParticipantLeave;
 
         /// <summary>
         /// A participant has changed presence, without joining or leaving the room.  This will not fire for yourself.
         /// </summary>
-        [Category("Room")]
         public event RoomParticipantPresenceEvent OnParticipantPresenceChange;
 
         /// <summary>
         /// You have changed presence, without joining or leaving the room.
         /// </summary>
-        [Category("Room")]
         public event RoomParticipantPresenceEvent OnPresenceChange;
 
         /// <summary>
         /// Determines whether to use the default conference room configuration
         /// or to retrieve the configuration form from the XMPP server.
         /// </summary>
-        [DefaultValue(false)]
         public bool DefaultConfig
         {
             get { return m_default; }
@@ -586,10 +526,10 @@ namespace jabber.connection
         public string Subject
         {
             get {
-	        if (m_subject != null)
-	            return m_subject.Subject;
+            if (m_subject != null)
+                return m_subject.Subject;
                 else
-	            return null;
+                return null;
             }
             set
             {

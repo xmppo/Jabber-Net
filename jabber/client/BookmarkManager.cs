@@ -13,9 +13,6 @@
  * --------------------------------------------------------------------------*/
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.Design;
-
 using bedrock.util;
 using jabber.connection;
 using jabber.protocol.client;
@@ -35,9 +32,9 @@ namespace jabber.client
     /// Manager bookmarks on the server, with the old-style iq:private.
     /// TODO: add support for new-style PEP.
     /// </summary>
-    [SVN(@"$Id$")]    
+    [SVN(@"$Id$")]
     public class BookmarkManager : jabber.connection.StreamComponent
-	{
+    {
         private bool m_autoPrivate = true;
         private ConferenceManager m_confManager;
         private Dictionary<JID, BookmarkConference> m_conferences = new Dictionary<JID, BookmarkConference>();
@@ -45,27 +42,14 @@ namespace jabber.client
         /// <summary>
         /// Create
         /// </summary>
-		public BookmarkManager()
-		{
-			InitializeComponent();
+        public BookmarkManager()
+        {
             this.OnStreamChanged += new bedrock.ObjectHandler(BookmarkManager_OnStreamChanged);
-		}
-
-        /// <summary>
-        /// Create
-        /// </summary>
-        /// <param name="container"></param>
-		public BookmarkManager(IContainer container) : this()
-		{
-			container.Add(this);
-		}
+        }
 
         /// <summary>
         /// Automatically request bookmarks using iq:private on login.
         /// </summary>
-        [Category("Bookmarks")]
-        [Description("Automatically request bookmarks using iq:private on login.")]
-        [DefaultValue(true)]
         public bool AutoPrivate
         {
             get { return m_autoPrivate; }
@@ -75,31 +59,20 @@ namespace jabber.client
         /// <summary>
         /// A conference bookmark has been .
         /// </summary>
-        [Category("Bookmarks")]
-        [Description("A conference bookmark has been added to the list.")]
         public event BookmarkConferenceDelegate OnConferenceAdd;
 
         /// <summary>
         /// A conference bookmark has been removed from the list.
         /// </summary>
-        [Category("Bookmarks")]
-        [Description("A conference bookmark has been removed from the list.")]
         public event BookmarkConferenceDelegate OnConferenceRemove;
 
         /// <summary>
         /// A ConferenceManager into which to auto-join conference rooms.
         /// </summary>
-        [Category("Jabber")]
         public ConferenceManager ConferenceManager
         {
             get
             {
-                // If we are running in the designer, let's try to auto-hook a ConferenceManager
-                if ((m_confManager == null) && DesignMode)
-                {
-                    IDesignerHost host = (IDesignerHost)base.GetService(typeof(IDesignerHost));
-                    this.ConferenceManager = (ConferenceManager)jabber.connection.StreamComponent.GetComponentFromHost(host, typeof(ConferenceManager));
-                }
                 return m_confManager;
             }
             set
@@ -212,23 +185,23 @@ namespace jabber.client
             }
         }
 
-	/// <summary>
-	/// Returns the number of bookmarked conferences.
-	/// </summary>
-	public int Count {
-		get {
-			return m_conferences.Count;
-		}
-	}
+    /// <summary>
+    /// Returns the number of bookmarked conferences.
+    /// </summary>
+    public int Count {
+        get {
+            return m_conferences.Count;
+        }
+    }
 
-	/// <summary>
-	/// Exposes an enumerator for all bookmarked conferences.
-	/// </summary>
-	public IEnumerable<BookmarkConference> Conferences {
-		get {
-			return m_conferences.Values;
-		}
-	}
+    /// <summary>
+    /// Exposes an enumerator for all bookmarked conferences.
+    /// </summary>
+    public IEnumerable<BookmarkConference> Conferences {
+        get {
+            return m_conferences.Values;
+        }
+    }
 
         private void BookmarksSet(object sender, IQ iq, object state)
         {
@@ -276,36 +249,5 @@ namespace jabber.client
             this[jid] = c;
             return c;
         }
-
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
-
-        /// <summary> 
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-        #region Component Designer generated code
-
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
-        private void InitializeComponent()
-        {
-            components = new System.ComponentModel.Container();
-        }
-
-        #endregion
-	}
+    }
 }

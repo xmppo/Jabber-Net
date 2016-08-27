@@ -149,9 +149,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="bedrock\net\UnixDnsResolver.cs" />
-    <Compile Include="jabber\client\BookmarkManager.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="jabber\client\BookmarkManager.cs" />
     <Compile Include="jabber\connection\FileMap.cs" />
     <Compile Include="bedrock\io\ReadEventStream.cs">
       <SubType>Code</SubType>
@@ -195,43 +193,27 @@
     <Compile Include="bedrock\util\GetOptBase.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="bedrock\util\IdleTime.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="bedrock\util\IdleTime.cs" />
     <Compile Include="bedrock\util\Version.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="jabber\connection\BindingStanzaStream.cs" />
-    <Compile Include="jabber\connection\CapsManager.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="jabber\connection\CapsManager.cs" />
     <Compile Include="jabber\connection\CertificatePrompt.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="jabber\connection\ConferenceManager.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="jabber\connection\DiscoManager.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="jabber\client\JabberClient.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="jabber\client\PresenceManager.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="jabber\client\RosterManager.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="jabber\connection\ConferenceManager.cs" />
+    <Compile Include="jabber\connection\DiscoManager.cs" />
+    <Compile Include="jabber\client\JabberClient.cs" />
+    <Compile Include="jabber\client\PresenceManager.cs" />
+    <Compile Include="jabber\client\RosterManager.cs" />
     <Compile Include="jabber\connection\HttpStanzaStream.cs" />
     <Compile Include="jabber\connection\HttpUploader.cs" />
     <Compile Include="jabber\connection\IQTracker.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="jabber\connection\PollingStanzaStream.cs" />
-    <Compile Include="jabber\connection\PubSubManager.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="jabber\connection\PubSubManager.cs" />
     <Compile Include="jabber\connection\sasl\AnonymousProcessor.cs" />
     <Compile Include="jabber\connection\sasl\ExternalProcessor.cs" />
     <Compile Include="jabber\connection\sasl\KerbProcessor.cs" />
@@ -244,12 +226,8 @@
     <Compile Include="jabber\connection\sasl\SASLProcessor.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="jabber\connection\StreamComponent.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="jabber\connection\XmppStream.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="jabber\connection\StreamComponent.cs" />
+    <Compile Include="jabber\connection\XmppStream.cs" />
     <Compile Include="jabber\connection\SocketStanzaStream.cs" />
     <Compile Include="jabber\connection\StanzaStream.cs" />
     <Compile Include="jabber\connection\States.cs">
@@ -402,9 +380,7 @@
     <Compile Include="jabber\protocol\x\Factory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="jabber\server\JabberService.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="jabber\server\JabberService.cs" />
     <Compile Include="jabber\server\XdbTracker.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -443,10 +419,6 @@
     <Compile Include="xpnet\UTF8Encoding.cs">
       <SubType>Code</SubType>
     </Compile>
-    <EmbeddedResource Include="jabber\client\JabberClient.bmp" />
-    <EmbeddedResource Include="jabber\client\JabberClient.resx">
-      <DependentUpon>JabberClient.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="jabber\client\PresenceManager.bmp" />
     <EmbeddedResource Include="jabber\client\RosterManager.bmp" />
     <EmbeddedResource Include="jabber\client\RosterManager.resx">
