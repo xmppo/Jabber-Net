@@ -6,10 +6,30 @@ Messaging and Presence Protocol (XMPP), also known as the Jabber. Client
 connections, server component connections, presence, service discovery, and the
 like.
 
+Build and test
+--------------
+
+Either use Visual Studio 2015 on Windows or `nuget` + `msbuild` / `xbuild` in
+your terminal. On Windows:
+
+```console
+> nuget restore jabber-net.sln
+> msbuild jabber-net.sln /p:Configuration=Debug
+> .\packages\NUnit.ConsoleRunner.3.4.1\tools\nunit3-console.exe  .\test\bin5\Debug\test.dll
+```
+
+On Linux:
+
+```console
+$ nuget restore jabber-net.sln
+$ xbuild /p:Configuration=Debug jabber-net.sln
+$ mono ./packages/NUnit.ConsoleRunner.3.4.1/tools/nunit3-console.exe  ./test/bin5/Debug/test.dll
+```
+
 Packaging
 ---------
 
-To build [Nuget][nuget] package for Jabber.Net, use the script
+To build [NuGet][nuget] package for Jabber.Net, use the script
 `Scripts/Package.ps1`. If you want to push this package to the Nuget feed, use
 `Scripts/Push-Package.ps1`.
 
