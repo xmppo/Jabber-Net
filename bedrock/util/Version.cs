@@ -12,12 +12,11 @@
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
 using System;
-
-using System.Collections;
 using System.Collections.Specialized;
+using System.Globalization;
 using System.Reflection;
-using System.Text;
 using System.Text.RegularExpressions;
+
 namespace bedrock.util
 {
     /// <summary>
@@ -305,6 +304,8 @@ namespace bedrock.util
                     AllowMultiple=false, Inherited=false)]
     public class StarTeamAttribute : SourceVersionAttribute
     {
+        private const string DateTimeFormat = "MM/dd/yyyy h:mm:ss tt";
+
         // Dammit gumby.  Don't mess up my regex.
         private static readonly Regex REGEX =
             new Regex(@"^\$" + @"Header(: (?<archive>[^,]+), (?<version>[0-9.]+), (?<date>[^,]+), (?<author>[^$]+))?" + @"\$$");
@@ -351,8 +352,11 @@ namespace bedrock.util
             {
                 m_archive = m.Groups["archive"].ToString();
                 m_version = m.Groups["version"].ToString();
-                m_date    = DateTime.Parse(m.Groups["date"].ToString());
-                m_author  = m.Groups["author"].ToString();
+                m_date = DateTime.ParseExact(
+                    m.Groups["date"].ToString(),
+                    DateTimeFormat,
+                    CultureInfo.InvariantCulture);
+                m_author = m.Groups["author"].ToString();
             }
         }
     }
