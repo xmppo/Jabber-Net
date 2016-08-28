@@ -195,7 +195,7 @@ namespace Example
             this.subscribePubSubToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deletePubSubToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.psm = new jabber.connection.PubSubManager();
-            this.idler = new bedrock.util.IdleTime();
+            this.idler = new IdleTime();
             this.muc = new jabber.connection.ConferenceManager();
             this.bmm = new jabber.client.BookmarkManager();
             ((System.ComponentModel.ISupportInitialize)(this.pnlCon)).BeginInit();
@@ -641,8 +641,8 @@ namespace Example
             // idler
             //
             this.idler.InvokeControl = this;
-            this.idler.OnIdle += new bedrock.util.SpanEventHandler(this.idler_OnIdle);
-            this.idler.OnUnIdle += new bedrock.util.SpanEventHandler(this.idler_OnUnIdle);
+            this.idler.OnIdle += new SpanEventHandler(this.idler_OnIdle);
+            this.idler.OnUnIdle += new SpanEventHandler(this.idler_OnUnIdle);
             //
             // muc
             //

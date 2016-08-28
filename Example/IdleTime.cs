@@ -14,8 +14,9 @@
 using System;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
+using bedrock.util;
 
-namespace bedrock.util
+namespace Example
 {
     /// <summary>
     /// TimeSpan event.
