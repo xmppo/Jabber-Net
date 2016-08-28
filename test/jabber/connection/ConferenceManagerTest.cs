@@ -230,6 +230,7 @@ namespace test.jabber.connection
             using (mocks.Record())
             {
                 CreateJoinExpected(CreateJoinResponsePacket);
+
                 stream.Write((XmlElement)null);
                 LastCall.Callback((Func<XmlElement, bool>)
                                   delegate (XmlElement elem)
@@ -275,10 +276,10 @@ namespace test.jabber.connection
                               {
                                   onProtocol.Raise(new object[] { null, sendPresence(elem) });
 
-                                  elem.RemoveAttribute("id"); // remove non-constant attribute
+                                  var id = elem.GetAttribute("id");
                                   string original = elem.OuterXml;
                                   return original.Replace(" ", "") ==
-                                         GetJoinPresence().Replace(" ", "");
+                                         GetJoinPresence(id).Replace(" ", "");
                               });
         }
 
@@ -309,7 +310,6 @@ namespace test.jabber.connection
             {
                 CreateJoinExpected(CreateJoinResponsePacket);
 
-                Expect.Call(stream.Document).Return(doc);
                 stream.Write((XmlElement)null);
                 LastCall.Callback((Func<XmlElement, bool>)
                                   delegate(XmlElement elem)
@@ -413,14 +413,11 @@ namespace test.jabber.connection
                     jid, REASON);
         }
 
-        private string GetJoinPresence()
+        private string GetJoinPresence(string id)
         {
-            return
-                string.Format(
-                    "<presence to=\"{0}\">" +
-                        "<x xmlns=\"{1}\"/>" +
-                    "</presence>",
-                    jid, URI.MUC);
+            return $"<presence id=\"{id}\" to=\"{jid}\">" +
+                    $"<x xmlns=\"{URI.MUC}\"/>" +
+                "</presence>";
         }
 
         private string GetRoomMessage(string id)
