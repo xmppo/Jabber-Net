@@ -90,7 +90,6 @@ namespace test.jabber.connection
                         return original == comparison;
                     });
 
-                Expect.Call(stream.Document).Return(doc);
                 SetupTrackerBeginIq(
                     delegate(IQ arg0, IqCB arg1, object arg2)
                     {
@@ -98,7 +97,8 @@ namespace test.jabber.connection
                         string original = arg0.OuterXml;
                         return original.Replace(" ", "") ==
                                GetItemsForServiceXml(id).Replace(" ", "");
-                    });
+                    },
+                    false);
             }
 
             using (mocks.Playback())
@@ -245,9 +245,13 @@ namespace test.jabber.connection
         }
 
         private delegate T Func<A0, A1, A2, T>(A0 arg0, A1 arg1, A2 arg2);
-        private void SetupTrackerBeginIq(Func<IQ, IqCB, object, bool> func)
+        private void SetupTrackerBeginIq(Func<IQ, IqCB, object, bool> func, bool verifyTracker = true)
         {
-            Expect.Call(stream.Tracker).Return(tracker);
+            if (verifyTracker)
+            {
+                Expect.Call(stream.Tracker).Return(tracker);
+            }
+
             tracker.BeginIQ(null, null, null);
             LastCall.Callback(func);
         }

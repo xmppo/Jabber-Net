@@ -169,7 +169,6 @@ namespace test.jabber.connection
             using (mocks.Record())
             {
                 Expect.Call(stream.Document).Return(doc);
-                Expect.Call(stream.Document).Return(doc);
                 SetupTrackerBeginIq(delegate(IQ iq, IqCB cb, object cbArg)
                     {
                         string id = iq.GetAttribute("id");

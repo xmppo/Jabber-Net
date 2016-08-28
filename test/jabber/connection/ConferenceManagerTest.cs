@@ -124,8 +124,6 @@ namespace test.jabber.connection
             using (mocks.Record())
             {
                 CreateJoinExpected(CreateJoinNeedConfigResponsePacket);
-
-                Expect.Call(stream.Document).Return(doc);
                 SetupTrackerBeginIq(delegate(IQ iq, IqCB cb, object cbArg)
                     {
                         string id = iq.GetAttribute("id");
@@ -232,11 +230,9 @@ namespace test.jabber.connection
             using (mocks.Record())
             {
                 CreateJoinExpected(CreateJoinResponsePacket);
-
-                Expect.Call(stream.Document).Return(doc);
                 stream.Write((XmlElement)null);
                 LastCall.Callback((Func<XmlElement, bool>)
-                                  delegate(XmlElement elem)
+                                  delegate (XmlElement elem)
                                   {
                                       string id = elem.GetAttribute("id");
                                       string original = elem.OuterXml;
