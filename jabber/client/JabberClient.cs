@@ -47,7 +47,6 @@ namespace jabber.client
     /// You can install this in your Toolbox, drop onto a form, a service, and so on.
     /// This class hooks into the OnProtocol event and calls the Connect() method.
     /// </summary>
-    [SVN(@"$Id: JabberClient.cs 724 2008-08-06 18:09:25Z hildjj $")]
     public class JabberClient : XmppStream
     {
         private static readonly object[][] DEFAULTS = new object[][] {

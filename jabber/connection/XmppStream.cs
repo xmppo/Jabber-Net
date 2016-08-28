@@ -216,7 +216,6 @@ namespace jabber.connection
     /// <summary>
     /// Manages the XMPP stream of the connection.
     /// </summary>
-    [SVN(@"$Id: XmppStream.cs 724 2008-08-06 18:09:25Z hildjj $")]
     abstract public class XmppStream : IStanzaEventListener
     {
         private static readonly object[][] DEFAULTS = new object[][] {

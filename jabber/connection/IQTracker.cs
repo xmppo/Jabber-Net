@@ -48,7 +48,6 @@ namespace jabber.connection
     ///<summary>
     /// Represents the interface for tracking an IQ packet.
     ///</summary>
-    [SVN(@"$Id$")]
     public interface IIQTracker
     {
         ///<summary>
