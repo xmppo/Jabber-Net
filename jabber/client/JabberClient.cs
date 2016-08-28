@@ -119,7 +119,7 @@ namespace jabber.client
         /// Informs the client that the presence is about to be sent.
         /// This gives a chance to modify outbound presence (fore example, entity caps).
         /// </summary>
-        public event PresenceHandler OnBeforePresenceOut;
+        public virtual event PresenceHandler OnBeforePresenceOut;
 
         /// <summary>
         /// Informs the client that the presence has been sent.

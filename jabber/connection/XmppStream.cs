@@ -381,7 +381,7 @@ namespace jabber.connection
         /// This is a union of the OnPresence, OnMessage, and OnIQ methods.
         /// Use this *or* the other 3 methods, but not both, as a matter of style.
         /// </summary>
-        public event ProtocolHandler OnProtocol;
+        public virtual event ProtocolHandler OnProtocol;
 
         /// <summary>
         /// Notifies the client that the stream header, as a packet,
@@ -413,7 +413,7 @@ namespace jabber.connection
         /// <summary>
         /// Informs the client that the connection is complete and the user is authenticated.
         /// </summary>
-        public event bedrock.ObjectHandler OnAuthenticate;
+        public virtual event bedrock.ObjectHandler OnAuthenticate;
 
         /// <summary>
         /// Informs the client that the connection is connected,
@@ -442,7 +442,7 @@ namespace jabber.connection
         /// <summary>
         /// Gets the tracker for sending IQ packets.
         /// </summary>
-        public IIQTracker Tracker
+        public virtual IIQTracker Tracker
         {
             get { return m_tracker; }
         }
@@ -690,7 +690,7 @@ namespace jabber.connection
         /// <summary>
         /// Retrieves the outbound document.
         /// </summary>
-        public XmlDocument Document
+        public virtual XmlDocument Document
         {
             get { return m_doc; }
         }
