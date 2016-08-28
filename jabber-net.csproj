@@ -419,8 +419,6 @@
     <Compile Include="xpnet\UTF8Encoding.cs">
       <SubType>Code</SubType>
     </Compile>
-    <EmbeddedResource Include="jabber\client\PresenceManager.bmp" />
-    <EmbeddedResource Include="jabber\client\RosterManager.bmp" />
     <EmbeddedResource Include="jabber\client\RosterManager.resx">
       <DependentUpon>RosterManager.cs</DependentUpon>
     </EmbeddedResource>
@@ -428,7 +426,6 @@
       <DependentUpon>XmppStream.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="jabber\server\JabberService.bmp" />
     <EmbeddedResource Include="jabber\server\JabberService.resx">
       <DependentUpon>JabberService.cs</DependentUpon>
     </EmbeddedResource>
@@ -438,20 +435,10 @@
     <None Include="jabber-net.nuspec" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="jabber\connection\DiscoManager.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="jabber\connection\CapsManager.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="jabber\connection\PubSubManager.bmp" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="jabber\connection\CertificatePrompt.resx">
       <SubType>Designer</SubType>
       <DependentUpon>CertificatePrompt.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="jabber\connection\ConferenceManager.bmp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Condition="'$(BuildMono)'==''" Include="netlib.Dns\netlib.Dns.csproj">
