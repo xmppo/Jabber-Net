@@ -3,3 +3,5 @@ before_build:
 - nuget restore
 build:
     project: jabber-net.sln
+after_test:
+- ps: ./Scripts/Package.ps1
