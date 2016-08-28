@@ -22,6 +22,7 @@ using bedrock.util;
 using System.Security.Authentication;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
+using zlib;
 
 namespace bedrock.net
 {
@@ -761,7 +762,7 @@ namespace bedrock.net
         /// </summary>
         public override void StartCompression()
         {
-            m_stream = new bedrock.io.ZlibStream(m_stream, ComponentAce.Compression.Libs.zlib.zlibConst.Z_FULL_FLUSH);
+            m_stream = new io.ZlibStream(m_stream, zlibConst.Z_FULL_FLUSH);
         }
 
         /// <summary>

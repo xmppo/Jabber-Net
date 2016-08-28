@@ -13,10 +13,8 @@
  * --------------------------------------------------------------------------*/
 using System;
 using System.IO;
-using System.Diagnostics;
-
 using bedrock.util;
-using ComponentAce.Compression.Libs.zlib;
+using zlib;
 
 namespace bedrock.io
 {
