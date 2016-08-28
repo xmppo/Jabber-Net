@@ -14,9 +14,6 @@
 using System;
 using System.Collections;
 using System.ComponentModel;
-using System.ComponentModel.Design;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 using System.Xml;
 
@@ -54,7 +51,7 @@ namespace muzzle
         protected OptionForm()
         {
             InitializeComponent();
-			this.AutoValidate = System.Windows.Forms.AutoValidate.Disable;
+            this.AutoValidate = System.Windows.Forms.AutoValidate.Disable;
         }
 
         /// <summary>
@@ -75,14 +72,6 @@ namespace muzzle
         {
             get
             {
-                // If we are running in the designer, let's try to auto-hook a JabberClient
-                if ((m_xmpp == null) && DesignMode)
-                {
-                    IDesignerHost host = (IDesignerHost)base.GetService(typeof(IDesignerHost));
-                    if (host == null)
-                        return null;
-                    m_xmpp = StreamComponent.GetStreamFromHost(host);
-                }
                 return m_xmpp;
             }
             set

@@ -11,10 +11,7 @@
  * Jabber-Net is licensed under the LGPL.
  * See LICENSE.txt for details.
  * --------------------------------------------------------------------------*/
-using System;
-using System.Text;
 using System.ComponentModel;
-using System.ComponentModel.Design;
 using System.Xml;
 
 using bedrock.util;
@@ -49,13 +46,6 @@ namespace muzzle
         {
             get
             {
-                // If we are running in the designer, let's try to get an XmppStream control
-                // from the environment.
-                if ((this.m_stream == null) && DesignMode)
-                {
-                    IDesignerHost host = (IDesignerHost)base.GetService(typeof(IDesignerHost));
-                    this.Stream = StreamComponent.GetStreamFromHost(host);
-                }
                 return m_stream;
             }
             set
@@ -73,7 +63,7 @@ namespace muzzle
 
         /// <summary>
         /// Override the from address that will be stamped on outbound packets.
-        /// Unless your server implemets XEP-193, you shouldn't use this for 
+        /// Unless your server implemets XEP-193, you shouldn't use this for
         /// client connections.
         /// </summary>
         public JID OverrideFrom

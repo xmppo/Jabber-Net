@@ -15,9 +15,7 @@ using System;
 
 using System.Collections;
 using System.ComponentModel;
-using System.ComponentModel.Design;
 using System.Drawing;
-using System.Diagnostics;
 using System.Windows.Forms;
 
 using bedrock.collections;
@@ -257,12 +255,6 @@ namespace muzzle
         {
             get
             {
-                // If we are running in the designer, let's try to auto-hook a RosterManager
-                if ((m_roster == null) && DesignMode)
-                {
-                    IDesignerHost host = (IDesignerHost)base.GetService(typeof(IDesignerHost));
-                    this.RosterManager = (RosterManager)jabber.connection.StreamComponent.GetComponentFromHost(host, typeof(RosterManager));
-                }
                 return m_roster;
             }
             set
@@ -287,12 +279,6 @@ namespace muzzle
         {
             get
             {
-                // If we are running in the designer, let's try to auto-hook a PresenceManager
-                if ((m_pres == null) && DesignMode)
-                {
-                    IDesignerHost host = (IDesignerHost) base.GetService(typeof(IDesignerHost));
-                    this.PresenceManager = (PresenceManager)jabber.connection.StreamComponent.GetComponentFromHost(host, typeof(PresenceManager));
-                }
                 return m_pres;
             }
             set
@@ -313,12 +299,6 @@ namespace muzzle
         {
             get
             {
-                // If we are running in the designer, let's try to auto-hook a JabberClient
-                if ((m_client == null) && DesignMode)
-                {
-                    IDesignerHost host = (IDesignerHost) base.GetService(typeof(IDesignerHost));
-                    this.Client = (JabberClient)jabber.connection.StreamComponent.GetComponentFromHost(host, typeof(JabberClient));
-                }
                 return m_client;
             }
             set
