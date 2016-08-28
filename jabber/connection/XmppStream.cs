@@ -1620,22 +1620,9 @@ namespace jabber.connection
                 OnElement(m_stanzas, elem);
         }
 
-        private bool ShowCertificatePrompt(object sender,
-            System.Security.Cryptography.X509Certificates.X509Certificate certificate,
-            System.Security.Cryptography.X509Certificates.X509Chain chain,
-            System.Net.Security.SslPolicyErrors sslPolicyErrors)
-        {
-#if !__MonoCS__
-            CertificatePrompt cp = new CertificatePrompt((X509Certificate2)certificate, chain, sslPolicyErrors);
-            return (cp.ShowDialog() == System.Windows.Forms.DialogResult.OK);
-#else
-            return false;
-#endif
-        }
-
         bool IStanzaEventListener.OnInvalidCertificate(bedrock.net.BaseSocket sock,
-            System.Security.Cryptography.X509Certificates.X509Certificate certificate,
-            System.Security.Cryptography.X509Certificates.X509Chain chain,
+            X509Certificate certificate,
+            X509Chain chain,
             System.Net.Security.SslPolicyErrors sslPolicyErrors)
         {
             if (OnInvalidCertificate != null)
@@ -1653,10 +1640,8 @@ namespace jabber.connection
                     return false;
                 }
             }
-            if ((m_invoker == null) || (!m_invoker.InvokeRequired))
-                return ShowCertificatePrompt(sock, certificate, chain, sslPolicyErrors);
 
-            return (bool)m_invoker.Invoke(new System.Net.Security.RemoteCertificateValidationCallback(ShowCertificatePrompt), new object[]{ sock, certificate, chain, sslPolicyErrors });
+            return false;
         }
 
         #endregion
