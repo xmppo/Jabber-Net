@@ -14,8 +14,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
-
 using bedrock.util;
 using jabber.protocol;
 using jabber.protocol.client;
@@ -819,10 +817,6 @@ namespace jabber.connection
 
         private void ConfigForm(object sender, IQ iq, object context)
         {
-            // We should always be on the GUI thread.
-            // XmppStream should invoke before calling OnProtocol in the Tracker.
-            Debug.Assert((m_manager.Stream.InvokeControl == null) || (!m_manager.Stream.InvokeControl.InvokeRequired));
-
             IQ resp = OnRoomConfig(this, iq);
             if (resp == null)
             {

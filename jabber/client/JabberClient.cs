@@ -564,13 +564,7 @@ namespace jabber.client
 
             if (iq.Type == IQType.error)
             {
-                if (OnRegistered != null)
-                {
-                    if (InvokeRequired)
-                        CheckedInvoke(OnRegistered, new object[] {this, iq});
-                    else
-                        OnRegistered(this, iq);
-                }
+                OnRegistered?.Invoke(this, iq);
             }
             else if (iq.Type == IQType.result)
             {
@@ -603,11 +597,7 @@ namespace jabber.client
                 bool res = true;
                 if (OnRegisterInfo != null)
                 {
-                    if (InvokeRequired)
-                        // Don't use CheckedInvoke, since we want this to be synchronous
-                        res = (bool)this.InvokeControl.Invoke(OnRegisterInfo, new object[] { this, r });
-                    else
-                        res = OnRegisterInfo(this, r);
+                    res = OnRegisterInfo(this, r);
                     if (xdata != null)
                     {
                         f = xdata.GetField("username");
@@ -638,13 +628,7 @@ namespace jabber.client
 
         private void OnSetRegister(object sender, IQ iq, object data)
         {
-            if (OnRegistered == null)
-                return;
-
-            if (InvokeRequired)
-                CheckedInvoke(OnRegistered, new object[] {this, iq});
-            else
-                OnRegistered(this, iq);
+            OnRegistered?.Invoke(this, iq);
         }
 
         private void OnGetAuth(object sender, IQ i, object data)
@@ -721,10 +705,7 @@ namespace jabber.client
                 Presence p = tag as Presence;
                 if (p != null)
                 {
-                    if (InvokeRequired)
-                        CheckedInvoke(OnPresence, new object[] {this, p});
-                    else
-                        OnPresence(this, p);
+                    OnPresence(this, p);
                     return;
                 }
             }
@@ -733,10 +714,7 @@ namespace jabber.client
                 Message m = tag as Message;
                 if (m != null)
                 {
-                    if (InvokeRequired)
-                        CheckedInvoke(OnMessage, new object[] {this, m});
-                    else
-                        OnMessage(this, m);
+                    OnMessage(this, m);
                     return;
                 }
             }
@@ -744,10 +722,7 @@ namespace jabber.client
             IQ i = tag as IQ;
             if (i != null)
             {
-                if (InvokeRequired)
-                    CheckedInvoke(new IQHandler(FireOnIQ) , new object[] { this, i });
-                else
-                    FireOnIQ(this, i);
+                FireOnIQ(this, i);
                 return;
             }
         }
@@ -779,10 +754,7 @@ namespace jabber.client
         {
             if (OnAuthError != null)
             {
-                if (InvokeRequired)
-                    CheckedInvoke(OnAuthError, new object[] { this, i });
-                else
-                    OnAuthError(this, i);
+                OnAuthError(this, i);
             }
             else
             {
@@ -808,10 +780,7 @@ namespace jabber.client
 
             if (OnLoginRequired != null)
             {
-                if (InvokeRequired)
-                    CheckedInvoke(OnLoginRequired, new object[] { this });
-                else
-                    OnLoginRequired(this);
+                OnLoginRequired(this);
             }
             else
             {

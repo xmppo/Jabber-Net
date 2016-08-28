@@ -352,10 +352,7 @@ namespace jabber.server
                 Route route = tag as Route;
                 if (route != null)
                 {
-                    if (InvokeRequired)
-                        CheckedInvoke(OnRoute, new object[] {this, route});
-                    else
-                        OnRoute(this, route);
+                    OnRoute(this, route);
                 }
             }
             // TODO: add XdbTracker stuff
@@ -364,10 +361,7 @@ namespace jabber.server
                 Xdb xdb = tag as Xdb;
                 if (xdb != null)
                 {
-                    if (InvokeRequired)
-                        CheckedInvoke(OnXdb, new object[] {this, xdb});
-                    else
-                        OnXdb(this, xdb);
+                    OnXdb(this, xdb);
                 }
             }
             if (OnLog != null)
@@ -375,10 +369,7 @@ namespace jabber.server
                 Log log = tag as Log;
                 if (log != null)
                 {
-                    if (InvokeRequired)
-                        CheckedInvoke(OnLog, new object[] {this, log});
-                    else
-                        OnLog(this, log);
+                    OnLog(this, log);
                 }
             }
         }

@@ -291,7 +291,6 @@ namespace Example
             this.jc.AutoReconnect = 3F;
             this.jc.AutoStartCompression = true;
             this.jc.AutoStartTLS = true;
-            this.jc.InvokeControl = this;
             this.jc.KeepAlive = 30F;
             this.jc.LocalCertificate = null;
             this.jc.Password = null;

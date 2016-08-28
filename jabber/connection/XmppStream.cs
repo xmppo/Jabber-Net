@@ -14,7 +14,6 @@
 using System;
 
 using System.Collections;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading;
 using System.Xml;
@@ -266,7 +265,6 @@ namespace jabber.connection
         private bool m_compressionOn = false;
 
         private XmlNamespaceManager m_ns;
-        private ISynchronizeInvoke m_invoker = null;
 
         // XMPP v1 stuff
         private string m_serverVersion = null;
@@ -592,18 +590,6 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Calls Invoke() for all callbacks on this control.
-        /// </summary>
-        public ISynchronizeInvoke InvokeControl
-        {
-            get
-            {
-                return m_invoker;
-            }
-            set { m_invoker = value; }
-        }
-
-        /// <summary>
         /// Gets or sets the keep-alive interval in seconds.
         /// </summary>
         public float KeepAlive
@@ -741,13 +727,12 @@ namespace jabber.connection
                 }
                 if (close)
                     Close();
-                if (value && (OnAuthenticate != null))
+
+                if (value)
                 {
-                    if (InvokeRequired)
-                        CheckedInvoke(OnAuthenticate, new object[] { this });
-                    else
-                        OnAuthenticate(this);
+                    OnAuthenticate?.Invoke(this);
                 }
+
                 this[Options.CURRENT_KEEP_ALIVE] = this[Options.KEEP_ALIVE];
             }
         }
@@ -900,49 +885,6 @@ namespace jabber.connection
         }
 
         /// <summary>
-        /// Invokes the given method on the Invoker, and does some exception handling.
-        /// </summary>
-        /// <param name="method">Method to call on the invoker thread.</param>
-        /// <param name="args">Arguments to pass to the method.</param>
-        protected void CheckedInvoke(MulticastDelegate method, object[] args)
-        {
-            try
-            {
-                Debug.Assert(m_invoker != null, "Check for this.InvokeControl == null before calling CheckedInvoke");
-                Debug.Assert(m_invoker.InvokeRequired, "Check for InvokeRequired before calling CheckedInvoke");
-
-                m_invoker.BeginInvoke(method, args);
-            }
-            catch (System.Reflection.TargetInvocationException e)
-            {
-                Debug.WriteLine("Exception passed along by XmppStream: " + e.ToString());
-                throw e.InnerException;
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("Exception in XmppStream: " + e.ToString());
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// Determines whether or not a callback needs to be on the GUI thread.
-        /// </summary>
-        /// <returns>
-        /// True if the invoke control is set and the current thread
-        /// is not the GUI thread.
-        /// </returns>
-        protected bool InvokeRequired
-        {
-            get
-            {
-                if (m_invoker == null)
-                    return false;
-                return m_invoker.InvokeRequired;
-            }
-        }
-
-        /// <summary>
         /// Informs the client that the first tag of the XML document has been received.
         /// </summary>
         /// <param name="sender">Caller of this function.</param>
@@ -978,13 +920,8 @@ namespace jabber.connection
                     }
                     hack = true;
                 }
-                if (OnStreamHeader != null)
-                {
-                    if (InvokeRequired)
-                        CheckedInvoke(OnStreamHeader, new object[] { this, elem });
-                    else
-                        OnStreamHeader(this, elem);
-                }
+
+                OnStreamHeader?.Invoke(this, elem);
                 CheckAll(elem);
 
                 if (hack && (OnSASLStart != null))
@@ -1142,13 +1079,7 @@ namespace jabber.connection
                     }
                 }
 
-                if (OnStreamError != null)
-                {
-                    if (InvokeRequired)
-                        CheckedInvoke(OnStreamError, new object[] { this, tag });
-                    else
-                        OnStreamError(this, tag);
-                }
+                OnStreamError?.Invoke(this, tag);
                 return;
             }
 
@@ -1249,20 +1180,15 @@ namespace jabber.connection
                     FireOnError(new InvalidOperationException("Expecting stream:features from a version='1.0' server"));
                     return;
                 }
-                if (OnSASLEnd != null)
-                    OnSASLEnd(this, f);
+
+                OnSASLEnd?.Invoke(this, f);
                 m_saslProc = null;
             }
             else
             {
-                if (OnProtocol != null)
-                {
-                    if (InvokeRequired)
-                        CheckedInvoke(OnProtocol, new object[] { this, tag });
-                    else
-                        OnProtocol(this, tag);
-                }
+                OnProtocol?.Invoke(this, tag);
             }
+
             CheckAll(tag);
         }
 
@@ -1350,13 +1276,7 @@ namespace jabber.connection
                 ((e is System.IO.IOException) || (e.InnerException is System.IO.IOException)))
                 return;
 
-            if (OnError != null)
-            {
-                if (InvokeRequired)
-                    CheckedInvoke(OnError, new object[] { this, e });
-                else
-                    OnError(this, e);
-            }
+            OnError?.Invoke(this, e);
 
             if ((State != ClosingState.Instance) && (State == ClosedState.Instance))
                 Close(false);
@@ -1452,10 +1372,7 @@ namespace jabber.connection
                     XmlNode n = elem.SelectSingleNode(m_xpath, sender.m_ns);
                     if (n != null)
                     {
-                        if (sender.InvokeRequired)
-                            sender.CheckedInvoke(m_cb, new object[] { sender, elem });
-                        else
-                            m_cb(sender, elem);
+                        m_cb(sender, elem);
                     }
                 }
                 catch (Exception e)
@@ -1476,14 +1393,7 @@ namespace jabber.connection
                     m_sslOn = true;
             }
 
-            if (OnConnect != null)
-            {
-                if (InvokeRequired)
-                    CheckedInvoke(OnConnect, new Object[] { this, m_stanzas });
-                else
-                    OnConnect(this, m_stanzas);
-            }
-
+            OnConnect?.Invoke(this, m_stanzas);
             SendNewStreamHeader();
         }
 
@@ -1496,39 +1406,17 @@ namespace jabber.connection
                 this.State = ConnectedState.Instance;
             }
 
-            if (OnConnect != null)
-            {
-                if (InvokeRequired)
-                    CheckedInvoke(OnConnect, new object[] { this, m_stanzas });
-                else
-                {
-                    // Um.  This cast might not be right, but I don't want to break backward compatibility
-                    // if I don't have to by changing the delegate interface.
-                    OnConnect(this, m_stanzas);
-                }
-            }
+            OnConnect?.Invoke(this, m_stanzas);
         }
 
         void IStanzaEventListener.BytesRead(byte[] buf, int offset, int count)
         {
-            if (OnReadText != null)
-            {
-                if (InvokeRequired)
-                    CheckedInvoke(OnReadText, new object[] { this, ENC.GetString(buf, offset, count) });
-                else
-                    OnReadText(this, ENC.GetString(buf, offset, count));
-            }
+            OnReadText?.Invoke(this, ENC.GetString(buf, offset, count));
         }
 
         void IStanzaEventListener.BytesWritten(byte[] buf, int offset, int count)
         {
-            if (OnWriteText != null)
-            {
-                if (InvokeRequired)
-                    CheckedInvoke(OnWriteText, new object[] { this, ENC.GetString(buf, offset, count) });
-                else
-                    OnWriteText(this, ENC.GetString(buf, offset, count));
-            }
+            OnWriteText?.Invoke(this, ENC.GetString(buf, offset, count));
         }
 
         void IStanzaEventListener.StreamInit(ElementStream stream)
@@ -1556,13 +1444,7 @@ namespace jabber.connection
                     m_stanzas = null;
             }
 
-            if (OnError != null)
-            {
-                if (InvokeRequired)
-                    CheckedInvoke(OnError, new object[] { this, ex });
-                else
-                    OnError(this, ex);
-            }
+            OnError?.Invoke(this, ex);
 
             // TODO: Figure out what the "good" errors are, and try to
             // reconnect.  There are too many "bad" errors to just let this fly.
@@ -1580,14 +1462,7 @@ namespace jabber.connection
                 m_compressionOn = false;
             }
 
-            if (OnDisconnect != null)
-            {
-                if (InvokeRequired)
-                    CheckedInvoke(OnDisconnect, new object[] { this });
-                else
-                    OnDisconnect(this);
-            }
-
+            OnDisconnect?.Invoke(this);
             TryReconnect();
         }
 
@@ -1625,23 +1500,16 @@ namespace jabber.connection
             X509Chain chain,
             System.Net.Security.SslPolicyErrors sslPolicyErrors)
         {
-            if (OnInvalidCertificate != null)
-            {
-                if ((m_invoker == null) || (!m_invoker.InvokeRequired))
-                    return OnInvalidCertificate(sock, certificate, chain, sslPolicyErrors);
-                try
-                {
-                    // Note: can't use CheckedInvoke here, since we need the return value.  We'll wait for the response.
-                    return (bool)m_invoker.Invoke(OnInvalidCertificate, new object[] { sock, certificate, chain, sslPolicyErrors });
-                }
-                catch (Exception e)
-                {
-                    Debug.WriteLine("Exception passed along by XmppStream: " + e.ToString());
-                    return false;
-                }
-            }
 
-            return false;
+            try
+            {
+                return OnInvalidCertificate?.Invoke(this, certificate, chain, sslPolicyErrors) ?? false;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Exception passed along by XmppStream: " + e);
+                return false;
+            }
         }
 
         #endregion
