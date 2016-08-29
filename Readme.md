@@ -49,6 +49,6 @@ version 3. Please consult `LICENSE.txt` for details.
 [nuget]: https://www.nuget.org/packages/jabber-net/
 [travis]: https://travis-ci.org/ForNeVeR/jabber-net
 
-[appveyor-badge]: https://ci.appveyor.com/api/projects/status/fpe2djtjucsl89x3/branch/develop?svg=true
+[appveyor-badge]: https://ci.appveyor.com/api/projects/status/9q5rgknk80oh5g3a/branch/develop?svg=true
 [nuget-badge]: https://img.shields.io/nuget/v/jabber-net.svg?maxAge=2592000
 [travis-badge]: https://travis-ci.org/ForNeVeR/jabber-net.svg?branch=develop
