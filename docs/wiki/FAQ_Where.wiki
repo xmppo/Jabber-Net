@@ -1,0 +1,19 @@
+#summary Where do I get a copy of Jabber-Net?
+#labels FAQ,Featured
+
+= Options =
+
+ * We try to keep the head of the [http://jabber-net.googlecode.com/svn/trunk/ subversion repository] in good shape.  If you want to track our [http://code.google.com/p/jabber-net/source/list progress], that's a good place to check out from.
+ * If you want a more stable check-out point, grab the [http://jabber-net.googlecode.com/svn/branches/RELEASE_1_0/ RELEASE_1_0] branch.  We will make changes to this branch only to fix bugs.
+ * Download one of the pre-compiled [http://code.google.com/p/jabber-net/downloads/list packages].
+
+
+= Subversion =
+
+Directions for getting started with Subversion:
+ * Download and install [http://tortoisesvn.tigris.org/ Tortoise SVN]
+ * If you have an HTTP proxy server, in Windows Explorer, right click, select TortoiseSVN/Settings/Network, and enter your details
+ * Right click on the directory where you want to check out, select "SVN Checkout"
+ * URL of repository: http://jabber-net.googlecode.com/svn/trunk/
+ * Hit OK
+ * Build, according to GettingStarted

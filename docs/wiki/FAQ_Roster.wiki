@@ -1,0 +1,6 @@
+#summary How Do I Modify The Roster?
+#labels FAQ
+
+Just drop a {{{jabber.client.RosterManager}}} on the same form as your {{{jabber.client.JabberClient}}} (you *have* followed the directions GettingStarted to get them into your toolbox, right?) Set the Client property on the {{{RosterManager}}} to your {{{JabberClient}}} instance, and you’re up and running.
+
+However, {{{RosterManager}}} is more for local caching of your roster, and not for setting things.  If you want to modify the roster, {{{JabberClient.Subscribe}}} and {{{JabberClient.RemoveRosterItem}}} allow you to do this. 
