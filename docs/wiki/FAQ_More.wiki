@@ -1,0 +1,6 @@
+#summary Where do I get more information about Jabber-Net?
+#labels FAQ
+
+Join the [http://groups.google.com/group/jabber-net Jabber-Net] Google Group, and send a message to the group.
+
+If you have found an issue in the code, please file it [http://code.google.com/p/jabber-net/issues/list here].
