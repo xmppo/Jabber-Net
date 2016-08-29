@@ -32,7 +32,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{608EAD0E-6217-4700-B9C1-01488F8B5701}"
 	ProjectSection(SolutionItems) = preProject
+		docs\FAQ.md = docs\FAQ.md
+		docs\FAQ_GoogleTalk.md = docs\FAQ_GoogleTalk.md
+		docs\FAQ_License.md = docs\FAQ_License.md
+		docs\FAQ_More.md = docs\FAQ_More.md
+		docs\FAQ_Packets.md = docs\FAQ_Packets.md
+		docs\FAQ_Register.md = docs\FAQ_Register.md
+		docs\FAQ_Roster.md = docs\FAQ_Roster.md
+		docs\FAQ_UntrustedRootOK.md = docs\FAQ_UntrustedRootOK.md
+		docs\FAQ_Where.md = docs\FAQ_Where.md
+		docs\GettingStarted.md = docs\GettingStarted.md
+		docs\howto.md = docs\howto.md
 		docs\namespaces.md = docs\namespaces.md
+		docs\philosophies.md = docs\philosophies.md
+		docs\SendMessage.md = docs\SendMessage.md
+		docs\SocketErrors.md = docs\SocketErrors.md
 	EndProjectSection
 EndProject
 Global
