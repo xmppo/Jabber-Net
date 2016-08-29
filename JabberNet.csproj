@@ -420,9 +420,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Condition="'$(BuildMono)'==''" Include="netlib.Dns\netlib.Dns.csproj">
+    <ProjectReference Condition="'$(BuildMono)'==''" Include="JabberNet.Netlib.Dns\JabberNet.Netlib.Dns.csproj">
       <Project>{40AC7A7C-D3E5-46DF-B740-06BD9D2A00E1}</Project>
-      <Name>netlib.Dns</Name>
+      <Name>JabberNet.Netlib.Dns</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

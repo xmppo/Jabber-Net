@@ -1,7 +1,7 @@
 language: csharp
 mono: latest
 install:
-- nuget restore jabber-net.sln
+- nuget restore JabberNet.sln
 script:
-- xbuild /p:Configuration=Debug jabber-net.sln
-- mono ./packages/NUnit.ConsoleRunner.3.4.1/tools/nunit3-console.exe ./test/bin5/Debug/test.dll
+- xbuild /p:Configuration=Debug JabberNet.sln
+- mono ./packages/NUnit.ConsoleRunner.3.4.1/tools/nunit3-console.exe ./JabberNet.Test/bin5/Debug/test.dll
