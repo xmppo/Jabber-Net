@@ -123,8 +123,8 @@ namespace test.stringprep
             TryOne("\x212B", "\x00C5"); //j
             TryOne("\x00C5", "\x00C5"); //k
 
-            TryOne("Äffin", "Äffin"); //l'
-            TryOne("Ä\xFB03n", "Äffin"); //m'
+            TryOne("ï¿½ffin", "ï¿½ffin"); //l'
+            TryOne("ï¿½\xFB03n", "ï¿½ffin"); //m'
             TryOne("Henry IV", "Henry IV"); //n'
             TryOne("Henry \x2163", "Henry IV"); //o'
             TryOne("\x30AC", "\x30AC"); //p' ga
