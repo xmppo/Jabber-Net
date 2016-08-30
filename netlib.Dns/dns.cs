@@ -1094,7 +1094,7 @@ namespace netlib.Dns
         }
 
         /// <summary>
-        /// Gets or sets whether or not to accept truncated results —
+        /// Gets or sets whether or not to accept truncated results â€”
         /// does not retry under TCP.
         /// </summary>
         /// <value>Boolean indicating whether or not to accept truncated results.</value>
