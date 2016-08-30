@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Text;
 
 using NUnit.Framework;
@@ -7,7 +6,6 @@ using NUnit.Framework;
 using bedrock.net;
 using bedrock.util;
 using System.Threading;
-
 
 namespace test.bedrock.net
 {
@@ -58,28 +56,31 @@ namespace test.bedrock.net
                 Console.WriteLine("SR: " + str);
                 if (str.Contains("11111"))
                 {
-                sock.Write(ENC.GetBytes(@"HTTP/1.1 200 OK
-Content-Length: 10
-Content-Type: text/plain
-
-1234567890"));
+                    sock.Write(
+                        ENC.GetBytes(
+                            "HTTP/1.1 200 OK\r\n" +
+                            "Content-Length: 10\r\n" +
+                            "Content-Type: text/plain\r\n\r\n" +
+                            "1234567890"));
                 }
                 else if (str.Contains("22222"))
                 {
-                    sock.Write(ENC.GetBytes(@"HTTP/1.1 200 OK
-Content-Length: 10
-Content-Type: text/plain
-
-12345"));
+                    sock.Write(
+                        ENC.GetBytes(
+                            "HTTP/1.1 200 OK\r\n" +
+                            "Content-Length: 10\r\n" +
+                            "Content-Type: text/plain\r\n\r\n" +
+                            "12345"));
                     sock.Write(ENC.GetBytes("67890"));
                 }
                 else if (str.Contains("33333"))
                 {
-                    sock.Write(ENC.GetBytes(@"HTTP/1.1 200 OK
-Content-Length: 20
-Content-Type: text/plain
-
-12345"));
+                    sock.Write(
+                        ENC.GetBytes(
+                            "HTTP/1.1 200 OK\r\n" +
+                            "Content-Length: 20\r\n" +
+                            "Content-Type: text/plain\r\n\r\n" +
+                            "12345"));
                     // Turning off Nagle didn't fix this.  Mrmph.
                     Thread.Sleep(300);
                     sock.Write(ENC.GetBytes("67890"));
