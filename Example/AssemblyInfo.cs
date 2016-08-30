@@ -25,7 +25,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Cursive Systems, Inc.")]
 [assembly: AssemblyProduct("jnExample")]
-[assembly: AssemblyCopyright("Copyright (c) Cursive Systems, 2000-2008")]
+[assembly: AssemblyCopyright("Copyright (c) Cursive Systems, 2000-2008; Jabber-Net Contributors, 2008—2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

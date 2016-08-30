@@ -12,7 +12,7 @@ using System.Runtime.InteropServices;
 
 [assembly: AssemblyCompany("The ASP Emporium (http://www.aspemporium.com/)")]
 [assembly: AssemblyProduct("The ASP Emporium (http://www.aspemporium.com/)")]
-[assembly: AssemblyCopyright("The ASP Emporium (http://www.aspemporium.com/)")]
+[assembly: AssemblyCopyright("The ASP Emporium (http://www.aspemporium.com/); Copyright (c) Jabber-Net Contributors, 2008—2016")]
 [assembly: AssemblyTrademark("The ASP Emporium (http://www.aspemporium.com/)")]
 
 [assembly: AssemblyConfiguration("")]

@@ -1,4 +1,4 @@
-/* --------------------------------------------------------------------------
+﻿/* --------------------------------------------------------------------------
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
@@ -25,7 +25,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("")]
-[assembly: AssemblyCopyright("")]
+[assembly: AssemblyCopyright("Jabber-Net Contributors, 2008—2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
