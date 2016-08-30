@@ -26,7 +26,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitignore = .gitignore
 		.travis.yml = .travis.yml
 		appveyor.yml = appveyor.yml
-		LICENSE.txt = LICENSE.txt
+		Licensing.md = Licensing.md
 		Readme.md = Readme.md
 	EndProjectSection
 EndProject
@@ -47,6 +47,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{608EAD0E-6
 		docs\philosophies.md = docs\philosophies.md
 		docs\SendMessage.md = docs\SendMessage.md
 		docs\SocketErrors.md = docs\SocketErrors.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "licenses", "licenses", "{F5D434F5-6D42-4491-85B3-6169D2F15BAE}"
+	ProjectSection(SolutionItems) = preProject
+		licenses\Jabber-Net_LGPLv3.txt = licenses\Jabber-Net_LGPLv3.txt
+		licenses\UNICODE.txt = licenses\UNICODE.txt
+		licenses\xpnet_MIT.txt = licenses\xpnet_MIT.txt
 	EndProjectSection
 EndProject
 Global
@@ -82,5 +89,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BBF059F0-722F-4DCC-AF7F-82054E8EF9F4} = {2C25C63F-7C2F-4025-8A4D-B85ABF2C8A34}
+		{608EAD0E-6217-4700-B9C1-01488F8B5701} = {2C25C63F-7C2F-4025-8A4D-B85ABF2C8A34}
+		{F5D434F5-6D42-4491-85B3-6169D2F15BAE} = {2C25C63F-7C2F-4025-8A4D-B85ABF2C8A34}
 	EndGlobalSection
 EndGlobal
