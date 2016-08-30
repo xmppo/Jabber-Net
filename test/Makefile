@@ -9,7 +9,7 @@
 # License
 #
 # Jabber-Net can be used under either JOSL or the GPL.
-# See LICENSE.txt for details.
+# See Licensing.md for details.
 # --------------------------------------------------------------------------
 
 # The purpose of this Makefile is to facilitate mono builds.
@@ -48,7 +48,7 @@ $(BASEDIR)/jabber/protocol/stream/StreamTest.cs \
 $(BASEDIR)/jabber/protocol/x/DataTest.cs \
 $(BASEDIR)/jabber/protocol/x/EventTest.cs
 
-RESOURCES = 
+RESOURCES =
 
 ASSEMBLIES = \
 	-r:$(BASEDIR)/nunit/nunit.framework.dll \

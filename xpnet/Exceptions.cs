@@ -9,7 +9,7 @@
  * License
  *
  * Jabber-Net is licensed under the LGPL.
- * See LICENSE.txt for details.
+ * See licenses/Jabber-Net_LGPLv3.txt for details.
  *
  * xpnet is a deriviative of James Clark's XP.  See copying.txt for more info.
  * --------------------------------------------------------------------------*/

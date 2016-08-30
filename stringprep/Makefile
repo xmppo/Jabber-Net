@@ -9,7 +9,7 @@
 # License
 #
 # Jabber-Net can be used under either JOSL or the GPL.
-# See LICENSE.txt for details.
+# See Licensing.md for details.
 # --------------------------------------------------------------------------
 
 # The purpose of this Makefile is to facilitate mono builds.
@@ -49,7 +49,7 @@ bin/debug/stringprep.dll: $(SOURCES)
 	-mkdir -p bin/debug
 	cd bin/debug && mcs $(MCS_OPTIONS) -target:library \
 	-out:"stringprep.dll" $(RESOURCES) $(SYSTEM_REFERENCES) \
-	$(SOURCES) $(ASSEMBLIES) 
+	$(SOURCES) $(ASSEMBLIES)
 
 clean:
 	rm -rf bin

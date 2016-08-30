@@ -9,7 +9,7 @@
 # License
 #
 # Jabber-Net can be used under either JOSL or the GPL.
-# See LICENSE.txt for details.
+# See Licensing.md for details.
 # --------------------------------------------------------------------------
 
 # The purpose of this Makefile is to facilitate mono builds.
@@ -18,11 +18,11 @@ BASEDIR:=$(shell pwd)
 
 SOURCES = \
 $(BASEDIR)/AssemblyInfo.cs \
-$(BASEDIR)/Main.cs 
+$(BASEDIR)/Main.cs
 
 ASSEMBLIES = -r:jabber-net.dll
 
-RESOURCES = 
+RESOURCES =
 
 SYSTEM_REFERENCES = -r:System.dll -r:System.Xml.dll
 
@@ -43,7 +43,7 @@ $(OUTFILE): $(OUTDIR) $(SOURCES) $(JNDLL)
 	cp -f $(BASEDIR)/../lib20/*.dll $(OUTDIR)
 	$(MCS) $(MCS_OPTIONS) -target:exe \
 	-out:$(OUTFILE) $(RESOURCES) $(SYSTEM_REFERENCES) $(ASSEMBLIES)  \
-	$(SOURCES) 
+	$(SOURCES)
 
 clean:
 	$(RM) -r bin

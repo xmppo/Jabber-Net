@@ -9,7 +9,7 @@
 # License
 #
 # Jabber-Net can be used under either JOSL or the GPL.
-# See LICENSE.txt for details.
+# See Licensing.md for details.
 # --------------------------------------------------------------------------
 
 # The purpose of this Makefile is to facilitate mono builds.
@@ -196,7 +196,7 @@ $(DLL): $(SOURCES)
 	-mkdir -p bin/debug
 	$(MCS) $(MCS_OPTIONS) -target:library \
 	-out:"$@" $(RESOURCES) $(SYSTEM_REFERENCES) \
-	$^ $(ASSEMBLIES) 
+	$^ $(ASSEMBLIES)
 
 $(SUBDIRS): $(DLL)
 	$(MAKE) -C $@
@@ -205,5 +205,4 @@ clean:
 	$(RM) -r bin
 	for dir in $(SUBDIRS); do \
 		$(MAKE) -C $$dir $@; \
-	done	
-
+	done
