@@ -15,8 +15,8 @@
 param (
     $msbuild = 'msbuild',
     $nuget = 'nuget',
-    $Solution = "$PSScriptRoot/../jabber-net.sln",
-    $Project = "$PSScriptRoot/../jabber-net.csproj",
+    $Solution = "$PSScriptRoot/../JabberNet.sln",
+    $Project = "$PSScriptRoot/../JabberNet.csproj",
     $Configuration = "Release"
 )
 
