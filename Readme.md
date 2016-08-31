@@ -49,4 +49,4 @@ consult [Licensing.md][] for details on licensing of internal components.
 
 [appveyor-badge]: https://ci.appveyor.com/api/projects/status/9q5rgknk80oh5g3a/branch/develop?svg=true
 [nuget-badge]: https://img.shields.io/nuget/v/jabber-net.svg?maxAge=2592000
-[travis-badge]: https://travis-ci.org/ForNeVeR/jabber-net.svg?branch=develop
+[travis-badge]: https://travis-ci.org/ForNeVeR/Jabber-Net.svg?branch=develop
