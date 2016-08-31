@@ -2,10 +2,6 @@
 /packages/
 
 bin/
-bin5/
 obj/
-obj5/
 
 *.user
-
-/2005-jabber-net.xml
