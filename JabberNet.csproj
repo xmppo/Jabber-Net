@@ -12,7 +12,6 @@
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
     <AssemblyName>jabber-net</AssemblyName>
-    <AssemblyOriginatorKeyFile>jabbernet.key</AssemblyOriginatorKeyFile>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
@@ -415,7 +414,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="jabbernet.key" />
     <None Include="jabber-net.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>

@@ -21,6 +21,3 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("2.1.2.0")]
 [assembly: AssemblyDelaySign(false)]
 [assembly: CLSCompliant(true)]
-[assembly: AssemblyKeyFile("jabbernet.key")]
-
-
