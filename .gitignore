@@ -1,6 +1,8 @@
 /.vs/
 /packages/
 
+/docs/output/
+
 bin/
 obj/
 
