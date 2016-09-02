@@ -44,17 +44,6 @@ regarding the license headers ([like this][header-sample]):
 4.  Don't add any headers in the new files; placing this `Licensing.md` file in
     the root of the source code package should be enough.
 
-"either JOSL or the GPL"-licensed files
----------------------------------------
-
-There's a bunch of files marked as licensed under the terms of "either JOSL or
-the GPL". Probably that's just some old sources that were never converted to the
-new license by the Cursive Systems, Inc., but the best choice we have today is
-to follow the restrictions mentioned in the sources.
-
-These files will be removed ASAP before the next release. Please follow
-[Jabber-Net#34][issue-34] to track the progress and get the full file list.
-
 netlib.Dns
 ----------
 
@@ -85,7 +74,6 @@ license. See the full license text at [licenses/xpnet_MIT.txt][xpnet-mit].
 [bedrock-net-certutil]: https://github.com/ForNeVeR/Jabber-Net/blob/develop/bedrock/net/CertUtil.cs
 [gplv2]: http://www.fsf.org/licensing/licenses/info/GPLv2.html
 [header-sample]: https://github.com/ForNeVeR/Jabber-Net/blob/develop/ConsoleClient/Main.cs#L1-L13
-[issue-34]: https://github.com/ForNeVeR/Jabber-Net/issues/34
 [josl]: http://archive.jabber.org/core/JOSL.pdf
 [netlib-dns]: https://github.com/ForNeVeR/Jabber-Net/tree/develop/netlib.Dns
 [stringprep-unicode]: https://github.com/ForNeVeR/Jabber-Net/tree/develop/stringprep/unicode
