@@ -1,5 +1,5 @@
-Jabber.Net
-==========
+How to use Jabber-Net
+======================
 
 A set of libraries for connecting to [Jabber](http://www.jabber.org/) using
 [.Net](http://msdn.microsoft.com/net) technology.

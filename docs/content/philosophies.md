@@ -1,4 +1,5 @@
-Philosophies to guide Jabber.Net development.
+Philosophies of a Jabber.Net development
+==========================================
 
 Sure, a lot of these are going to be Mom&ApplePie, but let's get them
 down.

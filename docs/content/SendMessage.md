@@ -1,7 +1,8 @@
-**Just send a message**
+How to send a message
+======================
 
 Introduction
-============
+------------
 
 Jabber-Net uses an asynchronous programming model by default. This can be
 confusing if you are new to .Net. This example shows how to set up a connection,
@@ -11,7 +12,7 @@ use of
 to wait for the end of asynchronous processing.
 
 SendMessage.cs
-==============
+--------------
 
 Make sure to reference `jabber-net.dll`, `zlib.net.dll`, and `netlib.Dns.dll`.
 

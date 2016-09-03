@@ -29,7 +29,7 @@ How Do I Use Jabber-Net?
 ```csharp
 private void jabberClient1_OnMessage(object sender, Message msg)
 {
-  jabber.protocol.client.Message reply = new jabber.protocol.client.Message(jabberClient1.Document);			
+  jabber.protocol.client.Message reply = new jabber.protocol.client.Message(jabberClient1.Document);
   reply.Body = "Hello!";
   reply.To = msg.From;
   jabberClient1.Write(reply);

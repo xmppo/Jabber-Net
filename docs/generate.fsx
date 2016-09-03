@@ -8,9 +8,10 @@ open FSharp.Markdown
 
 let input = Path.Combine (__SOURCE_DIRECTORY__, "content")
 let output = Path.Combine (__SOURCE_DIRECTORY__, "output")
+let jabberNetTemplates = Path.Combine (__SOURCE_DIRECTORY__, "templates")
 let formatting = Path.Combine (__SOURCE_DIRECTORY__, "../packages/FSharp.Formatting.2.14.4")
-let templates = Path.Combine (formatting, "templates")
-let docTemplate = Path.Combine (templates, "docpage.cshtml")
+let formattingTemplates = Path.Combine (formatting, "templates")
+let docTemplate = Path.Combine (formattingTemplates, "docpage.cshtml")
 
 if not <| Directory.Exists output then
     ignore <| Directory.CreateDirectory output
@@ -45,5 +46,5 @@ Literate.ProcessDirectory (input,
                            docTemplate,
                            output,
                            replacements = projectInfo,
-                           layoutRoots = [templates],
+                           layoutRoots = [jabberNetTemplates; formattingTemplates],
                            customizeDocument = customizeDocument)

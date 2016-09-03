@@ -54,12 +54,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "content", "content", "{4844
 		docs\content\FAQ_Roster.md = docs\content\FAQ_Roster.md
 		docs\content\FAQ_UntrustedRootOK.md = docs\content\FAQ_UntrustedRootOK.md
 		docs\content\FAQ_Where.md = docs\content\FAQ_Where.md
-		docs\content\GettingStarted.md = docs\content\GettingStarted.md
 		docs\content\howto.md = docs\content\howto.md
+		docs\content\index.md = docs\content\index.md
 		docs\content\namespaces.md = docs\content\namespaces.md
 		docs\content\philosophies.md = docs\content\philosophies.md
 		docs\content\SendMessage.md = docs\content\SendMessage.md
 		docs\content\SocketErrors.md = docs\content\SocketErrors.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{E6F7B01B-A762-4833-ABDF-3662E63AC63B}"
+	ProjectSection(SolutionItems) = preProject
+		docs\templates\template.cshtml = docs\templates\template.cshtml
 	EndProjectSection
 EndProject
 Global
@@ -101,5 +106,6 @@ Global
 		{608EAD0E-6217-4700-B9C1-01488F8B5701} = {2C25C63F-7C2F-4025-8A4D-B85ABF2C8A34}
 		{F5D434F5-6D42-4491-85B3-6169D2F15BAE} = {2C25C63F-7C2F-4025-8A4D-B85ABF2C8A34}
 		{48441DC4-91E5-4E2D-B2C3-10DCBFAB33E3} = {608EAD0E-6217-4700-B9C1-01488F8B5701}
+		{E6F7B01B-A762-4833-ABDF-3662E63AC63B} = {608EAD0E-6217-4700-B9C1-01488F8B5701}
 	EndGlobalSection
 EndGlobal
