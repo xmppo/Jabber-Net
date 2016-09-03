@@ -21,13 +21,14 @@ let mkdir name =
 
 mkdir output
 
+let root = defaultArg (Option.ofObj <| Environment.GetEnvironmentVariable "JABBER_NET_ROOT") "."
 let projectInfo =
     [ "project-author", "Friedrich von Never"
       "project-github", "https://github.com/ForNeVeR/Jabber-Net"
       "project-name", "Jabber-Net"
       "project-nuget", "https://www.nuget.org/packages/jabber-net/"
       "project-summary", "A set of .NET classes for sending and receiving Extensible Messaging and Presence Protocol (XMPP), also known as the Jabber."
-      "root", "." ]
+      "root", root ]
 
 let transformUrl url =
     match Uri.TryCreate (url, UriKind.Relative) with

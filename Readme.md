@@ -33,6 +33,7 @@ The documentation is placed in the `docs` directory. To build HTML
 documentation, invoke the following commands (PowerShell syntax):
 
 ```powershell
+$env:JABBER_NET_ROOT = 'https://fornever.github.io/jabber-net/'
 $fsi = 'C:\Program Files (x86)\Microsoft SDKs\F#\4.0\Framework\v4.0\Fsi.exe'
 Remove-Item -Recurse .\docs\output
 & $fsi docs\generate.fsx
