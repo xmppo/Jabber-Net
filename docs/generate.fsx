@@ -5,16 +5,21 @@ open System.IO
 
 open FSharp.Literate
 open FSharp.Markdown
+open FSharp.MetadataFormat
 
-let input = Path.Combine (__SOURCE_DIRECTORY__, "content")
+let content = Path.Combine (__SOURCE_DIRECTORY__, "content")
 let output = Path.Combine (__SOURCE_DIRECTORY__, "output")
 let jabberNetTemplates = Path.Combine (__SOURCE_DIRECTORY__, "templates")
 let formatting = Path.Combine (__SOURCE_DIRECTORY__, "../packages/FSharp.Formatting.2.14.4")
 let formattingTemplates = Path.Combine (formatting, "templates")
+let referenceTemplates = Path.Combine (formattingTemplates, "reference")
 let docTemplate = Path.Combine (formattingTemplates, "docpage.cshtml")
 
-if not <| Directory.Exists output then
-    ignore <| Directory.CreateDirectory output
+let mkdir name =
+    if not <| Directory.Exists name then
+        ignore <| Directory.CreateDirectory name
+
+mkdir output
 
 let projectInfo =
     [ "project-author", "Friedrich von Never"
@@ -42,9 +47,23 @@ let rec transformParagraph : MarkdownParagraph -> MarkdownParagraph = function
 let customizeDocument (p : ProcessingContext) (ld : LiterateDocument) : LiterateDocument =
     ld.With(List.map transformParagraph ld.Paragraphs)
 
-Literate.ProcessDirectory (input,
-                           docTemplate,
-                           output,
-                           replacements = projectInfo,
-                           layoutRoots = [jabberNetTemplates; formattingTemplates],
-                           customizeDocument = customizeDocument)
+Literate.ProcessDirectory
+    (content,
+     docTemplate,
+     output,
+     replacements = projectInfo,
+     layoutRoots = [jabberNetTemplates; formattingTemplates],
+     customizeDocument = customizeDocument)
+
+let bin = Path.Combine (__SOURCE_DIRECTORY__, "..", "bin", "Debug")
+let reference = Path.Combine (output, "reference")
+let library = Path.Combine (bin, "JabberNet.dll")
+
+mkdir reference
+
+MetadataFormat.Generate
+    (library,
+     reference,
+     [jabberNetTemplates; formattingTemplates; referenceTemplates],
+     parameters = projectInfo,
+     markDownComments = false)
