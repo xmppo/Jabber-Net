@@ -1,7 +1,8 @@
-**Where do I get a copy of Jabber-Net?**
+Where do I get a copy of Jabber-Net?
+=====================================
 
 Options
-=======
+-------
 
 * Install the library [from NuGet][nuget]
 * Download the binaries from the [GitHub releases page][releases]
