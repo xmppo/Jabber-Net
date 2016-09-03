@@ -27,8 +27,8 @@ Here're the main qualities valued across Jabber-Net development:
 -   Reused - don't reinvent the wheel until there is a *proven* reason
     to do so (e.g. hard performance data pointing to a hot spot). 
     Prefer less lines of code.
--   Enabled - allow client and server module developers to hook
-    functionality in the their IDE.
+-   Enabled - allow client and server module developers to hook functionality in
+    their IDE.
 -   Thread-safe - this thing is going to be maximum-async, so watch for
     correct locking.
 -   Compatible - maintain **all** of the client-to-CCM protocol, and
