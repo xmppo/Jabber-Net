@@ -15,4 +15,5 @@ certificate problem (preferred), or set:
 bedrock.net.AsyncSocket.UntrustedRootOK = true;
 ```
 
-`UntrustedRootOK` is now obsolete in the main development branch. If you want to handle the error with your own code, please handle `OnIvalidCertificate` event.
+`UntrustedRootOK` is now obsolete in the main development branch. If you want to
+handle the error with your own code, please handle `OnIvalidCertificate` event.
