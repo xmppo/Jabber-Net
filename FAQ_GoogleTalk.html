@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>How to connect to GoogleTalk
+</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A set of .NET classes for sending and receiving Extensible Messaging and Presence Protocol (XMPP), also known as the Jabber.">
+    <meta name="author" content="Friedrich von Never">
+
+    <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
+
+    <link type="text/css" rel="stylesheet" href="./content/style.css" />
+    <script type="text/javascript" src="./content/tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="masthead">
+        <h3 class="muted"><a href="./index.html">Jabber-Net</a></h3>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="span9" id="main">
+          
+<h1>How to connect to GoogleTalk</h1>
+<p>TODO: This section is outdated; needs to be updated.</p>
+<h2>Introduction</h2>
+<p>There are two use cases for connecting to GoogleTalk. In the first, you have
+your email address is @gmail.com. The second is Gmail for domains. The first is
+a little easier, due to the way that Google has generated their SSL/TLS
+certificates.</p>
+<p>The important piece of information that is required is the host and port name to
+connect to on the network. In Jabber-Net terms, this is the <code>NetworkHost</code>. You
+can find this information from the DNS. Later versions of Jabber-Net, on
+Windows, will do this DNS lookup automatically. If you want to perform the
+lookup manually, you can use the <code>nslookup</code> command:</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+<span class="l">20: </span>
+<span class="l">21: </span>
+<span class="l">22: </span>
+<span class="l">23: </span>
+<span class="l">24: </span>
+<span class="l">25: </span>
+<span class="l">26: </span>
+<span class="l">27: </span>
+<span class="l">28: </span>
+<span class="l">29: </span>
+<span class="l">30: </span>
+<span class="l">31: </span>
+<span class="l">32: </span>
+<span class="l">33: </span>
+<span class="l">34: </span>
+<span class="l">35: </span>
+<span class="l">36: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip"><code lang="console">C:\&gt;nslookup
+Default Server:  [my_dns_server]
+Address:  [my_dns_server_ip]
+
+&gt; set q=SRV
+&gt; set noverbose
+&gt; _xmpp-client._tcp.gmail.com.
+Server:  [my_dns_server]
+Address:  [my_dns_server_ip]
+
+Non-authoritative answer:
+_xmpp-client._tcp.gmail.com     SRV service location:
+          priority       = 5
+          weight         = 0
+          port           = 5222
+          svr hostname   = talk.l.google.com
+_xmpp-client._tcp.gmail.com     SRV service location:
+          priority       = 20
+          weight         = 0
+          port           = 5222
+          svr hostname   = talk1.l.google.com
+_xmpp-client._tcp.gmail.com     SRV service location:
+          priority       = 20
+          weight         = 0
+          port           = 5222
+          svr hostname   = talk2.l.google.com
+_xmpp-client._tcp.gmail.com     SRV service location:
+          priority       = 20
+          weight         = 0
+          port           = 5222
+          svr hostname   = talk3.l.google.com
+_xmpp-client._tcp.gmail.com     SRV service location:
+          priority       = 20
+          weight         = 0
+          port           = 5222
+          svr hostname   = talk4.l.google.com
+</code></pre></td></tr></table>
+<h2>gmail.com JIDs</h2>
+<ul>
+<li>
+If you're on Windows, and on a late-model version of Jabber-Net, it should
+"just work".
+
+```csharp
+</li>
+</ul>
+<p>JabberClient jc = new JabberClient();
+jc.User = "username";   // just the username, not including the @domain.
+jc.Server = "gmail.com";
+jc.Password = "password";</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">`</span><span class="k">`</span><span class="k">`</span>
+</code></pre></td>
+</tr>
+</table>
+<ul>
+<li>
+If you're on Mono, or an earlier version of Jabber-Net, you'll need to set
+the <code>NetworkHost</code> property:
+
+```csharp
+</li>
+</ul>
+<p>jc.NetworkHost = "talk.l.google.com";  // Note: that's an "L", not a "1".</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">`</span><span class="k">`</span><span class="k">`</span>
+</code></pre></td>
+</tr>
+</table>
+<h2>Google for Domains</h2>
+<h3>Turn on Chat</h3>
+<p>From your mail page, go to "Manage this domain", then "Chat", then make sure it
+says "Disable Chat" at the bottom. You obviously must be an administrator of
+your domain to do this.</p>
+<h3>DNS</h3>
+<p>If you have your own domain hosted on Google Mail, you can use the XMPP service
+for that domain as well. For everything to work correctly, you'll need the
+following SRV records on your domain.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">_xmpp</span><span class="o">-</span><span class="i">server</span><span class="o">.</span><span class="i">_tcp</span><span class="o">.</span><span class="i">example</span><span class="o">.</span><span class="i">com</span><span class="o">.</span> <span class="i">IN</span> <span class="i">SRV</span> <span class="n">5</span> <span class="n">0</span> <span class="n">5269</span> <span class="i">xmpp</span><span class="o">-</span><span class="i">server</span><span class="o">.</span><span class="i">l</span><span class="o">.</span><span class="i">google</span><span class="o">.</span><span class="i">com</span><span class="o">.</span>
+<span class="i">_jabber</span><span class="o">.</span><span class="i">_tcp</span><span class="o">.</span><span class="i">example</span><span class="o">.</span><span class="i">com</span><span class="o">.</span> <span class="i">IN</span> <span class="i">SRV</span> <span class="n">5</span> <span class="n">0</span> <span class="n">5269</span> <span class="i">xmpp</span><span class="o">-</span><span class="i">server</span><span class="o">.</span><span class="i">l</span><span class="o">.</span><span class="i">google</span><span class="o">.</span><span class="i">com</span><span class="o">.</span>
+<span class="i">_xmpp</span><span class="o">-</span><span class="i">client</span><span class="o">.</span><span class="i">_tcp</span><span class="o">.</span><span class="i">example</span><span class="o">.</span><span class="i">com</span><span class="o">.</span> <span class="i">IN</span> <span class="i">SRV</span> <span class="n">5</span> <span class="n">0</span> <span class="n">5222</span> <span class="i">talk</span><span class="o">.</span><span class="i">l</span><span class="o">.</span><span class="i">google</span><span class="o">.</span><span class="i">com</span><span class="o">.</span>
+</code></pre></td>
+</tr>
+</table>
+<p>Make sure to change "example.com" to your domain name. Don't modify the
+"google.com" portion. Ask your DNS provider for help if you can't figure out how
+to get these set.</p>
+<p>If you just want to get up and running quickly, don't put in the SRV records,
+and set the <code>NetworkHost</code> property to "talk.l.google.com". (Note that they used
+an "L", not a "1").</p>
+<h3>Certificates</h3>
+<p>The certificate that comes on the SSL/TLS handshake will be invalid, in that the
+name will not match your domain. The best way to deal with this is to catch the
+OnInvalidCertificate event.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="csharp">jc.OnInvalidCertificate <span class="o">+</span><span class="o">=</span> <span class="k">new</span> System.Net.Security.RemoteCertificateValidationCallback(jc_OnInvalidCertificate);
+
+<span class="o">.</span><span class="o">.</span><span class="o">.</span>
+<span class="k">bool</span> jc_OnInvalidCertificate(<span class="k">object</span> sender,
+                             System.Security.Cryptography.X<span class="n">509</span>Certificates.X<span class="n">509</span>Certificate certificate,
+                             System.Security.Cryptography.X<span class="n">509</span>Certificates.X<span class="n">509</span>Chain chain,
+                             System.Net.Security.SslPolicyErrors sslPolicyErrors)
+{
+    <span class="k">if</span> (certificate_ok)
+        <span class="k">return</span> <span class="k">true</span>;
+    <span class="k">else</span>
+        <span class="k">return</span> <span class="k">false</span>;
+}
+</code></pre></td></tr></table>
+<p>The concern here is that there is a man in the middle of your conversation with
+Google, that is offering you a certificate with a bad name, signed by a
+Certificate Authority that you trust. Take appropriate security precautions.</p>
+<h3>Connections</h3>
+<p>Now, continue along as above, for gmail.com addresses, but use <em>your</em> domain
+name instead of gmail.com:</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="csharp">JabberClient jc <span class="o">=</span> <span class="k">new</span> JabberClient();
+jc.User <span class="o">=</span> <span class="s">"username"</span>;   <span class="c">// just the username, not including the @domain.</span>
+jc.Server <span class="o">=</span> <span class="s">"example.com"</span>;
+jc.Password <span class="o">=</span> <span class="s">"password"</span>;
+</code></pre></td></tr></table>
+
+
+        </div>
+        <div class="span3">
+          <a href="./index.html">
+            <img src="./images/logo.png" style="width:140px;height:140px;margin:10px 0px 0px 35px;border-style:none;" />
+          </a>
+
+          <ul class="nav nav-list" id="menu">
+
+            <li class="nav-header">Jabber-Net</li>
+
+            <li class="divider"></li>
+
+            <li><a href="https://www.nuget.org/packages/jabber-net/">Get Jabber-Net package via NuGet</a></li>
+            <li><a href="https://github.com/ForNeVeR/Jabber-Net">Source Code on GitHub</a></li>
+            <li><a href="./licensing.html">License (LGPL)</a></li>
+
+            <li class="nav-header">Documentation</li>
+
+            <li><a href="./index.html">Getting Started</a></li>
+
+            <li class="divider"></li>
+
+            <li><a href="./FAQ.html">Frequently-Asked Questions about Jabber-Net</a></li>
+
+            <li class="divider"></li>
+
+            <li><a href="./SendMessage.html">How to send a message</a></li>
+
+            <li class="nav-header">Reference</li>
+
+            <li><a href="./reference/index.html">API Reference</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <a href="https://github.com/ForNeVeR/Jabber-Net"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+  </body>
+  </html>

@@ -1,0 +1,3492 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Namespaces - Jabber-Net</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Friedrich von Never">
+
+    <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
+
+    <link type="text/css" rel="stylesheet" href="./content/style.css" />
+    <script type="text/javascript" src="./content/tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="masthead">
+        <h3 class="muted"><a href="./index.html">Jabber-Net</a></h3>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="span9" id="main">
+          
+
+<h1>Jabber-Net</h1>
+
+
+<h2>bedrock Namespace</h2>
+Low-level utility routines.    <div>
+      <table class="table table-bordered type-list">
+    <thead>
+      <tr><td>Type</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-bytehandler.html">ByteHandler</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Delegate for methods that get a block of bytes
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-byteoffsethandler.html">ByteOffsetHandler</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Delegate for members that receive partial blocks of bytes.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-exceptionhandler.html">ExceptionHandler</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Delegate for members that receive an exception
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-objecthandler.html">ObjectHandler</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Delegate for memebers that just have a sender
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-texthandler.html">TextHandler</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Delegate for members that receive a string
+            </p></td>
+        </tr>
+    </tbody>
+  </table>
+
+    </div>
+<h2>bedrock.collections Namespace</h2>
+Collection classes not in the .Net framework    <div>
+      <table class="table table-bordered type-list">
+    <thead>
+      <tr><td>Type</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-collections-bytestack.html">ByteStack</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A type-safe stack for bytes, implemented as a growable
+            buffer.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-collections-graphnode.html">GraphNode</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A node in a Graph, such as a Tree
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-collections-iset.html">ISet</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Set operations.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-collections-indexedtrie.html">IndexedTrie</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A Trie that is searchable for substrings.  Uses a separate set of indexes
+            to allow entry into the Trie at any point.  Yes, this
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-collections-linkedlist.html">LinkedList</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A doubly-linked list implementation, with a sentinal wrap-around
+            m_header.  Yes, it  seem like this should have been included
+            in System.Collections.  This may be a nicer implementation of Queue
+            than the one in System.Collections, which uses an array.  YMMV.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-collections-set.html">Set</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Set backed into a Tree.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-collections-setimplementation.html">SetImplementation</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            The different ways a set can be implemented.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-collections-skiplist.html">SkipList</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Summary description for SkipList.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-collections-stringset.html">StringSet</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A set of strings, backed into a BitArray.  Any given string that is inserted
+            into any instance of a StringSet increases the size of all StringSets over time.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-collections-tree.html">Tree</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A basic balanced tree implementation.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-collections-trie.html">Trie</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A trie is a tree structure that implements a radix search.  Each node of the tree has a
+            sub-node for each possible next byte.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-collections-triekeywalker.html">TrieKeyWalker</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            The method signature used by <a href="bedrock-collections-trie.html">Trie.Traverse</a> when it encounters a key.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-collections-trienode.html">TrieNode</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A node in a Trie.  This class is public to support traversal via Trie.Traverse().
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-collections-triewalker.html">TrieWalker</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            The method signature used by <a href="bedrock-collections-trie.html">Trie.Traverse</a> when it encounters a node.
+            </p></td>
+        </tr>
+    </tbody>
+  </table>
+
+    </div>
+<h2>bedrock.io Namespace</h2>
+Input/output classes    <div>
+      <table class="table table-bordered type-list">
+    <thead>
+      <tr><td>Type</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-io-bufferaggregate.html">BufferAggregate</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'> Aggregate byte arrays together, so we can parse
+            across IP packet boundaries
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-io-compressionfailedexception.html">CompressionFailedException</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Compression failed.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-io-readeventstream.html">ReadEventStream</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Wrap a stream, so that OnRead events can be fired.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-io-zlibstream.html">ZlibStream</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+             Wrap two ComponentAce.Compression.Libs.zlib.ZStream's, one in and one out.
+             The existing wrappers in the project are uni-directional.
+            
+             No, System.IO.Compression.GZipStream won't work, because they didn't expose
+             compression levels or flush types.
+             </p></td>
+        </tr>
+    </tbody>
+  </table>
+
+    </div>
+<h2>bedrock.net Namespace</h2>
+Async network access    <div>
+      <table class="table table-bordered type-list">
+    <thead>
+      <tr><td>Type</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-net-address.html">Address</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Encapsulation and caching of IP address information.  Very similar to System.Net.IPEndPoint,
+            but adds async DNS lookups.
+            TODO: add SRV?
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-net-addressresolved.html">AddressResolved</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Callback for async DNS lookups.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-net-asyncsocket.html">AsyncSocket</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            An asynchronous socket, which calls a listener class when
+            interesting things happen.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-net-asyncsocketconnectionexception.html">AsyncSocketConnectionException</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Lame exception, since I couldn't find one I liked.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-net-asyncsockethandler.html">AsyncSocketHandler</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Delegate for members that receive a socket.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-net-basesocket.html">BaseSocket</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Base class for AsyncSocket and proxies for AsyncSocket
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-net-httpsocket.html">HttpSocket</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Do basic HTTP processing, with a long-lived socket.
+            TODO: the BaseSocket parameter in the listener events will always be null for now.
+            TODO: change HttpSocket to be a is-a of AsyncSocket, not has-a.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-net-ielementsocket.html">IElementSocket</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            This socket has special support for writing XML elements.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-net-isocketeventlistener.html">ISocketEventListener</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Interface class for Socket events. Any object which
+            implements these interfaces is eligible to recieve Socket
+            events.  This is an interface instead of events in order
+            to preserve symmetry with libbedrock.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-net-proxysocket.html">ProxySocket</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Proxy object for sockets.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-net-shttpproxy.html">ShttpProxy</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Proxy object for sockets that want to do SHTTP proxying.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-net-socketeventlistener.html">SocketEventListener</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Default, empty implementation of ISocketEventListener
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-net-socketwatcher.html">SocketWatcher</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A collection of sockets.  This makes a lot more sense in the poll() version (Unix/C) since
+            you need to have a place to collect all of the sockets and call poll().  Here, it's just
+            convenience functions.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-net-socks4proxy.html">Socks4Proxy</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Proxy object for sockets that want to do SOCKS4 proxying.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-net-socks5proxy.html">Socks5Proxy</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Proxy object for sockets that want to do SOCKS proxying.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-net-unixdnsresolver.html">UnixDnsResolver</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-net-xep124exception.html">XEP124Exception</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            XEP-0124 Error conditions
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-net-xep124socket.html">XEP124Socket</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Make a XEP-124 (http://www.xmpp.org/extensions/xep-0124.html) polling "connection" look like a socket.
+            TODO: get rid of the PipeStream, if possible.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-net-xep25exception.html">XEP25Exception</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            XEP25 Error conditions
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-net-xep25socket.html">XEP25Socket</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Make a XEP-25 (http://www.xmpp.org/extensions/xep-0025.html) polling "connection" look like a socket.
+            TODO: get rid of the PipeStream, if possible.
+            </p></td>
+        </tr>
+    </tbody>
+  </table>
+
+    </div>
+<h2>bedrock.util Namespace</h2>
+General utilities    <div>
+      <table class="table table-bordered type-list">
+    <thead>
+      <tr><td>Type</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-util-commandlineattribute.html">CommandLineAttribute</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Attribute to annotate subclasses of GetOpt.  Any field or property
+            that gets this attribute is a possible command-line argument for the
+            program containing the GetOpt subclass.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-util-configfile.html">ConfigFile</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            XML configuration file manager.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-util-getopt.html">GetOpt</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            GetOpt should be subclassed to create a class that handles
+            command-line parameters.  The subclass should use fields or properties
+            that have the CommandLine attribute set on them.  Fields and properties
+            of type bool will be toggle flags, other types will take a value as
+            either the next command-line parameter or following a colon.
+            Also, now, you can create an instance of GetOpt, and pass in
+            TODO: Give examples of sublcass and calling example.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-util-rcsattribute.html">RCSAttribute</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Version control attribute for RCS and CVS.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-util-svnattribute.html">SVNAttribute</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Version control attribute for Subversion.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-util-sourcesafeattribute.html">SourceSafeAttribute</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Version control attribute for SourceSafe.
+            I don't use this any more, so someone tell me if it breaks with
+            some new release.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-util-sourceversionattribute.html">SourceVersionAttribute</a>
+          </td>
+          <td class="xmldoc"><a href="bedrock-util-starteamattribute.html">StarTeamAttribute</a><a href="bedrock-util-sourcesafeattribute.html">SourceSafeAttribute</a><a href="bedrock-util-rcsattribute.html">RCSAttribute</a></br><p class='summary'>
+            Make source code versions available at runtime.  Use the appropriate
+            subclass for your CM system.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-util-sourceversioncollection.html">SourceVersionCollection</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A collection of SourceVersionAttributes, so that we can
+            return a list of all of the versioned classes in the
+            current working set.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="bedrock-util-starteamattribute.html">StarTeamAttribute</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+             Make StarTeam versoning available at run-time.
+            
+             </p></td>
+        </tr>
+    </tbody>
+  </table>
+
+    </div>
+<h2>jabber Namespace</h2>
+Jabber-specific classes    <div>
+      <table class="table table-bordered type-list">
+    <thead>
+      <tr><td>Type</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-jid.html">JID</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Provides simple JID management.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-jidformatexception.html">JIDFormatException</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Informs the client that an invalid JID was entered.
+            </p></td>
+        </tr>
+    </tbody>
+  </table>
+
+    </div>
+<h2>jabber.client Namespace</h2>
+Client connection oriented classes    <div>
+      <table class="table table-bordered type-list">
+    <thead>
+      <tr><td>Type</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-client-autosubscriptionhanding.html">AutoSubscriptionHanding</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Determines how the RosterManager deals with incoming subscriptions.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-client-bookmarkconferencedelegate.html">BookmarkConferenceDelegate</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A new conference bookmark.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-client-bookmarkmanager.html">BookmarkManager</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Manager bookmarks on the server, with the old-style iq:private.
+            TODO: add support for new-style PEP.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-client-getauthstate.html">GetAuthState</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Contains the "Getting authorization" information.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-client-iqhandler.html">IQHandler</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Informs the client that an IQ has been received.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-client-jabberclient.html">JabberClient</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Provides a component for clients to use to access the XMPP server.
+            You can install this in your Toolbox, drop onto a form, a service, and so on.
+            This class hooks into the OnProtocol event and calls the Connect() method.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-client-manualloginstate.html">ManualLoginState</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Informs the client that the JabberClient is in
+            the "Waiting for manual login" state.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-client-manualsaslloginstate.html">ManualSASLLoginState</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Informs the client that the JabberClient is in
+            the "Waiting for manual login" state, but when Login()
+            happens, it should try SASL.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-client-messagehandler.html">MessageHandler</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Informst the client that a message has been received.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-client-presencehandler.html">PresenceHandler</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Informs the client that a presence packet has been received.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-client-presencemanager.html">PresenceManager</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Specifies the presence proxy database.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-client-primarysessionhandler.html">PrimarySessionHandler</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Informs the client of a change of derived primary session for a user.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-client-registerinfohandler.html">RegisterInfoHandler</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Need more information for registration.  Return false to cancel.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-client-rosteritemhandler.html">RosterItemHandler</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Informs the client of roster items.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-client-rostermanager.html">RosterManager</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Manages the roster of the client.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-client-setauthstate.html">SetAuthState</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Contains the "Setting authorization" information.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-client-subscriptionhandler.html">SubscriptionHandler</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Informs the client of a subscription requests.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-client-unsubscriptionhandler.html">UnsubscriptionHandler</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Manages unsubscription notifications.
+            </p></td>
+        </tr>
+    </tbody>
+  </table>
+
+    </div>
+<h2>jabber.connection Namespace</h2>
+Base classes for client and service connections    <div>
+      <table class="table table-bordered type-list">
+    <thead>
+      <tr><td>Type</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-acceptingstate.html">AcceptingState</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Specifies the state is in the "Accepting incoming socket connections" state.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-basestate.html">BaseState</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Represents the base class for all states.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-bindstate.html">BindState</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Specifies the state is in the "Binding session" state.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-capsmanager.html">CapsManager</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Manages the entity capabilities information for the local connection as well as remote ones.
+            See XEP-0115, version 1.5 for details.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-closedstate.html">ClosedState</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Specifies the state is not connected.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-closingstate.html">ClosingState</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Specifies the state is in a closing state.
+            A close was requested, but hasn't yet finalized.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-compressionstate.html">CompressionState</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Specifies the state is in the compression state.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-conferencemanager.html">ConferenceManager</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Manages a set of conference rooms
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-configureroom.html">ConfigureRoom</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Notifies the client that a room configuration form has been received.
+            </p><p class='returns'>Returns: null to take the defaults, otherwise the IQ response</p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-connectedstate.html">ConnectedState</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Specifies the state is in the "connected socket" state.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-connectingstate.html">ConnectingState</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Specifies the state is in the process of connecting such as
+            DNS lookup, socket setup, and so on.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-connectiontype.html">ConnectionType</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Specifies the connection type, such as socket, polling, and so on.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-discomanager.html">DiscoManager</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Manages the discovery (disco) database.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-disconode.html">DiscoNode</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+             Manages the information and children of a given JID/Node combination.
+            
+             NOTE: If you have multiple connections in the same process, they all share the same Disco cache.
+             </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-disconodehandler.html">DiscoNodeHandler</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Represents a callback with a new disco node.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-filemap-1.html">FileMap<'T></a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A dictionary backed into a file.  Any modification to the dictionary re-writes the file, so 
+            writes are somewhat costly.  Reads are cached lazily.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-httpstanzastream.html">HttpStanzaStream</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Manages the HTTP Polling XMPP stream.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-httpuploader.html">HttpUploader</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Manages HTTP Requests via XMPP (XEP-70).
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-iiqtracker.html">IIQTracker</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+             Represents the interface for tracking an IQ packet.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-iqtimeoutexception.html">IQTimeoutException</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Informs the client that an IQ has timed out.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-iqtracker.html">IQTracker</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Tracks outstanding IQ requests.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-istanzaeventlistener.html">IStanzaEventListener</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Listens for stanza and connection events
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-ident.html">Ident</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Manages a service discovery (disco) identity. See  for more information.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-iqcb.html">IqCB</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Informs the client that a response to an IQ request has been received.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-itemcb.html">ItemCB</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Notifies the client about a publish-subscribe item.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-itemlist.html">ItemList</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Manages a list of items with a maximum size.  Only one item with a given ID will be in the
+            list at a given time.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-jidnode.html">JIDNode</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Manages a JID and Node combination.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-nodehandler.html">NodeHandler</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Some event has occurred on a PubSub node.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-nonsaslauthstate.html">NonSASLAuthState</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Specifies the state is in Old-style auth, iq:auth or handshake.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-op.html">Op</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Contains the different possible operations on a publish-subscribe node.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-options.html">Options</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Manages option names.  These must be well-formed XML element names.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-participantcollection.html">ParticipantCollection</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A list of all of the current participants.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-pollingstanzastream.html">PollingStanzaStream</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Manages the HTTP Polling XMPP stream.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-proxytype.html">ProxyType</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Contains the types of proxies Jabber-Net supports.  This is only for socket connections.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-pubsubexception.html">PubSubException</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Informs the client that a publish-subscribe error occurred.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-pubsubmanager.html">PubSubManager</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Manages a set of publish-subscribe () subscriptions.
+            The goal is to have a list of jid/node combinations, each of which is a singleton.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-pubsubnode.html">PubSubNode</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Manages a node to be subscribed to.  Will keep a maximum number of items.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-reconnectingstate.html">ReconnectingState</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Specifies the state is in a paused state waiting for reconnect timeout.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-room.html">Room</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Manages a multi-user conference room.  See XEP-0045 (http://www.xmpp.org/extensions/xep-0045.html).
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-roomevent.html">RoomEvent</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            An event, like join or leave, has happened to a room.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-roomparticipant.html">RoomParticipant</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Someone who is currently in or associated with a room.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-roomparticipantevent.html">RoomParticipantEvent</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A participant-related callback.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-roomparticipantpresenceevent.html">RoomParticipantPresenceEvent</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A participant-presence-related callback.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-roomparticipantsevent.html">RoomParticipantsEvent</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A participantCollection-related callback.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-roompresencehandler.html">RoomPresenceHandler</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            An error occurred with a presence sent to a room.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-roomstateevent.html">RoomStateEvent</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            An event, like join or leave, has happened to a room.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-runningstate.html">RunningState</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Specifies the state is up and running.  If subclasses change the
+            state transition approach, they should end at the RunningState state.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-saslauthedstate.html">SASLAuthedState</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Specifies the state is in the SASL Authentication has finished state.
+            Restarting the stream for the last time.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-saslfailedstate.html">SASLFailedState</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            SASL Authentication failed.  On some servers you can re-try, or register.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-saslstate.html">SASLState</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Specifies the state is in SASL Authentication.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-serverfeaturesstate.html">ServerFeaturesState</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Specifies the state is in waiting for the server to send the features element.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-socketstanzastream.html">SocketStanzaStream</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            "Standard" XMPP socket for outbound connections.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-stanzastream.html">StanzaStream</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Manages the base stream for reading and writing full stanzas.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-stanzastreamhandler.html">StanzaStreamHandler</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Informs the client that something happened on a StanzaStream.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-starttlsstate.html">StartTLSState</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Specifies the state is in Start-TLS.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-streamcomponent.html">StreamComponent</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Manages the XmppStream as a component.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-streamhandler.html">StreamHandler</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Informs the client about events that happen on an ElementStream.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-streamstate.html">StreamState</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Specifies the state is in the "stream:stream has been received" state.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-xmppstream.html">XmppStream</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Manages the XMPP stream of the connection.
+            </p></td>
+        </tr>
+    </tbody>
+  </table>
+
+    </div>
+<h2>jabber.connection.sasl Namespace</h2>
+    <div>
+      <table class="table table-bordered type-list">
+    <thead>
+      <tr><td>Type</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-sasl-anonymousprocessor.html">AnonymousProcessor</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-sasl-authenticationfailedexception.html">AuthenticationFailedException</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Authentication failed.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-sasl-externalprocessor.html">ExternalProcessor</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            SASL Mechanism EXTERNAL as specified in XEP-0178.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-sasl-invalidserverchallengeexception.html">InvalidServerChallengeException</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Server sent an invalid challenge
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-sasl-kerbprocessor.html">KerbProcessor</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+             Uses Kerberos authentication ot log into XMPP server.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-sasl-md5processor.html">MD5Processor</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            RFC2831 DIGEST-MD5 SASL mechanism
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-sasl-missingdirectiveexception.html">MissingDirectiveException</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A required directive wasn't supplied.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-sasl-plainprocessor.html">PlainProcessor</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            SASL Mechanism PLAIN as specified in RFC 2595.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-sasl-saslexception.html">SASLException</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Some sort of SASL error
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-sasl-saslprocessor.html">SASLProcessor</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Summary description for SASLProcessor.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-connection-sasl-saslprocessorhandler.html">SASLProcessorHandler</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A SASL processor instance has been created.  Fill it with information, like USERNAME and PASSWORD.
+            </p></td>
+        </tr>
+    </tbody>
+  </table>
+
+    </div>
+<h2>jabber.protocol Namespace</h2>
+Jabber protocol implementation    <div>
+      <table class="table table-bordered type-list">
+    <thead>
+      <tr><td>Type</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-asynchelementstream.html">AsynchElementStream</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Summary description for AsynchElementStream.
+            TODO: combine with ElementStream, since there's only one impl now.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-dashattribute.html">DashAttribute</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            An enum that should translate "_" into "-" for use externally.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-element.html">Element</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            An XmlElement with type-safe accessors.  This class is not much use by itself,
+            but provides a number of utility functions for its descendants.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-elementfactory.html">ElementFactory</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A ElementFactory is a class that knows how to create packet instances of
+            a wide variety of different types.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-elementlist.html">ElementList</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Replacement for XmlElementList that removes the safety belt of checking for changes during traversal,
+            but removes the big old memory leak in MS's implementation.  Also, only returns first-level children,
+            rather than all children below here with the given name.  Thanks, MS.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-elementstream.html">ElementStream</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+             Async XML parsing, according to jabber protocol rules of "interesting".
+             The root node fires IElementStreamListener.OnDocumentStart(), and each
+             direct child of the root fires IElementStreamListener.OnTag().
+            
+             TODO: Combine with AsyncElementStream, since there's only one impl.
+             </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-enumparser.html">EnumParser</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Parse enums
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-ipackettypes.html">IPacketTypes</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Interface for packet factories to implement.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-ns.html">NS</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Namespace stack.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-packet.html">Packet</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Packets that have to/from information.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-protocolhandler.html">ProtocolHandler</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A packet was received.  The specified element will likely be a sub-class
+            of XmlElement, if the packet is found in the packet factory.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-qnametype.html">QnameType</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Qname to type mapping.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-typedelementlist-1.html">TypedElementList<'T></a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Parameterized version of ElementList.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-uri.html">URI</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Namespace constants for http://etherx.jabber.org/streams.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-xmlattribute.html">XMLAttribute</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            How should the marked-up entity be rendered in XML?  Only used
+            for enums that are going to be put in attributes at the moment.
+            TODO: support namespaces, use for element definitions.
+            </p></td>
+        </tr>
+    </tbody>
+  </table>
+
+    </div>
+<h2>jabber.protocol.accept Namespace</h2>
+jabber:component:accept namespace, for services.    <div>
+      <table class="table table-bordered type-list">
+    <thead>
+      <tr><td>Type</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-accept-factory.html">Factory</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A packet factory for the jabber:component:accept namespace.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-accept-handshake.html">Handshake</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            The handshake tag, including digest calculation.  Call SetAuth() to calculate
+            the SHA1 hash.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-accept-log.html">Log</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            The log packet.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-accept-logtype.html">LogType</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            The type field in a log tag.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-accept-route.html">Route</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            The route packet.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-accept-routetype.html">RouteType</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            The type field in a route tag.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-accept-xdb.html">Xdb</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            The XDB packet.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-accept-xdbaction.html">XdbAction</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            The action attribute.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-accept-xdbtype.html">XdbType</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            The type attribute
+            </p></td>
+        </tr>
+    </tbody>
+  </table>
+
+    </div>
+<h2>jabber.protocol.client Namespace</h2>
+jabber:client namespace. The meat of the protocol.    <div>
+      <table class="table table-bordered type-list">
+    <thead>
+      <tr><td>Type</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-client-badprotocolexception.html">BadProtocolException</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Invalid protocol received.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-client-error.html">Error</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Error in a message or IQ.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-client-errortype.html">ErrorType</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            See RFC 3920, section 9.3.2.  These are the possible error types.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-client-factory.html">Factory</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            ElementFactory for the jabber:client namespace.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-client-iq.html">IQ</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            All IQ packets start here.  The Query property holds the interesting part.
+            There should usually be a convenience class next to the Query type, which
+            creates an IQ with the appropriate type of query inside.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-client-iqerror.html">IQError</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Error IQ
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-client-iqexception.html">IQException</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A jabber error, in an IQ.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-client-iqtype.html">IQType</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            IQ type attribute
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-client-message.html">Message</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A client-to-client message.
+            TODO: Some XHTML is supported by setting the .Html property,
+            but extra xmlns="" get put everywhere at the moment.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-client-messagetype.html">MessageType</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Message type attribute
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-client-presence.html">Presence</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Client presence packet.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-client-presencetype.html">PresenceType</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Presence type attribute
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-client-typediq-1.html">TypedIQ<'T></a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            An IQ subclass that allows typed access to its first child,
+            through the Instruction property.
+            </p></td>
+        </tr>
+    </tbody>
+  </table>
+
+    </div>
+<h2>jabber.protocol.iq Namespace</h2>
+The jabber:iq:* namespaces.    <div>
+      <table class="table table-bordered type-list">
+    <thead>
+      <tr><td>Type</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-addresslocation.html">AddressLocation</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Address location
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-adminitem.html">AdminItem</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Item associated with a room.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-adminquery.html">AdminQuery</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Moderator use cases
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-affiliation.html">Affiliation</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            The actual affiliation.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-affiliationtype.html">AffiliationType</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            What affiliation does an entity have with respect to a node?
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-affiliations.html">Affiliations</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Retrieve the affiliations.  See: http://www.xmpp.org/extensions/xep-0060.html#entity-affiliations
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-agent.html">Agent</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Agent items
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-agentsiq.html">AgentsIQ</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            IQ packet with an agents query element inside.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-agentsquery.html">AgentsQuery</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            An agents query element.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-ask.html">Ask</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            An optional attribute specifying the current status of a request to this contact.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-auth.html">Auth</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Client authentication, with digest support.  Call SetAuth() to compute
+            the digest.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-authiq.html">AuthIQ</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            An auth IQ.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-bookmarkconference.html">BookmarkConference</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A conference room name stored in bookmarks
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-bookmarknote.html">BookmarkNote</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A note stored in bookmarks.  Un-specified, but hinted at in version 1.1 of XEP-48.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-bookmarkurl.html">BookmarkURL</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A URL stored in bookmarks.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-bookmarks.html">Bookmarks</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            The bookmarks to be stored.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-bookmarksiq.html">BookmarksIQ</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            An IQ in jabber:iq:private, with a bookmarks body.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-browse.html">Browse</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Browse IQ query.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-browseiq.html">BrowseIQ</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            An browse IQ.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-closednode.html">ClosedNode</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            For nodes with a node access model of "whitelist", if the requesting 
+            entity is not on the whitelist then the service MUST return a 
+            not-allowed error, specifying a pubsub-specific error condition of closed-node.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-configurationrequired.html">ConfigurationRequired</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            The node must be configured.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-configure.html">Configure</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Configuring a pubsub node.  If the default is desired, it will be empty.  Otherwise it will contain an x:data.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-create.html">Create</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Create a node. See: http://www.xmpp.org/extensions/xep-0060.html#owner-create
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-decline.html">Decline</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Invitee Declines Invitation
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-destroy.html">Destroy</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A room was destroyed
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-discoaction.html">DiscoAction</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Actions for iq/set in the disco#items namespace.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-discofeature.html">DiscoFeature</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A feature associated with a disco node.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-discoidentity.html">DiscoIdentity</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            The identitiy associated with a disco node.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-discoinfo.html">DiscoInfo</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            The information associated with a disco node.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-discoinfoiq.html">DiscoInfoIQ</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            IQ packet with a disco#info query element inside.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-discoitem.html">DiscoItem</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            An item inside a disco#items result.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-discoitems.html">DiscoItems</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A disco#items query element.
+            See  for more information.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-discoitemsiq.html">DiscoItemsIQ</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            IQ packet with a disco#items query element inside.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-emailtype.html">EmailType</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Email type attribute
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-eventassociate.html">EventAssociate</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Nodes added to a collection
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-eventcollection.html">EventCollection</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'></p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-eventconfiguration.html">EventConfiguration</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            New node configuration
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-eventdisassociate.html">EventDisassociate</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Nodes removed from a collection
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-eventitems.html">EventItems</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Pubsub items notification.  This is the main reason for XEP-60 to have been written.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-eventpurge.html">EventPurge</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            All of the items in a node have been deleted.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-eventretract.html">EventRetract</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Notification for item deletion.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-eventsubscription.html">EventSubscription</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Subscription state has changed
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-factory.html">Factory</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            ElementFactory for all currently supported IQ namespaces.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-geoloc.html">GeoLoc</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Geographic location.  See http://www.xmpp.org/extensions/xep-0080.html.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-geolociq.html">GeoLocIQ</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A GeoLoc IQ.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-group.html">Group</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Roster item groups.  <group>GroupName</group>
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-history.html">History</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            How much history to retrieve upon joining a room.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-invalidjid.html">InvalidJID</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            An invalid JID was specified
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-invalidoptions.html">InvalidOptions</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Invalid options were specified
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-invalidpayload.html">InvalidPayload</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            An invalid item was specified.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-invalidsubid.html">InvalidSubid</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            An invalid ID was specified.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-invite.html">Invite</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            An invite to a room
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-item.html">Item</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Roster items.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-itemforbidden.html">ItemForbidden</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            An item was forbidden.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-itemrequired.html">ItemRequired</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            An item was required, but was not specified.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-items.html">Items</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Retrieve the items for a node. See http://www.xmpp.org/extensions/xep-0060.html#subscriber-retrieve
+            Note: this same type is used for event notifications, in the pubsub#event namespace
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-jidrequired.html">JIDRequired</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A JID was required, but not specified.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-last.html">Last</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A Last query element, which requests the last activity from an entity.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-lastiq.html">LastIQ</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            IQ packet with an Last query element inside.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-maxitemsexceeded.html">MaxItemsExceeded</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            The maximum number of items was exceeded.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-maxnodesexceeded.html">MaxNodesExceeded</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            The maximum number of nodes was exceeded.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-nodeidrequired.html">NodeIDRequired</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            The node was required, but not specified.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-notinrostergroup.html">NotInRosterGroup</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Not allowed to subscribe, because you aren't in one of the correct roster
+            groups of the publisher.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-notsubscribed.html">NotSubscribed</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            You must be subscribed to perform this function.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-oob.html">OOB</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            An oob query element for file transfer.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-oobiq.html">OobIQ</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            IQ packet with an oob query element inside.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-owneraffiliation.html">OwnerAffiliation</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            An affiliation for another user, retrieved by the owner.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-owneraffliliations.html">OwnerAffliliations</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Affiliations of all folks associated with a node
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-ownerconfigure.html">OwnerConfigure</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Owner-level configuration
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-ownerdefault.html">OwnerDefault</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            The default configuration parameters
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-ownerdelete.html">OwnerDelete</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Delete a node
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-ownerdestroy.html">OwnerDestroy</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Destroy the room
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-owneriq.html">OwnerIQ</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            IQ with an OwnerQuery inside
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-ownerpubsub-1.html">OwnerPubSub<'T></a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A type-safe pubsub element.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-ownerpubsubcommandiq-1.html">OwnerPubSubCommandIQ<'T></a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A type-safe PubSub IQ for owner actions.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-ownerpurge.html">OwnerPurge</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Purge all items from a node
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-ownerquery.html">OwnerQuery</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            The query element inside an owner IQ.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-ownersubscriptions.html">OwnerSubscriptions</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            The subscription list
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-payloadrequired.html">PayloadRequired</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            An item is required, but was not specified.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-payloadtoobig.html">PayloadTooBig</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            The item is too large.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-pendingsubscription.html">PendingSubscription</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            The subscription is pending.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-presencesubscriptionrequired.html">PresenceSubscriptionRequired</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            You must be subscribed first.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-private.html">Private</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Private storage query.
+            See XEP-0049 (http://www.xmpp.org/extensions/xep-0049.html)
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-privateiq.html">PrivateIQ</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Private storage IQ.
+            See XEP-0049 (http://www.xmpp.org/extensions/xep-0049.html)
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-pubsub.html">PubSub</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Publish/Subscribe.  See XEP-60: http://www.xmpp.org/extensions/xep-0060.html
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-pubsubcommand.html">PubSubCommand</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A PubSub command
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-pubsubcommandiq-1.html">PubSubCommandIQ<'T></a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A type-safe PubSub IQ.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-pubsubcommandtype.html">PubSubCommandType</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Different pubsub operations
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-pubsubevent.html">PubSubEvent</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Publish/Subscribe.  See XEP-60: http://www.xmpp.org/extensions/xep-0060.html
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-pubsubfeature.html">PubSubFeature</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Supported features
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-pubsubiq.html">PubSubIQ</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A PubSub IQ
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-pubsubitem.html">PubSubItem</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            The items in a node
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-pubsubitemcommand.html">PubSubItemCommand</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Commands that deal with items.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-pubsuboptions.html">PubSubOptions</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            PubSub subscription options
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-pubsubowner.html">PubSubOwner</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            The pubsub container for owner operations.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-pubsubsubscription.html">PubSubSubscription</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A single subscription
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-pubsubsubscriptiontype.html">PubSubSubscriptionType</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            The subscription state of a given pubsub node.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-publish.html">Publish</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Publish to a node.  See http://www.xmpp.org/extensions/xep-0060.html#publisher-publish
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-register.html">Register</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            User registration
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-registeriq.html">RegisterIQ</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            IQ packet with a register query element inside.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-retract.html">Retract</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Delete an item from a node.  See: http://www.xmpp.org/extensions/xep-0060.html#publisher-delete
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-roomactor.html">RoomActor</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            The JID associated with an item
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-roomadminiq.html">RoomAdminIQ</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            An IQ with a AdminQuery inside.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-roomaffiliation.html">RoomAffiliation</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Affiliation with a MUC room, per user.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-roomitem.html">RoomItem</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Item associated with a room.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-roompresence.html">RoomPresence</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Presence to join a multi-user chat.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-roomrole.html">RoomRole</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Current role in the room.  Initial role is set by affiliation, if it exits.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-roomstatus.html">RoomStatus</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Possible room status values.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-roomx.html">RoomX</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            X tag for presence when joining a room.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-roster.html">Roster</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A roster query element.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-rosteriq.html">RosterIQ</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            IQ packet with a roster query element inside.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-subidrequired.html">SubidRequired</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            An subscription ID is required, but was not specified.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-subscribe.html">Subscribe</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Subscribe to a node. See: http://www.xmpp.org/extensions/xep-0060.html#subscriber-subscribe
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-subscription.html">Subscription</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            The current status of the subscription related to this item.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-subscriptions.html">Subscriptions</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Retrieve subscriptions.  See: http://www.xmpp.org/extensions/xep-0060.html#entity-subscriptions
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-telephonelocation.html">TelephoneLocation</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Telephone location
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-telephonetype.html">TelephoneType</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Type of telephone number.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-time.html">Time</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A time query element.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-timeiq.html">TimeIQ</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            IQ packet with an time query element inside.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-typedpubsub-1.html">TypedPubSub<'T></a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A type-safe pubsub element.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-uniqueiq.html">UniqueIQ</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Request for a unique room name.  Seems like just using a GUID on the
+            create request would be enough, but it's in XEP-45.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-uniqueroom.html">UniqueRoom</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A unique name for a room.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-unsubscribe.html">Unsubscribe</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Unsubscribe from a node.  See: http://www.xmpp.org/extensions/xep-0060.html#subscriber-unsubscribe
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-unsupported.html">Unsupported</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            An unsupported protocol was used.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-unsupportedaccessmodel.html">UnsupportedAccessModel</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            An invalid access model was specified.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-userx.html">UserX</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Information about users
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-vcard.html">VCard</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A vCard element.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-vcardiq.html">VCardIQ</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            IQ packet with a version query element inside.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-version.html">Version</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A time query element.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-iq-versioniq.html">VersionIQ</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            IQ packet with a version query element inside.
+            </p></td>
+        </tr>
+    </tbody>
+  </table>
+
+    </div>
+<h2>jabber.protocol.stream Namespace</h2>
+etherx namespace. stream:stream and friends.    <div>
+      <table class="table table-bordered type-list">
+    <thead>
+      <tr><td>Type</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-stream-abort.html">Abort</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Abort SASL auth.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-stream-auth.html">Auth</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            First phase of SASL auth.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-stream-bind.html">Bind</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Bind start after binding
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-stream-body.html">Body</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            An HTTP Binding body element, which encapsulates stanzas.
+            See XEP-124 and XEP-206 for details.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-stream-bodytype.html">BodyType</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Is this an error or a termination?
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-stream-challenge.html">Challenge</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Subsequent phases of SASL auth sent by server.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-stream-compress.html">Compress</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            XEP-138 compression start.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-stream-compressed.html">Compressed</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            XEP-138 compression success.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-stream-compression.html">Compression</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            XEP-138 compression.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-stream-compressionfailure.html">CompressionFailure</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            XEP-138 compression failure.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-stream-conditiontype.html">ConditionType</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            These error conditions may be read by constrained clients. 
+            They are used for connection manager problems, abstracting stream errors, 
+            communication problems between the connection manager and the server, 
+            and invalid client requests (binding syntax errors, possible attacks, etc.)
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-stream-error.html">Error</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Stream error packet.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-stream-factory.html">Factory</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            ElementFactory for http://etherx.jabber.org/streams
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-stream-features.html">Features</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Stream features.  Will only be set by a version="1.0" or higher XMPP server.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-stream-featureshandler.html">FeaturesHandler</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Stream Features handler
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-stream-mechanism.html">Mechanism</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Stores SASL mechanisms in stream features.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-stream-mechanismtype.html">MechanismType</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            SASL mechanisms registered with IANA as of 5/16/2004.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-stream-mechanisms.html">Mechanisms</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            SASL mechanisms in stream features.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-stream-proceed.html">Proceed</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Start-TLS proceed.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-stream-response.html">Response</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            First phase of SASL auth.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-stream-saslfailure.html">SASLFailure</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            SASL auth failed.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-stream-session.html">Session</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Session start after binding
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-stream-starttls.html">StartTLS</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Start-TLS in stream features.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-stream-step.html">Step</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Auth, Challenge, and Response.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-stream-stream.html">Stream</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            The fabled stream:stream packet.  Id's get assigned automatically on allocation.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-stream-success.html">Success</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            SASL auth successfult.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-stream-tlsfailure.html">TLSFailure</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Start-TLS failure.
+            </p></td>
+        </tr>
+    </tbody>
+  </table>
+
+    </div>
+<h2>jabber.protocol.x Namespace</h2>
+The jabber:x:* namespaces.    <div>
+      <table class="table table-bordered type-list">
+    <thead>
+      <tr><td>Type</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-x-caps.html">Caps</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Entity Capabilities.  See http://www.xmpp.org/extensions/xep-0115.html.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-x-data.html">Data</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            jabber:x:data support, as in http://www.xmpp.org/extensions/xep-0004.html.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-x-delay.html">Delay</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A delay x element.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-x-event.html">Event</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A event x element, described by XEP-0022.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-x-eventtype.html">EventType</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Types of events
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-x-factory.html">Factory</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            ElementFactory for all currently supported IQ namespaces.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-x-field.html">Field</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Form field.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-x-fieldtype.html">FieldType</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Types of fields.  This enum doesn't exactly match the XEP,
+            since most of the field types aren't valid identifiers in C#.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-x-formtypecomparer.html">FormTypeComparer</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Compare two x:data forms by form type.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-x-moderndelay.html">ModernDelay</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A modern, XEP-0203 delay element
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-x-option.html">Option</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Field options, for list-single and list-multi type fields.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-protocol-x-xdatatype.html">XDataType</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            XData types.
+            </p></td>
+        </tr>
+    </tbody>
+  </table>
+
+    </div>
+<h2>jabber.server Namespace</h2>
+Service connections and utilties for extending the functionality of a Jabber server.    <div>
+      <table class="table table-bordered type-list">
+    <thead>
+      <tr><td>Type</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-server-acceptingstate.html">AcceptingState</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Waiting for socket connection.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-server-componenttype.html">ComponentType</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Type of connection to the server, with respect to jabberd.
+            This list will grow over time to include
+            queued connections, direct (in-proc) connections, etc.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-server-handshakingstate.html">HandshakingState</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Waiting for handshake result.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-server-jabberservice.html">JabberService</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Summary description for ServerComponent.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-server-loghandler.html">LogHandler</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Received a Log element.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-server-routehandler.html">RouteHandler</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Received a route element
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-server-xdbcb.html">XdbCB</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Received a response to an XDB request.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-server-xdbhandler.html">XdbHandler</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Received an XDB element.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="jabber-server-xdbtracker.html">XdbTracker</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Track outstanding XDB requests.
+            </p></td>
+        </tr>
+    </tbody>
+  </table>
+
+    </div>
+<h2>stringprep Namespace</h2>
+Library for canonicalizing Unicode strings    <div>
+      <table class="table table-bordered type-list">
+    <thead>
+      <tr><td>Type</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td class="type-name">
+            <a href="stringprep-nameprep.html">Nameprep</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            RFC 3491, "nameprep" profile, for internationalized domain names.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="stringprep-plain.html">Plain</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A relatively plain stringprep profile, that doesn't do case folding, or prevent unassigned characters.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="stringprep-profile.html">Profile</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Summary description for Prep.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="stringprep-rfc3454.html">RFC3454</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Constants from RFC 3454, Stringprep.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="stringprep-xmppnode.html">XmppNode</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A stringprep profile for draft-ietf-xmpp-nodeprep-02, for Jabber nodes (the "user" part).
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="stringprep-xmppresource.html">XmppResource</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A stringprep profile for draft-ietf-xmpp-resourceprep-02, used for Jabber resources.
+            </p></td>
+        </tr>
+    </tbody>
+  </table>
+
+    </div>
+<h2>stringprep.steps Namespace</h2>
+Steps along the path to Unicode canonicalization.    <div>
+      <table class="table table-bordered type-list">
+    <thead>
+      <tr><td>Type</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td class="type-name">
+            <a href="stringprep-steps-bidiexception.html">BidiException</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            There was a problem with the Bidirection nature of a string to be prepped.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="stringprep-steps-bidistep.html">BidiStep</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A stringprep profile step to check for Bidirectional correctness.
+            If the NO_BIDI flag is set, this is a no-op.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="stringprep-steps-mapstep.html">MapStep</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A stringprep profile step to map one input character into 0 or
+            more output characters.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="stringprep-steps-nfkcstep.html">NFKCStep</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Perform Unicode Normalization Form KC.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="stringprep-steps-profilestep.html">ProfileStep</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Base class for steps in a stringprep profile.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="stringprep-steps-prohibitstep.html">ProhibitStep</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A stringprep profile step that checks for prohibited characters
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="stringprep-steps-prohibitedcharacterexception.html">ProhibitedCharacterException</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A character that is forbidden by the current stringprep profile exists in the input.
+            </p></td>
+        </tr>
+    </tbody>
+  </table>
+
+    </div>
+<h2>stringprep.unicode Namespace</h2>
+Unicode data.    <div>
+      <table class="table table-bordered type-list">
+    <thead>
+      <tr><td>Type</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td class="type-name">
+            <a href="stringprep-unicode-combining.html">Combining</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Combining classes for Unicode characters.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="stringprep-unicode-combiningdata.html">CombiningData</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Combining class lookup tables.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="stringprep-unicode-compose.html">Compose</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Combine combining characters, where possible.
+            Note: this is still Black Magic, as far as I can tell.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="stringprep-unicode-composedata.html">ComposeData</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Data for composition of characters.  The algorithms here are still black box to me.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="stringprep-unicode-decompose.html">Decompose</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Decomposition data for NFKC.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="stringprep-unicode-decomposedata.html">DecomposeData</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Decomposition data for NFKC.
+            </p></td>
+        </tr>
+    </tbody>
+  </table>
+
+    </div>
+<h2>xpnet Namespace</h2>
+Partial port of James Clark's XP XML parser to .Net. See http://www.jclark.com/xml/ for more details.    <div>
+      <table class="table table-bordered type-list">
+    <thead>
+      <tr><td>Type</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td class="type-name">
+            <a href="xpnet-contenttoken.html">ContentToken</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Represents information returned by .
+            @see Encoding#tokenizeContent
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="xpnet-emptytokenexception.html">EmptyTokenException</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            An empty token was detected.  This only happens with a buffer of length 0 is passed in
+            to the parser.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="xpnet-encoding.html">Encoding</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Base tokenizer class
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="xpnet-endofprologexception.html">EndOfPrologException</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            End of prolog.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="xpnet-extensibletokenexception.html">ExtensibleTokenException</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="xpnet-invalidtokenexception.html">InvalidTokenException</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Several kinds of token problems.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="xpnet-partialcharexception.html">PartialCharException</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="xpnet-partialtokenexception.html">PartialTokenException</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A partial token was received.  Try again, after you add more bytes to the buffer.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="xpnet-position.html">Position</a>
+          </td>
+          <td class="xmldoc">
+            Represents a position in an entity.
+            A position can be modified by .
+            @see Encoding#movePosition
+            @version $Revision$ $Date$
+            </br><p class='summary'>
+             Position of an entry in a table.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="xpnet-tok.html">TOK</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Tokens that might have been found
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="xpnet-token.html">Token</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            A token that was parsed.
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="xpnet-tokenexception.html">TokenException</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            Base class for other exceptions
+            </p></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="xpnet-utf8encoding.html">UTF8Encoding</a>
+          </td>
+          <td class="xmldoc"></br><p class='summary'>
+            UTF-8 specific tokenizer.
+            </p></td>
+        </tr>
+    </tbody>
+  </table>
+
+    </div>
+
+        </div>
+        <div class="span3">
+          <a href="./index.html">
+            <img src="./images/logo.png" style="width:140px;height:140px;margin:10px 0px 0px 35px;border-style:none;" />
+          </a>
+
+          <ul class="nav nav-list" id="menu">
+
+            <li class="nav-header">Jabber-Net</li>
+
+            <li class="divider"></li>
+
+            <li><a href="https://www.nuget.org/packages/jabber-net/">Get Jabber-Net package via NuGet</a></li>
+            <li><a href="https://github.com/ForNeVeR/Jabber-Net">Source Code on GitHub</a></li>
+            <li><a href="./licensing.html">License (LGPL)</a></li>
+
+            <li class="nav-header">Documentation</li>
+
+            <li><a href="./index.html">Getting Started</a></li>
+
+            <li class="divider"></li>
+
+            <li><a href="./FAQ.html">Frequently-Asked Questions about Jabber-Net</a></li>
+
+            <li class="divider"></li>
+
+            <li><a href="./SendMessage.html">How to send a message</a></li>
+
+            <li class="nav-header">Reference</li>
+
+            <li><a href="./reference/index.html">API Reference</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <a href="https://github.com/ForNeVeR/Jabber-Net"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+  </body>
+  </html>

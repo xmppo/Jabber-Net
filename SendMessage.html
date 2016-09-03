@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>How to send a message
+</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A set of .NET classes for sending and receiving Extensible Messaging and Presence Protocol (XMPP), also known as the Jabber.">
+    <meta name="author" content="Friedrich von Never">
+
+    <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
+
+    <link type="text/css" rel="stylesheet" href="./content/style.css" />
+    <script type="text/javascript" src="./content/tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="masthead">
+        <h3 class="muted"><a href="./index.html">Jabber-Net</a></h3>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="span9" id="main">
+          
+<h1>How to send a message</h1>
+<h2>Introduction</h2>
+<p>Jabber-Net uses an asynchronous programming model by default. This can be
+confusing if you are new to .NET. This example shows how to set up a connection,
+connect, and send a message before your program finishes. The key concept is the
+use of
+<a href="http://msdn2.microsoft.com/en-us/library/system.threading.manualresetevent.aspx">ManualResetEvent</a>
+to wait for the end of asynchronous processing.</p>
+<h2>SendMessage.cs</h2>
+<p>Make sure to reference <code>jabber-net.dll</code>, <code>zlib.net.dll</code>, and <code>netlib.Dns.dll</code>.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+<span class="l">20: </span>
+<span class="l">21: </span>
+<span class="l">22: </span>
+<span class="l">23: </span>
+<span class="l">24: </span>
+<span class="l">25: </span>
+<span class="l">26: </span>
+<span class="l">27: </span>
+<span class="l">28: </span>
+<span class="l">29: </span>
+<span class="l">30: </span>
+<span class="l">31: </span>
+<span class="l">32: </span>
+<span class="l">33: </span>
+<span class="l">34: </span>
+<span class="l">35: </span>
+<span class="l">36: </span>
+<span class="l">37: </span>
+<span class="l">38: </span>
+<span class="l">39: </span>
+<span class="l">40: </span>
+<span class="l">41: </span>
+<span class="l">42: </span>
+<span class="l">43: </span>
+<span class="l">44: </span>
+<span class="l">45: </span>
+<span class="l">46: </span>
+<span class="l">47: </span>
+<span class="l">48: </span>
+<span class="l">49: </span>
+<span class="l">50: </span>
+<span class="l">51: </span>
+<span class="l">52: </span>
+<span class="l">53: </span>
+<span class="l">54: </span>
+<span class="l">55: </span>
+<span class="l">56: </span>
+<span class="l">57: </span>
+<span class="l">58: </span>
+<span class="l">59: </span>
+<span class="l">60: </span>
+<span class="l">61: </span>
+<span class="l">62: </span>
+<span class="l">63: </span>
+<span class="l">64: </span>
+<span class="l">65: </span>
+<span class="l">66: </span>
+<span class="l">67: </span>
+<span class="l">68: </span>
+<span class="l">69: </span>
+<span class="l">70: </span>
+<span class="l">71: </span>
+<span class="l">72: </span>
+<span class="l">73: </span>
+<span class="l">74: </span>
+<span class="l">75: </span>
+<span class="l">76: </span>
+<span class="l">77: </span>
+<span class="l">78: </span>
+<span class="l">79: </span>
+<span class="l">80: </span>
+<span class="l">81: </span>
+<span class="l">82: </span>
+<span class="l">83: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="csharp"><span class="k">using</span> System;
+<span class="k">using</span> System.Threading;
+
+<span class="k">using</span> jabber.client;
+
+<span class="k">namespace</span> SendMessage
+{
+    <span class="k">class</span> Program
+    {
+        <span class="c">// we will wait on this event until we're done sending</span>
+        <span class="k">static</span> ManualResetEvent done <span class="o">=</span> <span class="k">new</span> ManualResetEvent(<span class="k">false</span>);
+        <span class="c">// if true, output protocol trace to stdout</span>
+        <span class="k">const</span> <span class="k">bool</span> VERBOSE <span class="o">=</span> <span class="k">true</span>;
+        <span class="k">const</span> <span class="k">string</span> TARGET <span class="o">=</span> <span class="s">"otheruser@example.com"</span>;
+
+        <span class="k">static</span> <span class="k">void</span> Main(<span class="k">string</span>[] args)
+        {
+            JabberClient j <span class="o">=</span> <span class="k">new</span> JabberClient();
+            <span class="c">// what user/pass to log in as</span>
+            j.User <span class="o">=</span> <span class="s">"someuser"</span>;
+            j.Server <span class="o">=</span> <span class="s">"example.com"</span>;  <span class="c">// use gmail.com for GoogleTalk</span>
+            j.Password <span class="o">=</span> <span class="s">"somepassword"</span>;
+
+            <span class="c">// don't do extra stuff, please.</span>
+            j.AutoPresence <span class="o">=</span> <span class="k">false</span>;
+            j.AutoRoster <span class="o">=</span> <span class="k">false</span>;
+            j.AutoReconnect <span class="o">=</span> <span class="n">-1</span>;
+
+            <span class="c">// listen for errors.  Always do this!</span>
+            j.OnError <span class="o">+</span><span class="o">=</span> <span class="k">new</span> bedrock.ExceptionHandler(j_OnError);
+
+            <span class="c">// what to do when login completes</span>
+            j.OnAuthenticate <span class="o">+</span><span class="o">=</span> <span class="k">new</span> bedrock.ObjectHandler(j_OnAuthenticate);
+
+            <span class="c">// listen for XMPP wire protocol</span>
+            <span class="k">if</span> (VERBOSE)
+            {
+                j.OnReadText <span class="o">+</span><span class="o">=</span> <span class="k">new</span> bedrock.TextHandler(j_OnReadText);
+                j.OnWriteText <span class="o">+</span><span class="o">=</span> <span class="k">new</span> bedrock.TextHandler(j_OnWriteText);
+            }
+
+            <span class="c">// Set everything in motion</span>
+            j.Connect();
+
+            <span class="c">// wait until sending a message is complete</span>
+            done.WaitOne();
+
+            <span class="c">// logout cleanly</span>
+            j.Close();
+        }
+
+        <span class="k">static</span> <span class="k">void</span> j_OnWriteText(<span class="k">object</span> sender, <span class="k">string</span> txt)
+        {
+            <span class="k">if</span> (txt <span class="o">=</span><span class="o">=</span> <span class="s">" "</span>) <span class="k">return</span>;  <span class="c">// ignore keep-alive spaces</span>
+            Console.WriteLine(<span class="s">"SEND: "</span> <span class="o">+</span> txt);
+        }
+
+        <span class="k">static</span> <span class="k">void</span> j_OnReadText(<span class="k">object</span> sender, <span class="k">string</span> txt)
+        {
+            <span class="k">if</span> (txt <span class="o">=</span><span class="o">=</span> <span class="s">" "</span>) <span class="k">return</span>;  <span class="c">// ignore keep-alive spaces</span>
+            Console.WriteLine(<span class="s">"RECV: "</span> <span class="o">+</span> txt);
+        }
+
+        <span class="k">static</span> <span class="k">void</span> j_OnAuthenticate(<span class="k">object</span> sender)
+        {
+            <span class="c">// Sender is always the JabberClient.</span>
+            JabberClient j <span class="o">=</span> (JabberClient)sender;
+            j.Message(TARGET, <span class="s">"test"</span>);
+
+            <span class="c">// Finished sending.  Shut down.</span>
+            done.Set();
+        }
+
+        <span class="k">static</span> <span class="k">void</span> j_OnError(<span class="k">object</span> sender, Exception ex)
+        {
+            <span class="c">// There was an error!</span>
+            Console.WriteLine(<span class="s">"Error: "</span> <span class="o">+</span> ex.ToString());
+
+            <span class="c">// Shut down.</span>
+            done.Set();
+        }
+    }
+}
+</code></pre></td></tr></table>
+
+
+        </div>
+        <div class="span3">
+          <a href="./index.html">
+            <img src="./images/logo.png" style="width:140px;height:140px;margin:10px 0px 0px 35px;border-style:none;" />
+          </a>
+
+          <ul class="nav nav-list" id="menu">
+
+            <li class="nav-header">Jabber-Net</li>
+
+            <li class="divider"></li>
+
+            <li><a href="https://www.nuget.org/packages/jabber-net/">Get Jabber-Net package via NuGet</a></li>
+            <li><a href="https://github.com/ForNeVeR/Jabber-Net">Source Code on GitHub</a></li>
+            <li><a href="./licensing.html">License (LGPL)</a></li>
+
+            <li class="nav-header">Documentation</li>
+
+            <li><a href="./index.html">Getting Started</a></li>
+
+            <li class="divider"></li>
+
+            <li><a href="./FAQ.html">Frequently-Asked Questions about Jabber-Net</a></li>
+
+            <li class="divider"></li>
+
+            <li><a href="./SendMessage.html">How to send a message</a></li>
+
+            <li class="nav-header">Reference</li>
+
+            <li><a href="./reference/index.html">API Reference</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <a href="https://github.com/ForNeVeR/Jabber-Net"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+  </body>
+  </html>

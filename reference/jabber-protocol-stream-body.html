@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Body - Jabber-Net</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Friedrich von Never">
+
+    <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
+
+    <link type="text/css" rel="stylesheet" href="./content/style.css" />
+    <script type="text/javascript" src="./content/tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="masthead">
+        <h3 class="muted"><a href="./index.html">Jabber-Net</a></h3>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="span9" id="main">
+          
+
+
+
+<h1>Body</h1>
+<p>
+  <span>Namespace: jabber.protocol.stream</span><br />
+</p>
+<div class="xmldoc">
+</br><p class='summary'>
+            An HTTP Binding body element, which encapsulates stanzas.
+            See XEP-124 and XEP-206 for details.
+            </p></div>
+  <h3>Constructors</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Constructor</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1724', 1724)" onmouseover="showTip(event, '1724', 1724)">
+            new(doc)
+          </code>
+          <div class="tip" id="1724">
+            <strong>Signature:</strong> doc:XmlDocument -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Create for outbound
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1725', 1725)" onmouseover="showTip(event, '1725', 1725)">
+            new(prefix, qname, doc)
+          </code>
+          <div class="tip" id="1725">
+            <strong>Signature:</strong> (prefix:string * qname:XmlQualifiedName * doc:XmlDocument) -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Create inbound instance
+            </p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h3>Instance members</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Instance member</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1726', 1726)" onmouseover="showTip(event, '1726', 1726)">
+            Accept()
+          </code>
+          <div class="tip" id="1726">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            The content encodings that server can handle.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1727', 1727)" onmouseover="showTip(event, '1727', 1727)">
+            Ack()
+          </code>
+          <div class="tip" id="1727">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Acknowledgement of a given RID.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1728', 1728)" onmouseover="showTip(event, '1728', 1728)">
+            AuthID()
+          </code>
+          <div class="tip" id="1728">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Stream ID for digest auth calculations
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1729', 1729)" onmouseover="showTip(event, '1729', 1729)">
+            Charsets()
+          </code>
+          <div class="tip" id="1729">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            The charsets supported by the server.  Almost always just UTF8, if it exists.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1730', 1730)" onmouseover="showTip(event, '1730', 1730)">
+            Condition()
+          </code>
+          <div class="tip" id="1730">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            The error condition, if this is an error.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1731', 1731)" onmouseover="showTip(event, '1731', 1731)">
+            Content()
+          </code>
+          <div class="tip" id="1731">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1732', 1732)" onmouseover="showTip(event, '1732', 1732)">
+            Contents()
+          </code>
+          <div class="tip" id="1732">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            The child elements of the body.  0 or more stanzas.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1733', 1733)" onmouseover="showTip(event, '1733', 1733)">
+            From()
+          </code>
+          <div class="tip" id="1733">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            A client MAY include a 'from' attribute to enable the 
+            connection manager to forward its identity to the server.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1734', 1734)" onmouseover="showTip(event, '1734', 1734)">
+            Hold()
+          </code>
+          <div class="tip" id="1734">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            This attribute specifies the maximum number of requests the connection manager 
+            is allowed to keep waiting at any one time during the session. If the client 
+            is not able to use HTTP Pipelining then this SHOULD be set to "1".
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1735', 1735)" onmouseover="showTip(event, '1735', 1735)">
+            Inactivity()
+          </code>
+          <div class="tip" id="1735">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            This attribute specifies the longest allowable inactivity period (in seconds). 
+            This enables the client to ensure that the periods with no requests pending 
+            are never too long (see Polling Sessions and Inactivity).
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1736', 1736)" onmouseover="showTip(event, '1736', 1736)">
+            Key()
+          </code>
+          <div class="tip" id="1736">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            The client MUST set the 'key' attribute of all subsequent requests to the 
+            value of the next key in the generated sequence (decrementing from K(n-1) 
+            towards K(1) with each request sent).
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1737', 1737)" onmouseover="showTip(event, '1737', 1737)">
+            MaxPause()
+          </code>
+          <div class="tip" id="1737">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            If the connection manager supports session pausing (see Inactivity) then it 
+            SHOULD advertise that to the client by including a 'maxpause' attribute in 
+            the session creation response element. The value of the attribute indicates 
+            the maximum length of a temporary session pause (in seconds) that a client
+            MAY request.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1738', 1738)" onmouseover="showTip(event, '1738', 1738)">
+            NewKey()
+          </code>
+          <div class="tip" id="1738">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            The client MUST set the 'newkey' attribute of the first request in the session to the value K(n).
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1739', 1739)" onmouseover="showTip(event, '1739', 1739)">
+            Pause()
+          </code>
+          <div class="tip" id="1739">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            If a client encounters an exceptional temporary situation during which it 
+            will be unable to send requests to the connection manager for a period of 
+            time greater than the maximum inactivity period (e.g., while a runtime 
+            environment changes from one web page to another), and if the connection 
+            manager included a 'maxpause' attribute in its Session Creation Response,
+            then the client MAY request a temporary increase to the maximum inactivity 
+            period by including a 'pause' attribute in a request.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1740', 1740)" onmouseover="showTip(event, '1740', 1740)">
+            Polling()
+          </code>
+          <div class="tip" id="1740">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            This attribute specifies the shortest allowable polling interval (in seconds). 
+            This enables the client to not send empty request elements more often than desired.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1741', 1741)" onmouseover="showTip(event, '1741', 1741)">
+            Report()
+          </code>
+          <div class="tip" id="1741">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            After receiving a request with an 'ack' value less than the 'rid' of the last
+            request that it has already responded to, the connection manager MAY inform 
+            the client of the situation by sending its next response immediately instead
+            of waiting until it has stanzas to send to the client (e.g., if some time
+            has passed since it responded). In this case it SHOULD include a 'report'
+            attribute set to one greater than the 'ack' attribute it received from the 
+            client, and a 'time' attribute set to the number of milliseconds since it 
+            sent the response associated with the 'report' attribute.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1742', 1742)" onmouseover="showTip(event, '1742', 1742)">
+            Requests()
+          </code>
+          <div class="tip" id="1742">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            This attribute enables the connection manager to limit the number of 
+            simultaneous requests the client makes. The RECOMMENDED values are 
+            either "2" or one more than the value of the 'hold' attribute specified 
+            in the session request.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1743', 1743)" onmouseover="showTip(event, '1743', 1743)">
+            RID()
+          </code>
+          <div class="tip" id="1743">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Request ID.  Needs to start out random, and increment by one for each new BOSH
+            request.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1744', 1744)" onmouseover="showTip(event, '1744', 1744)">
+            Route()
+          </code>
+          <div class="tip" id="1744">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            connection manager MAY be configured to enable sessions with more than one 
+            server in different domains.  When requesting a session with such a 'proxy' 
+            connection manager, a client SHOULD include a 'route' attribute that 
+            specifies the protocol, hostname, and port of the server with which it 
+            wants to communicate, formatted as "proto:host:port" 
+            (e.g., "xmpp:jabber.org:9999").
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1745', 1745)" onmouseover="showTip(event, '1745', 1745)">
+            Secure()
+          </code>
+          <div class="tip" id="1745">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            A client MAY include a 'secure' attribute to specify that communications 
+            between the connection manager and the server must be "secure". (Note: The
+            'secure' attribute is of type xs:boolean (see XML Schema Part 2) and the 
+            default value is "false". [17]) If a connection manager receives a session
+            request with the 'secure' attribute set to "true" or "1", then it MUST 
+            respond to the client with a remote-connection-failed error as soon as it
+            determines that it cannot communicate in a secure way with the server.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1746', 1746)" onmouseover="showTip(event, '1746', 1746)">
+            SID()
+          </code>
+          <div class="tip" id="1746">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Stream ID
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1747', 1747)" onmouseover="showTip(event, '1747', 1747)">
+            Stream()
+          </code>
+          <div class="tip" id="1747">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            If a connection manager supports the multi-streams feature, it MUST 
+            include a 'stream' attribute in its Session Creation Response. If a
+            client does not receive the 'stream' attribute then it MUST assume 
+            that the connection manager does not support the feature. [22]
+            
+            The 'stream' attribute identifies the first stream to be opened for 
+            the session. The value of each 'stream' attribute MUST be an opaque 
+            and unpredictable name that is unique within the context of the 
+            connection manager application.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1748', 1748)" onmouseover="showTip(event, '1748', 1748)">
+            Time()
+          </code>
+          <div class="tip" id="1748">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            After receiving a request with an 'ack' value less than the 'rid' 
+            of the last request that it has already responded to, the connection 
+            manager MAY inform the client of the situation by sending its next
+            response immediately instead of waiting until it has stanzas to
+            send to the client (e.g., if some time has passed since it responded).
+            In this case it SHOULD include a 'report' attribute set to one greater
+            than the 'ack' attribute it received from the client, and a 'time' 
+            attribute set to the number of milliseconds since it sent the response
+            associated with the 'report' attribute.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1749', 1749)" onmouseover="showTip(event, '1749', 1749)">
+            To()
+          </code>
+          <div class="tip" id="1749">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            This attribute specifies the target domain of the first stream.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1750', 1750)" onmouseover="showTip(event, '1750', 1750)">
+            Type()
+          </code>
+          <div class="tip" id="1750">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            At any time, the client MAY gracefully terminate the session by sending a  
+            element with a 'type' attribute set to "terminate". The termination request 
+            MAY include one or more stanzas that the connection manager MUST forward to 
+            the server to ensure graceful logoff.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1751', 1751)" onmouseover="showTip(event, '1751', 1751)">
+            Ver()
+          </code>
+          <div class="tip" id="1751">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            This attribute specifies the highest version of the BOSH protocol 
+            that the client supports. The numbering scheme is "major.minor" 
+            (where the minor number MAY be incremented higher than a single digit, 
+            so it MUST be treated as a separate integer). Note: The 'ver' attribute 
+            should not be confused with the version of any protocol being transported.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1752', 1752)" onmouseover="showTip(event, '1752', 1752)">
+            Wait()
+          </code>
+          <div class="tip" id="1752">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            This attribute specifies the longest time (in seconds) that the connection
+            manager is allowed to wait before responding to any request during the session. 
+            This enables the client to limit the delay before it discovers any network failure, 
+            and to prevent its HTTP/TCP connection from expiring due to inactivity.
+            </p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+        </div>
+        <div class="span3">
+          <a href="./index.html">
+            <img src="./images/logo.png" style="width:140px;height:140px;margin:10px 0px 0px 35px;border-style:none;" />
+          </a>
+
+          <ul class="nav nav-list" id="menu">
+
+            <li class="nav-header">Jabber-Net</li>
+
+            <li class="divider"></li>
+
+            <li><a href="https://www.nuget.org/packages/jabber-net/">Get Jabber-Net package via NuGet</a></li>
+            <li><a href="https://github.com/ForNeVeR/Jabber-Net">Source Code on GitHub</a></li>
+            <li><a href="./licensing.html">License (LGPL)</a></li>
+
+            <li class="nav-header">Documentation</li>
+
+            <li><a href="./index.html">Getting Started</a></li>
+
+            <li class="divider"></li>
+
+            <li><a href="./FAQ.html">Frequently-Asked Questions about Jabber-Net</a></li>
+
+            <li class="divider"></li>
+
+            <li><a href="./SendMessage.html">How to send a message</a></li>
+
+            <li class="nav-header">Reference</li>
+
+            <li><a href="./reference/index.html">API Reference</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <a href="https://github.com/ForNeVeR/Jabber-Net"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+  </body>
+  </html>

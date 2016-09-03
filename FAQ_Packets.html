@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>How do I add my own packet types?
+</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A set of .NET classes for sending and receiving Extensible Messaging and Presence Protocol (XMPP), also known as the Jabber.">
+    <meta name="author" content="Friedrich von Never">
+
+    <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
+
+    <link type="text/css" rel="stylesheet" href="./content/style.css" />
+    <script type="text/javascript" src="./content/tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="masthead">
+        <h3 class="muted"><a href="./index.html">Jabber-Net</a></h3>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="span9" id="main">
+          
+<h1>How do I add my own packet types?</h1>
+<p>(thanks to Tom Waters for the genesis for this)</p>
+<p>TODO: This section is outdated; needs to be updated.</p>
+<p>Say you want to use a new packet type like this:</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="xml"><span class="c">&lt;!-- get your own list of all your objects... --&gt;</span>
+<span class="k">&lt;</span><span class="i">iq</span> <span class="o">type</span><span class="k">='get'</span> <span class="o">to</span><span class="k">='self'</span> <span class="o">id</span><span class="k">='n0'</span><span class="k">&gt;</span>
+ <span class="k">&lt;</span><span class="i">query</span> <span class="o">xmlns</span><span class="k">='your:namespace'</span><span class="k">/&gt;</span>
+<span class="k">&lt;/</span><span class="i">iq</span><span class="k">&gt;</span>
+
+<span class="c">&lt;!-- reply with list of objects... --&gt;</span>
+<span class="k">&lt;</span><span class="i">iq</span> <span class="o">type</span><span class="k">='result'</span> <span class="o">to</span><span class="k">='self'</span> <span class="o">id</span><span class="k">='n0'</span><span class="k">&gt;</span>
+ <span class="k">&lt;</span><span class="i">query</span> <span class="o">xmlns</span><span class="k">='your:namespace'</span><span class="k">&gt;</span>
+  <span class="k">&lt;</span><span class="i">yourobj</span> <span class="o">key</span><span class="k">='Object1'</span> <span class="o">other</span><span class="k">='value1'</span><span class="k">/&gt;</span>
+ <span class="k">&lt;/</span><span class="i">query</span><span class="k">&gt;</span>
+<span class="k">&lt;/</span><span class="i">iq</span><span class="k">&gt;</span>
+</code></pre></td></tr></table>
+<p>First, make sure you implement two constructors for each of your types:</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="csharp"><span class="k">namespace</span> your.protocol
+{
+    <span class="k">public</span> <span class="k">class</span> YourQuery <span class="o">:</span> Element
+    {
+        <span class="k">public</span> <span class="k">const</span> <span class="k">string</span> YOUR_NS  <span class="o">=</span> <span class="s">"your:namespace"</span>;
+
+        <span class="c">// used when creating elements to send</span>
+        <span class="k">public</span> YourQuery(XmlDocument doc) <span class="o">:</span> <span class="k">base</span>(<span class="s">"query"</span>, YOUR_NS, doc)  
+        {}
+
+        <span class="c">// used to create elements for inbound protocol</span>
+        <span class="k">public</span> YourQuery(<span class="k">string</span> prefix, XmlQualifiedName qname, XmlDocument doc)
+            <span class="o">:</span> <span class="k">base</span>(prefix, qname, doc)
+        {}
+
+        <span class="c">// put your accessor methods here</span>
+    }
+}
+</code></pre></td></tr></table>
+<p>In order to get the inbound connection to create objects of your class, rather
+than just plain <code>XmlElement</code>s, you need to create a factory class that maps the
+combination of the element name and namespace to a type.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+<span class="l">8: </span>
+<span class="l">9: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="csharp"><span class="k">public</span> <span class="k">class</span> Factory <span class="o">:</span> jabber.protocol.IPacketTypes
+{
+    <span class="k">private</span> <span class="k">static</span> QnameType[] s_qnt <span class="o">=</span> <span class="k">new</span> QnameType[]
+    {
+        <span class="k">new</span> QnameType(<span class="s">"query"</span>, YourQuery.YOUR_NS, <span class="k">typeof</span>(your.protocol.YourQuery))
+        <span class="c">// Add other types here, perhaps sub-elements of query...</span>
+    };
+    QnameType[] IPacketTypes.Types { get { <span class="k">return</span> s_qnt; } }
+}
+</code></pre></td></tr></table>
+<p>Next, register your factory with your connection object in the
+<code>OnStreamInit</code> event.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="csharp"><span class="k">private</span> <span class="k">void</span> jabberClient_OnStreamInit(<span class="k">object</span> sender, ElementStream stream)
+{
+    stream.AddFactory(<span class="k">new</span> your.protocol.Factory());
+}
+</code></pre></td></tr></table>
+<p>One more note. Most of the classes you are liable to write should derive from
+jabber.protocol.Element. jabber.protocol.Packet is for top-level jabber stanzas,
+like <code>&lt;message/&gt;</code>, <code>&lt;iq/&gt;</code>, and <code>&lt;presence/&gt;</code>.</p>
+
+
+        </div>
+        <div class="span3">
+          <a href="./index.html">
+            <img src="./images/logo.png" style="width:140px;height:140px;margin:10px 0px 0px 35px;border-style:none;" />
+          </a>
+
+          <ul class="nav nav-list" id="menu">
+
+            <li class="nav-header">Jabber-Net</li>
+
+            <li class="divider"></li>
+
+            <li><a href="https://www.nuget.org/packages/jabber-net/">Get Jabber-Net package via NuGet</a></li>
+            <li><a href="https://github.com/ForNeVeR/Jabber-Net">Source Code on GitHub</a></li>
+            <li><a href="./licensing.html">License (LGPL)</a></li>
+
+            <li class="nav-header">Documentation</li>
+
+            <li><a href="./index.html">Getting Started</a></li>
+
+            <li class="divider"></li>
+
+            <li><a href="./FAQ.html">Frequently-Asked Questions about Jabber-Net</a></li>
+
+            <li class="divider"></li>
+
+            <li><a href="./SendMessage.html">How to send a message</a></li>
+
+            <li class="nav-header">Reference</li>
+
+            <li><a href="./reference/index.html">API Reference</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <a href="https://github.com/ForNeVeR/Jabber-Net"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+  </body>
+  </html>
