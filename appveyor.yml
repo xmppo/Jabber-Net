@@ -5,3 +5,6 @@ build:
     project: JabberNet.sln
 after_test:
 - ps: ./Scripts/Package.ps1
+- ps: |
+    $fsi = 'C:\Program Files (x86)\Microsoft SDKs\F#\4.0\Framework\v4.0\Fsi.exe'
+    & $fsi docs\generate.fsx

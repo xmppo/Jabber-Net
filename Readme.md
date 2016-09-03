@@ -26,6 +26,19 @@ $ xbuild /p:Configuration=Debug jabber-net.sln
 $ mono ./packages/NUnit.ConsoleRunner.3.4.1/tools/nunit3-console.exe ./test/bin5/Debug/test.dll
 ```
 
+Documentation
+-------------
+
+The documentation is placed in the `docs` directory. To build HTML
+documentation, invoke the following commands (PowerShell syntax):
+
+```powershell
+$fsi = 'C:\Program Files (x86)\Microsoft SDKs\F#\4.0\Framework\v4.0\Fsi.exe'
+Remove-Item -Recurse .\docs\output
+& $fsi docs\generate.fsx
+docs\output\index.html
+```
+
 Packaging
 ---------
 
