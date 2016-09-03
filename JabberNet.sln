@@ -16,6 +16,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JabberNet.Netlib.Dns", "Jab
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{BBF059F0-722F-4DCC-AF7F-82054E8EF9F4}"
 	ProjectSection(SolutionItems) = preProject
+		Scripts\Build-Docs.ps1 = Scripts\Build-Docs.ps1
 		Scripts\Package.ps1 = Scripts\Package.ps1
 		Scripts\Push-Package.ps1 = Scripts\Push-Package.ps1
 	EndProjectSection
