@@ -55,7 +55,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "content", "content", "{4844
 		docs\content\FAQ_Where.md = docs\content\FAQ_Where.md
 		docs\content\howto.md = docs\content\howto.md
 		docs\content\index.md = docs\content\index.md
-		docs\content\namespaces.md = docs\content\namespaces.md
 		docs\content\philosophies.md = docs\content\philosophies.md
 		docs\content\SendMessage.md = docs\content\SendMessage.md
 		docs\content\SocketErrors.md = docs\content\SocketErrors.md
@@ -63,6 +62,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "content", "content", "{4844
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{E6F7B01B-A762-4833-ABDF-3662E63AC63B}"
 	ProjectSection(SolutionItems) = preProject
+		docs\templates\namespaces.cshtml = docs\templates\namespaces.cshtml
 		docs\templates\template.cshtml = docs\templates\template.cshtml
 	EndProjectSection
 EndProject

@@ -31,9 +31,8 @@ let projectInfo =
 
 let transformUrl url =
     match Uri.TryCreate (url, UriKind.Relative) with
-    | (true, uri) when url.EndsWith(".md") -> url.Substring (0, url.Length - 2) + "html"
+    | (true, _) when url.EndsWith(".md") -> url.Substring (0, url.Length - 2) + "html"
     | _ -> url
-
 
 let transformSpan : MarkdownSpan -> MarkdownSpan = function
 | DirectLink (body, (url, smth)) -> DirectLink (body, (transformUrl url, smth))
