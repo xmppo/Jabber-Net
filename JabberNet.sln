@@ -46,18 +46,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "content", "content", "{4844
 	ProjectSection(SolutionItems) = preProject
 		docs\content\FAQ.md = docs\content\FAQ.md
 		docs\content\FAQ_GoogleTalk.md = docs\content\FAQ_GoogleTalk.md
-		docs\content\FAQ_License.md = docs\content\FAQ_License.md
 		docs\content\FAQ_More.md = docs\content\FAQ_More.md
 		docs\content\FAQ_Packets.md = docs\content\FAQ_Packets.md
 		docs\content\FAQ_Register.md = docs\content\FAQ_Register.md
-		docs\content\FAQ_Roster.md = docs\content\FAQ_Roster.md
 		docs\content\FAQ_UntrustedRootOK.md = docs\content\FAQ_UntrustedRootOK.md
 		docs\content\FAQ_Where.md = docs\content\FAQ_Where.md
 		docs\content\howto.md = docs\content\howto.md
 		docs\content\index.md = docs\content\index.md
-		docs\content\philosophies.md = docs\content\philosophies.md
+		docs\content\licensing.md = docs\content\licensing.md
 		docs\content\SendMessage.md = docs\content\SendMessage.md
-		docs\content\SocketErrors.md = docs\content\SocketErrors.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{E6F7B01B-A762-4833-ABDF-3662E63AC63B}"

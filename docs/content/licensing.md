@@ -67,9 +67,9 @@ xpnet
 copyrighted by its author in 1997 and 1998 under the terms of modified MIT
 license. See the full license text at [licenses/xpnet_MIT.txt][xpnet-mit].
 
-[jabber-net]: licenses/Jabber-Net_LGPLv3.txt
-[unicode]: licenses/UNICODE.txt
-[xpnet-mit]: licenses/xpnet_MIT.txt
+[jabber-net]: https://github.com/ForNeVeR/Jabber-Net/blob/develop/licenses/Jabber-Net_LGPLv3.txt
+[unicode]: https://github.com/ForNeVeR/Jabber-Net/blob/develop/licenses/UNICODE.txt
+[xpnet-mit]: https://github.com/ForNeVeR/Jabber-Net/blob/develop/licenses/xpnet_MIT.txt
 
 [bedrock-net-certutil]: https://github.com/ForNeVeR/Jabber-Net/blob/develop/bedrock/net/CertUtil.cs
 [gplv2]: http://www.fsf.org/licensing/licenses/info/GPLv2.html

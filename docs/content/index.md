@@ -1,40 +1,43 @@
-**Getting started with Jabber-Net**
-
-What Is Jabber-Net?
+Jabber-Net Library
 ===================
 
+What Is Jabber-Net?
+-------------------
+
 Jabber-Net is a set of libraries for accessing Jabber functionality from .Net.
-It is written in C#, but should be accessible from other .Net languages such as
-VB.Net. Classes exist for connecting to a Jabber server either as a client or as
-a component. As you explore, you'll find there are some other goodies buried
-inside, like Trees, CommandLine processing, etc.
+It is written in C#, but is accessible from other .NET languages such as F# and
+VB.NET. As you explore, you'll find there are some other goodies buried inside,
+like Trees, CommandLine processing, etc.
 
-How Do I Use Jabber-Net?
-========================
+How to install
+--------------
 
-*   Create a new windows app in VS.Net.
-*   Right-click in toolbox, select "Add Tab".  Name the tab "Jabber-Net"
-*   In the new tab, right-click and select "Choose Items...".
-*   Select .the .Net Framework Components tab
-*   Click browse, and select jabber-net.dll, prefereably in the bin/Debug
-    directory, where it gets built
-*   Do the same for muzzle.dll (UI elements) if you want
-*   Click OK, to add a the components
-*   Drop a JabberClient component on your form
-*   Set connection parameters in the property box
-*   Call jabberClient1.Connect() in the Form.OnLoad event handler
-*   Go to events in the property box (the lightning bolt), double-click OnMessage
-*   Write code to handle Message's, like this:
+Install the library from NuGet:
 
-```csharp
-private void jabberClient1_OnMessage(object sender, Message msg)
-{
-  jabber.protocol.client.Message reply = new jabber.protocol.client.Message(jabberClient1.Document);
-  reply.Body = "Hello!";
-  reply.To = msg.From;
-  jabberClient1.Write(reply);
-}
-```
+    Install-Package jabber-net
 
-Note that packet types such as Message are sub-classes of XmlElement with
-easy-to-use getters and setters.
+Philosophy
+----------
+
+Here're the main qualities valued across Jabber-Net development:
+
+-   Scale - scale out first, then scale up
+-   Latency matters - don't automatically trade latency for scalability
+    or fail-over
+-   Reused - don't reinvent the wheel until there is a *proven* reason
+    to do so (e.g. hard performance data pointing to a hot spot). 
+    Prefer less lines of code.
+-   Enabled - allow client and server module developers to hook
+    functionality in the their IDE.
+-   Thread-safe - this thing is going to be maximum-async, so watch for
+    correct locking.
+-   Compatible - maintain **all** of the client-to-CCM protocol, and
+    create a superset of the server-to-module protocol.  Try to leverage
+    existing modules, but no need to maintain existing configuration
+    file formats, etc.  As long as there exists a way to hook in
+    existing base-accept and base-connect modules, we'll call that
+    good enough.
+-   Portable - keep platform-dependent code at the minimum level; the library
+    should be compatible for full .NET, .NET Core and Mono developers.
+-   Abstract - there are 20+ ways to implement queues.  Write an
+    interface, and defer the implementation details until later.

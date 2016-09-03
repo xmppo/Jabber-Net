@@ -1,6 +1,9 @@
-**How do I add my own packet types?**
+How do I add my own packet types?
+=================================
 
 (thanks to Tom Waters for the genesis for this)
+
+TODO: This section is outdated; needs to be updated.
 
 Say you want to use a new packet type like this:
 

@@ -1,4 +1,5 @@
-**How come I get a certificate error?**
+How come I get a certificate error?
+===================================
 
 In Mono, you get this error:
 
@@ -14,6 +15,4 @@ certificate problem (preferred), or set:
 bedrock.net.AsyncSocket.UntrustedRootOK = true;
 ```
 
-UntrustedRootOK is now obsolete in the head of subversion. The default behavior
-is to pop up an ugly dialog box to allow the certificate. If you want to build a
-better dialog box, catch OnIvalidCertificate.
+`UntrustedRootOK` is now obsolete in the main development branch. If you want to handle the error with your own code, please handle `OnIvalidCertificate` event.

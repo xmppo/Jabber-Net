@@ -1,7 +1,10 @@
-**How to connect to GoogleTalk**
+How to connect to GoogleTalk
+============================
+
+TODO: This section is outdated; needs to be updated.
 
 Introduction
-============
+------------
 
 There are two use cases for connecting to GoogleTalk. In the first, you have
 your email address is @gmail.com. The second is Gmail for domains. The first is
@@ -54,7 +57,7 @@ _xmpp-client._tcp.gmail.com     SRV service location:
 ```
 
 gmail.com JIDs
-==============
+--------------
 
 *   If you're on Windows, and on a late-model version of Jabber-Net, it should
     "just work".
@@ -74,17 +77,15 @@ jc.NetworkHost = "talk.l.google.com";  // Note: that's an "L", not a "1".
     ```
 
 Google for Domains
-==================
+------------------
 
-Turn on Chat
-------------
+### Turn on Chat
 
 From your mail page, go to "Manage this domain", then "Chat", then make sure it
 says "Disable Chat" at the bottom. You obviously must be an administrator of
 your domain to do this.
 
-DNS
----
+### DNS
 
 If you have your own domain hosted on Google Mail, you can use the XMPP service
 for that domain as well. For everything to work correctly, you'll need the
@@ -104,8 +105,7 @@ If you just want to get up and running quickly, don't put in the SRV records,
 and set the `NetworkHost` property to "talk.l.google.com". (Note that they used
 an "L", not a "1").
 
-Certificates
-------------
+### Certificates
 
 The certificate that comes on the SSL/TLS handshake will be invalid, in that the
 name will not match your domain. The best way to deal with this is to catch the
@@ -131,8 +131,7 @@ The concern here is that there is a man in the middle of your conversation with
 Google, that is offering you a certificate with a bad name, signed by a
 Certificate Authority that you trust. Take appropriate security precautions.
 
-Connections
------------
+### Connections
 
 Now, continue along as above, for gmail.com addresses, but use *your* domain
 name instead of gmail.com:

@@ -5,7 +5,7 @@ Introduction
 ------------
 
 Jabber-Net uses an asynchronous programming model by default. This can be
-confusing if you are new to .Net. This example shows how to set up a connection,
+confusing if you are new to .NET. This example shows how to set up a connection,
 connect, and send a message before your program finishes. The key concept is the
 use of
 [ManualResetEvent](http://msdn2.microsoft.com/en-us/library/system.threading.manualresetevent.aspx)

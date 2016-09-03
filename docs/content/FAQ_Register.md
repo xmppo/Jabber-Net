@@ -1,4 +1,5 @@
-**How do I register a new user?**
+How do I register a new user?
+=============================
 
 For background, see [XEP-0077](http://www.xmpp.org/extensions/xep-0077.html).
 
