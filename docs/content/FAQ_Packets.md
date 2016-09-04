@@ -31,7 +31,7 @@ namespace your.protocol
         public const string YOUR_NS  = "your:namespace";
 
         // used when creating elements to send
-        public YourQuery(XmlDocument doc) : base("query", YOUR_NS, doc)  
+        public YourQuery(XmlDocument doc) : base("query", YOUR_NS, doc)
         {}
 
         // used to create elements for inbound protocol
@@ -49,7 +49,7 @@ than just plain `XmlElement`s, you need to create a factory class that maps the
 combination of the element name and namespace to a type.
 
 ```csharp
-public class Factory : jabber.protocol.IPacketTypes
+public class Factory : JabberNet.jabber.protocol.IPacketTypes
 {
     private static QnameType[] s_qnt = new QnameType[]
     {
@@ -71,5 +71,5 @@ private void jabberClient_OnStreamInit(object sender, ElementStream stream)
 ```
 
 One more note. Most of the classes you are liable to write should derive from
-jabber.protocol.Element. jabber.protocol.Packet is for top-level jabber stanzas,
-like `<message/>`, `<iq/>`, and `<presence/>`.
+`JabberNet.jabber.protocol.Element`. `JabberNet.jabber.protocol.Packet` is for
+top-level jabber stanzas, like `<message/>`, `<iq/>`, and `<presence/>`.

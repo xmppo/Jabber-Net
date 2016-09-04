@@ -12,7 +12,7 @@ Certificate Authority (CA) that your system trusts. You can either fix the
 certificate problem (preferred), or set:
 
 ```csharp
-bedrock.net.AsyncSocket.UntrustedRootOK = true;
+JabberNet.bedrock.net.AsyncSocket.UntrustedRootOK = true;
 ```
 
 `UntrustedRootOK` is now obsolete in the main development branch. If you want to

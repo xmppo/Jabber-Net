@@ -14,13 +14,13 @@ to wait for the end of asynchronous processing.
 SendMessage.cs
 --------------
 
-Make sure to reference `jabber-net.dll`, `zlib.net.dll`, and `netlib.Dns.dll`.
+Make sure to reference `JabberNet.dll` and `JabberNet.Netlib.Dns.dll`.
 
 ```csharp
 using System;
 using System.Threading;
 
-using jabber.client;
+using JabberNet.jabber.client;
 
 namespace SendMessage
 {

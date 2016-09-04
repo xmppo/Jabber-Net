@@ -55,7 +55,7 @@ Literate.ProcessDirectory
      layoutRoots = [jabberNetTemplates; formattingTemplates],
      customizeDocument = customizeDocument)
 
-let bin = Path.Combine (__SOURCE_DIRECTORY__, "..", "bin", "Debug")
+let bin = Path.Combine (__SOURCE_DIRECTORY__, "..", "src", "JabberNet", "bin", "Debug")
 let reference = Path.Combine (output, "reference")
 let library = Path.Combine (bin, "JabberNet.dll")
 
