@@ -1,13 +1,13 @@
 ' --------------------------------------------------------------------------
 ' Copyrights
-' 
+'
 ' Portions created by or assigned to Cursive Systems, Inc. are
 ' Copyright (c) 2002-2008 Cursive Systems, Inc.  All Rights Reserved.  Contact
 ' information for Cursive Systems, Inc. is available at
 ' http://www.cursive.net/.
-' 
+'
 ' License
-' 
+'
 ' Jabber-Net is licensed under the LGPL.
 ' See licenses/Jabber-Net_LGPLv3.txt for details.
 '  --------------------------------------------------------------------------
@@ -49,7 +49,7 @@ Public Class SendMessage
     Private components As System.ComponentModel.IContainer
 
     'NOTE: The following procedure is required by the Windows Form Designer
-    'It can be modified using the Windows Form Designer.  
+    'It can be modified using the Windows Form Designer.
     'Do not modify it using the code editor.
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
     Friend WithEvents btnCancel As System.Windows.Forms.Button
@@ -158,6 +158,9 @@ Public Class SendMessage
     End Sub
 
 #End Region
+
+    Public Sub New()
+    End Sub
 
     Private Sub btnSend_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSend.Click
         Dim msg As New jabber.protocol.client.Message(m_jc.Document)
