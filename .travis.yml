@@ -1,7 +1,10 @@
 language: csharp
 mono: latest
 install:
-- nuget restore JabberNet.sln
+- mkdir ./.paket
+- wget -O ./.paket/paket.bootstrapper.exe https://github.com/fsprojects/Paket/releases/download/3.18.2/paket.bootstrapper.exe
+- mono ./.paket/paket.bootstrapper.exe
+- mono ./.paket/paket.exe restore -v
 script:
 - xbuild /p:Configuration=Debug JabberNet.sln
 - mono ./packages/NUnit.ConsoleRunner.3.4.1/tools/nunit3-console.exe ./JabberNet.Test/bin/Debug/JabberNet.Test.dll
