@@ -7,4 +7,4 @@ install:
 - mono ./.paket/paket.exe restore -v
 script:
 - xbuild /p:Configuration=Debug JabberNet.sln
-- mono ./packages/NUnit.ConsoleRunner.3.4.1/tools/nunit3-console.exe ./JabberNet.Test/bin/Debug/JabberNet.Test.dll
+- mono ./packages/NUnit.ConsoleRunner/tools/nunit3-console.exe ./JabberNet.Test/bin/Debug/JabberNet.Test.dll
