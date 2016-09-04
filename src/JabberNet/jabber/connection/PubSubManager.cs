@@ -17,7 +17,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Xml;
-using JabberNet.bedrock.util;
 using JabberNet.jabber.protocol;
 using JabberNet.jabber.protocol.client;
 using JabberNet.jabber.protocol.iq;
@@ -35,7 +34,6 @@ namespace JabberNet.jabber.connection
     /// node.AutomatedSubscribe();
     /// </example>
     /// </summary>
-    [SVN(@"$Id$")]
     public class PubSubManager : StreamComponent
     {
         private class CBHolder
@@ -269,7 +267,6 @@ namespace JabberNet.jabber.connection
     /// Manages a list of items with a maximum size.  Only one item with a given ID will be in the
     /// list at a given time.
     /// </summary>
-    [SVN(@"$Id$")]
     public class ItemList : ArrayList
     {
         private Hashtable m_index = new Hashtable();
@@ -432,7 +429,6 @@ namespace JabberNet.jabber.connection
     /// <summary>
     /// Informs the client that a publish-subscribe error occurred.
     /// </summary>
-    [SVN(@"$Id$")]
     public class PubSubException : Exception
     {
         /// <summary>
@@ -475,7 +471,6 @@ namespace JabberNet.jabber.connection
     /// <summary>
     /// Manages a node to be subscribed to.  Will keep a maximum number of items.
     /// </summary>
-    [SVN(@"$Id$")]
     public class PubSubNode : StreamComponent, IEnumerable
     {
         private enum STATE

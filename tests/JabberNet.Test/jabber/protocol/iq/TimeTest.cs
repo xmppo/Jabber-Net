@@ -14,13 +14,11 @@
 
 using System;
 using System.Xml;
-using JabberNet.bedrock.util;
 using JabberNet.jabber.protocol.iq;
 using NUnit.Framework;
 
 namespace JabberNet.Test.jabber.protocol.iq
 {
-    [SVN(@"$Id$")]
     [TestFixture]
     public class TimeTest
     {
@@ -35,7 +33,7 @@ namespace JabberNet.Test.jabber.protocol.iq
             DateTime start = DateTime.UtcNow;
             t.SetCurrentTime();
 
-            // SetCurrentTime only stores seconds portion, whereas UtcNow has all 
+            // SetCurrentTime only stores seconds portion, whereas UtcNow has all
             // kinds of precision.  Are we within a second of being correct?
             TimeSpan ts = t.UTC - start;
             Assert.IsTrue(Math.Abs(ts.TotalSeconds) < 1.0);

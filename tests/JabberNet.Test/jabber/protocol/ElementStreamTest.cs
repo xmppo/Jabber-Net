@@ -17,7 +17,6 @@ using System.IO;
 using System.Threading;
 using System.Xml;
 using JabberNet.bedrock;
-using JabberNet.bedrock.util;
 using JabberNet.jabber.protocol;
 using NUnit.Framework;
 
@@ -26,7 +25,6 @@ namespace JabberNet.Test.jabber.protocol
     /// <summary>
     /// Summary description for ElementStreamTest.
     /// </summary>
-    [SVN(@"$Id$")]
     [TestFixture]
     public class ElementStreamTest
     {

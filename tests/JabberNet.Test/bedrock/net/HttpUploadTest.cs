@@ -13,7 +13,6 @@
  * --------------------------------------------------------------------------*/
 
 using System.Threading;
-using JabberNet.bedrock.util;
 using NUnit.Framework;
 
 namespace JabberNet.Test.bedrock.net
@@ -22,7 +21,6 @@ namespace JabberNet.Test.bedrock.net
     /// TODO: This test is known to not work.  Add one that does, please.
     /// </summary>
     [TestFixture]
-    [SVN(@"$Id$")]
     public class HttpUploadTest
     {
         private object m_lock = new object();

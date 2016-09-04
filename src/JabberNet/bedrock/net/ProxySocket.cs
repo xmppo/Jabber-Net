@@ -13,14 +13,12 @@
  * --------------------------------------------------------------------------*/
 
 using System.Diagnostics;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.bedrock.net
 {
     /// <summary>
     /// Proxy object for sockets.
     /// </summary>
-    [SVN(@"$Id$")]
     public class ProxySocket : BaseSocket, ISocketEventListener
     {
         private BaseSocket     m_sock = null;

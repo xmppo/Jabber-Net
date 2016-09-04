@@ -17,7 +17,6 @@ using System.Diagnostics;
 using System.Threading;
 using System.Xml;
 using JabberNet.bedrock.net;
-using JabberNet.bedrock.util;
 using JabberNet.jabber.protocol;
 
 namespace JabberNet.jabber.connection
@@ -25,7 +24,6 @@ namespace JabberNet.jabber.connection
     /// <summary>
     /// Contains the types of proxies Jabber-Net supports.  This is only for socket connections.
     /// </summary>
-    [SVN(@"$Id$")]
     public enum ProxyType
     {
         /// <summary>
@@ -50,7 +48,6 @@ namespace JabberNet.jabber.connection
     /// <summary>
     /// "Standard" XMPP socket for outbound connections.
     /// </summary>
-    [SVN(@"$Id$")]
     public class SocketStanzaStream : StanzaStream, ISocketEventListener
     {
         private AsynchElementStream m_elements = null;

@@ -15,12 +15,10 @@
 using System;
 using System.Diagnostics;
 using System.Windows.Forms;
-using JabberNet.bedrock.util;
 using JabberNet.jabber.connection;
 
 namespace JabberNet.Example
 {
-    [SVN(@"$Id$")]
     public class PubSubDisplay : UserControl
     {
         private ListBox lbID;

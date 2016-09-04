@@ -14,14 +14,12 @@
 
 using System;
 using System.Xml;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.jabber.protocol.client
 {
     /// <summary>
     /// Presence type attribute
     /// </summary>
-    [SVN(@"$Id$")]
     public enum PresenceType
     {
         /// <summary>
@@ -66,7 +64,6 @@ namespace JabberNet.jabber.protocol.client
     /// <summary>
     /// Client presence packet.
     /// </summary>
-    [SVN(@"$Id$")]
     public class Presence : Packet, IComparable<Presence>, IComparable
     {
         /// <summary>
@@ -191,7 +188,7 @@ namespace JabberNet.jabber.protocol.client
                 return 3;
             }
         }
-        
+
         /// <summary>
         /// Date/Time stamp that the presence was originially received by the sending
         /// server, if this presence is in response to a probe.
@@ -230,7 +227,7 @@ namespace JabberNet.jabber.protocol.client
 
         /// <summary>
         /// If there is a stamp, returns it, otherwise looks for and adds a new stamp element.
-        /// This method should never be called for presence that is to be sent out, since it 
+        /// This method should never be called for presence that is to be sent out, since it
         /// will add non-standard protocol to the presence.
         /// </summary>
         public DateTime ReceivedTime
@@ -281,29 +278,29 @@ namespace JabberNet.jabber.protocol.client
         #region IComparable<Presence> Members
 
         /// <summary>
-        /// Compare this presence element with another, first by priority, 
+        /// Compare this presence element with another, first by priority,
         /// then by show, then by time received.
         /// </summary>
         /// <param name="other"></param>
         /// <returns>
-        ///    Less than zero 
+        ///    Less than zero
         ///     This object is less than the other parameter.
-        ///    Zero 
-        ///     This object is equal to other. 
-        ///    Greater than zero 
-        ///     This object is greater than other. 
+        ///    Zero
+        ///     This object is equal to other.
+        ///    Greater than zero
+        ///     This object is greater than other.
         /// </returns>
         public int CompareTo(Presence other)
         {
             /*
-            Less than zero 
+            Less than zero
              This object is less than the other parameter.
- 
-            Zero 
-             This object is equal to other. 
- 
-            Greater than zero 
-             This object is greater than other. 
+
+            Zero
+             This object is equal to other.
+
+            Greater than zero
+             This object is greater than other.
 
              */
             if ((object)this == (object)other)
@@ -337,17 +334,17 @@ namespace JabberNet.jabber.protocol.client
         #region IComparable Members
 
         /// <summary>
-        /// Compare this presence element with another, first by priority, 
+        /// Compare this presence element with another, first by priority,
         /// then by show, then by time received.
         /// </summary>
         /// <param name="other"></param>
         /// <returns>
-        ///    Less than zero 
+        ///    Less than zero
         ///     This object is less than the other parameter.
-        ///    Zero 
-        ///     This object is equal to other. 
-        ///    Greater than zero 
-        ///     This object is greater than other. 
+        ///    Zero
+        ///     This object is equal to other.
+        ///    Greater than zero
+        ///     This object is greater than other.
         /// </returns>
         public int CompareTo(object other)
         {

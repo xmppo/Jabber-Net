@@ -15,13 +15,11 @@
 using System;
 using System.ComponentModel;
 using System.Windows.Forms;
-using JabberNet.bedrock.util;
 using JabberNet.jabber;
 using JabberNet.jabber.connection;
 
 namespace JabberNet.Example
 {
-    [SVN(@"$Id$")]
     public class PubSubSubcribeForm : Form
     {
         private Label label1;

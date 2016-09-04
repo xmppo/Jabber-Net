@@ -18,7 +18,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using JabberNet.bedrock.util;
 using JabberNet.jabber.protocol;
 using JabberNet.jabber.protocol.client;
 using JabberNet.jabber.protocol.x;
@@ -28,7 +27,6 @@ namespace JabberNet.Muzzle
     /// <summary>
     /// Summary description for XData.
     /// </summary>
-    [SVN(@"$Id$")]
     public class XDataForm : System.Windows.Forms.Form
     {
         private static Regex WS = new Regex("\\s+", RegexOptions.Compiled);

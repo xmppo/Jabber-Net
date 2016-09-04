@@ -14,7 +14,6 @@
 
 using System.Text.RegularExpressions;
 using System.Xml;
-using JabberNet.bedrock.util;
 using JabberNet.jabber.protocol;
 using JabberNet.jabber.protocol.stream;
 using NUnit.Framework;
@@ -25,7 +24,6 @@ namespace JabberNet.Test.jabber.protocol.stream
     /// <summary>
     /// Summary description for StreamTest.
     /// </summary>
-    [SVN(@"$Id$")]
     [TestFixture]
     public class StreamTest
     {

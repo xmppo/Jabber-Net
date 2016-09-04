@@ -15,7 +15,6 @@
 using System;
 using System.Diagnostics;
 using System.Xml;
-using JabberNet.bedrock.util;
 using JabberNet.jabber.connection;
 using JabberNet.jabber.connection.sasl;
 using JabberNet.jabber.protocol;
@@ -917,7 +916,6 @@ namespace JabberNet.jabber.client
     /// <summary>
     /// Contains the "Getting authorization" information.
     /// </summary>
-    [SVN(@"$Id: JabberClient.cs 724 2008-08-06 18:09:25Z hildjj $")]
     public class GetAuthState : jabber.connection.BaseState
     {
         /// <summary>
@@ -929,7 +927,6 @@ namespace JabberNet.jabber.client
     /// <summary>
     /// Contains the "Setting authorization" information.
     /// </summary>
-    [SVN(@"$Id: JabberClient.cs 724 2008-08-06 18:09:25Z hildjj $")]
     public class SetAuthState : jabber.connection.BaseState
     {
         /// <summary>
@@ -942,7 +939,6 @@ namespace JabberNet.jabber.client
     /// Informs the client that the JabberClient is in
     /// the "Waiting for manual login" state.
     /// </summary>
-    [SVN(@"$Id: JabberClient.cs 724 2008-08-06 18:09:25Z hildjj $")]
     public class ManualLoginState : jabber.connection.BaseState
     {
         /// <summary>
@@ -956,7 +952,6 @@ namespace JabberNet.jabber.client
     /// the "Waiting for manual login" state, but when Login()
     /// happens, it should try SASL.
     /// </summary>
-    [SVN(@"$Id: JabberClient.cs 724 2008-08-06 18:09:25Z hildjj $")]
     public class ManualSASLLoginState : jabber.connection.BaseState
     {
         /// <summary>
@@ -964,5 +959,4 @@ namespace JabberNet.jabber.client
         /// </summary>
         public static readonly jabber.connection.BaseState Instance = new ManualSASLLoginState();
     }
-
 }

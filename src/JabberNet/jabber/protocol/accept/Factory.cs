@@ -12,14 +12,11 @@
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
 
-using JabberNet.bedrock.util;
-
 namespace JabberNet.jabber.protocol.accept
 {
     /// <summary>
     /// A packet factory for the jabber:component:accept namespace.
     /// </summary>
-    [SVN(@"$Id$")]
     public class Factory : IPacketTypes
     {
         private static QnameType[] s_qnt = new QnameType[]

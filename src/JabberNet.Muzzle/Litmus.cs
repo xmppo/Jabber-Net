@@ -17,7 +17,6 @@ using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.Muzzle
 {
@@ -42,7 +41,6 @@ namespace JabberNet.Muzzle
     ///
     /// Good gracious.  Did I really take the time to write this?
     /// </summary>
-    [SVN(@"$Id$")]
     public class Litmus : System.Windows.Forms.UserControl
     {
         private int               m_hist  = -1;

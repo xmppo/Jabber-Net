@@ -15,7 +15,6 @@
 using System;
 using System.ComponentModel;
 using System.Windows.Forms;
-using JabberNet.bedrock.util;
 using JabberNet.jabber.connection;
 using JabberNet.jabber.server;
 
@@ -32,7 +31,6 @@ namespace JabberNet.Muzzle
     ///     jc.Connect();
     /// }
     /// </example>
-    [SVN(@"$Id$")]
     public class ComponentLogin : OptionForm
     {
 

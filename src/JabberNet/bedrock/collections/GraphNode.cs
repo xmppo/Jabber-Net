@@ -13,14 +13,12 @@
  * --------------------------------------------------------------------------*/
 
 using System.Collections;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.bedrock.collections
 {
     /// <summary>
     /// A node in a Graph, such as a Tree
     /// </summary>
-    [SVN(@"$Id$")]
     public class GraphNode : IEnumerable
     {
         private object      m_key      = null;
@@ -38,7 +36,7 @@ namespace JabberNet.bedrock.collections
         }
         /// <summary>
         /// Creates a new node, with key and data, possibly having
-        /// sorted children. 
+        /// sorted children.
         /// </summary>
         /// <param name="key">The key used to retrieve the data</param>
         /// <param name="data">The data in the node</param>
@@ -74,7 +72,7 @@ namespace JabberNet.bedrock.collections
             get { return m_data; }
             set { m_data = value; }
         }
-        
+
         /// <summary>
         /// Adds a new child node
         /// </summary>

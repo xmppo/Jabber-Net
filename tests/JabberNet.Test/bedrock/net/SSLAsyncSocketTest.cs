@@ -16,7 +16,6 @@ using System;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using JabberNet.bedrock.net;
-using JabberNet.bedrock.util;
 using NUnit.Framework;
 
 namespace JabberNet.Test.bedrock.net
@@ -24,7 +23,6 @@ namespace JabberNet.Test.bedrock.net
     /// <summary>
     ///  Not really async.
     /// </summary>
-    [SVN(@"$Id$")]
     [Ignore("Fails due to certificate.")]
     [TestFixture]
     public class SSLAsyncSocketTest : ISocketEventListener

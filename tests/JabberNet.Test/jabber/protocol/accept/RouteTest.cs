@@ -13,7 +13,6 @@
  * --------------------------------------------------------------------------*/
 
 using System.Xml;
-using JabberNet.bedrock.util;
 using JabberNet.jabber.protocol.accept;
 using NUnit.Framework;
 
@@ -22,7 +21,6 @@ namespace JabberNet.Test.jabber.protocol.accept
     /// <summary>
     /// Summary description for IQTest.
     /// </summary>
-    [SVN(@"$Id$")]
     [TestFixture]
     public class RouteTest
     {

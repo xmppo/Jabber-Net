@@ -15,14 +15,12 @@
 using System;
 using System.Collections;
 using System.IO;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.bedrock.collections
 {
     /// <summary>
     /// A node in a Trie.  This class is public to support traversal via Trie.Traverse().
     /// </summary>
-    [SVN(@"$Id$")]
     public class TrieNode : IEnumerable
     {
         // Warning: Assumption of 7-bit ASCII encoding!

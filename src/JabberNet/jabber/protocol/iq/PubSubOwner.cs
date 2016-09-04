@@ -13,7 +13,6 @@
  * --------------------------------------------------------------------------*/
 
 using System.Xml;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.jabber.protocol.iq
 {
@@ -21,7 +20,6 @@ namespace JabberNet.jabber.protocol.iq
     /// A type-safe PubSub IQ for owner actions.
     /// </summary>
     /// <typeparam name="T">The type of command to create</typeparam>
-    [SVN(@"$Id$")]
     public class OwnerPubSubCommandIQ<T> : jabber.protocol.client.TypedIQ<OwnerPubSub<T>>
         where T : PubSubCommand
     {
@@ -59,7 +57,6 @@ namespace JabberNet.jabber.protocol.iq
     /// A type-safe pubsub element.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    [SVN(@"$Id$")]
     public class OwnerPubSub<T> : Element
         where T : PubSubCommand
     {
@@ -94,7 +91,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// The pubsub container for owner operations.
     /// </summary>
-    [SVN(@"$Id$")]
     public class PubSubOwner : Element
     {
         /// <summary>
@@ -137,7 +133,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// Affiliations of all folks associated with a node
     /// </summary>
-    [SVN(@"$Id$")]
     public class OwnerAffliliations : PubSubCommand
     {
         /// <summary>
@@ -195,7 +190,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// An affiliation for another user, retrieved by the owner.
     /// </summary>
-    [SVN(@"$Id$")]
     public class OwnerAffiliation : Affiliation
     {
         /// <summary>
@@ -231,7 +225,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// Owner-level configuration
     /// </summary>
-    [SVN(@"$Id$")]
     public class OwnerConfigure : PubSubCommand
     {
         /// <summary>
@@ -275,7 +268,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// The default configuration parameters
     /// </summary>
-    [SVN(@"$Id$")]
     public class OwnerDefault : PubSubCommand
     {
         /// <summary>
@@ -319,7 +311,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// Delete a node
     /// </summary>
-    [SVN(@"$Id$")]
     public class OwnerDelete : PubSubCommand
     {
         /// <summary>
@@ -354,7 +345,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// Purge all items from a node
     /// </summary>
-    [SVN(@"$Id$")]
     public class OwnerPurge : PubSubCommand
     {
         /// <summary>
@@ -389,7 +379,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// The subscription list
     /// </summary>
-    [SVN(@"$Id$")]
     public class OwnerSubscriptions : Subscriptions
     {
         /// <summary>
@@ -414,4 +403,4 @@ namespace JabberNet.jabber.protocol.iq
     }
 
 }
-    
+

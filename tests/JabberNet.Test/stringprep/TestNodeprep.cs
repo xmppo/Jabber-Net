@@ -13,14 +13,12 @@
  * --------------------------------------------------------------------------*/
 #if !NO_STRINGPREP
 
-using JabberNet.bedrock.util;
 using JabberNet.stringprep;
 using JabberNet.stringprep.steps;
 using NUnit.Framework;
 
 namespace JabberNet.Test.stringprep
 {
-    [SVN(@"$Id$")]
     [TestFixture]
     public class TestNodeprep
     {

@@ -15,7 +15,6 @@
 using System;
 using System.Diagnostics;
 using System.Xml;
-using JabberNet.bedrock.util;
 
 // http://www.xmpp.org/extensions/xep-0054.html
 
@@ -140,7 +139,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// IQ packet with a version query element inside.
     /// </summary>
-    [SVN(@"$Id$")]
     public class VCardIQ : jabber.protocol.client.TypedIQ<VCard>
     {
         /// <summary>
@@ -163,7 +161,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// A vCard element.
     /// </summary>
-    [SVN(@"$Id$")]
     public class VCard : Element
     {
         /// <summary>
@@ -430,7 +427,6 @@ namespace JabberNet.jabber.protocol.iq
         /// <summary>
         ///
         /// </summary>
-        [SVN(@"$Id$")]
         public class VName : Element
         {
             /// <summary>
@@ -483,7 +479,6 @@ namespace JabberNet.jabber.protocol.iq
         /// <summary>
         /// vCard Org Element
         /// </summary>
-        [SVN(@"$Id$")]
         public class VOrganization : Element
         {
             /// <summary>
@@ -527,7 +522,6 @@ namespace JabberNet.jabber.protocol.iq
         /// <summary>
         /// vCard Telephone Element
         /// </summary>
-        [SVN(@"$Id$")]
         public class VTelephone : Element
         {
             /// <summary>
@@ -623,7 +617,6 @@ namespace JabberNet.jabber.protocol.iq
         /// <summary>
         /// vCard Address Element
         /// </summary>
-        [SVN(@"$Id$")]
         public class VAddress : Element
         {
             /// <summary>
@@ -731,7 +724,6 @@ namespace JabberNet.jabber.protocol.iq
         /// <summary>
         /// vCard Email Element
         /// </summary>
-        [SVN(@"$Id$")]
         public class VEmail : Element
         {
             /// <summary>
@@ -819,7 +811,6 @@ namespace JabberNet.jabber.protocol.iq
         /// <summary>
         /// Geographic location
         /// </summary>
-        [SVN(@"$Id$")]
         public class VGeo : Element
         {
             /// <summary>
@@ -863,7 +854,6 @@ namespace JabberNet.jabber.protocol.iq
         /// <summary>
         ///
         /// </summary>
-        [SVN(@"$Id$")]
         public class VPhoto : Element
         {
             /// <summary>
@@ -891,7 +881,7 @@ namespace JabberNet.jabber.protocol.iq
             /// </summary>
             public System.Drawing.Imaging.ImageFormat ImageType
             {
-                get 
+                get
                 {
                     System.Drawing.Imaging.ImageFormat def = System.Drawing.Imaging.ImageFormat.Png;
 

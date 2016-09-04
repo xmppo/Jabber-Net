@@ -15,7 +15,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using JabberNet.bedrock.util;
 using JabberNet.jabber.client;
 using JabberNet.jabber.protocol;
 using JabberNet.jabber.protocol.client;
@@ -79,7 +78,6 @@ namespace JabberNet.jabber.connection
     /// <summary>
     /// Manages a set of conference rooms
     /// </summary>
-    [SVN(@"$Id$")]
     public class ConferenceManager : StreamComponent
     {
         /// <summary>
@@ -392,7 +390,6 @@ namespace JabberNet.jabber.connection
     /// <summary>
     /// Manages a multi-user conference room.  See XEP-0045 (http://www.xmpp.org/extensions/xep-0045.html).
     /// </summary>
-    [SVN(@"$Id$")]
     public class Room
     {
         private enum STATE
@@ -1380,7 +1377,6 @@ namespace JabberNet.jabber.connection
     /// <summary>
     /// A list of all of the current participants.
     /// </summary>
-    [SVN(@"$Id$")]
     public class ParticipantCollection : IEnumerable
     {
         private Hashtable m_hash = new Hashtable();
@@ -1487,7 +1483,6 @@ namespace JabberNet.jabber.connection
     /// <summary>
     /// Someone who is currently in or associated with a room.
     /// </summary>
-    [SVN(@"$Id$")]
     public class RoomParticipant
     {
         private Presence m_presence;

@@ -15,7 +15,6 @@
 using System.Collections;
 using System.Diagnostics;
 using System.Xml;
-using JabberNet.bedrock.util;
 using JabberNet.jabber.protocol.accept;
 
 namespace JabberNet.jabber.server
@@ -28,7 +27,6 @@ namespace JabberNet.jabber.server
     /// <summary>
     /// Track outstanding XDB requests.
     /// </summary>
-    [SVN(@"$Id$")]
     public class XdbTracker
     {
         // this hash doesn't need concurrency control, i don't think,

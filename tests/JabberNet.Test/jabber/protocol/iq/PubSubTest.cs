@@ -13,14 +13,12 @@
  * --------------------------------------------------------------------------*/
 
 using System.Xml;
-using JabberNet.bedrock.util;
 using JabberNet.jabber.protocol.iq;
 using NUnit.Framework;
 
 namespace JabberNet.Test.jabber.protocol.iq
 {
     [TestFixture]
-    [SVN(@"$Id$")]
     public class PubSubTest
     {
         private const string NODE = "TestNode";

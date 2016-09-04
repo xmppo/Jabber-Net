@@ -15,7 +15,6 @@
 using System;
 using System.Security.Cryptography.X509Certificates;
 using JabberNet.bedrock.collections;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.bedrock.net
 {
@@ -24,7 +23,6 @@ namespace JabberNet.bedrock.net
     /// you need to have a place to collect all of the sockets and call poll().  Here, it's just
     /// convenience functions.
     /// </summary>
-    [SVN(@"$Id$")]
     public class SocketWatcher : IDisposable
     {
         private enum State

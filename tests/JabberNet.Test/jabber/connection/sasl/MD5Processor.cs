@@ -13,7 +13,6 @@
  * --------------------------------------------------------------------------*/
 
 using System.Xml;
-using JabberNet.bedrock.util;
 using JabberNet.jabber.connection.sasl;
 using JabberNet.jabber.protocol.stream;
 using NUnit.Framework;
@@ -21,7 +20,6 @@ using NUnit.Framework;
 namespace JabberNet.Test.jabber.connection.sasl
 {
     [TestFixture]
-    [SVN(@"$Id$")]
     public class MD5ProcessorTest
     {
         [Test]

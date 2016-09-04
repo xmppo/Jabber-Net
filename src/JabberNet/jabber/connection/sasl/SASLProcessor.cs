@@ -16,7 +16,6 @@ using System;
 using System.Collections;
 using System.Text;
 using System.Xml;
-using JabberNet.bedrock.util;
 using JabberNet.jabber.protocol.stream;
 
 namespace JabberNet.jabber.connection.sasl
@@ -29,7 +28,6 @@ namespace JabberNet.jabber.connection.sasl
     /// <summary>
     /// Some sort of SASL error
     /// </summary>
-    [SVN(@"$Id: SASLProcessor.cs 724 2008-08-06 18:09:25Z hildjj $")]
     public class SASLException : ApplicationException
     {
         /// <summary>
@@ -47,7 +45,6 @@ namespace JabberNet.jabber.connection.sasl
     /// <summary>
     /// Authentication failed.
     /// </summary>
-    [SVN(@"$Id: SASLProcessor.cs 724 2008-08-06 18:09:25Z hildjj $")]
     public class AuthenticationFailedException : SASLException
     {
         /// <summary>
@@ -67,7 +64,6 @@ namespace JabberNet.jabber.connection.sasl
     /// <summary>
     /// A required directive wasn't supplied.
     /// </summary>
-    [SVN(@"$Id: SASLProcessor.cs 724 2008-08-06 18:09:25Z hildjj $")]
     public class MissingDirectiveException : SASLException
     {
         /// <summary>
@@ -81,7 +77,6 @@ namespace JabberNet.jabber.connection.sasl
     /// <summary>
     /// Server sent an invalid challenge
     /// </summary>
-    [SVN(@"$Id: SASLProcessor.cs 724 2008-08-06 18:09:25Z hildjj $")]
     public class InvalidServerChallengeException : SASLException
     {
         /// <summary>
@@ -94,7 +89,6 @@ namespace JabberNet.jabber.connection.sasl
     /// <summary>
     /// Summary description for SASLProcessor.
     /// </summary>
-    [SVN(@"$Id: SASLProcessor.cs 724 2008-08-06 18:09:25Z hildjj $")]
     public abstract class SASLProcessor
     {
         /// <summary>

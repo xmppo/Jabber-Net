@@ -12,15 +12,11 @@
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
 
-
-using JabberNet.bedrock.util;
-
 namespace JabberNet.jabber.protocol
 {
     /// <summary>
     /// Namespace constants for http://etherx.jabber.org/streams.
     /// </summary>
-    [SVN(@"$Id$")]
     public class URI
     {
         /// <summary>

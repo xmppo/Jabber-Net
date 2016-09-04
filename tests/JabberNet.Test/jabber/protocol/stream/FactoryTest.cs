@@ -12,7 +12,6 @@
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
 
-using JabberNet.bedrock.util;
 using JabberNet.jabber.protocol;
 using NUnit.Framework;
 using fact = JabberNet.jabber.protocol.stream.Factory;
@@ -22,7 +21,6 @@ namespace JabberNet.Test.jabber.protocol.stream
     /// <summary>
     /// Summary description for StreamFactoryTest.
     /// </summary>
-    [SVN(@"$Id$")]
     [TestFixture]
     public class StreamFactoryTest
     {

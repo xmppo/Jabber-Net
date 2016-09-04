@@ -15,7 +15,6 @@
 using System;
 using System.Collections;
 using JabberNet.bedrock.collections;
-using JabberNet.bedrock.util;
 using NUnit.Framework;
 
 namespace JabberNet.Test.bedrock.collections
@@ -23,7 +22,6 @@ namespace JabberNet.Test.bedrock.collections
     /// <summary>
     /// Summary description for TreeTest.
     /// </summary>
-    [SVN(@"$Id$")]
     [TestFixture]
     public class TreeTest
     {

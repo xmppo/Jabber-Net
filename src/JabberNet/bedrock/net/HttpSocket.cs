@@ -18,7 +18,6 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.bedrock.net
 {
@@ -27,7 +26,6 @@ namespace JabberNet.bedrock.net
     /// TODO: the BaseSocket parameter in the listener events will always be null for now.
     /// TODO: change HttpSocket to be a is-a of AsyncSocket, not has-a.
     /// </summary>
-    [SVN(@"$Id$")]
     public class HttpSocket : BaseSocket, ISocketEventListener
     {
         private class PendingRequest

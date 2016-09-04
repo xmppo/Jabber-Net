@@ -15,14 +15,12 @@
 using System;
 using System.IO;
 using System.Net;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.jabber.connection
 {
     /// <summary>
     /// Manages HTTP Requests via XMPP (XEP-70).
     /// </summary>
-    [SVN(@"$Id$")]
     public class HttpUploader
     {
         /// <summary>

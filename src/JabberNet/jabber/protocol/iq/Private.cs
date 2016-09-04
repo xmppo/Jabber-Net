@@ -13,7 +13,6 @@
  * --------------------------------------------------------------------------*/
 
 using System.Xml;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.jabber.protocol.iq
 {
@@ -21,7 +20,6 @@ namespace JabberNet.jabber.protocol.iq
     /// Private storage IQ.
     /// See XEP-0049 (http://www.xmpp.org/extensions/xep-0049.html)
     /// </summary>
-    [SVN(@"$Id$")]
     public class PrivateIQ : jabber.protocol.client.TypedIQ<Private>
     {
         /// <summary>
@@ -38,14 +36,13 @@ namespace JabberNet.jabber.protocol.iq
     /// Private storage query.
     /// See XEP-0049 (http://www.xmpp.org/extensions/xep-0049.html)
     /// </summary>
-    [SVN(@"$Id$")]
     public class Private : Element
     {
         /// <summary>
         /// Create for outbound
         /// </summary>
         /// <param name="doc"></param>
-        public Private(XmlDocument doc) : 
+        public Private(XmlDocument doc) :
             base("query", URI.PRIVATE, doc)
         {
         }

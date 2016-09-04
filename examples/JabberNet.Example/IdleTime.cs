@@ -15,7 +15,6 @@
 using System;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.Example
 {
@@ -29,7 +28,6 @@ namespace JabberNet.Example
     /// <summary>
     /// Idle time calculations and notifications.
     /// </summary>
-    [SVN(@"$Id$")]
     public class IdleTime
     {
         [StructLayout(LayoutKind.Sequential)]

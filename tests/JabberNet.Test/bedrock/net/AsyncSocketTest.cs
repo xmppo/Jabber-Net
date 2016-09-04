@@ -15,7 +15,6 @@
 using System;
 using System.Threading;
 using JabberNet.bedrock.net;
-using JabberNet.bedrock.util;
 using NUnit.Framework;
 
 namespace JabberNet.Test.bedrock.net
@@ -23,7 +22,6 @@ namespace JabberNet.Test.bedrock.net
     /// <summary>
     ///    Summary description for AsyncSocketTest.
     /// </summary>
-    [SVN(@"$Id$")]
     [TestFixture]
     public class AsyncSocketTest : ISocketEventListener
     {

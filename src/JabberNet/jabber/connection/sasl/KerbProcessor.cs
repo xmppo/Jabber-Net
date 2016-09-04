@@ -16,7 +16,6 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Xml;
-using JabberNet.bedrock.util;
 using JabberNet.jabber.protocol.stream;
 using HANDLE = System.IntPtr;
 
@@ -26,7 +25,6 @@ namespace JabberNet.jabber.connection.sasl
     ///<summary>
     /// Uses Kerberos authentication ot log into XMPP server.
     ///</summary>
-    [SVN(@"$Id$")]
     public class KerbProcessor : SASLProcessor
     {
         /// <summary>

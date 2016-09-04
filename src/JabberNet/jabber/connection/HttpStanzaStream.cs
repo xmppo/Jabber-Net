@@ -16,7 +16,6 @@ using System;
 using System.Diagnostics;
 using System.Xml;
 using JabberNet.bedrock.net;
-using JabberNet.bedrock.util;
 using JabberNet.jabber.protocol;
 
 namespace JabberNet.jabber.connection
@@ -24,7 +23,6 @@ namespace JabberNet.jabber.connection
     /// <summary>
     /// Manages the HTTP Polling XMPP stream.
     /// </summary>
-    [SVN(@"$Id$")]
     public abstract class HttpStanzaStream : StanzaStream, ISocketEventListener
     {
         private AsynchElementStream m_elements = null;

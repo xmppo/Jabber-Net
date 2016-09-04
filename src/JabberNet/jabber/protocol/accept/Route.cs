@@ -13,14 +13,12 @@
  * --------------------------------------------------------------------------*/
 
 using System.Xml;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.jabber.protocol.accept
 {
     /// <summary>
     /// The type field in a route tag.
     /// </summary>
-    [SVN(@"$Id$")]
     public enum RouteType
     {
         /// <summary>
@@ -44,7 +42,6 @@ namespace JabberNet.jabber.protocol.accept
     /// <summary>
     /// The route packet.
     /// </summary>
-    [SVN(@"$Id$")]
     public class Route : jabber.protocol.Packet
     {
         /// <summary>

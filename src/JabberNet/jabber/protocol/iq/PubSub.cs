@@ -91,7 +91,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// A PubSub IQ
     /// </summary>
-    [SVN(@"$Id$")]
     public class PubSubIQ : jabber.protocol.client.TypedIQ<PubSub>
     {
         /// <summary>
@@ -166,7 +165,6 @@ namespace JabberNet.jabber.protocol.iq
     /// A type-safe PubSub IQ.
     /// </summary>
     /// <typeparam name="T">The type of command to create</typeparam>
-    [SVN(@"$Id$")]
     public class PubSubCommandIQ<T> : jabber.protocol.client.TypedIQ<TypedPubSub<T>>
         where T : PubSubCommand
     {
@@ -204,7 +202,6 @@ namespace JabberNet.jabber.protocol.iq
     /// A type-safe pubsub element.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    [SVN(@"$Id$")]
     public class TypedPubSub<T> : Element
         where T : PubSubCommand
     {
@@ -239,7 +236,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// Publish/Subscribe.  See XEP-60: http://www.xmpp.org/extensions/xep-0060.html
     /// </summary>
-    [SVN(@"$Id$")]
     public class PubSub : Element
     {
         /// <summary>
@@ -273,7 +269,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// A PubSub command
     /// </summary>
-    [SVN(@"$Id$")]
     public abstract class PubSubCommand : Element
     {
         /// <summary>
@@ -332,7 +327,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// Retrieve the affiliations.  See: http://www.xmpp.org/extensions/xep-0060.html#entity-affiliations
     /// </summary>
-    [SVN(@"$Id$")]
     public class Affiliations : PubSubCommand
     {
         /// <summary>
@@ -390,7 +384,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// What affiliation does an entity have with respect to a node?
     /// </summary>
-    [SVN(@"$Id$")]
     public enum AffiliationType
     {
         /// <summary>
@@ -422,7 +415,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// The actual affiliation.
     /// </summary>
-    [SVN(@"$Id$")]
     public class Affiliation : Element
     {
         /// <summary>
@@ -435,7 +427,7 @@ namespace JabberNet.jabber.protocol.iq
         }
 
         /// <summary>
-        /// Create a new instance for output, specifying the namespace.  This 
+        /// Create a new instance for output, specifying the namespace.  This
         /// exists for things in pubsub#owner.
         /// </summary>
         /// <param name="doc"></param>
@@ -479,7 +471,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// Create a node. See: http://www.xmpp.org/extensions/xep-0060.html#owner-create
     /// </summary>
-    [SVN(@"$Id$")]
     public class Create : PubSubCommand
     {
         /// <summary>
@@ -576,7 +567,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// Configuring a pubsub node.  If the default is desired, it will be empty.  Otherwise it will contain an x:data.
     /// </summary>
-    [SVN(@"$Id$")]
     public class Configure : PubSubCommand
     {
         /// <summary>
@@ -693,7 +683,6 @@ namespace JabberNet.jabber.protocol.iq
     /// Retrieve the items for a node. See http://www.xmpp.org/extensions/xep-0060.html#subscriber-retrieve
     /// Note: this same type is used for event notifications, in the pubsub#event namespace
     /// </summary>
-    [SVN(@"$Id$")]
     public class Items : PubSubItemCommand
     {
         /// <summary>
@@ -747,7 +736,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// The items in a node
     /// </summary>
-    [SVN(@"$Id$")]
     public class PubSubItem : Element
     {
         /// <summary>
@@ -760,7 +748,7 @@ namespace JabberNet.jabber.protocol.iq
         }
 
         /// <summary>
-        /// Create a new instance for output, specifying the namespace.  This 
+        /// Create a new instance for output, specifying the namespace.  This
         /// exists for things in pubsub#event.
         /// </summary>
         /// <param name="doc"></param>
@@ -812,7 +800,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// Publish to a node.  See http://www.xmpp.org/extensions/xep-0060.html#publisher-publish
     /// </summary>
-    [SVN(@"$Id$")]
     public class Publish : PubSubItemCommand
     {
         /// <summary>
@@ -847,7 +834,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// Delete an item from a node.  See: http://www.xmpp.org/extensions/xep-0060.html#publisher-delete
     /// </summary>
-    [SVN(@"$Id$")]
     public class Retract : PubSubItemCommand
     {
         /// <summary>
@@ -908,7 +894,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// Subscribe to a node. See: http://www.xmpp.org/extensions/xep-0060.html#subscriber-subscribe
     /// </summary>
-    [SVN(@"$Id$")]
     public class Subscribe : PubSubCommand
     {
         /// <summary>
@@ -989,7 +974,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// PubSub subscription options
     /// </summary>
-    [SVN(@"$Id$")]
     public class PubSubOptions : Element
     {
         /// <summary>
@@ -1069,7 +1053,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// Retrieve subscriptions.  See: http://www.xmpp.org/extensions/xep-0060.html#entity-subscriptions
     /// </summary>
-    [SVN(@"$Id$")]
     public class Subscriptions : PubSubCommand
     {
         /// <summary>
@@ -1082,7 +1065,7 @@ namespace JabberNet.jabber.protocol.iq
         }
 
         /// <summary>
-        /// Create a new instance for output, specifying the namespace.  This 
+        /// Create a new instance for output, specifying the namespace.  This
         /// exists for things in pubsub#owner.
         /// </summary>
         /// <param name="doc"></param>
@@ -1134,7 +1117,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// A single subscription
     /// </summary>
-    [SVN(@"$Id$")]
     public class PubSubSubscription : Element
     {
       /// <summary>
@@ -1224,7 +1206,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// Unsubscribe from a node.  See: http://www.xmpp.org/extensions/xep-0060.html#subscriber-unsubscribe
     /// </summary>
-    [SVN(@"$Id$")]
     public class Unsubscribe : PubSubCommand
     {
         /// <summary>

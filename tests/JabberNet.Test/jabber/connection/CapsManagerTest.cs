@@ -13,7 +13,6 @@
  * --------------------------------------------------------------------------*/
 
 using System.Xml;
-using JabberNet.bedrock.util;
 using JabberNet.jabber;
 using JabberNet.jabber.client;
 using JabberNet.jabber.connection;
@@ -28,7 +27,6 @@ using Rhino.Mocks.Interfaces;
 namespace JabberNet.Test.jabber.connection
 {
     [TestFixture]
-    [SVN(@"$Id$")]
     public class CapsManagerTest
     {
         private MockRepository mocks;
@@ -38,9 +36,9 @@ namespace JabberNet.Test.jabber.connection
 
         private readonly JID TO_JID = new JID("user1@test.com");
         private readonly JID FROM_JID = new JID("user2@test.com");
-        
+
         private const string TEST_ID = "TEST_ID";
-        
+
         private const string NODE = "http://jm.jabber.com/caps";
         private const int PRIORITY = 2;
         private const string STATUS = "Ready to Chat";

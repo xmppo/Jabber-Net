@@ -16,7 +16,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.jabber.protocol
 {
@@ -25,7 +24,6 @@ namespace JabberNet.jabber.protocol
     /// for enums that are going to be put in attributes at the moment.
     /// TODO: support namespaces, use for element definitions.
     /// </summary>
-    [SVN(@"$Id$")]
     [AttributeUsage(AttributeTargets.Field)]
     public class XMLAttribute : Attribute
     {
@@ -52,10 +50,9 @@ namespace JabberNet.jabber.protocol
     /// <summary>
     /// Parse enums
     /// </summary>
-    [SVN(@"$Id$")]
     public class EnumParser
 	{
-        private static Dictionary<Type, Dictionary<string, object>> s_vals = 
+        private static Dictionary<Type, Dictionary<string, object>> s_vals =
             new Dictionary<Type, Dictionary<string, object>>();
 
         private static Dictionary<Type, Dictionary<object, string>> s_strings =
@@ -144,7 +141,7 @@ namespace JabberNet.jabber.protocol
         }
 
         /// <summary>
-        /// Parse a string into an enum value for the given type T.  
+        /// Parse a string into an enum value for the given type T.
         /// Any errors map to -1.
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -163,7 +160,7 @@ namespace JabberNet.jabber.protocol
         }
 
         /// <summary>
-        /// Parse a string into an enum value for the given type.  
+        /// Parse a string into an enum value for the given type.
         /// Any errors map to -1.
         /// </summary>
         /// <param name="value"></param>

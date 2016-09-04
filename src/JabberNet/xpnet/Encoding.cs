@@ -14,14 +14,11 @@
  * xpnet is a deriviative of James Clark's XP.  See copying.txt for more info.
  * --------------------------------------------------------------------------*/
 
-using JabberNet.bedrock.util;
-
 namespace JabberNet.xpnet
 {
     /// <summary>
     /// Tokens that might have been found
     /// </summary>
-    [SVN(@"$Id$")]
     public enum TOK
     {
         /**
@@ -253,7 +250,6 @@ namespace JabberNet.xpnet
     /// <summary>
     /// Base tokenizer class
     /// </summary>
-    [SVN(@"$Id$")]
     public abstract class Encoding
     {
         // Bytes with type < 0 may not be data in content.

@@ -15,14 +15,12 @@
 using System;
 using System.Collections;
 using System.Diagnostics;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.bedrock.collections
 {
     /// <summary>
     /// Summary description for SkipList.
     /// </summary>
-    [SVN(@"$Id$")]
     public class SkipList : IEnumerable, IDictionary
     {
         /// <summary>

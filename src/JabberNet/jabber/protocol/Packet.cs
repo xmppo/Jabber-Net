@@ -13,14 +13,12 @@
  * --------------------------------------------------------------------------*/
 
 using System.Xml;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.jabber.protocol
 {
     /// <summary>
     /// Packets that have to/from information.
     /// </summary>
-    [SVN(@"$Id$")]
     public class Packet : Element
     {
         /// <summary>

@@ -13,7 +13,6 @@
  * --------------------------------------------------------------------------*/
 
 using System.Xml;
-using JabberNet.bedrock.util;
 using JabberNet.jabber;
 using JabberNet.jabber.client;
 using JabberNet.jabber.protocol.client;
@@ -25,7 +24,6 @@ namespace JabberNet.Test.jabber.client
     /// <summary>
     /// Summary description for PPDP.
     /// </summary>
-    [SVN(@"$Id$")]
     [TestFixture]
     public class RosterManagerTest
     {

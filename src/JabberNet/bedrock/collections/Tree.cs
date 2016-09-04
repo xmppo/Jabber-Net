@@ -14,14 +14,12 @@
 
 using System;
 using System.Collections;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.bedrock.collections
 {
     /// <summary>
     /// A basic balanced tree implementation.
     /// </summary>
-    [SVN(@"$Id$")]
     public class Tree : IEnumerable, IDictionary
     {
         private Node      root       = null;

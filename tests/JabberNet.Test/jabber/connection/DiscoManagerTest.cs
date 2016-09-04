@@ -13,7 +13,6 @@
  * --------------------------------------------------------------------------*/
 
 using System.Xml;
-using JabberNet.bedrock.util;
 using JabberNet.jabber;
 using JabberNet.jabber.connection;
 using JabberNet.jabber.protocol;
@@ -26,7 +25,6 @@ using Rhino.Mocks.Interfaces;
 namespace JabberNet.Test.jabber.connection
 {
     [TestFixture]
-    [SVN(@"$Id$")]
     public class DiscoManagerTest
     {
         private MockRepository mocks;

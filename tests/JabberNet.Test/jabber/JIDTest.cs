@@ -13,7 +13,6 @@
  * --------------------------------------------------------------------------*/
 
 using System;
-using JabberNet.bedrock.util;
 using JabberNet.jabber;
 using NUnit.Framework;
 
@@ -22,7 +21,6 @@ namespace JabberNet.Test.jabber
     /// <summary>
     /// Summary description for JIDTest.
     /// </summary>
-    [SVN(@"$Id$")]
     [TestFixture]
     public class JIDTest
     {

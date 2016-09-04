@@ -14,14 +14,12 @@
 
 using System;
 using System.Windows.Forms;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.Muzzle
 {
     /// <summary>
     /// Summary description for JidMulti.
     /// </summary>
-    [SVN(@"$Id$")]
     public class JidMulti : System.Windows.Forms.UserControl
     {
         private System.Windows.Forms.ListBox lstJID;

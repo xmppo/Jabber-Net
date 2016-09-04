@@ -13,7 +13,6 @@
  * --------------------------------------------------------------------------*/
 
 using System.Xml;
-using JabberNet.bedrock.util;
 using JabberNet.jabber.protocol;
 using NUnit.Framework;
 
@@ -22,7 +21,6 @@ namespace JabberNet.Test.jabber.protocol
     /// <summary>
     /// Test the EnumParser
     /// </summary>
-    [SVN(@"$Id$")]
     [TestFixture]
     public class EnumParserTest
     {

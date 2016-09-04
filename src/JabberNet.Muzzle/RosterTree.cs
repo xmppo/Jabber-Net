@@ -18,7 +18,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using JabberNet.bedrock.collections;
-using JabberNet.bedrock.util;
 using JabberNet.jabber;
 using JabberNet.jabber.client;
 using JabberNet.jabber.protocol.client;
@@ -31,7 +30,6 @@ namespace JabberNet.Muzzle
     /// form you drop this on has a JabberClient, a PresenceManager, and a RosterManager
     /// on the form first, and this widget will automatically connect to them.
     /// </summary>
-    [SVN(@"$Id$")]
     public class RosterTree : System.Windows.Forms.TreeView
     {
         // image list offsets
@@ -519,7 +517,6 @@ namespace JabberNet.Muzzle
         /// <summary>
         /// A TreeNode to hold a Roster Group
         /// </summary>
-        [SVN(@"$Id$")]
         public class GroupNode : TreeNode
         {
             private jabber.protocol.iq.Group m_group;
@@ -571,7 +568,6 @@ namespace JabberNet.Muzzle
         /// <summary>
         /// A TreeNode to hold a RosterItem
         /// </summary>
-        [SVN(@"$Id$")]
         public class ItemNode : TreeNode
         {
             private jabber.protocol.iq.Item m_item;

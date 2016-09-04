@@ -17,7 +17,6 @@ using System.Diagnostics;
 using System.Text;
 using System.Xml;
 using JabberNet.bedrock.net;
-using JabberNet.bedrock.util;
 using JabberNet.jabber.protocol;
 
 namespace JabberNet.jabber.connection
@@ -25,7 +24,6 @@ namespace JabberNet.jabber.connection
     /// <summary>
     /// Specifies the connection type, such as socket, polling, and so on.
     /// </summary>
-    [SVN(@"$Id$")]
     public enum ConnectionType
     {
         /// <summary>
@@ -45,7 +43,6 @@ namespace JabberNet.jabber.connection
     /// <summary>
     /// Listens for stanza and connection events
     /// </summary>
-    [SVN(@"$Id$")]
     public interface IStanzaEventListener
     {
         /// <summary>
@@ -145,7 +142,6 @@ namespace JabberNet.jabber.connection
     /// <summary>
     /// Manages the base stream for reading and writing full stanzas.
     /// </summary>
-    [SVN(@"$Id$")]
     public abstract class StanzaStream
     {
         /// <summary>

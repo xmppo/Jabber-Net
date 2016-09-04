@@ -14,14 +14,12 @@
 
 using System;
 using System.Xml;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.jabber.protocol.iq
 {
     /// <summary>
     /// An IQ in jabber:iq:private, with a bookmarks body.
     /// </summary>
-    [SVN(@"$Id$")]
     public class BookmarksIQ : PrivateIQ
 	{
         /// <summary>
@@ -45,7 +43,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// The bookmarks to be stored.
     /// </summary>
-    [SVN(@"$Id$")]
     public class Bookmarks : Element
     {
         /// <summary>
@@ -149,7 +146,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// A URL stored in bookmarks.
     /// </summary>
-    [SVN(@"$Id$")]
     public class BookmarkURL : Element
     {
         /// <summary>
@@ -195,7 +191,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// A conference room name stored in bookmarks
     /// </summary>
-    [SVN(@"$Id$")]
     public class BookmarkConference : Element
     {
         /// <summary>
@@ -223,12 +218,12 @@ namespace JabberNet.jabber.protocol.iq
         /// </summary>
         public bool AutoJoin
         {
-            get 
+            get
             {
                 string aj = GetAttr("autojoin");
                 return (aj == "true") || (aj == "1");
             }
-            set 
+            set
             {
                 if (value)
                     SetAttr("autojoin", "true");
@@ -265,9 +260,9 @@ namespace JabberNet.jabber.protocol.iq
         }
 
         /// <summary>
-        /// Plain-text string for the password needed to enter a password-protected room. 
+        /// Plain-text string for the password needed to enter a password-protected room.
         /// For security reasons, use of this element is NOT RECOMMENDED.
-        /// 
+        ///
         /// TODO: should this be marked Obsolete?
         /// </summary>
         public string Password
@@ -280,7 +275,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// A note stored in bookmarks.  Un-specified, but hinted at in version 1.1 of XEP-48.
     /// </summary>
-    [SVN(@"$Id$")]
     public class BookmarkNote : Element
     {
         /// <summary>

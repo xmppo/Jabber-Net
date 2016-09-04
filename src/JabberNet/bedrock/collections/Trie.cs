@@ -14,7 +14,6 @@
 
 using System;
 using System.Collections;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.bedrock.collections
 {
@@ -30,7 +29,6 @@ namespace JabberNet.bedrock.collections
     /// A trie is a tree structure that implements a radix search.  Each node of the tree has a
     /// sub-node for each possible next byte.
     /// </summary>
-    [SVN(@"$Id$")]
     public class Trie : IDictionary
     {
         private static readonly System.Text.Encoding ENCODING = System.Text.Encoding.Default;

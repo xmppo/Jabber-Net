@@ -13,14 +13,12 @@
  * --------------------------------------------------------------------------*/
 
 using System.Xml;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.jabber.protocol.iq
 {
     /// <summary>
     /// IQ packet with a version query element inside.
     /// </summary>
-    [SVN(@"$Id$")]
     public class VersionIQ : jabber.protocol.client.TypedIQ<Version>
     {
         /// <summary>
@@ -35,7 +33,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// A time query element.
     /// </summary>
-    [SVN(@"$Id$")]
     public class Version : Element
     {
         /// <summary>

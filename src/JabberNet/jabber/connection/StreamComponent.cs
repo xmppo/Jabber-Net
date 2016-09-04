@@ -13,7 +13,6 @@
  * --------------------------------------------------------------------------*/
 
 using System.Xml;
-using JabberNet.bedrock.util;
 using JabberNet.jabber.protocol.client;
 
 namespace JabberNet.jabber.connection
@@ -21,7 +20,6 @@ namespace JabberNet.jabber.connection
     /// <summary>
     /// Manages the XmppStream as a component.
     /// </summary>
-    [SVN(@"$Id$")]
     public abstract class StreamComponent
     {
         /// <summary>

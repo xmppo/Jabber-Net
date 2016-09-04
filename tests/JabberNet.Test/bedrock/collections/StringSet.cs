@@ -14,13 +14,11 @@
 
 using System;
 using JabberNet.bedrock.collections;
-using JabberNet.bedrock.util;
 using NUnit.Framework;
 
 namespace JabberNet.Test.bedrock.collections
 {
     [TestFixture]
-    [SVN(@"$Id$")]
     public class StringSetTest
     {
         [Test]

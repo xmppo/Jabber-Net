@@ -13,14 +13,12 @@
  * --------------------------------------------------------------------------*/
 
 using System.Xml;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.jabber.protocol.stream
 {
     /// <summary>
     /// Start-TLS in stream features.
     /// </summary>
-    [SVN(@"$Id$")]
     public class StartTLS : Element
     {
         /// <summary>
@@ -72,7 +70,6 @@ namespace JabberNet.jabber.protocol.stream
     /// <summary>
     /// Start-TLS proceed.
     /// </summary>
-    [SVN(@"$Id$")]
     public class Proceed : Element
     {
         /// <summary>
@@ -99,7 +96,6 @@ namespace JabberNet.jabber.protocol.stream
     /// <summary>
     /// Start-TLS failure.
     /// </summary>
-    [SVN(@"$Id$")]
     public class TLSFailure : Element
     {
         /// <summary>

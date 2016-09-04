@@ -149,9 +149,6 @@
     <Compile Include="bedrock\util\GetOptBaseTest.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="bedrock\util\VersionTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="jabber\client\PresenceManagerTest.cs">
       <SubType>Code</SubType>
     </Compile>

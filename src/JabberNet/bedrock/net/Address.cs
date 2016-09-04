@@ -15,7 +15,6 @@
 using System;
 using System.Diagnostics;
 using System.Net;
-using JabberNet.bedrock.util;
 using JabberNet.Netlib.Dns;
 using JabberNet.Netlib.Dns.Records;
 
@@ -30,7 +29,6 @@ namespace JabberNet.bedrock.net
     /// but adds async DNS lookups.
     /// TODO: add SRV?
     /// </summary>
-    [SVN(@"$Id$")]
     public class Address
     {
         private string    m_hostname = null;

@@ -14,14 +14,12 @@
 
 using System;
 using System.Xml;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.jabber.protocol.iq
 {
     /// <summary>
     /// Publish/Subscribe.  See XEP-60: http://www.xmpp.org/extensions/xep-0060.html
     /// </summary>
-    [SVN(@"$Id$")]
     public class PubSubEvent : Element
     {
         /// <summary>
@@ -56,7 +54,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// Notification for item deletion.
     /// </summary>
-    [SVN(@"$Id$")]
     public class EventRetract : Element
     {
         /// <summary>
@@ -90,9 +87,8 @@ namespace JabberNet.jabber.protocol.iq
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
-    [SVN(@"$Id$")]
     public class EventCollection : PubSubCommand
     {
         /// <summary>
@@ -144,7 +140,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// Nodes added to a collection
     /// </summary>
-    [SVN(@"$Id$")]
     public class EventAssociate : Element
     {
         /// <summary>
@@ -189,7 +184,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// Nodes removed from a collection
     /// </summary>
-    [SVN(@"$Id$")]
     public class EventDisassociate : Element
     {
         /// <summary>
@@ -225,7 +219,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// Pubsub items notification.  This is the main reason for XEP-60 to have been written.
     /// </summary>
-    [SVN(@"$Id$")]
     public class EventItems : PubSubCommand
     {
         /// <summary>
@@ -308,7 +301,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// New node configuration
     /// </summary>
-    [SVN(@"$Id$")]
     public class EventConfiguration : PubSubCommand
     {
         /// <summary>
@@ -352,7 +344,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// All of the items in a node have been deleted.
     /// </summary>
-    [SVN(@"$Id$")]
     public class EventPurge : PubSubCommand
     {
         /// <summary>
@@ -387,7 +378,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// Subscription state has changed
     /// </summary>
-    [SVN(@"$Id$")]
     public class EventSubscription : PubSubCommand
     {
         /// <summary>

@@ -18,14 +18,12 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.Muzzle
 {
     /// <summary>
     /// Debug stream for XMPP, so I don't have write it every time.
     /// </summary>
-    [SVN(@"$Id$")]
     public class XmppDebugger : StreamControl
     {
         private RichTextBox rtSend;

@@ -13,7 +13,6 @@
  * --------------------------------------------------------------------------*/
 
 using System.Xml;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.jabber.protocol.iq
 {
@@ -32,7 +31,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// IQ packet with an agents query element inside.
     /// </summary>
-    [SVN(@"$Id$")]
     public class AgentsIQ : jabber.protocol.client.TypedIQ<AgentsQuery>
     {
         /// <summary>
@@ -47,7 +45,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// An agents query element.
     /// </summary>
-    [SVN(@"$Id$")]
     public class AgentsQuery : Element
     {
         /// <summary>
@@ -90,7 +87,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// Agent items
     /// </summary>
-    [SVN(@"$Id$")]
     public class Agent : Element
     {
         /// <summary>

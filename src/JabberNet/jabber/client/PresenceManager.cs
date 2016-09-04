@@ -16,7 +16,6 @@ using System;
 using System.Collections;
 using System.Diagnostics;
 using JabberNet.bedrock.collections;
-using JabberNet.bedrock.util;
 using JabberNet.jabber.connection;
 using JabberNet.jabber.protocol.client;
 using JabberNet.jabber.protocol.iq;
@@ -36,7 +35,6 @@ namespace JabberNet.jabber.client
     /// <summary>
     /// Specifies the presence proxy database.
     /// </summary>
-    [SVN(@"$Id$")]
     public class PresenceManager : jabber.connection.StreamComponent, IEnumerable
     {
         private Tree m_items = new Tree();

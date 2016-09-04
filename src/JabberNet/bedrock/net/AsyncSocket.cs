@@ -20,7 +20,6 @@ using System.Net.Security;
 using System.Net.Sockets;
 using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
-using JabberNet.bedrock.util;
 using zlib;
 
 namespace JabberNet.bedrock.net
@@ -34,14 +33,12 @@ namespace JabberNet.bedrock.net
     /// An asynchronous socket, which calls a listener class when
     /// interesting things happen.
     /// </summary>
-    [SVN(@"$Id$")]
     public class AsyncSocket : BaseSocket, IComparable
     {
         /// <summary>
         /// Socket states.
         /// </summary>
-        [SVN(@"$Id$")]
-            private enum SocketState
+        private enum SocketState
         {
             /// <summary>
             /// Socket has been created.

@@ -14,12 +14,10 @@
 
 using System;
 using System.Windows.Forms;
-using JabberNet.bedrock.util;
 using JabberNet.jabber;
 
 namespace JabberNet.Example
 {
-    [SVN(@"$Id$")]
     public class AddContact : Form
     {
 

@@ -14,7 +14,6 @@
 
 using System;
 using System.Xml;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.jabber.protocol.iq
 {
@@ -32,7 +31,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// IQ packet with an time query element inside.
     /// </summary>
-    [SVN(@"$Id$")]
     public class TimeIQ : jabber.protocol.client.TypedIQ<Time>
     {
         /// <summary>
@@ -47,7 +45,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// A time query element.
     /// </summary>
-    [SVN(@"$Id$")]
     public class Time : Element
     {
         /// <summary>

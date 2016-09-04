@@ -13,7 +13,6 @@
  * --------------------------------------------------------------------------*/
 
 using System.Xml;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.jabber.protocol.iq
 {
@@ -21,7 +20,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// IQ packet with a register query element inside.
     /// </summary>
-    [SVN(@"$Id$")]
     public class RegisterIQ : jabber.protocol.client.TypedIQ<Register>
     {
         /// <summary>
@@ -36,7 +34,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// User registration
     /// </summary>
-    [SVN(@"$Id$")]
     public class Register : Element
     {
         /// <summary>

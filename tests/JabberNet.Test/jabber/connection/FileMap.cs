@@ -14,7 +14,6 @@
 
 using System;
 using System.Xml;
-using JabberNet.bedrock.util;
 using JabberNet.jabber.connection;
 using JabberNet.jabber.protocol;
 using JabberNet.jabber.protocol.iq;
@@ -22,7 +21,6 @@ using NUnit.Framework;
 
 namespace JabberNet.Test.jabber.connection
 {
-    [SVN(@"$Id$")]
     [TestFixture]
     public class FileMapTest
     {

@@ -14,7 +14,6 @@
 
 using System;
 using System.Xml;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.jabber.protocol.x
 {
@@ -22,7 +21,6 @@ namespace JabberNet.jabber.protocol.x
     /// Types of events
     /// </summary>
     [Flags]
-    [SVN(@"$Id$")]
     public enum EventType
     {
         /// <summary>
@@ -59,7 +57,6 @@ namespace JabberNet.jabber.protocol.x
     /// <summary>
     /// A event x element, described by XEP-0022.
     /// </summary>
-    [SVN(@"$Id$")]
     public class Event : Element
     {
         /// <summary>

@@ -13,14 +13,12 @@
  * --------------------------------------------------------------------------*/
 
 using System.Xml;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.jabber.protocol.accept
 {
     /// <summary>
     /// The type attribute
     /// </summary>
-    [SVN(@"$Id$")]
     public enum XdbType
     {
         /// <summary>
@@ -48,7 +46,6 @@ namespace JabberNet.jabber.protocol.accept
     /// <summary>
     /// The action attribute.
     /// </summary>
-    [SVN(@"$Id$")]
     public enum XdbAction
     {
         /// <summary>
@@ -68,7 +65,6 @@ namespace JabberNet.jabber.protocol.accept
     /// <summary>
     /// The XDB packet.
     /// </summary>
-    [SVN(@"$Id$")]
     public class Xdb : jabber.protocol.Packet
     {
         /// <summary>

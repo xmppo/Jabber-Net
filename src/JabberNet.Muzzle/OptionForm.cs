@@ -17,7 +17,6 @@ using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.Xml;
-using JabberNet.bedrock.util;
 using JabberNet.jabber.connection;
 
 namespace JabberNet.Muzzle
@@ -25,7 +24,6 @@ namespace JabberNet.Muzzle
     /// <summary>
     /// Base class for forms that configure XmppStream subclasses.
     /// </summary>
-    [SVN(@"$Id$")]
     public class OptionForm : Form
     {
         private Button btnCancel;

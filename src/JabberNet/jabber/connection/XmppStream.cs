@@ -18,7 +18,6 @@ using System.Diagnostics;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Xml;
-using JabberNet.bedrock.util;
 using JabberNet.jabber.connection.sasl;
 using JabberNet.jabber.protocol;
 using JabberNet.jabber.protocol.stream;
@@ -33,7 +32,6 @@ namespace JabberNet.jabber.connection
     /// <summary>
     /// Manages option names.  These must be well-formed XML element names.
     /// </summary>
-    [SVN(@"$Id: XmppStream.cs 724 2008-08-06 18:09:25Z hildjj $")]
     public abstract class Options
     {
         //FF

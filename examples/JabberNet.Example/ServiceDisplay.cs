@@ -14,13 +14,11 @@
 
 using System.ComponentModel;
 using System.Windows.Forms;
-using JabberNet.bedrock.util;
 using JabberNet.jabber.client;
 using JabberNet.jabber.connection;
 
 namespace JabberNet.Example
 {
-    [SVN(@"$Id$")]
     public class ServiceDisplay : UserControl
     {
         /// <summary>

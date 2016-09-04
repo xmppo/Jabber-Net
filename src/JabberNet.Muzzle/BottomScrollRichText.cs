@@ -17,7 +17,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.Muzzle
 {
@@ -25,7 +24,6 @@ namespace JabberNet.Muzzle
     /// <summary>
     /// Summary description for BottomScrollRichText.
     /// </summary>
-    [SVN(@"$Id$")]
     public class BottomScrollRichText : System.Windows.Forms.RichTextBox
     {
         private const int SB_HORZ             = 0;

@@ -19,7 +19,6 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
-using JabberNet.bedrock.util;
 using JabberNet.jabber.protocol.stream;
 
 namespace JabberNet.jabber.connection.sasl
@@ -27,7 +26,6 @@ namespace JabberNet.jabber.connection.sasl
     /// <summary>
     /// RFC2831 DIGEST-MD5 SASL mechanism
     /// </summary>
-    [SVN(@"$Id$")]
     public class MD5Processor : SASLProcessor
     {
         /// <summary>

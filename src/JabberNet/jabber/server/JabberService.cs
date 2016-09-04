@@ -14,7 +14,6 @@
 
 using System;
 using System.Xml;
-using JabberNet.bedrock.util;
 using JabberNet.jabber.connection;
 using JabberNet.jabber.protocol;
 using JabberNet.jabber.protocol.accept;
@@ -27,7 +26,6 @@ namespace JabberNet.jabber.server
     /// This list will grow over time to include
     /// queued connections, direct (in-proc) connections, etc.
     /// </summary>
-    [SVN(@"$Id$")]
     public enum ComponentType
     {
         /// <summary>
@@ -58,7 +56,6 @@ namespace JabberNet.jabber.server
     /// <summary>
     /// Summary description for ServerComponent.
     /// </summary>
-    [SVN(@"$Id$")]
     public class JabberService : jabber.connection.XmppStream
     {
         private static readonly object[][] DEFAULTS = new object[][] {
@@ -407,7 +404,6 @@ namespace JabberNet.jabber.server
     /// <summary>
     /// Waiting for handshake result.
     /// </summary>
-    [SVN(@"$Id$")]
     public class HandshakingState : jabber.connection.BaseState
     {
         /// <summary>
@@ -419,7 +415,6 @@ namespace JabberNet.jabber.server
     /// <summary>
     /// Waiting for socket connection.
     /// </summary>
-    [SVN(@"$Id$")]
     public class AcceptingState : jabber.connection.BaseState
     {
         /// <summary>

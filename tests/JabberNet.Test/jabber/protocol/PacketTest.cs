@@ -14,7 +14,6 @@
 
 using System;
 using System.Xml;
-using JabberNet.bedrock.util;
 using JabberNet.jabber.protocol;
 using NUnit.Framework;
 
@@ -23,7 +22,6 @@ namespace JabberNet.Test.jabber.protocol
     /// <summary>
     /// Summary description for PacketTest.
     /// </summary>
-    [SVN(@"$Id$")]
     [TestFixture]
     public class PacketTest
     {

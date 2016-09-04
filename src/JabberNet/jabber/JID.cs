@@ -16,14 +16,12 @@ using System;
 using System.Diagnostics;
 using System.Text;
 using System.Text.RegularExpressions;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.jabber
 {
     /// <summary>
     /// Informs the client that an invalid JID was entered.
     /// </summary>
-    [SVN(@"$Id$")]
     public class JIDFormatException : ApplicationException
     {
         /// <summary>
@@ -65,7 +63,6 @@ namespace JabberNet.jabber
     /// <summary>
     /// Provides simple JID management.
     /// </summary>
-    [SVN(@"$Id$")]
     public class JID : IComparable
     {
 #if !NO_STRINGPREP

@@ -13,7 +13,6 @@
  * --------------------------------------------------------------------------*/
 
 using System.Xml;
-using JabberNet.bedrock.util;
 using JabberNet.jabber.protocol;
 using JabberNet.jabber.protocol.iq;
 using NUnit.Framework;
@@ -23,7 +22,6 @@ namespace JabberNet.Test.jabber.protocol.iq
     /// <summary>
     /// Summary description for RosterTest.
     /// </summary>
-    [SVN(@"$Id$")]
     [TestFixture]
     public class RegisterTest
     {

@@ -14,7 +14,6 @@
 
 using System.Diagnostics;
 using System.Xml;
-using JabberNet.bedrock.util;
 using JabberNet.jabber.protocol.stream;
 
 namespace JabberNet.jabber.connection.sasl
@@ -22,7 +21,6 @@ namespace JabberNet.jabber.connection.sasl
     /// <summary>
     /// SASL Mechanism EXTERNAL as specified in XEP-0178.
     /// </summary>
-    [SVN(@"$Id$")]
     public class ExternalProcessor : SASLProcessor
     {
         /// <summary>

@@ -13,14 +13,12 @@
  * --------------------------------------------------------------------------*/
 
 using System.Xml;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.jabber.protocol.stream
 {
     /// <summary>
     /// XEP-138 compression.
     /// </summary>
-    [SVN(@"$Id$")]
     public class Compression : Element
     {
         /// <summary>
@@ -87,7 +85,6 @@ namespace JabberNet.jabber.protocol.stream
     /// <summary>
     /// XEP-138 compression failure.
     /// </summary>
-    [SVN(@"$Id$")]
     public class CompressionFailure : Element
     {
         /// <summary>
@@ -130,7 +127,6 @@ namespace JabberNet.jabber.protocol.stream
     /// <summary>
     /// XEP-138 compression start.
     /// </summary>
-    [SVN(@"$Id$")]
     public class Compress : Element
     {
         /// <summary>
@@ -167,7 +163,6 @@ namespace JabberNet.jabber.protocol.stream
     /// <summary>
     /// XEP-138 compression success.
     /// </summary>
-    [SVN(@"$Id$")]
     public class Compressed : Element
     {
         /// <summary>

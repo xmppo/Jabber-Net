@@ -21,7 +21,6 @@ namespace JabberNet.bedrock.util
     /// <summary>
     /// XML configuration file manager.
     /// </summary>
-    [SVN(@"$Id$")]
     public class ConfigFile
     {
         private string m_file;

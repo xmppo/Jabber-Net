@@ -13,7 +13,6 @@
  * --------------------------------------------------------------------------*/
 
 using System;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.bedrock.collections
 {
@@ -21,7 +20,6 @@ namespace JabberNet.bedrock.collections
     /// A type-safe stack for bytes, implemented as a growable
     /// buffer.
     /// </summary>
-    [SVN(@"$Id$")]
     public class ByteStack
     {
         private const double GROWTH_FACTOR = 1.5d;

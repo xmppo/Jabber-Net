@@ -15,7 +15,6 @@
 using System.Diagnostics;
 using System.IO;
 using System.Xml;
-using JabberNet.bedrock.util;
 using JabberNet.jabber.protocol.stream;
 
 namespace JabberNet.jabber.connection.sasl
@@ -23,7 +22,6 @@ namespace JabberNet.jabber.connection.sasl
     /// <summary>
     /// SASL Mechanism PLAIN as specified in RFC 2595.
     /// </summary>
-    [SVN(@"$Id$")]
     public class PlainProcessor : SASLProcessor
     {
         /// <summary>

@@ -14,15 +14,12 @@
  * xpnet is a deriviative of James Clark's XP.  See copying.txt for more info.
  * --------------------------------------------------------------------------*/
 
-using JabberNet.bedrock.util;
-
 namespace JabberNet.xpnet
 {
     /// <summary>
     /// Represents information returned by <code>Encoding.tokenizeContent</code>.
     /// @see Encoding#tokenizeContent
     /// </summary>
-    [SVN(@"$Id$")]
     public class ContentToken : Token
     {
         private const int INIT_ATT_COUNT = 8;

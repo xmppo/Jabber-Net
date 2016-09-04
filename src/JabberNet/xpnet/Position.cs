@@ -14,8 +14,6 @@
  * xpnet is a deriviative of James Clark's XP.  See copying.txt for more info.
  * --------------------------------------------------------------------------*/
 
-using JabberNet.bedrock.util;
-
 namespace JabberNet.xpnet
 {
     /**
@@ -27,7 +25,6 @@ namespace JabberNet.xpnet
     ///<summary>
     /// Position of an entry in a table.
     ///</summary>
-    [SVN(@"$Id$")]
     public class Position : System.ICloneable
     {
         private int lineNumber;

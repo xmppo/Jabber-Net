@@ -15,14 +15,12 @@
 using System;
 using System.Diagnostics;
 using System.Xml;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.jabber.protocol.iq
 {
     /// <summary>
     /// An auth IQ.
     /// </summary>
-    [SVN(@"$Id$")]
     public class AuthIQ : jabber.protocol.client.TypedIQ<Auth>
     {
         /// <summary>
@@ -38,7 +36,6 @@ namespace JabberNet.jabber.protocol.iq
     /// Client authentication, with digest support.  Call SetAuth() to compute
     /// the digest.
     /// </summary>
-    [SVN(@"$Id$")]
     public class Auth : Element
     {
         /// <summary>

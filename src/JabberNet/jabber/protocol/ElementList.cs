@@ -14,7 +14,6 @@
 
 using System.Collections;
 using System.Xml;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.jabber.protocol
 {
@@ -23,7 +22,6 @@ namespace JabberNet.jabber.protocol
     /// but removes the big old memory leak in MS's implementation.  Also, only returns first-level children,
     /// rather than all children below here with the given name.  Thanks, MS.
     /// </summary>
-    [SVN(@"$Id$")]
     public class ElementList : XmlNodeList
     {
         private XmlElement m_parent = null;
@@ -184,7 +182,6 @@ namespace JabberNet.jabber.protocol
     /// <summary>
     /// Parameterized version of ElementList.
     /// </summary>
-    [SVN(@"$Id$")]
     public class TypedElementList<T> : XmlNodeList, System.Collections.Generic.IEnumerable<T>
         where T : XmlElement
     {
@@ -322,7 +319,7 @@ namespace JabberNet.jabber.protocol
 
             public void Dispose()
             {
-                
+
             }
 
             #endregion

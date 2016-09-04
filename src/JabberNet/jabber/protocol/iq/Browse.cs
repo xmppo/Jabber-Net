@@ -13,14 +13,12 @@
  * --------------------------------------------------------------------------*/
 
 using System.Xml;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.jabber.protocol.iq
 {
     /// <summary>
     /// An browse IQ.
     /// </summary>
-    [SVN(@"$Id$")]
     public class BrowseIQ : jabber.protocol.client.TypedIQ<Browse>
     {
         /// <summary>
@@ -35,7 +33,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// Browse IQ query.
     /// </summary>
-    [SVN(@"$Id$")]
     public class Browse : Element
     {
         /// <summary>

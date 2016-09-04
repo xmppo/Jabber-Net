@@ -16,16 +16,14 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Xml;
-using JabberNet.bedrock.util;
 using JabberNet.jabber.protocol;
 
 namespace JabberNet.jabber.connection
 {
     /// <summary>
-    /// A dictionary backed into a file.  Any modification to the dictionary re-writes the file, so 
+    /// A dictionary backed into a file.  Any modification to the dictionary re-writes the file, so
     /// writes are somewhat costly.  Reads are cached lazily.
     /// </summary>
-    [SVN(@"$Id$")]
     public class FileMap<T>
         where T : Element
 	{
@@ -38,7 +36,7 @@ namespace JabberNet.jabber.connection
         /// <summary>
         /// Create a file map.
         /// </summary>
-        /// <param name="fileName">Valid file name, either absoulte, or relative 
+        /// <param name="fileName">Valid file name, either absoulte, or relative
         /// to the current working directory.</param>
         /// <param name="factory">Element factory to create elements of a given type.  If null,
         /// Elements will always be created, and T MUST be Element.</param>
@@ -73,7 +71,7 @@ namespace JabberNet.jabber.connection
         public string FileName
         {
             get { return m_fileName; }
-            set 
+            set
             {
                 if (value == null)
                     throw new ArgumentNullException("fileName");
@@ -164,7 +162,7 @@ namespace JabberNet.jabber.connection
 
         /// <summary>
         /// Get or set the XmlElement associated with the given key.
-        /// If the key already has a value, it WILL NOT be overridden; you 
+        /// If the key already has a value, it WILL NOT be overridden; you
         /// MUST call Clear or Remove first.
         /// </summary>
         /// <param name="key"></param>

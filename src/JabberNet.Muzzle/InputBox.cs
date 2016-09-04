@@ -13,7 +13,6 @@
  * --------------------------------------------------------------------------*/
 
 using System.Windows.Forms;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.Muzzle
 {
@@ -21,7 +20,6 @@ namespace JabberNet.Muzzle
     /// <summary>
     /// A generic input getter dialog.
     /// </summary>
-    [SVN(@"$Id$")]
     public class InputBox : Form
     {
         private Label label1;

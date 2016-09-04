@@ -14,7 +14,6 @@
 
 using System.Xml;
 using JabberNet.bedrock.collections;
-using JabberNet.bedrock.util;
 using JabberNet.jabber;
 using JabberNet.jabber.client;
 using JabberNet.jabber.connection;
@@ -28,7 +27,6 @@ namespace JabberNet.Test.jabber.client // TODO: Client1 due to a bug in NUnit.
     /// <summary>
     /// Summary description for PPDP.
     /// </summary>
-    [SVN(@"$Id$")]
     [TestFixture]
     public class PresenceManagerTest
     {

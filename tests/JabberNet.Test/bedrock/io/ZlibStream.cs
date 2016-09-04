@@ -14,7 +14,6 @@
 
 using System.IO;
 using JabberNet.bedrock.io;
-using JabberNet.bedrock.util;
 using NUnit.Framework;
 
 namespace JabberNet.Test.bedrock.io
@@ -22,7 +21,6 @@ namespace JabberNet.Test.bedrock.io
     /// <summary>
     /// Test the ZlibStream class.
     /// </summary>
-    [SVN(@"$Id$")]
     [TestFixture]
     public class ZlibStreamTest
     {

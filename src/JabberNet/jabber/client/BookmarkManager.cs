@@ -15,7 +15,6 @@
 using System;
 using System.Collections.Generic;
 using System.Xml;
-using JabberNet.bedrock.util;
 using JabberNet.jabber.connection;
 using JabberNet.jabber.protocol.client;
 using JabberNet.jabber.protocol.iq;
@@ -33,7 +32,6 @@ namespace JabberNet.jabber.client
     /// Manager bookmarks on the server, with the old-style iq:private.
     /// TODO: add support for new-style PEP.
     /// </summary>
-    [SVN(@"$Id$")]
     public class BookmarkManager : jabber.connection.StreamComponent
     {
         private bool m_autoPrivate = true;

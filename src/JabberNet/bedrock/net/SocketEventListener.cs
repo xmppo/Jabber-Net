@@ -13,7 +13,6 @@
  * --------------------------------------------------------------------------*/
 
 using System;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.bedrock.net
 {
@@ -23,7 +22,6 @@ namespace JabberNet.bedrock.net
     /// events.  This is an interface instead of events in order
     /// to preserve symmetry with libbedrock.
     /// </summary>
-    [SVN(@"$Id$")]
     public interface ISocketEventListener
     {
         /// <summary>
@@ -99,7 +97,6 @@ namespace JabberNet.bedrock.net
     /// <summary>
     /// Default, empty implementation of ISocketEventListener
     /// </summary>
-    [SVN(@"$Id$")]
     public class SocketEventListener : ISocketEventListener
     {
         #region Implementation of ISocketEventListener

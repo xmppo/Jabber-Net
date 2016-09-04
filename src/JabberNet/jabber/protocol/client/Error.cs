@@ -14,7 +14,6 @@
 
 using System;
 using System.Xml;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.jabber.protocol.client
 {
@@ -135,7 +134,6 @@ namespace JabberNet.jabber.protocol.client
     /// <summary>
     /// Error IQ
     /// </summary>
-    [SVN(@"$Id$")]
     public class IQError : IQ
     {
         /// <summary>
@@ -154,7 +152,6 @@ namespace JabberNet.jabber.protocol.client
     /// <summary>
     /// Error in a message or IQ.
     /// </summary>
-    [SVN(@"$Id$")]
     public class Error : Element
     {
         /// <summary>

@@ -14,7 +14,6 @@
 
 using System;
 using System.Xml;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.jabber.protocol.iq
 {
@@ -192,7 +191,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// Presence to join a multi-user chat.
     /// </summary>
-    [SVN(@"$Id$")]
     public class RoomPresence : jabber.protocol.client.Presence
     {
         /// <summary>
@@ -237,7 +235,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// X tag for presence when joining a room.
     /// </summary>
-    [SVN(@"$Id$")]
     public class RoomX : Element
     {
         /// <summary>
@@ -291,7 +288,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// How much history to retrieve upon joining a room.
     /// </summary>
-    [SVN(@"$Id$")]
     public class History : Element
     {
         /// <summary>
@@ -355,7 +351,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// Information about users
     /// </summary>
-    [SVN(@"$Id$")]
     public class UserX : Element
     {
         /// <summary>
@@ -523,7 +518,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// Invitee Declines Invitation
     /// </summary>
-    [SVN(@"$Id$")]
     public class Decline : Element
     {
         /// <summary>
@@ -589,7 +583,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// An invite to a room
     /// </summary>
-    [SVN(@"$Id$")]
     public class Invite : Element
     {
         /// <summary>
@@ -655,7 +648,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// A room was destroyed
     /// </summary>
-    [SVN(@"$Id$")]
     public class Destroy : Element
     {
         /// <summary>
@@ -706,7 +698,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// Item associated with a room.
     /// </summary>
-    [SVN(@"$Id$")]
     public class RoomItem : AdminItem
     {
         /// <summary>
@@ -752,7 +743,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// The JID associated with an item
     /// </summary>
-    [SVN(@"$Id$")]
     public class RoomActor : Element
     {
         /// <summary>
@@ -796,7 +786,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// An IQ with a AdminQuery inside.
     /// </summary>
-    [SVN(@"$Id$")]
     public class RoomAdminIQ : jabber.protocol.client.TypedIQ<AdminQuery>
     {
         /// <summary>
@@ -812,7 +801,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// Moderator use cases
     /// </summary>
-    [SVN(@"$Id$")]
     public class AdminQuery : Element
     {
         /// <summary>
@@ -867,7 +855,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// Item associated with a room.
     /// </summary>
-    [SVN(@"$Id$")]
     public class AdminItem : Element
     {
         /// <summary>
@@ -967,7 +954,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// IQ with an OwnerQuery inside
     /// </summary>
-    [SVN(@"$Id$")]
     public class OwnerIQ : jabber.protocol.client.TypedIQ<OwnerQuery>
     {
         /// <summary>
@@ -983,7 +969,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// The query element inside an owner IQ.
     /// </summary>
-    [SVN(@"$Id$")]
     public class OwnerQuery : Element
     {
         /// <summary>
@@ -1028,7 +1013,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// Destroy the room
     /// </summary>
-    [SVN(@"$Id$")]
     public class OwnerDestroy : Element
     {
         /// <summary>
@@ -1090,7 +1074,6 @@ namespace JabberNet.jabber.protocol.iq
     /// Request for a unique room name.  Seems like just using a GUID on the
     /// create request would be enough, but it's in XEP-45.
     /// </summary>
-    [SVN(@"$Id$")]
     public class UniqueIQ : jabber.protocol.client.IQ
     {
         /// <summary>
@@ -1107,7 +1090,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// A unique name for a room.
     /// </summary>
-    [SVN(@"$Id$")]
     public class UniqueRoom : Element
     {
         /// <summary>

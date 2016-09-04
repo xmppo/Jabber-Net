@@ -14,7 +14,6 @@
 
 using System.ComponentModel;
 using System.Xml;
-using JabberNet.bedrock.util;
 using JabberNet.jabber;
 using JabberNet.jabber.connection;
 using JabberNet.jabber.protocol.client;
@@ -24,7 +23,6 @@ namespace JabberNet.Muzzle
     /// <summary>
     /// A UserControl that references an XmppStream.
     /// </summary>
-    [SVN(@"$Id$")]
     public class StreamControl : System.Windows.Forms.UserControl
     {
         /// <summary>

@@ -13,7 +13,6 @@
  * --------------------------------------------------------------------------*/
 
 using System.Xml;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.jabber.protocol.iq
 {
@@ -28,7 +27,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// IQ packet with an oob query element inside.
     /// </summary>
-    [SVN(@"$Id$")]
     public class OobIQ : jabber.protocol.client.TypedIQ<OOB>
     {
         /// <summary>
@@ -43,7 +41,6 @@ namespace JabberNet.jabber.protocol.iq
     /// <summary>
     /// An oob query element for file transfer.
     /// </summary>
-    [SVN(@"$Id$")]
     public class OOB : Element
     {
         /// <summary>

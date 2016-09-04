@@ -14,14 +14,12 @@
 
 using System;
 using System.Collections;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.bedrock.collections
 {
     /// <summary>
     /// The different ways a set can be implemented.
     /// </summary>
-    [SVN(@"$Id$")]
     public enum SetImplementation
     {
         /// <summary>
@@ -41,7 +39,6 @@ namespace JabberNet.bedrock.collections
     /// <summary>
     /// Set backed into a Tree.
     /// </summary>
-    [SVN(@"$Id$")]
     public class Set : ISet
     {
         private static readonly object s_nothing = new object();

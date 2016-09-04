@@ -13,7 +13,6 @@
  * --------------------------------------------------------------------------*/
 
 using System.Xml;
-using JabberNet.bedrock.util;
 using JabberNet.jabber;
 using JabberNet.jabber.protocol;
 using JabberNet.jabber.protocol.client;
@@ -25,7 +24,6 @@ namespace JabberNet.Test.jabber.protocol.iq
     /// <summary>
     /// Test Agents
     /// </summary>
-    [SVN(@"$Id$")]
     [TestFixture]
     public class AgentTest
     {

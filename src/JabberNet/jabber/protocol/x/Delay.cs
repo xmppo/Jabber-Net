@@ -14,14 +14,12 @@
 
 using System;
 using System.Xml;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.jabber.protocol.x
 {
     /// <summary>
     /// A delay x element.
     /// </summary>
-    [SVN(@"$Id$")]
     public class Delay : Element
     {
         /// <summary>
@@ -74,7 +72,6 @@ namespace JabberNet.jabber.protocol.x
     /// <summary>
     /// A modern, XEP-0203 delay element
     /// </summary>
-    [SVN(@"$Id$")]
     public class ModernDelay : Element
     {
 /*
@@ -128,6 +125,6 @@ namespace JabberNet.jabber.protocol.x
         {
             get { return this.InnerText; }
             set { this.InnerText = value; }
-        } 
+        }
     }
 }

@@ -14,14 +14,11 @@
  * xpnet is a deriviative of James Clark's XP.  See copying.txt for more info.
  * --------------------------------------------------------------------------*/
 
-using JabberNet.bedrock.util;
-
 namespace JabberNet.xpnet
 {
     /// <summary>
     /// UTF-8 specific tokenizer.
     /// </summary>
-    [SVN(@"$Id$")]
     public class UTF8Encoding : Encoding
     {
         private static readonly int[] utf8HiTypeTable = new int[]

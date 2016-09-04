@@ -13,14 +13,12 @@
  * --------------------------------------------------------------------------*/
 
 using System.Xml;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.jabber.protocol.stream
 {
     /// <summary>
     /// Session start after binding
     /// </summary>
-    [SVN(@"$Id$")]
     public class Session : Element
     {
         /// <summary>

@@ -16,7 +16,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using JabberNet.bedrock.util;
 using JabberNet.jabber.protocol.client;
 using JabberNet.jabber.protocol.iq;
 
@@ -71,7 +70,6 @@ namespace JabberNet.jabber.client
     /// <summary>
     /// Manages the roster of the client.
     /// </summary>
-    [SVN(@"$Id$")]
     public class RosterManager : jabber.connection.StreamComponent, IEnumerable<JID>
     {
         private Dictionary<JID,Item> m_items = new Dictionary<JID,Item>();

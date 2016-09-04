@@ -17,7 +17,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using System.Xml;
-using JabberNet.bedrock.util;
 using JabberNet.jabber.protocol.client;
 
 namespace JabberNet.jabber.connection
@@ -30,7 +29,6 @@ namespace JabberNet.jabber.connection
     /// <summary>
     /// Informs the client that an IQ has timed out.
     /// </summary>
-    [SVN(@"$Id$")]
     public class IQTimeoutException : Exception
     {
         /// <summary>
@@ -68,7 +66,6 @@ namespace JabberNet.jabber.connection
     /// <summary>
     /// Tracks outstanding IQ requests.
     /// </summary>
-    [SVN(@"$Id$")]
     public class IQTracker: IIQTracker
     {
         private Dictionary<string, TrackerData> m_pending = new Dictionary<string, TrackerData>();
@@ -168,7 +165,6 @@ namespace JabberNet.jabber.connection
         /// <summary>
         /// Internal state for a pending tracker request
         /// </summary>
-        [SVN(@"$Id$")]
         public class TrackerData
         {
             private IqCB  cb;

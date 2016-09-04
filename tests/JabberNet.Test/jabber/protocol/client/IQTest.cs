@@ -13,7 +13,6 @@
  * --------------------------------------------------------------------------*/
 
 using System.Xml;
-using JabberNet.bedrock.util;
 using JabberNet.jabber.protocol;
 using JabberNet.jabber.protocol.client;
 using JabberNet.jabber.protocol.iq;
@@ -24,7 +23,6 @@ namespace JabberNet.Test.jabber.protocol.client
     /// <summary>
     /// Summary description for IQTest.
     /// </summary>
-    [SVN(@"$Id$")]
     [TestFixture]
     public class IQTest
     {

@@ -14,14 +14,12 @@
 
 using System;
 using System.IO;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.bedrock.io
 {
     /// <summary>
     /// Wrap a stream, so that OnRead events can be fired.
     /// </summary>
-    [SVN(@"$Id$")]
     public class ReadEventStream : Stream
     {
         private Stream m_stream;

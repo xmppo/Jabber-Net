@@ -13,14 +13,12 @@
  * --------------------------------------------------------------------------*/
 
 using System;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.bedrock.net
 {
     /// <summary>
     /// Lame exception, since I couldn't find one I liked.
     /// </summary>
-    [SVN(@"$Id$")]
     [Serializable]
     public class AsyncSocketConnectionException : System.SystemException
     {

@@ -14,13 +14,11 @@
 
 using System;
 using System.Windows.Forms;
-using JabberNet.bedrock.util;
 using JabberNet.jabber;
 using JabberNet.jabber.connection;
 
 namespace JabberNet.Example
 {
-    [SVN(@"$Id$")]
     public class ConferenceForm : Form
     {
         private Label label1;

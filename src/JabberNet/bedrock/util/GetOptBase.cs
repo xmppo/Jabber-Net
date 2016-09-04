@@ -31,7 +31,6 @@ namespace JabberNet.bedrock.util
     /// Also, now, you can create an instance of GetOpt, and pass in
     /// TODO: Give examples of sublcass and calling example.
     /// </summary>
-    [SVN(@"$Id$")]
     public class GetOpt
     {
         private object    m_obj   = null;
@@ -470,7 +469,6 @@ namespace JabberNet.bedrock.util
     /// </summary>
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Method,
                     AllowMultiple=false)]
-    [SVN(@"$Id$")]
     public class CommandLineAttribute : Attribute
     {
         private string m_commandFlag = null;

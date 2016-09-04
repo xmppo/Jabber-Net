@@ -15,7 +15,6 @@
 using System.Collections;
 using System.Reflection;
 using System.Xml;
-using JabberNet.bedrock.util;
 using JabberNet.jabber;
 using JabberNet.jabber.connection;
 using JabberNet.jabber.protocol;
@@ -26,7 +25,6 @@ using Rhino.Mocks;
 namespace JabberNet.Test.jabber.connection
 {
     [TestFixture]
-    [SVN(@"$Id$")]
     public class PubSubManagerTest
     {
         private const string PUB_SUB_XMLNS = "http://jabber.org/protocol/pubsub";

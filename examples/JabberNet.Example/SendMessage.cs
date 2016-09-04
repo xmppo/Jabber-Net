@@ -12,14 +12,11 @@
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
 
-using JabberNet.bedrock.util;
-
 namespace JabberNet.Example
 {
     /// <summary>
     /// Summary description for SendMessage.
     /// </summary>
-    [SVN(@"$Id$")]
     public class SendMessage : System.Windows.Forms.Form
     {
         private jabber.client.JabberClient m_jc;

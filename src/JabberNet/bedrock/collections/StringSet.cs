@@ -15,7 +15,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.bedrock.collections
 {
@@ -23,7 +22,6 @@ namespace JabberNet.bedrock.collections
     /// A set of strings, backed into a BitArray.  Any given string that is inserted
     /// into any instance of a StringSet increases the size of all StringSets over time.
     /// </summary>
-    [SVN(@"$Id$")]
     public class StringSet : IEnumerable, IEnumerable<string>, ICloneable
 	{
         private BitArray m_bits = null;
@@ -73,7 +71,7 @@ namespace JabberNet.bedrock.collections
         private static int GetStringValue(string s)
         {
             int val = -1;
-            
+
             lock (s_bits)
             {
                 if (!s_bits.TryGetValue(s, out val))
@@ -160,7 +158,7 @@ namespace JabberNet.bedrock.collections
             int val = GetStringValue(s);
             if (val >= m_bits.Length)
                 return false;
-            return m_bits[val];            
+            return m_bits[val];
         }
 
         /// <summary>
@@ -268,8 +266,8 @@ namespace JabberNet.bedrock.collections
             if (set == null)
                 return false;
 
-            // BitArray.Equals is useless.  
-            // You'd also like to just compare the internal ints, 
+            // BitArray.Equals is useless.
+            // You'd also like to just compare the internal ints,
             // but BitArray is sealed.  Thx, MS.
 
             // it's easiest to just stretch everythin out to the longest.
@@ -284,7 +282,7 @@ namespace JabberNet.bedrock.collections
                 if (this.m_bits[i] != set.m_bits[i])
                     return false;
             }
-            
+
             return true;
         }
 
@@ -390,7 +388,7 @@ namespace JabberNet.bedrock.collections
 
             public string Current
             {
-                get 
+                get
                 {
                     if ((m_cur < 0) || (m_cur >= m_set.m_bits.Length))
                         throw new InvalidOperationException("Call to current outside of MoveNext");
@@ -413,7 +411,7 @@ namespace JabberNet.bedrock.collections
 
             object IEnumerator.Current
             {
-                get 
+                get
                 {
                     return this.Current;
                 }

@@ -18,7 +18,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml;
-using JabberNet.bedrock.util;
 using JabberNet.jabber;
 using JabberNet.jabber.connection;
 using JabberNet.jabber.protocol;
@@ -31,7 +30,6 @@ namespace JabberNet.Example
     /// <summary>
     /// Summary description for MainForm.
     /// </summary>
-    [SVN(@"$Id$")]
     public class MainForm : Form
     {
         #region Private Members

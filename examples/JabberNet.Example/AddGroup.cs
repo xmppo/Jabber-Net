@@ -13,11 +13,9 @@
  * --------------------------------------------------------------------------*/
 
 using System.Windows.Forms;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.Example
 {
-    [SVN(@"$Id$")]
     public class AddGroup : Form
     {
         private System.Windows.Forms.TextBox textBox1;

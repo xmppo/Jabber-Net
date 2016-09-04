@@ -22,7 +22,6 @@ namespace JabberNet.Test.bedrock.util
     /// <summary>
     ///    Summary description for GetOptBaseTest.
     /// </summary>
-    [SVN(@"$Id$")]
     [TestFixture]
     public class GetOptTest
     {
@@ -244,7 +243,7 @@ namespace JabberNet.Test.bedrock.util
             {
                 var go = new TestGetOpt(new[] { "-methodparams", "2" });
             });
-            
+
         }
     }
     public enum TestOptEnum
@@ -253,7 +252,6 @@ namespace JabberNet.Test.bedrock.util
         BAR
     }
 
-    [SVN(@"$Id$")]
     public class TestGetOpt : GetOpt
     {
         [CommandLine("nologo", Description="Command line argument for NUnit.")]

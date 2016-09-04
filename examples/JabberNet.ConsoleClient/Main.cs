@@ -26,7 +26,6 @@ namespace JabberNet.ConsoleClient
     /// <summary>
     /// Summary description for Class1.
     /// </summary>
-    [SVN(@"$Id$")]
     class Class1
     {
         [CommandLine("j", "user@host Jabber ID", true)]
@@ -106,7 +105,7 @@ namespace JabberNet.ConsoleClient
                 jc[Options.POLL_URL] = boshURL;
                 jc[Options.CONNECTION_TYPE] = ConnectionType.HTTP_Binding;
             }
-            
+
             if (register)
             {
                 jc.AutoLogin = false;
@@ -119,7 +118,7 @@ namespace JabberNet.ConsoleClient
             CapsManager cm = new CapsManager();
             cm.Stream = jc;
             cm.Node = "http://cursive.net/clients/ConsoleClient";
-            
+
             Console.WriteLine("Connecting");
             jc.Connect();
             Console.WriteLine("Connected");

@@ -13,7 +13,6 @@
  * --------------------------------------------------------------------------*/
 
 using System.Xml;
-using JabberNet.bedrock.util;
 using JabberNet.jabber.protocol;
 using JabberNet.jabber.protocol.x;
 using NUnit.Framework;
@@ -23,7 +22,6 @@ namespace JabberNet.Test.jabber.protocol.x
     /// <summary>
     /// Summary description for DataTest.
     /// </summary>
-    [SVN(@"$Id$")]
     [TestFixture]
     public class DataTest
     {

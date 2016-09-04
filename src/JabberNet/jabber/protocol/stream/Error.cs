@@ -13,14 +13,12 @@
  * --------------------------------------------------------------------------*/
 
 using System.Xml;
-using JabberNet.bedrock.util;
 
 namespace JabberNet.jabber.protocol.stream
 {
     /// <summary>
     /// Stream error packet.
     /// </summary>
-    [SVN(@"$Id$")]
     public class Error : Element
     {
         /// <summary>
