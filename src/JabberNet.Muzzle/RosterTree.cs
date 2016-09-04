@@ -11,13 +11,12 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
-using System;
 
+using System;
 using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
-
 using bedrock.collections;
 using bedrock.util;
 using jabber;
@@ -25,7 +24,7 @@ using jabber.client;
 using jabber.protocol.client;
 using jabber.protocol.iq;
 
-namespace muzzle
+namespace JabberNet.Muzzle
 {
     /// <summary>
     /// A TreeView optimized for showing Jabber roster items.  Make sure that the

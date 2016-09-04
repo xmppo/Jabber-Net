@@ -11,16 +11,12 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
+
 using System;
-
-using System.Collections;
-using System.ComponentModel;
-using System.Drawing;
 using System.Windows.Forms;
-
 using bedrock.util;
 
-namespace muzzle
+namespace JabberNet.Muzzle
 {
     /// <summary>
     /// Summary description for JidMulti.

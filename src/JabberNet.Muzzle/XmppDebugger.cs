@@ -11,16 +11,16 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
+
 using System;
 using System.ComponentModel;
-using System.Drawing;
 using System.Diagnostics;
+using System.Drawing;
 using System.Windows.Forms;
 using System.Xml;
-
 using bedrock.util;
 
-namespace muzzle
+namespace JabberNet.Muzzle
 {
     /// <summary>
     /// Debug stream for XMPP, so I don't have write it every time.
@@ -339,7 +339,7 @@ namespace muzzle
         {
             this.rtSend = new System.Windows.Forms.RichTextBox();
             this.splitter1 = new System.Windows.Forms.Splitter();
-            this.rtDebug = new muzzle.BottomScrollRichText();
+            this.rtDebug = new BottomScrollRichText();
             this.SuspendLayout();
             //
             // rtSend

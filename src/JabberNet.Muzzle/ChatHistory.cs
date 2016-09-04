@@ -11,17 +11,12 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
-using System;
-using System.ComponentModel;
-using System.ComponentModel.Design;
-using System.Drawing;
 
+using System;
+using System.Drawing;
 using bedrock.util;
 
-using jabber;
-using jabber.client;
-
-namespace muzzle
+namespace JabberNet.Muzzle
 {
     /// <summary>
     /// Keep track of the history of a conversation or room.

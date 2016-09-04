@@ -11,24 +11,19 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
+
 using System;
-
-using System.Drawing;
-using System.Collections;
 using System.ComponentModel;
-using System.Windows.Forms;
-using System.Text.RegularExpressions;
-using System.Xml;
-
-using bedrock.util;
-
-using jabber.protocol;
-using jabber.protocol.x;
-using jabber.protocol.client;
-using Msg = jabber.protocol.client.Message;
 using System.Diagnostics;
+using System.Drawing;
+using System.Text.RegularExpressions;
+using System.Windows.Forms;
+using bedrock.util;
+using jabber.protocol;
+using jabber.protocol.client;
+using jabber.protocol.x;
 
-namespace muzzle
+namespace JabberNet.Muzzle
 {
     /// <summary>
     /// Summary description for XData.

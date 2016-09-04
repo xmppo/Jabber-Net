@@ -24,6 +24,7 @@ using jabber.connection;
 using jabber.protocol;
 using jabber.protocol.client;
 using jabber.protocol.iq;
+using JabberNet.Muzzle;
 
 namespace JabberNet.Example
 {
@@ -48,12 +49,12 @@ namespace JabberNet.Example
         private MenuItem mnuAvailable;
         private MenuItem mnuAway;
         private IContainer components;
-        private muzzle.RosterTree roster;
+        private RosterTree roster;
         private StatusBarPanel pnlSSL;
         private DiscoManager dm;
         private TabPage tpServices;
         private CapsManager cm;
-        private muzzle.XmppDebugger debug;
+        private XmppDebugger debug;
         private PubSubManager psm;
         private MenuStrip menuStrip1;
         private ToolStripMenuItem fileToolStripMenuItem;
@@ -155,7 +156,7 @@ namespace JabberNet.Example
             this.pnlPresence = new System.Windows.Forms.StatusBarPanel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tpRoster = new System.Windows.Forms.TabPage();
-            this.roster = new muzzle.RosterTree();
+            this.roster = new RosterTree();
             this.jc = new jabber.client.JabberClient();
             this.pm = new jabber.client.PresenceManager();
             this.cm = new jabber.connection.CapsManager();
@@ -169,7 +170,7 @@ namespace JabberNet.Example
             this.chNick = new System.Windows.Forms.ColumnHeader();
             this.chAutoJoin = new System.Windows.Forms.ColumnHeader();
             this.tpDebug = new System.Windows.Forms.TabPage();
-            this.debug = new muzzle.XmppDebugger();
+            this.debug = new XmppDebugger();
             this.mnuPresence = new System.Windows.Forms.ContextMenu();
             this.mnuAvailable = new System.Windows.Forms.MenuItem();
             this.mnuAway = new System.Windows.Forms.MenuItem();
@@ -697,7 +698,7 @@ namespace JabberNet.Example
 
         private void Connect()
         {
-            muzzle.ClientLogin.Login(jc, "login.xml");
+            ClientLogin.Login(jc, "login.xml");
         }
 
         private void jc_OnAuthenticate(object sender)
@@ -780,7 +781,7 @@ namespace JabberNet.Example
         {
             if (r.Form == null)
                 return true;
-            muzzle.XDataForm f = new muzzle.XDataForm(r.Form);
+            XDataForm f = new XDataForm(r.Form);
             if (f.ShowDialog() != DialogResult.OK)
                 return false;
             f.FillInResponse(r.Form);
@@ -792,7 +793,7 @@ namespace JabberNet.Example
             jabber.protocol.x.Data x = msg["x", URI.XDATA] as jabber.protocol.x.Data;
             if (x != null)
             {
-                muzzle.XDataForm f = new muzzle.XDataForm(msg);
+                XDataForm f = new XDataForm(msg);
                 f.ShowDialog(this);
                 jc.Write(f.GetResponse());
             }
@@ -845,7 +846,7 @@ namespace JabberNet.Example
 
         private void roster_DoubleClick(object sender, EventArgs e)
         {
-            muzzle.RosterTree.ItemNode n = roster.SelectedNode as muzzle.RosterTree.ItemNode;
+            RosterTree.ItemNode n = roster.SelectedNode as RosterTree.ItemNode;
             if (n == null)
                 return;
             new SendMessage(jc, n.JID).Show();
@@ -971,7 +972,7 @@ namespace JabberNet.Example
 
         private void menuItem5_Click(object sender, EventArgs e)
         {
-            muzzle.RosterTree.ItemNode n = roster.SelectedNode as muzzle.RosterTree.ItemNode;
+            RosterTree.ItemNode n = roster.SelectedNode as RosterTree.ItemNode;
             if (n == null)
                 return;
             jc.RemoveRosterItem(n.JID);
@@ -1135,7 +1136,7 @@ namespace JabberNet.Example
 
         private IQ muc_OnRoomConfig(Room room, IQ parent)
         {
-            muzzle.XDataForm form = new muzzle.XDataForm(parent);
+            XDataForm form = new XDataForm(parent);
             if (form.ShowDialog() != DialogResult.OK)
                 return null;
 

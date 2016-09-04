@@ -11,15 +11,15 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
+
 using System.ComponentModel;
 using System.Xml;
-
 using bedrock.util;
 using jabber;
 using jabber.connection;
 using jabber.protocol.client;
 
-namespace muzzle
+namespace JabberNet.Muzzle
 {
     /// <summary>
     /// A UserControl that references an XmppStream.

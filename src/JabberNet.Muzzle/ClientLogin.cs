@@ -11,19 +11,15 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
-using System;
-using System.Drawing;
-using System.Collections;
-using System.ComponentModel;
-using System.ComponentModel.Design;
-using System.Windows.Forms;
-using System.Xml;
 
+using System;
+using System.ComponentModel;
+using System.Windows.Forms;
 using bedrock.util;
 using jabber.connection;
 using jabber.connection.sasl;
 
-namespace muzzle
+namespace JabberNet.Muzzle
 {
     /// <summary>
     /// A login form for client connections.

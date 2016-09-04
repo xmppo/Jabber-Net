@@ -11,20 +11,18 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
-using System;
 
+using System;
 using System.Collections;
 using System.ComponentModel;
-using System.Drawing;
-using System.Windows.Forms;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
 using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Threading;
-
+using System.Windows.Forms;
 using bedrock.util;
 
-namespace muzzle
+namespace JabberNet.Muzzle
 {
     /// <summary>
     /// How should the chart be rendered?
