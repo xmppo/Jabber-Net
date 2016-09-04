@@ -1,0 +1,12 @@
+NUGET
+  remote: https://www.nuget.org/api/v2
+    FSharp.Compiler.Service (2.0.0.6) - framework: >= net40
+    FSharp.Formatting (2.14.4) - framework: >= net40
+      FSharp.Compiler.Service (2.0.0.6)
+      FSharpVSPowerTools.Core (>= 2.3 < 2.4)
+    FSharpVSPowerTools.Core (2.3) - framework: >= net40
+      FSharp.Compiler.Service (>= 2.0.0.3)
+    NUnit (3.4.1) - framework: >= net40
+    NUnit.ConsoleRunner (3.4.1) - framework: >= net40
+    RhinoMocks (3.6.1) - framework: >= net40
+    zlib.net (1.0.4) - framework: >= net40

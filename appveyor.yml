@@ -1,6 +1,6 @@
 version: 2.1.2.{build}
 before_build:
-- nuget restore
+- ps: ./scripts/Install.ps1
 build:
     project: JabberNet.sln
 after_test:

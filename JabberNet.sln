@@ -2,6 +2,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{BFD2D70D-3C18-4BFD-B70E-38ED872B8F67}"
+	ProjectSection(SolutionItems) = preProject
+		paket.dependencies = paket.dependencies
+	EndProjectSection
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JabberNet.Test", "tests\JabberNet.Test\JabberNet.Test.csproj", "{76F923A3-5D99-45B9-9327-FBE56648A39F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JabberNet.Muzzle", "src\JabberNet.Muzzle\JabberNet.Muzzle.csproj", "{071A79A9-E23F-418F-A6B7-63D3A3E59EEB}"
@@ -17,11 +22,12 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{BBF059F0-722F-4DCC-AF7F-82054E8EF9F4}"
 	ProjectSection(SolutionItems) = preProject
 		Scripts\Build-Docs.ps1 = Scripts\Build-Docs.ps1
+		scripts\Install.ps1 = scripts\Install.ps1
 		Scripts\Package.ps1 = Scripts\Package.ps1
 		Scripts\Push-Package.ps1 = Scripts\Push-Package.ps1
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Solution Items", "_Solution Items", "{2C25C63F-7C2F-4025-8A4D-B85ABF2C8A34}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".root", ".root", "{2C25C63F-7C2F-4025-8A4D-B85ABF2C8A34}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		.gitignore = .gitignore

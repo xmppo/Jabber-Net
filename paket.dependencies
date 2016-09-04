@@ -1,0 +1,9 @@
+source https://www.nuget.org/api/v2/
+
+nuget FSharp.Compiler.Service 2.0.0.6 framework: >= net45
+nuget FSharp.Formatting 2.14.4 framework: >= net40
+nuget FSharpVSPowerTools.Core 2.3.0 framework: >= net45
+nuget NUnit 3.4.1 framework: >= net40
+nuget NUnit.ConsoleRunner 3.4.1 framework: >= net40
+nuget RhinoMocks 3.6.1 framework: >= net40
+nuget zlib.net 1.0.4.0 framework: >= net40

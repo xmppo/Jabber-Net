@@ -1,23 +1,20 @@
 <#
 .SYNOPSIS
-    Pushed the package to the NuGet feed.
+    Pushed the package to the Nuget feed.
 .PARAMETER ApiKey
     Nuget API key.
-.PARAMETER nuget
-    Path to the NuGet executable.
+.PARAMETER paket
+    Path to the Paket executable.
 .PARAMETER Url
-    URL of the NuGet feed.
+    URL of the Nuget feed.
 .PARAMETER Package
     Path to the package file that will be published.
 #>
 param (
     [Parameter(Mandatory=$true)] [string]$ApiKey,
-    [string]$nuget = "nuget",
+    [string]$paket = "$PSScriptRoot/../.paket/paket.exe",
     [string]$Url = 'https://www.nuget.org',
     [string]$Package = "$PSScriptRoot/../*.nupkg"
 )
 
-$ErrorActionPreference = 'Stop'
-
-& $nuget setApiKey $ApiKey
-& $nuget push (Resolve-Path $Package)
+& $paket push url $Url file (Resolve-Path $Package) apikey $ApiKey

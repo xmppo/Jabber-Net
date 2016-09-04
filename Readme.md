@@ -6,14 +6,31 @@ Messaging and Presence Protocol (XMPP), also known as the Jabber. Client
 connections, server component connections, presence, service discovery, and the
 like.
 
+Dependencies
+------------
+
+This project uses [Paket][paket] dependency manager. Before opening the solution
+or building the project, you should install Paket (or Paket bootstrapper) into
+`.paket` directory and download the dependencies using the following commands:
+
+```console
+$ ./.paket/paket.bootstrapper.exe
+$ ./.paket/paket.exe restore
+```
+
+For convenience, there is a script `scripts/Install.ps1` that will download
+Paket bootstrapper and call these commands automatically.
+
+Consult the script documentation to discover its parameters.
+
 Build and test
 --------------
 
-Either use Visual Studio 2015 on Windows or `nuget` + `msbuild` / `xbuild` in
+Either use Visual Studio 2015 on Windows or `paket` + `msbuild` / `xbuild` in
 your terminal. On Windows:
 
 ```console
-> nuget restore jabber-net.sln
+> .\.paket\paket.exe restore
 > msbuild jabber-net.sln /p:Configuration=Debug
 > .\packages\NUnit.ConsoleRunner.3.4.1\tools\nunit3-console.exe .\test\bin5\Debug\test.dll
 ```
@@ -21,7 +38,7 @@ your terminal. On Windows:
 On Linux:
 
 ```console
-$ nuget restore jabber-net.sln
+$ mono ./.paket/paket.exe restore
 $ xbuild /p:Configuration=Debug jabber-net.sln
 $ mono ./packages/NUnit.ConsoleRunner.3.4.1/tools/nunit3-console.exe ./test/bin5/Debug/test.dll
 ```
@@ -64,6 +81,7 @@ consult [Licensing.md][] for details on licensing of internal components.
 
 [appveyor]: https://ci.appveyor.com/project/ForNeVeR/jabber-net/branch/develop
 [nuget]: https://www.nuget.org/packages/jabber-net/
+[paket]: https://fsprojects.github.io/Paket/index.html
 [travis]: https://travis-ci.org/ForNeVeR/jabber-net
 
 [appveyor-badge]: https://ci.appveyor.com/api/projects/status/9q5rgknk80oh5g3a/branch/develop?svg=true

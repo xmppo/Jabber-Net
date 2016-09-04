@@ -1,4 +1,4 @@
-#load "../packages/FSharp.Formatting.2.14.4/FSharp.Formatting.fsx"
+#load "../packages/FSharp.Formatting/FSharp.Formatting.fsx"
 
 open System
 open System.IO
@@ -10,7 +10,7 @@ open FSharp.MetadataFormat
 let content = Path.Combine (__SOURCE_DIRECTORY__, "content")
 let output = Path.Combine (__SOURCE_DIRECTORY__, "output")
 let jabberNetTemplates = Path.Combine (__SOURCE_DIRECTORY__, "templates")
-let formatting = Path.Combine (__SOURCE_DIRECTORY__, "../packages/FSharp.Formatting.2.14.4")
+let formatting = Path.Combine (__SOURCE_DIRECTORY__, "../packages/FSharp.Formatting")
 let formattingTemplates = Path.Combine (formatting, "templates")
 let referenceTemplates = Path.Combine (formattingTemplates, "reference")
 let docTemplate = Path.Combine (formattingTemplates, "docpage.cshtml")
