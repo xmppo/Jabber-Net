@@ -40,7 +40,7 @@ Remove-Item -Recurse .\docs\output
 docs\output\index.html
 ```
 
-There's a convenience script `Scripts/Build-Docs.ps1` for that.
+There's a convenience script `scripts/Build-Docs.ps1` for that.
 
 You may then publish the `docs/output` directory through a Web server, or just
 read the documentation from your local drive.
@@ -49,8 +49,8 @@ Packaging
 ---------
 
 To build [NuGet][nuget] package for Jabber-Net, use the script
-`Scripts/Package.ps1`. If you want to push this package to the Nuget feed, use
-`Scripts/Push-Package.ps1`.
+`scripts/Package.ps1`. If you want to push this package to the Nuget feed, use
+`scripts/Push-Package.ps1`.
 
 Consult the scripts documentation to get the information about their parameters.
 
