@@ -480,60 +480,6 @@ General utilities    <div>
             TODO: Give examples of sublcass and calling example.
             </p></td>
         </tr>
-        <tr>
-          <td class="type-name">
-            <a href="jabbernet-bedrock-util-rcsattribute.html">RCSAttribute</a>
-          </td>
-          <td class="xmldoc"></br><p class='summary'>
-            Version control attribute for RCS and CVS.
-            </p></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="jabbernet-bedrock-util-svnattribute.html">SVNAttribute</a>
-          </td>
-          <td class="xmldoc"></br><p class='summary'>
-            Version control attribute for Subversion.
-            </p></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="jabbernet-bedrock-util-sourcesafeattribute.html">SourceSafeAttribute</a>
-          </td>
-          <td class="xmldoc"></br><p class='summary'>
-            Version control attribute for SourceSafe.
-            I don't use this any more, so someone tell me if it breaks with
-            some new release.
-            </p></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="jabbernet-bedrock-util-sourceversionattribute.html">SourceVersionAttribute</a>
-          </td>
-          <td class="xmldoc"><a href="jabbernet-bedrock-util-starteamattribute.html">StarTeamAttribute</a><a href="jabbernet-bedrock-util-sourcesafeattribute.html">SourceSafeAttribute</a><a href="jabbernet-bedrock-util-rcsattribute.html">RCSAttribute</a></br><p class='summary'>
-            Make source code versions available at runtime.  Use the appropriate
-            subclass for your CM system.
-            </p></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="jabbernet-bedrock-util-sourceversioncollection.html">SourceVersionCollection</a>
-          </td>
-          <td class="xmldoc"></br><p class='summary'>
-            A collection of SourceVersionAttributes, so that we can
-            return a list of all of the versioned classes in the
-            current working set.
-            </p></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="jabbernet-bedrock-util-starteamattribute.html">StarTeamAttribute</a>
-          </td>
-          <td class="xmldoc"></br><p class='summary'>
-             Make StarTeam versoning available at run-time.
-            
-             </p></td>
-        </tr>
     </tbody>
   </table>
 
@@ -863,7 +809,7 @@ Base classes for client and service connections    <div>
             <a href="jabbernet-jabber-connection-filemap-1.html">FileMap<'T></a>
           </td>
           <td class="xmldoc"></br><p class='summary'>
-            A dictionary backed into a file.  Any modification to the dictionary re-writes the file, so 
+            A dictionary backed into a file.  Any modification to the dictionary re-writes the file, so
             writes are somewhat costly.  Reads are cached lazily.
             </p></td>
         </tr>
@@ -1828,8 +1774,8 @@ The jabber:iq:* namespaces.    <div>
             <a href="jabbernet-jabber-protocol-iq-closednode.html">ClosedNode</a>
           </td>
           <td class="xmldoc"></br><p class='summary'>
-            For nodes with a node access model of "whitelist", if the requesting 
-            entity is not on the whitelist then the service MUST return a 
+            For nodes with a node access model of "whitelist", if the requesting
+            entity is not on the whitelist then the service MUST return a
             not-allowed error, specifying a pubsub-specific error condition of closed-node.
             </p></td>
         </tr>
@@ -2814,9 +2760,9 @@ etherx namespace. stream:stream and friends.    <div>
             <a href="jabbernet-jabber-protocol-stream-conditiontype.html">ConditionType</a>
           </td>
           <td class="xmldoc"></br><p class='summary'>
-            These error conditions may be read by constrained clients. 
-            They are used for connection manager problems, abstracting stream errors, 
-            communication problems between the connection manager and the server, 
+            These error conditions may be read by constrained clients.
+            They are used for connection manager problems, abstracting stream errors,
+            communication problems between the connection manager and the server,
             and invalid client requests (binding syntax errors, possible attacks, etc.)
             </p></td>
         </tr>
