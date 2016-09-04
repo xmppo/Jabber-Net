@@ -7,7 +7,6 @@
     <ProjectGuid>{6CAE854A-F202-4D2B-B10E-E8D8E81E5EF5}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <ApplicationIcon>
     </ApplicationIcon>
     <AssemblyKeyContainerName>
@@ -468,7 +467,7 @@
     <PostBuildEvent>
     </PostBuildEvent>
     <SignAssembly>false</SignAssembly>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <OldToolsVersion>2.0</OldToolsVersion>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
