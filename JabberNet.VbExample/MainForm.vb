@@ -1,13 +1,13 @@
 ' --------------------------------------------------------------------------
 ' Copyrights
-' 
+'
 ' Portions created by or assigned to Cursive Systems, Inc. are
 ' Copyright (c) 2002-2008 Cursive Systems, Inc.  All Rights Reserved.  Contact
 ' information for Cursive Systems, Inc. is available at
 ' http://www.cursive.net/.
-' 
+'
 ' License
-' 
+'
 ' Jabber-Net is licensed under the LGPL.
 ' See licenses/Jabber-Net_LGPLv3.txt for details.
 '  --------------------------------------------------------------------------
@@ -51,7 +51,7 @@ Public Class MainForm
     Private components As System.ComponentModel.IContainer
 
     'NOTE: The following procedure is required by the Windows Form Designer
-    'It can be modified using the Windows Form Designer.  
+    'It can be modified using the Windows Form Designer.
     'Do not modify it using the code editor.
     Friend WithEvents sb As System.Windows.Forms.StatusBar
     Friend WithEvents pnlCon As System.Windows.Forms.StatusBarPanel
@@ -78,9 +78,9 @@ Public Class MainForm
         Me.sb = New System.Windows.Forms.StatusBar
         Me.pnlCon = New System.Windows.Forms.StatusBarPanel
         Me.pnlPresence = New System.Windows.Forms.StatusBarPanel
-        Me.jc = New jabber.client.JabberClient(Me.components)
-        Me.rm = New jabber.client.RosterManager(Me.components)
-        Me.pm = New jabber.client.PresenceManager(Me.components)
+        Me.jc = New jabber.client.JabberClient()
+        Me.rm = New jabber.client.RosterManager()
+        Me.pm = New jabber.client.PresenceManager()
         Me.ilPresence = New System.Windows.Forms.ImageList(Me.components)
         Me.mnuPresence = New System.Windows.Forms.ContextMenu
         Me.mnuAvailable = New System.Windows.Forms.MenuItem
@@ -126,7 +126,6 @@ Public Class MainForm
         Me.jc.AutoReconnect = 3.0!
         Me.jc.AutoStartCompression = True
         Me.jc.AutoStartTLS = True
-        Me.jc.InvokeControl = Me
         Me.jc.KeepAlive = 30.0!
         Me.jc.LocalCertificate = Nothing
         Me.jc.Password = Nothing
