@@ -131,13 +131,13 @@ namespace JabberNet.Test.bedrock.util
         [Test] public void Test_GetAll()
         {
             SourceVersionCollection tv = SourceVersionAttribute.GetVersion();
-            Assert.IsTrue(tv["test.bedrock.util.VersionTest+vFoo"]   != null);
+            Assert.IsTrue(tv["JabberNet.Test.bedrock.util.VersionTest+vFoo"]   != null);
             Assert.IsTrue(tv[typeof(vBar).FullName]   != null);
             Assert.IsTrue(tv[typeof(vBaz)]   != null);
-            Assert.IsTrue(tv["test.bedrock.util.VersionTest+RCSVer"] != null);
-            Assert.IsTrue(tv["test.bedrock.util.VersionTest+VssVer"] != null);
-            Assert.IsTrue(tv["test.bedrock.util.VersionTest+SvnVer"] != null);
-            Assert.IsTrue(tv["test.bedrock.util.VersionTest+vBax"]   == null);
+            Assert.IsTrue(tv["JabberNet.Test.bedrock.util.VersionTest+RCSVer"] != null);
+            Assert.IsTrue(tv["JabberNet.Test.bedrock.util.VersionTest+VssVer"] != null);
+            Assert.IsTrue(tv["JabberNet.Test.bedrock.util.VersionTest+SvnVer"] != null);
+            Assert.IsTrue(tv["JabberNet.Test.bedrock.util.VersionTest+vBax"]   == null);
             foreach (string c in tv)
             {
                 //Console.WriteLine("<{0}>", c);
