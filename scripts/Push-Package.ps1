@@ -1,12 +1,12 @@
 <#
 .SYNOPSIS
-    Pushed the package to the Nuget feed.
+    Pushed the package to the NuGet feed.
 .PARAMETER ApiKey
-    Nuget API key.
+    NuGet API key.
 .PARAMETER paket
     Path to the Paket executable.
 .PARAMETER Url
-    URL of the Nuget feed.
+    URL of the NuGet feed.
 .PARAMETER Package
     Path to the package file that will be published.
 #>
