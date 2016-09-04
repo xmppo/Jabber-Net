@@ -4,22 +4,21 @@
     <ProjectType>Local</ProjectType>
     <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{76F923A3-5D99-45B9-9327-FBE56648A39F}</ProjectGuid>
+    <ProjectGuid>{049FB855-89C4-4539-9E5E-0996834D6A0E}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ApplicationIcon>
-    </ApplicationIcon>
+    <ApplicationIcon>App.ico</ApplicationIcon>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
-    <AssemblyName>JabberNet.Test</AssemblyName>
+    <AssemblyName>JabberNet.ConsoleClient</AssemblyName>
     <AssemblyOriginatorKeyFile>
     </AssemblyOriginatorKeyFile>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>false</DelaySign>
-    <OutputType>Library</OutputType>
-    <RootNamespace>test</RootNamespace>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>ConsoleClient</RootNamespace>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <StartupObject>
     </StartupObject>
@@ -70,6 +69,7 @@
     <WarningLevel>4</WarningLevel>
     <DebugType>full</DebugType>
     <ErrorReport>prompt</ErrorReport>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -100,141 +100,24 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="nunit.framework, Version=3.4.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.3.4.1\lib\net40\nunit.framework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Rhino.Mocks, Version=3.6.0.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
-      <HintPath>..\packages\RhinoMocks.3.6.1\lib\net\Rhino.Mocks.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
-    <ProjectReference Include="..\JabberNet.csproj">
+    <ProjectReference Include="..\..\src\JabberNet\JabberNet.csproj">
       <Name>JabberNet</Name>
       <Project>{6CAE854A-F202-4D2B-B10E-E8D8E81E5EF5}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App.ico" />
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="bedrock\collections\ByteStackTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="bedrock\collections\SetTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="bedrock\collections\SkipListTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="bedrock\collections\StringSet.cs" />
-    <Compile Include="bedrock\collections\TreeTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="bedrock\collections\TrieNodeTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="bedrock\collections\TrieTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="bedrock\net\HttpSocketTest.cs" />
-    <Compile Include="jabber\connection\FileMap.cs" />
-    <Compile Include="bedrock\io\ZlibStream.cs" />
-    <Compile Include="bedrock\net\AsyncSocketTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="bedrock\net\HttpUploadTest.cs" />
-    <Compile Include="bedrock\net\SSLAsyncSocketTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="bedrock\util\GetOptBaseTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="bedrock\util\VersionTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="jabber\client\PresenceManagerTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="jabber\client\RosterManagerTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="jabber\connection\CapsManagerTest.cs" />
-    <Compile Include="jabber\connection\ConferenceManagerTest.cs" />
-    <Compile Include="jabber\connection\DiscoManagerTest.cs" />
-    <Compile Include="jabber\connection\PubSubManagerTest.cs" />
-    <Compile Include="jabber\connection\sasl\MD5Processor.cs" />
-    <Compile Include="jabber\JIDTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="jabber\protocol\accept\RouteTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="jabber\protocol\client\IQTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="jabber\protocol\client\MessageTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="jabber\protocol\client\PresenceTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="jabber\protocol\ElementListTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="jabber\protocol\ElementStreamTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="jabber\protocol\EnumParserTest.cs" />
-    <Compile Include="jabber\protocol\iq\AgentTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="jabber\protocol\iq\AuthTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="jabber\protocol\iq\PubSubTest.cs" />
-    <Compile Include="jabber\protocol\iq\RegisterTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="jabber\protocol\iq\RosterTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="jabber\protocol\iq\TimeTest.cs" />
-    <Compile Include="jabber\protocol\PacketTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="jabber\protocol\stream\FactoryTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="jabber\protocol\stream\StreamTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="jabber\protocol\x\DataTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="jabber\protocol\x\EventTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="stringprep\TestDraft.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="stringprep\TestNameprep.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="stringprep\TestNFKC.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="stringprep\TestNodeprep.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="stringprep\TestResourceprep.cs">
+    <Compile Include="Main.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -256,7 +139,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

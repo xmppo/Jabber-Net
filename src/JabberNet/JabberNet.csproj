@@ -427,7 +427,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Condition="'$(BuildMono)'==''" Include="JabberNet.Netlib.Dns\JabberNet.Netlib.Dns.csproj">
+    <ProjectReference Condition="'$(BuildMono)'==''" Include="..\JabberNet.Netlib.Dns\JabberNet.Netlib.Dns.csproj">
       <Project>{40AC7A7C-D3E5-46DF-B740-06BD9D2A00E1}</Project>
       <Name>JabberNet.Netlib.Dns</Name>
     </ProjectReference>
@@ -435,7 +435,7 @@
   <ItemGroup>
     <Reference Include="System.Data" />
     <Reference Include="zlib.net, Version=1.0.3.0, Culture=neutral, PublicKeyToken=47d7877cb3620160">
-      <HintPath>packages\zlib.net.1.0.4.0\lib\zlib.net.dll</HintPath>
+      <HintPath>..\..\packages\zlib.net.1.0.4.0\lib\zlib.net.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
