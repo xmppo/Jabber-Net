@@ -16,9 +16,8 @@ using System;
 using System.Diagnostics;
 using System.Net;
 using bedrock.util;
-
-using netlib.Dns;
-using netlib.Dns.Records;
+using JabberNet.Netlib.Dns;
+using JabberNet.Netlib.Dns.Records;
 
 namespace bedrock.net
 {

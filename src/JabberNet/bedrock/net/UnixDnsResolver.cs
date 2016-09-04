@@ -29,7 +29,7 @@ using System;
 using System.Text;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using netlib.Dns.Records;
+using JabberNet.Netlib.Dns.Records;
 
 namespace bedrock.net
 {

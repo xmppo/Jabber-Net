@@ -8,7 +8,7 @@
     <ProjectGuid>{40AC7A7C-D3E5-46DF-B740-06BD9D2A00E1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>netlib.Dns</RootNamespace>
+    <RootNamespace>JabberNet.Netlib.Dns</RootNamespace>
     <AssemblyName>JabberNet.Netlib.Dns</AssemblyName>
     <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>
