@@ -11,10 +11,11 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
-using System.Collections;
-using bedrock.util;
 
-namespace jabber.protocol
+using System.Collections;
+using JabberNet.bedrock.util;
+
+namespace JabberNet.jabber.protocol
 {
     /// <summary>
     /// Namespace stack.

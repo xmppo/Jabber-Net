@@ -11,16 +11,14 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
-using System;
 
 using System.Collections;
 using System.Diagnostics;
 using System.Xml;
+using JabberNet.bedrock.util;
+using JabberNet.jabber.protocol.accept;
 
-using bedrock.util;
-using jabber.protocol.accept;
-
-namespace jabber.server
+namespace JabberNet.jabber.server
 {
     /// <summary>
     /// Received a response to an XDB request.

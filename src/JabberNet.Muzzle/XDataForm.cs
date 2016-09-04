@@ -18,10 +18,10 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using bedrock.util;
-using jabber.protocol;
-using jabber.protocol.client;
-using jabber.protocol.x;
+using JabberNet.bedrock.util;
+using JabberNet.jabber.protocol;
+using JabberNet.jabber.protocol.client;
+using JabberNet.jabber.protocol.x;
 
 namespace JabberNet.Muzzle
 {

@@ -13,10 +13,10 @@
  * --------------------------------------------------------------------------*/
 #if !NO_STRINGPREP
 
-using bedrock.util;
+using JabberNet.bedrock.util;
+using JabberNet.stringprep;
+using JabberNet.stringprep.steps;
 using NUnit.Framework;
-using stringprep;
-using stringprep.steps;
 
 namespace JabberNet.Test.stringprep
 {

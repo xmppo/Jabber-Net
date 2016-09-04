@@ -17,8 +17,8 @@ using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.Xml;
-using bedrock.util;
-using jabber.connection;
+using JabberNet.bedrock.util;
+using JabberNet.jabber.connection;
 
 namespace JabberNet.Muzzle
 {

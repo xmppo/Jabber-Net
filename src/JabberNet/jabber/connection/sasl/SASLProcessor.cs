@@ -11,15 +11,15 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
+
 using System;
 using System.Collections;
-using System.Xml;
 using System.Text;
+using System.Xml;
+using JabberNet.bedrock.util;
+using JabberNet.jabber.protocol.stream;
 
-using bedrock.util;
-using jabber.protocol.stream;
-
-namespace jabber.connection.sasl
+namespace JabberNet.jabber.connection.sasl
 {
     /// <summary>
     /// A SASL processor instance has been created.  Fill it with information, like USERNAME and PASSWORD.

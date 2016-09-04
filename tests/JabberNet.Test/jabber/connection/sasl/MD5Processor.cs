@@ -13,9 +13,9 @@
  * --------------------------------------------------------------------------*/
 
 using System.Xml;
-using bedrock.util;
-using jabber.connection.sasl;
-using jabber.protocol.stream;
+using JabberNet.bedrock.util;
+using JabberNet.jabber.connection.sasl;
+using JabberNet.jabber.protocol.stream;
 using NUnit.Framework;
 
 namespace JabberNet.Test.jabber.connection.sasl

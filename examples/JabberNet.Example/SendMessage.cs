@@ -12,7 +12,7 @@
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
 
-using bedrock.util;
+using JabberNet.bedrock.util;
 
 namespace JabberNet.Example
 {

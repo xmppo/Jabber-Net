@@ -13,10 +13,11 @@
  *
  * xpnet is a deriviative of James Clark's XP.  See copying.txt for more info.
  * --------------------------------------------------------------------------*/
-namespace xpnet
-{
-    using bedrock.util;
 
+using JabberNet.bedrock.util;
+
+namespace JabberNet.xpnet
+{
     /**
      * Represents a position in an entity.
      * A position can be modified by <code>Encoding.movePosition</code>.

@@ -14,12 +14,12 @@
 
 using System;
 using System.Xml;
-using bedrock.util;
-using jabber;
-using jabber.client;
-using jabber.connection;
-using jabber.protocol.client;
-using jabber.protocol.iq;
+using JabberNet.bedrock.util;
+using JabberNet.jabber;
+using JabberNet.jabber.client;
+using JabberNet.jabber.connection;
+using JabberNet.jabber.protocol.client;
+using JabberNet.jabber.protocol.iq;
 
 namespace JabberNet.ConsoleClient
 {

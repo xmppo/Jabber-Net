@@ -11,9 +11,10 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
+
 using System;
 
-namespace bedrock
+namespace JabberNet.bedrock
 {
     /// <summary>
     /// Delegate for memebers that just have a sender

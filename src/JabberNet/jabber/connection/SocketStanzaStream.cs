@@ -11,16 +11,16 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
+
 using System;
 using System.Diagnostics;
 using System.Threading;
 using System.Xml;
+using JabberNet.bedrock.net;
+using JabberNet.bedrock.util;
+using JabberNet.jabber.protocol;
 
-using bedrock.net;
-using bedrock.util;
-using jabber.protocol;
-
-namespace jabber.connection
+namespace JabberNet.jabber.connection
 {
     /// <summary>
     /// Contains the types of proxies Jabber-Net supports.  This is only for socket connections.

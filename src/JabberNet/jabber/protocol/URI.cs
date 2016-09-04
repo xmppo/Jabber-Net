@@ -11,12 +11,11 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
-using System;
 
 
-using bedrock.util;
+using JabberNet.bedrock.util;
 
-namespace jabber.protocol
+namespace JabberNet.jabber.protocol
 {
     /// <summary>
     /// Namespace constants for http://etherx.jabber.org/streams.

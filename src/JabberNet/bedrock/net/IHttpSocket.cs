@@ -1,4 +1,4 @@
-namespace bedrock.net
+namespace JabberNet.bedrock.net
 {
 	interface IHttpSocket
 	{

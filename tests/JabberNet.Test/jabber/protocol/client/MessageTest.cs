@@ -13,9 +13,9 @@
  * --------------------------------------------------------------------------*/
 
 using System.Xml;
-using bedrock.util;
-using jabber.protocol;
-using jabber.protocol.client;
+using JabberNet.bedrock.util;
+using JabberNet.jabber.protocol;
+using JabberNet.jabber.protocol.client;
 using NUnit.Framework;
 
 namespace JabberNet.Test.jabber.protocol.client

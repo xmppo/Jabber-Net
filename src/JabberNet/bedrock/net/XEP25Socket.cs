@@ -21,9 +21,9 @@ using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
-using bedrock.util;
+using JabberNet.bedrock.util;
 
-namespace bedrock.net
+namespace JabberNet.bedrock.net
 {
     /// <summary>
     /// XEP25 Error conditions

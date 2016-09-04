@@ -11,6 +11,7 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -19,12 +20,11 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using System.Xml;
-using bedrock.util;
+using JabberNet.bedrock.util;
+using JabberNet.jabber.protocol;
+using JabberNet.jabber.protocol.stream;
 
-using jabber.protocol.stream;
-using jabber.protocol;
-
-namespace bedrock.net
+namespace JabberNet.bedrock.net
 {
     /// <summary>
     /// XEP-0124 Error conditions

@@ -11,17 +11,15 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
+
 using System;
 using System.Collections;
-using System.Diagnostics;
 using System.Xml;
+using JabberNet.bedrock.io;
+using JabberNet.bedrock.util;
+using JabberNet.xpnet;
 
-using xpnet;
-
-using bedrock.io;
-using bedrock.util;
-
-namespace jabber.protocol
+namespace JabberNet.jabber.protocol
 {
     /// <summary>
     /// Summary description for AsynchElementStream.

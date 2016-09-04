@@ -11,13 +11,10 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
-using System;
 
+using JabberNet.bedrock.util;
 
-using bedrock.util;
-using jabber.protocol;
-
-namespace jabber.protocol.accept
+namespace JabberNet.jabber.protocol.accept
 {
     /// <summary>
     /// A packet factory for the jabber:component:accept namespace.

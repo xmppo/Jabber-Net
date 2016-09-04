@@ -14,8 +14,8 @@
 
 using System;
 using System.Xml;
-using bedrock.util;
-using jabber.protocol;
+using JabberNet.bedrock.util;
+using JabberNet.jabber.protocol;
 using NUnit.Framework;
 
 namespace JabberNet.Test.jabber.protocol

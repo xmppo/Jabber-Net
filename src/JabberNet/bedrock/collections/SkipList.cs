@@ -11,14 +11,13 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
-using System;
 
+using System;
 using System.Collections;
 using System.Diagnostics;
+using JabberNet.bedrock.util;
 
-using bedrock.util;
-
-namespace bedrock.collections
+namespace JabberNet.bedrock.collections
 {
     /// <summary>
     /// Summary description for SkipList.

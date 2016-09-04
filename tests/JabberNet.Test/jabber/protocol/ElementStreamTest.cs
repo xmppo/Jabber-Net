@@ -16,9 +16,9 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Xml;
-using bedrock;
-using bedrock.util;
-using jabber.protocol;
+using JabberNet.bedrock;
+using JabberNet.bedrock.util;
+using JabberNet.jabber.protocol;
 using NUnit.Framework;
 
 namespace JabberNet.Test.jabber.protocol

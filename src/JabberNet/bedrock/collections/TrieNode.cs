@@ -11,12 +11,13 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
-using System;
 
-using System.IO;
+using System;
 using System.Collections;
-using bedrock.util;
-namespace bedrock.collections
+using System.IO;
+using JabberNet.bedrock.util;
+
+namespace JabberNet.bedrock.collections
 {
     /// <summary>
     /// A node in a Trie.  This class is public to support traversal via Trie.Traverse().

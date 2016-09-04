@@ -11,12 +11,12 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
+
 using System;
-
 using System.IO;
-using bedrock.util;
+using JabberNet.bedrock.util;
 
-namespace bedrock.io
+namespace JabberNet.bedrock.io
 {
     /// <summary>
     /// Wrap a stream, so that OnRead events can be fired.

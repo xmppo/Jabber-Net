@@ -11,13 +11,12 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
-using System;
 
 using System.Collections;
 using System.Xml;
-using bedrock.util;
+using JabberNet.bedrock.util;
 
-namespace jabber.protocol
+namespace JabberNet.jabber.protocol
 {
     /// <summary>
     /// Replacement for XmlElementList that removes the safety belt of checking for changes during traversal,

@@ -11,19 +11,18 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
+
 using System;
 using System.Diagnostics;
-using System.Collections;
+using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.IO;
 using System.Xml;
+using JabberNet.bedrock.util;
+using JabberNet.jabber.protocol.stream;
 
-using bedrock.util;
-using jabber.protocol.stream;
-
-namespace jabber.connection.sasl
+namespace JabberNet.jabber.connection.sasl
 {
     /// <summary>
     /// RFC2831 DIGEST-MD5 SASL mechanism

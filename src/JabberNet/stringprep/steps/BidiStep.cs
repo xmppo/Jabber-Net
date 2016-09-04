@@ -11,10 +11,10 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
+
 using System;
 
-
-namespace stringprep.steps
+namespace JabberNet.stringprep.steps
 {
     /// <summary>
     /// There was a problem with the Bidirection nature of a string to be prepped.

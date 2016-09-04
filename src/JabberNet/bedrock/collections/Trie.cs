@@ -11,12 +11,12 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
+
 using System;
-
 using System.Collections;
-using bedrock.util;
+using JabberNet.bedrock.util;
 
-namespace bedrock.collections
+namespace JabberNet.bedrock.collections
 {
     /// <summary>
     /// The method signature used by <see cref="Trie.Traverse(TrieKeyWalker,object,TrieNode,ByteStack)"/> when it encounters a key.

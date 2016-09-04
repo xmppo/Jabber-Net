@@ -11,11 +11,12 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
-using System;
 
+using System;
 using System.Collections;
-using bedrock.util;
-namespace bedrock.collections
+using JabberNet.bedrock.util;
+
+namespace JabberNet.bedrock.collections
 {
     /// <summary>
     /// A Trie that is searchable for substrings.  Uses a separate set of indexes

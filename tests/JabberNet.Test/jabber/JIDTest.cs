@@ -13,8 +13,8 @@
  * --------------------------------------------------------------------------*/
 
 using System;
-using bedrock.util;
-using jabber;
+using JabberNet.bedrock.util;
+using JabberNet.jabber;
 using NUnit.Framework;
 
 namespace JabberNet.Test.jabber

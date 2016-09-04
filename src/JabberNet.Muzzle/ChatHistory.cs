@@ -14,7 +14,7 @@
 
 using System;
 using System.Drawing;
-using bedrock.util;
+using JabberNet.bedrock.util;
 
 namespace JabberNet.Muzzle
 {

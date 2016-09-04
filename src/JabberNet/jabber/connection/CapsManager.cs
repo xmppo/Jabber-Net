@@ -11,20 +11,19 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
+
 using System;
 using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text;
 using System.Xml;
+using JabberNet.bedrock.util;
+using JabberNet.jabber.protocol;
+using JabberNet.jabber.protocol.client;
+using JabberNet.jabber.protocol.iq;
+using JabberNet.jabber.protocol.x;
 
-using jabber.protocol;
-using jabber.protocol.client;
-using jabber.protocol.iq;
-using jabber.protocol.x;
-
-using bedrock.util;
-
-namespace jabber.connection
+namespace JabberNet.jabber.connection
 {
     /// <summary>
     /// Manages the entity capabilities information for the local connection as well as remote ones.

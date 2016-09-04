@@ -14,9 +14,9 @@
 
 using System;
 using System.Windows.Forms;
-using bedrock.util;
-using jabber;
-using jabber.connection;
+using JabberNet.bedrock.util;
+using JabberNet.jabber;
+using JabberNet.jabber.connection;
 
 namespace JabberNet.Example
 {

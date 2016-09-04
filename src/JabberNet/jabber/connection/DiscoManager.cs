@@ -11,21 +11,19 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
-using System;
 
+using System;
 using System.Collections;
 using System.Diagnostics;
-using System.Xml;
 using System.Threading;
+using System.Xml;
+using JabberNet.bedrock.collections;
+using JabberNet.bedrock.util;
+using JabberNet.jabber.protocol;
+using JabberNet.jabber.protocol.client;
+using JabberNet.jabber.protocol.iq;
 
-using bedrock.util;
-using bedrock.collections;
-
-using jabber.protocol;
-using jabber.protocol.client;
-using jabber.protocol.iq;
-
-namespace jabber.connection
+namespace JabberNet.jabber.connection
 {
     /// <summary>
     /// Manages a service discovery (disco) identity. See <a href="http://www.xmpp.org/extensions/xep-0030.html">XEP-0030</a> for more information.

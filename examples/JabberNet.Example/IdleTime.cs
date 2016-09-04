@@ -15,7 +15,7 @@
 using System;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
-using bedrock.util;
+using JabberNet.bedrock.util;
 
 namespace JabberNet.Example
 {

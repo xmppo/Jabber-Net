@@ -11,18 +11,16 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
-using System;
 
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using System.Xml;
+using JabberNet.bedrock.util;
+using JabberNet.jabber.protocol.client;
 
-using bedrock.util;
-using jabber.protocol.client;
-
-namespace jabber.connection
+namespace JabberNet.jabber.connection
 {
     /// <summary>
     /// Informs the client that a response to an IQ request has been received.

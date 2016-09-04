@@ -1,8 +1,8 @@
 using System;
 using System.Text;
 using System.Threading;
-using bedrock.net;
-using bedrock.util;
+using JabberNet.bedrock.net;
+using JabberNet.bedrock.util;
 using NUnit.Framework;
 
 namespace JabberNet.Test.bedrock.net

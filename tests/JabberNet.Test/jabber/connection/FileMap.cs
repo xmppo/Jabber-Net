@@ -14,10 +14,10 @@
 
 using System;
 using System.Xml;
-using bedrock.util;
-using jabber.connection;
-using jabber.protocol;
-using jabber.protocol.iq;
+using JabberNet.bedrock.util;
+using JabberNet.jabber.connection;
+using JabberNet.jabber.protocol;
+using JabberNet.jabber.protocol.iq;
 using NUnit.Framework;
 
 namespace JabberNet.Test.jabber.connection
@@ -33,9 +33,9 @@ namespace JabberNet.Test.jabber.connection
             get
             {
                 XmlDocument doc = new XmlDocument();
-                global::jabber.protocol.iq.DiscoInfo di = new global::jabber.protocol.iq.DiscoInfo(doc);
-                di.AddFeature(global::jabber.protocol.URI.DISCO_INFO);
-                di.AddFeature(global::jabber.protocol.URI.DISCO_ITEMS);
+                global::JabberNet.jabber.protocol.iq.DiscoInfo di = new global::JabberNet.jabber.protocol.iq.DiscoInfo(doc);
+                di.AddFeature(global::JabberNet.jabber.protocol.URI.DISCO_INFO);
+                di.AddFeature(global::JabberNet.jabber.protocol.URI.DISCO_ITEMS);
                 return di;
             }
         }
@@ -55,7 +55,7 @@ namespace JabberNet.Test.jabber.connection
         public void TestCreate()
         {
             ElementFactory ef = new ElementFactory();
-            ef.AddType(new global::jabber.protocol.iq.Factory());
+            ef.AddType(new global::JabberNet.jabber.protocol.iq.Factory());
 
             string g = new Guid().ToString();
             FileMap<DiscoInfo> fm = new FileMap<DiscoInfo>("test.xml", ef);

@@ -11,15 +11,15 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
-using System;
 
+using System;
 using System.Diagnostics;
 using System.Net;
-using bedrock.util;
+using JabberNet.bedrock.util;
 using JabberNet.Netlib.Dns;
 using JabberNet.Netlib.Dns.Records;
 
-namespace bedrock.net
+namespace JabberNet.bedrock.net
 {
     /// <summary>
     /// Callback for async DNS lookups.

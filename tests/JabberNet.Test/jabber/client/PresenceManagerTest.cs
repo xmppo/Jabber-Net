@@ -13,14 +13,14 @@
  * --------------------------------------------------------------------------*/
 
 using System.Xml;
-using bedrock.collections;
-using bedrock.util;
-using jabber;
-using jabber.client;
-using jabber.connection;
-using jabber.protocol;
-using jabber.protocol.client;
-using jabber.protocol.iq;
+using JabberNet.bedrock.collections;
+using JabberNet.bedrock.util;
+using JabberNet.jabber;
+using JabberNet.jabber.client;
+using JabberNet.jabber.connection;
+using JabberNet.jabber.protocol;
+using JabberNet.jabber.protocol.client;
+using JabberNet.jabber.protocol.iq;
 using NUnit.Framework;
 
 namespace JabberNet.Test.jabber.client // TODO: Client1 due to a bug in NUnit.
@@ -43,7 +43,7 @@ namespace JabberNet.Test.jabber.client // TODO: Client1 due to a bug in NUnit.
         public void Test_Create()
         {
             PresenceManager pp = new PresenceManager();
-            Assert.AreEqual("jabber.client.PresenceManager", pp.GetType().FullName);
+            Assert.AreEqual("JabberNet.jabber.client.PresenceManager", pp.GetType().FullName);
         }
         [Test]
         public void TestAdd()

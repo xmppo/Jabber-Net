@@ -14,11 +14,11 @@
 
 using System.Text.RegularExpressions;
 using System.Xml;
-using bedrock.util;
-using jabber.protocol;
-using jabber.protocol.stream;
+using JabberNet.bedrock.util;
+using JabberNet.jabber.protocol;
+using JabberNet.jabber.protocol.stream;
 using NUnit.Framework;
-using fact = jabber.protocol.stream.Factory;
+using fact = JabberNet.jabber.protocol.stream.Factory;
 
 namespace JabberNet.Test.jabber.protocol.stream
 {

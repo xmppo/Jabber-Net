@@ -11,17 +11,16 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
-using System;
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using bedrock.util;
+using JabberNet.bedrock.util;
+using JabberNet.jabber.protocol.client;
+using JabberNet.jabber.protocol.iq;
 
-using jabber.protocol.client;
-using jabber.protocol.iq;
-
-namespace jabber.client
+namespace JabberNet.jabber.client
 {
     /// <summary>
     /// Informs the client of roster items.

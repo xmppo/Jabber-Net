@@ -18,11 +18,11 @@
  *
  * Look over here.  Something shiny!
  */
-using System;
-using System.Text;
-using stringprep.unicode;
 
-namespace stringprep.steps
+using System.Text;
+using JabberNet.stringprep.unicode;
+
+namespace JabberNet.stringprep.steps
 {
     /// <summary>
     /// Perform Unicode Normalization Form KC.

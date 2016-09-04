@@ -13,9 +13,9 @@
  * --------------------------------------------------------------------------*/
 
 using System.Xml;
-using bedrock.util;
-using jabber.protocol;
-using jabber.protocol.x;
+using JabberNet.bedrock.util;
+using JabberNet.jabber.protocol;
+using JabberNet.jabber.protocol.x;
 using NUnit.Framework;
 
 namespace JabberNet.Test.jabber.protocol.x
@@ -78,7 +78,7 @@ namespace JabberNet.Test.jabber.protocol.x
         [Test] public void Test_Parse()
         {
             AsynchElementStream es = new AsynchElementStream();
-            es.AddFactory(new global::jabber.protocol.x.Factory());
+            es.AddFactory(new global::JabberNet.jabber.protocol.x.Factory());
             es.OnElement += new ProtocolHandler(es_OnElement);
             es.Push(System.Text.Encoding.UTF8.GetBytes(tstring));
 
@@ -117,10 +117,10 @@ namespace JabberNet.Test.jabber.protocol.x
             doc.LoadXml(tstring);
 
             ElementFactory f = new ElementFactory();
-            f.AddType(new global::jabber.protocol.x.Factory());
+            f.AddType(new global::JabberNet.jabber.protocol.x.Factory());
 
             Element stream = Element.AddTypes(doc.DocumentElement, f);
-            Data d = stream.GetChildElement<global::jabber.protocol.x.Data>();
+            Data d = stream.GetChildElement<global::JabberNet.jabber.protocol.x.Data>();
             Assert.IsNotNull(d);
         }
     }

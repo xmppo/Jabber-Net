@@ -13,10 +13,11 @@
  *
  * xpnet is a deriviative of James Clark's XP.  See copying.txt for more info.
  * --------------------------------------------------------------------------*/
-namespace xpnet
-{
-    using bedrock.util;
 
+using JabberNet.bedrock.util;
+
+namespace JabberNet.xpnet
+{
     /// <summary>
     /// Represents information returned by <code>Encoding.tokenizeContent</code>.
     /// @see Encoding#tokenizeContent

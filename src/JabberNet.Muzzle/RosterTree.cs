@@ -17,12 +17,12 @@ using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
-using bedrock.collections;
-using bedrock.util;
-using jabber;
-using jabber.client;
-using jabber.protocol.client;
-using jabber.protocol.iq;
+using JabberNet.bedrock.collections;
+using JabberNet.bedrock.util;
+using JabberNet.jabber;
+using JabberNet.jabber.client;
+using JabberNet.jabber.protocol.client;
+using JabberNet.jabber.protocol.iq;
 
 namespace JabberNet.Muzzle
 {

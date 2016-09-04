@@ -11,21 +11,19 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
-using System;
 
+using System;
 using System.Collections;
 using System.Diagnostics;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Xml;
-using bedrock.util;
+using JabberNet.bedrock.util;
+using JabberNet.jabber.connection.sasl;
+using JabberNet.jabber.protocol;
+using JabberNet.jabber.protocol.stream;
 
-using jabber.protocol;
-using jabber.protocol.stream;
-using jabber.connection.sasl;
-
-using System.Security.Cryptography.X509Certificates;
-
-namespace jabber.connection
+namespace JabberNet.jabber.connection
 {
     /// <summary>
     /// Informs the client about events that happen on an ElementStream.

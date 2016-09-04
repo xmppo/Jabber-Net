@@ -11,15 +11,14 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
+
 using System;
 using System.Collections.Generic;
-using System.Threading;
-using System.Reflection;
 using System.Diagnostics;
+using System.Reflection;
+using JabberNet.bedrock.util;
 
-using bedrock.util;
-
-namespace jabber.protocol
+namespace JabberNet.jabber.protocol
 {
     /// <summary>
     /// How should the marked-up entity be rendered in XML?  Only used

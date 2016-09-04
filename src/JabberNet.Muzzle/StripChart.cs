@@ -20,7 +20,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Threading;
 using System.Windows.Forms;
-using bedrock.util;
+using JabberNet.bedrock.util;
 
 namespace JabberNet.Muzzle
 {

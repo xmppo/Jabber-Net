@@ -11,6 +11,7 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
+
 using System;
 using System.Diagnostics;
 using System.Reflection;
@@ -18,10 +19,9 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
+using JabberNet.bedrock.util;
 
-using bedrock.util;
-
-namespace jabber.protocol
+namespace JabberNet.jabber.protocol
 {
     /// <summary>
     /// An enum that should translate "_" into "-" for use externally.

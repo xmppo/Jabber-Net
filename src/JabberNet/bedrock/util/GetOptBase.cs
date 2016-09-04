@@ -11,16 +11,17 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
-namespace bedrock.util
+
+using System;
+using System.Collections;
+using System.Diagnostics;
+using System.Reflection;
+using System.Text;
+using System.Text.RegularExpressions;
+
+namespace JabberNet.bedrock.util
 
 {
-    using System;
-    using System.Collections;
-    using System.Diagnostics;
-    using System.Reflection;
-    using System.Text;
-    using System.Text.RegularExpressions;
-
     /// <summary>
     /// GetOpt should be subclassed to create a class that handles
     /// command-line parameters.  The subclass should use fields or properties

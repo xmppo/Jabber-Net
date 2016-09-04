@@ -14,11 +14,9 @@
 
 Imports System.Diagnostics
 Imports System.Xml
-
-Imports jabber
-Imports jabber.protocol
-Imports jabber.protocol.client
-Imports jabber.protocol.iq
+Imports JabberNet.jabber
+Imports JabberNet.jabber.protocol.client
+Imports JabberNet.jabber.protocol.iq
 
 Public Class MainForm
     Inherits System.Windows.Forms.Form

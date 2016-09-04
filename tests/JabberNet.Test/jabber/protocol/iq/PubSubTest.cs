@@ -13,8 +13,8 @@
  * --------------------------------------------------------------------------*/
 
 using System.Xml;
-using bedrock.util;
-using jabber.protocol.iq;
+using JabberNet.bedrock.util;
+using JabberNet.jabber.protocol.iq;
 using NUnit.Framework;
 
 namespace JabberNet.Test.jabber.protocol.iq

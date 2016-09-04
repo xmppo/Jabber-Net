@@ -13,8 +13,7 @@
  * --------------------------------------------------------------------------*/
 /* This file is auto-generated.  DO NOT EDIT! */
 
-using System;
-namespace stringprep
+namespace JabberNet.stringprep.steps
 {
     /// <summary>
     /// Constants from RFC 3454, Stringprep.

@@ -12,8 +12,8 @@
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
 
-using bedrock.collections;
-using bedrock.util;
+using JabberNet.bedrock.collections;
+using JabberNet.bedrock.util;
 using NUnit.Framework;
 
 namespace JabberNet.Test.bedrock.collections

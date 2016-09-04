@@ -11,12 +11,12 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
-using System;
 
+using System;
 using System.Collections;
 using System.Text;
 
-namespace stringprep.steps
+namespace JabberNet.stringprep.steps
 {
     /// <summary>
     /// A character that is forbidden by the current stringprep profile exists in the input.

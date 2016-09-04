@@ -18,12 +18,12 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml;
-using bedrock.util;
-using jabber;
-using jabber.connection;
-using jabber.protocol;
-using jabber.protocol.client;
-using jabber.protocol.iq;
+using JabberNet.bedrock.util;
+using JabberNet.jabber;
+using JabberNet.jabber.connection;
+using JabberNet.jabber.protocol;
+using JabberNet.jabber.protocol.client;
+using JabberNet.jabber.protocol.iq;
 using JabberNet.Muzzle;
 
 namespace JabberNet.Example

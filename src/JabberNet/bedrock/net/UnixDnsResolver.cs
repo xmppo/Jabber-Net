@@ -26,12 +26,11 @@
  */
 
 using System;
-using System.Text;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using JabberNet.Netlib.Dns.Records;
 
-namespace bedrock.net
+namespace JabberNet.bedrock.net
 {
 	public class UnixDnsResolver
 	{

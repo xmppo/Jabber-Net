@@ -14,9 +14,9 @@
 #if !NO_STRINGPREP
 
 using System.Text;
-using bedrock.util;
+using JabberNet.bedrock.util;
+using JabberNet.stringprep.steps;
 using NUnit.Framework;
-using stringprep.steps;
 
 namespace JabberNet.Test.stringprep
 {

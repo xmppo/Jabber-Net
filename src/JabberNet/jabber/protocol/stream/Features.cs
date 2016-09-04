@@ -11,11 +11,12 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
+
 using System;
 using System.Xml;
-using bedrock.util;
+using JabberNet.bedrock.util;
 
-namespace jabber.protocol.stream
+namespace JabberNet.jabber.protocol.stream
 {
     /// <summary>
     /// Stream Features handler

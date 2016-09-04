@@ -17,7 +17,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using bedrock.util;
+using JabberNet.bedrock.util;
 
 namespace JabberNet.Muzzle
 {

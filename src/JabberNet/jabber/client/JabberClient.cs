@@ -11,19 +11,18 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
-using System;
 
+using System;
 using System.Diagnostics;
 using System.Xml;
+using JabberNet.bedrock.util;
+using JabberNet.jabber.connection;
+using JabberNet.jabber.connection.sasl;
+using JabberNet.jabber.protocol;
+using JabberNet.jabber.protocol.client;
+using JabberNet.jabber.protocol.iq;
 
-using bedrock.util;
-using jabber.connection;
-using jabber.protocol;
-using jabber.protocol.client;
-using jabber.protocol.iq;
-using jabber.connection.sasl;
-
-namespace jabber.client
+namespace JabberNet.jabber.client
 {
     /// <summary>
     /// Informs the client that a presence packet has been received.

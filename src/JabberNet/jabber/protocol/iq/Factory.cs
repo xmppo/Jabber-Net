@@ -11,13 +11,10 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
-using System;
 
+using JabberNet.bedrock.util;
 
-using bedrock.util;
-using jabber.protocol;
-
-namespace jabber.protocol.iq
+namespace JabberNet.jabber.protocol.iq
 {
     /// <summary>
     /// ElementFactory for all currently supported IQ namespaces.
@@ -40,8 +37,8 @@ namespace jabber.protocol.iq
             new QnameType("query", URI.LAST,     typeof(jabber.protocol.iq.Last)),
             new QnameType("item",  URI.BROWSE,   typeof(jabber.protocol.iq.Browse)),
             new QnameType("geoloc",URI.GEOLOC,   typeof(jabber.protocol.iq.GeoLoc)),
-            
-            
+
+
             new QnameType("query",      URI.PRIVATE,   typeof(jabber.protocol.iq.Private)),
             new QnameType("storage",    URI.BOOKMARKS, typeof(jabber.protocol.iq.Bookmarks)),
             new QnameType("url",        URI.BOOKMARKS, typeof(jabber.protocol.iq.BookmarkURL)),

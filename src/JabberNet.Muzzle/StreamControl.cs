@@ -14,10 +14,10 @@
 
 using System.ComponentModel;
 using System.Xml;
-using bedrock.util;
-using jabber;
-using jabber.connection;
-using jabber.protocol.client;
+using JabberNet.bedrock.util;
+using JabberNet.jabber;
+using JabberNet.jabber.connection;
+using JabberNet.jabber.protocol.client;
 
 namespace JabberNet.Muzzle
 {

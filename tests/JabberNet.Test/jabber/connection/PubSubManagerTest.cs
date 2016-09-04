@@ -15,11 +15,11 @@
 using System.Collections;
 using System.Reflection;
 using System.Xml;
-using bedrock.util;
-using jabber;
-using jabber.connection;
-using jabber.protocol;
-using jabber.protocol.client;
+using JabberNet.bedrock.util;
+using JabberNet.jabber;
+using JabberNet.jabber.connection;
+using JabberNet.jabber.protocol;
+using JabberNet.jabber.protocol.client;
 using NUnit.Framework;
 using Rhino.Mocks;
 

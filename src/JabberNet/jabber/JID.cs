@@ -11,15 +11,14 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
+
 using System;
-
-using System.Text;
 using System.Diagnostics;
-
-using bedrock.util;
+using System.Text;
 using System.Text.RegularExpressions;
+using JabberNet.bedrock.util;
 
-namespace jabber
+namespace JabberNet.jabber
 {
     /// <summary>
     /// Informs the client that an invalid JID was entered.

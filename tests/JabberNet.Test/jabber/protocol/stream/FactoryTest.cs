@@ -12,10 +12,10 @@
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
 
-using bedrock.util;
-using jabber.protocol;
+using JabberNet.bedrock.util;
+using JabberNet.jabber.protocol;
 using NUnit.Framework;
-using fact = jabber.protocol.stream.Factory;
+using fact = JabberNet.jabber.protocol.stream.Factory;
 
 namespace JabberNet.Test.jabber.protocol.stream
 {

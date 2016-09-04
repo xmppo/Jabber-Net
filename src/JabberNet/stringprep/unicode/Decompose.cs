@@ -11,11 +11,11 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
-using System;
 
+using System;
 using System.Collections;
 
-namespace stringprep.unicode
+namespace JabberNet.stringprep.unicode
 {
     /// <summary>
     /// Decomposition data for NFKC.

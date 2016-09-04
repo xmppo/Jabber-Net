@@ -1,7 +1,7 @@
-using bedrock.net;
-using jabber.protocol.stream;
+using JabberNet.bedrock.net;
+using JabberNet.jabber.protocol.stream;
 
-namespace jabber.connection
+namespace JabberNet.jabber.connection
 {
 	class BindingStanzaStream : HttpStanzaStream
 	{

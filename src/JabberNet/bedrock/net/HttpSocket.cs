@@ -18,10 +18,9 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading;
+using JabberNet.bedrock.util;
 
-using bedrock.util;
-
-namespace bedrock.net
+namespace JabberNet.bedrock.net
 {
     /// <summary>
     /// Do basic HTTP processing, with a long-lived socket.

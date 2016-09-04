@@ -11,17 +11,15 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
+
 using System;
-
 using System.Diagnostics;
-
 using System.Xml;
-
-using bedrock.util;
+using JabberNet.bedrock.util;
 
 // http://www.xmpp.org/extensions/xep-0054.html
 
-namespace jabber.protocol.iq
+namespace JabberNet.jabber.protocol.iq
 {
     /// <summary>
     /// Type of telephone number.

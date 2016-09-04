@@ -17,16 +17,11 @@
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
 
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Xml;
+using JabberNet.jabber.protocol.stream;
 
-using jabber.protocol.stream;
-
-namespace jabber.connection.sasl
+namespace JabberNet.jabber.connection.sasl
 {
     //FF
 	public class AnonymousProcessor : SASLProcessor

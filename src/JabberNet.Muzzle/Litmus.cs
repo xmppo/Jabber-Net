@@ -17,7 +17,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using bedrock.util;
+using JabberNet.bedrock.util;
 
 namespace JabberNet.Muzzle
 {

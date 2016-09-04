@@ -11,12 +11,11 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
-using System.Collections;
+
 using System.IO;
+using JabberNet.bedrock.util;
 
-using bedrock.util;
-
-namespace bedrock.io
+namespace JabberNet.bedrock.io
 {
     /// <summary> Aggregate byte arrays together, so we can parse
     /// across IP packet boundaries

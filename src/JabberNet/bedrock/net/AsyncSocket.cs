@@ -11,20 +11,19 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
-using System;
 
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
-using System.Net.Sockets;
-using bedrock.util;
-
-using System.Security.Authentication;
 using System.Net.Security;
+using System.Net.Sockets;
+using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
+using JabberNet.bedrock.util;
 using zlib;
 
-namespace bedrock.net
+namespace JabberNet.bedrock.net
 {
     /// <summary>
     /// Delegate for members that receive a socket.

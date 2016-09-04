@@ -17,12 +17,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Xml;
-using bedrock.util;
-using jabber.protocol;
-using jabber.protocol.client;
-using jabber.protocol.iq;
+using JabberNet.bedrock.util;
+using JabberNet.jabber.protocol;
+using JabberNet.jabber.protocol.client;
+using JabberNet.jabber.protocol.iq;
 
-namespace jabber.connection
+namespace JabberNet.jabber.connection
 {
     /// <summary>
     /// Manages a set of publish-subscribe (<a href="http://www.xmpp.org/extensions/xep-0060.html">XEP-60</a>) subscriptions.

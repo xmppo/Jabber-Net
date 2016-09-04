@@ -14,12 +14,12 @@
 
 using System;
 using System.Xml;
-using bedrock.util;
-using jabber;
-using jabber.connection;
-using jabber.protocol;
-using jabber.protocol.client;
-using jabber.protocol.iq;
+using JabberNet.bedrock.util;
+using JabberNet.jabber;
+using JabberNet.jabber.connection;
+using JabberNet.jabber.protocol;
+using JabberNet.jabber.protocol.client;
+using JabberNet.jabber.protocol.iq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.Mocks.Interfaces;
