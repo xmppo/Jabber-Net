@@ -22,8 +22,8 @@
     <OptionCompare>Binary</OptionCompare>
     <OptionExplicit>On</OptionExplicit>
     <OptionStrict>Off</OptionStrict>
-    <RootNamespace>VB.Example</RootNamespace>
-    <StartupObject>VB.Example.MainForm</StartupObject>
+    <RootNamespace>JabberNet.VbExample</RootNamespace>
+    <StartupObject>JabberNet.VbExample.MainForm</StartupObject>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <MyType>WindowsFormsWithCustomSubMain</MyType>
