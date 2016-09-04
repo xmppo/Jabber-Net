@@ -3,8 +3,8 @@ mono: latest
 install:
 - mkdir ./.paket
 - wget -O ./.paket/paket.bootstrapper.exe https://github.com/fsprojects/Paket/releases/download/3.18.2/paket.bootstrapper.exe
-- mono ./.paket/paket.bootstrapper.exe
-- mono ./.paket/paket.exe restore -v
+- mono ./.paket/paket.bootstrapper.exe 3.18.2
+- mono ./.paket/paket.exe restore
 script:
 - xbuild /p:Configuration=Debug JabberNet.sln
 - mono ./packages/NUnit.ConsoleRunner/tools/nunit3-console.exe ./tests/JabberNet.Test/bin/Debug/JabberNet.Test.dll

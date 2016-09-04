@@ -45,6 +45,6 @@ if (-not (Test-Path $paket)) {
 }
 
 Write-Output "Running paket restore"
-& $paket restore -v
+& $paket restore
 
 exit -not $?
