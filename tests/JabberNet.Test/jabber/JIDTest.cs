@@ -11,14 +11,13 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
+
 using System;
-
 using bedrock.util;
-using NUnit.Framework;
-using je = jabber.JIDFormatException;
 using jabber;
+using NUnit.Framework;
 
-namespace test.jabber
+namespace JabberNet.Test.jabber
 {
     /// <summary>
     /// Summary description for JIDTest.

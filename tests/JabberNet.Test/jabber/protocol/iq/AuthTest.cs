@@ -11,17 +11,15 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
-using System;
 
 using System.Xml;
-using NUnit.Framework;
-
 using bedrock.util;
 using jabber.protocol;
 using jabber.protocol.client;
 using jabber.protocol.iq;
+using NUnit.Framework;
 
-namespace test.jabber.protocol.iq
+namespace JabberNet.Test.jabber.protocol.iq
 {
     /// <summary>
     /// Summary description for AuthTest.

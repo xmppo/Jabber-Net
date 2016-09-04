@@ -1,13 +1,11 @@
 using System;
 using System.Text;
-
-using NUnit.Framework;
-
+using System.Threading;
 using bedrock.net;
 using bedrock.util;
-using System.Threading;
+using NUnit.Framework;
 
-namespace test.bedrock.net
+namespace JabberNet.Test.bedrock.net
 {
     [SVN(@"$Id$")]
     [TestFixture]

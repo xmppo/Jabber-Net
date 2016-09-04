@@ -11,14 +11,13 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
-using System;
-using System.IO;
 
-using NUnit.Framework;
+using System.IO;
 using bedrock.io;
 using bedrock.util;
+using NUnit.Framework;
 
-namespace test.bedrock.io
+namespace JabberNet.Test.bedrock.io
 {
     /// <summary>
     /// Test the ZlibStream class.

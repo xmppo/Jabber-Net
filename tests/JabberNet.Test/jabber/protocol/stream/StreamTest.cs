@@ -11,18 +11,16 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
-using System;
 
-using System.Xml;
 using System.Text.RegularExpressions;
-using NUnit.Framework;
-
+using System.Xml;
 using bedrock.util;
 using jabber.protocol;
 using jabber.protocol.stream;
+using NUnit.Framework;
 using fact = jabber.protocol.stream.Factory;
 
-namespace test.jabber.protocol.stream
+namespace JabberNet.Test.jabber.protocol.stream
 {
     /// <summary>
     /// Summary description for StreamTest.

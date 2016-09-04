@@ -11,22 +11,19 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
-using System;
 
 using System.Xml;
-using NUnit.Framework;
-
+using bedrock.collections;
 using bedrock.util;
 using jabber;
 using jabber.client;
-using jabber.protocol.client;
-using jabber.protocol.x;
 using jabber.connection;
 using jabber.protocol;
-using bedrock.collections;
+using jabber.protocol.client;
 using jabber.protocol.iq;
+using NUnit.Framework;
 
-namespace test.jabber.client1 // TODO: Client1 due to a bug in NUnit.
+namespace JabberNet.Test.jabber.client // TODO: Client1 due to a bug in NUnit.
 {
     /// <summary>
     /// Summary description for PPDP.

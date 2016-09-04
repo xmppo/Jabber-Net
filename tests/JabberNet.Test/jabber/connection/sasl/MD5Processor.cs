@@ -11,18 +11,14 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
-using System;
 
+using System.Xml;
 using bedrock.util;
-
-using jabber.connection;
 using jabber.connection.sasl;
 using jabber.protocol.stream;
-
 using NUnit.Framework;
-using System.Xml;
 
-namespace test.jabber.connection.sasl
+namespace JabberNet.Test.jabber.connection.sasl
 {
     [TestFixture]
     [SVN(@"$Id$")]

@@ -13,13 +13,12 @@
  * --------------------------------------------------------------------------*/
 #if !NO_STRINGPREP
 
-using System;
+using bedrock.util;
 using NUnit.Framework;
 using stringprep;
 using stringprep.steps;
-using bedrock.util;
 
-namespace test.stringprep
+namespace JabberNet.Test.stringprep
 {
     [SVN(@"$Id$")]
     [TestFixture]
