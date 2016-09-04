@@ -45,7 +45,7 @@ namespace JabberNet.Test.bedrock.collections
         [Test] public void Test_Type()
         {
             Tree t = new Tree();
-            Assert.AreEqual("bedrock.collections.Tree", t.GetType().FullName);
+            Assert.AreEqual("JabberNet.bedrock.collections.Tree", t.GetType().FullName);
         }
         [Test] public void Test_Main()
         {

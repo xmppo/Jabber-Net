@@ -45,7 +45,7 @@ namespace JabberNet.Test.bedrock.collections
         [Test] public void Test_Type()
         {
             Trie t = new Trie();
-            Assert.AreEqual("bedrock.collections.Trie", t.GetType().FullName);
+            Assert.AreEqual("JabberNet.bedrock.collections.Trie", t.GetType().FullName);
         }
         [Test] public void Test_Main()
         {
