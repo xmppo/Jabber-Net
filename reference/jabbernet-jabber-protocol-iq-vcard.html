@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>VCard - Jabber-Net</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Friedrich von Never">
+
+    <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
+
+    <link type="text/css" rel="stylesheet" href="https://fornever.github.io/Jabber-Net/content/style.css" />
+    <script type="text/javascript" src="https://fornever.github.io/Jabber-Net/content/tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="masthead">
+        <h3 class="muted"><a href="https://fornever.github.io/Jabber-Net/index.html">Jabber-Net</a></h3>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="span9" id="main">
+          
+
+
+
+<h1>VCard</h1>
+<p>
+  <span>Namespace: JabberNet.jabber.protocol.iq</span><br />
+</p>
+<div class="xmldoc">
+</br><p class='summary'>
+            A vCard element.
+            </p></div>
+  <h3>Constructors</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Constructor</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1686', 1686)" onmouseover="showTip(event, '1686', 1686)">
+            new(doc)
+          </code>
+          <div class="tip" id="1686">
+            <strong>Signature:</strong> doc:XmlDocument -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1687', 1687)" onmouseover="showTip(event, '1687', 1687)">
+            new(prefix, qname, doc)
+          </code>
+          <div class="tip" id="1687">
+            <strong>Signature:</strong> (prefix:string * qname:XmlQualifiedName * doc:XmlDocument) -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h3>Instance members</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Instance member</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1688', 1688)" onmouseover="showTip(event, '1688', 1688)">
+            Birthday()
+          </code>
+          <div class="tip" id="1688">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Date of birth
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1689', 1689)" onmouseover="showTip(event, '1689', 1689)">
+            ComplexName()
+          </code>
+          <div class="tip" id="1689">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Pieces of the name, split apart
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1690', 1690)" onmouseover="showTip(event, '1690', 1690)">
+            Description()
+          </code>
+          <div class="tip" id="1690">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1691', 1691)" onmouseover="showTip(event, '1691', 1691)">
+            Email
+          </code>
+          <div class="tip" id="1691">
+            <strong>Signature:</strong> string<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Get the internet email address (default)
+            </p><p class='returns'>Returns: </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1692', 1692)" onmouseover="showTip(event, '1692', 1692)">
+            FullName()
+          </code>
+          <div class="tip" id="1692">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Full name of the individual, as a single string
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1693', 1693)" onmouseover="showTip(event, '1693', 1693)">
+            GetAddress(location)
+          </code>
+          <div class="tip" id="1693">
+            <strong>Signature:</strong> location:AddressLocation -&gt; VAddress<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Get the address for the given location.
+            </p><p class='returns'>Returns: </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1694', 1694)" onmouseover="showTip(event, '1694', 1694)">
+            GetAddressList()
+          </code>
+          <div class="tip" id="1694">
+            <strong>Signature:</strong> unit -&gt; VAddress []<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            List of addresses
+            </p><p class='returns'>Returns: </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1695', 1695)" onmouseover="showTip(event, '1695', 1695)">
+            GetEmail(type)
+          </code>
+          <div class="tip" id="1695">
+            <strong>Signature:</strong> type:EmailType -&gt; VEmail<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Get the email address for the given type.
+            </p><p class='returns'>Returns: </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1696', 1696)" onmouseover="showTip(event, '1696', 1696)">
+            GetEmailList()
+          </code>
+          <div class="tip" id="1696">
+            <strong>Signature:</strong> unit -&gt; VEmail []<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            List of Email addresses
+            </p><p class='returns'>Returns: </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1697', 1697)" onmouseover="showTip(event, '1697', 1697)">
+            GetTelephone(type, location)
+          </code>
+          <div class="tip" id="1697">
+            <strong>Signature:</strong> (type:TelephoneType * location:TelephoneLocation) -&gt; VTelephone<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'></p><p class='returns'>Returns: </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1698', 1698)" onmouseover="showTip(event, '1698', 1698)">
+            GetTelephoneList()
+          </code>
+          <div class="tip" id="1698">
+            <strong>Signature:</strong> unit -&gt; VTelephone []<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            List of telephone numbers
+            </p><p class='returns'>Returns: </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1699', 1699)" onmouseover="showTip(event, '1699', 1699)">
+            JabberId()
+          </code>
+          <div class="tip" id="1699">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Jabber ID
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1700', 1700)" onmouseover="showTip(event, '1700', 1700)">
+            Nickname()
+          </code>
+          <div class="tip" id="1700">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Person's nick name.  This might be a good choice for a default roster nick,
+            for instance.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1701', 1701)" onmouseover="showTip(event, '1701', 1701)">
+            Organization()
+          </code>
+          <div class="tip" id="1701">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1702', 1702)" onmouseover="showTip(event, '1702', 1702)">
+            Photo()
+          </code>
+          <div class="tip" id="1702">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            User's photograph
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1703', 1703)" onmouseover="showTip(event, '1703', 1703)">
+            Role()
+          </code>
+          <div class="tip" id="1703">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1704', 1704)" onmouseover="showTip(event, '1704', 1704)">
+            SetEmail(email)
+          </code>
+          <div class="tip" id="1704">
+            <strong>Signature:</strong> email:VEmail -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+             Sets the email address for the given type.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1705', 1705)" onmouseover="showTip(event, '1705', 1705)">
+            Title()
+          </code>
+          <div class="tip" id="1705">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1706', 1706)" onmouseover="showTip(event, '1706', 1706)">
+            Url()
+          </code>
+          <div class="tip" id="1706">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Associated URL
+            </p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+        </div>
+        <div class="span3">
+          <ul class="nav nav-list" id="menu">
+
+            <li class="nav-header">Jabber-Net</li>
+
+            <li class="divider"></li>
+
+            <li><a href="https://www.nuget.org/packages/jabber-net/">Get Jabber-Net package via NuGet</a></li>
+            <li><a href="https://github.com/ForNeVeR/Jabber-Net">Source Code on GitHub</a></li>
+            <li><a href="https://fornever.github.io/Jabber-Net/licensing.html">License (LGPL)</a></li>
+
+            <li class="nav-header">Documentation</li>
+
+            <li><a href="https://fornever.github.io/Jabber-Net/index.html">Getting Started</a></li>
+
+            <li class="divider"></li>
+
+            <li><a href="https://fornever.github.io/Jabber-Net/FAQ.html">Frequently-Asked Questions about Jabber-Net</a></li>
+
+            <li class="divider"></li>
+
+            <li><a href="https://fornever.github.io/Jabber-Net/SendMessage.html">How to send a message</a></li>
+
+            <li class="nav-header">Reference</li>
+
+            <li><a href="https://fornever.github.io/Jabber-Net/reference/index.html">API Reference</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <a href="https://github.com/ForNeVeR/Jabber-Net"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+  </body>
+  </html>

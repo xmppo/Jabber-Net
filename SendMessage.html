@@ -38,7 +38,7 @@ use of
 <a href="http://msdn2.microsoft.com/en-us/library/system.threading.manualresetevent.aspx">ManualResetEvent</a>
 to wait for the end of asynchronous processing.</p>
 <h2>SendMessage.cs</h2>
-<p>Make sure to reference <code>jabber-net.dll</code>, <code>zlib.net.dll</code>, and <code>netlib.Dns.dll</code>.</p>
+<p>Make sure to reference <code>JabberNet.dll</code> and <code>JabberNet.Netlib.Dns.dll</code>.</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
 <span class="l"> 2: </span>
 <span class="l"> 3: </span>
@@ -126,7 +126,7 @@ to wait for the end of asynchronous processing.</p>
 <td class="snippet"><pre class="fssnip highlighted"><code lang="csharp"><span class="k">using</span> System;
 <span class="k">using</span> System.Threading;
 
-<span class="k">using</span> jabber.client;
+<span class="k">using</span> JabberNet.jabber.client;
 
 <span class="k">namespace</span> SendMessage
 {

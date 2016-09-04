@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>DiscoNode - Jabber-Net</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Friedrich von Never">
+
+    <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
+
+    <link type="text/css" rel="stylesheet" href="https://fornever.github.io/Jabber-Net/content/style.css" />
+    <script type="text/javascript" src="https://fornever.github.io/Jabber-Net/content/tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="masthead">
+        <h3 class="muted"><a href="https://fornever.github.io/Jabber-Net/index.html">Jabber-Net</a></h3>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="span9" id="main">
+          
+
+
+
+<h1>DiscoNode</h1>
+<p>
+  <span>Namespace: JabberNet.jabber.connection</span><br />
+</p>
+<div class="xmldoc">
+</br><p class='summary'>
+             Manages the information and children of a given JID/Node combination.
+            
+             NOTE: If you have multiple connections in the same process, they all share the same Disco cache.
+             </p></div>
+  <h3>Constructors</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Constructor</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '707', 707)" onmouseover="showTip(event, '707', 707)">
+            new(jid, node)
+          </code>
+          <div class="tip" id="707">
+            <strong>Signature:</strong> (jid:JID * node:string) -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Creates a disco node.
+            </p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h3>Instance members</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Instance member</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '708', 708)" onmouseover="showTip(event, '708', 708)">
+            AddFeature(feature)
+          </code>
+          <div class="tip" id="708">
+            <strong>Signature:</strong> feature:string -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Add a single feature to the node.
+            Does not fire OnFeatures, since this should mostly be used by
+            things that are not querying externally.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '709', 709)" onmouseover="showTip(event, '709', 709)">
+            AddFeatureCallback(...)
+          </code>
+          <div class="tip" id="709">
+            <strong>Signature:</strong> (manager:DiscoManager * callback:DiscoNodeHandler * state:obj) -&gt; bool<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+             Add a callback for when features are received.
+            
+             Calls the callback immediately if the features have already been retrieved.
+             </p><p class='returns'>Returns: True if there were no features yet, and the callback was queued.</p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '710', 710)" onmouseover="showTip(event, '710', 710)">
+            AddFeatures(features)
+          </code>
+          <div class="tip" id="710">
+            <strong>Signature:</strong> (features:DiscoFeature []) -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Adds these features to the node. Calls the OnFeatures event.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '711', 711)" onmouseover="showTip(event, '711', 711)">
+            AddFeatures(features)
+          </code>
+          <div class="tip" id="711">
+            <strong>Signature:</strong> features:StringSet -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Add all of the features from the specified set.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '712', 712)" onmouseover="showTip(event, '712', 712)">
+            AddIdentities(ids)
+          </code>
+          <div class="tip" id="712">
+            <strong>Signature:</strong> (ids:DiscoIdentity []) -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Add these identities to the node.
+            Fires OnIdentities
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '713', 713)" onmouseover="showTip(event, '713', 713)">
+            AddIdentity(id)
+          </code>
+          <div class="tip" id="713">
+            <strong>Signature:</strong> id:Ident -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Adds these identities to the node.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '714', 714)" onmouseover="showTip(event, '714', 714)">
+            AddIdentityCallback(...)
+          </code>
+          <div class="tip" id="714">
+            <strong>Signature:</strong> (manager:DiscoManager * callback:DiscoNodeHandler * state:obj) -&gt; bool<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+             Add a callback for when identities are received.
+            
+             Calls the callback immediately if the features have already been retrieved.
+             </p><p class='returns'>Returns: True if there were no identities yet, and the callback was queued.</p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '715', 715)" onmouseover="showTip(event, '715', 715)">
+            AddInfo(info)
+          </code>
+          <div class="tip" id="715">
+            <strong>Signature:</strong> info:DiscoInfo -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Pulls all of the data out of the given protocol response.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '716', 716)" onmouseover="showTip(event, '716', 716)">
+            AddItems(manager, items)
+          </code>
+          <div class="tip" id="716">
+            <strong>Signature:</strong> (manager:DiscoManager * items:DiscoItem []) -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Adds the given items to the cache.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '717', 717)" onmouseover="showTip(event, '717', 717)">
+            AddItemsCallback(...)
+          </code>
+          <div class="tip" id="717">
+            <strong>Signature:</strong> (manager:DiscoManager * callback:DiscoNodeHandler * state:obj) -&gt; bool<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+             Add a callback for when items are received.
+            
+             Calls the callback immediately if the items have already been retrieved.
+             </p><p class='returns'>Returns: True if there were no items yet, and the callback was queued.</p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '718', 718)" onmouseover="showTip(event, '718', 718)">
+            ClearFeatures()
+          </code>
+          <div class="tip" id="718">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Clear out any features already in the list.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '719', 719)" onmouseover="showTip(event, '719', 719)">
+            ClearIdentity()
+          </code>
+          <div class="tip" id="719">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Clear out any identities already in the list.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '720', 720)" onmouseover="showTip(event, '720', 720)">
+            Extensions()
+          </code>
+          <div class="tip" id="720">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Gets or sets the x:data extensions of the disco information.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '721', 721)" onmouseover="showTip(event, '721', 721)">
+            FeatureNames
+          </code>
+          <div class="tip" id="721">
+            <strong>Signature:</strong> string []<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Retrieves the features associated with this node.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '722', 722)" onmouseover="showTip(event, '722', 722)">
+            GetEnumerator()
+          </code>
+          <div class="tip" id="722">
+            <strong>Signature:</strong> unit -&gt; IEnumerator<br />
+              <strong>Modifiers:</strong> abstract<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Gets an enumerator across all items.
+            </p><p class='returns'>Returns: Set enumerator to loop over.</p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '723', 723)" onmouseover="showTip(event, '723', 723)">
+            GetIdentities()
+          </code>
+          <div class="tip" id="723">
+            <strong>Signature:</strong> unit -&gt; Ident []<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Retrieves an identity object for each identity of the node.
+            </p><p class='returns'>Returns: List of identities associated with this node.</p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '724', 724)" onmouseover="showTip(event, '724', 724)">
+            HasFeature(URI)
+          </code>
+          <div class="tip" id="724">
+            <strong>Signature:</strong> URI:string -&gt; bool<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Determines if this node has the specified feature.
+            </p><p class='returns'>Returns: The node has this feature if true.</p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '725', 725)" onmouseover="showTip(event, '725', 725)">
+            HasIdentity(category, type)
+          </code>
+          <div class="tip" id="725">
+            <strong>Signature:</strong> (category:string * type:string) -&gt; bool<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Determines whether or not this node has the given category and type among its identities.
+            </p><p class='returns'>Returns: The node contains the category and the type if true.</p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '726', 726)" onmouseover="showTip(event, '726', 726)">
+            Identities
+          </code>
+          <div class="tip" id="726">
+            <strong>Signature:</strong> string []<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Retrieves the disco identities of the node.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '727', 727)" onmouseover="showTip(event, '727', 727)">
+            Info
+          </code>
+          <div class="tip" id="727">
+            <strong>Signature:</strong> DiscoInfo<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            This last info result returned for this JID and node.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '728', 728)" onmouseover="showTip(event, '728', 728)">
+            InfoIQ(doc)
+          </code>
+          <div class="tip" id="728">
+            <strong>Signature:</strong> doc:XmlDocument -&gt; IQ<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Creates a disco#info IQ packet.
+            </p><p class='returns'>Returns: XML representing the disco#info request.</p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '729', 729)" onmouseover="showTip(event, '729', 729)">
+            ItemsIQ(doc)
+          </code>
+          <div class="tip" id="729">
+            <strong>Signature:</strong> doc:XmlDocument -&gt; IQ<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Creates a disco#items IQ packet.
+            </p><p class='returns'>Returns: XML element representing the disco#items request.</p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '730', 730)" onmouseover="showTip(event, '730', 730)">
+            Name()
+          </code>
+          <div class="tip" id="730">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Gets or sets the string representation of the first identity.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '731', 731)" onmouseover="showTip(event, '731', 731)">
+            PendingInfo
+          </code>
+          <div class="tip" id="731">
+            <strong>Signature:</strong> bool<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Determines whether or not the disco#info packet has been sent.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '732', 732)" onmouseover="showTip(event, '732', 732)">
+            PendingItems
+          </code>
+          <div class="tip" id="732">
+            <strong>Signature:</strong> bool<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Determines whether or not the disco#items packet has been sent.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '733', 733)" onmouseover="showTip(event, '733', 733)">
+            RemoveFeature(feature)
+          </code>
+          <div class="tip" id="733">
+            <strong>Signature:</strong> feature:string -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+             Remove a single feature from the node.
+             Does not fire OnFeatures, since this should mostly be used by
+             things that are not querying externally.
+            
+             No exception should be thrown if the feature doesn't exist.
+             </p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+        </div>
+        <div class="span3">
+          <ul class="nav nav-list" id="menu">
+
+            <li class="nav-header">Jabber-Net</li>
+
+            <li class="divider"></li>
+
+            <li><a href="https://www.nuget.org/packages/jabber-net/">Get Jabber-Net package via NuGet</a></li>
+            <li><a href="https://github.com/ForNeVeR/Jabber-Net">Source Code on GitHub</a></li>
+            <li><a href="https://fornever.github.io/Jabber-Net/licensing.html">License (LGPL)</a></li>
+
+            <li class="nav-header">Documentation</li>
+
+            <li><a href="https://fornever.github.io/Jabber-Net/index.html">Getting Started</a></li>
+
+            <li class="divider"></li>
+
+            <li><a href="https://fornever.github.io/Jabber-Net/FAQ.html">Frequently-Asked Questions about Jabber-Net</a></li>
+
+            <li class="divider"></li>
+
+            <li><a href="https://fornever.github.io/Jabber-Net/SendMessage.html">How to send a message</a></li>
+
+            <li class="nav-header">Reference</li>
+
+            <li><a href="https://fornever.github.io/Jabber-Net/reference/index.html">API Reference</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <a href="https://github.com/ForNeVeR/Jabber-Net"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+  </body>
+  </html>

@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Room - Jabber-Net</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Friedrich von Never">
+
+    <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
+
+    <link type="text/css" rel="stylesheet" href="https://fornever.github.io/Jabber-Net/content/style.css" />
+    <script type="text/javascript" src="https://fornever.github.io/Jabber-Net/content/tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="masthead">
+        <h3 class="muted"><a href="https://fornever.github.io/Jabber-Net/index.html">Jabber-Net</a></h3>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="span9" id="main">
+          
+
+
+
+<h1>Room</h1>
+<p>
+  <span>Namespace: JabberNet.jabber.connection</span><br />
+</p>
+<div class="xmldoc">
+</br><p class='summary'>
+            Manages a multi-user conference room.  See XEP-0045 (http://www.xmpp.org/extensions/xep-0045.html).
+            </p></div>
+  <h3>Instance members</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Instance member</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '858', 858)" onmouseover="showTip(event, '858', 858)">
+            Ban(jid, reason)
+          </code>
+          <div class="tip" id="858">
+            <strong>Signature:</strong> (jid:JID * reason:string) -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Ban a user from re-joining the room.  Must be an admin.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '859', 859)" onmouseover="showTip(event, '859', 859)">
+            ChangeAffiliation(...)
+          </code>
+          <div class="tip" id="859">
+            <strong>Signature:</strong> (jid:JID * affiliation:RoomAffiliation * reason:string) -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Change the affiliation (long-term) with the room of a user, based on their real JID.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '860', 860)" onmouseover="showTip(event, '860', 860)">
+            ChangeRole(nick, role, reason)
+          </code>
+          <div class="tip" id="860">
+            <strong>Signature:</strong> (nick:string * role:RoomRole * reason:string) -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Change the role of a user in the room, by nickname.  Must be a moderator.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '861', 861)" onmouseover="showTip(event, '861', 861)">
+            Configure()
+          </code>
+          <div class="tip" id="861">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Configures the room. OnRoomConfig MUST be set first.
+            OnRoomConfig will be called back in the GUI thread if there is an
+            InvokeControl on your XmppStream.  Make sure that OnRoomConfig does not
+            return until it has the answer, typically by popping up a modal dialog
+            with the x:data form.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '862', 862)" onmouseover="showTip(event, '862', 862)">
+            DefaultConfig()
+          </code>
+          <div class="tip" id="862">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Determines whether to use the default conference room configuration
+            or to retrieve the configuration form from the XMPP server.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '863', 863)" onmouseover="showTip(event, '863', 863)">
+            GrantMembership(jid, reason)
+          </code>
+          <div class="tip" id="863">
+            <strong>Signature:</strong> (jid:JID * reason:string) -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Make this user a member of the room.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '864', 864)" onmouseover="showTip(event, '864', 864)">
+            GrantVoice(nick, reason)
+          </code>
+          <div class="tip" id="864">
+            <strong>Signature:</strong> (nick:string * reason:string) -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Un-mute a muted user.  Give them "voice".
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '865', 865)" onmouseover="showTip(event, '865', 865)">
+            Invite(invitee, reason)
+          </code>
+          <div class="tip" id="865">
+            <strong>Signature:</strong> (invitee:JID * reason:string) -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Invite a user to join the room.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '866', 866)" onmouseover="showTip(event, '866', 866)">
+            IsParticipating
+          </code>
+          <div class="tip" id="866">
+            <strong>Signature:</strong> bool<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Have we joined the room successfully?
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '867', 867)" onmouseover="showTip(event, '867', 867)">
+            JID
+          </code>
+          <div class="tip" id="867">
+            <strong>Signature:</strong> JID<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            The bare JID of the room.  room@service
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '868', 868)" onmouseover="showTip(event, '868', 868)">
+            Join()
+          </code>
+          <div class="tip" id="868">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Joins the room.  If the room is created, Configure() will
+            be called automatically.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '869', 869)" onmouseover="showTip(event, '869', 869)">
+            Join(password)
+          </code>
+          <div class="tip" id="869">
+            <strong>Signature:</strong> password:string -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Join a room, using a password.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '870', 870)" onmouseover="showTip(event, '870', 870)">
+            Kick(nick, reason)
+          </code>
+          <div class="tip" id="870">
+            <strong>Signature:</strong> (nick:string * reason:string) -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Kick the given user from the room, based on their nickname.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '871', 871)" onmouseover="showTip(event, '871', 871)">
+            Leave(reason)
+          </code>
+          <div class="tip" id="871">
+            <strong>Signature:</strong> reason:string -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Exits the room.  This cleans up the entry in the ConferenceManager, as well.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '872', 872)" onmouseover="showTip(event, '872', 872)">
+            MakeModerator(nick)
+          </code>
+          <div class="tip" id="872">
+            <strong>Signature:</strong> nick:string -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Make this user a moderator of the room.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '873', 873)" onmouseover="showTip(event, '873', 873)">
+            ModifyAffiliations(...)
+          </code>
+          <div class="tip" id="873">
+            <strong>Signature:</strong> (parties:ParticipantCollection * reason:string * callback:IqCB * state:obj) -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Modify the roles of the parties in this list.
+            To use, retrive a ParticipantCollection, change the roles
+            of the parties in that collection, then pass that modified
+            collection in here.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '874', 874)" onmouseover="showTip(event, '874', 874)">
+            ModifyRoles(...)
+          </code>
+          <div class="tip" id="874">
+            <strong>Signature:</strong> (parties:ParticipantCollection * reason:string * callback:IqCB * state:obj) -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Modify the roles of the parties in this list.
+            To use, retrive a ParticipantCollection, change the roles
+            of the parties in that collection, then pass that modified
+            collection in here.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '875', 875)" onmouseover="showTip(event, '875', 875)">
+            Nickname()
+          </code>
+          <div class="tip" id="875">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            The nickname that others in the room will see for you.
+            Set has the side-effect of changing the nickname on the server.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '876', 876)" onmouseover="showTip(event, '876', 876)">
+            OnAdminMessage
+          </code>
+          <div class="tip" id="876">
+            <strong>Signature:</strong> IEvent&lt;MessageHandler,Message&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            An admin message from the room itself.  Typically status change sorts of things
+            like kick/ban.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '877', 877)" onmouseover="showTip(event, '877', 877)">
+            OnJoin
+          </code>
+          <div class="tip" id="877">
+            <strong>Signature:</strong> RoomEvent<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Finished joining the room, including all potential configuration.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '878', 878)" onmouseover="showTip(event, '878', 878)">
+            OnLeave
+          </code>
+          <div class="tip" id="878">
+            <strong>Signature:</strong> RoomPresenceHandler<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Finished leaving the room, or was kicked/banned, or the room server went down cleanly.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '879', 879)" onmouseover="showTip(event, '879', 879)">
+            OnParticipantJoin
+          </code>
+          <div class="tip" id="879">
+            <strong>Signature:</strong> RoomParticipantEvent<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            A participant has joined the room.  This will not fire for yourself.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '880', 880)" onmouseover="showTip(event, '880', 880)">
+            OnParticipantLeave
+          </code>
+          <div class="tip" id="880">
+            <strong>Signature:</strong> RoomParticipantEvent<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            A participant has left the room.  This will not fire for yourself.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '881', 881)" onmouseover="showTip(event, '881', 881)">
+            OnParticipantPresenceChange
+          </code>
+          <div class="tip" id="881">
+            <strong>Signature:</strong> RoomParticipantPresenceEvent<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            A participant has changed presence, without joining or leaving the room.  This will not fire for yourself.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '882', 882)" onmouseover="showTip(event, '882', 882)">
+            OnPresenceChange
+          </code>
+          <div class="tip" id="882">
+            <strong>Signature:</strong> RoomParticipantPresenceEvent<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            You have changed presence, without joining or leaving the room.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '883', 883)" onmouseover="showTip(event, '883', 883)">
+            OnPresenceError
+          </code>
+          <div class="tip" id="883">
+            <strong>Signature:</strong> RoomPresenceHandler<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Informs the client that an error in response to a room join,
+            nick change, or presence update has occurred.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '884', 884)" onmouseover="showTip(event, '884', 884)">
+            OnPrivateMessage
+          </code>
+          <div class="tip" id="884">
+            <strong>Signature:</strong> IEvent&lt;MessageHandler,Message&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            A side-chat message.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '885', 885)" onmouseover="showTip(event, '885', 885)">
+            OnRoomConfig
+          </code>
+          <div class="tip" id="885">
+            <strong>Signature:</strong> ConfigureRoom<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Informs the client that the room configuration form was received.
+            It is up to the listener to call the FinishConfig() method.
+            The IQ in the callback is the parent of the x:data element.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '886', 886)" onmouseover="showTip(event, '886', 886)">
+            OnRoomMessage
+          </code>
+          <div class="tip" id="886">
+            <strong>Signature:</strong> IEvent&lt;MessageHandler,Message&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            A message broadcast to all in the room
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '887', 887)" onmouseover="showTip(event, '887', 887)">
+            OnSelfMessage
+          </code>
+          <div class="tip" id="887">
+            <strong>Signature:</strong> IEvent&lt;MessageHandler,Message&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            A message that was sent by this user to the room, echo'd back.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '888', 888)" onmouseover="showTip(event, '888', 888)">
+            OnSubjectChange
+          </code>
+          <div class="tip" id="888">
+            <strong>Signature:</strong> IEvent&lt;MessageHandler,Message&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            The subject of the room has been changed
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '889', 889)" onmouseover="showTip(event, '889', 889)">
+            Participants
+          </code>
+          <div class="tip" id="889">
+            <strong>Signature:</strong> ParticipantCollection<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Current room participants.
+            </p><p class='returns'>Returns: </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '890', 890)" onmouseover="showTip(event, '890', 890)">
+            PrivateMessage(nick, body)
+          </code>
+          <div class="tip" id="890">
+            <strong>Signature:</strong> (nick:string * body:string) -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Sends a private message to a single user in the room.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '891', 891)" onmouseover="showTip(event, '891', 891)">
+            PublicMessage(body)
+          </code>
+          <div class="tip" id="891">
+            <strong>Signature:</strong> body:string -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Sends a message to everyone currently in the room.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '892', 892)" onmouseover="showTip(event, '892', 892)">
+            RetrieveListByAffiliation(...)
+          </code>
+          <div class="tip" id="892">
+            <strong>Signature:</strong> (affiliation:RoomAffiliation * callback:RoomParticipantsEvent * state:obj) -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Retrieve all of the parties with a given affiliiation.
+            Modify the affiliations of persons in this list, then call ModifyAffiliations
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '893', 893)" onmouseover="showTip(event, '893', 893)">
+            RetrieveListByRole(...)
+          </code>
+          <div class="tip" id="893">
+            <strong>Signature:</strong> (role:RoomRole * callback:RoomParticipantsEvent * state:obj) -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Retrieve all of the parties with a given role.
+            Modify the affiliations of persons in this list, then call ModifyRoles
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '894', 894)" onmouseover="showTip(event, '894', 894)">
+            RevokeMembership(jid, reason)
+          </code>
+          <div class="tip" id="894">
+            <strong>Signature:</strong> (jid:JID * reason:string) -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Remove the membership privileges of the given user
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '895', 895)" onmouseover="showTip(event, '895', 895)">
+            RevokeVoice(nick, reason)
+          </code>
+          <div class="tip" id="895">
+            <strong>Signature:</strong> (nick:string * reason:string) -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Disallow a user from speaking; remove their "voice".
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '896', 896)" onmouseover="showTip(event, '896', 896)">
+            RoomAndNick
+          </code>
+          <div class="tip" id="896">
+            <strong>Signature:</strong> JID<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            The full JID of the user in the room.  room@service/nick
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '897', 897)" onmouseover="showTip(event, '897', 897)">
+            Subject()
+          </code>
+          <div class="tip" id="897">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            The subject of the room.  Set has the side-effect of sending to the server.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '898', 898)" onmouseover="showTip(event, '898', 898)">
+            Tag()
+          </code>
+          <div class="tip" id="898">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Extra data associated with the room.
+            </p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+        </div>
+        <div class="span3">
+          <ul class="nav nav-list" id="menu">
+
+            <li class="nav-header">Jabber-Net</li>
+
+            <li class="divider"></li>
+
+            <li><a href="https://www.nuget.org/packages/jabber-net/">Get Jabber-Net package via NuGet</a></li>
+            <li><a href="https://github.com/ForNeVeR/Jabber-Net">Source Code on GitHub</a></li>
+            <li><a href="https://fornever.github.io/Jabber-Net/licensing.html">License (LGPL)</a></li>
+
+            <li class="nav-header">Documentation</li>
+
+            <li><a href="https://fornever.github.io/Jabber-Net/index.html">Getting Started</a></li>
+
+            <li class="divider"></li>
+
+            <li><a href="https://fornever.github.io/Jabber-Net/FAQ.html">Frequently-Asked Questions about Jabber-Net</a></li>
+
+            <li class="divider"></li>
+
+            <li><a href="https://fornever.github.io/Jabber-Net/SendMessage.html">How to send a message</a></li>
+
+            <li class="nav-header">Reference</li>
+
+            <li><a href="https://fornever.github.io/Jabber-Net/reference/index.html">API Reference</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <a href="https://github.com/ForNeVeR/Jabber-Net"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+  </body>
+  </html>

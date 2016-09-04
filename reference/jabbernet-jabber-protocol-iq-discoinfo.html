@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>DiscoInfo - Jabber-Net</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Friedrich von Never">
+
+    <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
+
+    <link type="text/css" rel="stylesheet" href="https://fornever.github.io/Jabber-Net/content/style.css" />
+    <script type="text/javascript" src="https://fornever.github.io/Jabber-Net/content/tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="masthead">
+        <h3 class="muted"><a href="https://fornever.github.io/Jabber-Net/index.html">Jabber-Net</a></h3>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="span9" id="main">
+          
+
+
+
+<h1>DiscoInfo</h1>
+<p>
+  <span>Namespace: JabberNet.jabber.protocol.iq</span><br />
+</p>
+<div class="xmldoc">
+</br><p class='summary'>
+            The information associated with a disco node.
+            </p></div>
+  <h3>Constructors</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Constructor</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1347', 1347)" onmouseover="showTip(event, '1347', 1347)">
+            new(doc)
+          </code>
+          <div class="tip" id="1347">
+            <strong>Signature:</strong> doc:XmlDocument -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1348', 1348)" onmouseover="showTip(event, '1348', 1348)">
+            new(prefix, qname, doc)
+          </code>
+          <div class="tip" id="1348">
+            <strong>Signature:</strong> (prefix:string * qname:XmlQualifiedName * doc:XmlDocument) -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h3>Instance members</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Instance member</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1349', 1349)" onmouseover="showTip(event, '1349', 1349)">
+            AddFeature(featureURI)
+          </code>
+          <div class="tip" id="1349">
+            <strong>Signature:</strong> featureURI:string -&gt; DiscoFeature<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Add a feature
+            </p><p class='returns'>Returns: </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1350', 1350)" onmouseover="showTip(event, '1350', 1350)">
+            AddIdentity(...)
+          </code>
+          <div class="tip" id="1350">
+            <strong>Signature:</strong> (category:string * discoType:string * name:string * language:string) -&gt; DiscoIdentity<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Add an identity
+            </p><p class='returns'>Returns: </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1351', 1351)" onmouseover="showTip(event, '1351', 1351)">
+            ClearFeatures()
+          </code>
+          <div class="tip" id="1351">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Clear all of the features from the 
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1352', 1352)" onmouseover="showTip(event, '1352', 1352)">
+            CreateExtension()
+          </code>
+          <div class="tip" id="1352">
+            <strong>Signature:</strong> unit -&gt; Data<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Create a XEP-0128 x:data extension, or return the first existing one.
+            </p><p class='returns'>Returns: </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1353', 1353)" onmouseover="showTip(event, '1353', 1353)">
+            Extension()
+          </code>
+          <div class="tip" id="1353">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Get or set the first XEP-0128 x:data extension.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1354', 1354)" onmouseover="showTip(event, '1354', 1354)">
+            FeatureSet()
+          </code>
+          <div class="tip" id="1354">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Get or set a compressed set of features.
+            Setting this has the side-effect of removing all existing features, and
+            replacing them with the specified ones.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1355', 1355)" onmouseover="showTip(event, '1355', 1355)">
+            GetExtension(formType)
+          </code>
+          <div class="tip" id="1355">
+            <strong>Signature:</strong> formType:string -&gt; Data<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Get the extension with the given XEP-0068 form type.
+            </p><p class='returns'>Returns: null if none found</p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1356', 1356)" onmouseover="showTip(event, '1356', 1356)">
+            GetExtensions()
+          </code>
+          <div class="tip" id="1356">
+            <strong>Signature:</strong> unit -&gt; Data []<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            In the unlikely event that there are multiple extensions, we need to be able
+            to retrieve all of them.  
+            </p><p class='returns'>Returns: </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1357', 1357)" onmouseover="showTip(event, '1357', 1357)">
+            GetFeatures()
+          </code>
+          <div class="tip" id="1357">
+            <strong>Signature:</strong> unit -&gt; DiscoFeature []<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            List of features
+            </p><p class='returns'>Returns: </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1358', 1358)" onmouseover="showTip(event, '1358', 1358)">
+            GetIdentities()
+          </code>
+          <div class="tip" id="1358">
+            <strong>Signature:</strong> unit -&gt; DiscoIdentity []<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            List of identities
+            </p><p class='returns'>Returns: </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1359', 1359)" onmouseover="showTip(event, '1359', 1359)">
+            HasFeature(featureURI)
+          </code>
+          <div class="tip" id="1359">
+            <strong>Signature:</strong> featureURI:string -&gt; bool<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Is the given feature URI supported by this entity?
+            </p><p class='returns'>Returns: </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1360', 1360)" onmouseover="showTip(event, '1360', 1360)">
+            Node()
+          </code>
+          <div class="tip" id="1360">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            The sub-node associated with this item.
+            </p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+        </div>
+        <div class="span3">
+          <ul class="nav nav-list" id="menu">
+
+            <li class="nav-header">Jabber-Net</li>
+
+            <li class="divider"></li>
+
+            <li><a href="https://www.nuget.org/packages/jabber-net/">Get Jabber-Net package via NuGet</a></li>
+            <li><a href="https://github.com/ForNeVeR/Jabber-Net">Source Code on GitHub</a></li>
+            <li><a href="https://fornever.github.io/Jabber-Net/licensing.html">License (LGPL)</a></li>
+
+            <li class="nav-header">Documentation</li>
+
+            <li><a href="https://fornever.github.io/Jabber-Net/index.html">Getting Started</a></li>
+
+            <li class="divider"></li>
+
+            <li><a href="https://fornever.github.io/Jabber-Net/FAQ.html">Frequently-Asked Questions about Jabber-Net</a></li>
+
+            <li class="divider"></li>
+
+            <li><a href="https://fornever.github.io/Jabber-Net/SendMessage.html">How to send a message</a></li>
+
+            <li class="nav-header">Reference</li>
+
+            <li><a href="https://fornever.github.io/Jabber-Net/reference/index.html">API Reference</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <a href="https://github.com/ForNeVeR/Jabber-Net"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+  </body>
+  </html>

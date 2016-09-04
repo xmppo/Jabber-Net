@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Browse - Jabber-Net</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Friedrich von Never">
+
+    <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
+
+    <link type="text/css" rel="stylesheet" href="https://fornever.github.io/Jabber-Net/content/style.css" />
+    <script type="text/javascript" src="https://fornever.github.io/Jabber-Net/content/tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="masthead">
+        <h3 class="muted"><a href="https://fornever.github.io/Jabber-Net/index.html">Jabber-Net</a></h3>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="span9" id="main">
+          
+
+
+
+<h1>Browse</h1>
+<p>
+  <span>Namespace: JabberNet.jabber.protocol.iq</span><br />
+</p>
+<div class="xmldoc">
+</br><p class='summary'>
+            Browse IQ query.
+            </p></div>
+  <h3>Constructors</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Constructor</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1302', 1302)" onmouseover="showTip(event, '1302', 1302)">
+            new(doc)
+          </code>
+          <div class="tip" id="1302">
+            <strong>Signature:</strong> doc:XmlDocument -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1303', 1303)" onmouseover="showTip(event, '1303', 1303)">
+            new(prefix, qname, doc)
+          </code>
+          <div class="tip" id="1303">
+            <strong>Signature:</strong> (prefix:string * qname:XmlQualifiedName * doc:XmlDocument) -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h3>Instance members</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Instance member</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1304', 1304)" onmouseover="showTip(event, '1304', 1304)">
+            AddItem()
+          </code>
+          <div class="tip" id="1304">
+            <strong>Signature:</strong> unit -&gt; Browse<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Add an item to the sub-item list.
+            </p><p class='returns'>Returns: </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1305', 1305)" onmouseover="showTip(event, '1305', 1305)">
+            AddNamespace(ns)
+          </code>
+          <div class="tip" id="1305">
+            <strong>Signature:</strong> ns:string -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Add a namespace to the namespaces supported by this item.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1306', 1306)" onmouseover="showTip(event, '1306', 1306)">
+            BrowseName()
+          </code>
+          <div class="tip" id="1306">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            A friendly name that may be used in a user interface.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1307', 1307)" onmouseover="showTip(event, '1307', 1307)">
+            Category()
+          </code>
+          <div class="tip" id="1307">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            One of the categories from the category list, or a non-standard category prefixed with the string "x-".
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1308', 1308)" onmouseover="showTip(event, '1308', 1308)">
+            GetItems()
+          </code>
+          <div class="tip" id="1308">
+            <strong>Signature:</strong> unit -&gt; Browse []<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Sub-items of this item
+            </p><p class='returns'>Returns: </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1309', 1309)" onmouseover="showTip(event, '1309', 1309)">
+            GetNamespaces()
+          </code>
+          <div class="tip" id="1309">
+            <strong>Signature:</strong> unit -&gt; string []<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            The namespaces advertised by this item.
+            </p><p class='returns'>Returns: </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1310', 1310)" onmouseover="showTip(event, '1310', 1310)">
+            JID()
+          </code>
+          <div class="tip" id="1310">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            The full JabberID of the entity described.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1311', 1311)" onmouseover="showTip(event, '1311', 1311)">
+            Type()
+          </code>
+          <div class="tip" id="1311">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            One of the official types from the specified category, or a non-standard type prefixed with the string "x-".
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1312', 1312)" onmouseover="showTip(event, '1312', 1312)">
+            Version()
+          </code>
+          <div class="tip" id="1312">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            A string containing the version of the node, equivalent to the response provided to a
+            query in the 'jabber:iq:version' namespace. This is useful for servers, especially for lists of services
+            (see the 'service/serverlist' category/type above).
+            </p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+        </div>
+        <div class="span3">
+          <ul class="nav nav-list" id="menu">
+
+            <li class="nav-header">Jabber-Net</li>
+
+            <li class="divider"></li>
+
+            <li><a href="https://www.nuget.org/packages/jabber-net/">Get Jabber-Net package via NuGet</a></li>
+            <li><a href="https://github.com/ForNeVeR/Jabber-Net">Source Code on GitHub</a></li>
+            <li><a href="https://fornever.github.io/Jabber-Net/licensing.html">License (LGPL)</a></li>
+
+            <li class="nav-header">Documentation</li>
+
+            <li><a href="https://fornever.github.io/Jabber-Net/index.html">Getting Started</a></li>
+
+            <li class="divider"></li>
+
+            <li><a href="https://fornever.github.io/Jabber-Net/FAQ.html">Frequently-Asked Questions about Jabber-Net</a></li>
+
+            <li class="divider"></li>
+
+            <li><a href="https://fornever.github.io/Jabber-Net/SendMessage.html">How to send a message</a></li>
+
+            <li class="nav-header">Reference</li>
+
+            <li><a href="https://fornever.github.io/Jabber-Net/reference/index.html">API Reference</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <a href="https://github.com/ForNeVeR/Jabber-Net"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+  </body>
+  </html>

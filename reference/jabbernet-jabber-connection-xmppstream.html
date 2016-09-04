@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>XmppStream - Jabber-Net</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Friedrich von Never">
+
+    <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
+
+    <link type="text/css" rel="stylesheet" href="https://fornever.github.io/Jabber-Net/content/style.css" />
+    <script type="text/javascript" src="https://fornever.github.io/Jabber-Net/content/tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="masthead">
+        <h3 class="muted"><a href="https://fornever.github.io/Jabber-Net/index.html">Jabber-Net</a></h3>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="span9" id="main">
+          
+
+
+
+<h1>XmppStream</h1>
+<p>
+  <span>Namespace: JabberNet.jabber.connection</span><br />
+</p>
+<div class="xmldoc">
+</br><p class='summary'>
+            Manages the XMPP stream of the connection.
+            </p></div>
+  <h3>Constructors</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Constructor</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '982', 982)" onmouseover="showTip(event, '982', 982)">
+            new()
+          </code>
+          <div class="tip" id="982">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Creates a new SocketElementStream.
+            </p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h3>Instance members</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Instance member</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '983', 983)" onmouseover="showTip(event, '983', 983)">
+            AddCallback(xpath, cb)
+          </code>
+          <div class="tip" id="983">
+            <strong>Signature:</strong> (xpath:string * cb:ProtocolHandler) -&gt; Guid<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Registers a callback, so that if a packet arrives that matches the given xpath expression,
+            the callback fires.  Use <a href="jabbernet-jabber-connection-xmppstream.html">XmppStream.AddNamespace</a> to add namespace prefixes.
+            </p><p class='returns'>Returns: A guid that can be used to unregister the callback</p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '984', 984)" onmouseover="showTip(event, '984', 984)">
+            AddNamespace(prefix, uri)
+          </code>
+          <div class="tip" id="984">
+            <strong>Signature:</strong> (prefix:string * uri:string) -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Adds a namespace prefix, for use with callback xpath expressions added
+            with <a href="jabbernet-jabber-connection-xmppstream.html">XmppStream.AddCallback</a>.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '985', 985)" onmouseover="showTip(event, '985', 985)">
+            AutoReconnect()
+          </code>
+          <div class="tip" id="985">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Gets or sets the number of seconds before automatically
+            reconnecting if the connection drops.
+            -1 to disable, 0 for immediate.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '986', 986)" onmouseover="showTip(event, '986', 986)">
+            AutoStartCompression()
+          </code>
+          <div class="tip" id="986">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Allows start compression on connection if the server supports it and
+            is set to true.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '987', 987)" onmouseover="showTip(event, '987', 987)">
+            AutoStartTLS()
+          </code>
+          <div class="tip" id="987">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Allows Start-TLS on connection if the server supports it and if set to true.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '988', 988)" onmouseover="showTip(event, '988', 988)">
+            Close()
+          </code>
+          <div class="tip" id="988">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+              <strong>Modifiers:</strong> abstract<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Closes down the connection with the XMPP server with a clean shutdown.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '989', 989)" onmouseover="showTip(event, '989', 989)">
+            Close(clean)
+          </code>
+          <div class="tip" id="989">
+            <strong>Signature:</strong> clean:bool -&gt; unit<br />
+              <strong>Modifiers:</strong> abstract<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Closes down the connection.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '990', 990)" onmouseover="showTip(event, '990', 990)">
+            CompressionOn
+          </code>
+          <div class="tip" id="990">
+            <strong>Signature:</strong> bool<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Determines whether or not the current connection uses
+            XMPP stream compression (XEP-138).
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '991', 991)" onmouseover="showTip(event, '991', 991)">
+            Connect()
+          </code>
+          <div class="tip" id="991">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+              <strong>Modifiers:</strong> abstract<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Starts connecting to the XMPP server.  This is done asyncronously.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '992', 992)" onmouseover="showTip(event, '992', 992)">
+            Connection()
+          </code>
+          <div class="tip" id="992">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Gets or sets the connection type, such as Socket, HTTP polling and so on.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '993', 993)" onmouseover="showTip(event, '993', 993)">
+            Document
+          </code>
+          <div class="tip" id="993">
+            <strong>Signature:</strong> XmlDocument<br />
+              <strong>Modifiers:</strong> abstract<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Retrieves the outbound document.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '994', 994)" onmouseover="showTip(event, '994', 994)">
+            IsAuthenticated()
+          </code>
+          <div class="tip" id="994">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+              <strong>Modifiers:</strong> abstract<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Gets or sets the state to authenticated.  Locks on StateLock
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '995', 995)" onmouseover="showTip(event, '995', 995)">
+            [()]
+          </code>
+          <div class="tip" id="995">
+            <strong>Signature:</strong> unit -&gt; string<br />
+              <strong>Modifiers:</strong> abstract<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Sets or retrieves a connection property.
+            You have to know the type of the property based on the name.
+            For example, PORT is an integer.
+            </p><p class='returns'>Returns: </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '996', 996)" onmouseover="showTip(event, '996', 996)">
+            JID
+          </code>
+          <div class="tip" id="996">
+            <strong>Signature:</strong> JID<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Gets the JID from the connection.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '997', 997)" onmouseover="showTip(event, '997', 997)">
+            KeepAlive()
+          </code>
+          <div class="tip" id="997">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Gets or sets the keep-alive interval in seconds.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '998', 998)" onmouseover="showTip(event, '998', 998)">
+            LocalCertificate()
+          </code>
+          <div class="tip" id="998">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Gets or sets the certificate to be used for the local
+            side of sockets when SSL is enabled.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '999', 999)" onmouseover="showTip(event, '999', 999)">
+            NetworkHost()
+          </code>
+          <div class="tip" id="999">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Gets or sets the network host address to use on the "to" attribute
+            of the stream:stream. You can put the network hostname or IP address
+            of the XMPP server to connect to. If none is specified, the Server will
+            be used. Eventually, when SRV is supported, this will be deprecated.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1000', 1000)" onmouseover="showTip(event, '1000', 1000)">
+            NS
+          </code>
+          <div class="tip" id="1000">
+            <strong>Signature:</strong> string<br />
+              <strong>Modifiers:</strong> abstract<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Returns the namespace for this connection.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1001', 1001)" onmouseover="showTip(event, '1001', 1001)">
+            OnAuthenticate
+          </code>
+          <div class="tip" id="1001">
+            <strong>Signature:</strong> IEvent&lt;ObjectHandler,unit&gt;<br />
+              <strong>Modifiers:</strong> abstract<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Informs the client that the connection is complete and the user is authenticated.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1002', 1002)" onmouseover="showTip(event, '1002', 1002)">
+            OnConnect
+          </code>
+          <div class="tip" id="1002">
+            <strong>Signature:</strong> IEvent&lt;StanzaStreamHandler,StanzaStream&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Informs the client that the connection is connected,
+            but no stream:stream has been sent yet.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1003', 1003)" onmouseover="showTip(event, '1003', 1003)">
+            OnDisconnect
+          </code>
+          <div class="tip" id="1003">
+            <strong>Signature:</strong> IEvent&lt;ObjectHandler,unit&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Informs the client that the connection is disconnected.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1004', 1004)" onmouseover="showTip(event, '1004', 1004)">
+            OnError
+          </code>
+          <div class="tip" id="1004">
+            <strong>Signature:</strong> IEvent&lt;ExceptionHandler,exn&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Informs the client that an error occurred when processing.
+            The connection has been closed.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1005', 1005)" onmouseover="showTip(event, '1005', 1005)">
+            OnInvalidCertificate
+          </code>
+          <div class="tip" id="1005">
+            <strong>Signature:</strong> IEvent&lt;RemoteCertificateValidationCallback,(X509Certificate * X509Chain * SslPolicyErrors)&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            An invalid cert was received from the other side.  Set this event and return true to
+            use the cert anyway.  If the event is not set, an ugly user interface will be displayed.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1006', 1006)" onmouseover="showTip(event, '1006', 1006)">
+            OnProtocol
+          </code>
+          <div class="tip" id="1006">
+            <strong>Signature:</strong> IEvent&lt;ProtocolHandler,XmlElement&gt;<br />
+              <strong>Modifiers:</strong> abstract<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Notifies the client about every jabber packet.
+            This is a union of the OnPresence, OnMessage, and OnIQ methods.
+            Use this *or* the other 3 methods, but not both, as a matter of style.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1007', 1007)" onmouseover="showTip(event, '1007', 1007)">
+            OnReadText
+          </code>
+          <div class="tip" id="1007">
+            <strong>Signature:</strong> IEvent&lt;TextHandler,string&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Informs the client that text was read from the server.
+            Use for debugging only. Will NOT be complete nodes at a time.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1008', 1008)" onmouseover="showTip(event, '1008', 1008)">
+            OnSASLEnd
+          </code>
+          <div class="tip" id="1008">
+            <strong>Signature:</strong> IEvent&lt;FeaturesHandler,Features&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Gets notified of the end of a SASL handshake.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1009', 1009)" onmouseover="showTip(event, '1009', 1009)">
+            OnSASLError
+          </code>
+          <div class="tip" id="1009">
+            <strong>Signature:</strong> IEvent&lt;ProtocolHandler,XmlElement&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Gets notified when SASL login fails.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1010', 1010)" onmouseover="showTip(event, '1010', 1010)">
+            OnSASLStart
+          </code>
+          <div class="tip" id="1010">
+            <strong>Signature:</strong> IEvent&lt;SASLProcessorHandler,SASLProcessor&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Notifies the client that the SASL handshake has started.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1011', 1011)" onmouseover="showTip(event, '1011', 1011)">
+            OnStreamError
+          </code>
+          <div class="tip" id="1011">
+            <strong>Signature:</strong> IEvent&lt;ProtocolHandler,XmlElement&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Informs the client that it received a stream:error packet.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1012', 1012)" onmouseover="showTip(event, '1012', 1012)">
+            OnStreamHeader
+          </code>
+          <div class="tip" id="1012">
+            <strong>Signature:</strong> IEvent&lt;ProtocolHandler,XmlElement&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Notifies the client that the stream header, as a packet,
+            has been received.  Can be called multiple  times for
+            a single session, with XMPP.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1013', 1013)" onmouseover="showTip(event, '1013', 1013)">
+            OnStreamInit
+          </code>
+          <div class="tip" id="1013">
+            <strong>Signature:</strong> IEvent&lt;StreamHandler,ElementStream&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Informs the client that a new stream has been inialized.
+            You can add your packet factories to the new stream.
+            NOTE: You may NOT make calls to the GUI in this callback, unless you
+            call Invoke.  Make sure you add your packet factories before
+            calling Invoke, however.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1014', 1014)" onmouseover="showTip(event, '1014', 1014)">
+            OnWriteText
+          </code>
+          <div class="tip" id="1014">
+            <strong>Signature:</strong> IEvent&lt;TextHandler,string&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Informs the client when text has been written to the XMPP server.
+            Use for debugging only.
+            Will NOT be complete nodes at a time.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1015', 1015)" onmouseover="showTip(event, '1015', 1015)">
+            PlaintextAuth()
+          </code>
+          <div class="tip" id="1015">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Specifies whether plaintext authentication is used for connecting
+            to the XMPP server.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1016', 1016)" onmouseover="showTip(event, '1016', 1016)">
+            Port()
+          </code>
+          <div class="tip" id="1016">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Specifies the TCP port to connect to.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1017', 1017)" onmouseover="showTip(event, '1017', 1017)">
+            Proxy()
+          </code>
+          <div class="tip" id="1017">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Gets or sets the proxy type, such as none, SOCKS5 and so on.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1018', 1018)" onmouseover="showTip(event, '1018', 1018)">
+            ProxyHost()
+          </code>
+          <div class="tip" id="1018">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Gets or sets the hostname running the proxy.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1019', 1019)" onmouseover="showTip(event, '1019', 1019)">
+            ProxyPassword()
+          </code>
+          <div class="tip" id="1019">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Gets or sets the authentication password for the SOCKS5 proxy.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1020', 1020)" onmouseover="showTip(event, '1020', 1020)">
+            ProxyPort()
+          </code>
+          <div class="tip" id="1020">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Gets or sets the port number of the proxy host.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1021', 1021)" onmouseover="showTip(event, '1021', 1021)">
+            ProxyUsername()
+          </code>
+          <div class="tip" id="1021">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Gets or sets the authentication username for the SOCKS5 proxy.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1022', 1022)" onmouseover="showTip(event, '1022', 1022)">
+            RemoveCallback(guid)
+          </code>
+          <div class="tip" id="1022">
+            <strong>Signature:</strong> guid:Guid -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Removes a callback added with <a href="jabbernet-jabber-connection-xmppstream.html">XmppStream.AddCallback</a>.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1023', 1023)" onmouseover="showTip(event, '1023', 1023)">
+            RequiresSASL()
+          </code>
+          <div class="tip" id="1023">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Determines whether or not SASL is required for connecting to the XMPP server.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1024', 1024)" onmouseover="showTip(event, '1024', 1024)">
+            Server()
+          </code>
+          <div class="tip" id="1024">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+              <strong>Modifiers:</strong> abstract<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Gets or sets the name of the XMPP server to connect to.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1025', 1025)" onmouseover="showTip(event, '1025', 1025)">
+            ServerVersion
+          </code>
+          <div class="tip" id="1025">
+            <strong>Signature:</strong> string<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Gets the version number of the XMPP server.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1026', 1026)" onmouseover="showTip(event, '1026', 1026)">
+            SetCertificateFile(filename, password)
+          </code>
+          <div class="tip" id="1026">
+            <strong>Signature:</strong> (filename:string * password:string) -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Sets the certificate to be used for accept sockets.  To
+            generate a test .pfx file using OpenSSL, add this to
+            openssl.conf:
+              
+            and run the following commands:
+              
+            If you leave the certificate null, and you are doing
+            Accept, the SSL class will try to find a default server
+            certificate on your box.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1027', 1027)" onmouseover="showTip(event, '1027', 1027)">
+            SSL()
+          </code>
+          <div class="tip" id="1027">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Determines whether SSL3/TLS1 authentication is used when a user
+            connects to the XMPP server.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1028', 1028)" onmouseover="showTip(event, '1028', 1028)">
+            SSLon
+          </code>
+          <div class="tip" id="1028">
+            <strong>Signature:</strong> bool<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Determines whether or not the current connection is secured with SSL/TLS.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1029', 1029)" onmouseover="showTip(event, '1029', 1029)">
+            State()
+          </code>
+          <div class="tip" id="1029">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+              <strong>Modifiers:</strong> abstract<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Gets or sets the current state of the connection.
+            Lock on StateLock before accessing.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1030', 1030)" onmouseover="showTip(event, '1030', 1030)">
+            StateLock
+          </code>
+          <div class="tip" id="1030">
+            <strong>Signature:</strong> obj<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Gets the lock for the state information.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1031', 1031)" onmouseover="showTip(event, '1031', 1031)">
+            StreamID()
+          </code>
+          <div class="tip" id="1031">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Gets or sets the ID attribute from the
+            stream:stream element sent by the XMPP server.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1032', 1032)" onmouseover="showTip(event, '1032', 1032)">
+            Tracker
+          </code>
+          <div class="tip" id="1032">
+            <strong>Signature:</strong> IIQTracker<br />
+              <strong>Modifiers:</strong> abstract<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Gets the tracker for sending IQ packets.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1033', 1033)" onmouseover="showTip(event, '1033', 1033)">
+            UseAnonymous()
+          </code>
+          <div class="tip" id="1033">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1034', 1034)" onmouseover="showTip(event, '1034', 1034)">
+            Write(elem)
+          </code>
+          <div class="tip" id="1034">
+            <strong>Signature:</strong> elem:XmlElement -&gt; unit<br />
+              <strong>Modifiers:</strong> abstract<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Sends the given packet to the server.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1035', 1035)" onmouseover="showTip(event, '1035', 1035)">
+            Write(str)
+          </code>
+          <div class="tip" id="1035">
+            <strong>Signature:</strong> str:string -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Sends a raw string.
+            </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1036', 1036)" onmouseover="showTip(event, '1036', 1036)">
+            WriteStartTag(elem)
+          </code>
+          <div class="tip" id="1036">
+            <strong>Signature:</strong> elem:Stream -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          </br><p class='summary'>
+            Writes just the start tag of the given XML element.
+            Typically only used for <stream:stream>.
+            </p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+        </div>
+        <div class="span3">
+          <ul class="nav nav-list" id="menu">
+
+            <li class="nav-header">Jabber-Net</li>
+
+            <li class="divider"></li>
+
+            <li><a href="https://www.nuget.org/packages/jabber-net/">Get Jabber-Net package via NuGet</a></li>
+            <li><a href="https://github.com/ForNeVeR/Jabber-Net">Source Code on GitHub</a></li>
+            <li><a href="https://fornever.github.io/Jabber-Net/licensing.html">License (LGPL)</a></li>
+
+            <li class="nav-header">Documentation</li>
+
+            <li><a href="https://fornever.github.io/Jabber-Net/index.html">Getting Started</a></li>
+
+            <li class="divider"></li>
+
+            <li><a href="https://fornever.github.io/Jabber-Net/FAQ.html">Frequently-Asked Questions about Jabber-Net</a></li>
+
+            <li class="divider"></li>
+
+            <li><a href="https://fornever.github.io/Jabber-Net/SendMessage.html">How to send a message</a></li>
+
+            <li class="nav-header">Reference</li>
+
+            <li><a href="https://fornever.github.io/Jabber-Net/reference/index.html">API Reference</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <a href="https://github.com/ForNeVeR/Jabber-Net"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+  </body>
+  </html>

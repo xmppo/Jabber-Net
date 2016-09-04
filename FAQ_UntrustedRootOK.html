@@ -42,7 +42,7 @@ Certificate Authority (CA) that your system trusts. You can either fix the
 certificate problem (preferred), or set:</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="csharp">bedrock.net.AsyncSocket.UntrustedRootOK <span class="o">=</span> <span class="k">true</span>;
+<td class="snippet"><pre class="fssnip highlighted"><code lang="csharp">JabberNet.bedrock.net.AsyncSocket.UntrustedRootOK <span class="o">=</span> <span class="k">true</span>;
 </code></pre></td></tr></table>
 <p><code>UntrustedRootOK</code> is now obsolete in the main development branch. If you want to
 handle the error with your own code, please handle <code>OnIvalidCertificate</code> event.</p>

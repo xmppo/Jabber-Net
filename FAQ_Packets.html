@@ -84,7 +84,7 @@
         <span class="k">public</span> <span class="k">const</span> <span class="k">string</span> YOUR_NS  <span class="o">=</span> <span class="s">"your:namespace"</span>;
 
         <span class="c">// used when creating elements to send</span>
-        <span class="k">public</span> YourQuery(XmlDocument doc) <span class="o">:</span> <span class="k">base</span>(<span class="s">"query"</span>, YOUR_NS, doc)  
+        <span class="k">public</span> YourQuery(XmlDocument doc) <span class="o">:</span> <span class="k">base</span>(<span class="s">"query"</span>, YOUR_NS, doc)
         {}
 
         <span class="c">// used to create elements for inbound protocol</span>
@@ -109,7 +109,7 @@ combination of the element name and namespace to a type.</p>
 <span class="l">8: </span>
 <span class="l">9: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="csharp"><span class="k">public</span> <span class="k">class</span> Factory <span class="o">:</span> jabber.protocol.IPacketTypes
+<td class="snippet"><pre class="fssnip highlighted"><code lang="csharp"><span class="k">public</span> <span class="k">class</span> Factory <span class="o">:</span> JabberNet.jabber.protocol.IPacketTypes
 {
     <span class="k">private</span> <span class="k">static</span> QnameType[] s_qnt <span class="o">=</span> <span class="k">new</span> QnameType[]
     {
@@ -132,8 +132,8 @@ combination of the element name and namespace to a type.</p>
 }
 </code></pre></td></tr></table>
 <p>One more note. Most of the classes you are liable to write should derive from
-jabber.protocol.Element. jabber.protocol.Packet is for top-level jabber stanzas,
-like <code>&lt;message/&gt;</code>, <code>&lt;iq/&gt;</code>, and <code>&lt;presence/&gt;</code>.</p>
+<code>JabberNet.jabber.protocol.Element</code>. <code>JabberNet.jabber.protocol.Packet</code> is for
+top-level jabber stanzas, like <code>&lt;message/&gt;</code>, <code>&lt;iq/&gt;</code>, and <code>&lt;presence/&gt;</code>.</p>
 
 
         </div>
