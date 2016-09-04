@@ -19,7 +19,7 @@ using bedrock.util;
 using jabber;
 using jabber.connection;
 
-namespace Example
+namespace JabberNet.Example
 {
     [SVN(@"$Id$")]
     public class PubSubSubcribeForm : Form

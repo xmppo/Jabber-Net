@@ -11,16 +11,13 @@
  * Jabber-Net is licensed under the LGPL.
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
-using System;
-using System.ComponentModel;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
 
+using System;
+using System.Windows.Forms;
 using bedrock.util;
 using jabber;
 
-namespace Example
+namespace JabberNet.Example
 {
     [SVN(@"$Id$")]
     public class AddContact : Form

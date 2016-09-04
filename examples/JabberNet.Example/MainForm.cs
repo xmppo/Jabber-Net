@@ -25,7 +25,7 @@ using jabber.protocol;
 using jabber.protocol.client;
 using jabber.protocol.iq;
 
-namespace Example
+namespace JabberNet.Example
 {
     /// <summary>
     /// Summary description for MainForm.

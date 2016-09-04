@@ -15,11 +15,10 @@
 using System;
 using System.Diagnostics;
 using System.Windows.Forms;
+using bedrock.util;
 using jabber.connection;
 
-using bedrock.util;
-
-namespace Example
+namespace JabberNet.Example
 {
     [SVN(@"$Id$")]
     public class PubSubDisplay : UserControl
