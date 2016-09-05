@@ -60,6 +60,12 @@ Portions of [stringprep.unicode][stringprep-unicode] namespace contains data
 published by UNICODE, INC. under the terms of [UNICODE, INC. LICENSE
 AGREEMENT][unicode].
 
+UnixDnsResolver
+---------------
+
+[`UnixDnsResolver`][unixdnsresolver] class is licensed by Eric Butler in 2008
+under the terms of the [Simplified BSD License][unixdnsresolver-license].
+
 xpnet
 -----
 
@@ -69,6 +75,7 @@ license. See the full license text at [licenses/xpnet_MIT.txt][xpnet-mit].
 
 [jabber-net]: licenses/Jabber-Net_LGPLv3.txt
 [unicode]: licenses/UNICODE.txt
+[unixdnsresolver-license]: licenses/UnixDnsResolver_BSD.txt
 [xpnet-mit]: licenses/xpnet_MIT.txt
 
 [bedrock-net-certutil]: https://github.com/ForNeVeR/Jabber-Net/blob/develop/bedrock/net/CertUtil.cs
@@ -76,5 +83,6 @@ license. See the full license text at [licenses/xpnet_MIT.txt][xpnet-mit].
 [header-sample]: https://github.com/ForNeVeR/Jabber-Net/blob/71e48fbaf4e4408e44734861c8ce1d436aeee2a4/JabberNet.ConsoleClient/Main.cs#L1-L13
 [josl]: http://archive.jabber.org/core/JOSL.pdf
 [netlib-dns]: https://github.com/ForNeVeR/Jabber-Net/tree/develop/netlib.Dns
-[stringprep-unicode]: https://github.com/ForNeVeR/Jabber-Net/tree/develop/stringprep/unicode
+[stringprep-unicode]: https://github.com/ForNeVeR/Jabber-Net/tree/41059bb1d70b678b17bf494e71a4a08e2f3b42e1/src/JabberNet/stringprep/unicode
+[unixdnsresolver]: https://github.com/ForNeVeR/Jabber-Net/blob/41059bb1d70b678b17bf494e71a4a08e2f3b42e1/src/JabberNet/bedrock/net/UnixDnsResolver.cs
 [xpnet]: https://github.com/ForNeVeR/Jabber-Net/tree/develop/xpnet

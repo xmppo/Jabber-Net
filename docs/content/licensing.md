@@ -60,6 +60,12 @@ Portions of [stringprep.unicode][stringprep-unicode] namespace contains data
 published by UNICODE, INC. under the terms of [UNICODE, INC. LICENSE
 AGREEMENT][unicode].
 
+UnixDnsResolver
+---------------
+
+[`UnixDnsResolver`][unixdnsresolver] class is licensed by Eric Butler in 2008
+under the terms of the [Simplified BSD License][unixdnsresolver-license].
+
 xpnet
 -----
 
@@ -67,14 +73,15 @@ xpnet
 copyrighted by its author in 1997 and 1998 under the terms of modified MIT
 license. See the full license text at [licenses/xpnet_MIT.txt][xpnet-mit].
 
-[jabber-net]: https://github.com/ForNeVeR/Jabber-Net/blob/develop/licenses/Jabber-Net_LGPLv3.txt
-[unicode]: https://github.com/ForNeVeR/Jabber-Net/blob/develop/licenses/UNICODE.txt
-[xpnet-mit]: https://github.com/ForNeVeR/Jabber-Net/blob/develop/licenses/xpnet_MIT.txt
-
 [bedrock-net-certutil]: https://github.com/ForNeVeR/Jabber-Net/blob/develop/bedrock/net/CertUtil.cs
 [gplv2]: http://www.fsf.org/licensing/licenses/info/GPLv2.html
 [header-sample]: https://github.com/ForNeVeR/Jabber-Net/blob/71e48fbaf4e4408e44734861c8ce1d436aeee2a4/JabberNet.ConsoleClient/Main.cs#L1-L13
+[jabber-net]: https://github.com/ForNeVeR/Jabber-Net/blob/develop/licenses/Jabber-Net_LGPLv3.txt
 [josl]: http://archive.jabber.org/core/JOSL.pdf
 [netlib-dns]: https://github.com/ForNeVeR/Jabber-Net/tree/develop/netlib.Dns
-[stringprep-unicode]: https://github.com/ForNeVeR/Jabber-Net/tree/develop/stringprep/unicode
+[stringprep-unicode]: https://github.com/ForNeVeR/Jabber-Net/tree/41059bb1d70b678b17bf494e71a4a08e2f3b42e1/src/JabberNet/stringprep/unicode
+[unicode]: https://github.com/ForNeVeR/Jabber-Net/blob/develop/licenses/UNICODE.txt
+[unixdnsresolver]: https://github.com/ForNeVeR/Jabber-Net/blob/41059bb1d70b678b17bf494e71a4a08e2f3b42e1/src/JabberNet/bedrock/net/UnixDnsResolver.cs
+[unixdnsresolver-license]: https://github.com/ForNeVeR/Jabber-Net/blob/develop/licenses/UnixDnsResolver_BSD.txt
 [xpnet]: https://github.com/ForNeVeR/Jabber-Net/tree/develop/xpnet
+[xpnet-mit]: https://github.com/ForNeVeR/Jabber-Net/blob/develop/licenses/xpnet_MIT.txt
