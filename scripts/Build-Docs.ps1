@@ -6,6 +6,8 @@ param (
 
 $localOutput = "$PSScriptRoot/../docs/output"
 $env:JABBER_NET_ROOT = $Root
-Remove-Item -Recurse $localOutput
+Remove-Item -Recurse $localOutput -ErrorAction SilentlyContinue
 & $fsi docs\generate.fsx
+
+Get-ChildItem $Output -Exclude '.git' | Remove-Item -Recurse
 Copy-Item -Recurse -Force "$localOutput/*" $Output
