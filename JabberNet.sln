@@ -46,6 +46,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "licenses", "licenses", "{F5
 	ProjectSection(SolutionItems) = preProject
 		licenses\Jabber-Net_LGPLv3.txt = licenses\Jabber-Net_LGPLv3.txt
 		licenses\UNICODE.txt = licenses\UNICODE.txt
+		licenses\UnixDnsResolver_BSD.txt = licenses\UnixDnsResolver_BSD.txt
 		licenses\xpnet_MIT.txt = licenses\xpnet_MIT.txt
 	EndProjectSection
 EndProject
