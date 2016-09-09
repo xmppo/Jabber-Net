@@ -425,6 +425,9 @@
   <ItemGroup>
     <None Include="jabber-net.nuspec" />
     <None Include="paket.references" />
+    <None Include="stringprep\steps\gen-stringprep-tables.pl" />
+    <None Include="stringprep\unicode\gen-unicode-tables.pl" />
+    <None Include="stringprep\unicode\gen.bat" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Condition="'$(BuildMono)'==''" Include="..\JabberNet.Netlib.Dns\JabberNet.Netlib.Dns.csproj">
@@ -456,6 +459,14 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="stringprep\steps\rfc3454.txt" />
+    <None Include="stringprep\unicode\CaseFolding-3.2.0.txt" />
+    <None Include="stringprep\unicode\CompositionExclusions-3.2.0.txt" />
+    <None Include="stringprep\unicode\LineBreak-3.2.0.txt" />
+    <None Include="stringprep\unicode\SpecialCasing-3.2.0.txt" />
+    <None Include="stringprep\unicode\UnicodeData-3.2.0.txt" />
   </ItemGroup>
   <Import Condition="'$(BuildMono)'==''" Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
