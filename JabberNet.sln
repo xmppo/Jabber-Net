@@ -60,7 +60,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "content", "content", "{4844
 		docs\content\FAQ_UntrustedRootOK.md = docs\content\FAQ_UntrustedRootOK.md
 		docs\content\FAQ_Where.md = docs\content\FAQ_Where.md
 		docs\content\index.md = docs\content\index.md
-		docs\content\licensing.md = docs\content\licensing.md
 		docs\content\SendMessage.md = docs\content\SendMessage.md
 	EndProjectSection
 EndProject
