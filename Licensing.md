@@ -53,6 +53,21 @@ that it has the same license as Jabber-Net itself, because its source code was
 found in the same repository as Jabber-Net with no explicit license marks, so it
 has to be covered by the [main Jabber-Net license file][jabber-net].
 
+stringprep
+----------
+
+`stringprep` namespace contains some files based on the included GPL-licensed
+Perl scripts copyrighted by Simon Josefsson, Tom Tromey, and Red Hat Software.
+
+The scripts are:
+
+- [`gen-stringprep-tables.pl`][gen-stringprep-tables-pl]
+- [`gen-unicode-tables.pl`][gen-unicode-tables-pl]
+
+The output of these generators is explicitly mentioned as unrestricted, so we're
+distributing it (and not the scripts themselves) under LGPL as an integral part
+of Jabber-Net under the terms of LGPL.
+
 UNICODE
 -------
 
@@ -73,6 +88,8 @@ xpnet
 copyrighted by its author in 1997 and 1998 under the terms of modified MIT
 license. See the full license text at [licenses/xpnet_MIT.txt][xpnet-mit].
 
+[gen-stringprep-tables-pl]: src/JabberNet/stringprep/steps/gen-stringprep-tables.pl
+[gen-unicode-tables-pl]: src/JabberNet/stringprep/unicode/gen-unicode-tables.pl
 [jabber-net]: licenses/Jabber-Net_LGPLv3.txt
 [unicode]: licenses/UNICODE.txt
 [unixdnsresolver-license]: licenses/UnixDnsResolver_BSD.txt
