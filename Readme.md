@@ -43,6 +43,17 @@ $ xbuild /p:Configuration=Debug jabber-net.sln
 $ mono ./packages/NUnit.ConsoleRunner.3.4.1/tools/nunit3-console.exe ./test/bin5/Debug/test.dll
 ```
 
+.NET Core
+---------
+
+There's an alpha-level support for [.NET Core][dotnet-core] build system in the
+project. To build the project using `dotnet`, invoke the following command:
+
+```console
+$ dotnet restore
+$ dotnet build **/project.json
+```
+
 Documentation
 -------------
 
@@ -80,6 +91,7 @@ consult [Licensing.md][] for details on licensing of internal components.
 [Licensing.md]: ./Licensing.md
 
 [appveyor]: https://ci.appveyor.com/project/ForNeVeR/jabber-net/branch/develop
+[dotnet-core]: https://docs.microsoft.com/dotnet/
 [nuget]: https://www.nuget.org/packages/jabber-net/
 [paket]: https://fsprojects.github.io/Paket/index.html
 [travis]: https://travis-ci.org/ForNeVeR/jabber-net

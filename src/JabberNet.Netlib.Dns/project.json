@@ -1,0 +1,9 @@
+{
+    "version": "2.1.2-*",
+    "buildOptions": {
+        "debugType": "portable"
+    },
+    "frameworks": {
+        "net45": {}
+    }
+}
