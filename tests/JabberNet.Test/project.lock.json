@@ -350,11 +350,23 @@
           "System.Drawing",
           "System.Security",
           "System.Xml"
-        ]
+        ],
+        "compile": {
+          "net40/JabberNet.dll": {}
+        },
+        "runtime": {
+          "net40/JabberNet.dll": {}
+        }
       },
       "JabberNet.Netlib.Dns/2.1.2": {
         "type": "project",
-        "framework": ".NETFramework,Version=v4.0"
+        "framework": ".NETFramework,Version=v4.0",
+        "compile": {
+          "net40/JabberNet.Netlib.Dns.dll": {}
+        },
+        "runtime": {
+          "net40/JabberNet.Netlib.Dns.dll": {}
+        }
       }
     }
   },
@@ -909,11 +921,13 @@
     },
     "JabberNet/2.1.2": {
       "type": "project",
-      "path": "../../src/JabberNet/project.json"
+      "path": "../../src/JabberNet/project.json",
+      "msbuildProject": "../../src/JabberNet/JabberNet.xproj"
     },
     "JabberNet.Netlib.Dns/2.1.2": {
       "type": "project",
-      "path": "../../src/JabberNet.Netlib.Dns/project.json"
+      "path": "../../src/JabberNet.Netlib.Dns/project.json",
+      "msbuildProject": "../../src/JabberNet.Netlib.Dns/JabberNet.Netlib.Dns.xproj"
     }
   },
   "projectFileDependencyGroups": {

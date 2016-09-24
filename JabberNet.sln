@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JabberNet.Muzzle", "src\Jab
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JabberNet.Example", "examples\JabberNet.Example\JabberNet.Example.csproj", "{F7208FC2-C9FF-4019-96D8-E0F5001FDBFD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JabberNet.ConsoleClient", "examples\JabberNet.ConsoleClient\JabberNet.ConsoleClient.csproj", "{049FB855-89C4-4539-9E5E-0996834D6A0E}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{BBF059F0-722F-4DCC-AF7F-82054E8EF9F4}"
 	ProjectSection(SolutionItems) = preProject
 		Scripts\Build-Docs.ps1 = Scripts\Build-Docs.ps1
@@ -71,6 +69,8 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "JabberNet", "src\JabberNet\
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "JabberNet.Test", "tests\JabberNet.Test\JabberNet.Test.xproj", "{3F7B322B-BD5D-4DB7-8528-08A4FFE9E199}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "JabberNet.ConsoleClient", "examples\JabberNet.ConsoleClient\JabberNet.ConsoleClient.xproj", "{3FD358A4-8603-4306-BB78-E6D92C6935B0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -85,10 +85,6 @@ Global
 		{F7208FC2-C9FF-4019-96D8-E0F5001FDBFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7208FC2-C9FF-4019-96D8-E0F5001FDBFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7208FC2-C9FF-4019-96D8-E0F5001FDBFD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{049FB855-89C4-4539-9E5E-0996834D6A0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{049FB855-89C4-4539-9E5E-0996834D6A0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{049FB855-89C4-4539-9E5E-0996834D6A0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{049FB855-89C4-4539-9E5E-0996834D6A0E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B5086B0D-C448-450F-945D-5DBE681F2EE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B5086B0D-C448-450F-945D-5DBE681F2EE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B5086B0D-C448-450F-945D-5DBE681F2EE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -105,6 +101,10 @@ Global
 		{3F7B322B-BD5D-4DB7-8528-08A4FFE9E199}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F7B322B-BD5D-4DB7-8528-08A4FFE9E199}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3F7B322B-BD5D-4DB7-8528-08A4FFE9E199}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FD358A4-8603-4306-BB78-E6D92C6935B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FD358A4-8603-4306-BB78-E6D92C6935B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FD358A4-8603-4306-BB78-E6D92C6935B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FD358A4-8603-4306-BB78-E6D92C6935B0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
