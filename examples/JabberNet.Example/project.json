@@ -1,0 +1,18 @@
+{
+    "version": "2.1.2-*",
+    "buildOptions": {
+        "debugType": "portable",
+        "emitEntryPoint": true
+    },
+    "frameworks": {
+        "net40": {
+            "frameworkAssemblies": {
+                "System.Windows.Forms": "4.0.0.0"
+            }
+        }
+    },
+    "dependencies": {
+        "JabberNet": "*",
+        "JabberNet.Muzzle": "*"
+    }
+}
