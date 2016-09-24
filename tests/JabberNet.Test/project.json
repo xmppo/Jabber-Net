@@ -3,16 +3,18 @@
     "buildOptions": {
         "debugType": "portable"
     },
-    "dependencies": {
-        "NUnit": "3.4.1",
-        "RhinoMocks": "3.6.1",
-
-        "JabberNet": "*"
-    },
     "frameworks": {
-        "net40": {
+        "net451": {
             "frameworkAssemblies": {
             }
         }
-    }
+    },
+    "dependencies": {
+        "NUnit": "3.4.1",
+        "RhinoMocks": "3.6.1",
+        "dotnet-test-nunit": "3.4.0-beta-2",
+
+        "JabberNet": "*"
+    },
+    "testRunner": "nunit"
 }

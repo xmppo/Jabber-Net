@@ -52,6 +52,7 @@ project. To build the project using `dotnet`, invoke the following command:
 ```console
 $ dotnet restore
 $ dotnet build **/project.json
+$ dotnet test tests/JabberNet.Test/project.json
 ```
 
 Documentation
