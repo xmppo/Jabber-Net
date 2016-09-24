@@ -27,16 +27,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{BBF0
 		Scripts\Push-Package.ps1 = Scripts\Push-Package.ps1
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".root", ".root", "{2C25C63F-7C2F-4025-8A4D-B85ABF2C8A34}"
-	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
-		.gitignore = .gitignore
-		.travis.yml = .travis.yml
-		appveyor.yml = appveyor.yml
-		Licensing.md = Licensing.md
-		Readme.md = Readme.md
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{608EAD0E-6217-4700-B9C1-01488F8B5701}"
 	ProjectSection(SolutionItems) = preProject
 		docs\generate.fsx = docs\generate.fsx
@@ -71,11 +61,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "JabberNet.VbExample", "examples\JabberNet.VbExample\JabberNet.VbExample.vbproj", "{B5086B0D-C448-450F-945D-5DBE681F2EE7}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{8845C7D9-638B-4010-8F28-D7E9A778712A}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{6F3812B6-FCCC-4583-BC62-B393B3367454}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{6CEF5D5D-B6A6-4DAD-8612-5D89F604650C}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{41BBF093-186E-44EE-9388-B7CE26F3D77E}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+		.travis.yml = .travis.yml
+		appveyor.yml = appveyor.yml
+		Licensing.md = Licensing.md
+		Readme.md = Readme.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -116,14 +110,11 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{76F923A3-5D99-45B9-9327-FBE56648A39F} = {6CEF5D5D-B6A6-4DAD-8612-5D89F604650C}
-		{071A79A9-E23F-418F-A6B7-63D3A3E59EEB} = {8845C7D9-638B-4010-8F28-D7E9A778712A}
-		{F7208FC2-C9FF-4019-96D8-E0F5001FDBFD} = {6F3812B6-FCCC-4583-BC62-B393B3367454}
-		{049FB855-89C4-4539-9E5E-0996834D6A0E} = {6F3812B6-FCCC-4583-BC62-B393B3367454}
-		{6CAE854A-F202-4D2B-B10E-E8D8E81E5EF5} = {8845C7D9-638B-4010-8F28-D7E9A778712A}
-		{40AC7A7C-D3E5-46DF-B740-06BD9D2A00E1} = {8845C7D9-638B-4010-8F28-D7E9A778712A}
+		{BFD2D70D-3C18-4BFD-B70E-38ED872B8F67} = {41BBF093-186E-44EE-9388-B7CE26F3D77E}
+		{BBF059F0-722F-4DCC-AF7F-82054E8EF9F4} = {41BBF093-186E-44EE-9388-B7CE26F3D77E}
+		{608EAD0E-6217-4700-B9C1-01488F8B5701} = {41BBF093-186E-44EE-9388-B7CE26F3D77E}
+		{F5D434F5-6D42-4491-85B3-6169D2F15BAE} = {41BBF093-186E-44EE-9388-B7CE26F3D77E}
 		{48441DC4-91E5-4E2D-B2C3-10DCBFAB33E3} = {608EAD0E-6217-4700-B9C1-01488F8B5701}
 		{E6F7B01B-A762-4833-ABDF-3662E63AC63B} = {608EAD0E-6217-4700-B9C1-01488F8B5701}
-		{B5086B0D-C448-450F-945D-5DBE681F2EE7} = {6F3812B6-FCCC-4583-BC62-B393B3367454}
 	EndGlobalSection
 EndGlobal
