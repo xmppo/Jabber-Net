@@ -95,6 +95,12 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="JabberNet">
+      <HintPath>..\..\src\JabberNet\bin\Debug\net40\JabberNet.dll</HintPath>
+    </Reference>
+    <Reference Include="JabberNet.Muzzle">
+      <HintPath>..\..\src\JabberNet.Muzzle\bin\Debug\net40\JabberNet.Muzzle.dll</HintPath>
+    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -155,12 +161,6 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\JabberNet.Muzzle\JabberNet.Muzzle.csproj">
-      <Project>{071a79a9-e23f-418f-a6b7-63d3a3e59eeb}</Project>
-      <Name>JabberNet.Muzzle</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>
