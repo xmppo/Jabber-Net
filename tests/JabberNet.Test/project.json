@@ -1,20 +1,17 @@
 {
     "version": "2.1.2-*",
     "buildOptions": {
-        "allowUnsafe": true,
         "debugType": "portable"
     },
     "dependencies": {
-        "zlib.net": "1.0.4",
+        "NUnit": "3.4.1",
+        "RhinoMocks": "3.6.1",
 
-        "JabberNet.Netlib.Dns": "*"
+        "JabberNet": "*"
     },
     "frameworks": {
         "net40": {
             "frameworkAssemblies": {
-                "System.Drawing": "4.0.0.0",
-                "System.Security": "4.0.0.0",
-                "System.Xml": "4.0.0.0"
             }
         }
     }

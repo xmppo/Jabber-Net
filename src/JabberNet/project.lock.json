@@ -2,7 +2,7 @@
   "locked": false,
   "version": 2,
   "targets": {
-    ".NETFramework,Version=v4.5": {
+    ".NETFramework,Version=v4.0": {
       "zlib.net/1.0.4": {
         "type": "package",
         "compile": {
@@ -14,7 +14,7 @@
       },
       "JabberNet.Netlib.Dns/2.1.2": {
         "type": "project",
-        "framework": ".NETFramework,Version=v4.5"
+        "framework": ".NETFramework,Version=v4.0"
       }
     }
   },
@@ -39,7 +39,7 @@
       "JabberNet.Netlib.Dns",
       "zlib.net >= 1.0.4"
     ],
-    ".NETFramework,Version=v4.5": [
+    ".NETFramework,Version=v4.0": [
       "System.Drawing >= 4.0.0",
       "System.Security >= 4.0.0",
       "System.Xml >= 4.0.0"

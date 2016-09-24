@@ -4,6 +4,6 @@
         "debugType": "portable"
     },
     "frameworks": {
-        "net45": {}
+        "net40": {}
     }
 }
