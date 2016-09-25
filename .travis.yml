@@ -1,5 +1,5 @@
 language: csharp
-mono: latest
+mono: 4.4.2
 install:
 - mkdir ./.paket
 - wget -O ./.paket/paket.bootstrapper.exe https://github.com/fsprojects/Paket/releases/download/3.18.2/paket.bootstrapper.exe
