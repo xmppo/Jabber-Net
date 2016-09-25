@@ -82,7 +82,7 @@ consult [Licensing.md][] for details on licensing of internal components.
 [appveyor]: https://ci.appveyor.com/project/ForNeVeR/jabber-net/branch/develop
 [nuget]: https://www.nuget.org/packages/jabber-net/
 [paket]: https://fsprojects.github.io/Paket/index.html
-[travis]: https://travis-ci.org/ForNeVeR/jabber-net
+[travis]: https://travis-ci.org/ForNeVeR/Jabber-Net
 
 [appveyor-badge]: https://ci.appveyor.com/api/projects/status/9q5rgknk80oh5g3a/branch/develop?svg=true
 [nuget-badge]: https://img.shields.io/nuget/v/jabber-net.svg?maxAge=2592000
