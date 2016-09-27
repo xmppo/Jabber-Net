@@ -8,6 +8,7 @@ using NUnit.Framework;
 namespace JabberNet.Test.Muzzle
 {
     [TestFixture]
+    [Platform(Exclude = "Linux", Reason = "Travis have no support for X-Server")]
     public class ControlExtensionTests
     {
         [Test]
