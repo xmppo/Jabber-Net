@@ -16,6 +16,7 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.Security.Cryptography.X509Certificates;
 using System.Windows.Forms;
 using System.Xml;
 using JabberNet.jabber;
@@ -106,10 +107,11 @@ namespace JabberNet.Example
             tabControl1.TabPages.Remove(tpServices);
             tabControl1.TabPages.Remove(tpDebug);
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+
+            this.BindHandlesToCurrentThread();
         }
 
-
-        void idler_OnUnIdle(object sender, TimeSpan span)
+        private void idler_OnUnIdle(object sender, TimeSpan span)
         {
             jc.Presence(PresenceType.available, "Available", null, 0);
             pnlPresence.Text = "Available";
@@ -701,145 +703,170 @@ namespace JabberNet.Example
 
         private void jc_OnAuthenticate(object sender)
         {
-            pnlPresence.Text = "Available";
-            pnlCon.Text = "Connected";
-            mnuAway.Enabled = mnuAvailable.Enabled = true;
-
-            if (jc.SSLon)
+            this.InvokeAction(() =>
             {
+                pnlPresence.Text = "Available";
+                pnlCon.Text = "Connected";
+                mnuAway.Enabled = mnuAvailable.Enabled = true;
 
-                pnlSSL.Text = "SSL";
-                System.Security.Cryptography.X509Certificates.X509Certificate cert2 =
-                    (System.Security.Cryptography.X509Certificates.X509Certificate)
-                    jc[Options.REMOTE_CERTIFICATE];
+                if (jc.SSLon)
+                {
+                    pnlSSL.Text = "SSL";
+                    var cert2 = (X509Certificate)jc[Options.REMOTE_CERTIFICATE];
 
-                string cert_str = cert2.ToString(true);
-                debug.Write("CERT:", cert_str);
-                pnlSSL.ToolTipText = cert_str;
-            }
-            idler.Enabled = true;
+                    string cert_str = cert2.ToString(true);
+                    debug.Write("CERT:", cert_str);
+                    pnlSSL.ToolTipText = cert_str;
+                }
+                idler.Enabled = true;
+            });
         }
 
         private void jc_OnDisconnect(object sender)
         {
-            m_connected = false;
-            mnuAway.Enabled = mnuAvailable.Enabled = false;
-            idler.Enabled = false;
-            pnlPresence.Text = "Offline";
-            pnlSSL.Text = "";
-            pnlSSL.ToolTipText = "";
-            connectToolStripMenuItem.Text = "&Connect";
-            lvBookmarks.Items.Clear();
+            this.InvokeAction(() =>
+            {
+                m_connected = false;
+                mnuAway.Enabled = mnuAvailable.Enabled = false;
+                idler.Enabled = false;
+                pnlPresence.Text = "Offline";
+                pnlSSL.Text = "";
+                pnlSSL.ToolTipText = "";
+                connectToolStripMenuItem.Text = "&Connect";
+                lvBookmarks.Items.Clear();
 
-            if (!m_err)
-                pnlCon.Text = "Disconnected";
+                if (!m_err)
+                    pnlCon.Text = "Disconnected";
+            });
         }
 
         private void jc_OnError(object sender, Exception ex)
         {
-            m_connected = false;
-            mnuAway.Enabled = mnuAvailable.Enabled = false;
-            connectToolStripMenuItem.Text = "&Connect";
-            idler.Enabled = false;
-            lvBookmarks.Items.Clear();
+            this.InvokeAction(() =>
+            {
+                m_connected = false;
+                mnuAway.Enabled = mnuAvailable.Enabled = false;
+                connectToolStripMenuItem.Text = "&Connect";
+                idler.Enabled = false;
+                lvBookmarks.Items.Clear();
 
-            pnlCon.Text = "Error: " + ex.Message;
+                pnlCon.Text = "Error: " + ex.Message;
+            });
         }
 
         private void jc_OnAuthError(object sender, XmlElement elem)
         {
-            if (MessageBox.Show(this,
-                "Create new account?",
-                "Authentication error",
-                MessageBoxButtons.OKCancel,
-                MessageBoxIcon.Warning) == DialogResult.OK)
+            this.InvokeAction(() =>
             {
-                if (!m_connected)
+                if (MessageBox.Show(
+                    this,
+                        "Create new account?",
+                        "Authentication error",
+                        MessageBoxButtons.OKCancel,
+                        MessageBoxIcon.Warning) == DialogResult.OK)
                 {
-                    MessageBox.Show("You have been disconnected by the server.  Registration is not enabled.", "Disconnected", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
+                    if (!m_connected)
+                    {
+                        MessageBox.Show(
+                            "You have been disconnected by the server. Registration is not enabled.",
+                            "Disconnected",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+                        return;
+                    }
+                    jc.Register(new JID(jc.User, jc.Server, null));
                 }
-                jc.Register(new JID(jc.User, jc.Server, null));
-            }
-            else
-            {
-                jc.Close(false);
-            }
+                else
+                {
+                    jc.Close(false);
+                }
+            });
         }
 
         private void jc_OnRegistered(object sender, IQ iq)
         {
-            if (iq.Type == IQType.result)
-                jc.Login();
-            else
-                pnlCon.Text = "Registration error";
+            this.InvokeAction(() =>
+            {
+                if (iq.Type == IQType.result)
+                    jc.Login();
+                else
+                    pnlCon.Text = "Registration error";
+            });
         }
 
         private bool jc_OnRegisterInfo(object sender, Register r)
         {
-            if (r.Form == null)
+            return this.InvokeFunc(() =>
+            {
+                if (r.Form == null)
+                    return true;
+                XDataForm f = new XDataForm(r.Form);
+                if (f.ShowDialog() != DialogResult.OK)
+                    return false;
+                f.FillInResponse(r.Form);
                 return true;
-            XDataForm f = new XDataForm(r.Form);
-            if (f.ShowDialog() != DialogResult.OK)
-                return false;
-            f.FillInResponse(r.Form);
-            return true;
+            });
         }
 
         private void jc_OnMessage(object sender, jabber.protocol.client.Message msg)
         {
-            jabber.protocol.x.Data x = msg["x", URI.XDATA] as jabber.protocol.x.Data;
-            if (x != null)
+            this.InvokeAction(() =>
             {
-                XDataForm f = new XDataForm(msg);
-                f.ShowDialog(this);
-                jc.Write(f.GetResponse());
-            }
-            else
-                MessageBox.Show(this, msg.Body, msg.From, MessageBoxButtons.OK);
+                var x = msg["x", URI.XDATA] as jabber.protocol.x.Data;
+                if (x != null)
+                {
+                    var f = new XDataForm(msg);
+                    f.ShowDialog(this);
+                    jc.Write(f.GetResponse());
+                }
+                else
+                    MessageBox.Show(this, msg.Body, msg.From, MessageBoxButtons.OK);
+            });
         }
 
         private void jc_OnIQ(object sender, IQ iq)
         {
-            if (iq.Type != IQType.get)
-                return;
-
-            XmlElement query = iq.Query;
-            if (query == null)
-                return;
-
-            // <iq id="jcl_8" to="me" from="you" type="get"><query xmlns="jabber:iq:version"/></iq>
-            if (query is jabber.protocol.iq.Version)
+            this.InvokeAction(() =>
             {
-                iq = iq.GetResponse(jc.Document);
-                jabber.protocol.iq.Version ver = iq.Query as jabber.protocol.iq.Version;
-                if (ver != null)
+                if (iq.Type != IQType.get)
+                    return;
+
+                XmlElement query = iq.Query;
+                if (query == null)
+                    return;
+
+                // <iq id="jcl_8" to="me" from="you" type="get"><query xmlns="jabber:iq:version"/></iq>
+                if (query is jabber.protocol.iq.Version)
                 {
-                    ver.OS = Environment.OSVersion.ToString();
-                    ver.EntityName = Application.ProductName;
-                    ver.Ver = Application.ProductVersion;
+                    iq = iq.GetResponse(jc.Document);
+                    jabber.protocol.iq.Version ver = iq.Query as jabber.protocol.iq.Version;
+                    if (ver != null)
+                    {
+                        ver.OS = Environment.OSVersion.ToString();
+                        ver.EntityName = Application.ProductName;
+                        ver.Ver = Application.ProductVersion;
+                    }
+                    jc.Write(iq);
+                    return;
                 }
-                jc.Write(iq);
-                return;
-            }
 
-            if (query is Time)
-            {
-                iq = iq.GetResponse(jc.Document);
-                Time tim = iq.Query as Time;
-                if (tim != null) tim.SetCurrentTime();
-                jc.Write(iq);
-                return;
-            }
+                if (query is Time)
+                {
+                    iq = iq.GetResponse(jc.Document);
+                    Time tim = iq.Query as Time;
+                    if (tim != null) tim.SetCurrentTime();
+                    jc.Write(iq);
+                    return;
+                }
 
-            if (query is Last)
-            {
-                iq = iq.GetResponse(jc.Document);
-                Last last = iq.Query as Last;
-                if (last != null) last.Seconds = (int)IdleTime.GetIdleTime();
-                jc.Write(iq);
-                return;
-            }
+                if (query is Last)
+                {
+                    iq = iq.GetResponse(jc.Document);
+                    Last last = iq.Query as Last;
+                    if (last != null) last.Seconds = (int)IdleTime.GetIdleTime();
+                    jc.Write(iq);
+                }
+            });
         }
 
         private void roster_DoubleClick(object sender, EventArgs e)
@@ -903,14 +930,20 @@ namespace JabberNet.Example
 
         void jc_OnConnect(object sender, StanzaStream stream)
         {
-            m_err = false;
-            m_connected = true;
+            this.InvokeAction(() =>
+            {
+                m_err = false;
+                m_connected = true;
+            });
         }
 
         private void jc_OnStreamError(object sender, XmlElement rp)
         {
-            m_err = true;
-            pnlCon.Text = "Stream error: " + rp.InnerText;
+            this.InvokeAction(() =>
+            {
+                m_err = true;
+                pnlCon.Text = "Stream error: " + rp.InnerText;
+            });
         }
 
         /*
@@ -942,7 +975,7 @@ namespace JabberNet.Example
 
         private void rm_OnRosterEnd(object sender)
         {
-            roster.ExpandAll();
+            this.InvokeAction(roster.ExpandAll);
         }
 
         private void MainForm_Closing(object sender, CancelEventArgs e)
@@ -1155,23 +1188,29 @@ namespace JabberNet.Example
 
         private void bmm_OnConferenceAdd(jabber.client.BookmarkManager manager, BookmarkConference conference)
         {
-            string jid = conference.JID;
-            string name = conference.ConferenceName;
-            if (name == null)
-                name = jid;
-            if (lvBookmarks.Items.ContainsKey(jid))
-                lvBookmarks.Items.RemoveByKey(jid);
-            ListViewItem item = lvBookmarks.Items.Add(jid, name, -1);
-            item.SubItems.Add(conference.Nick);
-            item.SubItems.Add(conference.AutoJoin.ToString());
-            item.Tag = conference.JID;
+            this.InvokeAction(() =>
+            {
+                var jid = conference.JID;
+                var name = conference.ConferenceName;
+                if (name == null)
+                    name = jid;
+                if (lvBookmarks.Items.ContainsKey(jid))
+                    lvBookmarks.Items.RemoveByKey(jid);
+                var item = lvBookmarks.Items.Add(jid, name, -1);
+                item.SubItems.Add(conference.Nick);
+                item.SubItems.Add(conference.AutoJoin.ToString());
+                item.Tag = conference.JID;
+            });
         }
 
         private void bmm_OnConferenceRemove(jabber.client.BookmarkManager manager, BookmarkConference conference)
         {
-            string jid = conference.JID;
-            if (lvBookmarks.Items.ContainsKey(jid))
-                lvBookmarks.Items.RemoveByKey(jid);
+            this.InvokeAction(() =>
+            {
+                var jid = conference.JID;
+                if (lvBookmarks.Items.ContainsKey(jid))
+                    lvBookmarks.Items.RemoveByKey(jid);
+            });
         }
 
         private void lvBookmarks_KeyUp(object sender, KeyEventArgs e)

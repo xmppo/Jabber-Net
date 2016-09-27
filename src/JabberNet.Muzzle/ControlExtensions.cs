@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace JabberNet.Muzzle
@@ -15,13 +16,40 @@ namespace JabberNet.Muzzle
         /// <param name="action">The invocable action.</param>
         public static void InvokeAction(this Control control, Action action)
         {
-            if (control.InvokeRequired)
-            {
-                control.Invoke(action);
-            }
-            else
+            control.InvokeFunc<object>(() =>
             {
                 action();
+                return null;
+            });
+        }
+
+        /// <summary>
+        /// Invoke the function in the control owning thread if invocation is required.
+        /// </summary>
+        /// <param name="control">Control on which the action should be invoked.</param>
+        /// <param name="func">The invocable function.</param>
+        public static T InvokeFunc<T>(this Control control, Func<T> func)
+        {
+            if (control.InvokeRequired)
+            {
+                var result = default(T);
+                control.Invoke((Action)(() => { result = func(); }));
+                return result;
+            }
+
+            return func();
+        }
+
+        /// <summary>
+        /// Bind all the handles of the component and its children to the current thread to avoid multithreading
+        /// issues.
+        /// </summary>
+        public static void BindHandlesToCurrentThread(this Control control)
+        {
+            var handle = control.Handle;
+            foreach (var child in control.Controls.OfType<Control>())
+            {
+                child.BindHandlesToCurrentThread();
             }
         }
     }
