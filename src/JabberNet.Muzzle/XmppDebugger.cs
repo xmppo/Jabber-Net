@@ -52,6 +52,7 @@ namespace JabberNet.Muzzle
         {
             InitializeComponent();
             this.OnStreamChanged += new bedrock.ObjectHandler(XmppDebugger_OnStreamChanged);
+            this.BindHandlesToCurrentThread();
         }
 
         /// <summary>
@@ -176,13 +177,13 @@ namespace JabberNet.Muzzle
 
         private void m_stream_OnError(object sender, Exception ex)
         {
-            WriteError(ex.ToString());
+            this.InvokeAction(() => WriteError(ex.ToString()));
         }
 
         private void m_stream_OnConnect(object sender, jabber.connection.StanzaStream stream)
         {
             // I think this is right.  Double check.
-            rtDebug.Clear();
+            this.InvokeAction(rtDebug.Clear);
         }
 
         private void m_stream_OnReadText(object sender, string txt)
@@ -191,7 +192,7 @@ namespace JabberNet.Muzzle
             if (txt == " ")
                 return;
 
-            Write(m_recvColor, m_recv, txt);
+            this.InvokeAction(() => Write(m_recvColor, m_recv, txt));
         }
 
         private void m_stream_OnWriteText(object sender, string txt)
@@ -200,7 +201,7 @@ namespace JabberNet.Muzzle
             if (txt == " ")
                 return;
 
-            Write(m_sendColor, m_send, txt);
+            this.InvokeAction(() => Write(m_sendColor, m_send, txt));
         }
 
         /// <summary>

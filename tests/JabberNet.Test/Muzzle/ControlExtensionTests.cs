@@ -27,6 +27,20 @@ namespace JabberNet.Test.Muzzle
         }
 
         [Test]
+        public void InvocationOfFuncShouldBePerformedInTheSameThread()
+        {
+            ExecuteInStaThread(() =>
+            {
+                var threadId = Thread.CurrentThread.ManagedThreadId;
+                var form = new Form();
+                var handle = form.Handle;
+
+                var result = form.InvokeFunc(() => Thread.CurrentThread.ManagedThreadId);
+                Assert.AreEqual(threadId, result);
+            });
+        }
+
+        [Test]
         public void InvocationShouldBePerformedInAnotherThreadInCaseOfMultiThreading()
         {
             ExecuteInStaThread(() =>
@@ -61,6 +75,25 @@ namespace JabberNet.Test.Muzzle
                 {
                     throw exception;
                 }
+            });
+        }
+
+        [Test]
+        public void BindHandlesShouldCreateThem()
+        {
+            ExecuteInStaThread(() =>
+            {
+                var f = new Form();
+                var c = new TextBox();
+                f.Controls.Add(c);
+
+                Assert.IsFalse(f.IsHandleCreated);
+                Assert.IsFalse(c.IsHandleCreated);
+
+                f.BindHandlesToCurrentThread();
+
+                Assert.IsTrue(f.IsHandleCreated);
+                Assert.IsTrue(c.IsHandleCreated);
             });
         }
 
