@@ -510,7 +510,7 @@ namespace JabberNet.Muzzle
 
         private void m_pres_OnPrimarySessionChange(object sender, JID bare)
         {
-            this.InvokeAction(() =>
+            this.BeginInvokeAction(() =>
             {
                 var pres = m_pres[bare];
                 var nodelist = (LinkedList)m_items[bare.ToString()];
