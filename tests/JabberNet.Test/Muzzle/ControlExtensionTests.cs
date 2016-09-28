@@ -50,33 +50,39 @@ namespace JabberNet.Test.Muzzle
                 var form = new Form();
                 var handle = form.Handle;
 
-                Exception exception = null;
-                Task.Factory.StartNew(() =>
-                {
-                    try
+                RunApplicationWithParallelTask(
+                    form,
+                    () =>
                     {
                         Assert.IsTrue(form.InvokeRequired);
                         form.InvokeAction(() =>
                         {
                             Assert.AreEqual(threadId, Thread.CurrentThread.ManagedThreadId);
                         });
-                    }
-                    catch (Exception ex)
-                    {
-                        exception = ex;
-                    }
-                    finally
-                    {
-                        Application.Exit();
-                    }
-                });
-
-                Application.Run(form);
-                if (exception != null)
-                {
-                    throw exception;
-                }
+                    });
             });
+        }
+
+        [Test]
+        public void BeginInvokeShouldReturnFinishedTask()
+        {
+            Task result = null;
+            ExecuteInStaThread(() =>
+            {
+                var form = new Form();
+                var handle = form.Handle;
+
+                RunApplicationWithParallelTask(
+                    form,
+                    () =>
+                    {
+                        Assert.IsTrue(form.InvokeRequired);
+                        result = form.BeginInvokeAction(Application.Exit);
+                    });
+            });
+
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.IsCompleted);
         }
 
         [Test]
@@ -116,6 +122,37 @@ namespace JabberNet.Test.Muzzle
             thread.Start();
             thread.Join();
 
+            if (exception != null)
+            {
+                throw exception;
+            }
+        }
+
+        private static void ExecuteInTask(Action action, Action<Exception> catchClause, Action finallyClause)
+        {
+            Task.Factory.StartNew(() =>
+            {
+                try
+                {
+                    action();
+                }
+                catch (Exception exception)
+                {
+                    catchClause(exception);
+                }
+                finally
+                {
+                    finallyClause();
+                }
+            });
+        }
+
+        private static void RunApplicationWithParallelTask(Form mainForm, Action task)
+        {
+            Exception exception = null;
+            ExecuteInTask(task, ex => exception = ex, Application.Exit);
+
+            Application.Run(mainForm);
             if (exception != null)
             {
                 throw exception;

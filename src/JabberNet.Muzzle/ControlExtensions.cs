@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace JabberNet.Muzzle
@@ -21,6 +22,38 @@ namespace JabberNet.Muzzle
                 action();
                 return null;
             });
+        }
+
+        /// <summary>
+        /// Asynchronously invokes the action in the control owning thread if invocation is required.
+        /// </summary>
+        /// <param name="control">Control on which the action should be invoked.</param>
+        /// <param name="action">The invocable action.</param>
+        public static Task BeginInvokeAction(this Control control, Action action)
+        {
+            var source = new TaskCompletionSource<object>();
+            if (control.InvokeRequired)
+            {
+                control.BeginInvoke((Action)(() =>
+                {
+                    try
+                    {
+                        action();
+                        source.SetResult(null);
+                    }
+                    catch (Exception exception)
+                    {
+                        source.SetException(exception);
+                    }
+                }));
+            }
+            else
+            {
+                action();
+                source.SetResult(null);
+            }
+
+            return source.Task;
         }
 
         /// <summary>
