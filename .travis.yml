@@ -6,5 +6,5 @@ install:
 - mono ./.paket/paket.bootstrapper.exe 3.18.2
 - mono ./.paket/paket.exe restore
 script:
-- xbuild /p:Configuration=Debug JabberNet.sln
+- xbuild /p:Configuration=Travis JabberNet.sln
 - mono ./packages/NUnit.ConsoleRunner/tools/nunit3-console.exe ./tests/JabberNet.Test/bin/Debug/JabberNet.Test.dll
