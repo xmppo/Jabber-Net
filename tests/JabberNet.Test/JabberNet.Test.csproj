@@ -104,7 +104,6 @@
       <Name>System</Name>
     </Reference>
     <Reference Include="System.Data" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
@@ -216,7 +215,6 @@
     <Compile Include="jabber\protocol\x\EventTest.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Muzzle\ControlExtensionTests.cs" />
     <Compile Include="stringprep\TestDraft.cs">
       <SubType>Code</SubType>
     </Compile>
