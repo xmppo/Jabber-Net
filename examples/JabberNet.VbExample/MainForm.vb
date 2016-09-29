@@ -17,6 +17,7 @@ Imports System.Xml
 Imports JabberNet.jabber
 Imports JabberNet.jabber.protocol.client
 Imports JabberNet.jabber.protocol.iq
+Imports JabberNet.Muzzle
 
 Public Class MainForm
     Inherits System.Windows.Forms.Form
@@ -287,109 +288,133 @@ Public Class MainForm
         End If
     End Sub
 
-    Private Sub jc_OnConnect(ByVal sender As Object, ByVal stream As jabber.connection.StanzaStream) Handles jc.OnConnect
-        m_err = False
-        debug.AppendMaybeScroll("Connected to: " & stream.ToString() & vbCrLf)
+    Private Sub jc_OnConnect(sender As Object, stream As connection.StanzaStream) Handles jc.OnConnect
+        InvokeAction(Sub ()
+                         m_err = False
+                         debug.AppendMaybeScroll("Connected to: " & stream.ToString() & vbCrLf)
+                     End Sub)
     End Sub
 
-    Private Sub jc_OnReadText(ByVal sender As Object, ByVal txt As String) Handles jc.OnReadText
-        debug.SelectionColor = Color.Red
-        debug.AppendText("RECV: ")
-        debug.SelectionColor = Color.Black
-        debug.AppendText(txt)
-        debug.AppendMaybeScroll(vbCrLf)
+    Private Sub jc_OnReadText(sender As Object, txt As String) Handles jc.OnReadText
+        InvokeAction(Sub ()
+                         debug.SelectionColor = Color.Red
+                         debug.AppendText("RECV: ")
+                         debug.SelectionColor = Color.Black
+                         debug.AppendText(txt)
+                         debug.AppendMaybeScroll(vbCrLf)
+                     End Sub)
     End Sub
 
-    Private Sub jc_OnWriteText(ByVal sender As Object, ByVal txt As String) Handles jc.OnWriteText
-        ' keepalive
-        If txt = " " Then
-            Return
-        End If
-
-        debug.SelectionColor = Color.Blue
-        debug.AppendText("SEND: ")
-        debug.SelectionColor = Color.Black
-        debug.AppendText(txt)
-        debug.AppendMaybeScroll(vbCrLf)
+    Private Sub jc_OnWriteText(sender As Object, txt As String) Handles jc.OnWriteText
+        InvokeAction(Sub ()
+                         ' keepalive
+                         If txt = " " Then
+                             Return
+                         End If
+                         
+                         debug.SelectionColor = Color.Blue
+                         debug.AppendText("SEND: ")
+                         debug.SelectionColor = Color.Black
+                         debug.AppendText(txt)
+                         debug.AppendMaybeScroll(vbCrLf)
+                     End Sub)
     End Sub
 
-    Private Sub jc_OnAuthenticate(ByVal sender As Object) Handles jc.OnAuthenticate
-        pnlPresence.Text = "Available"
-        pnlCon.Text = "Connected"
+    Private Sub jc_OnAuthenticate(sender As Object) Handles jc.OnAuthenticate
+        InvokeAction(Sub ()
+                         pnlPresence.Text = "Available"
+                         pnlCon.Text = "Connected"
+                     End Sub)
     End Sub
 
-    Private Sub jc_OnDisconnect(ByVal sender As Object) Handles jc.OnDisconnect
-        pnlPresence.Text = "Offline"
-
-        If Not m_err Then
-            pnlCon.Text = "Disconnected"
-        End If
+    Private Sub jc_OnDisconnect(sender As Object) Handles jc.OnDisconnect
+        InvokeAction(Sub ()
+                         pnlPresence.Text = "Offline"
+                         
+                         If Not m_err Then
+                             pnlCon.Text = "Disconnected"
+                         End If
+                     End Sub)
     End Sub
 
-    Private Sub jc_OnError(ByVal sender As Object, ByVal ex As System.Exception) Handles jc.OnError
-        pnlCon.Text = "Error!"
-        debug.SelectionColor = Color.Green
-        debug.AppendText("ERROR: ")
-        debug.SelectionColor = Color.Black
-        debug.AppendText(ex.ToString())
-        debug.AppendMaybeScroll(vbCrLf)
+    Private Sub jc_OnError(sender As Object, ex As Exception) Handles jc.OnError
+        InvokeAction(Sub ()
+                         pnlCon.Text = "Error!"
+                         debug.SelectionColor = Color.Green
+                         debug.AppendText("ERROR: ")
+                         debug.SelectionColor = Color.Black
+                         debug.AppendText(ex.ToString())
+                         debug.AppendMaybeScroll(vbCrLf)
+                     End Sub)
     End Sub
 
-    Private Sub jc_OnAuthError(ByVal sender As Object, ByVal iq As XmlElement) Handles jc.OnAuthError
-        If (MessageBox.Show(Me, "Create new account?", _
-            "Authentication error", MessageBoxButtons.OKCancel) = Windows.Forms.DialogResult.OK) Then
-            jc.Register(New JID(jc.User, jc.Server, Nothing))
-        Else
-            jc.Close()
-            Connect()
-        End If
+    Private Sub jc_OnAuthError(sender As Object, iq As XmlElement) Handles jc.OnAuthError
+        InvokeAction(Sub ()
+                         If (MessageBox.Show(Me, "Create new account?", _
+                             "Authentication error", MessageBoxButtons.OKCancel) = Windows.Forms.DialogResult.OK) Then
+                             jc.Register(New JID(jc.User, jc.Server, Nothing))
+                         Else
+                             jc.Close()
+                             Connect()
+                         End If
+                     End Sub)
     End Sub
 
-    Private Function jc_OnRegisterInfo(ByVal sender As System.Object, ByVal register As jabber.protocol.iq.Register) As System.Boolean Handles jc.OnRegisterInfo
-        Dim data As jabber.protocol.x.Data = register.Form
-        If (data Is Nothing) Then Return True
-
-        Dim form As muzzle.XDataForm = New muzzle.XDataForm(data)
-
-        If (form.ShowDialog() <> Windows.Forms.DialogResult.OK) Then Return False
-        form.FillInResponse(data)
-
-        Return True
+    Private Function jc_OnRegisterInfo(sender As Object, register As Register) As Boolean Handles jc.OnRegisterInfo
+        InvokeFunc(Function ()
+                       Dim data As protocol.x.Data = register.Form
+                       If (data Is Nothing) Then Return True
+                       
+                       Dim form As muzzle.XDataForm = New muzzle.XDataForm(data)
+                       
+                       If (form.ShowDialog() <> Windows.Forms.DialogResult.OK) Then Return False
+                       form.FillInResponse(data)
+                       
+                       Return True
+                   End Function)
     End Function
 
 
-    Private Sub jc_OnRegistered(ByVal sender As Object, ByVal iq As jabber.protocol.client.IQ) Handles jc.OnRegistered
-        If (iq.Type = jabber.protocol.client.IQType.result) Then
-            jc.Login()
-        Else
-            pnlCon.Text = "Registration error"
-        End If
+    Private Sub jc_OnRegistered(sender As Object, iq As IQ) Handles jc.OnRegistered
+        InvokeAction(Sub ()
+                         If (iq.Type = IQType.result) Then
+                             jc.Login()
+                         Else
+                             pnlCon.Text = "Registration error"
+                         End If
+                     End Sub)
     End Sub
 
-    Private Sub jc_OnMessage(ByVal sender As Object, ByVal msg As jabber.protocol.client.Message) Handles jc.OnMessage
-        MessageBox.Show(Me, msg.Body, msg.From.ToString(), MessageBoxButtons.OK)
+    Private Sub jc_OnMessage(sender As Object, msg As Message) Handles jc.OnMessage
+        InvokeAction(Sub ()
+                         MessageBox.Show(Me, msg.Body, msg.From.ToString(), MessageBoxButtons.OK)
+                     End Sub)
     End Sub
 
-    Private Sub jc_OnIQ(ByVal sender As Object, ByVal iq As jabber.protocol.client.IQ) Handles jc.OnIQ
-        If iq.Type <> jabber.protocol.client.IQType.get Then Return
-
-        Dim query As XmlElement = iq.Query
-        If (query Is Nothing) Then
-            Return
-        End If
-
-        If TypeOf query Is Version Then
-            iq = iq.GetResponse(jc.Document)
-            Dim ver As jabber.protocol.iq.Version = DirectCast(iq.Query, jabber.protocol.iq.Version)
-            ver.OS = Environment.OSVersion.ToString()
-            ver.EntityName = Application.ProductName
-            ver.Ver = Application.ProductVersion
-            jc.Write(iq)
-        End If
+    Private Sub jc_OnIQ(sender As Object, iq As IQ) Handles jc.OnIQ
+        InvokeAction(Sub ()
+                         If iq.Type <> IQType.get Then Return
+                         
+                         Dim query As XmlElement = iq.Query
+                         If (query Is Nothing) Then
+                             Return
+                         End If
+                         
+                         If TypeOf query Is Version Then
+                             iq = iq.GetResponse(jc.Document)
+                             Dim ver As Version = DirectCast(iq.Query, Version)
+                             ver.OS = Environment.OSVersion.ToString()
+                             ver.EntityName = Application.ProductName
+                             ver.Ver = Application.ProductVersion
+                             jc.Write(iq)
+                         End If
+                     End Sub)
     End Sub
 
-    Private Sub rm_OnRosterEnd(ByVal sender As Object) Handles rm.OnRosterEnd
-        roster.ExpandAll()
+    Private Sub rm_OnRosterEnd(sender As Object) Handles rm.OnRosterEnd
+        InvokeAction(Sub ()
+                         roster.ExpandAll()
+                     End Sub)
     End Sub
 
     Private Sub roster_DoubleClick(ByVal sender As System.Object, ByVal e As System.EventArgs)
@@ -398,13 +423,17 @@ Public Class MainForm
         sm.Show()
     End Sub
 
-    Private Sub jc_OnStreamError(ByVal sender As Object, ByVal rp As System.Xml.XmlElement) Handles jc.OnStreamError
-        m_err = True
-        pnlCon.Text = "Stream error: " + rp.InnerText
+    Private Sub jc_OnStreamError(sender As Object, rp As XmlElement) Handles jc.OnStreamError
+        InvokeAction(Sub ()
+                         m_err = True
+                         pnlCon.Text = "Stream error: " + rp.InnerText
+                     End Sub)
     End Sub
 
-    Private Sub jc_OnStreamInit(ByVal sender As Object, ByVal stream As jabber.protocol.ElementStream) Handles jc.OnStreamInit
-        stream.AddFactory(New FooFactory)
+    Private Sub jc_OnStreamInit(sender As Object, stream As protocol.ElementStream) Handles jc.OnStreamInit
+        InvokeAction(Sub ()
+                         stream.AddFactory(New FooFactory)
+                     End Sub)
     End Sub
 
     Private Sub mnuPresence_Popup(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnuPresence.Popup
