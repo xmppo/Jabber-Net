@@ -9,7 +9,6 @@ open NUnit.Framework
 open JabberNet.Muzzle
 open JabberNet.Test.Muzzle.Helpers
 
-
 [<TestFixture>]
 type ControlExtensionsTest () =
 
