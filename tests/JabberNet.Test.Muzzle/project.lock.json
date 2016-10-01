@@ -2,7 +2,16 @@
   "locked": false,
   "version": 2,
   "targets": {
-    ".NETFramework,Version=v4.5.1": {
+    ".NETFramework,Version=v4.6.2": {
+      "FSharp.Core/4.0.0.1": {
+        "type": "package",
+        "compile": {
+          "lib/net40/FSharp.Core.dll": {}
+        },
+        "runtime": {
+          "lib/net40/FSharp.Core.dll": {}
+        }
+      },
       "NUnit/3.4.1": {
         "type": "package",
         "compile": {
@@ -10,15 +19,6 @@
         },
         "runtime": {
           "lib/net45/nunit.framework.dll": {}
-        }
-      },
-      "RhinoMocks/3.6.1": {
-        "type": "package",
-        "compile": {
-          "lib/net/Rhino.Mocks.dll": {}
-        },
-        "runtime": {
-          "lib/net/Rhino.Mocks.dll": {}
         }
       },
       "zlib.net/1.0.4": {
@@ -49,6 +49,22 @@
           "net40/JabberNet.dll": {}
         }
       },
+      "JabberNet.Muzzle/2.1.2": {
+        "type": "project",
+        "framework": ".NETFramework,Version=v4.0",
+        "dependencies": {
+          "JabberNet": "1.0.0"
+        },
+        "frameworkAssemblies": [
+          "System.Windows.Forms"
+        ],
+        "compile": {
+          "net40/JabberNet.Muzzle.dll": {}
+        },
+        "runtime": {
+          "net40/JabberNet.Muzzle.dll": {}
+        }
+      },
       "JabberNet.Netlib.Dns/2.1.2": {
         "type": "project",
         "framework": ".NETFramework,Version=v4.0",
@@ -62,6 +78,43 @@
     }
   },
   "libraries": {
+    "FSharp.Core/4.0.0.1": {
+      "sha512": "lNtlbbJ5hP8LEd7nKtTUiGEpLmHLWiU39x+0jq4rmRWG7Mgj6vYm+gmTOhtwpiPFX8j8zUsfLyA8AC7dZY75LQ==",
+      "type": "package",
+      "path": "FSharp.Core/4.0.0.1",
+      "files": [
+        "FSharp.Core.4.0.0.1.nupkg.sha512",
+        "FSharp.Core.nuspec",
+        "lib/net20/FSharp.Core.dll",
+        "lib/net20/FSharp.Core.optdata",
+        "lib/net20/FSharp.Core.sigdata",
+        "lib/net20/FSharp.Core.xml",
+        "lib/net40/FSharp.Core.dll",
+        "lib/net40/FSharp.Core.optdata",
+        "lib/net40/FSharp.Core.sigdata",
+        "lib/net40/FSharp.Core.xml",
+        "lib/portable-net45+monoandroid10+monotouch10+xamarinios10/FSharp.Core.dll",
+        "lib/portable-net45+monoandroid10+monotouch10+xamarinios10/FSharp.Core.optdata",
+        "lib/portable-net45+monoandroid10+monotouch10+xamarinios10/FSharp.Core.sigdata",
+        "lib/portable-net45+monoandroid10+monotouch10+xamarinios10/FSharp.Core.xml",
+        "lib/portable-net45+netcore45+wp8/FSharp.Core.dll",
+        "lib/portable-net45+netcore45+wp8/FSharp.Core.optdata",
+        "lib/portable-net45+netcore45+wp8/FSharp.Core.sigdata",
+        "lib/portable-net45+netcore45+wp8/FSharp.Core.xml",
+        "lib/portable-net45+netcore45+wpa81+wp8/FSharp.Core.dll",
+        "lib/portable-net45+netcore45+wpa81+wp8/FSharp.Core.optdata",
+        "lib/portable-net45+netcore45+wpa81+wp8/FSharp.Core.sigdata",
+        "lib/portable-net45+netcore45+wpa81+wp8/FSharp.Core.xml",
+        "lib/portable-net45+netcore45/FSharp.Core.dll",
+        "lib/portable-net45+netcore45/FSharp.Core.optdata",
+        "lib/portable-net45+netcore45/FSharp.Core.sigdata",
+        "lib/portable-net45+netcore45/FSharp.Core.xml",
+        "lib/portable-net45+sl5+netcore45/FSharp.Core.dll",
+        "lib/portable-net45+sl5+netcore45/FSharp.Core.optdata",
+        "lib/portable-net45+sl5+netcore45/FSharp.Core.sigdata",
+        "lib/portable-net45+sl5+netcore45/FSharp.Core.xml"
+      ]
+    },
     "NUnit/3.4.1": {
       "sha512": "G/9h/ENn8+GvT5DvBqVNrUhIWuxtAr0/oVGN2ljKVUw50EAZYBzeWSy9s6nqMswaQACpQzljql1sWQ/peE2eJg==",
       "type": "package",
@@ -87,17 +140,6 @@
         "lib/portable-net45+win8+wp8+wpa81+Xamarin.Mac+MonoAndroid10+MonoTouch10+Xamarin.iOS10/nunit.framework.xml"
       ]
     },
-    "RhinoMocks/3.6.1": {
-      "sha512": "0HjdR7PVVUDz9Db5cLzU0Dquay8MhoCoZ8PJRZOo10Iysq4m+mjl2aaxc4eWztvZ6S1v/NYW5xv1qul0ToN21w==",
-      "type": "package",
-      "path": "RhinoMocks/3.6.1",
-      "files": [
-        "RhinoMocks.3.6.1.nupkg.sha512",
-        "RhinoMocks.nuspec",
-        "lib/net/Rhino.Mocks.dll",
-        "lib/net/Rhino.Mocks.xml"
-      ]
-    },
     "zlib.net/1.0.4": {
       "sha512": "ywKkVY1y20tGQsUnYgKupYm91L8GVrVgoEOFTjfR1Bb5Xiy5tBJu5SV9liIiW2h8/KQUBefE45vSythtNMmahQ==",
       "type": "package",
@@ -113,6 +155,11 @@
       "path": "../../src/JabberNet/project.json",
       "msbuildProject": "../../src/JabberNet/JabberNet.xproj"
     },
+    "JabberNet.Muzzle/2.1.2": {
+      "type": "project",
+      "path": "../../src/JabberNet.Muzzle/project.json",
+      "msbuildProject": "../../src/JabberNet.Muzzle/JabberNet.Muzzle.xproj"
+    },
     "JabberNet.Netlib.Dns/2.1.2": {
       "type": "project",
       "path": "../../src/JabberNet.Netlib.Dns/project.json",
@@ -121,14 +168,32 @@
   },
   "projectFileDependencyGroups": {
     "": [
-      "JabberNet",
-      "NUnit >= 3.4.1",
-      "RhinoMocks >= 3.6.1"
+      "FSharp.Core >= 4.0.0.1",
+      "JabberNet.Muzzle",
+      "NUnit >= 3.4.1"
     ],
-    ".NETFramework,Version=v4.5.1": []
+    ".NETFramework,Version=v4.6.2": [
+      "System.Numerics >= 4.0.0"
+    ]
   },
   "tools": {
     ".NETCoreApp,Version=v1.0": {
+      "dotnet-compile-fsc/1.0.0-preview2-020000": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.DotNet.Cli.Utils": "1.0.0-preview2-003121",
+          "Microsoft.DotNet.Compiler.Common": "1.0.0-preview2-003121",
+          "Microsoft.DotNet.ProjectModel": "1.0.0-rc3-003121",
+          "Microsoft.FSharp.Compiler.netcore": "1.0.0-alpha-160629",
+          "Microsoft.NETCore.App": "1.0.0"
+        },
+        "compile": {
+          "lib/netcoreapp1.0/dotnet-compile-fsc.dll": {}
+        },
+        "runtime": {
+          "lib/netcoreapp1.0/dotnet-compile-fsc.dll": {}
+        }
+      },
       "dotnet-test-nunit/3.4.0-beta-2": {
         "type": "package",
         "dependencies": {
@@ -148,6 +213,7 @@
   },
   "projectFileToolGroups": {
     ".NETCoreApp,Version=v1.0": [
+      "dotnet-compile-fsc >= 1.0.0-preview2-*",
       "dotnet-test-nunit >= 3.4.0-beta-2"
     ]
   }
