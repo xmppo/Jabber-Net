@@ -364,12 +364,12 @@ namespace JabberNet.Muzzle
 
         private void m_roster_OnRosterBegin(object sender)
         {
-            this.BeginUpdate();
+            this.InvokeAction(BeginUpdate);
         }
 
         private void m_roster_OnRosterEnd(object sender)
         {
-            this.EndUpdate();
+            this.InvokeAction(EndUpdate);
         }
 
         /// <summary>
@@ -427,92 +427,102 @@ namespace JabberNet.Muzzle
             return gn;
         }
 
-        private void m_roster_OnRosterItem(object sender, jabber.protocol.iq.Item ri)
+        private void m_roster_OnRosterItem(object sender, Item ri)
         {
-            bool remove = (ri.Subscription == Subscription.remove);
+            this.InvokeAction(() =>
+            {
+                var remove = (ri.Subscription == Subscription.remove);
 
-            LinkedList nodelist = (LinkedList)m_items[ri.JID.ToString()];
-            if (nodelist == null)
-            {
-                // First time through.
-                if (!remove)
+                var nodelist = (LinkedList)m_items[ri.JID.ToString()];
+                if (nodelist == null)
                 {
-                    nodelist = new LinkedList();
-                    m_items.Add(ri.JID.ToString(), nodelist);
-                }
-            }
-            else
-            {
-                // update to an existing item.  remove all of them, and start over.
-                foreach (ItemNode i in nodelist)
-                {
-                    GroupNode gn = i.Parent as GroupNode;
-                    i.Remove();
-                    if ((gn != null) && (gn.Nodes.Count == 0))
+                    // First time through.
+                    if (!remove)
                     {
-                        m_groups.Remove(gn.GroupName);
-                        gn.Remove();
+                        nodelist = new LinkedList();
+                        m_items.Add(ri.JID.ToString(), nodelist);
                     }
                 }
-                nodelist.Clear();
+                else
+                {
+                    // update to an existing item.  remove all of them, and start over.
+                    foreach (ItemNode i in nodelist)
+                    {
+                        var gn = i.Parent as GroupNode;
+                        i.Remove();
+                        if ((gn != null) && (gn.Nodes.Count == 0))
+                        {
+                            m_groups.Remove(gn.GroupName);
+                            gn.Remove();
+                        }
+                    }
+                    nodelist.Clear();
+                    if (remove)
+                        m_items.Remove(ri.JID.ToString());
+                }
+
                 if (remove)
-                    m_items.Remove(ri.JID.ToString());
-            }
+                    return;
 
-            if (remove)
-                return;
+                // add the new ones back
+                var ghash = new Hashtable();
+                var groups = ri.GetGroups();
+                for (int i = groups.Length - 1; i >= 0; i--)
+                {
+                    if (groups[i].GroupName == "")
+                        groups[i].GroupName = UNFILED;
+                }
 
-            // add the new ones back
-            Hashtable ghash = new Hashtable();
-            Group[] groups = ri.GetGroups();
-            for (int i=groups.Length-1; i>=0; i--)
-            {
-                if (groups[i].GroupName == "")
-                    groups[i].GroupName = UNFILED;
-            }
+                if (groups.Length == 0)
+                {
+                    groups = new Group[]
+                    {
+                        new Group(ri.OwnerDocument)
+                    };
+                    groups[0].GroupName = UNFILED;
+                }
 
-            if (groups.Length == 0)
-            {
-                groups = new Group[] { new Group(ri.OwnerDocument) };
-                groups[0].GroupName = UNFILED;
-            }
+                foreach (var g in groups)
+                {
+                    var gn = AddGroupNode(g);
+                    // might have the same group twice.
+                    if (ghash.Contains(g.GroupName))
+                        continue;
+                    ghash.Add(g.GroupName, g);
 
-            foreach (Group g in groups)
-            {
-                GroupNode gn = AddGroupNode(g);
-                // might have the same group twice.
-                if (ghash.Contains(g.GroupName))
-                    continue;
-                ghash.Add(g.GroupName, g);
-
-                ItemNode i = new ItemNode(ri);
-                i.ChangePresence(m_pres[ri.JID]);
-                nodelist.Add(i);
-                gn.Nodes.Add(i);
-            }
+                    var i = new ItemNode(ri);
+                    i.ChangePresence(m_pres[ri.JID]);
+                    nodelist.Add(i);
+                    gn.Nodes.Add(i);
+                }
+            });
         }
 
         private void m_client_OnDisconnect(object sender)
         {
-            this.Nodes.Clear();
-            m_groups.Clear();
-            m_items.Clear();
+            this.InvokeAction(() =>
+            {
+                this.Nodes.Clear();
+                m_groups.Clear();
+                m_items.Clear();
+            });
         }
-
 
         private void m_pres_OnPrimarySessionChange(object sender, JID bare)
         {
-            Presence pres = m_pres[bare];
-            LinkedList nodelist = (LinkedList) m_items[bare.ToString()];
-            if (nodelist == null)
-                return;
-
-            foreach (ItemNode n in nodelist)
+            this.BeginInvokeAction(() =>
             {
-                n.ChangePresence(pres);
-            }
-        }
+                var pres = m_pres[bare];
+                var nodelist = (LinkedList)m_items[bare.ToString()];
+                if (nodelist == null)
+                    return;
 
+                foreach (ItemNode n in nodelist)
+                {
+                    n.ChangePresence(pres);
+                }
+            });
+        }
 
         /// <summary>
         /// A TreeNode to hold a Roster Group
