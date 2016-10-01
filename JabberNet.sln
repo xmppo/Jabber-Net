@@ -131,8 +131,7 @@ Global
 		{AA5EF38F-ABCE-4997-B96F-0846E62E46B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA5EF38F-ABCE-4997-B96F-0846E62E46B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AA5EF38F-ABCE-4997-B96F-0846E62E46B3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AA5EF38F-ABCE-4997-B96F-0846E62E46B3}.Travis|Any CPU.ActiveCfg = Debug|Any CPU
-		{AA5EF38F-ABCE-4997-B96F-0846E62E46B3}.Travis|Any CPU.Build.0 = Debug|Any CPU
+		{AA5EF38F-ABCE-4997-B96F-0846E62E46B3}.Travis|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
