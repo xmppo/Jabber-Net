@@ -6,8 +6,10 @@ Messaging and Presence Protocol (XMPP), also known as the Jabber. Client
 connections, server component connections, presence, service discovery, and the
 like.
 
-Dependencies
-------------
+Prerequisites
+-------------
+
+### Package manager
 
 This project uses [Paket][paket] dependency manager. Before opening the solution
 or building the project, you should install Paket (or Paket bootstrapper) into
@@ -22,6 +24,13 @@ For convenience, there is a script `scripts/Install.ps1` that will download
 Paket bootstrapper and call these commands automatically.
 
 Consult the script documentation to discover its parameters.
+
+### Build system
+
+To build the project, you'll need [.NET Core build system][dotnet-core]. On
+Windows, you'll also need to install [.NET 4.6.2 Developer
+Pack][net-462-developer-pack] (can be installed [from
+Chocolatey][net-462-developer-pack-choco]) to compile some of the tests.
 
 Build and test
 --------------
@@ -93,7 +102,9 @@ consult [Licensing.md][] for details on licensing of internal components.
 [Licensing.md]: ./Licensing.md
 
 [appveyor]: https://ci.appveyor.com/project/ForNeVeR/jabber-net/branch/develop
-[dotnet-core]: https://docs.microsoft.com/dotnet/
+[dotnet-core]: https://www.microsoft.com/net/core
+[net-462-developer-pack]: https://www.microsoft.com/en-us/download/details.aspx?id=53321
+[net-462-developer-pack-choco]: https://chocolatey.org/packages/netfx-4.6.2-devpack
 [nuget]: https://www.nuget.org/packages/jabber-net/
 [paket]: https://fsprojects.github.io/Paket/index.html
 [travis]: https://travis-ci.org/ForNeVeR/Jabber-Net
