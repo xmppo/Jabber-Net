@@ -2,7 +2,6 @@
     "version": "2.1.2-*",
     "buildOptions": {
         "additionalArguments": [ "/target:winexe" ],
-        "debugType": "portable",
         "emitEntryPoint": true
     },
     "frameworks": {

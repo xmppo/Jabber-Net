@@ -1,8 +1,7 @@
 {
     "version": "2.1.2-*",
     "buildOptions": {
-        "allowUnsafe": true,
-        "debugType": "portable"
+        "allowUnsafe": true
     },
     "dependencies": {
         "zlib.net": "1.0.4",
