@@ -26,7 +26,7 @@ of [Jabber Open Source License (JOSL)][josl] and [GPLv2][gplv2].
 ### Source tagging policy
 
 Current project maintainers are not happy with explicitly naming the licenses in
-headers of every source file (expecially because there're some source code
+headers of every source file (especially because there're some source code
 formats that disallow such headers), so we state the following the policy
 regarding the license headers ([like this][header-sample]):
 
@@ -65,8 +65,8 @@ The scripts are:
 - [`gen-unicode-tables.pl`][gen-unicode-tables-pl]
 
 The output of these generators is explicitly mentioned as unrestricted, so we're
-distributing it (and not the scripts themselves) under LGPL as an integral part
-of Jabber-Net under the terms of LGPL.
+distributing it (and not the scripts themselves) as an integral part of
+Jabber-Net under the terms of LGPL.
 
 UNICODE
 -------
