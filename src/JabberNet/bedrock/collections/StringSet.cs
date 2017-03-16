@@ -1,4 +1,4 @@
-/* --------------------------------------------------------------------------
+﻿/* --------------------------------------------------------------------------
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
@@ -22,12 +22,11 @@ namespace JabberNet.bedrock.collections
     /// A set of strings, backed into a BitArray.  Any given string that is inserted
     /// into any instance of a StringSet increases the size of all StringSets over time.
     /// </summary>
-    public class StringSet : IEnumerable, IEnumerable<string>, ICloneable
+    public class StringSet : IEnumerable, IEnumerable<string>
 	{
         private BitArray m_bits = null;
 
-        // List<T>.Add doesn't return an int.
-        private static ArrayList s_strings = new ArrayList();
+        private static List<string> s_strings = new List<string>();
         private static Dictionary<string, int> s_bits = new Dictionary<string,int>();
 
         /// <summary>
@@ -45,7 +44,7 @@ namespace JabberNet.bedrock.collections
         public StringSet(StringSet other)
         {
             if (other != null)
-                m_bits = (BitArray)other.m_bits.Clone();
+                m_bits = new BitArray(other.m_bits);
         }
 
         /// <summary>
@@ -76,7 +75,8 @@ namespace JabberNet.bedrock.collections
             {
                 if (!s_bits.TryGetValue(s, out val))
                 {
-                    s_bits[s] = val = s_strings.Add(s);
+                    s_strings.Add(s);
+                    s_bits[s] = val = s_strings.Count - 1;
                 }
             }
             return val;
@@ -135,7 +135,7 @@ namespace JabberNet.bedrock.collections
         {
             m_bits.Length = set.m_bits.Length = Math.Max(m_bits.Length, set.m_bits.Length);
             // Not is destructive.  Stupid.
-            BitArray os = (BitArray)set.m_bits.Clone();
+            BitArray os = new BitArray(set.m_bits);
             os.Not();
             m_bits.And(os);
         }

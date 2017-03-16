@@ -1,4 +1,4 @@
-/* --------------------------------------------------------------------------
+﻿/* --------------------------------------------------------------------------
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
@@ -19,8 +19,7 @@ namespace JabberNet.bedrock.net
     /// <summary>
     /// Lame exception, since I couldn't find one I liked.
     /// </summary>
-    [Serializable]
-    public class AsyncSocketConnectionException : System.SystemException
+    public class AsyncSocketConnectionException : Exception
     {
         /// <summary>
         /// Create a new exception instance.
@@ -46,22 +45,6 @@ namespace JabberNet.bedrock.net
         /// <param name="e">Inner exception</param>
         public AsyncSocketConnectionException(string description, Exception e)
             : base(description, e)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the
-        /// AsyncSocketConnectionException class with serialized
-        /// data.
-        /// </summary>
-        /// <param name="info">The object that holds the serialized
-        /// object data.</param>
-        /// <param name="ctx">The contextual information about the
-        /// source or destination.</param>
-        protected AsyncSocketConnectionException(System.Runtime.Serialization.SerializationInfo info,
-            System.Runtime.Serialization.StreamingContext ctx)
-            :
-            base(info, ctx)
         {
         }
     }

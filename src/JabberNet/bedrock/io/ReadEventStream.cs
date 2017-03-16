@@ -1,4 +1,4 @@
-/* --------------------------------------------------------------------------
+﻿/* --------------------------------------------------------------------------
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
@@ -12,8 +12,9 @@
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
 
-using System;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace JabberNet.bedrock.io
 {
@@ -79,62 +80,23 @@ namespace JabberNet.bedrock.io
             set { m_stream.Position = value; }
         }
 
-        /// <summary>
-        /// Begins an asynchronous read operation.
-        /// </summary>
-        /// <param name="buffer"></param>
-        /// <param name="offset"></param>
-        /// <param name="count"></param>
-        /// <param name="callback"></param>
-        /// <param name="state"></param>
-        /// <returns></returns>
-        public override IAsyncResult BeginRead(byte[] buffer, int offset, int count, AsyncCallback callback, object state)
+        public override Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
         {
-            return m_stream.BeginRead (buffer, offset, count, callback, state);
+            return m_stream.ReadAsync(buffer, offset, count, cancellationToken);
         }
 
-        /// <summary>
-        /// Begins an asynchronous write operation.
-        /// </summary>
-        /// <param name="buffer"></param>
-        /// <param name="offset"></param>
-        /// <param name="count"></param>
-        /// <param name="callback"></param>
-        /// <param name="state"></param>
-        /// <returns></returns>
-        public override IAsyncResult BeginWrite(byte[] buffer, int offset, int count, AsyncCallback callback, object state)
+        public override Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
         {
-            return m_stream.BeginWrite (buffer, offset, count, callback, state);
+            return m_stream.WriteAsync(buffer, offset, count, cancellationToken);
         }
 
-        /// <summary>
-        /// Closes the current stream and releases any resources (such as sockets and file handles) associated with the current stream.
-        /// </summary>
-        public override void Close()
+        protected override void Dispose(bool disposing)
         {
-            m_stream.Close ();
-        }
-
-        /// <summary>
-        /// Waits for the pending asynchronous read to complete.
-        /// </summary>
-        /// <param name="asyncResult"></param>
-        /// <returns></returns>
-        public override int EndRead(IAsyncResult asyncResult)
-        {
-            int count = m_stream.EndRead(asyncResult);
-            byte[] buf = System.Text.Encoding.UTF8.GetBytes("Read " + count + " bytes from async stream");
-            FireOnRead(buf, 0, buf.Length);
-            return count;
-        }
-
-        /// <summary>
-        /// Ends an asynchronous write operation.
-        /// </summary>
-        /// <param name="asyncResult"></param>
-        public override void EndWrite(IAsyncResult asyncResult)
-        {
-            m_stream.EndWrite (asyncResult);
+            base.Dispose(disposing);
+            if (disposing)
+            {
+                m_stream.Dispose();
+            }
         }
 
         /// <summary>
