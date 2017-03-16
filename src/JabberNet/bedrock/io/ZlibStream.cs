@@ -14,6 +14,8 @@
 
 using System;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using ComponentAce.Compression.Libs.zlib;
 
 namespace JabberNet.bedrock.io
@@ -21,7 +23,7 @@ namespace JabberNet.bedrock.io
     /// <summary>
     /// Compression failed.
     /// </summary>
-    public class CompressionFailedException : ApplicationException
+    public class CompressionFailedException : Exception
     {
         /// <summary>
         ///
@@ -161,16 +163,7 @@ namespace JabberNet.bedrock.io
             set { throw new NotImplementedException("The method or operation is not implemented."); }
         }
 
-        /// <summary>
-        /// Start an async read. Implemented locally, since Stream.BeginRead() isn't really asynch.
-        /// </summary>
-        /// <param name="buffer"></param>
-        /// <param name="offset"></param>
-        /// <param name="count"></param>
-        /// <param name="callback"></param>
-        /// <param name="state"></param>
-        /// <returns></returns>
-        public override IAsyncResult BeginRead(byte[] buffer, int offset, int count, AsyncCallback callback, object state)
+        public override Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
         {
             if (count <= 0)
                 throw new ArgumentException("Can't read 0 bytes", "count");
@@ -181,23 +174,10 @@ namespace JabberNet.bedrock.io
             if (m_in.avail_in == 0)
             {
                 m_in.next_in_index = 0;
-                return m_stream.BeginRead(m_inbuf, 0, bufsize, callback, state);
+                return m_stream.ReadAsync(m_inbuf, 0, bufsize, cancellationToken);
             }
-            ZlibStreamAsyncResult ar = new ZlibStreamAsyncResult(state);
-            callback(ar);
-            return ar;
-        }
 
-        /// <summary>
-        /// Complete a pending read, when the callback passed to BeginRead fires.
-        /// </summary>
-        /// <param name="asyncResult"></param>
-        /// <returns></returns>
-        public override int EndRead(IAsyncResult asyncResult)
-        {
-            if (!(asyncResult is ZlibStreamAsyncResult))
-                m_in.avail_in = m_stream.EndRead(asyncResult);
-            return Inflate();
+            return Task.FromResult(Inflate());
         }
 
         /// <summary>
@@ -260,17 +240,7 @@ namespace JabberNet.bedrock.io
             throw new NotImplementedException("The method or operation is not implemented.");
         }
 
-        /// <summary>
-        /// Begin an asynch write, compressing first.  Implemented locally, since Stream.BeginWrite isn't asynch.
-        /// Note: may call Write() on the underlying stream more than once.
-        /// </summary>
-        /// <param name="buffer"></param>
-        /// <param name="offset"></param>
-        /// <param name="count"></param>
-        /// <param name="callback"></param>
-        /// <param name="state"></param>
-        /// <returns></returns>
-        public override IAsyncResult BeginWrite(byte[] buffer, int offset, int count, AsyncCallback callback, object state)
+        public override async Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
         {
             if (count <= 0)
                 throw new ArgumentException("Can't write 0 bytes", "count");
@@ -286,31 +256,20 @@ namespace JabberNet.bedrock.io
             {
                 if (err != zlibConst.Z_OK)
                 {
-                    ZlibStreamAsyncResult res = new ZlibStreamAsyncResult(state, new CompressionFailedException("Compress failed: " + err));
-                    callback(res);
-                    return res;
+                    throw new CompressionFailedException("Compress failed: " + err);
                 }
             }
             if (m_out.avail_in == 0)
-                return m_stream.BeginWrite(m_outbuf, 0, bufsize - m_out.avail_out, callback, state);
+                await m_stream.WriteAsync(m_outbuf, 0, bufsize - m_out.avail_out, cancellationToken);
             else
-                return m_stream.BeginWrite(m_outbuf, 0, bufsize - m_out.avail_out, new AsyncCallback(IntermediateWrite), new ZlibState(callback, state));
+            {
+                await m_stream.WriteAsync(m_outbuf, 0, bufsize - m_out.avail_out, cancellationToken);
+                await IntermediateWrite(cancellationToken);
+            }
         }
 
-        private void IntermediateWrite(IAsyncResult asyncResult)
+        private async Task IntermediateWrite(CancellationToken cancellationToken)
         {
-            ZlibState state = (ZlibState)asyncResult.AsyncState;
-            try
-            {
-                m_stream.EndWrite(asyncResult);
-            }
-            catch (Exception e)
-            {
-                ZlibStreamAsyncResult res = new ZlibStreamAsyncResult(state.state, e);
-                state.callback(res);
-                return;
-            }
-
             m_out.next_out_index = 0;
             m_out.avail_out = bufsize;
             int err = m_out.deflate(m_flush);
@@ -318,32 +277,16 @@ namespace JabberNet.bedrock.io
             {
                 if (err != zlibConst.Z_OK)
                 {
-                    ZlibStreamAsyncResult res = new ZlibStreamAsyncResult(state.state, new CompressionFailedException("Compress failed: " + err));
-                    state.callback(res);
-                    return;
+                    throw new CompressionFailedException("Compress failed: " + err);
                 }
             }
             if (m_out.avail_in == 0)
-                m_stream.BeginWrite(m_outbuf, 0, bufsize - m_out.avail_out, state.callback, state.state);
+                await m_stream.WriteAsync(m_outbuf, 0, bufsize - m_out.avail_out, cancellationToken);
             else
-                m_stream.BeginWrite(m_outbuf, 0, bufsize - m_out.avail_out, new AsyncCallback(IntermediateWrite), state);
-        }
-
-        /// <summary>
-        /// Complete a pending write, when the callback given to BeginWrite is called.
-        /// </summary>
-        /// <param name="asyncResult"></param>
-        public override void EndWrite(IAsyncResult asyncResult)
-        {
-            if (asyncResult is ZlibStreamAsyncResult)
             {
-                ZlibStreamAsyncResult ar = (ZlibStreamAsyncResult)asyncResult;
-                if (ar.Exception != null)
-                    throw ar.Exception;
+                await m_stream.WriteAsync(m_outbuf, 0, bufsize - m_out.avail_out, cancellationToken);
+                await IntermediateWrite(cancellationToken);
             }
-            else
-                m_stream.EndWrite(asyncResult);
-            return;
         }
 
         /// <summary>
@@ -371,67 +314,6 @@ namespace JabberNet.bedrock.io
                         throw new CompressionFailedException("Compress failed: " + err);
                 }
                 m_stream.Write(m_outbuf, 0, bufsize - m_out.avail_out);
-            }
-        }
-
-        private class ZlibStreamAsyncResult : IAsyncResult
-        {
-            private object m_state = null;
-            private Exception m_exception;
-
-            public ZlibStreamAsyncResult(object state)
-            {
-                m_state = state;
-            }
-
-            public ZlibStreamAsyncResult(object state, Exception except)
-            {
-                m_state = state;
-                m_exception = except;
-            }
-
-            public Exception Exception
-            {
-                get { return m_exception; }
-            }
-
-            #region IAsyncResult Members
-
-            public object AsyncState
-            {
-                get { return m_state; }
-            }
-
-            public System.Threading.WaitHandle AsyncWaitHandle
-            {
-                get
-                {
-                    throw new Exception("The method or operation is not implemented.");
-                }
-            }
-
-            public bool CompletedSynchronously
-            {
-                get { return true; }
-            }
-
-            public bool IsCompleted
-            {
-                get { return true; }
-            }
-
-            #endregion
-        }
-
-        private class ZlibState
-        {
-            public AsyncCallback callback;
-            public object state;
-
-            public ZlibState(AsyncCallback callback, object state)
-            {
-                this.callback = callback;
-                this.state = state;
             }
         }
     }

@@ -1,4 +1,4 @@
-/* --------------------------------------------------------------------------
+﻿/* --------------------------------------------------------------------------
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
@@ -427,7 +427,7 @@ namespace JabberNet.jabber.connection.sasl
 
         bool _bGotClientCredentials = false;
 
-        [DllImport("secur32", CharSet = CharSet.Auto)]
+        [DllImport("secur32", CharSet = CharSet.Unicode)]
         static extern uint AcquireCredentialsHandle(
             string pszPrincipal, //SEC_CHAR*
             string pszPackage, //SEC_CHAR* //"Kerberos","NTLM","Negotiative"
@@ -439,7 +439,7 @@ namespace JabberNet.jabber.connection.sasl
             ref SECURITY_HANDLE phCredential, //SecHandle //PCtxtHandle ref
             ref SECURITY_INTEGER ptsExpiry); //PTimeStamp //TimeStamp ref
 
-        [DllImport("secur32", CharSet = CharSet.Auto)]
+        [DllImport("secur32", CharSet = CharSet.Unicode)]
         static extern uint AcquireCredentialsHandle(
             string pszPrincipal, //SEC_CHAR*
             string pszPackage, //SEC_CHAR* //"Kerberos","NTLM","Negotiative"
@@ -451,7 +451,7 @@ namespace JabberNet.jabber.connection.sasl
             ref SECURITY_HANDLE phCredential, //SecHandle //PCtxtHandle ref
             ref SECURITY_INTEGER ptsExpiry); //PTimeStamp //TimeStamp ref
 
-        [DllImport("secur32", CharSet = CharSet.Auto, SetLastError = true)]
+        [DllImport("secur32", CharSet = CharSet.Unicode, SetLastError = true)]
         static extern uint InitializeSecurityContext(
             ref SECURITY_HANDLE phCredential,//PCredHandle
             IntPtr phContext, //PCtxtHandle
@@ -466,7 +466,7 @@ namespace JabberNet.jabber.connection.sasl
             out uint pfContextAttr, //managed ulong == 64 bits!!!
             out SECURITY_INTEGER ptsExpiry); //PTimeStamp
 
-        [DllImport("secur32", CharSet = CharSet.Auto, SetLastError = true)]
+        [DllImport("secur32", CharSet = CharSet.Unicode, SetLastError = true)]
         static extern uint InitializeSecurityContext(
             ref SECURITY_HANDLE phCredential,//PCredHandle
             ref SECURITY_HANDLE phContext, //PCtxtHandle
@@ -482,7 +482,7 @@ namespace JabberNet.jabber.connection.sasl
             out SECURITY_INTEGER ptsExpiry); //PTimeStamp
 
         /*
-        [DllImport("secur32.Dll", CharSet = CharSet.Auto, SetLastError = false)]
+        [DllImport("secur32.Dll", CharSet = CharSet.Unicode, SetLastError = false)]
         static extern int AcceptSecurityContext(ref SECURITY_HANDLE phCredential,
                                                 IntPtr phContext,
                                                 ref SecBufferDesc pInput,
@@ -493,7 +493,7 @@ namespace JabberNet.jabber.connection.sasl
                                                 out uint pfContextAttr,    //managed ulong == 64 bits!!!
                                                 out SECURITY_INTEGER ptsTimeStamp);
 
-        [DllImport("secur32.Dll", CharSet = CharSet.Auto, SetLastError = false)]
+        [DllImport("secur32.Dll", CharSet = CharSet.Unicode, SetLastError = false)]
         static extern int AcceptSecurityContext(ref SECURITY_HANDLE phCredential,
                                                 ref SECURITY_HANDLE phContext,
                                                 ref SecBufferDesc pInput,
@@ -505,33 +505,33 @@ namespace JabberNet.jabber.connection.sasl
                                                 out SECURITY_INTEGER ptsTimeStamp);
         */
 
-        [DllImport("secur32.Dll", CharSet = CharSet.Auto, SetLastError = false)]
+        [DllImport("secur32.Dll", CharSet = CharSet.Unicode, SetLastError = false)]
         public static extern int ImpersonateSecurityContext(ref SECURITY_HANDLE phContext);
 
-        [DllImport("secur32.Dll", CharSet = CharSet.Auto, SetLastError = false)]
+        [DllImport("secur32.Dll", CharSet = CharSet.Unicode, SetLastError = false)]
         public static extern int QueryContextAttributes(ref SECURITY_HANDLE phContext,
                                                         uint ulAttribute,
                                                         out SecPkgContext_Sizes pContextAttributes);
 
-        [DllImport("secur32.Dll", CharSet = CharSet.Auto, SetLastError = false)]
+        [DllImport("secur32.Dll", CharSet = CharSet.Unicode, SetLastError = false)]
         public static extern int EncryptMessage(ref SECURITY_HANDLE phContext,
                                                 uint fQOP,        //managed ulong == 64 bits!!!
                                                 ref SecBufferDesc pMessage,
                                                 uint MessageSeqNo);    //managed ulong == 64 bits!!!
 
-        [DllImport("secur32.Dll", CharSet = CharSet.Auto, SetLastError = false)]
+        [DllImport("secur32.Dll", CharSet = CharSet.Unicode, SetLastError = false)]
         public static extern int DecryptMessage(ref SECURITY_HANDLE phContext,
                                                  ref SecBufferDesc pMessage,
                                                  uint MessageSeqNo,
                                                  out uint pfQOP);
 
-        [DllImport("secur32.Dll", CharSet = CharSet.Auto, SetLastError = false)]
+        [DllImport("secur32.Dll", CharSet = CharSet.Unicode, SetLastError = false)]
         public static extern int MakeSignature(ref SECURITY_HANDLE phContext,          // Context to use
                                                 uint fQOP,         // Quality of Protection
                                                 ref SecBufferDesc pMessage,        // Message to sign
                                                 uint MessageSeqNo);      // Message Sequence Num.
 
-        [DllImport("secur32.Dll", CharSet = CharSet.Auto, SetLastError = false)]
+        [DllImport("secur32.Dll", CharSet = CharSet.Unicode, SetLastError = false)]
         public static extern int VerifySignature(ref SECURITY_HANDLE phContext,          // Context to use
                                                 ref SecBufferDesc pMessage,        // Message to sign
                                                 uint MessageSeqNo,            // Message Sequence Num.

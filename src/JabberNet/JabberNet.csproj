@@ -12,11 +12,19 @@
     <Copyright>Copyright (c) Cursive, Inc. 2000—2008; Jabber-Net Contributors, 2008—2017</Copyright>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="ComponentAce.Compression.Libs.zlib" Version="1.0.4" />
     <PackageReference Include="System.Collections" Version="4.3.0" />
+    <PackageReference Include="System.Collections.NonGeneric" Version="4.3.0" />
     <PackageReference Include="System.IO.FileSystem.Watcher" Version="4.3.0" />
+    <PackageReference Include="System.Net.Requests" Version="4.3.0" />
     <PackageReference Include="System.Net.Security" Version="4.3.0" />
+    <PackageReference Include="System.Net.WebHeaderCollection" Version="4.3.0" />
+    <PackageReference Include="System.Threading.Thread" Version="4.3.0" />
     <PackageReference Include="System.Xml.XmlDocument" Version="4.3.0" />
     <PackageReference Include="System.Xml.XPath.XmlDocument" Version="4.3.0" />
   </ItemGroup>
