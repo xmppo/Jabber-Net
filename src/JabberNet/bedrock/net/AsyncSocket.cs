@@ -1,4 +1,4 @@
-/* --------------------------------------------------------------------------
+﻿/* --------------------------------------------------------------------------
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
@@ -616,10 +616,10 @@ namespace JabberNet.bedrock.net
                     // TODO: check to see if this Mono bug is still valid
 #if __MonoCS__
                     m_sock.Blocking = true;
-                    m_stream = new NetworkStream(m_sock);
+                    m_stream = new NetworkStream(m_sock, true);
                     m_sock.Blocking = false;
 #else
-                    m_stream = new NetworkStream(m_sock);
+                    m_stream = new NetworkStream(m_sock, true);
 #endif
                     if (m_secureProtocol != SslProtocols.None)
                         StartTLS();
