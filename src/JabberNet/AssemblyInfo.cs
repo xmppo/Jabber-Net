@@ -4,5 +4,6 @@
 [assembly: AssemblyProduct("Jabber-Net")]
 [assembly: AssemblyTitle("JabberNet")]
 [assembly: AssemblyDescription("Connect to Jabber (http://www.jabber.org/) from .Net")]
-[assembly: AssemblyCopyright("Copyright (c) Cursive, Inc. 2000—2008; Jabber-Net Contributors, 2008—2016")]
-[assembly: AssemblyVersion("2.1.2.0")]
+[assembly: AssemblyCopyright("Copyright (c) Cursive, Inc. 2000—2008; Jabber-Net Contributors, 2008—2017")]
+[assembly: AssemblyVersion("3.0.0.*")]
+[assembly: AssemblyInformationalVersion("3.0.0-preview1")]
