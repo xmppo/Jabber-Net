@@ -1,4 +1,4 @@
-/* --------------------------------------------------------------------------
+﻿/* --------------------------------------------------------------------------
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
@@ -14,7 +14,7 @@
 
 using System;
 using System.IO;
-using zlib;
+using ComponentAce.Compression.Libs.zlib;
 
 namespace JabberNet.bedrock.io
 {

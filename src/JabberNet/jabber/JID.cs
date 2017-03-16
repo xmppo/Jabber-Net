@@ -1,4 +1,4 @@
-/* --------------------------------------------------------------------------
+﻿/* --------------------------------------------------------------------------
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
@@ -22,7 +22,7 @@ namespace JabberNet.jabber
     /// <summary>
     /// Informs the client that an invalid JID was entered.
     /// </summary>
-    public class JIDFormatException : ApplicationException
+    public class JIDFormatException : Exception
     {
         /// <summary>
         /// Creates a new exception for an invalid JID.
@@ -45,17 +45,6 @@ namespace JabberNet.jabber
         /// <param name="badJid">Invalid JID.</param>
         /// <param name="e">Inner exception.</param>
         public JIDFormatException(string badJid, Exception e) : base("Bad JID: (" + badJid + ")", e)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the AsyncSocketConnectionException class with serialized data.
-        /// </summary>
-        /// <param name="info">The object that holds the serialized object data.</param>
-        /// <param name="ctx">The contextual information about the source or destination.</param>
-        protected JIDFormatException(System.Runtime.Serialization.SerializationInfo info,
-            System.Runtime.Serialization.StreamingContext ctx) :
-            base(info, ctx)
         {
         }
     }

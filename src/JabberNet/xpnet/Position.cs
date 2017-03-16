@@ -1,4 +1,4 @@
-/* --------------------------------------------------------------------------
+﻿/* --------------------------------------------------------------------------
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
@@ -26,7 +26,7 @@ namespace JabberNet.xpnet
     ///<summary>
     /// Position of an entry in a table.
     ///</summary>
-    public class Position : System.ICloneable
+    public class Position
     {
         private int lineNumber;
         private int columnNumber;
@@ -60,14 +60,6 @@ namespace JabberNet.xpnet
         {
             get { return columnNumber; }
             set { columnNumber = value; }
-        }
-
-        /**
-         * Returns a copy of this position.
-         */
-        public object Clone()
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

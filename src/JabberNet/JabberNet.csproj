@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.3</TargetFramework>
+    <TargetFramework>netstandard1.6</TargetFramework>
     <AssemblyVersion>3.0.0.0</AssemblyVersion>
     <FileVersion>3.0.0.0</FileVersion>
     <Version>3.0.0-preview1</Version>
@@ -13,8 +13,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ComponentAce.Compression.Libs.zlib" Version="1.0.4" />
     <PackageReference Include="System.Collections" Version="4.3.0" />
+    <PackageReference Include="System.IO.FileSystem.Watcher" Version="4.3.0" />
     <PackageReference Include="System.Net.Security" Version="4.3.0" />
+    <PackageReference Include="System.Xml.XmlDocument" Version="4.3.0" />
+    <PackageReference Include="System.Xml.XPath.XmlDocument" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -206,9 +210,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="xpnet\Exceptions.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="xpnet\Position.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="xpnet\UTF8Encoding.cs">
