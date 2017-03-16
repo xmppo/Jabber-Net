@@ -18,12 +18,17 @@
 
   <ItemGroup>
     <PackageReference Include="ComponentAce.Compression.Libs.zlib" Version="1.0.4" />
+    <PackageReference Include="CoreCompat.System.Drawing" Version="1.0.0-beta006" />
+    <PackageReference Include="runtime.linux-x64.CoreCompat.System.Drawing" Version="1.0.0-beta009" />
+    <PackageReference Include="runtime.osx.10.10-x64.CoreCompat.System.Drawing" Version="1.0.1-beta004" />
     <PackageReference Include="System.Collections" Version="4.3.0" />
     <PackageReference Include="System.Collections.NonGeneric" Version="4.3.0" />
+    <PackageReference Include="System.Drawing.Primitives" Version="4.3.0" />
     <PackageReference Include="System.IO.FileSystem.Watcher" Version="4.3.0" />
     <PackageReference Include="System.Net.Requests" Version="4.3.0" />
     <PackageReference Include="System.Net.Security" Version="4.3.0" />
     <PackageReference Include="System.Net.WebHeaderCollection" Version="4.3.0" />
+    <PackageReference Include="System.Security.Cryptography.Algorithms" Version="4.3.0" />
     <PackageReference Include="System.Threading.Thread" Version="4.3.0" />
     <PackageReference Include="System.Xml.XmlDocument" Version="4.3.0" />
     <PackageReference Include="System.Xml.XPath.XmlDocument" Version="4.3.0" />
@@ -31,198 +36,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\JabberNet.Netlib.Dns\JabberNet.Netlib.Dns.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="bedrock\collections\GraphNode.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="bedrock\collections\LinkedList.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="bedrock\collections\Set.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="bedrock\collections\SkipList.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="bedrock\collections\Tree.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="bedrock\collections\Trie.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="bedrock\collections\TrieNode.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="bedrock\io\ReadEventStream.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="bedrock\net\AsyncSocket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="bedrock\net\ProxySocket.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="bedrock\net\ShttpProxy.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="bedrock\net\SocketEventListener.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="bedrock\net\SocketWatcher.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="bedrock\net\Socks4Proxy.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="bedrock\net\Socks5Proxy.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="jabber\connection\IQTracker.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="jabber\connection\sasl\MD5Processor.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="jabber\connection\sasl\PlainProcessor.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="jabber\connection\sasl\SASLProcessor.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="jabber\JID.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="jabber\protocol\accept\Factory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="jabber\protocol\accept\Handshake.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="jabber\protocol\accept\Log.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="jabber\protocol\accept\Route.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="jabber\protocol\accept\Xdb.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="jabber\protocol\AsynchElementStream.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="jabber\protocol\client\Error.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="jabber\protocol\client\Factory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="jabber\protocol\client\IQ.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="jabber\protocol\client\Message.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="jabber\protocol\client\Presence.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="jabber\protocol\client\ProtocolException.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="jabber\protocol\Element.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="jabber\protocol\ElementList.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="jabber\protocol\iq\Agents.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="jabber\protocol\iq\Auth.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="jabber\protocol\iq\Browse.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="jabber\protocol\iq\Disco.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="jabber\protocol\iq\Factory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="jabber\protocol\iq\GeoLoc.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="jabber\protocol\iq\Last.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="jabber\protocol\iq\OOB.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="jabber\protocol\iq\Register.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="jabber\protocol\iq\Roster.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="jabber\protocol\iq\Time.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="jabber\protocol\iq\VCard.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="jabber\protocol\iq\Version.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="jabber\protocol\Packet.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="jabber\protocol\stream\Bind.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="jabber\protocol\stream\Error.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="jabber\protocol\stream\Factory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="jabber\protocol\stream\Features.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="jabber\protocol\stream\SASL.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="jabber\protocol\stream\Session.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="jabber\protocol\stream\StartTLS.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="jabber\protocol\stream\Stream.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="jabber\protocol\x\Data.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="jabber\protocol\x\Delay.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="jabber\protocol\x\Event.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="jabber\protocol\x\Factory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="xpnet\ContentToken.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="xpnet\Exceptions.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="xpnet\UTF8Encoding.cs">
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
 
   <ItemGroup>

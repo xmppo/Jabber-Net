@@ -1,4 +1,4 @@
-/* --------------------------------------------------------------------------
+﻿/* --------------------------------------------------------------------------
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
@@ -43,7 +43,7 @@ namespace JabberNet.jabber.connection.sasl
         private string  m_charset;
         private string  m_authzid;
 
-        private readonly MD5CryptoServiceProvider MD5 = new MD5CryptoServiceProvider();
+        private readonly MD5 MD5 = MD5.Create();
         private readonly Regex CSV = new Regex(@"(?<tag>[^= \t\r\n]+)=(?:(?<data>[^,"" \t\r\n]+)|(?:""(?<data>[^""]*)"")),?",
                 RegexOptions.ExplicitCapture);
 
