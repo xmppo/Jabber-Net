@@ -271,6 +271,8 @@ namespace jabber.connection
         {
             Debug.Assert(m_listener != null);
             Debug.Assert(m_elements != null);
+            if (m_listener == null || m_elements == null)
+                return false;
             m_listener.BytesRead(buf, offset, length);
             m_elements.Push(buf, offset, length);
             return true;
