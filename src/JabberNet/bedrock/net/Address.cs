@@ -1,4 +1,4 @@
-/* --------------------------------------------------------------------------
+﻿/* --------------------------------------------------------------------------
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
@@ -15,6 +15,7 @@
 using System;
 using System.Diagnostics;
 using System.Net;
+using System.Runtime.InteropServices;
 using JabberNet.Netlib.Dns;
 using JabberNet.Netlib.Dns.Records;
 
@@ -131,7 +132,7 @@ namespace JabberNet.bedrock.net
             try
             {
         SRVRecord record;
-                if (Environment.OSVersion.Platform != PlatformID.Unix) {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
                     DnsRequest request = new DnsRequest(prefix + domain);
                     DnsResponse response = request.GetResponse(DnsRecordType.SRV);
                     record = PickSRV(response.SRVRecords);
@@ -169,7 +170,7 @@ namespace JabberNet.bedrock.net
 
             try
             {
-        if (Environment.OSVersion.Platform != PlatformID.Unix) {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
                     DnsRequest request = new DnsRequest(prefix + domain);
                     DnsResponse response = request.GetResponse(DnsRecordType.TEXT);
                     string attr = attribute + "=";
