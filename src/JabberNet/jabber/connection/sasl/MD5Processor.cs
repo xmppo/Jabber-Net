@@ -184,14 +184,9 @@ namespace JabberNet.jabber.connection.sasl
             {
                 throw new InvalidServerChallengeException("Missing nonce directive");
             }
-            if ( (n = this[QOP]) != null)
-            {
-                m_qop = n.ToString();
-            }
-            else
-            {
-                throw new InvalidServerChallengeException("Missing qop directive");
-            }
+
+            m_qop = this[QOP] ?? "auth"; // OpenFire doesn't send that and defaults to "auth" instead
+            
             if ( (n = this[CHARSET]) != null)
             {
                 m_charset = n.ToString();
