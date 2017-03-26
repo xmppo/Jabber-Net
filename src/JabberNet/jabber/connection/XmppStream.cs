@@ -997,11 +997,12 @@ namespace JabberNet.jabber.connection
                         State = SASLState.Instance;
                     }
 
-                    //FF
-                    m_saslProc = SASLProcessor.createProcessor(types
-                                                               , m_sslOn || (bool)this[Options.PLAINTEXT]
-                                                               , ms
-                                                               , (bool)this[Options.ANONYMOUS]);
+                    m_saslProc = SASLProcessor.createProcessor(
+                        ms,
+                        types,
+                        plaintextOK: m_sslOn || (bool)this[Options.PLAINTEXT],
+                        useClientCertificate: LocalCertificate != null,
+                        useAnonymous: (bool)this[Options.ANONYMOUS]);
                     if (m_saslProc == null)
                     {
                         FireOnError(new NotImplementedException("No implemented mechanisms in: " + types.ToString()));

@@ -107,32 +107,33 @@ namespace JabberNet.jabber.connection.sasl
         private Hashtable m_directives = new Hashtable();
 
         /// <summary>
-        ///
-        /// </summary>
-        public SASLProcessor()
-        {
-        }
-
-        /// <summary>
         /// Create a new SASLProcessor, of the best type possible
         /// </summary>
+        /// <param name="mechs">The mechanisms supported by the server</param>
         /// <param name="mt">The types the server implements</param>
         /// <param name="plaintextOK">Is it ok to select insecure types?</param>
-        /// <param name="mechs">The mechanisms supported by the server</param>
+        /// <param name="useClientCertificate">
+        /// <c>true</c> if the connection have an associated local client certificate.
+        /// </param>
+        /// <param name="useAnonymous"></param>
         /// <returns></returns>
-        public static SASLProcessor createProcessor(MechanismType mt, bool plaintextOK, Mechanisms mechs, bool useAnonymous)
+        public static SASLProcessor createProcessor(
+            Mechanisms mechs,
+            MechanismType mt,
+            bool plaintextOK,
+            bool useClientCertificate,
+            bool useAnonymous)
         {
-            //FF
             if (useAnonymous && (mt & MechanismType.ANONYMOUS) == MechanismType.ANONYMOUS)
             {
                 return new AnonymousProcessor();
             }
 
-            if ((mt & MechanismType.EXTERNAL) == MechanismType.EXTERNAL)
+            if (mt.HasFlag(MechanismType.EXTERNAL) && useClientCertificate)
             {
                 return new ExternalProcessor();
             }
-            if ((mt & MechanismType.GSSAPI) == MechanismType.GSSAPI)
+            else if ((mt & MechanismType.GSSAPI) == MechanismType.GSSAPI)
             {
                 string RemotePrincipal = "";
                 foreach (Mechanism mechanism in mechs.GetMechanisms())
