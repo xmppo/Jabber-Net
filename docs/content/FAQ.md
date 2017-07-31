@@ -5,5 +5,5 @@
 * [How do I register a new user?](./FAQ_Register.md)
 * [How do I find out more information?](./FAQ_More.md)
 * [Where do I find Jabber-Net?](./FAQ_Where.md)
-* [How is Jabber-Net licensed?](./licensing.md)
+* [How is Jabber-Net licensed?](https://github.com/ForNeVeR/Jabber-Net/blob/develop/Licensing.md)
 * [How do I connect to GoogleTalk?](./FAQ_GoogleTalk.md)

@@ -51,7 +51,7 @@ documentation, invoke the following commands (PowerShell syntax):
 
 ```powershell
 $env:JABBER_NET_ROOT = 'https://fornever.github.io/Jabber-Net'
-$fsi = 'C:\Program Files (x86)\Microsoft SDKs\F#\4.0\Framework\v4.0\Fsi.exe'
+$fsi = 'C:\Program Files (x86)\Microsoft SDKs\F#\4.1\Framework\v4.0\Fsi.exe'
 Remove-Item -Recurse .\docs\output
 & $fsi docs\generate.fsx
 docs\output\index.html
