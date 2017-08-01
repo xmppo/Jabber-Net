@@ -1,0 +1,31 @@
+{
+    "version": "2.1.2-*",
+    "buildOptions": {
+        "compilerName": "fsc",
+        "compile": {
+            "includeFiles": [
+                "AssemblyInfo.fs",
+                "Helpers.fs",
+                "ControlExtensionsTest.fs"
+            ]
+        }
+    },
+    "frameworks": {
+        "net462": {
+            "frameworkAssemblies": {
+                "System.Numerics": "4.0.0.0"
+            }
+        }
+    },
+    "dependencies": {
+        "FSharp.Core": "4.0.0.1",
+        "NUnit": "3.4.1",
+
+        "JabberNet.Muzzle": "*"
+    },
+    "tools": {
+        "dotnet-compile-fsc": "1.0.0-preview2-*",
+        "dotnet-test-nunit": "3.4.0-beta-2"
+    },
+    "testRunner": "nunit"
+}

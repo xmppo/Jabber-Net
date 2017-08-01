@@ -1,0 +1,20 @@
+{
+    "version": "2.1.2-*",
+    "buildOptions": {
+        "allowUnsafe": true
+    },
+    "dependencies": {
+        "zlib.net": "1.0.4",
+
+        "JabberNet.Netlib.Dns": "*"
+    },
+    "frameworks": {
+        "net40": {
+            "frameworkAssemblies": {
+                "System.Drawing": "4.0.0.0",
+                "System.Security": "4.0.0.0",
+                "System.Xml": "4.0.0.0"
+            }
+        }
+    }
+}

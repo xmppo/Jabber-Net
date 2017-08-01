@@ -1,0 +1,19 @@
+{
+    "version": "2.1.2-*",
+    "frameworks": {
+        "net451": {
+            "frameworkAssemblies": {
+            }
+        }
+    },
+    "dependencies": {
+        "NUnit": "3.4.1",
+        "RhinoMocks": "3.6.1",
+
+        "JabberNet": "*"
+    },
+    "tools": {
+        "dotnet-test-nunit": "3.4.0-beta-2"
+    },
+    "testRunner": "nunit"
+}

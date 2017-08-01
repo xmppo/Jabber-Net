@@ -1,0 +1,154 @@
+{
+  "locked": false,
+  "version": 2,
+  "targets": {
+    ".NETFramework,Version=v4.5.1": {
+      "NUnit/3.4.1": {
+        "type": "package",
+        "compile": {
+          "lib/net45/nunit.framework.dll": {}
+        },
+        "runtime": {
+          "lib/net45/nunit.framework.dll": {}
+        }
+      },
+      "RhinoMocks/3.6.1": {
+        "type": "package",
+        "compile": {
+          "lib/net/Rhino.Mocks.dll": {}
+        },
+        "runtime": {
+          "lib/net/Rhino.Mocks.dll": {}
+        }
+      },
+      "zlib.net/1.0.4": {
+        "type": "package",
+        "compile": {
+          "lib/zlib.net.dll": {}
+        },
+        "runtime": {
+          "lib/zlib.net.dll": {}
+        }
+      },
+      "JabberNet/2.1.2": {
+        "type": "project",
+        "framework": ".NETFramework,Version=v4.0",
+        "dependencies": {
+          "JabberNet.Netlib.Dns": "1.0.0",
+          "zlib.net": "1.0.4"
+        },
+        "frameworkAssemblies": [
+          "System.Drawing",
+          "System.Security",
+          "System.Xml"
+        ],
+        "compile": {
+          "net40/JabberNet.dll": {}
+        },
+        "runtime": {
+          "net40/JabberNet.dll": {}
+        }
+      },
+      "JabberNet.Netlib.Dns/2.1.2": {
+        "type": "project",
+        "framework": ".NETFramework,Version=v4.0",
+        "compile": {
+          "net40/JabberNet.Netlib.Dns.dll": {}
+        },
+        "runtime": {
+          "net40/JabberNet.Netlib.Dns.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "NUnit/3.4.1": {
+      "sha512": "G/9h/ENn8+GvT5DvBqVNrUhIWuxtAr0/oVGN2ljKVUw50EAZYBzeWSy9s6nqMswaQACpQzljql1sWQ/peE2eJg==",
+      "type": "package",
+      "path": "NUnit/3.4.1",
+      "files": [
+        "CHANGES.txt",
+        "LICENSE.txt",
+        "NOTICES.txt",
+        "NUnit.3.4.1.nupkg.sha512",
+        "NUnit.nuspec",
+        "lib/dotnet/nunit.framework.dll",
+        "lib/dotnet/nunit.framework.xml",
+        "lib/net20/NUnit.System.Linq.dll",
+        "lib/net20/nunit.framework.dll",
+        "lib/net20/nunit.framework.xml",
+        "lib/net35/nunit.framework.dll",
+        "lib/net35/nunit.framework.xml",
+        "lib/net40/nunit.framework.dll",
+        "lib/net40/nunit.framework.xml",
+        "lib/net45/nunit.framework.dll",
+        "lib/net45/nunit.framework.xml",
+        "lib/portable-net45+win8+wp8+wpa81+Xamarin.Mac+MonoAndroid10+MonoTouch10+Xamarin.iOS10/nunit.framework.dll",
+        "lib/portable-net45+win8+wp8+wpa81+Xamarin.Mac+MonoAndroid10+MonoTouch10+Xamarin.iOS10/nunit.framework.xml"
+      ]
+    },
+    "RhinoMocks/3.6.1": {
+      "sha512": "0HjdR7PVVUDz9Db5cLzU0Dquay8MhoCoZ8PJRZOo10Iysq4m+mjl2aaxc4eWztvZ6S1v/NYW5xv1qul0ToN21w==",
+      "type": "package",
+      "path": "RhinoMocks/3.6.1",
+      "files": [
+        "RhinoMocks.3.6.1.nupkg.sha512",
+        "RhinoMocks.nuspec",
+        "lib/net/Rhino.Mocks.dll",
+        "lib/net/Rhino.Mocks.xml"
+      ]
+    },
+    "zlib.net/1.0.4": {
+      "sha512": "ywKkVY1y20tGQsUnYgKupYm91L8GVrVgoEOFTjfR1Bb5Xiy5tBJu5SV9liIiW2h8/KQUBefE45vSythtNMmahQ==",
+      "type": "package",
+      "path": "zlib.net/1.0.4",
+      "files": [
+        "lib/zlib.net.dll",
+        "zlib.net.1.0.4.nupkg.sha512",
+        "zlib.net.nuspec"
+      ]
+    },
+    "JabberNet/2.1.2": {
+      "type": "project",
+      "path": "../../src/JabberNet/project.json",
+      "msbuildProject": "../../src/JabberNet/JabberNet.xproj"
+    },
+    "JabberNet.Netlib.Dns/2.1.2": {
+      "type": "project",
+      "path": "../../src/JabberNet.Netlib.Dns/project.json",
+      "msbuildProject": "../../src/JabberNet.Netlib.Dns/JabberNet.Netlib.Dns.xproj"
+    }
+  },
+  "projectFileDependencyGroups": {
+    "": [
+      "JabberNet",
+      "NUnit >= 3.4.1",
+      "RhinoMocks >= 3.6.1"
+    ],
+    ".NETFramework,Version=v4.5.1": []
+  },
+  "tools": {
+    ".NETCoreApp,Version=v1.0": {
+      "dotnet-test-nunit/3.4.0-beta-2": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Extensions.DependencyModel": "1.0.0",
+          "Microsoft.Extensions.Testing.Abstractions": "1.0.0-preview2-003121",
+          "Microsoft.NETCore.App": "1.0.0",
+          "NUnit.Portable.Agent": "3.4.0-beta-2"
+        },
+        "compile": {
+          "lib/netcoreapp1.0/dotnet-test-nunit.dll": {}
+        },
+        "runtime": {
+          "lib/netcoreapp1.0/dotnet-test-nunit.dll": {}
+        }
+      }
+    }
+  },
+  "projectFileToolGroups": {
+    ".NETCoreApp,Version=v1.0": [
+      "dotnet-test-nunit >= 3.4.0-beta-2"
+    ]
+  }
+}

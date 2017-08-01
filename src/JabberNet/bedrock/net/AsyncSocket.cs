@@ -472,10 +472,19 @@ namespace JabberNet.bedrock.net
         /// <param name="ar"></param>
         private void ExecuteAccept(IAsyncResult ar)
         {
-            Socket cli = (Socket) m_sock.EndAccept(ar);
-            AsyncSocket cliCon = new AsyncSocket(m_watcher);
-            cliCon.m_sock = cli;
-            AcceptDone(cliCon);
+            try
+            {
+                var cli = m_sock.EndAccept(ar);
+                var cliCon = new AsyncSocket(m_watcher)
+                {
+                    m_sock = cli
+                };
+                AcceptDone(cliCon);
+            }
+            catch (ObjectDisposedException)
+            {
+                // Socket is already disposed; don't accept.
+            }
         }
 
         private void AcceptDone(AsyncSocket cliCon)

@@ -1,0 +1,78 @@
+{
+  "locked": false,
+  "version": 2,
+  "targets": {
+    ".NETFramework,Version=v4.0": {
+      "zlib.net/1.0.4": {
+        "type": "package",
+        "compile": {
+          "lib/zlib.net.dll": {}
+        },
+        "runtime": {
+          "lib/zlib.net.dll": {}
+        }
+      },
+      "JabberNet/2.1.2": {
+        "type": "project",
+        "framework": ".NETFramework,Version=v4.0",
+        "dependencies": {
+          "JabberNet.Netlib.Dns": "1.0.0",
+          "zlib.net": "1.0.4"
+        },
+        "frameworkAssemblies": [
+          "System.Drawing",
+          "System.Security",
+          "System.Xml"
+        ],
+        "compile": {
+          "net40/JabberNet.dll": {}
+        },
+        "runtime": {
+          "net40/JabberNet.dll": {}
+        }
+      },
+      "JabberNet.Netlib.Dns/2.1.2": {
+        "type": "project",
+        "framework": ".NETFramework,Version=v4.0",
+        "compile": {
+          "net40/JabberNet.Netlib.Dns.dll": {}
+        },
+        "runtime": {
+          "net40/JabberNet.Netlib.Dns.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "zlib.net/1.0.4": {
+      "sha512": "ywKkVY1y20tGQsUnYgKupYm91L8GVrVgoEOFTjfR1Bb5Xiy5tBJu5SV9liIiW2h8/KQUBefE45vSythtNMmahQ==",
+      "type": "package",
+      "path": "zlib.net/1.0.4",
+      "files": [
+        "lib/zlib.net.dll",
+        "zlib.net.1.0.4.nupkg.sha512",
+        "zlib.net.nuspec"
+      ]
+    },
+    "JabberNet/2.1.2": {
+      "type": "project",
+      "path": "../JabberNet/project.json",
+      "msbuildProject": "../JabberNet/JabberNet.xproj"
+    },
+    "JabberNet.Netlib.Dns/2.1.2": {
+      "type": "project",
+      "path": "../JabberNet.Netlib.Dns/project.json",
+      "msbuildProject": "../JabberNet.Netlib.Dns/JabberNet.Netlib.Dns.xproj"
+    }
+  },
+  "projectFileDependencyGroups": {
+    "": [
+      "JabberNet"
+    ],
+    ".NETFramework,Version=v4.0": [
+      "System.Windows.Forms >= 4.0.0"
+    ]
+  },
+  "tools": {},
+  "projectFileToolGroups": {}
+}
