@@ -1,8 +1,8 @@
-using System;
-using System.Collections;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices;
-using System.Runtime.Serialization;
 using JabberNet.Netlib.Dns.Records;
 
 namespace JabberNet.Netlib.Dns
@@ -343,8 +343,7 @@ namespace JabberNet.Netlib.Dns
     /// InnerException property.
     /// </para>
     /// </remarks>
-    [Serializable]
-    public class DnsException: ApplicationException, ISerializable
+    public class DnsException: Exception
     {
         private readonly uint errcode = (uint) DnsQueryReturnCode.SUCCESS;
 
@@ -459,25 +458,6 @@ namespace JabberNet.Netlib.Dns
         /// </remarks>
         public DnsException(string message, Exception innerException): base(message, innerException)
         {
-        }
-
-        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            info.AddValue("errcode", errcode);
-            base.GetObjectData(info, context);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of <see cref="DnsException"/> for <see cref="ISerializable"/>
-        /// </summary>
-        /// <param name="info">the serialization information</param>
-        /// <param name="context">the context</param>
-        /// <remarks>
-        /// Used by the <see cref="ISerializable"/> interface.
-        /// </remarks>
-        public DnsException(SerializationInfo info, StreamingContext context): base(info, context)
-        {
-            errcode = info.GetUInt32("errcode");
         }
     }
 
@@ -727,93 +707,6 @@ namespace JabberNet.Netlib.Dns
         }
 
         #endregion
-    }
-
-    /// <summary>
-    /// Represents a collection of <see cref="DnsWrapper"/> objects.
-    /// </summary>
-    /// <remarks>
-    /// The DnsWrapperCollection is a collection of <see cref="DnsWrapper"/>
-    /// objects. The resultant collection represents all of the DNS records
-    /// for the given domain that was looked up. This class cannot be directly
-    /// created - it is created by the <see cref="DnsRequest"/> and
-    /// <see cref="DnsResponse"/> classes to hold the returned DNS
-    /// records for the given domain.
-    /// </remarks>
-    public class DnsWrapperCollection: ReadOnlyCollectionBase, IEnumerable
-    {
-        internal DnsWrapperCollection()
-        {
-        }
-
-        internal bool Contains(DnsWrapper w)
-        {
-            foreach(DnsWrapper wrapper in InnerList)
-                if (w.Equals(wrapper))
-                    return true;
-
-            return false;
-        }
-
-        internal void Add(DnsWrapper w)
-        {
-            InnerList.Add(w);
-        }
-
-        /// <summary>
-        /// Gets the <see cref="DnsWrapper"/> at the specified
-        /// ordinal in the collection
-        /// </summary>
-        /// <remarks>
-        /// Gets the <see cref="DnsWrapper"/> at the specified
-        /// index of the collection.
-        /// </remarks>
-        /// <param name="i">The index to retrieve from the collection.</param>
-        /// <value>The <see cref="DnsWrapper"/> at the specified index of
-        /// the collection.</value>
-        public DnsWrapper this[int i]
-        {
-            get
-            {
-                return (DnsWrapper) InnerList[i];
-            }
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return new DnsWrapperCollectionEnumerator(this);
-        }
-
-        class DnsWrapperCollectionEnumerator: IEnumerator
-        {
-            private int idx = -1;
-            private readonly DnsWrapperCollection coll;
-
-            public DnsWrapperCollectionEnumerator(DnsWrapperCollection coll)
-            {
-                this.coll = coll;
-            }
-
-            void IEnumerator.Reset()
-            {
-                idx=-1;
-            }
-
-            bool IEnumerator.MoveNext()
-            {
-                idx++;
-
-                return idx < coll.Count;
-            }
-
-            object IEnumerator.Current
-            {
-                get
-                {
-                    return coll[idx];
-                }
-            }
-        }
     }
 
     /// <summary>
@@ -1453,8 +1346,6 @@ namespace JabberNet.Netlib.Dns
         /// </remarks>
         public DnsResponse GetResponse(DnsRecordType dnstype)
         {
-            if (Environment.OSVersion.Platform != PlatformID.Win32NT)
-                throw new NotSupportedException("This API is found only on Windows NT or better.");
 
             if (_domain == null)
                 throw new ArgumentNullException();
@@ -1567,11 +1458,11 @@ namespace JabberNet.Netlib.Dns
     /// </remarks>
     public class DnsResponse
     {
-        private readonly DnsWrapperCollection rawrecords;
+        private readonly List<DnsWrapper> rawrecords;
 
         internal DnsResponse()
         {
-            rawrecords = new DnsWrapperCollection();
+            rawrecords = new List<DnsWrapper>();
         }
 
         /// <summary>
@@ -1585,7 +1476,7 @@ namespace JabberNet.Netlib.Dns
         /// is wrapped by the <see cref="GetRecords"/> method.
         /// </remarks>
         /// <value>Gets a collection of <see cref="DnsWrapper"/> objects.</value>
-        public DnsWrapperCollection RawRecords
+        public List<DnsWrapper> RawRecords
         {
             get
             {
@@ -1603,8 +1494,8 @@ namespace JabberNet.Netlib.Dns
         /// value indicating the type of DNS record to get from the list of
         /// all DNS records (available in the <see cref="RawRecords"/>
         /// property.</param>
-        /// <returns>an <see cref="ArrayList"/> of one of the types
-        /// specified in the <see cref="netlib.Dns.Records"/> namespace based
+        /// <returns>a <see cref="List{T}"/> of one of the types
+        /// specified in the <see cref="Records"/> namespace based
         /// on the <see cref="DnsRecordType"/> argument representing the
         /// type of DNS record desired.
         /// </returns>
@@ -1651,9 +1542,9 @@ namespace JabberNet.Netlib.Dns
         ///     </item>
         /// </list>
         /// </remarks>
-        public ArrayList GetRecords(DnsRecordType type)
+        public List<object> GetRecords(DnsRecordType type)
         {
-            ArrayList arr = new ArrayList();
+            List<object> arr = new List<object>();
             foreach(DnsWrapper dnsentry in rawrecords)
                 if (dnsentry.Equals(type))
                     arr.Add(dnsentry.RecordData);
@@ -1674,8 +1565,8 @@ namespace JabberNet.Netlib.Dns
         {
             get
             {
-                ArrayList arr = GetRecords(DnsRecordType.SRV);
-                return (SRVRecord[])arr.ToArray(typeof(SRVRecord));
+                List<object> arr = GetRecords(DnsRecordType.SRV);
+                return arr.Cast<SRVRecord>().ToArray();
             }
         }
 
@@ -1692,8 +1583,8 @@ namespace JabberNet.Netlib.Dns
         {
             get
             {
-                ArrayList arr = GetRecords(DnsRecordType.TEXT);
-                return (TXTRecord[])arr.ToArray(typeof(TXTRecord));
+                List<object> arr = GetRecords(DnsRecordType.TEXT);
+                return arr.Cast<TXTRecord>().ToArray();
             }
         }
         /// <summary>
@@ -1709,8 +1600,8 @@ namespace JabberNet.Netlib.Dns
         {
             get
             {
-                ArrayList arr = GetRecords(DnsRecordType.MX);
-                return (MXRecord[]) arr.ToArray(typeof(MXRecord));
+                List<object> arr = GetRecords(DnsRecordType.MX);
+                return arr.Cast<MXRecord>().ToArray();
             }
         }
     }

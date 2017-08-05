@@ -1,4 +1,4 @@
-/* --------------------------------------------------------------------------
+﻿/* --------------------------------------------------------------------------
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
@@ -17,6 +17,7 @@ using System.Collections;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
+using System.Net.Http;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -45,9 +46,8 @@ namespace JabberNet.bedrock.net
     public class XEP25Socket : BaseSocket, IHttpSocket
     {
         private const string CONTENT_TYPE = "application/x-www-form-urlencoded";
-        private const string METHOD       = "POST";
 
-        private readonly RandomNumberGenerator s_rng = RNGCryptoServiceProvider.Create();
+        private readonly RandomNumberGenerator s_rng = RandomNumberGenerator.Create();
 
         private readonly Queue      m_writeQ  = new Queue();
         private readonly Object     m_lock    = new Object();
@@ -61,9 +61,8 @@ namespace JabberNet.bedrock.net
         private int                 m_curKey  = 511;
         private bool                m_running = false;
         private string              m_id      = null;
-        private WebProxy            m_proxy   = null;
+        private IWebProxy m_proxy = null;
         private X509Certificate     m_cert = null;
-        private X509Certificate     m_remote_cert = null;
 
         /// <summary>
         /// Do trust all server sertificates?
@@ -122,7 +121,7 @@ namespace JabberNet.bedrock.net
         /// Proxy information.  My guess is if you leave this null, the IE proxy
         /// info may be used.  Not tested.
         /// </summary>
-        public WebProxy Proxy
+        public IWebProxy Proxy
         {
             get { return m_proxy; }
             set { m_proxy = value; }
@@ -135,15 +134,6 @@ namespace JabberNet.bedrock.net
         {
             get { return m_cert; }
             set { m_cert = value; }
-        }
-
-        /// <summary>
-        /// The remote certificate.
-        /// </summary>
-        public X509Certificate RemoteCertificate
-        {
-            get { return m_remote_cert; }
-            set { m_remote_cert = value; }
         }
 
         /// <summary>
@@ -290,14 +280,32 @@ namespace JabberNet.bedrock.net
             m_id = null;
 
             MemoryStream ms = new MemoryStream();
-            CookieContainer cookies = new CookieContainer(5);
+            CookieContainer cookies = new CookieContainer();
             byte[] readbuf = new byte[1024];
 
-            Stream rs;
             byte[] buf;
-            HttpWebResponse resp;
-            HttpWebRequest req;
-            Stream s;
+            HttpResponseMessage response;
+            var handler = new HttpClientHandler
+            {
+                CookieContainer = cookies,
+                Proxy = m_proxy,
+                ServerCertificateCustomValidationCallback = ValidateRemoteCertificate
+            };
+            if (m_cert != null)
+                handler.ClientCertificates.Add(m_cert);
+            var client = new HttpClient(handler)
+            {
+                DefaultRequestHeaders =
+                {
+                    ConnectionClose = true,
+                    CacheControl =
+                    {
+                        NoCache = true,
+                        NoStore = true
+                    }
+                }
+            };
+
             WriteBuf start;
 
             while (m_running)
@@ -344,59 +352,41 @@ namespace JabberNet.bedrock.net
                 }
 
             POLL:
-                req = (HttpWebRequest)WebRequest.Create(m_url);
-                req.CookieContainer = cookies;
-                req.ContentType     = CONTENT_TYPE;
-                req.Method          = METHOD;
-
-                if (m_cert != null)
-                    req.ClientCertificates.Add(m_cert);
-
-                req.KeepAlive       = false;
-
-                req.CachePolicy = new System.Net.Cache.HttpRequestCachePolicy(System.Net.Cache.HttpRequestCacheLevel.NoCacheNoStore);
-                req.CachePolicy = new System.Net.Cache.HttpRequestCachePolicy(System.Net.Cache.HttpRequestCacheLevel.NoCacheNoStore);
-
-                if (m_proxy != null)
-                    req.Proxy = m_proxy;
-                req.ContentLength = count;
-
-
-                try
+                using (var requestStream = new MemoryStream())
                 {
-                    ServicePointManager.ServerCertificateValidationCallback =
-                        ValidateRemoteCertificate;
-
-                    s = req.GetRequestStream();
-                    s.Write(start.buf, start.offset, start.len);
-
-                    m_remote_cert = req.ServicePoint.Certificate;
-
-                    buf = ms.ToArray();
-                    s.Write(buf, 0, buf.Length);
-                    s.Close();
-
-                    resp = (HttpWebResponse) req.GetResponse();
-                }
-                catch (WebException ex)
-                {
-                    if (ex.Status != WebExceptionStatus.KeepAliveFailure)
+                    var message = new HttpRequestMessage(HttpMethod.Post, m_url)
                     {
-                        m_listener.OnError(this, ex);
-                        return;
+                        Content = new StreamContent(requestStream)
+                        {
+                            Headers = { ContentLength = count }
+                        }
+                    };
+
+                    try
+                    {
+                        requestStream.Write(start.buf, start.offset, start.len);
+                        response = client.SendAsync(message).Result;
+                        buf = ms.ToArray();
+                        requestStream.Write(buf, 0, buf.Length);
                     }
-                    goto POLL;
+                    catch (WebException ex)
+                    {
+                        if (ex.Status != WebExceptionStatus.KeepAliveFailure)
+                        {
+                            m_listener.OnError(this, ex);
+                            return;
+                        }
+                        goto POLL;
+                    }
                 }
 
-
-
-                if (resp.StatusCode != HttpStatusCode.OK)
+                if (response.StatusCode != HttpStatusCode.OK)
                 {
-                    m_listener.OnError(this, new WebException("Invalid HTTP return code: " + resp.StatusCode));
+                    m_listener.OnError(this, new WebException("Invalid HTTP return code: " + response.StatusCode));
                     return;
                 }
 
-                CookieCollection cc = resp.Cookies;
+                CookieCollection cc = cookies.GetCookies(new Uri(m_url));
                 Debug.Assert(cc != null);
 
                 Cookie c = cc["ID"];
@@ -441,15 +431,15 @@ namespace JabberNet.bedrock.net
                 }
 
                 ms.SetLength(0);
-                rs = resp.GetResponseStream();
-
-
-                int readlen;
-                while ((readlen = rs.Read(readbuf, 0, readbuf.Length)) > 0)
+                using (var rs = response.Content.ReadAsStreamAsync().Result)
                 {
-                    ms.Write(readbuf, 0, readlen);
+                    int readlen;
+                    while ((readlen = rs.Read(readbuf, 0, readbuf.Length)) > 0)
+                    {
+                        ms.Write(readbuf, 0, readlen);
+                    }
                 }
-                rs.Close();
+
                 if (ms.Length > 0)
                 {
                     buf = ms.ToArray();

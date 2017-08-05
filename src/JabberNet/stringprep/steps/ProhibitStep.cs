@@ -1,4 +1,4 @@
-/* --------------------------------------------------------------------------
+﻿/* --------------------------------------------------------------------------
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
@@ -117,7 +117,7 @@ namespace JabberNet.stringprep.steps
             {
                 char[] bounds = (char[]) x;
                 if (bounds[1] == '\x0000')
-                    return bounds[0].CompareTo(y);
+                    return bounds[0].CompareTo((char)y);
 
                 char c = (char) y;
                 if (c < bounds[0])

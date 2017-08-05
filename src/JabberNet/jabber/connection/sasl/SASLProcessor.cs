@@ -1,4 +1,4 @@
-/* --------------------------------------------------------------------------
+﻿/* --------------------------------------------------------------------------
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
@@ -28,7 +28,7 @@ namespace JabberNet.jabber.connection.sasl
     /// <summary>
     /// Some sort of SASL error
     /// </summary>
-    public class SASLException : ApplicationException
+    public class SASLException : Exception
     {
         /// <summary>
         ///

@@ -1,4 +1,4 @@
-/* --------------------------------------------------------------------------
+﻿/* --------------------------------------------------------------------------
  * Copyrights
  *
  * Portions created by or assigned to Cursive Systems, Inc. are
@@ -12,7 +12,7 @@
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
 
-using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 
@@ -25,7 +25,7 @@ namespace JabberNet.bedrock.util
     {
         private string m_file;
         private XmlDocument m_doc;
-        private static Hashtable s_instances = new Hashtable();
+        private static Dictionary<string, ConfigFile> s_instances = new Dictionary<string, ConfigFile>();
         private FileSystemWatcher m_watcher;
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace JabberNet.bedrock.util
             ConfigFile inst = (ConfigFile) s_instances[name];
             if (inst == null)
             {
-                lock (s_instances.SyncRoot)
+                lock (s_instances)
                 {
                     if (inst == null)
                     {
@@ -81,7 +81,8 @@ namespace JabberNet.bedrock.util
         private void Load(FileInfo info)
         {
             m_file = info.FullName;
-            m_doc.Load(m_file);
+            using (var stream = new FileStream(m_file, FileMode.Open))
+                m_doc.Load(stream);
             m_watcher = new FileSystemWatcher(info.DirectoryName, info.Name);
             m_watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size | NotifyFilters.CreationTime;
             m_watcher.Changed += new FileSystemEventHandler(m_watcher_Changed);
@@ -91,7 +92,8 @@ namespace JabberNet.bedrock.util
         private void m_watcher_Changed(object sender, FileSystemEventArgs e)
         {
             m_doc = new XmlDocument();
-            m_doc.Load(m_file);
+            using (var stream = new FileStream(m_file, FileMode.Open))
+                m_doc.Load(stream);
             if (OnFileChange != null)
                 OnFileChange(this, e);
         }
@@ -112,7 +114,7 @@ namespace JabberNet.bedrock.util
         /// <returns></returns>
         public XmlNode GetNode(string xpath)
         {
-            return m_doc.SelectSingleNode(xpath);
+            return m_doc. SelectSingleNode(xpath);
             //ConfigFile f;
         }
         /// <summary>
