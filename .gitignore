@@ -1,6 +1,7 @@
 /.paket/
 /.vs/
 /packages/
+/.idea/
 
 /docs/output/
 
