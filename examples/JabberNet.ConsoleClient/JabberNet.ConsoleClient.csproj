@@ -117,7 +117,7 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Main.cs">
+    <Compile Include="Program.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

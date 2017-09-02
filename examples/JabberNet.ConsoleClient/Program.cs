@@ -13,6 +13,8 @@
  * --------------------------------------------------------------------------*/
 
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml;
 using JabberNet.bedrock.util;
 using JabberNet.jabber;
@@ -23,11 +25,11 @@ using JabberNet.jabber.protocol.iq;
 
 namespace JabberNet.ConsoleClient
 {
-    /// <summary>
-    /// Summary description for Class1.
-    /// </summary>
-    class Class1
+    /// <summary>Example client program.</summary>
+    public class Program
     {
+        public static readonly TimeSpan RandomMessageTimeSpan = TimeSpan.FromSeconds(1);
+
         [CommandLine("j", "user@host Jabber ID", true)]
         public string jid = null;
 
@@ -61,7 +63,10 @@ namespace JabberNet.ConsoleClient
         [CommandLine("b", "HTTP Binding (BOSH) URL", false)]
         public string boshURL = null;
 
-        public Class1(string[] args)
+        [CommandLine("sendrandom", "Send random messages to that user")]
+        public string RandomMessageJID = string.Empty;
+
+        public Program(string[] args)
         {
             JabberClient jc = new JabberClient();
             jc.OnReadText += new bedrock.TextHandler(jc_OnReadText);
@@ -119,9 +124,28 @@ namespace JabberNet.ConsoleClient
             cm.Stream = jc;
             cm.Node = "http://cursive.net/clients/ConsoleClient";
 
+            var authenticate = Authenticated(jc);
+
             Console.WriteLine("Connecting");
             jc.Connect();
             Console.WriteLine("Connected");
+
+            if (!string.IsNullOrEmpty(RandomMessageJID))
+            {
+                authenticate.ContinueWith(t =>
+                {
+                    if (t.Status != TaskStatus.RanToCompletion)
+                    {
+                        throw t.Exception ?? new Exception("Cannot authenticate");
+                    }
+
+                    while (true)
+                    {
+                        jc.Message(RandomMessageJID, $"Random message {Guid.NewGuid()}");
+                        Thread.Sleep(RandomMessageTimeSpan);
+                    }
+                });
+            }
 
             string line;
             while ((line = Console.ReadLine()) != null)
@@ -177,7 +201,7 @@ namespace JabberNet.ConsoleClient
         [STAThread]
         static void Main(string[] args)
         {
-            new Class1(args);
+            new Program(args);
         }
 
         private void jc_OnReadText(object sender, string txt)
@@ -222,6 +246,14 @@ namespace JabberNet.ConsoleClient
         private bool jc_OnRegisterInfo(object sender, Register r)
         {
             return true;
+        }
+
+        private Task Authenticated(JabberClient client)
+        {
+            var task = new TaskCompletionSource<object>();
+            client.OnAuthenticate += _ => task.SetResult(null);
+            client.OnAuthError += (_, element) => task.SetException(new Exception($"Authentication error: ${element}"));
+            return task.Task;
         }
     }
 }
