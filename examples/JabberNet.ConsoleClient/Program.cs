@@ -28,7 +28,7 @@ namespace JabberNet.ConsoleClient
     /// <summary>Example client program.</summary>
     public class Program
     {
-        public static readonly TimeSpan RandomMessageTimeSpan = TimeSpan.FromSeconds(1);
+        public static readonly TimeSpan RandomMessageTimeSpan = TimeSpan.FromMilliseconds(100);
 
         [CommandLine("j", "user@host Jabber ID", true)]
         public string jid = null;
@@ -141,7 +141,8 @@ namespace JabberNet.ConsoleClient
 
                     while (true)
                     {
-                        jc.Message(RandomMessageJID, $"Random message {Guid.NewGuid()}");
+                        var message = new string('x', 512);
+                        jc.Message(RandomMessageJID, message);
                         Thread.Sleep(RandomMessageTimeSpan);
                     }
                 });
