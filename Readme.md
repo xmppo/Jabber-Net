@@ -26,7 +26,7 @@ Consult the script documentation to discover its parameters.
 Build and test
 --------------
 
-Either use Visual Studio 2015 on Windows or `paket` + `msbuild` / `xbuild` in
+Either use Visual Studio 2017 on Windows or `paket` + `msbuild` / `xbuild` in
 your terminal. On Windows:
 
 ```console
