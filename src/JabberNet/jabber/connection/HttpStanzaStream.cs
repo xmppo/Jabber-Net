@@ -14,9 +14,14 @@
 
 using System;
 using System.Diagnostics;
+using System.Net.Security;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
 using System.Xml;
+using JabberNet.bedrock;
 using JabberNet.bedrock.net;
 using JabberNet.jabber.protocol;
+using JabberNet.jabber.protocol.stream;
 
 namespace JabberNet.jabber.connection
 {
@@ -69,9 +74,9 @@ namespace JabberNet.jabber.connection
             bool first = (m_elements == null);
             m_elements = new AsynchElementStream();
             m_elements.OnDocumentStart += new ProtocolHandler(m_elements_OnDocumentStart);
-            m_elements.OnDocumentEnd += new bedrock.ObjectHandler(m_elements_OnDocumentEnd);
+            m_elements.OnDocumentEnd += new ObjectHandler(m_elements_OnDocumentEnd);
             m_elements.OnElement += new ProtocolHandler(m_elements_OnElement);
-            m_elements.OnError += new bedrock.ExceptionHandler(m_elements_OnError);
+            m_elements.OnError += new ExceptionHandler(m_elements_OnError);
 
             m_listener.StreamInit(m_elements);
 
@@ -126,7 +131,7 @@ namespace JabberNet.jabber.connection
         {
             AsyncSocket s = new AsyncSocket(null, this, (bool)m_listener[Options.SSL], false);
             s.LocalCertificate = m_listener[Options.LOCAL_CERTIFICATE] as
-                System.Security.Cryptography.X509Certificates.X509Certificate2;
+                X509Certificate2;
 
             m_sock = s;
             m_sock.Accept(new Address((int)m_listener[Options.PORT]));
@@ -149,7 +154,7 @@ namespace JabberNet.jabber.connection
         /// Writes a stream:stream start tag.
         /// </summary>
         /// <param name="stream">Stream containing the stream:stream packet to send.</param>
-        public override void WriteStartTag(jabber.protocol.stream.Stream stream)
+        public override void WriteStartTag(Stream stream)
         {
             Write(stream.StartTag());
         }
@@ -226,6 +231,7 @@ namespace JabberNet.jabber.connection
             return this;
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         bool ISocketEventListener.OnAccept(BaseSocket newsocket)
         {
             m_sock = newsocket;
@@ -238,6 +244,7 @@ namespace JabberNet.jabber.connection
             return false;
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         void ISocketEventListener.OnConnect(BaseSocket sock)
         {
 #if !NO_SSL
@@ -251,6 +258,7 @@ namespace JabberNet.jabber.connection
             m_listener.Connected();
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         void ISocketEventListener.OnClose(BaseSocket sock)
         {
             m_listener[Options.REMOTE_CERTIFICATE] = null;
@@ -258,6 +266,7 @@ namespace JabberNet.jabber.connection
             m_listener.Closed();
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         void ISocketEventListener.OnError(BaseSocket sock, Exception ex)
         {
             m_listener[Options.REMOTE_CERTIFICATE] = null;
@@ -265,15 +274,15 @@ namespace JabberNet.jabber.connection
             m_listener.Errored(ex);
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         bool ISocketEventListener.OnRead(BaseSocket sock, byte[] buf, int offset, int length)
         {
-            Debug.Assert(m_listener != null);
-            Debug.Assert(m_elements != null);
             m_listener.BytesRead(buf, offset, length);
-            m_elements.Push(buf, offset, length);
+            m_elements?.Push(buf, offset, length);
             return true;
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         void ISocketEventListener.OnWrite(BaseSocket sock, byte[] buf, int offset, int length)
         {
             m_listener.BytesWritten(buf, offset, length);
@@ -287,10 +296,11 @@ namespace JabberNet.jabber.connection
         /// <param name="chain">The chain of CAs for the cert</param>
         /// <param name="sslPolicyErrors">A bitfield for the erorrs in the certificate.</param>
         /// <returns>True if the cert should be accepted anyway.</returns>
+        [MethodImpl(MethodImplOptions.Synchronized)]
         bool ISocketEventListener.OnInvalidCertificate(BaseSocket sock,
-            System.Security.Cryptography.X509Certificates.X509Certificate certificate,
-            System.Security.Cryptography.X509Certificates.X509Chain chain,
-            System.Net.Security.SslPolicyErrors sslPolicyErrors)
+            X509Certificate certificate,
+            X509Chain chain,
+            SslPolicyErrors sslPolicyErrors)
         {
             return m_listener.OnInvalidCertificate(sock, certificate, chain, sslPolicyErrors);
         }

@@ -15,6 +15,7 @@
 using System;
 using System.Collections;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Xml;
@@ -1380,6 +1381,7 @@ namespace JabberNet.jabber.connection
 
         #region IStanzaEventListener Members
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         void IStanzaEventListener.Connected()
         {
             lock (m_stateLock)
@@ -1393,6 +1395,7 @@ namespace JabberNet.jabber.connection
             SendNewStreamHeader();
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         void IStanzaEventListener.Accepted()
         {
             lock (StateLock)
@@ -1405,16 +1408,19 @@ namespace JabberNet.jabber.connection
             OnConnect?.Invoke(this, m_stanzas);
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         void IStanzaEventListener.BytesRead(byte[] buf, int offset, int count)
         {
             OnReadText?.Invoke(this, ENC.GetString(buf, offset, count));
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         void IStanzaEventListener.BytesWritten(byte[] buf, int offset, int count)
         {
             OnWriteText?.Invoke(this, ENC.GetString(buf, offset, count));
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         void IStanzaEventListener.StreamInit(ElementStream stream)
         {
             if (OnStreamInit != null)
@@ -1429,6 +1435,7 @@ namespace JabberNet.jabber.connection
             }
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         void IStanzaEventListener.Errored(Exception ex)
         {
             m_reconnect = false;
@@ -1447,6 +1454,7 @@ namespace JabberNet.jabber.connection
             //TryReconnect();
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         void IStanzaEventListener.Closed()
         {
             lock (StateLock)
@@ -1462,6 +1470,7 @@ namespace JabberNet.jabber.connection
             TryReconnect();
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         void IStanzaEventListener.DocumentStarted(XmlElement elem)
         {
             // The OnDocumentStart logic stays outside the listener, so that it can be
@@ -1469,6 +1478,7 @@ namespace JabberNet.jabber.connection
             OnDocumentStart(m_stanzas, elem);
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         void IStanzaEventListener.DocumentEnded()
         {
             lock (StateLock)
@@ -1484,6 +1494,7 @@ namespace JabberNet.jabber.connection
             }
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         void IStanzaEventListener.StanzaReceived(XmlElement elem)
         {
             // The OnElement logic stays outside the listener, so that it can be
@@ -1491,12 +1502,12 @@ namespace JabberNet.jabber.connection
                 OnElement(m_stanzas, elem);
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         bool IStanzaEventListener.OnInvalidCertificate(bedrock.net.BaseSocket sock,
             X509Certificate certificate,
             X509Chain chain,
             System.Net.Security.SslPolicyErrors sslPolicyErrors)
         {
-
             try
             {
                 return OnInvalidCertificate?.Invoke(this, certificate, chain, sslPolicyErrors) ?? false;

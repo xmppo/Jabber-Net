@@ -158,6 +158,7 @@
     <Compile Include="jabber\connection\CapsManagerTest.cs" />
     <Compile Include="jabber\connection\ConferenceManagerTest.cs" />
     <Compile Include="jabber\connection\DiscoManagerTest.cs" />
+    <Compile Include="jabber\connection\HttpStanzaStreamTests.cs" />
     <Compile Include="jabber\connection\PubSubManagerTest.cs" />
     <Compile Include="jabber\connection\sasl\MD5Processor.cs" />
     <Compile Include="jabber\JIDTest.cs">

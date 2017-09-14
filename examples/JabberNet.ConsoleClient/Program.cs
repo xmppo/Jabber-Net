@@ -28,8 +28,6 @@ namespace JabberNet.ConsoleClient
     /// <summary>Example client program.</summary>
     public class Program
     {
-        public static readonly TimeSpan RandomMessageTimeSpan = TimeSpan.FromMilliseconds(100);
-
         [CommandLine("j", "user@host Jabber ID", true)]
         public string jid = null;
 
@@ -65,6 +63,9 @@ namespace JabberNet.ConsoleClient
 
         [CommandLine("sendrandom", "Send random messages to that user")]
         public string RandomMessageJID = string.Empty;
+
+        [CommandLine("randomspan", "Send random messages timespan, ms")]
+        public int RandomMessageTimeSpan = 100;
 
         public Program(string[] args)
         {
@@ -141,7 +142,7 @@ namespace JabberNet.ConsoleClient
 
                     while (true)
                     {
-                        var message = new string('x', 512);
+                        var message = new string('x', 100);
                         jc.Message(RandomMessageJID, message);
                         Thread.Sleep(RandomMessageTimeSpan);
                     }
@@ -219,7 +220,7 @@ namespace JabberNet.ConsoleClient
 
         private void jc_OnError(object sender, Exception ex)
         {
-            Console.WriteLine("ERROR: " + ex.ToString());
+            Console.WriteLine("ERROR: " + ex.ToString() + ex.StackTrace);
             Environment.Exit(1);
         }
 

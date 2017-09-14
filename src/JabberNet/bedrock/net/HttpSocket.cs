@@ -434,6 +434,7 @@ namespace JabberNet.bedrock.net
             string header = null;
             int last = offset + length;
 
+            var errorReason = "";
             while (i < last)
             {
                 // HTTP/1.1 200 OK
@@ -451,11 +452,14 @@ namespace JabberNet.bedrock.net
                     case ParseState.RESPONSE:
                         string code = ParseTo(buf, ref i, last, SPACE);
                         if (code == null)
+                        {
+                            errorReason = "ParseState.RESPONSE: cannot be parsed";
                             goto ERROR;
+                        }
 
                         if (code != "200")
                         {
-                            Debug.WriteLine("Non-OK response from server (" + code + ").  STOP!");
+                            errorReason = $"Non-OK response from server ({code})";
                             goto ERROR;
                         }
 
@@ -467,7 +471,7 @@ namespace JabberNet.bedrock.net
                         }
                         catch (Exception)
                         {
-                            Debug.WriteLine("invalid response code");
+                            errorReason = $"invalid response code: {code}";
                             goto ERROR;
                         }
 
@@ -476,7 +480,10 @@ namespace JabberNet.bedrock.net
                     case ParseState.RESPONSE_TEXT:
                         m_current.ResponseText = ParseTo(buf, ref i, last, CRLF);
                         if (m_current.ResponseText == null)
+                        {
+                            errorReason = "Response text is null";
                             goto ERROR;
+                        }
                         m_state = ParseState.HEADER_NAME;
                         break;
                     case ParseState.HEADER_NAME:
@@ -487,13 +494,19 @@ namespace JabberNet.bedrock.net
                         }
                         header = ParseTo(buf, ref i, last, COL_SP);
                         if (header == null)
+                        {
+                            errorReason = "Response header is null";
                             goto ERROR;
+                        }
                         m_state = ParseState.HEADER_VALUE;
                         break;
                     case ParseState.HEADER_VALUE:
                         string val = ParseTo(buf, ref i, last, CRLF);
                         if (val == null)
+                        {
+                            errorReason = "Response header value is null";
                             goto ERROR;
+                        }
                         m_current.Headers.Add(header, val);
                         m_state = ParseState.HEADER_NAME;
                         break;
@@ -502,7 +515,10 @@ namespace JabberNet.bedrock.net
                         // once, without creating a MemoryStream.
                         int len = m_current.ContentLength;
                         if (len == -1)
+                        {
+                            errorReason = "Response content length is not set or invalid";
                             goto ERROR;
+                        }
                         if (i + len <= last)
                         {
                             Done();
@@ -538,14 +554,17 @@ namespace JabberNet.bedrock.net
                             return false;
                         }
                         return true;
-                    default:
-                        break;
                 }
             }
             return true;
 
         ERROR:
-            m_listener.OnError(null, new ProtocolViolationException("Error parsing HTTP response"));
+            m_listener.OnError(
+                null,
+                new ProtocolViolationException(
+                    "Error parsing HTTP response\n" +
+                    $"Reason: {errorReason}\n" +
+                    Environment.StackTrace));
             Close();
             return false;
         }
