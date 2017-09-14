@@ -18,4 +18,4 @@ using System.Reflection;
 [assembly: AssemblyTitle("JabberNet.Test")]
 [assembly: AssemblyCopyright("Copyright (c) Jabber-Net Contributors, 2008—2017")]
 [assembly: AssemblyVersion("3.0.0.*")]
-[assembly: AssemblyInformationalVersion("3.0.0-preview1")]
+[assembly: AssemblyInformationalVersion("3.0.0-preview2")]

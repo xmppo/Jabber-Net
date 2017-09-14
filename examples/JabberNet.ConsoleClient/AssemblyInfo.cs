@@ -19,4 +19,4 @@ using System.Reflection;
 [assembly: AssemblyDescription("Jabber-Net console client example")]
 [assembly: AssemblyCopyright("Copyright (c) Cursive Systems, 2000—2008; Jabber-Net Contributors, 2008—2017")]
 [assembly: AssemblyVersion("3.0.0.*")]
-[assembly: AssemblyInformationalVersion("3.0.0-preview1")]
+[assembly: AssemblyInformationalVersion("3.0.0-preview2")]
