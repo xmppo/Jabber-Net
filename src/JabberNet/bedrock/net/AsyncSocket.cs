@@ -812,7 +812,15 @@ namespace JabberNet.bedrock.net
                     }
 
                     State = SocketState.Connected;
-                    m_listener.OnConnect(this);
+                    try
+                    {
+                        m_listener.OnConnect(this);
+                    }
+                    catch (Exception ex)
+                    {
+                        FireError(new AsyncSocketConnectionException($"An error occurred while connecting: {ex.Message}"));
+                        AsyncClose();
+                    }
                 }
                 else
                 {
