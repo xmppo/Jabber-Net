@@ -805,8 +805,7 @@ namespace JabberNet.bedrock.net
                         }
                         catch (Exception e)
                         {
-                            FireError(e);
-                            AsyncClose();
+                            CloseWithError(e);
                             return;
                         }
                     }
@@ -818,15 +817,22 @@ namespace JabberNet.bedrock.net
                     }
                     catch (Exception ex)
                     {
-                        FireError(new AsyncSocketConnectionException($"An error occurred while connecting: {ex.Message}"));
-                        AsyncClose();
+                        CloseWithError(
+                            new AsyncSocketConnectionException(
+                                $"An error occurred while connecting: {ex.Message}",
+                                ex));
                     }
                 }
                 else
                 {
-                    FireError(new AsyncSocketConnectionException("could not connect"));
-                    AsyncClose();
+                    CloseWithError(new AsyncSocketConnectionException("could not connect"));
                 }
+            }
+
+            void CloseWithError(Exception error)
+            {
+                FireError(error);
+                AsyncClose();
             }
         }
 
