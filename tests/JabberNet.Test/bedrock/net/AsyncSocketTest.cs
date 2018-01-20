@@ -13,6 +13,10 @@
  * --------------------------------------------------------------------------*/
 
 using System;
+using System.Diagnostics;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using System.Threading;
 using JabberNet.bedrock.net;
 using NUnit.Framework;
@@ -25,14 +29,25 @@ namespace JabberNet.Test.bedrock.net
     [TestFixture]
     public class AsyncSocketTest : ISocketEventListener
     {
-        private static readonly System.Text.Encoding ENC = System.Text.Encoding.ASCII;
+        private static readonly Encoding ENC = Encoding.ASCII;
 
         private static readonly byte[] sbuf = ENC.GetBytes("01234567890123456789012345678901234567890123456789012345678901234567890123456789");
         private readonly object done = new object();
-        private string success = null;
 
-        private bool succeeded = true;
-        private string errorMessage;
+        private Action _connectedCallback;
+
+        private string success;
+        private bool succeeded;
+        private Exception _error;
+
+        [SetUp]
+        public void SetUp()
+        {
+            _connectedCallback = null;
+            success = null;
+            succeeded = true;
+            _error = null;
+        }
 
         [Test] public void Test_Write()
         {
@@ -50,7 +65,7 @@ namespace JabberNet.Test.bedrock.net
                 bool NoTimeout = Monitor.Wait(done, new TimeSpan(0, 0, 30));
 
                 Assert.IsTrue(NoTimeout, "The read command didn't complete in time.");
-                Assert.IsTrue(succeeded, errorMessage);
+                Assert.IsTrue(succeeded, _error?.Message);
             }
 
             Assert.AreEqual("5678901234", success);
@@ -122,6 +137,32 @@ namespace JabberNet.Test.bedrock.net
             }
         }
 
+        [Test]
+        public void ExceptionFromOnConnectGetsSignaledThroughOnError()
+        {
+            var exception = new Exception("Test exception");
+            _connectedCallback = () => throw exception;
+
+            var watcher = new SocketWatcher(20);
+            var address = new Address("127.0.0.1", 7003);
+
+            using (var listener = watcher.CreateListenSocket(this, address))
+            {
+                listener.RequestAccept();
+
+                lock (done)
+                {
+                    using (watcher.CreateConnectSocket(this, address))
+                    {
+                        Assert.True(Monitor.Wait(done, new TimeSpan(0, 0, 30)));
+
+                        Assert.False(succeeded);
+                        Assert.AreEqual(exception, _error.InnerException);
+                    }
+                }
+            }
+        }
+
         #region Implementation of ISocketEventListener
         public bool OnAccept(BaseSocket newsocket)
         {
@@ -142,7 +183,7 @@ namespace JabberNet.Test.bedrock.net
 
         public void OnWrite(BaseSocket sock, byte[] buf, int offset, int length)
         {
-            System.Diagnostics.Debug.WriteLine(ENC.GetString(buf, offset, length));
+            Debug.WriteLine(ENC.GetString(buf, offset, length));
             sock.Close();
         }
 
@@ -151,7 +192,7 @@ namespace JabberNet.Test.bedrock.net
             lock (done)
             {
                 succeeded = false;
-                errorMessage = ex.Message;
+                _error = ex;
                 Monitor.Pulse(done);
             }
         }
@@ -159,6 +200,7 @@ namespace JabberNet.Test.bedrock.net
         public void OnConnect(BaseSocket sock)
         {
             sock.Write(sbuf, 5, 10);
+            _connectedCallback?.Invoke();
         }
 
         public void OnClose(BaseSocket sock)
@@ -177,9 +219,9 @@ namespace JabberNet.Test.bedrock.net
         }
 
         public bool OnInvalidCertificate(BaseSocket sock,
-            System.Security.Cryptography.X509Certificates.X509Certificate certificate,
-            System.Security.Cryptography.X509Certificates.X509Chain chain,
-            System.Net.Security.SslPolicyErrors sslPolicyErrors)
+            X509Certificate certificate,
+            X509Chain chain,
+            SslPolicyErrors sslPolicyErrors)
         {
             return false;
         }
