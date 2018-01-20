@@ -12,6 +12,7 @@
  * See licenses/Jabber-Net_LGPLv3.txt for details.
  * --------------------------------------------------------------------------*/
 
+using System;
 using System.Diagnostics;
 
 namespace JabberNet.bedrock.net
@@ -19,7 +20,7 @@ namespace JabberNet.bedrock.net
     /// <summary>
     /// Base class for AsyncSocket and proxies for AsyncSocket
     /// </summary>
-    public abstract class BaseSocket
+    public abstract class BaseSocket : IDisposable
     {
         /// <summary>
         /// Identity of the host we're connecting to.  Used for SSL
@@ -126,7 +127,7 @@ namespace JabberNet.bedrock.net
         /// Returns true if the socket is connected.
         ///</summary>
         public abstract bool Connected
-        { 
+        {
             get;
         }
 
@@ -175,5 +176,8 @@ namespace JabberNet.bedrock.net
         /// from GotData.  Attempts to do a shutdown() first.
         /// </summary>
         public abstract void Close();
+
+        /// <inheritdoc />
+        public void Dispose() => Close();
     }
 }
