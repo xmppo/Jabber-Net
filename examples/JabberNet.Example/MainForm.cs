@@ -810,7 +810,7 @@ namespace JabberNet.Example
 
         private void jc_OnMessage(object sender, jabber.protocol.client.Message msg)
         {
-            this.InvokeAction(() =>
+            this.BeginInvokeAction(() =>
             {
                 var x = msg["x", URI.XDATA] as jabber.protocol.x.Data;
                 if (x != null)

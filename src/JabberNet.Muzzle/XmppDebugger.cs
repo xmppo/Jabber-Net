@@ -177,13 +177,13 @@ namespace JabberNet.Muzzle
 
         private void m_stream_OnError(object sender, Exception ex)
         {
-            this.InvokeAction(() => WriteError(ex.ToString()));
+            this.BeginInvokeAction(() => WriteError(ex.ToString()));
         }
 
         private void m_stream_OnConnect(object sender, jabber.connection.StanzaStream stream)
         {
             // I think this is right.  Double check.
-            this.InvokeAction(rtDebug.Clear);
+            this.BeginInvokeAction(rtDebug.Clear);
         }
 
         private void m_stream_OnReadText(object sender, string txt)
@@ -192,7 +192,7 @@ namespace JabberNet.Muzzle
             if (txt == " ")
                 return;
 
-            this.InvokeAction(() => Write(m_recvColor, m_recv, txt));
+            this.BeginInvokeAction(() => Write(m_recvColor, m_recv, txt));
         }
 
         private void m_stream_OnWriteText(object sender, string txt)
@@ -201,7 +201,7 @@ namespace JabberNet.Muzzle
             if (txt == " ")
                 return;
 
-            this.InvokeAction(() => Write(m_sendColor, m_send, txt));
+            this.BeginInvokeAction(() => Write(m_sendColor, m_send, txt));
         }
 
         /// <summary>
