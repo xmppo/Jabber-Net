@@ -248,11 +248,9 @@ namespace JabberNet.jabber.connection
         private IQTracker m_tracker = null;
 
         private XmlDocument m_doc        = new XmlDocument();
-        private BaseState   m_state      = ClosedState.Instance;
         private IDictionary m_properties = new Hashtable();
 
         private string m_streamID = null;
-        private object m_stateLock = new object();
         private ArrayList m_callbacks = new ArrayList();
 
         private Timer m_reconnectTimer = null;
@@ -681,21 +679,12 @@ namespace JabberNet.jabber.connection
         /// Gets or sets the current state of the connection.
         /// Lock on StateLock before accessing.
         /// </summary>
-        protected virtual BaseState State
-        {
-            get { return m_state; }
-            set { m_state = value;
-            // Debug.WriteLine("New state: " + m_state.ToString());
-            }
-        }
+        protected BaseState State { get; set; } = ClosedState.Instance;
 
         /// <summary>
         /// Gets the lock for the state information.
         /// </summary>
-        protected object StateLock
-        {
-            get { return m_stateLock; }
-        }
+        protected object StateLock { get; } = new object();
 
         /// <summary>
         /// Gets or sets the state to authenticated.  Locks on StateLock
@@ -821,17 +810,18 @@ namespace JabberNet.jabber.connection
         /// </summary>
         private void TryReconnect()
         {
-            // close was not requested, or autoreconnect turned on.
-            if (m_reconnect)
+            lock (StateLock)
             {
-                if (m_reconnectTimer != null)
-                    m_reconnectTimer.Dispose();
-
-                m_reconnectTimer = new System.Threading.Timer(
-                        new System.Threading.TimerCallback(Reconnect),
+                // close was not requested, or autoreconnect turned on.
+                if (m_reconnect)
+                {
+                    m_reconnectTimer?.Dispose();
+                    m_reconnectTimer = new Timer(
+                        Reconnect,
                         null,
                         (int)this[Options.RECONNECT_TIMEOUT],
-                        System.Threading.Timeout.Infinite);
+                        Timeout.Infinite);
+                }
             }
         }
 
@@ -862,7 +852,7 @@ namespace JabberNet.jabber.connection
                 {
                     doStream = true;
                 }
-                if (m_state != ClosedState.Instance)
+                if (State != ClosedState.Instance)
                 {
                     State = ClosingState.Instance;
                     doClose = true;
@@ -893,13 +883,13 @@ namespace JabberNet.jabber.connection
             {
                 jabber.protocol.stream.Stream str = elem as jabber.protocol.stream.Stream;
 
-                m_streamID = str.ID;
-                m_serverVersion = str.Version;
-
-                // See XMPP-core section 4.4.1.  We'll accept 1.x
-                if (m_serverVersion.StartsWith("1."))
+                lock (StateLock)
                 {
-                    lock (m_stateLock)
+                    m_streamID = str.ID;
+                    m_serverVersion = str.Version;
+
+                    // See XMPP-core section 4.4.1.  We'll accept 1.x
+                    if (m_serverVersion.StartsWith("1."))
                     {
                         if (State == SASLState.Instance)
                             // already authed.  last stream restart.
@@ -907,22 +897,20 @@ namespace JabberNet.jabber.connection
                         else
                             State = jabber.connection.ServerFeaturesState.Instance;
                     }
-                }
-                else
-                {
-                    lock (m_stateLock)
+                    else
                     {
                         State = NonSASLAuthState.Instance;
+
+                        hack = true;
                     }
-                    hack = true;
                 }
 
                 OnStreamHeader?.Invoke(this, elem);
                 CheckAll(elem);
 
-                if (hack && (OnSASLStart != null))
+                if (hack)
                 {
-                    OnSASLStart(this, null); // Hack.  Old-style auth for jabberclient.
+                    OnSASLStart?.Invoke(this, null); // Hack.  Old-style auth for jabberclient.
                 }
             }
         }
@@ -942,7 +930,7 @@ namespace JabberNet.jabber.connection
                 m_stanzas.SupportsTLS)
             {
                 // start-tls
-                lock (m_stateLock)
+                lock (StateLock)
                 {
                     State = StartTLSState.Instance;
                 }
@@ -958,7 +946,7 @@ namespace JabberNet.jabber.connection
                 m_stanzas.SupportsCompression)
             {
                 // start compression
-                lock (m_stateLock)
+                lock (StateLock)
                 {
                     State = CompressionState.Instance;
                 }
@@ -993,7 +981,7 @@ namespace JabberNet.jabber.connection
                 // client and server.
                 if ((types != MechanismType.NONE) && ((bool)this[Options.SASL]))
                 {
-                    lock (m_stateLock)
+                    lock (StateLock)
                     {
                         State = SASLState.Instance;
                     }
@@ -1011,7 +999,7 @@ namespace JabberNet.jabber.connection
                     }
                     if (OnSASLStart != null)
                         OnSASLStart(this, m_saslProc);
-                    lock (m_stateLock)
+                    lock (StateLock)
                     {
                         // probably manual authentication
                         if (State != SASLState.Instance)
@@ -1038,7 +1026,7 @@ namespace JabberNet.jabber.connection
                         FireOnError(new SASLException("No SASL mechanisms available"));
                         return;
                     }
-                    lock (m_stateLock)
+                    lock (StateLock)
                     {
                         State = NonSASLAuthState.Instance;
                     }
@@ -1056,16 +1044,14 @@ namespace JabberNet.jabber.connection
         /// <param name="tag">XML element that contains the new tag.</param>
         protected virtual void OnElement(object sender, System.Xml.XmlElement tag)
         {
-            //Debug.WriteLine(tag.OuterXml);
-
-            if (tag is jabber.protocol.stream.Error)
+            if (tag is Error)
             {
                 // Stream error.  Race condition!  Two cases:
                 // 1) OnClose has already fired, in which case we are in ClosedState, and the reconnect timer is pending.
                 // 2) OnClose hasn't fired, in which case we trick it into not starting the reconnect timer.
-                lock (m_stateLock)
+                lock (StateLock)
                 {
-                    if (m_state != ClosedState.Instance)
+                    if (State != ClosedState.Instance)
                     {
                         State = ClosingState.Instance;
                     }
@@ -1080,7 +1066,13 @@ namespace JabberNet.jabber.connection
                 return;
             }
 
-            if (State == ServerFeaturesState.Instance)
+            BaseState state;
+            lock (StateLock)
+            {
+                state = State;
+            }
+
+            if (state == ServerFeaturesState.Instance)
             {
                 Features f = tag as Features;
                 if (f == null)
@@ -1088,41 +1080,55 @@ namespace JabberNet.jabber.connection
                     FireOnError(new InvalidOperationException("Expecting stream:features from a version='1.0' server"));
                     return;
                 }
-                m_features = f;
-                ProcessFeatures();
+
+                lock (StateLock)
+                {
+                    m_features = f;
+                    ProcessFeatures();
+                }
+
                 return;
             }
-            else if (State == SASLState.Instance)
+            else if (state == SASLState.Instance)
             {
                 if (tag is Success)
                 {
-                    // restart the stream again
-                    SendNewStreamHeader();
+                    lock (StateLock)
+                    {
+                        // restart the stream again
+                        SendNewStreamHeader();
+                    }
                 }
                 else if (tag is SASLFailure)
                 {
-                    m_saslProc = null;
+                    lock (StateLock)
+                    {
+                        m_saslProc = null;
 
-                    lock (m_stateLock)
-                    {
                         State = SASLFailedState.Instance;
+
+                        SASLFailure sf = tag as SASLFailure;
+                        if (OnSASLError != null)
+                        {
+                            m_reconnect = false;
+                            OnSASLError(this, sf);
+                        }
+                        else
+                            FireOnError(new SASLException("SASL failure: " + sf.InnerXml));
                     }
-                    SASLFailure sf = tag as SASLFailure;
-                    // TODO: I18N
-                    if (OnSASLError != null)
-                    {
-                        m_reconnect = false;
-                        OnSASLError(this, sf);
-                    }
-                    else
-                        FireOnError(new SASLException("SASL failure: " + sf.InnerXml));
+
                     return;
                 }
                 else if (tag is Step)
                 {
                     try
                     {
-                        Step s = m_saslProc.step(tag as Step, this.Document);
+                        Step s;
+                        lock (StateLock)
+                        {
+                            s = m_saslProc.step(tag as Step, this.Document);
+                        }
+
                         if (s != null)
                             Write(s);
                     }
@@ -1134,42 +1140,52 @@ namespace JabberNet.jabber.connection
                 }
                 else
                 {
-                    m_saslProc = null;
+                    lock (StateLock)
+                    {
+                        m_saslProc = null;
+                    }
+
                     FireOnError(new SASLException("Invalid SASL protocol"));
                     return;
                 }
             }
-            else if (State == StartTLSState.Instance)
+            else if (state == StartTLSState.Instance)
             {
-                switch (tag.Name)
+                lock (StateLock)
                 {
-                case "proceed":
-                    if (!StartTLS())
-                        return;
-                    SendNewStreamHeader();
-                    break;
-                case "failure":
-                    FireOnError(new AuthenticationFailedException());
-                    return;
+                    switch (tag.Name)
+                    {
+                        case "proceed":
+                            if (!StartTLS())
+                                return;
+                            SendNewStreamHeader();
+                            break;
+                        case "failure":
+                            FireOnError(new AuthenticationFailedException());
+                            return;
+                    }
                 }
             }
-            else if (State == CompressionState.Instance)
+            else if (state == CompressionState.Instance)
             {
-                switch (tag.Name)
+                lock (StateLock)
                 {
-                case "compressed":
-                    if (!StartCompression())
-                        return;
-                    SendNewStreamHeader();
-                    break;
-                case "failure":
-                    CompressionFailure fail = tag as CompressionFailure;
-                    FireOnError(new bedrock.io.CompressionFailedException(fail.Error));
-                    return;
+                    switch (tag.Name)
+                    {
+                        case "compressed":
+                            if (!StartCompression())
+                                return;
+                            SendNewStreamHeader();
+                            break;
+                        case "failure":
+                            CompressionFailure fail = tag as CompressionFailure;
+                            FireOnError(new bedrock.io.CompressionFailedException(fail.Error));
+                            return;
+                    }
                 }
 
             }
-            else if (State == SASLAuthedState.Instance)
+            else if (state == SASLAuthedState.Instance)
             {
                 Features f = tag as Features;
                 if (f == null)
@@ -1179,7 +1195,11 @@ namespace JabberNet.jabber.connection
                 }
 
                 OnSASLEnd?.Invoke(this, f);
-                m_saslProc = null;
+
+                lock (StateLock)
+                {
+                    m_saslProc = null;
+                }
             }
             else
             {
@@ -1253,11 +1273,14 @@ namespace JabberNet.jabber.connection
         /// </summary>
         protected void SendNewStreamHeader()
         {
-            jabber.protocol.stream.Stream str = new jabber.protocol.stream.Stream(m_doc, NS);
-            str.To = new JID((string)this[Options.TO]);
-            str.Version = "1.0";
-            m_stanzas.WriteStartTag(str);
-            InitializeStream();
+            lock (StateLock)
+            {
+                var str = new Stream(m_doc, NS);
+                str.To = new JID((string)this[Options.TO]);
+                str.Version = "1.0";
+                m_stanzas.WriteStartTag(str);
+                InitializeStream();
+            }
         }
 
         /// <summary>
@@ -1266,17 +1289,20 @@ namespace JabberNet.jabber.connection
         /// <param name="e">Error that occurred.</param>
         protected void FireOnError(Exception e)
         {
-            m_reconnect = false;
+            lock (StateLock)
+            {
+                m_reconnect = false;
 
-            // ignore spurious IO errors on shutdown.
-            if (((State == ClosingState.Instance) || (State == ClosedState.Instance)) &&
-                ((e is System.IO.IOException) || (e.InnerException is System.IO.IOException)))
-                return;
+                // ignore spurious IO errors on shutdown.
+                if (((State == ClosingState.Instance) || (State == ClosedState.Instance)) &&
+                    ((e is System.IO.IOException) || (e.InnerException is System.IO.IOException)))
+                    return;
 
-            OnError?.Invoke(this, e);
+                OnError?.Invoke(this, e);
 
-            if ((State != ClosingState.Instance) && (State == ClosedState.Instance))
-                Close(false);
+                if ((State != ClosingState.Instance) && (State == ClosedState.Instance))
+                    Close(false);
+            }
         }
 
         private void Reconnect(object state)
@@ -1333,9 +1359,12 @@ namespace JabberNet.jabber.connection
 
         private void CheckAll(XmlElement elem)
         {
-            foreach (CallbackData cbd in m_callbacks)
+            lock (StateLock)
             {
-                cbd.Check(this, elem);
+                foreach (CallbackData cbd in m_callbacks)
+                {
+                    cbd.Check(this, elem);
+                }
             }
         }
 
@@ -1381,10 +1410,9 @@ namespace JabberNet.jabber.connection
 
         #region IStanzaEventListener Members
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         void IStanzaEventListener.Connected()
         {
-            lock (m_stateLock)
+            lock (StateLock)
             {
                 this.State = ConnectedState.Instance;
                 if ((bool)this[Options.SSL])
@@ -1395,55 +1423,40 @@ namespace JabberNet.jabber.connection
             SendNewStreamHeader();
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         void IStanzaEventListener.Accepted()
         {
             lock (StateLock)
             {
-                Debug.Assert(this.State == AcceptingState.Instance, this.State.GetType().ToString());
-
-                this.State = ConnectedState.Instance;
+                Debug.Assert(State == AcceptingState.Instance, State.GetType().ToString());
+                State = ConnectedState.Instance;
             }
 
             OnConnect?.Invoke(this, m_stanzas);
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         void IStanzaEventListener.BytesRead(byte[] buf, int offset, int count)
         {
             OnReadText?.Invoke(this, ENC.GetString(buf, offset, count));
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         void IStanzaEventListener.BytesWritten(byte[] buf, int offset, int count)
         {
             OnWriteText?.Invoke(this, ENC.GetString(buf, offset, count));
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         void IStanzaEventListener.StreamInit(ElementStream stream)
         {
-            if (OnStreamInit != null)
-            {
-                // Race condition.  Make sure not to make GUI calls in OnStreamInit
-                /*
-                if (InvokeRequired)
-                    CheckedInvoke(OnStreamInit, new object[] { this, stream });
-                else
-              */
-                    OnStreamInit(this, stream);
-            }
+            OnStreamInit?.Invoke(this, stream);
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         void IStanzaEventListener.Errored(Exception ex)
         {
-            m_reconnect = false;
-
-            lock (m_stateLock)
+            lock (StateLock)
             {
+                m_reconnect = false;
+
                 State = ClosedState.Instance;
-                if ((m_stanzas != null) && (!m_stanzas.Acceptable))
+                if (m_stanzas != null && !m_stanzas.Acceptable)
                     m_stanzas = null;
             }
 
@@ -1454,7 +1467,6 @@ namespace JabberNet.jabber.connection
             //TryReconnect();
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         void IStanzaEventListener.Closed()
         {
             lock (StateLock)
@@ -1470,7 +1482,6 @@ namespace JabberNet.jabber.connection
             TryReconnect();
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         void IStanzaEventListener.DocumentStarted(XmlElement elem)
         {
             // The OnDocumentStart logic stays outside the listener, so that it can be
@@ -1478,7 +1489,6 @@ namespace JabberNet.jabber.connection
             OnDocumentStart(m_stanzas, elem);
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         void IStanzaEventListener.DocumentEnded()
         {
             lock (StateLock)
@@ -1494,7 +1504,6 @@ namespace JabberNet.jabber.connection
             }
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         void IStanzaEventListener.StanzaReceived(XmlElement elem)
         {
             // The OnElement logic stays outside the listener, so that it can be
@@ -1502,7 +1511,6 @@ namespace JabberNet.jabber.connection
                 OnElement(m_stanzas, elem);
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         bool IStanzaEventListener.OnInvalidCertificate(bedrock.net.BaseSocket sock,
             X509Certificate certificate,
             X509Chain chain,
