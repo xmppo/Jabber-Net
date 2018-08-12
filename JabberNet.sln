@@ -51,6 +51,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "content", "content", "{4844
 		docs\content\FAQ_Where.md = docs\content\FAQ_Where.md
 		docs\content\index.md = docs\content\index.md
 		docs\content\SendMessage.md = docs\content\SendMessage.md
+		docs\content\docker-env.md = docs\content\docker-env.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{E6F7B01B-A762-4833-ABDF-3662E63AC63B}"
