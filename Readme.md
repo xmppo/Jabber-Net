@@ -19,7 +19,8 @@ $ ./.paket/paket.exe restore
 ```
 
 For convenience, there is a script `scripts/Install.ps1` that will download
-Paket bootstrapper and call these commands automatically.
+Paket bootstrapper and call these commands automatically. [PowerShell
+6.0+][pwsh] is recommended to execute this script.
 
 Consult the script documentation to discover its parameters.
 
@@ -82,6 +83,7 @@ consult [Licensing.md][] for details on licensing of internal components.
 [appveyor]: https://ci.appveyor.com/project/ForNeVeR/jabber-net/branch/develop
 [nuget]: https://www.nuget.org/packages/jabber-net/
 [paket]: https://fsprojects.github.io/Paket/index.html
+[pwsh]:  https://github.com/powershell/powershell
 [travis]: https://travis-ci.org/ForNeVeR/Jabber-Net
 
 [appveyor-badge]: https://ci.appveyor.com/api/projects/status/9q5rgknk80oh5g3a/branch/develop?svg=true
