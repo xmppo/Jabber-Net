@@ -14,10 +14,12 @@
 
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Xml;
 
 namespace JabberNet.jabber.protocol
@@ -765,7 +767,7 @@ namespace JabberNet.jabber.protocol
                 "HH:mm:ss.fffzzz",
             };
             string arg = dt.Replace("Z", "+00:00");
-            return DateTime.ParseExact(arg, fmts, null, System.Globalization.DateTimeStyles.AdjustToUniversal);
+            return DateTime.ParseExact(arg, fmts, null, DateTimeStyles.AdjustToUniversal);
         }
 
         /// <summary>
@@ -939,24 +941,21 @@ namespace JabberNet.jabber.protocol
         /// <summary>
         /// System-wide one-up counter, for numbering packets.
         /// </summary>
-        static int s_counter = 0;
+        private static int s_counter = 0;
         /// <summary>
         /// Reset the packet ID counter.  This is ONLY to be used for test cases!   No locking!
         /// </summary>
         [Conditional("DEBUG")]
         public static void ResetID()
         {
-            s_counter = 0;
+            Interlocked.Exchange(ref s_counter, 0);
         }
 
         /// <summary>
         /// Increment the ID counter, and get the new value.
         /// </summary>
         /// <returns>The new ID.</returns>
-        public static string NextID()
-        {
-            System.Threading.Interlocked.Increment(ref s_counter);
-            return "JN_" + s_counter.ToString();
-        }
+        public static string NextID() =>
+            $"JN_{Interlocked.Increment(ref s_counter)}";
     }
 }
