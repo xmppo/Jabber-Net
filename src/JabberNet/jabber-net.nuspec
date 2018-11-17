@@ -11,8 +11,8 @@
         <projectUrl>https://github.com/ForNeVeR/jabber-net</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>A set of .NET classes for sending and receiving Extensible Messaging and Presence Protocol (XMPP), also known as the Jabber.</description>
-        <releaseNotes>Fix bugs #86 and #90.</releaseNotes>
-        <copyright>Copyright (c) Cursive, Inc. 2000-2008; Copyright (c) jabber-net contributors 2008—2017</copyright>
+        <releaseNotes>Fix issues #93 and #101.</releaseNotes>
+        <copyright>Copyright (c) Cursive, Inc. 2000-2008; Copyright (c) jabber-net contributors 2008—2018</copyright>
         <tags>XMPP Jabber</tags>
     </metadata>
 </package>

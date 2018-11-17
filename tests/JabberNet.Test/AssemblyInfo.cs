@@ -16,6 +16,6 @@ using System.Reflection;
 [assembly: AssemblyCompany("Jabber-Net contributors")]
 [assembly: AssemblyProduct("Jabber-Net")]
 [assembly: AssemblyTitle("JabberNet.Test")]
-[assembly: AssemblyCopyright("Copyright (c) Jabber-Net Contributors, 2008—2017")]
+[assembly: AssemblyCopyright("Copyright (c) Jabber-Net Contributors, 2008—2018")]
 [assembly: AssemblyVersion("3.0.0.*")]
 [assembly: AssemblyInformationalVersion("3.0.0-preview2")]
