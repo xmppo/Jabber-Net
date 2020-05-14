@@ -1,8 +1,9 @@
 Jabber-Net [![NuGet][nuget-badge]][nuget] [![Appveyor build][appveyor-badge]][appveyor] [![Travis build][travis-badge]][travis]
 ==========
 
-⚠ This project is **deprecated**, reasons are listed in #110. Please use other
-XMPP libraries for .NET:
+⚠ This project is **deprecated**, reasons are listed in
+[#110](https://github.com/ForNeVeR/Jabber-Net/pull/110). Please use other XMPP
+libraries for .NET:
 - [Ubiety.Xmpp.Core](https://github.com/ubiety/Ubiety.Xmpp.Core)
 - [SharpXMPP](https://github.com/vitalyster/SharpXMPP/) (maintained by a former
   maintainer of Jabber-Net)
