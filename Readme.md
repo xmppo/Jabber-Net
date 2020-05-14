@@ -1,6 +1,11 @@
 Jabber-Net [![NuGet][nuget-badge]][nuget] [![Appveyor build][appveyor-badge]][appveyor] [![Travis build][travis-badge]][travis]
 ==========
 
+⚠ This project is **deprecated**. Please use other XMPP libraries for .NET:
+- [Ubiety.Xmpp.Core](https://github.com/ubiety/Ubiety.Xmpp.Core)
+- [SharpXMPP](https://github.com/vitalyster/SharpXMPP/) (maintained by a former 
+  maintainer of Jabber-Net)
+
 Jabber-Net is a set of .NET classes for sending and receiving Extensible
 Messaging and Presence Protocol (XMPP), also known as the Jabber. Client
 connections, server component connections, presence, service discovery, and the
